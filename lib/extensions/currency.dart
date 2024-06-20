@@ -1,0 +1,247 @@
+part of 'extensions.dart';
+
+extension CurrencyStringX on String? {
+  String toPrice({bool withSymbol = false, String unit = '\$', int dp = 2}) {
+    return CurrencyExt.toPrice(this, withSymbol: withSymbol, dp: dp);
+  }
+
+  String toCost({bool withSymbol = false, String unit = '\$'}) {
+    return CurrencyExt.toCost(this, withSymbol: withSymbol);
+  }
+
+  String toPercentage({bool withSymbol = true, int dp = 0}) {
+    return CurrencyExt.toPercentage(this, withSymbol: withSymbol, dp: dp);
+  }
+}
+
+extension CurrencyNumX on num? {
+  String toPrice({bool withSymbol = false, String unit = '\$', int dp = 2}) {
+    return CurrencyExt.toPrice(this, withSymbol: withSymbol, dp: dp);
+  }
+
+  String toCost({bool withSymbol = false, String unit = '\$'}) {
+    return CurrencyExt.toCost(this, withSymbol: withSymbol);
+  }
+
+  String toPercentage({bool withSymbol = true, int dp = 0}) {
+    return CurrencyExt.toPercentage(this, withSymbol: withSymbol, dp: dp);
+  }
+}
+
+class CurrencyExt {
+  CurrencyExt._();
+
+  static String toPrice(
+    Object? value, {
+    bool withSymbol = false,
+    String unit = '\$',
+    int dp = 2,
+  }) {
+    if (value.toString().isNum) {
+      return '${withSymbol ? '$unit ' : ''}${(value.toString().toDouble())?.toStringAsFixed(dp)}';
+    } else {
+      return '${withSymbol ? '$unit ' : ''}0${dp == 0 ? '' : '.'}${'0' * dp}';
+    }
+  }
+
+  static String toCost(
+    Object? value, {
+    bool withSymbol = false,
+    String unit = '\$',
+  }) {
+    if (value.toString().isNum) {
+      return '${withSymbol ? '$unit ' : ''}${(value.toString().toDouble())?.toStringAsFixed(4)}';
+    } else {
+      return '${withSymbol ? '$unit ' : ''}0.0000';
+    }
+  }
+
+  static String toPercentage(
+    Object? value, {
+    bool withSymbol = true,
+    int dp = 0,
+  }) {
+    if (value.toString().isNum) {
+      return '${(value.toString().toDouble())?.toStringAsFixed(dp)}${withSymbol ? ' %' : ''}';
+    } else {
+      return '0${dp == 0 ? '' : '.'}${'0' * dp}${withSymbol ? ' %' : ''}';
+    }
+  }
+}
+
+extension StringToCurrency on String {
+  String formatNumber() {
+    List<String> nullList = ['null', ''];
+    // , 'NA', 'NaN'];
+    // final formatter = new NumberFormat.decimalPattern();
+    if (nullList.contains(this)) {
+      return '';
+    } else {
+      var formatter = NumberFormat('##,##,##,##,###.##', 'en_IN');
+      return formatter.format(double.parse);
+    }
+  }
+
+  String formatIndianCurrency(dynamic inputNumber) {
+    List<String> nullList = ['null', ''];
+    // , 'NA', 'NaN'];
+    // final formatter = new NumberFormat.decimalPattern();
+    if (nullList.contains(inputNumber)) {
+      return '';
+    } else if (inputNumber.runtimeType.toString() == 'String') {
+      var formatter = NumberFormat('##,##,##,##,###.##', 'en_IN');
+      return '\u20B9${formatter.format(double.parse(inputNumber))}';
+    } else {
+      var formatter = NumberFormat('##,##,##,##,###.##', 'en_IN');
+      return '\u20B9${formatter.format(inputNumber)}';
+    }
+  }
+
+  String toIndianCurrency() {
+    String words = "";
+    String result = "";
+    if (this == "") {
+      return '';
+    }
+    words = IndianCurrencyFromNumber.toWord(this);
+
+    result = words.replaceAll("^\\s+", "").replaceAll("\\b\\s{2,}\\b", " ");
+    return result.trim();
+  }
+}
+
+class IndianCurrencyFromNumber {
+  IndianCurrencyFromNumber._();
+
+  static String toWord(String currency) {
+    double number = double.parse(currency);
+    // 0 to 999999999.99
+    if (number == 0) {
+      return "zero";
+    }
+    // pad with "0"
+    String mask = "000000000.00";
+    final df = NumberFormat(mask);
+    String maskNo = df.format(number);
+    // XXnnnnnnn.nn
+    int crore = int.parse(maskNo.substring(0, 2));
+    // nnXXnnnnn.nn
+    int lakh = int.parse(maskNo.substring(2, 4));
+    // nnXXnnnnn.nn
+    int thousand = int.parse(maskNo.substring(4, 6));
+    // nnnnnnXXX.nn
+    int hundred = int.parse(maskNo.substring(6, 9));
+    // nnnnnn.XX
+    int paisa = int.parse(maskNo.substring(10, 12));
+
+    String tradCrore;
+
+    switch (crore) {
+      case 0:
+        tradCrore = "";
+        break;
+      case 1:
+        tradCrore = "${_convertLessThanOneThousand(crore)} crore ";
+        break;
+      default:
+        tradCrore = "${_convertLessThanOneThousand(crore)} crore ";
+    }
+    String result = tradCrore;
+
+    String tradLakh;
+
+    switch (lakh) {
+      case 0:
+        tradLakh = "";
+        break;
+      case 1:
+        tradLakh = "${_convertLessThanOneThousand(lakh)} lakh ";
+        break;
+      default:
+        tradLakh = "${_convertLessThanOneThousand(lakh)} lakh ";
+    }
+    result = result + tradLakh;
+
+    String tradThousand;
+    switch (thousand) {
+      case 0:
+        tradThousand = "";
+        break;
+      case 1:
+        tradThousand = "${_convertLessThanOneThousand(thousand)} thousand ";
+        break;
+      default:
+        tradThousand = "${_convertLessThanOneThousand(thousand)} thousand ";
+    }
+    result = result + tradThousand;
+
+    String tradHundred;
+    tradHundred = _convertLessThanOneThousand(hundred);
+    result = result + tradHundred;
+
+    String tradPaisa;
+    switch (paisa) {
+      case 0:
+        tradPaisa = "";
+        break;
+      case 1:
+        tradPaisa = " and ${_convertLessThanOneThousand(paisa)} paisa ";
+        break;
+      default:
+        tradPaisa = " and ${_convertLessThanOneThousand(paisa)} paisa ";
+    }
+    result = result + tradPaisa;
+
+    return "$result only";
+  }
+
+  static String _convertLessThanOneThousand(int number) {
+    List<String> tensNames = [
+      "",
+      " ten",
+      " twenty",
+      " thirty",
+      " forty",
+      " fifty",
+      " sixty",
+      " seventy",
+      " eighty",
+      " ninety"
+    ];
+
+    List<String> numNames = [
+      "",
+      " one",
+      " two",
+      " three",
+      " four",
+      " five",
+      " six",
+      " seven",
+      " eight",
+      " nine",
+      " ten",
+      " eleven",
+      " twelve",
+      " thirteen",
+      " fourteen",
+      " fifteen",
+      " sixteen",
+      " seventeen",
+      " eighteen",
+      " nineteen"
+    ];
+    String soFar;
+    if (number % 100 < 20) {
+      soFar = numNames[number % 100];
+      number = number ~/ 100;
+    } else {
+      soFar = numNames[number % 10];
+      number = number ~/ 10;
+      soFar = tensNames[number % 10] + soFar;
+      number = number ~/ 10;
+    }
+    if (number == 0) return soFar;
+    return "${numNames[number]} hundred$soFar";
+  }
+}
