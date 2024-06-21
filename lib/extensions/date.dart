@@ -17,6 +17,64 @@ extension DateExtension on DateTime {
   }) =>
       DateFormat(pattern, locale).format(this);
 
+  //
+  // /// Check if the string is a date
+  // bool get isDate => v.isDate(this);
+  //
+  // /// Check if the string is a date that's after the specified date
+  // ///
+  // /// If `date` is not passed, it defaults to now.
+  // bool isAfter([String? date]) => v.isAfter(this, date);
+  //
+  // /// Check if the string is a date that's before the specified date
+  // ///
+  // /// If `date` is not passed, it defaults to now.
+  // bool isBefore([String? date]) => v.isBefore(this, date);
+  //
+  //
+  // /// check if the string is a date
+  // bool isDate(String str) {
+  //   return DateTime.tryParse(str) != null;
+  // }
+  //
+  // /// check if the string is a date that's after the specified date
+  // ///
+  // /// If `date` is not passed, it defaults to now.
+  // bool isAfter(String str, [String? date]) {
+  //   DateTime referenceDate;
+  //   if (date == null) {
+  //     referenceDate = DateTime.now();
+  //   } else if (isDate(date)) {
+  //     referenceDate = DateTime.parse(date);
+  //   } else {
+  //     return false;
+  //   }
+  //
+  //   final strDate = DateTime.tryParse(str);
+  //   if (strDate == null) return false;
+  //
+  //   return strDate.isAfter(referenceDate);
+  // }
+  //
+  // /// check if the string is a date that's before the specified date
+  // ///
+  // /// If `date` is not passed, it defaults to now.
+  // bool isBefore(String str, [String? date]) {
+  //   DateTime referenceDate;
+  //   if (date == null) {
+  //     referenceDate = DateTime.now();
+  //   } else if (isDate(date)) {
+  //     referenceDate = DateTime.parse(date);
+  //   } else {
+  //     return false;
+  //   }
+  //
+  //   final strDate = DateTime.tryParse(str);
+  //   if (strDate == null) return false;
+  //
+  //   return strDate.isBefore(referenceDate);
+  // }
+
   String toDate() => DateFormat.yMd().format(this);
 
   String toTime() => DateFormat.jm().format(this);
@@ -309,7 +367,8 @@ extension DateRangeUtils on DateTimeRange? {
 }
 
 extension StringToDate on String? {
-  DateTime toDate() => DateTime.tryParse(this ?? '') ?? DateTime.now();
+  /// Converts the string to a [DateTime] object. Returns null if parsing fails.
+  DateTime? toDate() => this != null ? DateTime.tryParse(this!) : null;
 
   DateTime? toDateTime({String? format}) {
     DateFormat dateFormat = DateFormat(format ?? DateFormats.defaultX);
@@ -396,5 +455,53 @@ extension TimeConversions on TimeOfDay {
   String timeToString() {
     final timeFormat = DateFormat.jm();
     return timeFormat.format(toDateTime());
+  }
+}
+
+extension TimeX on int {
+  String get text {
+    final diff = Duration(seconds: this);
+    final sec = diff.inSeconds;
+
+    if (diff.inDays > 365) {
+      return "${(diff.inDays / 365).floor()} ${(diff.inDays / 365).floor() == 1 ? "year" : "years"}";
+    }
+    if (diff.inDays > 30) {
+      return "${(diff.inDays / 30).floor()} ${(diff.inDays / 30).floor() == 1 ? "month" : "months"}";
+    }
+    if (diff.inDays > 7) {
+      return "${(diff.inDays / 7).floor()} ${(diff.inDays / 7).floor() == 1 ? "week" : "weeks"}";
+    } else if (diff.inDays > 0) {
+      return "${diff.inDays} ${diff.inDays == 1 ? "day" : "days"}";
+    } else if (diff.inHours > 0) {
+      return "${diff.inHours} ${diff.inHours == 1 ? "hour" : "hours"}";
+    } else if (diff.inMinutes > 0) {
+      return "${diff.inMinutes} ${diff.inMinutes == 1 ? "minute" : "minutes"}";
+    } else {
+      return "$sec ${sec == 1 ? "second" : "seconds"}";
+    }
+  }
+
+  String get timeAgo {
+    final diff = Duration(seconds: this);
+    final sec = diff.inSeconds;
+
+    if (diff.inDays > 365) {
+      return "${(diff.inDays / 365).floor()} ${(diff.inDays / 365).floor() == 1 ? "year" : "years"} ago";
+    }
+    if (diff.inDays > 30) {
+      return "${(diff.inDays / 30).floor()} ${(diff.inDays / 30).floor() == 1 ? "month" : "months"} ago";
+    }
+    if (diff.inDays > 7) {
+      return "${(diff.inDays / 7).floor()} ${(diff.inDays / 7).floor() == 1 ? "week" : "weeks"} ago";
+    } else if (diff.inDays > 0) {
+      return "${diff.inDays} ${diff.inDays == 1 ? "day" : "days"} ago";
+    } else if (diff.inHours > 0) {
+      return "${diff.inHours} ${diff.inHours == 1 ? "hour" : "hours"} ago";
+    } else if (diff.inMinutes > 0) {
+      return "${diff.inMinutes} ${diff.inMinutes == 1 ? "minute" : "minutes"} ago";
+    } else {
+      return "$sec ${sec == 1 ? "second" : "seconds"} ago";
+    }
   }
 }

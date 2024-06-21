@@ -21,10 +21,12 @@ dependencies:
 
   #--- Hardware packages ---#
   local_auth: ^2.2.0 # biometric authentication
+  image_picker: ^1.1.2
+  file_picker: ^8.0.5
+  path: ^1.9.0
 
   #--- Misc packages ---#
   logger: ^2.3.0
-
 
   flutter:
     sdk: flutter

@@ -2,10 +2,10 @@ part of 'utilities.dart';
 
 class Clipboard {
   Clipboard._();
-  static Future<void> copy(String text, {VoidCallback? onSuccess}) async {
+  static Future<void> copy(String text, {VoidCallback? onCopy}) async {
     final data = service.ClipboardData(text: text);
     await service.Clipboard.setData(data);
-    onSuccess?.call();
+    onCopy?.call();
   }
 
   static Future<String> paste(String text) async {

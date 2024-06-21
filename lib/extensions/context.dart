@@ -2,6 +2,10 @@ part of 'extensions.dart';
 
 extension ContextExtension on BuildContext {
   MediaQueryData get _mediaQuery => MediaQuery.of(this);
+  Size get size => MediaQuery.sizeOf(this);
+  double get width => size.width;
+  double get height => size.height;
+
   ThemeData get theme => Theme.of(this);
   bool get isDark => theme.brightness == Brightness.dark;
 

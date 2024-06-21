@@ -29,7 +29,7 @@ extension IterableWithIndex<T> on Iterable<T> {
   }
 
   T get getRandomElement {
-    final random = Random();
+    final random = math.Random();
     int index = random.nextInt(length);
     return elementAt(index);
   }

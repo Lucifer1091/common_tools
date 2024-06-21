@@ -20,6 +20,14 @@ class BouncingScrollBehavior extends ScrollBehavior {
   }
 }
 
+/// Usage
+/// ```dart
+/// child: BouncingScrollWrapperX.builder(
+///        context,
+///        widget!,
+////       dragWithMouse: true,
+///      ),
+/// ```
 class BouncingScrollWrapperX extends StatelessWidget {
   final Widget child;
   final bool dragWithMouse;
@@ -71,6 +79,14 @@ class ClampingScrollBehavior extends ScrollBehavior {
   }
 }
 
+/// Usage
+/// ```dart
+/// child: ClampingScrollWrapperX.builder(
+///        context,
+///        widget!,
+////       dragWithMouse: true,
+///      ),
+/// ```
 class ClampingScrollWrapperX extends StatelessWidget {
   final Widget child;
   final bool dragWithMouse;
