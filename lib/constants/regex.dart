@@ -11,15 +11,18 @@ class Regex {
   static RegExp ipv6 =
       RegExp(r'^::|^::1|^([a-fA-F0-9]{1,4}::?){1,7}([a-fA-F0-9]{1,4})$');
 
+  /// A regular expression that matches surrogate pairs in a string.
+  ///
+  /// Surrogate pairs are used in UTF-16 encoding to represent characters outside
+  /// the Basic Multilingual Plane (BMP), which includes characters with code points
+  /// from U+10000 to U+10FFFF. A surrogate pair consists of a high surrogate
+  /// (U+D800 to U+DBFF) followed by a low surrogate (U+DC00 to U+DFFF).
   static RegExp surrogatePairsRegExp =
       RegExp(r'[\uD800-\uDBFF][\uDC00-\uDFFF]');
 
   static RegExp alpha = RegExp(r'^[a-zA-Z]+$');
   static RegExp alphanumeric = RegExp(r'^[a-zA-Z0-9]+$');
-  static RegExp numeric = RegExp(r'^-?[0-9]+$');
-  static RegExp int = RegExp(r'^-?(?:0|[1-9][0-9]*)$');
-  static RegExp float =
-      RegExp(r'^(?:-?[0-9]+)?(?:\.[0-9]*)?(?:[eE][+\-]?[0-9]+)?$');
+
   static RegExp hexadecimal = RegExp(r'^[0-9a-fA-F]+$');
   static RegExp hexColor = RegExp(r'^#?([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$');
 
@@ -43,8 +46,29 @@ class Regex {
         r'^[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}$')
   };
 
+  /// A regular expression that matches full-width characters.
+  ///
+  /// This matches any character that is not:
+  /// - ASCII characters (U+0020 to U+007E)
+  /// - Half-width katakana (U+FF61 to U+FF9F)
+  /// - Half-width Hangul (U+FFA0 to U+FFDC)
+  /// - Half-width symbols (U+FFE8 to U+FFEE)
+  /// - Digits (0-9)
+  /// - Lowercase letters (a-z)
+  /// - Uppercase letters (A-Z)
   static RegExp fullWidth = RegExp(
       r'[^\u0020-\u007E\uFF61-\uFF9F\uFFA0-\uFFDC\uFFE8-\uFFEE0-9a-zA-Z]');
+
+  /// A regular expression that matches half-width characters.
+  ///
+  /// This includes:
+  /// - ASCII characters (U+0020 to U+007E)
+  /// - Half-width katakana (U+FF61 to U+FF9F)
+  /// - Half-width Hangul (U+FFA0 to U+FFDC)
+  /// - Half-width symbols (U+FFE8 to U+FFEE)
+  /// - Digits (0-9)
+  /// - Lowercase letters (a-z)
+  /// - Uppercase letters (A-Z)
   static RegExp halfWidth = RegExp(
       r'[\u0020-\u007E\uFF61-\uFF9F\uFFA0-\uFFDC\uFFE8-\uFFEE0-9a-zA-Z]');
 

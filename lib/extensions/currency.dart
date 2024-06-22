@@ -37,7 +37,7 @@ class CurrencyExt {
     String unit = '\$',
     int dp = 2,
   }) {
-    if (value.toString().isNumeric) {
+    if (value.toString().isNum) {
       return '${withSymbol ? '$unit ' : ''}${(value.toString().toDouble()).toStringAsFixed(dp)}';
     } else {
       return '${withSymbol ? '$unit ' : ''}0${dp == 0 ? '' : '.'}${'0' * dp}';
@@ -49,7 +49,7 @@ class CurrencyExt {
     bool withSymbol = false,
     String unit = '\$',
   }) {
-    if (value.toString().isNumeric) {
+    if (value.toString().isNum) {
       return '${withSymbol ? '$unit ' : ''}${(value.toString().toDouble()).toStringAsFixed(4)}';
     } else {
       return '${withSymbol ? '$unit ' : ''}0.0000';
@@ -61,7 +61,7 @@ class CurrencyExt {
     bool withSymbol = true,
     int dp = 0,
   }) {
-    if (value.toString().isNumeric) {
+    if (value.toString().isNum) {
       return '${(value.toString().toDouble()).toStringAsFixed(dp)}${withSymbol ? ' %' : ''}';
     } else {
       return '0${dp == 0 ? '' : '.'}${'0' * dp}${withSymbol ? ' %' : ''}';
