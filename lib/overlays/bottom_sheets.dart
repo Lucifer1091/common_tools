@@ -1,5 +1,8 @@
 part of 'overlays.dart';
 
+/// Enum representing types of bottom sheet dialogs.
+enum BottomSheetDialog { dialog, bottomSheet }
+
 class BottomSheets {
   BottomSheets._();
 
@@ -88,5 +91,20 @@ class BottomSheets {
         ),
       ),
     );
+  }
+
+  /// Shows a bottom sheet or a dialog based on the specified type.
+  static Future<dynamic> showBottomSheetOrDialog(
+    BuildContext context, {
+    required Widget child,
+    BottomSheetDialog bottomSheetDialog = BottomSheetDialog.dialog,
+  }) {
+    if (bottomSheetDialog == BottomSheetDialog.bottomSheet) {
+      // Show a bottom sheet.
+      return showModalBottomSheet(context: context, builder: (_) => child);
+    } else {
+      // Show a dialog.
+      return Dialogs.show(context, content: child);
+    }
   }
 }

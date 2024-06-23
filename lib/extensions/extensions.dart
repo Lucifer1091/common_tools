@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
+part 'bool.dart';
 part 'color.dart';
 part 'context.dart';
 part 'currency.dart';
@@ -15,5 +16,6 @@ part 'form.dart';
 part 'generic.dart';
 part 'list.dart';
 part 'num.dart';
+part 'scope_functions.dart';
 part 'string.dart';
 part 'widget.dart';

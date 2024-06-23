@@ -152,18 +152,6 @@ enum SizeUnit {
   const SizeUnit(this.id);
 }
 
-extension DoubleExtensions on double {
-  double roundWithDigit(int digit) {
-    final digitValue = math.pow(10, digit);
-    return (this * digitValue).roundToDouble() / digitValue;
-  }
-
-  double floorWithDigit(int digit) {
-    final digitValue = math.pow(10, digit);
-    return (this * digitValue).floorToDouble() / digitValue;
-  }
-}
-
 /// Extension on `num` to convert to human-readable words.
 extension HumanReadableWords on num {
   static final List<String> _units = [
@@ -293,5 +281,306 @@ extension HumanReadableWords on num {
     }
 
     return words;
+  }
+}
+
+/// Double Extensions
+extension DoubleExtensions on double? {
+  double roundWithDigit(int digit) {
+    final digitValue = math.pow(10, digit);
+    return (validate() * digitValue).roundToDouble() / digitValue;
+  }
+
+  double floorWithDigit(int digit) {
+    final digitValue = math.pow(10, digit);
+    return (validate() * digitValue).floorToDouble() / digitValue;
+  }
+
+  /// Validates the double value and returns it if not null.
+  ///
+  /// If the value is null, returns 0.0.
+  double validate({double value = 0.0}) => this ?? value;
+
+  /// Returns a [BorderRadius] with circular radius.
+  ///
+  /// Example:
+  /// ```dart
+  /// double radius = 5.0;
+  /// BorderRadius borderRadius = radius.circularRadius;
+  /// ```
+  BorderRadius get circularRadius => BorderRadius.circular(validate());
+
+  /// Checks if the current value falls between the specified range.
+  ///
+  /// Returns `true` if the current value is between [first] and [second],
+  /// otherwise returns `false`.
+  ///
+  /// Example:
+  /// ```dart
+  /// bool isInRange = 100.0.isBetween(50.0, 150.0);
+  /// print('Is in range? $isInRange'); // Output: true
+  /// ```
+  bool isBetween(num first, num second) {
+    final lower = math.min(first, second);
+    final upper = math.max(first, second);
+    return validate() >= lower && validate() <= upper;
+  }
+
+  /// Returns a square [Size] object with the current value as both width and height.
+  ///
+  /// Example:
+  /// ```dart
+  /// Size squareSize = 50.0.squareSizeBox;
+  /// print('Square Size: $squareSize'); // Output: Size(50.0, 50.0)
+  /// ```
+  SizedBox get squareSizeBox => SizedBox(width: this!, height: this!);
+
+  /// Returns a square [Size] with the current value as both width and height.
+  ///
+  /// Example:
+  /// ```dart
+  /// double sideLength = 100.0;
+  /// Size squareSize = sideLength.squareSize; // Output: Size(100.0, 100.0)
+  /// ```
+  Size get squareSize => Size(this!, this!);
+}
+
+/// int Extensions
+extension IntNullableExtensions on int? {
+  /// Checks if the given String [s] is null or empty
+  bool get isEmptyOrNull => this == null;
+
+  /// Leaves given height of space
+  Widget get height => SizedBox(height: validate().toDouble());
+
+  /// Leaves given width of space
+  Widget get width => SizedBox(width: validate().toDouble());
+
+  /// Returns microseconds duration
+  /// 5.microseconds
+  Duration get microseconds => Duration(microseconds: validate());
+
+  /// Returns milliseconds duration
+  /// ```dart
+  /// 5.milliseconds
+  /// ```
+  Duration get milliseconds => Duration(milliseconds: validate());
+
+  /// Returns seconds duration
+  /// ```dart
+  /// 5.seconds
+  /// ```
+  Duration get seconds => Duration(seconds: validate());
+
+  /// Returns minutes duration
+  /// ```dart
+  /// 5.minutes
+  /// ```
+  Duration get minutes => Duration(minutes: validate());
+
+  /// Returns hours duration
+  /// ```dart
+  /// 5.hours
+  /// ```
+  Duration get hours => Duration(hours: validate());
+
+  /// Returns days duration
+  /// ```dart
+  /// 5.days
+  /// ```
+  Duration get days => Duration(days: validate());
+
+  /// Returns month duration
+  /// ```dart
+  /// 5.weeks
+  /// ```
+  Duration get weeks => Duration(days: validate() * 7);
+
+  /// Returns month duration
+  /// ```dart
+  /// 5.months
+  /// ```
+  Duration get month => Duration(days: (validate() * 30));
+
+  /// Returns years duration
+  /// ```dart
+  /// 5.years
+  /// ```
+  Duration get years => Duration(days: (validate() * 365));
+
+  /// Returns Size
+  Size get size => Size(validate().toDouble(), validate().toDouble());
+
+  /// Returns Radius
+  /// ```dart
+  /// 5.circularRadius
+  /// ```
+  BorderRadius get circularBorderRadius =>
+      BorderRadius.circular(validate().toDouble());
+
+  /// Returns true if the value is `1`
+  /// otherwise false is returned.
+  bool toBool([int value = 1]) => this == value ? true : false;
+
+  /// Validate given int is not null and returns given value if null.
+  int validate({int value = 0}) => this ?? value;
+
+  /// Validate given int is not null and returns given value if null.
+  String? get addZeroPrefix {
+    if (isEmptyOrNull) {
+      return null;
+    }
+    if ((this ?? 0) < 10) {
+      return '0$this';
+    } else {
+      return toString();
+    }
+  }
+
+  /// get last charts of give value
+  /// 'I  like dart language'.lastChars(13) // dart language
+  int lastDigits(int n) {
+    if (isEmptyOrNull) return 0;
+    int charCount = n;
+    if (toString().trim().length < n) {
+      charCount = toString().trim().length;
+    }
+    return (toString().trim().substring(toString().trim().length - charCount))
+            .toInt() ??
+        0;
+  }
+
+  // returns month name from the given int
+  String toMonthName({bool isHalfName = false}) {
+    String status = '';
+    if (!(this! >= 1 && this! <= 12)) {
+      throw Exception('Invalid day of month');
+    }
+    if (this == 1) {
+      return status = isHalfName ? 'Jan' : 'January';
+    } else if (this == 2) {
+      return status = isHalfName ? 'Feb' : 'February';
+    } else if (this == 3) {
+      return status = isHalfName ? 'Mar' : 'March';
+    } else if (this == 4) {
+      return status = isHalfName ? 'Apr' : 'April';
+    } else if (this == 5) {
+      return status = isHalfName ? 'May' : 'May';
+    } else if (this == 6) {
+      return status = isHalfName ? 'Jun' : 'June';
+    } else if (this == 7) {
+      return status = isHalfName ? 'Jul' : 'July';
+    } else if (this == 8) {
+      return status = isHalfName ? 'Aug' : 'August';
+    } else if (this == 9) {
+      return status = isHalfName ? 'Sept' : 'September';
+    } else if (this == 10) {
+      return status = isHalfName ? 'Oct' : 'October';
+    } else if (this == 11) {
+      return status = isHalfName ? 'Nov' : 'November';
+    } else if (this == 12) {
+      return status = isHalfName ? 'Dec' : 'December';
+    }
+    return status;
+  }
+
+  // returns WeekDay from the given int
+  String toWeekDay({bool isHalfName = false}) {
+    if (!(this! >= 1 && this! <= 7)) {
+      throw Exception('Invalid day of month');
+    }
+    String weekName = '';
+
+    if (this == 1) {
+      return weekName = isHalfName ? "Mon" : "Monday";
+    } else if (this == 2) {
+      return weekName = isHalfName ? "Tue" : "Tuesday";
+    } else if (this == 3) {
+      return weekName = isHalfName ? "Wed" : "Wednesday";
+    } else if (this == 4) {
+      return weekName = isHalfName ? "Thu" : "Thursday";
+    } else if (this == 5) {
+      return weekName = isHalfName ? "Fri" : "Friday";
+    } else if (this == 6) {
+      return weekName = isHalfName ? "Sat" : "Saturday";
+    } else if (this == 7) {
+      return weekName = isHalfName ? "Sun" : "Sunday";
+    }
+    return weekName;
+  }
+}
+
+/// Num Extensions
+extension NumExt on num? {
+  /// Returns `true` if this nullable iterable is either `null` or empty.
+  bool get isNullOrEmpty => this == null;
+
+  /// Validate given double is not null and returns given value if null.
+  num validate({num value = 0}) => this ?? value;
+
+  /// Validate given double is not null and returns given value if null.
+  num get validateNum => this ?? 0;
+
+  /// Determines if [this] is between [a] and [b] whereas the bounds
+  /// are inclusive.
+  bool between(int min, int max) => validate() >= min && validate() <= max;
+
+  // Returns price with currency
+  // String toCurrencyAmount() => "$defaultCurrencySymbol${this.validate()}";
+
+  /// Check if the number is in the range [min] to [max].
+  /// Returns `true` if the number is in the range, `false` otherwise.
+  bool isInRange(num min, num max) => (this ?? 0) >= min && (this ?? 0) <= max;
+
+  /// Get list of random numbers.
+  List<num> randomList({int min = 0, int max = 100}) {
+    if (isNullOrEmpty) return [];
+    var result = <num>[];
+    for (var i = 0; i < (this ?? 0); i++) {
+      result.add(math.Random().nextInt(max - min) + min);
+    }
+    return result;
+  }
+
+  /// Converts degrees to radians.
+  double? degreesToRadians() {
+    if (isNullOrEmpty) return null;
+    return this! * (math.pi / 180.0);
+  }
+
+  /// Converts radians to degrees.
+  double? radiansToDegrees() {
+    if (isNullOrEmpty) return null;
+    return this! * (180.0 / math.pi);
+  }
+}
+
+extension NumExtension2 on num {
+  double asPercentageInDecimal() {
+    return validate() / 100.0;
+  }
+
+  double calculatePercentageOf(double percentage) {
+    return (validate() * percentage) / 100.0;
+  }
+}
+
+extension DoubleExtension on double {
+  double asPercentageInDecimal() {
+    return validate() / 100.0;
+  }
+
+  double calculatePercentageOf(double percentage) {
+    return (validate() * percentage) / 100.0;
+  }
+}
+
+extension IntExtension on int {
+  int asPercentageInDecimal() {
+    return validate() ~/ 100.0;
+  }
+
+  int calculatePercentageOf(double percentage) {
+    return (validate() * percentage) ~/ 100;
   }
 }

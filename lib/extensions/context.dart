@@ -1,21 +1,80 @@
 part of 'extensions.dart';
 
 extension ContextExtension on BuildContext {
-  MediaQueryData get _mediaQuery => MediaQuery.of(this);
+  /// Equivalent as `Navigator.of(context)`
+  NavigatorState get navigator => Navigator.of(this);
+
+  /// Equivalent as `MediaQuery.sizeOf(context)`
   Size get size => MediaQuery.sizeOf(this);
+
   double get width => size.width;
   double get height => size.height;
 
+  /// Equivalent as `MediaQuery.of(context)`
+  MediaQueryData get mediaQuery => MediaQuery.of(this);
+
+  /// Returns padding for the nearest MediaQuery ancestor or
+  /// throws an exception, if no such ancestor exists.
+  EdgeInsets get padding => MediaQuery.paddingOf(this);
+
+  /// return screen devicePixelRatio
+  double get pixelRatio => mediaQuery.devicePixelRatio;
+
+  /// Returns viewInsets for the nearest MediaQuery ancestor or
+  /// throws an exception, if no such ancestor exists.
+  EdgeInsets get viewInsets => MediaQuery.viewInsetsOf(this);
+
   ThemeData get theme => Theme.of(this);
+
   bool get isDark => theme.brightness == Brightness.dark;
 
-  double get deviceWidth => _mediaQuery.size.width;
-  double get deviceHeight => _mediaQuery.size.height;
-  bool get isLandscape => _mediaQuery.orientation == Orientation.landscape;
-  bool get isPortrait => _mediaQuery.orientation == Orientation.portrait;
+  bool get isLandscape => mediaQuery.orientation == Orientation.landscape;
 
-  bool get isAndroid => theme.platform == TargetPlatform.android;
-  bool get isIOS => theme.platform == TargetPlatform.iOS;
+  bool get isPortrait => mediaQuery.orientation == Orientation.portrait;
+
+  /// Request focus to given FocusNode
+  void requestFocus(FocusNode focus) => FocusScope.of(this).requestFocus(focus);
+
+  /// Request focus to given FocusNode
+  void unFocus(FocusNode focus) => focus.unfocus();
+
+  /// Hide Keyboard
+  void unFocusKeyboard() => FocusScope.of(this).unfocus();
+
+  /// Hide soft keyboard
+  void hideKeyboard() => FocusScope.of(this).requestFocus(FocusNode());
+
+  /// Returns DefaultTextStyle.of(context)
+  DefaultTextStyle get defaultTextStyle => DefaultTextStyle.of(this);
+
+  /// Returns Form.of(context)
+  FormState? get formState => Form.of(this);
+
+  /// Returns Scaffold.of(context)
+  ScaffoldState get scaffoldState => Scaffold.of(this);
+
+  /// Returns Overlay.of(context)
+  OverlayState? get overlayState => Overlay.of(this);
+
+  /// returns brightness
+  Brightness get platformBrightness => mediaQuery.platformBrightness;
+
+  /// Return the height of status bar
+  double get statusBarHeight => mediaQuery.padding.top;
+
+  double get appBarHeight => mediaQuery.padding.top + kToolbarHeight;
+
+  /// Return the height of navigation bar
+  double get navigationBarHeight => MediaQuery.of(this).padding.bottom;
+
+  /// Open Drawer
+  void openDrawer() => Scaffold.of(this).openDrawer();
+
+  /// Hide Drawer
+  void openEndDrawer() => Scaffold.of(this).openEndDrawer();
+
+  /// Returns true if keyboard is visible
+  bool get isKeyboardShowing => viewInsets.bottom > 0;
 
   // Context Colors
   Color get scaffoldBackgroundColor => theme.scaffoldBackgroundColor;
@@ -70,7 +129,4 @@ extension ContextExtension on BuildContext {
   TextStyle get bodyLarge => theme.textTheme.bodyLarge!;
   TextStyle get bodyMedium => theme.textTheme.bodyMedium!;
   TextStyle get bodySmall => theme.textTheme.bodySmall!;
-
-  double get statusBarHeight => _mediaQuery.padding.top;
-  double get appBarHeight => _mediaQuery.padding.top + kToolbarHeight;
 }

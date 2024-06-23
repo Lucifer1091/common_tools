@@ -1,10 +1,13 @@
+import 'package:common_tools/common_tools.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:common_tools/common_tools.dart';
 
 void main() {
   Logger.configure();
 
-  log.f(' Hel lo World '.mostFrequent(ignoreSpaces: true));
+  DateTime date = DateTime(2025, 1);
+
+  log.f(date.weekday);
+
+  log.w(date.weekNumber);
 }

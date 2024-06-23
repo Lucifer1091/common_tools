@@ -86,7 +86,7 @@ extension OperandsOverloading on String? {
   }
 }
 
-extension ValidatorExtensions on String? {
+extension StringValidators on String? {
   /// Checks whether the `String` is `null`.
   /// ### Example 1
   /// ```dart
@@ -98,7 +98,7 @@ extension ValidatorExtensions on String? {
   /// String foo = 'fff';
   /// bool isNull = foo.isNull; // returns false
   /// ```
-  bool get isNull => this == null;
+  bool get isNull => this == null || (this != null && this! == 'null');
 
   /// Checks whether the `String` is not `null`.
   /// ### Example 1
@@ -114,7 +114,7 @@ extension ValidatorExtensions on String? {
   bool get isNotNull => isNull == false;
 
   /// Checks if the `String` is Blank (null, empty or only white spaces).
-  bool get isBlank => this?.trim().isEmpty ?? true;
+  bool get isBlank => isNull || (this?.trim().isEmpty ?? true);
 
   /// Checks if the `String` is not blank (null, empty or only white spaces).
   bool get isNotBlank => isBlank == false;
@@ -475,12 +475,6 @@ extension ValidatorExtensions on String? {
   /// ```
   bool get isSurrogatePair => matches(regex: Regex.surrogatePairsRegExp);
 
-  /// Check if the string is a image path or url
-  bool get isImage {
-    return isNotBlank &&
-        (matches(regex: Regex.image) || this!.startsWith('data:image'));
-  }
-
   /// Checks whether the `String` complies to below rules :
   ///  * At least 1 uppercase
   ///  * At least 1 special character
@@ -600,7 +594,7 @@ extension ValidatorExtensions on String? {
   /// String foo = 'hello world';
   /// bool isMixedCase = foo.isMixedCase; // returns false;
   ///
-  bool isMixedCase() {
+  bool get isMixedCase {
     if (isBlank) return false;
 
     return this!.toUpperCase() != this && this!.toLowerCase() != this;
@@ -645,6 +639,55 @@ extension ValidatorExtensions on String? {
   /// bool hasSpecialChar = text.hasSpecial; // true
   /// ```
   bool get hasSpecial => matches(regex: RegExp(r'^[a-zA-Z0-9 ]+$'));
+
+  /// Checks if the current string contains the specified [other] string, ignoring case.
+  ///
+  /// The [other] parameter specifies the string to search for.
+  ///
+  /// Returns `true` if the current string contains the [other] string, ignoring case, otherwise `false`.
+  ///
+  /// Example:
+  /// ```dart
+  /// print('Hello World'.containsIgnoreCase('hello')); // Output: true
+  /// ```
+  bool containsIgnoreCase(String other) {
+    if (isBlank) return false;
+
+    return this!.toLowerCase().contains(other.toLowerCase());
+  }
+
+  /// Check if the string is a image path or url
+  bool get isImage {
+    return isNotBlank &&
+        (matches(regex: Regex.image) || this!.startsWith('data:image'));
+  }
+
+  /// Audio regex
+  bool get isAudio => matches(regex: Regex.audio);
+
+  /// Video regex
+  bool get isVideo => matches(regex: Regex.video);
+
+  /// Txt regex
+  bool get isTxt => matches(regex: Regex.txt);
+
+  /// Document regex
+  bool get isDoc => matches(regex: Regex.doc);
+
+  /// Excel regex
+  bool get isExcel => matches(regex: Regex.excel);
+
+  /// PPT regex
+  bool get isPPT => matches(regex: Regex.ppt);
+
+  /// Document regex
+  bool get isApk => matches(regex: Regex.apk);
+
+  /// PDF regex
+  bool get isPdf => matches(regex: Regex.pdf);
+
+  /// HTML regex
+  bool get isHtml => matches(regex: Regex.html);
 }
 
 extension SanitizerExtensions on String? {
@@ -656,11 +699,8 @@ extension SanitizerExtensions on String? {
   double toDouble() => toFloat();
 
   /// Converts the string to a [num]. [radix] is the base for integer parsing.
-  num toInt({int radix = 10}) => isNotBlank
-      ? int.tryParse(this!, radix: radix) ??
-          double.tryParse(this!)?.toInt() ??
-          double.nan
-      : double.nan;
+  int? toInt({int radix = 10}) =>
+      isNotBlank ? int.tryParse(this!, radix: radix) : null;
 
   /// Converts a `String` to a numeric value if possible.
   ///
@@ -837,6 +877,28 @@ extension StringConversions on String? {
     return words.join(' ');
   }
 
+  /// Converts a string to kebab case.
+  ///
+  /// Kebab case is a naming convention where words are separated by hyphens.
+  /// This method replaces any occurrence of a lowercase letter followed by an
+  /// uppercase letter with the lowercase letter, a hyphen, and the uppercase
+  /// letter. The resulting string is then converted to lowercase.
+  ///
+  /// Returns the kebab case representation of the string.
+  ///
+  /// Example:
+  /// ```dart
+  /// 'camelCaseString'.toKebabCase; // 'camel-case-string'
+  /// ```
+  String? get toKebabCase {
+    if (isBlank) return this;
+    return this!
+        .replaceAllMapped(RegExp(r'\s'), (match) => '')
+        .replaceAllMapped(
+            RegExp(r'([a-z])([A-Z])'), (match) => '${match[1]}-${match[2]}')
+        .toLowerCase();
+  }
+
   /// Returns a list of the `String`'s characters.
   ///
   /// O(n)
@@ -971,6 +1033,42 @@ extension StringConversions on String? {
     return this!.replaceAll(RegExp(r'\s+'), '');
   }
 
+  /// Removes all punctuation characters from the given string.
+  ///
+  /// Returns an empty string if the input is null.
+  ///
+  /// Returns a new string with all punctuation characters removed.
+  ///
+  /// Example:
+  /// ```dart
+  /// String input = "Hello, world!";
+  /// String output = input.removePunctuation;
+  /// print(output); // Output: "Hello world"
+  /// ```
+  ///
+  /// Returns:
+  /// A new string with all punctuation characters removed.
+  String? get removePunctuation {
+    if (isBlank) return this;
+
+    return this!.replaceAll(RegExp(r'[^\w\s]'), '');
+  }
+
+  /// Returns a new string with leading and trailing characters removed.
+  ///
+  /// The optional [chars] argument specifies the characters to remove.
+  ///
+  /// If [chars] is not provided, it removes leading and trailing whitespace.
+  String? strip([String? chars]) {
+    if (isBlank) return this;
+
+    if (chars != null) {
+      return this!.replaceAll(RegExp('^[$chars]+|[$chars]+\$'), '');
+    } else {
+      return this!.trim();
+    }
+  }
+
   /// Strips all HTML code from `String`.
   ///
   /// ### Example
@@ -990,9 +1088,7 @@ extension StringConversions on String? {
   String? truncate({int length = 10, bool ellipsis = false}) {
     if (isBlank || length <= 0 || length >= this!.length) return this;
 
-    return ellipsis
-        ? '${this!.substring(0, length)}...'
-        : this!.substring(0, length);
+    return this!.substring(0, length) + (ellipsis ? '...' : '');
   }
 
   /// Truncates a long `String` in the middle while retaining the beginning and the end.
@@ -1766,6 +1862,28 @@ extension StringConversions on String? {
     if (isBlank) return this;
     return '$wrapWith$this$wrapWith';
   }
+
+  /// Returns a new string with the current string centered in a string of length [width].
+  ///
+  /// If the current string is already longer than [width], the original string is returned.
+  ///
+  /// The optional [fillChar] parameter specifies the character to use for padding.
+  /// Defaults to a space character.
+  ///
+  /// Example:
+  /// ```dart
+  /// print('hello'.center(10)); // Output: '   hello   '
+  /// print('hello'.center(10, '-')); // Output: '---hello---'
+  /// ```
+  String? center(int width, [String fillChar = ' ']) {
+    if (isBlank) return this;
+
+    if (width <= this!.length) return this;
+    int totalPadding = width - this!.length;
+    int leftPadding = totalPadding ~/ 2;
+    int rightPadding = totalPadding - leftPadding;
+    return fillChar * leftPadding + this! + fillChar * rightPadding;
+  }
 }
 
 extension MiscExtensions on String? {
@@ -2136,4 +2254,209 @@ extension MiscExtensions on String? {
   String? asIf(bool Function(String?) comparison, String? trueString,
           String? falseString) =>
       comparison(this) ? trueString : falseString;
+}
+
+extension Safe on String? {
+  /// Refer to [String.length]
+  ///
+  /// If [string] is null then it is treated as an empty String
+  static int length(String? string) => (string ?? '').length;
+
+  /// Refer to [String.codeUnits]
+  ///
+  /// If [string] is null then it is treated as an empty String
+  static List<int> codeUnits(String? string) => (string ?? '').codeUnits;
+
+  /// Refer to [String.runes]
+  ///
+  /// If [string] is null then it is treated as an empty String
+  static Runes runes(String? string) => (string ?? '').runes;
+
+  /// Refer to [String.allMatches]
+  ///
+  /// If [string] is null then it is treated as an empty String
+  static Iterable<Match> allMatches(
+    String? pattern,
+    String string, [
+    int start = 0,
+  ]) =>
+      (pattern ?? '').allMatches(string, start);
+
+  /// Refer to [String.codeUnitAt]
+  ///
+  /// If [string] is null it is treated as an empty string which will result
+  /// in an IndexOutOfBoundsException
+  static int codeUnitAt(String? string, int index) =>
+      (string ?? '').codeUnitAt(index);
+
+  /// Refer to [String.compareTo]
+  ///
+  /// This method has special handling for a null [string] or [other].
+  /// If both are null then we return -1
+  /// If one of them is null then we use [nullIsLessThan] to determine if
+  /// we return -1  or 1.
+  static int compareTo(
+    String? string,
+    String? other, {
+    bool nullIsLessThan = true,
+  }) {
+    if (string == other) return 0;
+
+    if (string == null) return nullIsLessThan ? -1 : 1;
+
+    if (other == null) return nullIsLessThan ? 1 : -1;
+
+    return string.compareTo(other);
+  }
+
+  /// Refer to [String.contains]
+  ///
+  /// If [string] is null then it is treated as an empty String
+  static bool contains(String? string, Pattern other, [int startIndex = 0]) =>
+      (string ?? '').contains(other, startIndex);
+
+  /// Refer to [String.endsWith]
+  static bool endsWith(String? string, String? other) {
+    if (string == null || other == null) return false;
+
+    return string.endsWith(other);
+  }
+
+  /// Refer to [String.indexOf]
+  ///
+  /// If [string] is null then it is treated as an empty String
+  static int indexOf(String? string, Pattern pattern, [int start = 0]) =>
+      (string ?? '').indexOf(pattern, start);
+
+  /// Refer to [String.lastIndexOf]
+  ///
+  /// If [string] is null then it is treated as an empty String
+  static int lastIndexOf(String? string, Pattern pattern, [int? start]) =>
+      (string ?? '').lastIndexOf(pattern, start);
+
+  /// Refer to [String.matchAsPrefix]
+  ///
+  /// If [string] is null then it is treated as an empty String
+  static Match? matchAsPrefix(
+    String? pattern,
+    String string, [
+    int start = 0,
+  ]) =>
+      (pattern ?? '').matchAsPrefix(string, start);
+
+  /// Refer to [String.padLeft]
+  ///
+  /// If [string] is null then it is treated as an empty String
+  static String padLeft(String? string, int width, [String padding = ' ']) =>
+      (string ?? '').padLeft(width, padding);
+
+  /// Refer to [String.padRight]
+  ///
+  /// If [string] is null then it is treated as an empty String
+  static String padRight(String? string, int width, [String padding = ' ']) =>
+      (string ?? '').padRight(width, padding);
+
+  /// Refer to [String.replaceAll]
+  ///
+  /// If [string] is null then it is treated as an empty String
+  static String replaceAll(String? string, Pattern from, String replace) =>
+      (string ?? '').replaceAll(from, replace);
+
+  /// Refer to [String.replaceAllMapped]
+  ///
+  /// If [string] is null then it is treated as an empty String
+  static String replaceAllMapped(
+          String? string, Pattern from, String Function(Match match) replace) =>
+      (string ?? '').replaceAllMapped(from, replace);
+
+  /// Refer to [String.replaceFirst]
+  ///
+  /// If [string] is null then it is treated as an empty String
+  static String replaceFirst(
+    String? string,
+    Pattern from,
+    String to, [
+    int startIndex = 0,
+  ]) =>
+      (string ?? '').replaceFirst(from, to, startIndex);
+
+  /// Refer to [String.replaceFirstMapped]
+  ///
+  /// If [string] is null then it is treated as an empty String
+  static String replaceFirstMapped(
+    String? string,
+    Pattern from,
+    String Function(Match match) replace, [
+    int startIndex = 0,
+  ]) =>
+      (string ?? '').replaceFirstMapped(from, replace, startIndex);
+
+  /// Refer to [String.replaceRange]
+  ///
+  /// If [string] is null then it is treated as an empty String
+  static String replaceRange(
+    String? string,
+    int start,
+    int? end,
+    String replacement,
+  ) =>
+      (string ?? '').replaceRange(start, end, replacement);
+
+  /// Refer to [String.split]
+  ///
+  /// If [string] is null then it is treated as an empty String
+  static List<String> split(String? string, Pattern pattern) =>
+      (string ?? '').split(pattern);
+
+  /// Refer to [String.splitMapJoin]
+  ///
+  /// If [string] is null then it is treated as an empty String
+  static String splitMapJoin(
+    String? string,
+    Pattern pattern, {
+    String Function(Match)? onMatch,
+    String Function(String)? onNonMatch,
+  }) =>
+      (string ?? '')
+          .splitMapJoin(pattern, onMatch: onMatch, onNonMatch: onNonMatch);
+
+  /// Refer to [String.startsWith]
+  ///
+  /// If [string] is null then it is treated as an empty String
+  static bool startsWith(String? string, Pattern pattern, [int index = 0]) =>
+      (string ?? '').startsWith(pattern, index);
+
+  /// Refer to [String.substring]
+  ///
+  /// If [string] is null then it is treated as an empty String
+  static String substring(String? string, int start, [int? end]) {
+    if (string == null) return ' ' * ((end ?? start + 1) - start);
+
+    return string.substring(start, end);
+  }
+
+  /// Refer to [String.toLowerCase]
+  ///
+  /// If [string] is null then it is treated as an empty String
+  static String toLowerCase(String? string) => (string ?? '').toLowerCase();
+
+  /// Refer to [String.toUpperCase]
+  ///
+  /// If [string] is null then it is treated as an empty String
+  static String toUpperCase(String? string) => (string ?? '').toUpperCase();
+
+  /// Refer to [String.trim]
+  ///
+  /// If [string] is null then it is treated as an empty String
+  static String trim(String? string) => (string ?? '').trim();
+
+  /// Refer to [String.trimLeft]
+  ///
+  /// If [string] is null then it is treated as an empty String
+  static String trimLeft(String? string) => (string ?? '').trimLeft();
+
+  /// Refer to [String.trimRight]
+  ///
+  /// If [string] is null then it is treated as an empty String
+  static String trimRight(String? string) => (string ?? '').trimRight();
 }

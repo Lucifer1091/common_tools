@@ -11,6 +11,9 @@ class Regex {
   static RegExp ipv6 =
       RegExp(r'^::|^::1|^([a-fA-F0-9]{1,4}::?){1,7}([a-fA-F0-9]{1,4})$');
 
+  static RegExp date = RegExp(
+      r'^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$');
+
   /// A regular expression that matches surrogate pairs in a string.
   ///
   /// Surrogate pairs are used in UTF-16 encoding to represent characters outside
@@ -76,5 +79,15 @@ class Regex {
   static RegExp ascii = RegExp(r'^[\x00-\x7F]+$');
 
   static RegExp image =
-      RegExp(r'(http(s?):)([/|.\w\s-])*\.(?:jpg|gif|png|jpeg)');
+      RegExp(r'(http(s?):)([/|.\w\s-])*\.(?:jpg|gif|png|jpeg|bmp)');
+
+  static RegExp audio = RegExp(r'.(mp3|wav|wma|amr|ogg)$');
+  static RegExp video = RegExp(r'.(mp4|avi|wmv|rmvb|mpg|mpeg|3gp|mkv)$');
+  static RegExp txt = RegExp(r'.txt$');
+  static RegExp doc = RegExp(r'.(doc|docx)$');
+  static RegExp excel = RegExp(r'.(xls|xlsx)$');
+  static RegExp ppt = RegExp(r'.(ppt|pptx)$');
+  static RegExp apk = RegExp(r'.apk$');
+  static RegExp pdf = RegExp(r'.pdf$');
+  static RegExp html = RegExp(r'.html$');
 }

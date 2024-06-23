@@ -82,4 +82,12 @@ class SnackBars {
   static void closeAllSnackBars() {
     key.currentState?.clearSnackBars();
   }
+
+  static void hideCurrentSnackBar() {
+    key.currentState?.hideCurrentSnackBar();
+  }
+
+  static void removeCurrentSnackBar() {
+    key.currentState?.removeCurrentSnackBar();
+  }
 }

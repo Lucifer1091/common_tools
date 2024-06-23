@@ -7,6 +7,11 @@ part of 'utilities.dart';
 /// This will handle devices from mobile to large desktops in portrait,
 /// landscape and folded devices
 ///
+/// A widget that manages UI responsiveness based on predefined breakpoints.
+///
+/// This class provides utility methods to determine the current device size
+/// and select appropriate widgets to render based on those sizes.
+///
 /// [showDeviceLogs] when set to true will print exact breakpoints in console
 ///
 class Responsive extends StatelessWidget {
@@ -41,7 +46,9 @@ class Responsive extends StatelessWidget {
 
   static bool isExtraLarge(BuildContext context) => context.width >= 1600;
 
-  /// Set padding or any thing according to breakpoints
+  /// Retrieves a value based on the current device size.
+  ///
+  /// Returns the appropriate value based on the current device size category.
   static T value<T>(
     BuildContext context, {
     required T compact,
@@ -63,7 +70,9 @@ class Responsive extends StatelessWidget {
     }
   }
 
-  /// Call different functions according to breakpoints
+  /// Executes a callback based on the current device size.
+  ///
+  /// Calls the appropriate callback function based on the current device size category.
   static void callback(
     BuildContext context, {
     required VoidCallback compact,
@@ -73,15 +82,15 @@ class Responsive extends StatelessWidget {
     VoidCallback? extraLarge,
   }) {
     if (isExtraLarge(context)) {
-      return (extraLarge ?? large ?? expanded ?? medium ?? compact)();
+      (extraLarge ?? large ?? expanded ?? medium ?? compact)();
     } else if (isLarge(context)) {
-      return (large ?? expanded ?? medium ?? compact)();
+      (large ?? expanded ?? medium ?? compact)();
     } else if (isExpanded(context)) {
-      return (expanded ?? medium ?? compact)();
+      (expanded ?? medium ?? compact)();
     } else if (isMedium(context)) {
-      return (medium ?? compact)();
+      (medium ?? compact)();
     } else {
-      return compact();
+      compact();
     }
   }
 
@@ -109,12 +118,6 @@ class Responsive extends StatelessWidget {
   void _showLog(BuildContext context) {
     if (!showDeviceLogs) return;
 
-    // print("context.height : ${context.height}");
-    // print("context.width : ${context.width}");
-    // print("Get.context!.width : ${Get.context!.width}");
-    // print("constraints.minWidth : ${constraints.minWidth}");
-    // print("constraints.maxWidth : ${constraints.maxWidth}");
-
     if (isExtraLarge(context)) {
       log.i(
           "EXTRA LARGE => Width: ${context.width}, Height: ${context.height}");
@@ -129,6 +132,7 @@ class Responsive extends StatelessWidget {
     }
   }
 
+  /// Creates a sample `Responsive` widget for testing purposes.
   static Responsive test() {
     return Responsive(
       showDeviceLogs: true,
