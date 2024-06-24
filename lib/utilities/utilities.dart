@@ -27,5 +27,5 @@ part 'keep_alive_wrapper.dart';
 part 'logger.dart';
 part 'platform_checker.dart';
 part 'responsive.dart';
-part 'system_utils.dart';
+part 'system.dart';
 part 'vibration.dart';

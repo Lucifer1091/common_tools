@@ -1,0 +1,119 @@
+import 'package:common_tools/extensions/extensions.dart';
+import 'package:flutter/material.dart';
+
+class MultiSelectController {
+  List<int> selectedIndexes = [];
+  bool isSelecting = false;
+  bool disableEditingWhenNoneSelected = false;
+  int listLength = 0;
+
+  /// Sets the controller length
+  void set(int i) {
+    if (listLength != 0 && isSelecting) {
+      listLength = i;
+      isSelecting = true;
+    } else {
+      listLength = i;
+      isSelecting = false;
+    }
+
+    selectedIndexes.clear();
+  }
+
+  /// Returns true if the id is selected
+  bool isSelected(int i) {
+    return selectedIndexes.contains(i);
+  }
+
+  bool get isAllSelected => selectedIndexes.length == listLength;
+
+  /// Toggle all select.
+  /// If there are some that not selected, it will select all.
+  /// If not, it will deselect all.
+  void toggleAll() {
+    if (selectedIndexes.length == listLength) {
+      deselectAll();
+    } else {
+      selectAll();
+    }
+  }
+
+  /// Select all
+  void selectAll() {
+    isSelecting = true;
+    selectedIndexes = List.generate(listLength, (index) {
+      return index;
+    });
+  }
+
+  /// Deselect all
+  void deselectAll() {
+    isSelecting = !disableEditingWhenNoneSelected;
+    selectedIndexes.clear();
+  }
+
+  /// Toggle at index
+  void toggle(int index) {
+    if (selectedIndexes.contains(index)) {
+      selectedIndexes.remove(index);
+    } else {
+      selectedIndexes.add(index);
+    }
+
+    if (selectedIndexes.isEmpty && disableEditingWhenNoneSelected) {
+      isSelecting = false;
+    } else {
+      isSelecting = true;
+    }
+  }
+
+  /// Select at index
+  void select(int index) {
+    if (!selectedIndexes.contains(index)) {
+      selectedIndexes.add(index);
+    }
+    isSelecting = true;
+  }
+
+  /// Deselect at index
+  void deselect(int index) {
+    if (selectedIndexes.contains(index)) {
+      selectedIndexes.remove(index);
+    }
+
+    if (selectedIndexes.isEmpty && disableEditingWhenNoneSelected) {
+      isSelecting = false;
+    } else {
+      isSelecting = true;
+    }
+  }
+}
+
+class MultiSelectItem extends StatefulWidget {
+  final Widget? child;
+  final bool isSelecting;
+  final VoidCallback? onLongPress;
+
+  const MultiSelectItem({
+    super.key,
+    this.child,
+    required this.isSelecting,
+    this.onLongPress,
+  });
+
+  @override
+  MultiSelectItemState createState() => MultiSelectItemState();
+}
+
+class MultiSelectItemState extends State<MultiSelectItem> {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onLongPress: widget.onLongPress,
+      onTap: () {
+        if (widget.isSelecting) widget.onLongPress?.call();
+      },
+      child: widget.child,
+    ).mouseRegion;
+  }
+}

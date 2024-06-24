@@ -3,6 +3,37 @@ part of 'extensions.dart';
 extension WidgetExtensions on Widget {
   RepaintBoundary get repaintBoundary => RepaintBoundary(child: this);
 
+  Tooltip tooltip({
+    required String msg,
+    bool showRichText = false,
+    bool preferBelow = true,
+    double? height,
+    double? width,
+  }) =>
+      Tooltip(
+        message: showRichText ? null : msg,
+        height: height,
+        richMessage: showRichText
+            ? WidgetSpan(
+                alignment: PlaceholderAlignment.baseline,
+                baseline: TextBaseline.alphabetic,
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  constraints: BoxConstraints(maxWidth: width ?? 300),
+                  child: Text(msg),
+                ),
+              )
+            : null,
+        decoration: showRichText
+            ? const BoxDecoration(
+                color: Colors.amberAccent,
+                borderRadius: BorderRadius.all(Radius.circular(4)),
+              )
+            : null,
+        preferBelow: preferBelow,
+        child: this,
+      );
+
   Widget expanded({int flex = 1, bool enabled = true}) =>
       enabled ? Expanded(flex: flex, child: this) : this;
 

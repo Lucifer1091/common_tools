@@ -4,8 +4,8 @@ part of 'utilities.dart';
 ///
 /// Provides methods to manipulate system UI elements such as status bar, navigation bar,
 /// screen orientation, and invoking native methods.
-class SystemUtils {
-  SystemUtils._();
+class System {
+  System._();
 
   /// Change status bar Color and Brightness.
   ///

@@ -973,39 +973,6 @@ extension StringToDate on String? {
   /// Returns null if the string is null or parsing fails.
   DateTime? toDate() => this != null ? DateTime.tryParse(this!) : null;
 
-  /// Converts the string to a [DateTime] object using a specified [format].
-  ///
-  /// Returns null if the string is null or cannot be parsed according to the [format].
-  ///
-  /// If [format] is not provided, defaults to [DateFormats.defaultDateTime].
-  DateTime? toDateTime({String? format}) {
-    DateFormat dateFormat = DateFormat(format ?? DateFormats.defaultDateTime);
-    try {
-      return dateFormat.parse(this ?? '');
-    } catch (e) {
-      return null;
-    }
-  }
-
-  /// Parses the provided [date] object into a [DateTime] object.
-  ///
-  /// Returns null if [date] is null, empty, or cannot be parsed.
-  ///
-  /// Accepts various object types and formats them into a [DateTime].
-  static DateTime? parse(Object? date) {
-    String? dt = date?.toString().trim();
-
-    try {
-      if (dt == "" || (dt?.isEmpty ?? true) || dt == null) return null;
-
-      // return DateFormat("yyyy-MM-dd HH:mm:ss").parse(dt, true);
-
-      return DateTime.tryParse(dt);
-    } catch (e) {
-      return null;
-    }
-  }
-
   /// Converts the string to a [TimeOfDay] object using the 'hh:mm a' format.
   ///
   /// The string must be in the format 'hh:mm a', for example, '02:30 PM'.
@@ -1013,7 +980,7 @@ extension StringToDate on String? {
   /// Throws a [FormatException] if the string does not conform to the expected format.
   ///
   /// Returns a [TimeOfDay] object representing the parsed time.
-  TimeOfDay? stringToTime() {
+  TimeOfDay? toTime() {
     if (isBlank) return null;
 
     final format = DateFormat.jm();
@@ -1367,6 +1334,67 @@ extension DateTimeExtension on DateTime? {
   }
 }
 
-extension DateTimeExtension1 on DateTime {}
+extension DateTimeExtension1 on DateTime {
+  String toUtcString({bool utc = true}) {
+    if (utc) {
+      return toUtc().toString().split('.')[0];
+    }
+
+    return toString().split('.')[0];
+  }
+
+  DateTime get nextWeek => endOfWeek.add(const Duration(days: 1)).startOfWeek;
+
+  DateTime get previousWeek =>
+      startOfWeek.subtract(const Duration(days: 1)).startOfWeek;
+
+  bool compareWithoutTime(DateTime date) =>
+      day == date.day && month == date.month && year == date.year;
+
+  bool compareTime(DateTime date) =>
+      hour == date.hour && minute == date.minute && second == date.second;
+}
+
+extension StringToDate1 on String? {
+  DateTime? toDateTime({bool utc = false, String? format}) =>
+      parse(this, utc: utc, format: format);
+
+  String? toUtcString({
+    bool utc = true,
+    String format = 'MMM dd, yyyy h:mm a',
+  }) {
+    return parse(this, format: format, utc: utc)?.toString().split('.')[0];
+  }
+
+  static DateTime? parse(Object? date, {bool utc = true, String? format}) {
+    String? dt = date?.toString().trim();
+
+    try {
+      if (dt == "" || (dt?.isEmpty ?? true) || dt == null) return null;
+
+      if (utc) {
+        return DateFormat(format ?? "yyyy-MM-dd HH:mm:ss")
+            .parse(dt, true)
+            .toLocal();
+      }
+
+      if (format != null) {
+        return DateFormat(format).parse(dt, utc).toLocal();
+      }
+
+      return DateTime.tryParse(dt);
+    } catch (e) {
+      try {
+        // if its failing it means the date format is 2024-04-17T07:20:57.573
+        DateFormat format = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+        DateTime dateTime = format.parse(dt ?? '', utc).toLocal();
+
+        return dateTime;
+      } catch (e) {
+        return null;
+      }
+    }
+  }
+}
 
 extension DateTimeExtension2 on DateTime? {}

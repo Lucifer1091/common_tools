@@ -1,6 +1,3 @@
-// ignore_for_file: constant_identifier_names, non_constant_identifier_names
-
-import 'dart:math';
 import 'package:common_tools/common_tools.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
