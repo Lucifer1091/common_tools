@@ -16,14 +16,7 @@ dependencies:
 
   #--- Form packages ---#
   form_field_validator: ^1.1.0
-  flutter_form_builder:
-    git:
-      url: https://github.com/AliumTech/flutter_form_builder.git
-      ref: scroll_fixes
-
-  month_year_picker:
-    git:
-      url: https://github.com/AliumTech/month-year-picker.git
+  flutter_form_builder: ^9.3.0
 
   #--- Logic packages ---#
   intl: ^0.19.0

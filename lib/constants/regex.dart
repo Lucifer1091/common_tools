@@ -49,6 +49,9 @@ class Regex {
         r'^[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}$')
   };
 
+  static RegExp guid = RegExp(
+      r'^(\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\}{0,1})$');
+
   /// A regular expression that matches full-width characters.
   ///
   /// This matches any character that is not:

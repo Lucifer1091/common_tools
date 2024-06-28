@@ -272,14 +272,7 @@ extension StringValidators on String? {
   /// String foo = '887b7923-6d64-4396-8547-1ec1b86e081e';
   /// bool isGuid = foo.isGuid; // returns true
   /// ```
-  bool get isGuid {
-    if (isBlank) {
-      return false;
-    }
-    var regex = RegExp(
-        r'^(\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\}{0,1})$');
-    return regex.hasMatch(this!);
-  }
+  bool get isGuid => matches(regex: Regex.guid);
 
   /// Check if the string is in an array of given values
   bool isIn(Object? values) {
