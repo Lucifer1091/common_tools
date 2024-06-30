@@ -30,10 +30,10 @@ class RandomImage {
   /// Example:
   /// ```dart
   /// // Get a random image URL with default dimensions (200x200).
-  /// String imageUrl = FlutterHelperUtils.picsumImage();
+  /// String imageUrl = RandomImage.picsumImage();
   ///
   /// // Get a random image URL with custom dimensions (300x400).
-  /// String customImageUrl = FlutterHelperUtils.picsumImage(300, 400);
+  /// String customImageUrl = RandomImage.picsumImage(300, 400);
   /// ```
   static String picsumImage([int width = 200, int height = 200]) {
     return "https://picsum.photos/$width/$height";
@@ -170,7 +170,7 @@ class Faker {
   /// Generates a single random user.
   ///
   /// Returns a [Json] user object with randomly generated attributes.
-  static Json generateUser() {
+  static Json generateUser([int minAge = 18, int maxAge = 65]) {
     String name = generateName();
     var random = Random();
 
@@ -179,7 +179,7 @@ class Faker {
       'name': name,
       'image': RandomImage.picsumImage(300, 300),
       // Generates random age between 18 and 60
-      'age': 18 + random.nextInt(60 - 18 + 1),
+      'age': minAge + random.nextInt(maxAge - minAge + 1),
       'email': generateEmail(name),
       'phone': generatePhoneNumber(),
       'address': generateAddress(),
@@ -191,10 +191,14 @@ class Faker {
   /// If [count] is not provided, defaults to generating 5 users.
   ///
   /// Returns a list of [Json] user objects.
-  static List<Json> generateUsers([int count = 5]) {
+  static List<Json> generateUsers([
+    int count = 5,
+    int minAge = 18,
+    int maxAge = 65,
+  ]) {
     List<Json> users = [];
     for (var i = 0; i < count; i++) {
-      users.add(generateUser());
+      users.add(generateUser(minAge, maxAge));
     }
     return users;
   }

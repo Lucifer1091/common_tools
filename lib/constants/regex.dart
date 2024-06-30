@@ -11,9 +11,6 @@ class Regex {
   static RegExp ipv6 =
       RegExp(r'^::|^::1|^([a-fA-F0-9]{1,4}::?){1,7}([a-fA-F0-9]{1,4})$');
 
-  static RegExp date = RegExp(
-      r'^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$');
-
   /// A regular expression that matches surrogate pairs in a string.
   ///
   /// Surrogate pairs are used in UTF-16 encoding to represent characters outside
@@ -93,4 +90,55 @@ class Regex {
   static RegExp apk = RegExp(r'.apk$');
   static RegExp pdf = RegExp(r'.pdf$');
   static RegExp html = RegExp(r'.html$');
+
+  static RegExp date = RegExp(
+      r'^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$');
+
+  static Map<String, String> dateFormats = {
+    r'\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}':
+        "yyyy-MM-dd HH:mm:ss", // Example: 2022-01-14 12:34:56
+    r'\w{3}, \w{3} \d{1,2}, \d{2}':
+        "EEE, MMM d, 'yy", // Example: Fri, Jan 14, '22
+    r'\w+ \d{1,2}, \d{4}': "MMMM dd, yyyy", // Example: January 14, 2022
+    r'\d{2}/\d{2}/\d{4}': "MM/dd/yyyy", // Example: 01/14/2022
+    r'\d{2}-\d{2}-\d{4}': "dd-MM-yyyy", // Example: 14-01-2022
+    r'\d{2}:\d{2} [APap][Mm]': "hh:mm a", // Example: 12:34 PM
+    r'\w+ \d{4}': "MMMM yyyy", // Example: January 2022
+    r'\w{3}, \d{1,2} \w{3} \d{4}':
+        "EEE, dd MMM yyyy HH:mm:ss", // Example: Fri, 14 Jan 2022 12:34:56
+    r'\d{2}/\d{2}/\d{4} \d{2}:\d{2}:\d{2}':
+        "dd/MM/yyyy HH:mm:ss", // Example: 14/01/2022 12:34:56
+    r'\d{4}-\d{2}-\d{2}': "yyyy-MM-dd", // Example: 2022-01-14 (Date only)
+    r'\d{1,2} \w{3} \d{4}': "d MMM yyyy", // Example: 22 Sep 2023
+    r'\w{3}, \d{1,2} \w{3} \d{2}': "EEE, d MMM 'yy", // Example: Fri, 22 Sep '23
+    r'\d{2}:\d{2}': "HH:mm", // Example: 12:34 (Time only)
+    r'\d{1,2}/\d{1,2}/\d{2}': "M/d/yy", // Example: 9/22/23
+    r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}':
+        "yyyy-MM-ddTHH:mm:ss", // Example: 2022-01-14T12:34:56
+    r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z':
+        "yyyy-MM-ddTHH:mm:ssZ", // Example: 2022-01-14T12:34:56Z
+    r'^\d{4}-\d{2}-\d{2}$': 'yyyy-MM-dd', // Example: 2022-01-14
+    r'^\d{2}/\d{2}/\d{4}$': 'MM/dd/yyyy', // Example: 01/14/2022
+    r'^\d{2}\.\d{2}\.\d{4}$': 'MM.dd.yyyy', // Example: 01.14.2022
+    r'^\d{2}\s\d{2}\s\d{4}$': 'MM dd yyyy', // Example: 01 14 2022
+    r'^\d{4}/\d{2}/\d{2}$': 'yyyy/MM/dd', // Example: 2022/01/14
+    r'^\d{4}\.\d{2}\.\d{2}$': 'yyyy.MM.dd', // Example: 2022.01.14
+    r'^\d{4}\s\d{2}\s\d{2}$': 'yyyy MM dd', // Example: 2022 01 14
+    r'^\d{2}-\d{2}-\d{4}$': 'dd-MM-yyyy', // Example: 14-01-2022
+    r'^\d{2}/\d{2}/\d{2}$': 'dd/MM/yy', // Example: 14/01/22
+    r'^\d{2}\.\d{2}\.\d{2}$': 'dd.MM.yy', // Example: 14.01.22
+    r'^\d{2}\s\d{2}\s\d{2}$': 'dd MM yy', // Example: 14 01 22
+    r'^\d{4}-\d{1,2}-\d{1,2}$': 'yyyy-M-d', // Example: 2022-1-14
+    r'^\d{2}/\d{1,2}/\d{1,2}$': 'MM/d/yy', // Example: 01/1/22
+    r'^\d{2}\.\d{1,2}\.\d{1,2}$': 'MM.d.yy', // Example: 01.1.22
+    r'^\d{2}\s\d{1,2}\s\d{1,2}$': 'MM d yy', // Example: 01 1 22
+    r'^\d{1,2}-\d{1,2}-\d{4}$': 'd-M-yyyy', // Example: 14-1-2022
+    r'^\d{1,2}/\d{1,2}/\d{4}$': 'd/M/yyyy', // Example: 14/1/2022
+    r'^\d{1,2}\.\d{1,2}\.\d{4}$': 'd.M.yyyy', // Example: 14.1.2022
+    r'^\d{1,2}\s\d{1,2}\s\d{4}$': 'd M yyyy', // Example: 14 1 2022
+    r'^\d{1,2} \w+ \d{4}$': 'd MMMM yyyy', // Example: 29 April 1999
+    r'^\d{1,2} \w{3} \d{4}$': 'dd MMM yyyy', // Example: 29 Apr 1999
+    r'^\d{8}$': 'yyyyMMdd', // Example: 20220114
+    r'^\d{6}$': 'yyMMdd', // Example: 220114
+  };
 }

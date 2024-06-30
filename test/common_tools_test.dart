@@ -5,9 +5,9 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   Logger.configure();
 
-  DateTime date = DateTime(2025, 1);
+  DateTime date = DateTime(2024, 6, 30);
 
-  log.f(date.weekday);
-
-  log.w(date.weekNumber);
+  // log.f(date.isLastWeek);
+  log.w(date.startOfWeek);
+  log.f(date.startOfLastWeek);
 }

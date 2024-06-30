@@ -1,6 +1,6 @@
 part of 'extensions.dart';
 
-extension OperandsOverloading on String? {
+extension StringOperators on String? {
   /// Checks if the [length!] of the `String` is more than the length of [s].
   ///
   /// If the `String` is null or empty, it returns false.
