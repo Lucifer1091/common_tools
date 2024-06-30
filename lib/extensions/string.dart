@@ -633,6 +633,22 @@ extension StringValidators on String? {
   /// ```
   bool get hasSpecial => matches(regex: RegExp(r'^[a-zA-Z0-9 ]+$'));
 
+  /// Checks if the current string equals the specified [other] string, ignoring case.
+  ///
+  /// The [other] parameter specifies the string to search for.
+  ///
+  /// Returns `true` if the current string is equal to the [other] string, ignoring case, otherwise `false`.
+  ///
+  /// Example:
+  /// ```dart
+  /// print('Hello World'.equalsIgnoreCase('hello')); // Output: false
+  /// ```
+  bool equalsIgnoreCase(String? other) =>
+      (isBlank && other == null) ||
+      (isNotBlank &&
+          other != null &&
+          this?.toLowerCase() == other.toLowerCase());
+
   /// Checks if the current string contains the specified [other] string, ignoring case.
   ///
   /// The [other] parameter specifies the string to search for.
@@ -1687,6 +1703,41 @@ extension StringConversions on String? {
       indexOfFirstPatternWord + 1,
       this!.length,
     );
+  }
+
+  /// Replaces the part of the string after the first occurrence of the given [delimiter]
+  /// with the [replacement] string. If the string does not contain the delimiter,
+  /// returns [defaultValue] or the original string if [defaultValue] is not provided.
+  String? replaceAfter(
+    String delimiter,
+    String replacement, [
+    String? defaultValue,
+  ]) {
+    if (this == null) return null;
+    final index = this!.indexOf(delimiter);
+    return (index == -1)
+        ? (defaultValue?.isEmpty ?? true)
+            ? this
+            : defaultValue
+        : this!
+            .replaceRange(index + delimiter.length, this!.length, replacement);
+  }
+
+  /// Replaces the part of the string before the first occurrence of the given [delimiter]
+  /// with the [replacement] string. If the string does not contain the delimiter,
+  /// returns [defaultValue] or the original string if [defaultValue] is not provided.
+  String? replaceBefore(
+    String delimiter,
+    String replacement, [
+    String? defaultValue,
+  ]) {
+    if (this == null) return null;
+    final index = this!.indexOf(delimiter);
+    return (index == -1)
+        ? (defaultValue?.isEmpty ?? true)
+            ? this
+            : defaultValue
+        : this!.replaceRange(0, index, replacement);
   }
 
   /// Adds a `String` after the first match of the [pattern]. The [pattern] should not be `null`.

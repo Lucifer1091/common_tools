@@ -139,6 +139,21 @@ extension NumExtension on num {
     if (this <= 0) return 0;
     return (this / math.pow(1000, unit.id));
   }
+
+  /// Returns a [bool] if [this] value is between (including) the two
+  /// numeric values [first] and [second].
+  ///
+  /// Example:
+  /// ```dart
+  /// 100.0.isBetween(50, 150) // true;
+  /// 100.0.isBetween(50.0, 150.0) // true;
+  /// 100.0.isBetween(100.0, 100.0) // true;
+  /// ```
+  bool isBetween(num first, num second) {
+    final lower = min(first, second);
+    final upper = max(first, second);
+    return this >= lower && this <= upper;
+  }
 }
 
 enum SizeUnit {
@@ -515,6 +530,9 @@ extension NumExt on num? {
   /// Returns `true` if this nullable iterable is either `null` or empty.
   bool get isNullOrEmpty => this == null;
 
+  /// isZero
+  bool isZero() => this == null || this == 0;
+
   /// Validate given double is not null and returns given value if null.
   num validate({num value = 0}) => this ?? value;
 
@@ -612,4 +630,406 @@ extension NumTimeExtension<T extends num> on T {
   /// Returns a Duration represented in nanoseconds
   Duration get nanoseconds =>
       microseconds ~/ DurationTimeExtension.nanosecondsPerMicrosecond;
+}
+
+/// Supercharged extensions on [int] numbers.
+extension IntSC on int {
+  /// Creates an [Iterable<int>] that contains all values from current integer
+  /// until (including) the value [n].
+  ///
+  /// Example:
+  /// ```dart
+  /// 0.rangeTo(5); // [0, 1, 2, 3, 4, 5]
+  /// 3.rangeTo(1); // [3, 2, 1]
+  /// ```
+  Iterable<int> rangeTo(int n) {
+    var count = (n - this).abs() + 1;
+    var direction = (n - this).sign;
+    var i = this - direction;
+    return Iterable.generate(count, (int index) {
+      return i += direction;
+    });
+  }
+
+  /// Creates an [Iterable<int>] that contains all values from current integer
+  /// until (excluding) the value [n].
+  ///
+  /// Example:
+  /// ```dart
+  /// 0.until(5); // [0, 1, 2, 3, 4]
+  /// 3.until(1); // [3, 2]
+  /// ```
+  Iterable<int> until(int n) {
+    if (this < n) {
+      return rangeTo(n - 1);
+    } else if (this > n) {
+      return rangeTo(n + 1);
+    } else {
+      return const Iterable.empty();
+    }
+  }
+
+  /// Executes the function [action] for [this] times.
+  ///
+  /// Example:
+  /// 3.times(() => print('Hello')); // Hello... Hello... Hello
+  void times(void Function() action) {
+    0.until(this).forEach((_) => action());
+  }
+
+  /// Returns a [Duration] representing the current value as microseconds.
+  ///
+  /// Example:
+  /// ```dart
+  /// 200.microseconds; // Duration(microseconds: 200);
+  /// ```
+  Duration get microseconds {
+    return Duration(microseconds: this);
+  }
+
+  /// Returns a [Duration] representing the current value as milliseconds.
+  ///
+  /// Example:
+  /// ```dart
+  /// 1000.milliseconds; // Duration(milliseconds: 1000);
+  /// ```
+  Duration get milliseconds {
+    return Duration(milliseconds: this);
+  }
+
+  /// Returns a [Duration] representing the current value as seconds.
+  ///
+  /// Example:
+  /// ```dart
+  /// 30.seconds; // Duration(seconds: 1000);
+  /// ```
+  Duration get seconds {
+    return Duration(seconds: this);
+  }
+
+  /// Returns a [Duration] representing the current value as minutes.
+  ///
+  /// Example:
+  /// ```dart
+  /// 15.minutes; // Duration(minutes: 15);
+  /// ```
+  Duration get minutes {
+    return Duration(minutes: this);
+  }
+
+  /// Returns a [Duration] representing the current value as hours.
+  ///
+  /// Example:
+  /// ```dart
+  /// 24.hours; // Duration(hours: 24);
+  /// ```
+  Duration get hours {
+    return Duration(hours: this);
+  }
+
+  /// Returns a [Duration] representing the current value as days.
+  ///
+  /// Example:
+  /// ```dart
+  /// 14.days; // Duration(days: 14);
+  /// ```
+  Duration get days {
+    return Duration(days: this);
+  }
+
+  /// Returns a [bool] if [this] value is between (including) the two
+  /// numeric values [first] and [second].
+  ///
+  /// Example:
+  /// ```dart
+  /// 100.isBetween(50, 150) // true;
+  /// 100.isBetween(50.0, 150.0) // true;
+  /// 100.isBetween(100, 100) // true;
+  /// ```
+  bool isBetween(num first, num second) {
+    if (first <= second) {
+      return this >= first && this <= second;
+    } else {
+      return this >= second && this <= first;
+    }
+  }
+}
+
+extension NumberUtils on num {
+  /// Returns `true` if the number is even, `false` otherwise.
+  bool get isEven => this % 2 == 0;
+
+  /// Returns `true` if the number is odd, `false` otherwise.
+  bool get isOdd => this % 2 != 0;
+
+  /// Returns `true` if the number is positive, `false` otherwise.
+  bool get isPositive => this > 0;
+
+  /// Returns `true` if the number is negative, `false` otherwise.
+  bool get isNegative => this < 0;
+
+  /// Returns `true` if the number is zero, `false` otherwise.
+  bool get isZero => this == 0;
+
+  /// Returns `true` if the number is an integer, `false` otherwise.
+  bool get isInteger => this == toInt();
+
+  /// Returns `true` if the number is a double, `false` otherwise.
+  bool get isDouble => this == toDouble();
+
+  /// Swap the sign of the number.
+  num swapSign() => -this;
+
+  /// Convert the number to a [String] with the specified [precision].
+  /// If [precision] is not specified, the default is 2.
+
+  String toPrecision([int precision = 2]) {
+    var result = toStringAsFixed(precision);
+    if (result.endsWith('.00')) {
+      result = result.substring(0, result.length - 3);
+    }
+    return result;
+  }
+
+  /// Convert to currency string with specified delimiter and precision.
+  /// If [delimiter] is not specified, the default is ','.
+  /// If [precision] is not specified, the default is 2.
+
+  String toCurrencyString([String delimiter = ',', int precision = 2]) {
+    var result1 = toPrecision(precision);
+    var parts = result1.split('.');
+    var integer = parts[0];
+    var decimal = parts[1];
+    var result = '';
+    var count = 0;
+    for (var i = integer.length - 1; i >= 0; i--) {
+      result = integer[i] + result;
+      count++;
+      if (count == 3 && i != 0) {
+        result = delimiter + result;
+        count = 0;
+      }
+    }
+    return '$result.$decimal';
+  }
+
+  /// Check if the number is in the range [min] to [max].
+  /// Returns `true` if the number is in the range, `false` otherwise.
+  bool isInRange(num min, num max) => this >= min && this <= max;
+
+  /// Check if the number starts with [prefix].
+  /// Returns `true` if the number starts with [prefix], `false` otherwise.
+  bool startsWith(num prefix) => toString().startsWith(prefix.toString());
+
+  /// Check if the number ends with [suffix].
+  /// Returns `true` if the number ends with [suffix], `false` otherwise.
+  bool endsWith(num suffix) => toString().endsWith(suffix.toString());
+
+  /// Check if the number contains [substring].
+  /// Returns `true` if the number contains [substring], `false` otherwise.
+  bool contains(num substring) => toString().contains(substring.toString());
+
+  /// Get count of a [substring] in the number.
+  /// Returns the count of [substring] in the number.
+
+  int count(num substring) {
+    var count = 0;
+    var index = 0;
+    while (true) {
+      index = toString().indexOf(substring.toString(), index);
+      if (index == -1) break;
+      count++;
+      index++;
+    }
+    return count;
+  }
+
+  /// get the index of all occurrences of [substring] in the number.
+
+  List<int> indexesOf(num substring) {
+    final indexes = <int>[];
+    var index = 0;
+    while (true) {
+      index = toString().indexOf(substring.toString(), index);
+      if (index == -1) break;
+      indexes.add(index);
+      index++;
+    }
+    return indexes;
+  }
+
+  /// Get the index of the first occurrence of [substring] in the number.
+  int indexOfFirst(num substring) => toString().indexOf(substring.toString());
+
+  /// Get the index of the last occurrence of [substring] in the number.
+  /// Returns the index of the last occurrence of [substring] in the number.
+  int indexOfLast(num substring) =>
+      toString().lastIndexOf(substring.toString());
+
+  /// sum of digits
+  /// Returns the sum of digits in the number.
+  num sumOfDigits() {
+    num sum = 0;
+    var number = this;
+    while (number > 0) {
+      sum += number % 10;
+      number = (number / 10).floor();
+    }
+    return sum;
+  }
+
+  /// Get the digits after a [substring] in the number
+  /// Returns the digits after a [substring] in the number
+  num digitsAfter(num substring) {
+    var index = toString().indexOf(substring.toString());
+    if (index == -1) return 0;
+    var result = toString().substring(index + 1);
+    return int.parse(result);
+  }
+
+  /// Get the digits before a [substring] in the number
+  /// Returns the digits before a [substring] in the number
+  num digitsBefore(num substring) {
+    var index = toString().indexOf(substring.toString());
+    if (index == -1) return 0;
+    var result = toString().substring(0, index);
+    return int.parse(result);
+  }
+
+  /// Get the digits between [start] and [end] in the number
+  /// Returns the digits between [start] and [end] in the number
+  num digitsBetween(num start, num end) {
+    var startIndex = toString().indexOf(start.toString());
+    if (startIndex == -1) return 0;
+    var endIndex = toString().indexOf(end.toString(), startIndex + 1);
+    if (endIndex == -1) return 0;
+    var result = toString().substring(startIndex + 1, endIndex);
+    return int.parse(result);
+  }
+
+  /// Get the digits before the first occurrence of [substring] in the number
+  /// Returns the digits before the first occurrence of [substring] in the number
+  num digitsBeforeFirst(num substring) {
+    var index = toString().indexOf(substring.toString());
+    if (index == -1) return 0;
+    var result = toString().substring(0, index);
+    return int.parse(result);
+  }
+
+  /// Get the digits after the first occurrence of [substring] in the number
+  /// Returns the digits after the first occurrence of [substring] in the number
+  num digitsAfterFirst(num substring) {
+    var index = toString().indexOf(substring.toString());
+    if (index == -1) return 0;
+    var result = toString().substring(index + 1);
+    return int.parse(result);
+  }
+
+  /// Get the digits before the last occurrence of [substring] in the number
+  /// Returns the digits before the last occurrence of [substring] in the number
+  num digitsBeforeLast(num substring) {
+    var index = toString().lastIndexOf(substring.toString());
+    if (index == -1) return 0;
+    var result = toString().substring(0, index);
+    return int.parse(result);
+  }
+
+  /// Get the digits after the last occurrence of [substring] in the number
+  /// Returns the digits after the last occurrence of [substring] in the number
+  num digitsAfterLast(num substring) {
+    var index = toString().lastIndexOf(substring.toString());
+    if (index == -1) return 0;
+    var result = toString().substring(index + 1);
+    return int.parse(result);
+  }
+
+  /// Get the lorem ipsum text of [this] words.
+  String loremIpsum() {
+    var words = [
+      'lorem',
+      'ipsum',
+      'dolor',
+      'sit',
+      'amet',
+      'consectetur',
+      'adipiscing',
+      'elit',
+      'sed',
+      'do',
+      'eiusmod',
+      'tempor',
+      'incididunt',
+      'ut',
+      'labore',
+      'et',
+      'dolore',
+      'magna',
+      'aliqua',
+      'ut',
+      'enim',
+      'ad',
+      'minim',
+      'veniam',
+      'quis',
+      'nostrud',
+      'exercitation',
+      'ullamco',
+      'laboris',
+      'nisi',
+      'ut',
+      'aliquip',
+      'ex',
+      'ea',
+      'commodo',
+      'consequat',
+      'duis',
+      'aute',
+      'irure',
+      'dolor',
+      'in',
+      'reprehenderit',
+      'in',
+      'voluptate',
+      'velit',
+      'esse',
+      'cillum',
+      'dolore',
+      'eu',
+      'fugiat',
+      'nulla',
+      'pariatur',
+      'excepteur',
+      'sint',
+      'occaecat',
+      'cupidatat',
+      'non',
+      'proident',
+      'sunt',
+      'in',
+      'culpa',
+      'qui',
+      'officia',
+      'deserunt',
+      'mollit',
+      'anim',
+      'id',
+      'est',
+      'laborum'
+    ];
+
+    var result = '';
+    for (var i = 0; i < this; i++) {
+      result += '${words[i % words.length]} ';
+    }
+    return result.trim();
+  }
+
+  /// Get list of random numbers.
+  List<num> randomList({int min = 0, int max = 100}) {
+    var result = <num>[];
+    for (var i = 0; i < this; i++) {
+      result.add(Random().nextInt(max - min) + min);
+    }
+    return result;
+  }
 }

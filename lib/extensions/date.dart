@@ -106,6 +106,22 @@ extension DateValidators on DateTime? {
   /// ```
   bool get isPm => isNotNull && this!.hour >= 12;
 
+  /// Return `true` if is morning, `false` otherwise.
+  /// Morning is defined as between 5am and 12pm.
+  bool get isMorning => isNotNull && this!.hour >= 5 && this!.hour < 12;
+
+  /// Return `true` if is afternoon, `false` otherwise.
+  /// Afternoon is defined as 12:00 to 17:59.
+  bool get isAfternoon => isNotNull && this!.hour >= 12 && this!.hour < 17;
+
+  /// Return `true` if is evening, `false` otherwise.
+  /// Evening is between 18 and 22.
+  bool get isEvening => isNotNull && this!.hour >= 17 && this!.hour < 21;
+
+  /// Return `true` if is night, `false` otherwise.
+  /// Night is between 23 and 5.
+  bool get isNight => isNotNull && this!.hour >= 21 || this!.hour < 6;
+
   /// Checks if this [DateTime] is greater than [other].
   ///
   /// Returns `true` if this [DateTime] is later than [other], `false` otherwise.
@@ -485,13 +501,11 @@ extension DateConversions on DateTime {
   /// "Good Afternoon" if the hour is between 12:00 and 4:59 PM,
   /// and "Good Night" for all other times.
   String greeting() {
-    int hour = this.hour;
-
-    if (hour <= 12) {
+    if (isMorning) {
       return 'Good Morning';
-    } else if ((hour > 12) && (hour <= 16)) {
+    } else if (isAfternoon) {
       return 'Good Afternoon';
-    } else if ((hour > 16) && (hour <= 20)) {
+    } else if (isEvening) {
       return 'Good Evening';
     } else {
       return 'Good Night';
@@ -793,6 +807,16 @@ extension DateConversions on DateTime {
     }
 
     return toString().split('.')[0];
+  }
+
+  /// Returns the [Duration] from 01.01.1970 (epoch/unix time) until this.
+  ///
+  /// Example:
+  /// ```dart
+  /// DateTime.now().duration(); // Duration from 01.01.1970 until now
+  /// ```
+  Duration duration() {
+    return Duration(milliseconds: millisecondsSinceEpoch);
   }
 }
 

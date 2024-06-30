@@ -7,6 +7,10 @@ void main() {
 
   DateTime date = DateTime(2024, 6, 30);
 
+  List<int> a = [];
+
+  int b = 5;
+
   // log.f(date.isLastWeek);
   log.w(date.startOfWeek);
   log.f(date.startOfLastWeek);

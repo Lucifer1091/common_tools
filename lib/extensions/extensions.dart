@@ -2,6 +2,7 @@ library extensions;
 
 import 'dart:convert';
 import 'dart:math' as math;
+import 'dart:math';
 import '../constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -16,6 +17,7 @@ part 'duration.dart';
 part 'form.dart';
 part 'generic.dart';
 part 'list.dart';
+part 'map.dart';
 part 'num.dart';
 part 'scope_functions.dart';
 part 'string.dart';
