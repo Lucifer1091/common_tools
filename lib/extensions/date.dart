@@ -484,15 +484,17 @@ extension DateConversions on DateTime {
   /// Returns "Good Morning" if the hour is between 5:00 and 11:59 AM,
   /// "Good Afternoon" if the hour is between 12:00 and 4:59 PM,
   /// and "Good Night" for all other times.
-  String toGreeting() {
+  String greeting() {
     int hour = this.hour;
 
-    if (hour >= 5 && hour < 12) {
-      return "Good Morning";
-    } else if (hour >= 12 && hour < 17) {
-      return "Good Afternoon";
+    if (hour <= 12) {
+      return 'Good Morning';
+    } else if ((hour > 12) && (hour <= 16)) {
+      return 'Good Afternoon';
+    } else if ((hour > 16) && (hour <= 20)) {
+      return 'Good Evening';
     } else {
-      return "Good Night";
+      return 'Good Night';
     }
   }
 
