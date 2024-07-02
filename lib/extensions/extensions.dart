@@ -7,6 +7,8 @@ import '../constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'src/sort_key_compare.dart';
+
 part 'bool.dart';
 part 'color.dart';
 part 'context.dart';

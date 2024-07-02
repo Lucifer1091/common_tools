@@ -1,4 +1,4 @@
-library utilities;
+library;
 
 import 'dart:async';
 import 'dart:math';
@@ -13,8 +13,8 @@ import 'package:logger/logger.dart' as logger;
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:flutter/services.dart' as service;
 import 'dart:isolate';
-import '../extensions/extensions.dart';
 
+part 'cancelable_retry.dart';
 part 'clipboard.dart';
 part 'common.dart';
 part 'custom_scroll_web.dart';

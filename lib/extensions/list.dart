@@ -759,13 +759,13 @@ extension ListExtensions<T> on Iterable<T>? {
 
 extension IterableExtensions<T> on Iterable<T>? {
   /// Returns `true` if at least one element matches the given [predicate].
-  bool any(bool Function(T element) predicate) {
-    if (isNullOrEmpty) return false;
-    for (final element in this!) {
-      if (predicate(element)) return true;
-    }
-    return false;
-  }
+  // bool any(bool Function(T element) predicate) {
+  //   if (isNullOrEmpty) return false;
+  //   for (final element in this!) {
+  //     if (predicate(element)) return true;
+  //   }
+  //   return false;
+  // }
 
   /// Returns count of elements that matches the given [predicate].
   /// Returns -1 if iterable is null
@@ -1959,3 +1959,1036 @@ extension ListUtils<T> on List<T> {
     return list;
   }
 }
+
+/// Function that returns `true` if element passes test.
+typedef TestPredicate<E> = bool Function(E element);
+
+/// Function that gets value [T] for that element.
+typedef GetValue<E, T> = T Function(E element);
+
+/// Function that returns value [T] for the element and index
+typedef MapIndexedValue<E, T> = T Function(E element, int index);
+
+/// Extension methods for any [Iterable].
+extension IterableExtensions1<E> on Iterable<E> {
+  // Common
+
+  /// Returns count of elements that satisfy the predicate [test].
+  int countWhere(TestPredicate<E> test) =>
+      fold(0, (count, e) => test(e) ? count + 1 : count);
+
+  /// Returns `true` if the collection contains all elements from the [elements].
+  ///
+  /// Order of elements does not matter.
+  ///
+  /// See [contains].
+  bool containsAll(Iterable<E> elements) {
+    for (final e in elements) {
+      if (!contains(e)) return false;
+    }
+
+    return true;
+  }
+
+  // Common - Equality
+
+  // /// Check equality of the elements of this and [other] iterables
+  // /// without considering order.
+  // ///
+  // /// Return `true` if two iterable have the same number of elements,
+  // /// and the elements of this iterable can be paired with the elements of
+  // /// the other iterable, so that each pair are equal.
+  // bool isUnorderedEquivalent(Iterable<E> other) =>
+  //     _getUnorderedEquality<E>().equals(this, other);
+
+  // Common - Search
+
+  /// Return the first element that satisfies the given predicate [test]
+  /// or `null` if no element satisfies.
+  ///
+  /// See [Iterable.firstWhere].
+  E? firstWhereOrNull(TestPredicate<E> test) {
+    for (final element in this) {
+      if (test(element)) return element;
+    }
+
+    return null;
+  }
+
+  // Common - Safe elements access
+
+  /// Returns the first element or `null` if `this` is empty.
+  E? get firstOrNull => isEmpty ? null : first;
+
+  /// Returns the element at the [index] if exists
+  /// or [orElse] if it is out of range.
+  E? tryElementAt(int index, {E? orElse}) {
+    try {
+      return elementAt(index);
+    } catch (e) {
+      return orElse;
+    }
+  }
+
+  // Transformation
+
+  /// Reduces values of elements in a collection
+  /// to a single value by iteratively combining its
+  /// using the provided function.
+  ///
+  /// The iterable must have at least one element.
+  /// If it has only one element, that element is returned.
+  T reduceValue<T>(
+      T Function(T value, T elementVal) combine, GetValue<E, T> getVal) {
+    final iterator = this.iterator;
+    if (!iterator.moveNext()) {
+      throw StateError('No element');
+    }
+
+    var value = getVal(iterator.current);
+    while (iterator.moveNext()) {
+      value = combine(value, getVal(iterator.current));
+    }
+
+    return value;
+  }
+
+  // Transformation - Iterables
+
+  // /// Splits into chunks of the specified size.
+  // ///
+  // /// Example:
+  // /// ```
+  // /// final res = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].chunks(3);
+  // /// ```
+  // /// Result:
+  // /// ```
+  // /// [[1, 2, 3], [4, 5, 6], [7, 8, 9], [10]]
+  // /// ```
+  // Iterable<List<E>> chunks(int size) => partition(this, size);
+  //
+  // /// Adds [element] between elements of the iterable.
+  // ///
+  // /// Example: if we have `[1, 2, 3]` and adds `0`, then as a result
+  // /// we will have `[1, 0, 2, 0, 3]`.
+  // ///
+  // /// If iterable is empty then returns empty iterable.
+  // ///
+  // /// If iterable have only one element then
+  // /// returns interable with only one element.
+  // Iterable<E> intersperse(E element) =>
+  //     isEmpty ? [] : IntersperseIterable(this, element);
+  //
+  // /// Create a new iterable by passing each element and index to the callback.
+  // ///
+  // /// Example: if we have `['a', 'b', 'c']`, then the callback is called
+  // /// with ('a', 0), ('b', 1), then ('c', 2).
+  // ///
+  // /// Returns a new lazy iterable with elements that are created by
+  // /// calling `toElement` on each element of this `Iterable` in
+  // /// iteration order with a generated index.
+  // ///
+  // /// See [Iterable.map] for caveats about the lazy iterable.
+  // Iterable<T> mapIndex<T>(MapIndexedValue<E, T> toElement) =>
+  //     enumerate(this).map((e) => toElement(e.value, e.index));
+
+  // Transformation - String
+
+  /// Get string value for each element and concatenates it with [separator].
+  ///
+  /// [getVal] used to get string value for element. It can be value of some
+  /// field, or custom stringify function.
+  String joinOf(GetValue<E, String> getVal, [String separator = '']) =>
+      fold('', (res, e) => res != '' ? res + separator + getVal(e) : getVal(e));
+
+  // Transformation - Map
+
+  /// Creates a Map instance from the iterable.
+  ///
+  /// [getKey] used to get key for result Map.
+  /// [getVal] used to get value for result Map.
+  Map<TKey, TVal> toMap<TKey, TVal>(
+          GetValue<E, TKey> getKey, GetValue<E, TVal> getVal) =>
+      {for (final e in this) getKey(e): getVal(e)};
+
+  // Math
+
+  /// Returns sum of int values by elements.
+  ///
+  /// [getVal] should return value for sum up. It can be property of element,
+  /// or any another value by element.
+  int sumOf(GetValue<E, int> getVal) => fold(0, (sum, e) => sum + getVal(e));
+
+  /// Returns sum of double values by elements.
+  ///
+  /// [getVal] should return value for sum up. It can be property of element,
+  /// or any another value by element.
+  double sumOfDouble(GetValue<E, double> getVal) =>
+      fold(0, (sum, e) => sum + getVal(e));
+
+  /// Returns the average value of int values by elements.
+  ///
+  /// [getVal] should return value for calculate average.
+  /// It can be property of element, or any another value by element.
+  ///
+  /// If no elements, return `0`.
+  double avgOf(GetValue<E, int> getVal) {
+    final count = length;
+    return count > 0 ? sumOf(getVal) / count : 0;
+  }
+
+  /// Returns the average value of double values by elements.
+  ///
+  /// [getVal] should return value for calculate average.
+  /// It can be property of element, or any another value by element.
+  ///
+  /// If no elements, return `0`.
+  double avgOfDouble(GetValue<E, double> getVal) {
+    final count = length;
+    return count > 0 ? sumOfDouble(getVal) / count : 0;
+  }
+
+  /// Returns the max value of int or double values by elements.
+  ///
+  /// [getVal] should return value for compare.
+  /// It can be property of element, or any another value by element.
+  ///
+  /// If no elements, return zero.
+  T maxOf<T extends num>(GetValue<E, T> getVal) {
+    return isEmpty ? _zero() : reduceValue(math.max, getVal);
+  }
+
+  /// Returns the min value of int or double values by elements.
+  ///
+  /// [getVal] should return value for compare.
+  /// It can be property of element, or any another value by element.
+  ///
+  /// If no elements, return zero.
+  T minOf<T extends num>(GetValue<E, T> getVal) {
+    return isEmpty ? _zero() : reduceValue(math.min, getVal);
+  }
+}
+
+extension NullableIterableExtensions<E> on Iterable<E>? {
+  // // Common - Equality
+  //
+  // /// Returns `true` if iterable is `null` or empty.
+  // bool get isNullOrEmpty {
+  //   return this?.isEmpty ?? true;
+  // }
+  //
+  // /// Returns `true` if iterable is not `null` and not empty.
+  // bool get isNotNullOrEmpty {
+  //   return this?.isNotEmpty ?? false;
+  // }
+}
+
+/// Extension methods for [Iterable] of num.
+extension NumIterableExtensions<E extends num> on Iterable<E> {
+  // Math
+
+  /// Returns max value of values.
+  E max() => isEmpty ? _zero() : reduce(math.max);
+
+  /// Returns min value of values.
+  E min() => isEmpty ? _zero() : reduce(math.min);
+}
+
+extension BigIntItrableExtention on Iterable<BigInt> {
+  /// Returns max value of values.
+  BigInt min() {
+    final min = isEmpty
+        ? BigInt.zero
+        : reduce((value, element) => value < element ? value : element);
+    return min;
+  }
+
+  /// Returns min value of values.
+  BigInt max() {
+    final max = isEmpty
+        ? BigInt.zero
+        : reduce((value, element) => value > element ? value : element);
+    return max;
+  }
+}
+
+extension IterableExtension<E> on Iterable<E> {
+  BigInt sumOfBigInt(GetValue<E, BigInt> getVal) =>
+      fold(BigInt.zero, (sum, e) => sum + getVal(e));
+}
+
+/// Extension methods for [Iterable] of int.
+extension IntIterableExtensions on Iterable<int> {
+  // Math
+
+  /// Returns sum of values.
+  int sum() => fold(0, (sum, v) => sum + v);
+
+  /// Returns the average value of values.
+  ///
+  /// See [IterableExtensions.avgOf].
+  double avg() => isNotEmpty ? sum() / length : 0;
+}
+
+/// Extension methods for [Iterable] of double.
+extension DoubleIterableExtensions on Iterable<double> {
+  // Math
+
+  /// Returns sum of values.
+  double sum() => fold(0, (sum, v) => sum + v);
+
+  /// Returns the average value of values.
+  ///
+  /// See [IterableExtensions.avgOfDouble].
+  double avg() => isNotEmpty ? sum() / length : 0;
+}
+
+/// Returns zero value for num, depends on required type.
+///
+/// It will be `0` for [int] and `0.0` for [double].
+T _zero<T extends num>() => T == int ? 0 as T : 0.0 as T;
+
+/// Extension methods for any [List].
+extension ListExtensions1<E> on List<E> {
+  // Common
+
+  // Common - Get
+
+  /// Returns a random element from the list.
+  ///
+  /// Throws a [StateError] if `this` is empty.
+  E get random {
+    if (isEmpty) {
+      throw StateError('No element');
+    }
+
+    final rnd = Random();
+    return this[rnd.nextInt(length)];
+  }
+
+  // Transformation
+
+  // Transformation - List
+  /// Copy current list with adding [element] at the end of new list.
+  ///
+  /// If current list is `null` - new list with [element] will be created.
+  List<E> copyWith(E element) => List.from(this)..add(element);
+
+  /// Copy current list with adding all [elements] at the end of new list.
+  ///
+  /// If current list is `null` - copy of list [elements] will be created.
+  List<E> copyWithAll(List<E> elements) => List.from(this)..addAll(elements);
+
+  /// Copy current list, replacing all [element] occurrences with [replacement].
+  ///
+  /// If [element] is not in the list than just copy will be returned.
+  /// If current list is `null` - returns new empty list.
+  List<E> copyWithReplace(E element, E replacement) {
+    return [for (final e in this) e == element ? replacement : e];
+  }
+
+  /// Copy current list with adding all [elements] at the position of new list.
+  ///
+  /// Error throwed due to a value being outside a valid range.
+  List<E> copyWithInsertAll(int index, List<E> elements) =>
+      List.from(this)..insertAll(index, elements);
+
+  /// Copy current list, replacing elements of list that
+  /// satisfy [test] predicate with [replacement].
+  ///
+  /// If no elements that satisfy [test] predicate found
+  /// than just copy will be returned.
+  /// If current list is `null` - returns new empty list.
+  List<E> copyWithReplaceWhere(TestPredicate<E> test, E replacement) {
+    return [for (final e in this) test(e) ? replacement : e];
+  }
+
+  // Modification
+
+  // Modification - Element
+
+  /// Replaces all [element] occurrences with [replacement].
+  ///
+  /// Returns `true` if element was replaced.
+  /// If [element] is not in the list than will be no changes.
+  /// If there are multiple [element] in list - all will be replaced.
+  bool replace(E element, E replacement) {
+    var found = false;
+    final len = length;
+    for (var i = 0; i < len; i++) {
+      if (element == this[i]) {
+        this[i] = replacement;
+        found = true;
+      }
+    }
+
+    return found;
+  }
+
+  /// Replaces all elements of list that satisfy [test] predicate
+  /// with [replacement].
+  ///
+  /// Returns `true` if at least one element was replaced.
+  /// If no elements that satisfy [test] predicate found than will be no changes.
+  bool replaceWhere(TestPredicate<E> test, E replacement) {
+    var found = false;
+    final len = length;
+    for (var i = 0; i < len; i++) {
+      if (test(this[i])) {
+        this[i] = replacement;
+        found = true;
+      }
+    }
+
+    return found;
+  }
+
+  /// Adds [value] to the end of this list
+  /// only if it's not null.
+  ///
+  /// The list must be growable.
+  bool addIfNotNull(E? value) {
+    if (value != null) {
+      add(value);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  // Modification - Sorting
+
+  /// Sorts the list in ascending order of the object's field value.
+  void sortBy(Comparable Function(E e) getVal) =>
+      sort((a, b) => getVal(a).compareTo(getVal(b)));
+
+  /// Sorts the list in descending order of the object's field value.
+  void sortByDescending(Comparable Function(E e) getVal) =>
+      sort((a, b) => getVal(b).compareTo(getVal(a)));
+}
+
+extension NullableListExtensions<E> on List<E>? {
+  // Transformation
+
+  // Transformation - List
+
+  /// Copy current list with adding [element] at the end of new list.
+  ///
+  /// If current list is `null` - new list with [element] will be created.
+  List<E> copyWith(E element) => this?.copyWith(element) ?? [element];
+
+  /// Copy current list with adding all [elements] at the end of new list.
+  ///
+  /// If current list is `null` - copy of list [elements] will be created.
+  List<E> copyWithAll(List<E> elements) =>
+      this?.copyWithAll(elements) ?? List.from(elements);
+
+  /// Copy current list with adding all [elements] at the position of new list.
+  ///
+  /// If current list is `null` - copy of list [elements] will be created.
+  /// Error throwed due to a value being outside a valid range.
+  List<E> copyWithInsertAll(int index, List<E> elements) =>
+      this?.copyWithInsertAll(index, elements) ?? List.from(elements);
+
+  /// Copy current list, replacing all [element] occurrences with [replacement].
+  ///
+  /// If [element] is not in the list than just copy will be returned.
+  /// If current list is `null` - returns new empty list.
+  List<E> copyWithReplace(E element, E replacement) {
+    return this?.copyWithReplace(element, replacement) ?? const [];
+  }
+
+  /// Copy current list, replacing elements of list that
+  /// satisfy [test] predicate with [replacement].
+  ///
+  /// If no elements that satisfy [test] predicate found
+  /// than just copy will be returned.
+  /// If current list is `null` - returns new empty list.
+  List<E> copyWithReplaceWhere(TestPredicate<E> test, E replacement) {
+    return this?.copyWithReplaceWhere(test, replacement) ?? const [];
+  }
+}
+
+extension IterableExtension2<T> on Iterable<T> {
+  /// Split one large list to limited sub lists
+  /// ```dart
+  /// [1, 2, 3, 4, 5, 6, 7, 8, 9].chunks(2)
+  /// // => [[1, 2], [3, 4], [5, 6], [7, 8], [9]]
+  /// ```
+  Iterable<List<T>> chunks(int chunkSize) sync* {
+    final len = length;
+
+    for (int i = 0; i < len; i += chunkSize) {
+      final start = i > len ? i - len : i;
+      yield skip(start).take(chunkSize).toList();
+    }
+  }
+}
+
+extension ListExtension4<T> on List<T> {
+  /// Split one large list to limited sub lists
+  /// ```dart
+  /// [1, 2, 3, 4, 5, 6, 7, 8, 9].chunks(2)
+  /// // => [[1, 2], [3, 4], [5, 6], [7, 8], [9]]
+  /// ```
+  List<List<T>> chunks(int chunkSize) {
+    final chunks = <List<T>>[];
+    final len = length;
+    for (int i = 0; i < len; i += chunkSize) {
+      final size = i + chunkSize;
+      chunks.add(sublist(i, size > len ? len : size));
+    }
+    return chunks;
+  }
+}
+
+// /// Utility extension methods for the native [Iterable] class.
+// extension IterableBasics<E> on Iterable<E> {
+//   /// Alias for [Iterable]`.every`.
+//   bool all(bool Function(E) test) => every(test);
+//
+//   /// Returns `true` if no element of [this] satisfies [test].
+//   ///
+//   /// Example:
+//   /// ```dart
+//   /// [1, 2, 3].none((e) => e > 4); // true
+//   /// [1, 2, 3].none((e) => e > 2); // false
+//   /// ```
+//   bool none(bool Function(E) test) => !any(test);
+//
+//   /// Returns `true` if there is exactly one element of [this] which satisfies
+//   /// [test].
+//   ///
+//   /// Example:
+//   /// ```dart
+//   /// [1, 2, 3].one((e) => e == 2); // 1 element satisfies. Returns true.
+//   /// [1, 2, 3].one((e) => e > 4); // No element satisfies. Returns false.
+//   /// [1, 2, 3].one((e) => e > 1); // >1 element satisfies. Returns false.
+//   /// ```
+//   bool one(bool Function(E) test) {
+//     bool foundOne = false;
+//     for (var e in this) {
+//       if (test(e)) {
+//         if (foundOne) return false;
+//         foundOne = true;
+//       }
+//     }
+//     return foundOne;
+//   }
+//
+//   /// Returns `true` if [this] contains at least one element also contained in
+//   /// [other].
+//   ///
+//   /// Example:
+//   /// ```dart
+//   /// [1, 2, 3].containsAny([5, 2]); // true
+//   /// [1, 2, 3].containsAny([4, 5, 6]); // false
+//   /// ```
+//   bool containsAny(Iterable<E> other) => any(other.contains);
+//
+//   /// Returns true if every element in [other] also exists in [this].
+//   ///
+//   /// Example:
+//   /// ```dart
+//   /// [1, 2, 3].containsAll([1, 2]); // true
+//   /// [1, 2].containsAll([1, 2, 3]); // false
+//   /// ```
+//   ///
+//   /// If [collapseDuplicates] is true, only the presence of a value will be
+//   /// considered, not the number of times it occurs. If [collapseDuplicates] is
+//   /// false, the number of occurrences of a given value in [this] must be
+//   /// greater than or equal to the number of occurrences of that value in
+//   /// [other] for the result to be true.
+//   ///
+//   /// Example:
+//   /// ```
+//   /// [1, 2, 3].containsAll([1, 1, 1, 2]); // true
+//   /// [1, 2, 3].containsAll([1, 1, 1, 2], collapseDuplicates: false); // false
+//   /// [1, 1, 2, 3].containsAll([1, 1, 2], collapseDuplicates: false); // true
+//   /// ```
+//   bool containsAll(Iterable<E> other, {bool collapseDuplicates = true}) {
+//     if (other.isEmpty) return true;
+//     if (collapseDuplicates) {
+//       return Set<E>.from(this).containsAll(Set<E>.from(other));
+//     }
+//
+//     final thisElementCounts = _elementCountsIn<E>(this);
+//     final otherElementCounts = _elementCountsIn<E>(other);
+//
+//     for (final element in otherElementCounts.keys) {
+//       final countInThis = thisElementCounts[element] ?? 0;
+//       final countInOther = otherElementCounts[element] ?? 0;
+//       if (countInThis < countInOther) {
+//         return false;
+//       }
+//     }
+//     return true;
+//   }
+//
+//   /// Returns the greatest element of [this] as ordered by [compare], or [null]
+//   /// if [this] is empty.
+//   ///
+//   /// Example:
+//   /// ```dart
+//   /// ['a', 'aaa', 'aa']
+//   ///   .max((a, b) => a.length.compareTo(b.length)).value; // 'aaa'
+//   /// ```
+//   E? max(Comparator<E> compare) =>
+//       isEmpty ? null : reduce(_generateCustomMaxFunction<E>(compare));
+//
+//   /// Returns the smallest element of [this] as ordered by [compare], or [null]
+//   /// if [this] is empty.
+//   ///
+//   /// Example:
+//   /// ```dart
+//   /// ['a', 'aaa', 'aa']
+//   ///   .min((a, b) => a.length.compareTo(b.length)).value; // 'a'
+//   /// ```
+//   E? min(Comparator<E> compare) =>
+//       isEmpty ? null : reduce(_generateCustomMinFunction<E>(compare));
+//
+//   /// Returns the element of [this] with the greatest value for [sortKey], or
+//   /// [null] if [this] is empty.
+//   ///
+//   /// This method is guaranteed to calculate [sortKey] only once for each
+//   /// element.
+//   ///
+//   /// Example:
+//   /// ```dart
+//   /// ['a', 'aaa', 'aa'].maxBy((e) => e.length).value; // 'aaa'
+//   /// ```
+//   E? maxBy(Comparable<dynamic> Function(E) sortKey) {
+//     final sortKeyCache = <E, Comparable<dynamic>>{};
+//     return this.max((a, b) => sortKeyCompare<E>(a, b, sortKey, sortKeyCache));
+//   }
+//
+//   /// Returns the element of [this] with the least value for [sortKey], or
+//   /// [null] if [this] is empty.
+//   ///
+//   /// This method is guaranteed to calculate [sortKey] only once for each
+//   /// element.
+//   ///
+//   /// Example:
+//   /// ```dart
+//   /// ['a', 'aaa', 'aa'].minBy((e) => e.length).value; // 'a'
+//   /// ```
+//   E? minBy(Comparable<dynamic> Function(E) sortKey) {
+//     final sortKeyCache = <E, Comparable<dynamic>>{};
+//     return this.min((a, b) => sortKeyCompare<E>(a, b, sortKey, sortKeyCache));
+//   }
+//
+//   /// Returns the sum of all the values in this iterable, as defined by
+//   /// [addend].
+//   ///
+//   /// Returns 0 if [this] is empty.
+//   ///
+//   /// Example:
+//   /// ```dart
+//   /// ['a', 'aa', 'aaa'].sum((s) => s.length); // 6
+//   /// ```
+//   num sum(num Function(E) addend) => isEmpty
+//       ? 0
+//       : fold(0, (prev, element) => prev + addend(element));
+//
+//   /// Returns the average of all the values in this iterable, as defined by
+//   /// [value].
+//   ///
+//   /// Returns null if [this] is empty.
+//   ///
+//   /// Example:
+//   /// ```dart
+//   /// ['a', 'aa', 'aaa'].average((s) => s.length); // 2
+//   /// [].average(); // null
+//   /// ```
+//   num? average(num Function(E) value) {
+//     if (isEmpty) return null;
+//
+//     return this.sum(value) / length;
+//   }
+//
+//   /// Returns a random element of [this], or [null] if [this] is empty.
+//   ///
+//   /// If [seed] is provided, will be used as the random seed for determining
+//   /// which element to select. (See [math.Random].)
+//   E? getRandom({int? seed}) => isEmpty
+//       ? null
+//       : elementAt(math.Random(seed).nextInt(length));
+//
+//   /// Returns an [Iterable] containing the first [end] elements of [this],
+//   /// excluding the first [start] elements.
+//   ///
+//   /// This method is a generalization of [List.getRange] to [Iterable]s,
+//   /// and obeys the same contract.
+//   ///
+//   /// Example:
+//   /// ```dart
+//   /// {3, 8, 12, 4, 1}.range(2, 4); // [12, 4]
+//   /// ```
+//   Iterable<E> getRange(int start, int end) {
+//     RangeError.checkValidRange(start, end, length);
+//     return skip(start).take(end - start);
+//   }
+// }
+//
+// /// Utility extension methods for [Iterable]s containing [num]s.
+// extension NumIterableBasics<E extends num> on Iterable<E> {
+//   /// Returns the greatest number in [this], or [null] if [this] is empty.
+//   ///
+//   /// Example:
+//   /// ```dart
+//   /// [104, 3, 18].max().value; // 104
+//   /// ```
+//   ///
+//   /// If [compare] is provided, it will be used to order the elements.
+//   ///
+//   /// Example:
+//   /// ```dart
+//   /// [-47, 10, 2].max((a, b) =>
+//   ///     a.toString().length.compareTo(b.toString().length)).value; // -47
+//   /// ```
+//   E? max([Comparator<E>? compare]) => isEmpty
+//       ? null
+//       : reduce(
+//           compare == null ? math.max : _generateCustomMaxFunction<E>(compare));
+//
+//   /// Returns the least number in [this], or [null] if [this] is empty.
+//   ///
+//   /// Example:
+//   /// ```dart
+//   /// [104, 3, 18].min().value; // 3
+//   /// ```
+//   ///
+//   /// If [compare] is provided, it will be used to order the elements.
+//   ///
+//   /// Example:
+//   /// ```dart
+//   /// [-100, -200, 5].min((a, b) =>
+//   ///     a.toString().length.compareTo(b.toString().length)).value; // 5
+//   /// ```
+//   E? min([Comparator<E>? compare]) => isEmpty
+//       ? null
+//       : reduce(
+//           compare == null ? math.min : _generateCustomMinFunction<E>(compare));
+//
+//   /// Returns the sum of all the values in this iterable.
+//   ///
+//   /// If [addend] is provided, it will be used to compute the value to be
+//   /// summed.
+//   ///
+//   /// Returns 0 if [this] is empty.
+//   ///
+//   /// Example:
+//   /// ```dart
+//   /// [1, 2, 3].sum(); // 6.
+//   /// [2, 3, 4].sum((i) => i * 0.5); // 4.5.
+//   /// [].sum() // 0.
+//   /// ```
+//   num sum([num Function(E)? addend]) {
+//     if (isEmpty) return 0;
+//     return addend == null
+//         ? reduce((a, b) => (a + b) as E)
+//         : fold(0, (prev, element) => prev + addend(element));
+//   }
+//
+//   /// Returns the average of all the values in this iterable.
+//   ///
+//   /// If [value] is provided, it will be used to compute the value to be
+//   /// averaged.
+//   ///
+//   /// Returns null if [this] is empty.
+//   ///
+//   /// Example:
+//   /// ```dart
+//   /// [2, 2, 4, 8].average(); // 4.
+//   /// [2, 2, 4, 8].average((i) => i + 1); // 5.
+//   /// [].average() // null.
+//   /// ```
+//   num? average([num Function(E)? value]) {
+//     if (isEmpty) return null;
+//
+//     return this.sum(value) / length;
+//   }
+// }
+//
+// T Function(T, T) _generateCustomMaxFunction<T>(Comparator<T> compare) {
+//   T max(T a, T b) {
+//     if (compare(a, b) >= 0) return a;
+//     return b;
+//   }
+//
+//   return max;
+// }
+//
+// T Function(T, T) _generateCustomMinFunction<T>(Comparator<T> compare) {
+//   T min(T a, T b) {
+//     if (compare(a, b) <= 0) return a;
+//     return b;
+//   }
+//
+//   return min;
+// }
+//
+// Map<E, int> _elementCountsIn<E>(Iterable<E> iterable) {
+//   final counts = <E, int>{};
+//   for (final element in iterable) {
+//     final currentCount = counts[element] ?? 0;
+//     counts[element] = currentCount + 1;
+//   }
+//   return counts;
+// }
+
+///
+
+// Copyright (c) 2019, Google Inc. Please see the AUTHORS file for details.
+// All rights reserved. Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+// import 'dart:math' as math;
+//
+// import 'src/slice_indices.dart';
+// import 'src/sort_key_compare.dart';
+//
+// /// Utility extension methods for the native [List] class.
+// extension ListBasics<E> on List<E> {
+//   /// Returns a new list containing the elements of [this] from [start]
+//   /// inclusive to [end] exclusive, skipping by [step].
+//   ///
+//   /// Example:
+//   /// ```dart
+//   /// [1, 2, 3, 4].slice(start: 1, end: 3); // [2, 3]
+//   /// [1, 2, 3, 4].slice(start: 1, end: 4, step: 2); // [2, 4]
+//   /// ```
+//   ///
+//   /// [start] defaults to the first element if [step] is positive and to the
+//   /// last element if [step] is negative. [end] does the opposite.
+//   ///
+//   /// Example:
+//   /// ```dart
+//   /// [1, 2, 3, 4].slice(end: 2); // [1, 2]
+//   /// [1, 2, 3, 4].slice(start: 1); // [2, 3, 4]
+//   /// [1, 2, 3, 4].slice(end: 1, step: -1); // [4, 3]
+//   /// [1, 2, 3, 4].slice(start: 2, step: -1); // [3, 2, 1]
+//   /// ```
+//   ///
+//   /// If [start] or [end] is negative, it will be counted backwards from the
+//   /// last element of [this]. If [step] is negative, the elements will be
+//   /// returned in reverse order.
+//   ///
+//   /// Example:
+//   /// ```dart
+//   /// [1, 2, 3, 4].slice(start: -2); // [3, 4]
+//   /// [1, 2, 3, 4].slice(end: -1); // [1, 2, 3]
+//   /// [1, 2, 3, 4].slice(step: -1); // [4, 3, 2, 1]
+//   /// ```
+//   ///
+//   /// Any out-of-range values for [start] or [end] will be truncated to the
+//   /// maximum in-range value in that direction.
+//   ///
+//   /// Example:
+//   /// ```dart
+//   /// [1, 2, 3, 4].slice(start: -100); // [1, 2, 3, 4]
+//   /// [1, 2, 3, 4].slice(end: 100); // [1, 2, 3, 4]
+//   /// ```
+//   ///
+//   /// Will return an empty list if [start] and [end] are equal, [start] is
+//   /// greater than [end] while [step] is positive, or [end] is greater than
+//   /// [start] while [step] is negative.
+//   ///
+//   /// Example:
+//   /// ```dart
+//   /// [1, 2, 3, 4].slice(start: 1, end: -3); // []
+//   /// [1, 2, 3, 4].slice(start: 3, end: 1); // []
+//   /// [1, 2, 3, 4].slice(start: 1, end: 3, step: -1); // []
+//   /// ```
+//   List<E> slice({int? start, int? end, int step = 1}) {
+//     final indices = sliceIndices(start, end, step, this.length);
+//     if (indices == null) {
+//       return <E>[];
+//     }
+//
+//     final _start = indices.start;
+//     final _end = indices.end;
+//     final slice = <E>[];
+//
+//     if (step > 0) {
+//       for (var i = _start; i < _end; i += step) {
+//         slice.add(this[i]);
+//       }
+//     } else {
+//       for (var i = _start; i > _end; i += step) {
+//         slice.add(this[i]);
+//       }
+//     }
+//     return slice;
+//   }
+//
+//   /// Returns a sorted copy of this list.
+//   List<E> sortedCopy() {
+//     return List<E>.of(this)..sort();
+//   }
+//
+//   /// Sorts this list by the value returned by [sortKey] for each element.
+//   ///
+//   /// This method is guaranteed to calculate [sortKey] only once for each
+//   /// element.
+//   ///
+//   /// Example:
+//   /// ```dart
+//   /// var list = [-12, 3, 10];
+//   /// list.sortBy((e) => e.toString().length); // list is now [3, 10, -12].
+//   /// ```
+//   void sortBy(Comparable<dynamic> Function(E) sortKey) {
+//     final sortKeyCache = <E, Comparable<dynamic>>{};
+//     this.sort((a, b) => sortKeyCompare(a, b, sortKey, sortKeyCache));
+//   }
+//
+//   /// Returns a copy of this list sorted by the value returned by [sortKey] for
+//   /// each element.
+//   ///
+//   /// This method is guaranteed to calculate [sortKey] only once for each
+//   /// element.
+//   ///
+//   /// Example:
+//   /// ```dart
+//   /// var list = [-12, 3, 10];
+//   /// var sorted = list.sortedCopyBy((e) => e.toString().length);
+//   /// // list is still [-12, 3, 10]. sorted is [3, 10, -12].
+//   /// ```
+//   List<E> sortedCopyBy(Comparable<dynamic> Function(E) sortKey) {
+//     return List<E>.of(this)..sortBy(sortKey);
+//   }
+//
+//   /// Removes a random element of [this] and returns it.
+//   ///
+//   /// Returns [null] if [this] is empty.
+//   ///
+//   /// If [seed] is provided, will be used as the random seed for determining
+//   /// which element to select. (See [math.Random].)
+//   E? takeRandom({int? seed}) => this.isEmpty
+//       ? null
+//       : this.removeAt(math.Random(seed).nextInt(this.length));
+// }
+
+///
+
+// import 'dart:math' as math;
+//
+// /// Utility extension methods for the native [Set] class.
+// extension SetBasics<E> on Set<E> {
+//   /// Returns `true` if [this] and [other] contain exactly the same elements.
+//   ///
+//   /// Example:
+//   /// ```dart
+//   /// var set = {'a', 'b', 'c'};
+//   /// set.isEqualTo({'b', 'a', 'c'}); // true
+//   /// set.isEqualTo({'b', 'a', 'f'}); // false
+//   /// set.isEqualTo({'a', 'b'}); // false
+//   /// set.isEqualTo({'a', 'b', 'c', 'd'}); // false
+//   /// ```
+//   bool isEqualTo(Set<Object> other) =>
+//       this.length == other.length && this.containsAll(other);
+//
+//   /// Returns `true` if [this] and [other] have no elements in common.
+//   ///
+//   /// Example:
+//   /// ```dart
+//   /// var set = {'a', 'b', 'c'};
+//   /// set.isDisjointWith({'d', 'e', 'f'}); // true
+//   /// set.isDisjointWith({'d', 'e', 'b'}); // false
+//   /// ```
+//   bool isDisjointWith(Set<Object> other) => this.intersection(other).isEmpty;
+//
+//   /// Returns `true` if [this] and [other] have at least one element in common.
+//   ///
+//   /// Example:
+//   /// ```dart
+//   /// var set = {'a', 'b', 'c'};
+//   /// set.isIntersectingWith({'d', 'e', 'b'}); // true
+//   /// set.isIntersectingWith({'d', 'e', 'f'}); // false
+//   /// ```
+//   bool isIntersectingWith(Set<Object> other) =>
+//       this.intersection(other).isNotEmpty;
+//
+//   /// Returns `true` if every element of [this] is contained in [other].
+//   ///
+//   /// Example:
+//   /// ```dart
+//   /// var set = {'a', 'b', 'c'};
+//   /// set.isSubsetOf({'a', 'b', 'c', 'd'}); // true
+//   /// set.isSubsetOf({'a', 'b', 'c'}); // true
+//   /// set.isSubsetOf({'a', 'b', 'f'}); // false
+//   /// ```
+//   bool isSubsetOf(Set<Object> other) =>
+//       this.length <= other.length && other.containsAll(this);
+//
+//   /// Returns `true` if every element of [other] is contained in [this].
+//   ///
+//   /// ```dart
+//   /// var set = {'a', 'b', 'c'};
+//   /// set.isSupersetOf({'a', 'b'}); // true
+//   /// set.isSupersetOf({'a', 'b', 'c'}); // true
+//   /// set.isSupersetOf({'a', 'b', 'f'}); // false
+//   /// ```
+//   bool isSupersetOf(Set<Object> other) =>
+//       this.length >= other.length && this.containsAll(other);
+//
+//   /// Returns `true` if every element of [this] is contained in [other] and at
+//   /// least one element of [other] is not contained in [this].
+//   ///
+//   /// Example:
+//   /// ```dart
+//   /// var set = {'a', 'b', 'c'};
+//   /// set.isStrictSubsetOf({'a', 'b', 'c', 'd'}); // true
+//   /// set.isStrictSubsetOf({'a', 'b', 'c'}); // false
+//   /// set.isStrictSubsetOf({'a', 'b', 'f'}); // false
+//   /// ```
+//   bool isStrictSubsetOf(Set<Object> other) =>
+//       this.length < other.length && other.containsAll(this);
+//
+//   /// Returns `true` if every element of [other] is contained in [this] and at
+//   /// least one element of [this] is not contained in [other].
+//   ///
+//   /// ```dart
+//   /// var set = {'a', 'b', 'c'};
+//   /// set.isStrictSupersetOf({'a', 'b'}); // true
+//   /// set.isStrictSupersetOf({'a', 'b', 'c'}); // false
+//   /// set.isStrictSupersetOf({'a', 'b', 'f'}); // false
+//   /// ```
+//   bool isStrictSupersetOf(Set<Object> other) =>
+//       this.length > other.length && this.containsAll(other);
+//
+//   /// Removes a random element of [this] and returns it.
+//   ///
+//   /// Returns [null] if [this] is empty.
+//   ///
+//   /// If [seed] is provided, will be used as the random seed for determining
+//   /// which element to select. (See [math.Random].)
+//   E? takeRandom({int? seed}) {
+//     if (this.isEmpty) return null;
+//     final element = this.elementAt(math.Random(seed).nextInt(this.length));
+//     this.remove(element);
+//     return element;
+//   }
+//
+//   /// Returns a map grouping all elements of [this] with the same value for
+//   /// [classifier].
+//   ///
+//   /// Example:
+//   /// ```dart
+//   /// {'aaa', 'bbb', 'cc', 'a', 'bb'}.classify<int>((e) => e.length);
+//   /// // Returns {
+//   /// //   1: {'a'},
+//   /// //   2: {'cc', 'bb'},
+//   /// //   3: {'aaa', 'bbb'}
+//   /// // }
+//   /// ```
+//   Map<K, Set<E>> classify<K>(K classifier(E element)) {
+//     final groups = <K, Set<E>>{};
+//     for (var e in this) {
+//       groups.putIfAbsent(classifier(e), () => <E>{}).add(e);
+//     }
+//     return groups;
+//   }
+// }
+
+///
