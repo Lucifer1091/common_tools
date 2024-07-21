@@ -1,12 +1,14 @@
 import 'dart:convert';
 
+import '../common_tools.dart';
+
 // Decode a string JWT token into a `Map<String, dynamic>`
 class JwtDecoder {
   JwtDecoder._();
 
   /// Decode a string JWT token into a `Map<String, dynamic>`
   static Map<String, dynamic>? decode(String token) {
-    final splitToken = token.split(".");
+    final splitToken = token.split('.');
     if (splitToken.length != 3) {
       throw const FormatException('Invalid token');
     }
@@ -16,7 +18,7 @@ class JwtDecoder {
       final payloadString = utf8.decode(base64.decode(normalizedPayload));
       final decodedPayload = jsonDecode(payloadString);
 
-      return decodedPayload;
+      return decodedPayload as Map<String, dynamic>?;
     } catch (error) {
       throw const FormatException('Invalid payload');
     }
@@ -42,8 +44,9 @@ class JwtDecoder {
   static DateTime getExpirationDate(String token) {
     final decodedToken = decode(token)!;
 
-    final expirationDate = DateTime.fromMillisecondsSinceEpoch(0)
-        .add(Duration(seconds: decodedToken['exp'].toInt()));
+    final expirationDate = DateTime.fromMillisecondsSinceEpoch(0).add(
+      Duration(seconds: decodedToken['exp'].toString().toInt() ?? 0),
+    );
     return expirationDate;
   }
 
@@ -51,8 +54,9 @@ class JwtDecoder {
   static Duration getTokenTime(String token) {
     final decodedToken = decode(token)!;
 
-    final issuedAtDate = DateTime.fromMillisecondsSinceEpoch(0)
-        .add(Duration(seconds: decodedToken["iat"]));
+    final issuedAtDate = DateTime.fromMillisecondsSinceEpoch(0).add(
+      Duration(seconds: decodedToken['iat'].toString().toInt() ?? 0),
+    );
     return DateTime.now().difference(issuedAtDate);
   }
 

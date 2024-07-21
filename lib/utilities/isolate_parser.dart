@@ -1,3 +1,5 @@
+// ignore_for_file: strict_raw_type, inference_failure_on_instance_creation
+
 part of 'utilities.dart';
 
 /// Typedef for a converter function that converts dynamic `response` to type `T`.
@@ -20,11 +22,12 @@ typedef ResponseConverter<T> = T Function(dynamic response);
 /// }
 /// ```
 class IsolateParser<T> {
-  final Map<String, dynamic> json;
-  final ResponseConverter<T> converter;
 
   /// Constructs an `IsolateParser` with the given JSON data and converter function.
   IsolateParser(this.json, this.converter);
+  
+  final Map<String, dynamic> json;
+  final ResponseConverter<T> converter;
 
   /// Parses the JSON data in a background isolate and returns the result of type `T`.
   ///
@@ -70,10 +73,10 @@ class IsolateParser<T> {
 /// }
 /// ```
 class VoidIsolateParser<T> {
-  final VoidCallback? run;
 
   /// Constructs a `VoidIsolateParser` with an optional void callback `run`.
   VoidIsolateParser({this.run});
+  final VoidCallback? run;
 
   /// Executes the void callback in a background isolate and returns the result of type `T`.
   ///
@@ -102,11 +105,11 @@ class VoidIsolateParser<T> {
 /// This class encapsulates parameters (`json`, `converter`, `sendPort`, `run`)
 /// passed to isolates in `IsolateParser` and `VoidIsolateParser`.
 class _IsolateParams<T> {
+
+  /// Constructs `_IsolateParams` with the given parameters.
+  _IsolateParams(this.json, this.converter, this.sendPort, this.run);
   final Map<String, dynamic>? json;
   final ResponseConverter<T>? converter;
   final SendPort sendPort;
   final VoidCallback? run;
-
-  /// Constructs `_IsolateParams` with the given parameters.
-  _IsolateParams(this.json, this.converter, this.sendPort, this.run);
 }

@@ -111,13 +111,13 @@ extension StringValidators on String? {
   /// String foo = 'fff';
   /// bool isNull = foo.isNotNull; // returns true
   /// ```
-  bool get isNotNull => isNull == false;
+  bool get isNotNull => !isNull;
 
   /// Checks if the `String` is Blank (null, empty or only white spaces).
   bool get isBlank => isNull || (this?.trim().isEmpty ?? true);
 
   /// Checks if the `String` is not blank (null, empty or only white spaces).
-  bool get isNotBlank => isBlank == false;
+  bool get isNotBlank => !isBlank;
 
   /// Check if the string exactly matches with the [comparison]
   bool equals(Object? comparison) {
@@ -152,7 +152,10 @@ extension StringValidators on String? {
   bool isIP([Object? version]) {
     if (isBlank) return false;
 
-    assert(version == null || version is String || version is int);
+    assert(
+      version == null || version is String || version is int,
+      'IP can only be a String or int',
+    );
 
     version = version.toString();
 
@@ -161,8 +164,7 @@ extension StringValidators on String? {
     } else if (version == '4') {
       if (!matches(regex: Regex.ipv4Maybe)) return false;
 
-      var parts = this!.split('.');
-      parts.sort((a, b) => int.parse(a) - int.parse(b));
+      var parts = this!.split('.')..sort((a, b) => int.parse(a) - int.parse(b));
       return int.parse(parts[3]) <= 255;
     }
     return version == '6' && matches(regex: Regex.ipv6);
@@ -204,7 +206,7 @@ extension StringValidators on String? {
   bool isDivisibleBy(Object n) {
     if (isBlank) return false;
 
-    assert(n is String || n is int);
+    assert(n is String || n is int, 'n can only be a String or Num');
 
     final int? number;
 
@@ -258,7 +260,7 @@ extension StringValidators on String? {
     }
 
     RegExp? pat = Regex.uuid[version];
-    return (pat != null && pat.hasMatch(this!.toUpperCase()));
+    return pat != null && pat.hasMatch(this!.toUpperCase());
   }
 
   /// Checks whether the `String` is a valid Guid.
@@ -282,7 +284,7 @@ extension StringValidators on String? {
 
     if (values is! Iterable) return false;
 
-    for (Object? value in values) {
+    for (final Object? value in values) {
       if (value.toString() == this) return true;
     }
     return false;
@@ -299,7 +301,7 @@ extension StringValidators on String? {
   bool get isCreditCard {
     if (isBlank) return false;
 
-    String sanitized = this!.replaceAll(RegExp(r'[^0-9]+'), '');
+    String sanitized = this!.replaceAll(RegExp('[^0-9]+'), '');
 
     if (!sanitized.matches(regex: Regex.creditCard)) return false;
 
@@ -309,13 +311,13 @@ extension StringValidators on String? {
     bool shouldDouble = false;
 
     for (int i = sanitized.length - 1; i >= 0; i--) {
-      digit = sanitized.substring(i, (i + 1));
+      digit = sanitized.substring(i, i + 1);
       int tmpNum = int.parse(digit);
 
-      if (shouldDouble == true) {
+      if (shouldDouble) {
         tmpNum *= 2;
         if (tmpNum >= 10) {
-          sum += ((tmpNum % 10) + 1);
+          sum += (tmpNum % 10) + 1;
         } else {
           sum += tmpNum;
         }
@@ -486,7 +488,8 @@ extension StringValidators on String? {
     if (isBlank) return false;
 
     var regex = RegExp(
-        r'^(?=.*([A-Z]){1,})(?=.*[!@#$&*]{1,})(?=.*[0-9]{1,})(?=.*[a-z]{1,}).{8,100}$');
+      r'^(?=.*([A-Z]){1,})(?=.*[!@#$&*]{1,})(?=.*[0-9]{1,})(?=.*[a-z]{1,}).{8,100}$',
+    );
     return regex.hasMatch(this!);
   }
 
@@ -665,17 +668,16 @@ extension StringValidators on String? {
     return this!.toLowerCase().contains(other.toLowerCase());
   }
 
-  /// Compares [a] and [other] after converting to lower case.
+  /// Compares this and [other] after converting to lower case.
   ///
-  /// Both [a] and [other] must not be null.
+  /// Both this and [other] must not be null.
   int compareIgnoreCase(String other) =>
       isNotBlank ? this!.toLowerCase().compareTo(other.toLowerCase()) : 0;
 
   /// Check if the string is a image path or url
-  bool get isImage {
-    return isNotBlank &&
-        (matches(regex: Regex.image) || this!.startsWith('data:image'));
-  }
+  bool get isImage =>
+      isNotBlank &&
+      (matches(regex: Regex.image) || this!.startsWith('data:image'));
 
   /// Audio regex
   bool get isAudio => matches(regex: Regex.audio);
@@ -779,9 +781,8 @@ extension SanitizerExtensions on String? {
   /// Removes characters with a numerical value less than 32 and 127.
   /// If [keepNewLines] is true, newline characters are preserved (\n and \r, hex 0xA and 0xD).
   String? stripLow([bool keepNewLines = false]) {
-    final chars = keepNewLines == true
-        ? '\x00-\x09\x0B\x0C\x0E-\x1F\x7F'
-        : '\x00-\x1F\x7F';
+    final chars =
+        keepNewLines ? '\x00-\x09\x0B\x0C\x0E-\x1F\x7F' : '\x00-\x1F\x7F';
     return blacklist(chars);
   }
 
@@ -857,7 +858,7 @@ extension StringConversions on String? {
     return snakeWord;
   }
 
-  /// Returns the `String` in camelcase.
+  /// Returns the `String` in camel case.
   /// ### Example
   /// ```dart
   /// String foo = 'Find max of array';
@@ -867,12 +868,16 @@ extension StringConversions on String? {
     if (isBlank) return this;
 
     var words = this!.trim().split(RegExp(r'(\s+)'));
-    var result = words[0].toLowerCase();
+
+    var buffer = StringBuffer()..write(words[0].toLowerCase());
+
     for (var i = 1; i < words.length; i++) {
-      result += words[i].substring(0, 1).toUpperCase() +
-          words[i].substring(1).toLowerCase();
+      buffer
+        ..write(words[i].substring(0, 1).toUpperCase())
+        ..write(words[i].substring(1).toLowerCase());
     }
-    return result;
+
+    return buffer.toString();
   }
 
   /// Returns the `String` title cased.
@@ -910,7 +915,9 @@ extension StringConversions on String? {
     return this!
         .replaceAllMapped(RegExp(r'\s'), (match) => '')
         .replaceAllMapped(
-            RegExp(r'([a-z])([A-Z])'), (match) => '${match[1]}-${match[2]}')
+          RegExp('([a-z])([A-Z])'),
+          (match) => '${match[1]}-${match[2]}',
+        )
         .toLowerCase();
   }
 
@@ -958,7 +965,7 @@ extension StringConversions on String? {
   String? get removeLetters {
     if (isBlank) return this;
 
-    var regex = RegExp(r'([a-zA-Z]+)');
+    var regex = RegExp('([a-zA-Z]+)');
     return this!.replaceAll(regex, '');
   }
 
@@ -989,7 +996,7 @@ extension StringConversions on String? {
   String? get onlyNumbers {
     if (isBlank) return this;
 
-    var regex = RegExp(r'([^0-9]+)');
+    var regex = RegExp('([^0-9]+)');
     return this!.replaceAll(regex, '');
   }
 
@@ -1094,7 +1101,7 @@ extension StringConversions on String? {
   String? get stripHtml {
     if (isBlank) return this;
 
-    var regex = RegExp(r'<[^>]*>');
+    var regex = RegExp('<[^>]*>');
     return this!.replaceAll(regex, '');
   }
 
@@ -1220,7 +1227,7 @@ extension StringConversions on String? {
 
     List<int> occurrences = [];
     // How many times the pattern can fit the text provided
-    var fitCount = (this!.length / pattern.length).truncate().toInt();
+    var fitCount = (this!.length / pattern.length).truncate();
 
     if (fitCount > this!.length) return [];
 
@@ -1309,8 +1316,7 @@ extension StringConversions on String? {
   String? get shuffle {
     if (isBlank) return this;
 
-    var stringArray = toArray;
-    stringArray.shuffle();
+    var stringArray = toArray..shuffle();
     return stringArray.join();
   }
 
@@ -1331,7 +1337,7 @@ extension StringConversions on String? {
     var maskChars = mask.toArray;
     var index = 0;
     var out = '';
-    for (var m in maskChars) {
+    for (final m in maskChars) {
       if (m == specialChar) {
         if (index < this!.length) {
           out += this![index];
@@ -1410,9 +1416,9 @@ extension StringConversions on String? {
 
     switch (direction) {
       case 0:
-        return this!.replaceAll('/', '\\');
+        return this!.replaceAll('/', r'\');
       case 1:
-        return this!.replaceAll('\\', '/');
+        return this!.replaceAll(r'\', '/');
       default:
         return this;
     }
@@ -1560,7 +1566,9 @@ extension StringConversions on String? {
     if (patternWords.last.isEmpty) return '';
 
     return this!.substring(
-        indexOfLastPatternWord + patternWords.last.length, this!.length);
+      indexOfLastPatternWord + patternWords.last.length,
+      this!.length,
+    );
   }
 
   /// Returns the `String` before a specific character
@@ -1597,7 +1605,7 @@ extension StringConversions on String? {
   String? removeFirstAny(List<String?> patterns) {
     var from = this;
     if (from.isNotBlank) {
-      for (var pattern in patterns) {
+      for (final pattern in patterns) {
         if (pattern != null && pattern.isNotEmpty) {
           while (from!.startsWith(pattern)) {
             from = from.removeFirst(pattern.length);
@@ -1618,7 +1626,7 @@ extension StringConversions on String? {
   String? removeLastAny(List<String?> patterns) {
     var from = this;
     if (from.isNotBlank) {
-      for (var pattern in patterns) {
+      for (final pattern in patterns) {
         if (pattern != null && pattern.isNotEmpty) {
           while (from!.endsWith(pattern)) {
             from = from.removeLast(pattern.length);
@@ -1810,7 +1818,8 @@ extension StringConversions on String? {
   /// ```
   bool containsAny(List<String?> patterns) {
     if (isNotBlank) {
-      for (String? item in patterns.where((element) => element.isNotBlank)) {
+      for (final String? item
+          in patterns.where((element) => element.isNotBlank)) {
         if (this!.contains(item!)) return true;
       }
     }
@@ -1825,8 +1834,9 @@ extension StringConversions on String? {
   /// bool contains = "abracadabra".containsAll(["abra", "cadabra"]; // returns true;
   /// ```
   bool containsAll(List<String?> patterns) {
-    for (String? item in patterns.where((element) => element.isNotBlank)) {
-      if (isBlank || this!.contains(item!) == false) return false;
+    for (final String? item
+        in patterns.where((element) => element.isNotBlank)) {
+      if (isBlank || !this!.contains(item!)) return false;
     }
     return true;
   }
@@ -2164,12 +2174,11 @@ extension MiscExtensions on String? {
   }) {
     if (isBlank) return {};
 
-    String processString(String input) {
-      return (caseSensitive ? input : input.toLowerCase())
-          .split('')
-          .where((char) => includeSpaces || char != ' ')
-          .join('');
-    }
+    String processString(String input) =>
+        (caseSensitive ? input : input.toLowerCase())
+            .split('')
+            .where((char) => includeSpaces || char != ' ')
+            .join();
 
     final Set<String> commonLettersSet = {};
     final Set<String> otherStringSet =
@@ -2211,12 +2220,11 @@ extension MiscExtensions on String? {
   }) {
     if (isBlank) return {};
 
-    String processString(String input) {
-      return (caseSensitive ? input : input.toLowerCase())
-          .split('')
-          .where((char) => includeSpaces || char != ' ')
-          .join('');
-    }
+    String processString(String input) =>
+        (caseSensitive ? input : input.toLowerCase())
+            .split('')
+            .where((char) => includeSpaces || char != ' ')
+            .join();
 
     final Set<String> thisSet = processString(this!).split('').toSet();
     final Set<String> otherStringSet =
@@ -2236,7 +2244,7 @@ extension MiscExtensions on String? {
   /// String foo = '';
   /// foo.ifEmpty(()=>print('String is empty'));
   /// ```
-  String? ifEmpty(Function act) {
+  String? ifEmpty(ValueGetter<String?> act) {
     if (isNull) return null;
 
     return this!.trim().isEmpty ? act() : this;
@@ -2249,7 +2257,7 @@ extension MiscExtensions on String? {
   /// String foo = ''
   /// foo.ifEmpty(()=>print('String is null'));
   /// ```
-  String ifNull(Function act) {
+  String ifNull(ValueGetter<String> act) {
     if (isNotBlank) return this!;
 
     return act();
@@ -2268,7 +2276,7 @@ extension MiscExtensions on String? {
     return defaultValue;
   }
 
-  /// Return a empty `String` if [this] equals [comparisonString]. Otherwise return [this].
+  /// Return a empty `String` if this equals [comparisonString]. Otherwise return this.
   ///
   /// ### Example
   ///
@@ -2277,9 +2285,9 @@ extension MiscExtensions on String? {
   /// String f = 'NO'.emptyIf("YES"); // returns "NO";
   /// ```
   String? emptyIf(String? comparisonString) =>
-      asIf((s) => s == comparisonString, "", this);
+      asIf((s) => s == comparisonString, '', this);
 
-  /// Return null if [this] equals [comparisonString]. Otherwise return [this].
+  /// Return null if this equals [comparisonString]. Otherwise return this.
   ///
   /// ### Example
   ///
@@ -2290,19 +2298,22 @@ extension MiscExtensions on String? {
   String? nullIf(String? comparisonString) =>
       asIf((s) => s == comparisonString, null, this);
 
-  /// Return [this] if not blank. Otherwise return [newString].
+  /// Return [this if not blank. Otherwise return [newString].
   String? ifBlank(String? newString) =>
       asIf((s) => s.isNotBlank, this, newString);
 
-  /// Compares [this] using [comparison] and returns [trueString] if true, otherwise return [falseString].
+  /// Compares this using [comparison] and returns [trueString] if true, otherwise return [falseString].
   ///
   /// ### Example
   ///
   /// ```dart
   /// String s = 'OK'.asIf((s) => s == "OK", "is OK", "is not OK"); // returns "is OK";
   /// ```
-  String? asIf(bool Function(String?) comparison, String? trueString,
-          String? falseString) =>
+  String? asIf(
+    bool Function(String?) comparison,
+    String? trueString,
+    String? falseString,
+  ) =>
       comparison(this) ? trueString : falseString;
 }
 
@@ -2416,7 +2427,10 @@ extension Safe on String? {
   ///
   /// If [string] is null then it is treated as an empty String
   static String replaceAllMapped(
-          String? string, Pattern from, String Function(Match match) replace) =>
+    String? string,
+    Pattern from,
+    String Function(Match match) replace,
+  ) =>
       (string ?? '').replaceAllMapped(from, replace);
 
   /// Refer to [String.replaceFirst]

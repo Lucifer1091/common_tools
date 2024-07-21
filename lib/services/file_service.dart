@@ -1,9 +1,10 @@
-import 'package:common_tools/common_tools.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as p;
+
+import '../common_tools.dart';
 
 class FileService {
   FileService._();
@@ -30,9 +31,9 @@ class FileService {
           if (image.mimeType == 'image/jpeg' ||
               image.mimeType == 'image/jpg' ||
               image.mimeType == 'image/png' ||
-              ext == ".jpg" ||
-              ext == ".jpeg" ||
-              ext == ".png") {
+              ext == '.jpg' ||
+              ext == '.jpeg' ||
+              ext == '.png') {
             return image;
           } else {
             SnackBars.error(title: 'Invalid File Format.');
@@ -51,7 +52,7 @@ class FileService {
         }
       }
     } on PlatformException catch (_) {
-      SnackBars.error(title: "Failed to pick Image.");
+      SnackBars.error(title: 'Failed to pick Image.');
     }
     return null;
   }
@@ -84,16 +85,16 @@ class FileService {
 
       String? fileExt = result.files.single.extension?.toLowerCase();
 
-      if (fileExt == "jpg" ||
-          fileExt == "jpeg" ||
-          fileExt == "png" ||
-          fileExt == "doc" ||
-          fileExt == "docx" ||
-          fileExt == "xls" ||
-          fileExt == "xlsx" ||
-          fileExt == "csv" ||
-          fileExt == "pdf" ||
-          fileExt == "txt") {
+      if (fileExt == 'jpg' ||
+          fileExt == 'jpeg' ||
+          fileExt == 'png' ||
+          fileExt == 'doc' ||
+          fileExt == 'docx' ||
+          fileExt == 'xls' ||
+          fileExt == 'xlsx' ||
+          fileExt == 'csv' ||
+          fileExt == 'pdf' ||
+          fileExt == 'txt') {
         if (PlatformChecker.isWeb) {
           return XFile.fromData(
             result.files.single.bytes!,
@@ -111,7 +112,7 @@ class FileService {
         SnackBars.error(title: 'Invalid File Format.');
       }
     } on PlatformException catch (_) {
-      SnackBars.error(title: "Failed to pick File.");
+      SnackBars.error(title: 'Failed to pick File.');
     }
     return null;
   }
@@ -144,7 +145,7 @@ class FileService {
         }
       }
     } on PlatformException catch (_) {
-      SnackBars.error(title: "Failed to pick Image.");
+      SnackBars.error(title: 'Failed to pick Image.');
     }
     return null;
   }
@@ -181,7 +182,7 @@ class FileService {
 
       if (result == null) return null;
 
-      for (PlatformFile file in result.files) {
+      for (final PlatformFile file in result.files) {
         String? fileExt = file.extension?.toLowerCase();
 
         if (!fileExtensions.contains(fileExt)) {
@@ -193,7 +194,7 @@ class FileService {
       List<XFile> files = [];
 
       if (PlatformChecker.isWeb) {
-        for (PlatformFile file in result.files) {
+        for (final PlatformFile file in result.files) {
           files.add(
             XFile.fromData(
               file.bytes!,
@@ -203,7 +204,7 @@ class FileService {
           );
         }
       } else {
-        for (PlatformFile file in result.files) {
+        for (final PlatformFile file in result.files) {
           files.add(
             XFile(
               file.path!,
@@ -216,7 +217,7 @@ class FileService {
 
       return files;
     } on PlatformException catch (_) {
-      SnackBars.error(title: "Failed to pick Files.");
+      SnackBars.error(title: 'Failed to pick Files.');
     }
     return null;
   }
@@ -252,43 +253,34 @@ class FileService {
   static Future<XFile?> _showImagePickerDialog(
     BuildContext context, {
     bool isFilePicker = false,
-  }) async {
-    XFile? image;
-
-    image = await Dialogs.show<XFile?>(
-      context,
-      content: SizedBox(
-        width: 400,
-        height: 120,
-        child: Center(
-          child: _buildImagePickerContent(context, isFilePicker: isFilePicker),
+  }) =>
+      Dialogs.show<XFile?>(
+        context,
+        content: SizedBox(
+          width: 400,
+          height: 120,
+          child: Center(
+            child:
+                _buildImagePickerContent(context, isFilePicker: isFilePicker),
+          ),
         ),
-      ),
-    );
-
-    return image;
-  }
+      );
 
   static Future<XFile?> _showImagePickerSheet(
     BuildContext context, {
     bool isFilePicker = false,
-  }) async {
-    XFile? image;
-
-    image = await BottomSheets.show<XFile?>(
-      context,
-      color: context.scaffoldBackgroundColor,
-      showDivider: false,
-      maxHeight: 160,
-      maxWidth: 500,
-      bottomSheet: _buildImagePickerContent(
+  }) async =>
+      BottomSheets.show<XFile?>(
         context,
-        isFilePicker: isFilePicker,
-      ),
-    );
-
-    return image;
-  }
+        color: context.scaffoldBackgroundColor,
+        showDivider: false,
+        maxHeight: 160,
+        maxWidth: 500,
+        bottomSheet: _buildImagePickerContent(
+          context,
+          isFilePicker: isFilePicker,
+        ),
+      );
 
   static Widget _buildImagePickerContent(
     BuildContext context, {
@@ -305,8 +297,10 @@ class FileService {
             onTap: () async {
               image = await pickImage(
                 imageSource: ImageSource.camera,
-              );
-              Navigator.of(context).pop<XFile>(image);
+              ).then((value) {
+                Navigator.of(context).pop<XFile>(image);
+                return value;
+              });
             },
             leading: Icon(
               Icons.camera_alt_outlined,
@@ -320,10 +314,10 @@ class FileService {
           if (!isFilePicker) ...[
             ListTile(
               onTap: () async {
-                image = await pickImage(
-                  imageSource: ImageSource.gallery,
-                );
-                Navigator.of(context).pop<XFile>(image);
+                image = await pickImage().then((value) {
+                  Navigator.of(context).pop<XFile>(image);
+                  return value;
+                });
               },
               leading: Icon(
                 Icons.photo_size_select_actual_outlined,
@@ -337,8 +331,10 @@ class FileService {
           ] else ...[
             ListTile(
               onTap: () async {
-                image = await pickFile();
-                Navigator.of(context).pop<XFile>(image);
+                image = await pickFile().then((value) {
+                  Navigator.of(context).pop<XFile>(image);
+                  return value;
+                });
               },
               leading: Icon(
                 Icons.upload_file_outlined,

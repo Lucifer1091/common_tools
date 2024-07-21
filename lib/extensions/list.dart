@@ -2,16 +2,17 @@ part of 'extensions.dart';
 
 extension IterableWithIndex<T> on Iterable<T> {
   Iterable<T> sortByAsc<TSelected extends Comparable<TSelected>>(
-          TSelected Function(T) selector) =>
+    TSelected Function(T) selector,
+  ) =>
       toList()..sort((a, b) => selector(a).compareTo(selector(b)));
 
   Iterable<T> sortByDesc<TSelected extends Comparable<TSelected>>(
-          TSelected Function(T) selector) =>
+    TSelected Function(T) selector,
+  ) =>
       toList()..sort((a, b) => selector(b).compareTo(selector(a)));
 
-  Iterable<E> mapWithIndex<E>(E Function(int index, T value) f) {
-    return Iterable.generate(length).map((i) => f(i, elementAt(i)));
-  }
+  Iterable<E> mapWithIndex<E>(E Function(int index, T value) f) =>
+      Iterable<int>.generate(length).map((int i) => f(i, elementAt(i)));
 
   // returns only distinct elements
   Iterable<T> distinctBy(Object Function(T e) getCompareValue) {
@@ -83,13 +84,11 @@ extension IterableExt<T> on Iterable<T> {
   }
 
   /// Returns a new list with [hugger] at the beginning and at the end.
-  Iterable<T> hugBy(T hugger) {
-    return [
-      hugger,
-      ...this,
-      hugger,
-    ];
-  }
+  Iterable<T> hugBy(T hugger) => [
+        hugger,
+        ...this,
+        hugger,
+      ];
 
   /// Same as [map] but providing the index too.
   Iterable<S> indexedMap<S>(S Function(T item, int index) map) {
@@ -132,9 +131,7 @@ extension IterableExt<T> on Iterable<T> {
   }
 
   /// Returns `true` if the iterable is has an element of type [S].
-  bool anyType<S extends T>() {
-    return whereType<S>().isNotEmpty;
-  }
+  bool anyType<S extends T>() => whereType<S>().isNotEmpty;
 
   /// Extract one random item from the list
   T random() => toList()[math.Random().nextInt(length)];
@@ -166,12 +163,12 @@ extension IterableExt<T> on Iterable<T> {
   }
 
   /// The first element satisfying [test], or `null` if there are none.
-  // T? firstWhereOrNull(bool Function(T element) test) {
-  //   for (final element in this) {
-  //     if (test(element)) return element;
-  //   }
-  //   return null;
-  // }
+  T? firstWhereOrNull(bool Function(T element) test) {
+    for (final element in this) {
+      if (test(element)) return element;
+    }
+    return null;
+  }
 
   /// Returns a map grouped by the [keyFunction].
   Map<K, List<T>> groupBy<K>(K Function(T) keyFunction) => fold(
@@ -257,9 +254,8 @@ extension IterableListExt<T> on Iterable<List<T>> {
   /// Returns a single list composed of each element of the lists inside.
   List<T> get flat {
     final l = <T>[];
-    for (final item in this) {
-      l.addAll(item);
-    }
+    forEach(l.addAll);
+
     return l;
   }
 }
@@ -301,7 +297,7 @@ extension MyIterable<T> on Iterable<T>? {
 
   T? get firstOrNull => isNullOrEmpty ? null : this!.first;
 
-  /// Returns the last element matching the given [predicate], or null if element was not found.
+  /// Returns the last element matching the given [test], or null if element was not found.
   ///  ["Flutter", "Dart", "Java", "IOS", "Android","web"].lastOrNullIf((it) => it.length == 9); // null
   ///  ["Flutter", "Dart", "Java", "IOS", "Android","web"].lastOrNullIf((it) => it.length == 3); // IOS
   T? firstWhereOrNull(bool Function(T element) test) {
@@ -312,7 +308,7 @@ extension MyIterable<T> on Iterable<T>? {
     return list.isEmpty ? null : list.first;
   }
 
-  /// Returns the last element matching the given [predicate], or null if element was not found.
+  /// Returns the last element matching the given [test], or null if element was not found.
   ///  ["Flutter", "Dart", "Java", "IOS", "Android","web"].lastOrNullIf((it) => it.length == 9); // null
   ///  ["Flutter", "Dart", "Java", "IOS", "Android","web"].lastOrNullIf((it) => it.length == 3); // web
   T? lastWhereOrNull(bool Function(T element) test) {
@@ -356,7 +352,7 @@ extension MyIterable<T> on Iterable<T>? {
 
       var count = 0;
       var thisList = this!.toList();
-      for (var item in thisList) {
+      for (final item in thisList) {
         list.add(item);
         if (++count == n) break;
       }
@@ -376,14 +372,14 @@ extension MyIterable<T> on Iterable<T>? {
     }
   }
 
-  /// Returns a list containing only elements matching the given [predicate]
-  Iterable<T> filterOrNewList(bool Function(T e) fun) {
+  /// Returns a list containing only elements matching the given [test]
+  Iterable<T> filterOrNewList(bool Function(T e) test) {
     if (isNullOrEmpty) {
       return [];
     }
     final result = <T>[];
-    for (var element in this!) {
-      if (fun(element)) result.add(element);
+    for (final element in this!) {
+      if (test(element)) result.add(element);
     }
     return result;
   }
@@ -399,14 +395,14 @@ extension MyIterable<T> on Iterable<T>? {
     }
   }*/
 
-  /// Returns a list containing all elements not matching the given [predicate]
-  Iterable<T> filterNot(bool Function(T element) fun) {
+  /// Returns a list containing all elements not matching the given [test]
+  Iterable<T> filterNot(bool Function(T element) test) {
     if (isNullOrEmpty) {
       return [];
     }
     final result = <T>[];
-    for (var element in this!) {
-      if (!fun(element)) result.add(element);
+    for (final element in this!) {
+      if (!test(element)) result.add(element);
     }
     return result;
   }
@@ -417,8 +413,7 @@ extension ListExt<T> on List<T>? {
   List<Widget> toWidgetList(Widget Function(T value) mapFunc) =>
       isNullOrEmpty ? [] : [...this!.map(mapFunc)];
 
-  bool get isNullOrEmpty =>
-      (this == null || (this?.isEmpty ?? true)) ? true : false;
+  bool get isNullOrEmpty => this == null || (this?.isEmpty ?? true);
 
   int? get lastIndex => isNullOrEmpty ? this!.length - 1 : null;
 
@@ -430,7 +425,7 @@ extension ListExt<T> on List<T>? {
     }
   }
 
-  /// Counts the elements for whichs the predicate holds.
+  /// Counts the elements for which the [test] holds.
   ///
   /// See [where].
   int countWhere(bool Function(T) test) {
@@ -479,7 +474,7 @@ extension ListExt<T> on List<T>? {
     List<T> currentSublist = [];
     if (isNullOrEmpty) return [];
 
-    for (T element in this ?? []) {
+    for (final T element in this ?? []) {
       if (condition(element)) {
         // Start a new sublist when the condition is met.
         if (currentSublist.isNotEmpty) {
@@ -505,7 +500,7 @@ extension ListExt<T> on List<T>? {
       return null;
     }
     if (rangeSize <= 0) {
-      throw ArgumentError("Range size must be greater than zero.");
+      throw ArgumentError('Range size must be greater than zero.');
     }
 
     List<List<T>> nestedLists = [];
@@ -553,14 +548,11 @@ extension CollectionNumExtension<T extends num> on List<T> {
 // This Dart file defines an extension called StringExtension on List objects.
 extension ListExtension<T> on List<T> {
   // This method groups the elements in the List by a specified key function.
-  Map<K, List<T>> groupBy<K>(K Function(T) keyFunction) {
-    return fold(
-      <K, List<T>>{},
-      (Map<K, List<T>> map, T element) {
-        return map..putIfAbsent(keyFunction(element), () => <T>[]).add(element);
-      },
-    );
-  }
+  Map<K, List<T>> groupBy<K>(K Function(T) keyFunction) => fold(
+        <K, List<T>>{},
+        (Map<K, List<T>> map, T element) =>
+            map..putIfAbsent(keyFunction(element), () => <T>[]).add(element),
+      );
 
   // This getter checks if the List contains exactly one element.
   bool get isSingle => length == 1;
@@ -603,9 +595,7 @@ extension GenericListExtensions<E> on Iterable<E> {
   ///
   /// Returns:
   /// A new list that contains the elements of this list followed by the elements of [data].
-  List<E> operator +(List<E> data) {
-    return [...this, ...data];
-  }
+  List<E> operator +(List<E> data) => [...this, ...data];
 }
 
 extension IntList<T extends num> on Iterable<T> {
@@ -654,7 +644,8 @@ extension IntList<T extends num> on Iterable<T> {
       throw Exception('List is empty');
     }
     var sorted = [...this]..sort();
-    if (length % 2 == 0) {
+
+    if (length.isEven) {
       return (sorted[length ~/ 2 - 1] + sorted[length ~/ 2]) / 2;
     }
     return sorted[length ~/ 2];
@@ -721,7 +712,7 @@ extension ListExtensions<T> on Iterable<T>? {
   /// Generate forEach but gives index for each element
   void forEachIndexed(void Function(T element, int index) action) {
     var index = 0;
-    for (var element in this!) {
+    for (final element in this!) {
       action(element!, index++);
     }
   }
@@ -731,17 +722,15 @@ extension ListExtensions<T> on Iterable<T>? {
   /// [1, 3, 7].sumBy((n) => n);                 // 11
   /// ['hello', 'world'].sumBy((s) => s.length); // 10
   /// ```
-  int sumBy(int Function(T) selector) {
-    return this.validate().map(selector).fold(0, (prev, curr) => prev + curr);
-  }
+  int sumBy(int Function(T) selector) =>
+      this.validate().map(selector).fold(0, (prev, curr) => prev + curr);
 
   /// Example:
   /// ```dart
   /// [1.5, 2.5].sumByDouble((d) => 0.5 * d); // 2.0
   /// ```
-  double sumByDouble(num Function(T) selector) {
-    return this.validate().map(selector).fold(0.0, (prev, curr) => prev + curr);
-  }
+  double sumByDouble(num Function(T) selector) =>
+      this.validate().map(selector).fold(0, (prev, curr) => prev + curr);
 
   /// Example:
   /// ```dart
@@ -779,26 +768,14 @@ extension IterableExtensions<T> on Iterable<T>? {
 
   /// Returns a set containing all elements that are contained
   /// by both this set and the specified collection.
-  Set<T> intersect(Iterable other) {
-    final set = this.toSet();
-    set.retainAll(other);
-    return set;
-  }
+  Set<T> intersect(Iterable<T> other) => toSet()..retainAll(other);
 
   /// Returns a set containing all elements that are contained
   /// by this collection and not contained by the specified collection.
-  Set<T> subtract(Iterable<T> other) {
-    final set = toSet();
-    set.removeAll(other);
-    return set;
-  }
+  Set<T> subtract(Iterable<T> other) => toSet()..removeAll(other);
 
   /// Returns a set containing all distinct elements from both collections.
-  Set<T> union(Iterable<T> other) {
-    final set = toSet();
-    set.addAll(other);
-    return set;
-  }
+  Set<T> union(Iterable<T> other) => toSet()..addAll(other);
 
   /// Performs the given action on each element on iterable, providing sequential index with the element.
   /// [element!] the element on the current iteration
@@ -814,7 +791,7 @@ extension IterableExtensions<T> on Iterable<T>? {
   /// xx, 2
   void forEachIndexed(void Function(T element, int index) action) {
     var index = 0;
-    for (var element in this!) {
+    for (final element in this!) {
       action(element, index++);
     }
   }
@@ -828,8 +805,7 @@ extension IterableExtensions<T> on Iterable<T>? {
     var map = <K, List<R>>{};
 
     for (final element in this!) {
-      var list = map.putIfAbsent(keySelector(element as R), () => []);
-      list.add(element);
+      map.putIfAbsent(keySelector(element as R), () => []).add(element);
     }
     return map;
   }
@@ -838,7 +814,7 @@ extension IterableExtensions<T> on Iterable<T>? {
   List<T> filter(bool Function(T element) test) {
     if (this == null) return <T>[];
     final result = <T>[];
-    for (var e in this!) {
+    for (final e in this!) {
       if (test(e)) {
         result.add(e);
       }
@@ -850,7 +826,7 @@ extension IterableExtensions<T> on Iterable<T>? {
   List<T> filterNot(bool Function(T element) test) {
     if (this == null) return <T>[];
     final result = <T>[];
-    for (var e in this!) {
+    for (final e in this!) {
       if (!test(e)) {
         result.add(e);
       }
@@ -862,7 +838,7 @@ extension IterableExtensions<T> on Iterable<T>? {
   List<T> filterNotNull() {
     if (this == null) return <T>[];
     final result = <T>[];
-    for (var e in this!) {
+    for (final e in this!) {
       if (e != null) {
         result.add(e);
       }
@@ -881,7 +857,7 @@ extension IterableExtensions<T> on Iterable<T>? {
 
       var count = 0;
       var thisList = this!.toList();
-      for (var item in thisList) {
+      for (final item in thisList) {
         list.add(item);
         if (++count == n) break;
       }
@@ -910,10 +886,9 @@ extension IterableOfDoubleSC on Iterable<double> {
   /// [2.0, 6.0, 4.0, 8.0].sum(); // 20.0
   /// ```
   @Deprecated(
-      'Dart natively supports this function. Read DartDoc comment for more info.')
-  double sumSC() {
-    return sumByDouble((n) => n);
-  }
+    'Dart natively supports this function. Read DartDoc comment for more info.',
+  )
+  double sumSC() => sumByDouble((n) => n);
 
   /// Deprecation hint: Read the
   /// [migration guide](https://github.com/felixblaschke/supercharged/blob/master/migration_v2.md)
@@ -927,10 +902,9 @@ extension IterableOfDoubleSC on Iterable<double> {
   /// [2.0, 4.0, 6.0, 8.0].average(); // 5.0
   /// ```
   @Deprecated(
-      'Dart natively supports this function. Read DartDoc comment for more info.')
-  double? averageSC() {
-    return averageBy((n) => n);
-  }
+    'Dart natively supports this function. Read DartDoc comment for more info.',
+  )
+  double? averageSC() => averageBy((n) => n);
 
   /// Returns the largest value of all elements
   /// If collection is empty this returns `null`.
@@ -939,9 +913,7 @@ extension IterableOfDoubleSC on Iterable<double> {
   /// ```dart
   /// [9.0, 42.0, 3.0].max(); // 42.0
   /// ```
-  double? max() {
-    return maxBy((a, b) => a.compareTo(b));
-  }
+  double? max() => maxBy((a, b) => a.compareTo(b));
 
   /// Returns the lowest value of all elements
   /// If collection is empty this returns `null`.
@@ -950,9 +922,7 @@ extension IterableOfDoubleSC on Iterable<double> {
   /// ```dart
   /// [17.0, 13.0, 92.0].min(); // 13.0
   /// ```
-  double? min() {
-    return minBy((a, b) => a.compareTo(b));
-  }
+  double? min() => minBy((a, b) => a.compareTo(b));
 }
 
 /// Supercharged extensions on [Iterable<int>] like [List<int>] and [Set<int>].
@@ -968,10 +938,9 @@ extension IterableOfIntSC on Iterable<int> {
   /// [2, 6, 4, 8].sum(); // 20
   /// ```
   @Deprecated(
-      'Dart natively supports this function. Read DartDoc comment for more info.')
-  int sumSC() {
-    return sumBy((n) => n);
-  }
+    'Dart natively supports this function. Read DartDoc comment for more info.',
+  )
+  int sumSC() => sumBy((n) => n);
 
   /// Deprecation hint: Read the
   /// [migration guide](https://github.com/felixblaschke/supercharged/blob/master/migration_v2.md)
@@ -985,10 +954,9 @@ extension IterableOfIntSC on Iterable<int> {
   /// [2, 4, 6, 8].average(); // 5.0
   /// ```
   @Deprecated(
-      'Dart natively supports this function. Read DartDoc comment for more info.')
-  double? averageSC() {
-    return averageBy((n) => n);
-  }
+    'Dart natively supports this function. Read DartDoc comment for more info.',
+  )
+  double? averageSC() => averageBy((n) => n);
 
   /// Returns the largest value of all elements
   /// If collection is empty this returns `null`.
@@ -997,9 +965,7 @@ extension IterableOfIntSC on Iterable<int> {
   /// ```dart
   /// [9, 42, 3].max(); // 42
   /// ```
-  int? max() {
-    return maxBy((a, b) => a.compareTo(b));
-  }
+  int? max() => maxBy((a, b) => a.compareTo(b));
 
   /// Returns the lowest value of all elements
   /// If collection is empty this returns `null`.
@@ -1008,12 +974,10 @@ extension IterableOfIntSC on Iterable<int> {
   /// ```dart
   /// [17, 13, 92].min(); // 13
   /// ```
-  int? min() {
-    return minBy((a, b) => a.compareTo(b));
-  }
+  int? min() => minBy((a, b) => a.compareTo(b));
 }
 
-/// Supercharged extensions on [Iterables] like [List] and [Set].
+/// Supercharged extensions on [Iterable] like [List] and [Set].
 extension IterableSC<T> on Iterable<T> {
   /// Returns the sum of all values produced by the [selector] function that is
   /// applied to each element.
@@ -1023,9 +987,8 @@ extension IterableSC<T> on Iterable<T> {
   /// [2, 4, 6].sumBy((n) => n);                   // 12
   /// ['hello', 'flutter'].sumBy((s) => s.length); // 12
   /// ```
-  int sumBy(int Function(T) selector) {
-    return map(selector).fold(0, (prev, curr) => prev + curr);
-  }
+  int sumBy(int Function(T) selector) =>
+      map(selector).fold(0, (prev, curr) => prev + curr);
 
   /// Returns the sum of all values produced by the [selector] function that is
   /// applied to each element.
@@ -1034,9 +997,8 @@ extension IterableSC<T> on Iterable<T> {
   /// ```dart
   /// [1.5, 2.5].sumByDouble((d) => 0.5 * d); // 2.0
   /// ```
-  double sumByDouble(num Function(T) selector) {
-    return map(selector).fold(0.0, (prev, curr) => prev + curr);
-  }
+  double sumByDouble(num Function(T) selector) =>
+      map(selector).fold(0, (prev, curr) => prev + curr);
 
   /// Returns the average value (arithmetic mean) of all values produces by the
   /// [selector] function that is applied to each element.
@@ -1119,37 +1081,7 @@ extension IterableSC<T> on Iterable<T> {
   /// ```
   ///
   /// This method is an alias for [where].
-  Iterable<T> filter(bool Function(T element) test) {
-    return where(test);
-  }
-
-  /// Deprecation hint: Read the
-  /// [migration guide](https://github.com/felixblaschke/supercharged/blob/master/migration_v2.md)
-  /// for more details on migrating.
-  ///
-  /// Applies the function [funcIndexValue] to each element of this collection
-  /// in iteration order. The function receives the element index as first
-  /// parameter [index] and the [element] as the second parameter.
-  ///
-  /// Applies the function [funcIndexValue] to each element of this collection
-  /// in iteration order. The function receives the element index as first
-  /// parameter [index] and the [element] as the second parameter.
-  ///
-  /// Example:
-  /// ```dart
-  /// ['a', 'b', 'c'].forEachIndex((index, value) {
-  ///   print('$index : $value'); // '0 : a', '1: b', '2: c'
-  /// });
-  /// ```
-  @Deprecated(
-      'Dart natively supports this function. Read DartDoc comment for more info.')
-  void forEachIndexedSC(void Function(int index, T element) funcIndexValue) {
-    var index = 0;
-    var iter = iterator;
-    while (iter.moveNext()) {
-      funcIndexValue(index++, iter.current);
-    }
-  }
+  Iterable<T> filter(bool Function(T element) test) => where(test);
 
   /// Returns the [index]th element. If the index is out of bounds the [orElse]
   /// supplier function is called to provide a value.
@@ -1161,7 +1093,7 @@ extension IterableSC<T> on Iterable<T> {
   T elementAtOrElse(int index, T Function() orElse) {
     try {
       return elementAt(index);
-    } catch (error) {
+    } catch (_) {
       return orElse();
     }
   }
@@ -1193,9 +1125,7 @@ extension IterableSC<T> on Iterable<T> {
   /// ['a', 'b'].firstOrElse(() => ''); // 'a'
   /// [].firstOrElse(() => '');         // ''
   /// ```
-  T firstOrElse(T Function() orElse) {
-    return firstWhere((_) => true, orElse: orElse);
-  }
+  T firstOrElse(T Function() orElse) => firstWhere((_) => true, orElse: orElse);
 
   /// Deprecation hint: Read the
   /// [migration guide](https://github.com/felixblaschke/supercharged/blob/master/migration_v2.md)
@@ -1210,7 +1140,8 @@ extension IterableSC<T> on Iterable<T> {
   /// [].firstOrNull();         // null
   /// ```
   @Deprecated(
-      'Dart natively supports this function. Read DartDoc comment for more info.')
+    'Dart natively supports this function. Read DartDoc comment for more info.',
+  )
   T? firstOrNullSC() {
     if (isEmpty) {
       return null;
@@ -1227,9 +1158,7 @@ extension IterableSC<T> on Iterable<T> {
   /// ['a', 'b'].lastOrElse(() => ''); // 'a'
   /// [].lastOrElse(() => '');         // ''
   /// ```
-  T lastOrElse(T Function() orElse) {
-    return lastWhere((_) => true, orElse: orElse);
-  }
+  T lastOrElse(T Function() orElse) => lastWhere((_) => true, orElse: orElse);
 
   /// Deprecation hint: Read the
   /// [migration guide](https://github.com/felixblaschke/supercharged/blob/master/migration_v2.md)
@@ -1244,7 +1173,8 @@ extension IterableSC<T> on Iterable<T> {
   /// [].lastOrElse();         // null
   /// ```
   @Deprecated(
-      'Dart natively supports this function. Read DartDoc comment for more info.')
+    'Dart natively supports this function. Read DartDoc comment for more info.',
+  )
   T? lastOrNullSC() {
     if (isEmpty) {
       return null;
@@ -1276,8 +1206,10 @@ extension IterableSC<T> on Iterable<T> {
   ///        valueTransform: (p) => p.name);
   /// // map = {'young': ['John', 'Carl'], 'old': ['Peter', 'Sarah']}
   /// ```
-  Map<K, List<V>> groupBy<K, V>(K Function(T element) keySelector,
-      {V Function(T element)? valueTransform}) {
+  Map<K, List<V>> groupBy<K, V>(
+    K Function(T element) keySelector, {
+    V Function(T element)? valueTransform,
+  }) {
     final transformFn = valueTransform ?? (element) => element as V;
 
     var map = <K, List<V>>{};
@@ -1302,11 +1234,10 @@ extension IterableSC<T> on Iterable<T> {
   /// ```dart
   /// [1, 2, 3].associate((e) => MapEntry('key_$e', e * 100)); // {'key_1': 100, 'key_2': 200, 'key_3': 300}
   /// ```
-  Map<K, V> associate<K, V>(MapEntry<K, V> Function(T element) transform) {
-    return Map.fromEntries(map(transform));
-  }
+  Map<K, V> associate<K, V>(MapEntry<K, V> Function(T element) transform) =>
+      Map.fromEntries(map(transform));
 
-  /// Returns a map where every [element] is associated by a key produced from
+  /// Returns a map where every element is associated by a key produced from
   /// the [keySelector] function.
   ///
   /// If two elements share the same key, the last one gets added to the map.
@@ -1324,7 +1255,7 @@ extension IterableSC<T> on Iterable<T> {
     return map;
   }
 
-  /// Returns a map where every [element] is used as a key that is associated
+  /// Returns a map where every element is used as a key that is associated
   /// with a value produced by the [valueSelector] function.
   ///
   /// Example:
@@ -1352,7 +1283,8 @@ extension IterableSC<T> on Iterable<T> {
       return null;
     }
     return reduce(
-        (value, element) => comparator(value, element) < 0 ? value : element);
+      (value, element) => comparator(value, element) < 0 ? value : element,
+    );
   }
 
   /// Returns the maximum value based on the [comparator] function.
@@ -1368,7 +1300,8 @@ extension IterableSC<T> on Iterable<T> {
       return null;
     }
     return reduce(
-        (value, element) => comparator(value, element) > 0 ? value : element);
+      (value, element) => comparator(value, element) > 0 ? value : element,
+    );
   }
 
   /// Deprecation hint: Read the
@@ -1382,12 +1315,9 @@ extension IterableSC<T> on Iterable<T> {
   /// [3, 1, 5, 9, 7].sortedBy((a,b) => a.compareTo(b)); // [1, 3, 5, 7, 9]
   /// ```
   @Deprecated(
-      'Dart natively supports this function. Read DartDoc comment for more info.')
-  List<T> sortedBySC(Comparator<T> comparator) {
-    var list = toList();
-    list.sort(comparator);
-    return list;
-  }
+    'Dart natively supports this function. Read DartDoc comment for more info.',
+  )
+  List<T> sortedBySC(Comparator<T> comparator) => toList()..sort(comparator);
 
   /// Deprecation hint: Read the
   /// [migration guide](https://github.com/felixblaschke/supercharged/blob/master/migration_v2.md)
@@ -1402,10 +1332,10 @@ extension IterableSC<T> on Iterable<T> {
   /// persons.sortedByNum((p) => p.age).reversed; // oldest persons first
   /// ```
   @Deprecated(
-      'Dart natively supports this function. Read DartDoc comment for more info.')
-  List<T> sortedByNumSC(num Function(T element) valueProvider) {
-    return sortedBySC((a, b) => valueProvider(a).compareTo(valueProvider(b)));
-  }
+    'Dart natively supports this function. Read DartDoc comment for more info.',
+  )
+  List<T> sortedByNumSC(num Function(T element) valueProvider) =>
+      sortedBySC((a, b) => valueProvider(a).compareTo(valueProvider(b)));
 
   /// Deprecation hint: Read the
   /// [migration guide](https://github.com/felixblaschke/supercharged/blob/master/migration_v2.md)
@@ -1420,10 +1350,10 @@ extension IterableSC<T> on Iterable<T> {
   /// persons.sortedByString((p) => p.name); // sort persons alphabetically
   /// ```
   @Deprecated(
-      'Dart natively supports this function. Read DartDoc comment for more info.')
-  List<T> sortedByStringSC(String Function(T element) valueProvider) {
-    return sortedBySC((a, b) => valueProvider(a).compareTo(valueProvider(b)));
-  }
+    'Dart natively supports this function. Read DartDoc comment for more info.',
+  )
+  List<T> sortedByStringSC(String Function(T element) valueProvider) =>
+      sortedBySC((a, b) => valueProvider(a).compareTo(valueProvider(b)));
 
   /// Returns the last accessible index.
   /// If collection is empty this returns `null`.
@@ -1450,9 +1380,7 @@ extension IterableSC<T> on Iterable<T> {
   /// [].withoutFirst(); // [];
   /// ```
   Iterable<T> withoutFirst() sync* {
-    var iter = iterator;
-
-    iter.moveNext(); // eat the first
+    var iter = iterator..moveNext();
 
     while (iter.moveNext()) {
       yield iter.current;
@@ -1529,32 +1457,6 @@ extension IterableSC<T> on Iterable<T> {
     }
   }
 
-  /// Deprecation hint: Read the
-  /// [migration guide](https://github.com/felixblaschke/supercharged/blob/master/migration_v2.md)
-  /// for more details on migrating.
-  ///
-  /// Applies the function [funcIndexValue] to each element of this collection
-  /// in iteration order. The function receives the element index as first
-  /// parameter [index] and the [element] as the second parameter.
-  ///
-  /// Just like [map], but with access to the element's current index.
-  ///
-  /// Example
-  /// ```dart
-  /// [1, 2, 3].mapIndexed((number, index) => number * 2); // [2, 4, 6]
-  /// ```
-  @Deprecated(
-      'Dart natively supports this function. Read DartDoc comment for more info.')
-  Iterable<U> mapIndexedSC<U>(
-    U Function(T currentValue, int index) transformer,
-  ) sync* {
-    final it = iterator;
-    var index = 0;
-    while (it.moveNext()) {
-      yield transformer(it.current, index++);
-    }
-  }
-
   /// Applies the given [action] on each element and also returns the
   /// whole [Iterable] without modifying it.
   ///
@@ -1572,7 +1474,7 @@ extension IterableSC<T> on Iterable<T> {
 
   /// Applies the given [action] on each element and also returns the
   /// whole [Iterable] without modifying it. The [action] takes a second
-  /// parameter [index] matching the element index.
+  /// parameter index matching the element index.
   ///
   /// Example:
   /// ```dart
@@ -1595,8 +1497,7 @@ extension IterableSC<T> on Iterable<T> {
   /// [1, 2, 3].pickOne(); // 2 (or 1 or 3)
   /// ```
   T pickOne([Random? random]) {
-    var list = toList();
-    list.shuffle(random);
+    var list = toList()..shuffle(random);
     return list.first;
   }
 
@@ -1608,8 +1509,7 @@ extension IterableSC<T> on Iterable<T> {
   /// [1, 2, 3].pickSome(2); // [1, 2] or [3, 2] and so on...
   /// ```
   List<T> pickSome(int count, [Random? random]) {
-    var list = toList();
-    list.shuffle(random);
+    var list = toList()..shuffle(random);
     return list.take(min(count, length)).toList();
   }
 }
@@ -1637,45 +1537,26 @@ extension ListUtils<T> on List<T> {
   }
 
   /// Remove all occurrences of [List] [items] from the list.
-  void removeAllList(List<T> items) {
-    for (final item in items) {
-      removeAll(item);
-    }
-  }
+  void removeAllList(List<T> items) => items.forEach(removeAll);
 
   /// Remove all occurrences of [Set] [items] from the list.
-  void removeAllSet(Set<T> items) {
-    for (final item in items) {
-      removeAll(item);
-    }
-  }
+  void removeAllSet(Set<T> items) => items.forEach(removeAll);
 
   /// Remove all occurrences of [Iterable] [items] from the list.
-  void removeAllIterable(Iterable<T> items) {
-    for (final item in items) {
-      removeAll(item);
-    }
-  }
+  void removeAllIterable(Iterable<T> items) => items.forEach(removeAll);
 
   /// Remove all occurrences of [Map] [items] keys from the list.
-
-  void removeAllMapKeys(Map<T, dynamic> items) {
-    for (final item in items.keys) {
-      removeAll(item);
-    }
-  }
+  void removeAllMapKeys(Map<T, dynamic> items) => items.keys.forEach(removeAll);
 
   /// Remove all occurrences of [Map] [items] values from the list.
-
   void removeAllMapValues(Map<T, dynamic> items) {
     for (final item in items.values) {
-      removeAll(item);
+      removeAll(item as T);
     }
   }
 
   /// Remove first [n] occurrences of [item] from the list.
   ///  If [n] is negative, remove from end of list.
-
   void removeN(T item, int n) {
     if (n == 0) return;
     if (n > 0) {
@@ -1706,7 +1587,6 @@ extension ListUtils<T> on List<T> {
 
   /// Get the first occurrence of [item] from the list.
   /// Returns `null` if the item was not found.
-
   T? getFirst(T item) {
     final index = indexOf(item);
     if (index == -1) return null;
@@ -1715,7 +1595,6 @@ extension ListUtils<T> on List<T> {
 
   /// Get the last occurrence of [item] from the list.
   /// Returns `null` if the item was not found.
-
   T? getLast(T item) {
     final index = lastIndexOf(item);
     if (index == -1) return null;
@@ -1724,7 +1603,6 @@ extension ListUtils<T> on List<T> {
 
   /// Sum by [f] of all elements in the list.
   /// Returns `0` if the list is empty and [f] returns `null`.
-
   num sumBy(num Function(T) f) {
     num sum = 0;
     for (final item in this) {
@@ -1736,7 +1614,6 @@ extension ListUtils<T> on List<T> {
 
   /// Split the list into chunks of size [n].
   /// Returns a list of chunks.
-
   List<List<T>> chunk(int n) {
     final chunks = <List<T>>[];
     for (var i = 0; i < length; i += n) {
@@ -1747,7 +1624,6 @@ extension ListUtils<T> on List<T> {
 
   /// Check if the list contains all elements of [List] [items].
   /// Returns `true` if the list contains all elements of [items], `false` otherwise.
-
   bool containsAllList(List<T> items) {
     for (final item in items) {
       if (!contains(item)) return false;
@@ -1757,10 +1633,9 @@ extension ListUtils<T> on List<T> {
 
   /// Merge the list with [List] [items].
   /// Returns a new list with all elements of the list and [items].
-
   List<T> mergeList(List<T> items, {bool unique = false}) {
-    final list = <T>[];
-    list.addAll(this);
+    final list = <T>[...this];
+
     if (unique) {
       for (final item in items) {
         if (!list.contains(item)) list.add(item);
@@ -1773,7 +1648,6 @@ extension ListUtils<T> on List<T> {
 
   /// Convert the list to a [Map] with [key] and [value] functions.
   /// Returns a new [Map] with the keys and values returned by [key] and [value].
-
   Map<K, V> toMap<K, V>(K Function(T) key, V Function(T) value) {
     final map = <K, V>{};
     for (final item in this) {
@@ -1784,7 +1658,6 @@ extension ListUtils<T> on List<T> {
 
   /// Distinct the list by [f].
   /// Returns a new list with distinct elements based on [f].
-
   List<T> distinctBy(dynamic Function(T) f) {
     final list = <T>[];
     for (final item in this) {
@@ -1795,7 +1668,6 @@ extension ListUtils<T> on List<T> {
 
   /// Remove null or empty elements from the list.
   /// Returns a new list with null or empty elements removed.
-
   List<T> compact() {
     final list = <T>[];
     for (final item in this) {
@@ -1829,75 +1701,68 @@ extension ListUtils<T> on List<T> {
 
   /// Sort the list by [f].
   /// Returns a new list sorted by [f].
-
   List<T> sortedBy(dynamic Function(T) f) {
-    final list = <T>[];
-    list.addAll(this);
-    list.sort((a, b) {
-      final valueA = f(a);
-      final valueB = f(b);
-      if (valueA == null) {
-        if (valueB == null) {
-          return 0;
+    final list = <T>[...this]..sort((a, b) {
+        final valueA = f(a);
+        final valueB = f(b);
+        if (valueA == null) {
+          if (valueB == null) {
+            return 0;
+          } else {
+            return 1;
+          }
+        } else if (valueB == null) {
+          return -1;
+        } else if (valueA is num) {
+          return valueA.compareTo(valueB as num);
+        } else if (valueA is String) {
+          return valueA.compareTo(valueB as String);
+        } else if (valueA is bool) {
+          return valueA == valueB ? 0 : (valueA ? 1 : -1);
+        } else if (valueA is DateTime) {
+          return valueA.compareTo(valueB as DateTime);
+        } else if (valueA is Comparable) {
+          return valueA.compareTo(valueB);
         } else {
-          return 1;
+          return 0;
         }
-      } else if (valueB == null) {
-        return -1;
-      } else if (valueA is num) {
-        return valueA.compareTo(valueB);
-      } else if (valueA is String) {
-        return valueA.compareTo(valueB);
-      } else if (valueA is bool) {
-        return valueA == valueB ? 0 : (valueA ? 1 : -1);
-      } else if (valueA is DateTime) {
-        return valueA.compareTo(valueB);
-      } else if (valueA is Comparable) {
-        return valueA.compareTo(valueB);
-      } else {
-        return 0;
-      }
-    });
+      });
     return list;
   }
 
   // Sort the list by [f] descending.
   /// Returns a new list sorted by [f] descending.
-
   List<T> sortedByDescending(dynamic Function(T) f) {
-    final list = <T>[];
-    list.addAll(this);
-    list.sort((a, b) {
-      final valueA = f(a);
-      final valueB = f(b);
-      if (valueA == null) {
-        if (valueB == null) {
-          return 0;
+    final list = <T>[...this]..sort((a, b) {
+        final valueA = f(a);
+        final valueB = f(b);
+        if (valueA == null) {
+          if (valueB == null) {
+            return 0;
+          } else {
+            return -1;
+          }
+        } else if (valueB == null) {
+          return 1;
+        } else if (valueA is num) {
+          return valueA.compareTo(valueB as num);
+        } else if (valueA is String) {
+          return valueA.compareTo(valueB as String);
+        } else if (valueA is bool) {
+          return valueA == valueB ? 0 : (valueA ? -1 : 1);
+        } else if (valueA is DateTime) {
+          return valueA.compareTo(valueB as DateTime);
+        } else if (valueA is Comparable) {
+          return valueA.compareTo(valueB);
         } else {
-          return -1;
+          return 0;
         }
-      } else if (valueB == null) {
-        return 1;
-      } else if (valueA is num) {
-        return valueA.compareTo(valueB);
-      } else if (valueA is String) {
-        return valueA.compareTo(valueB);
-      } else if (valueA is bool) {
-        return valueA == valueB ? 0 : (valueA ? -1 : 1);
-      } else if (valueA is DateTime) {
-        return valueA.compareTo(valueB);
-      } else if (valueA is Comparable) {
-        return valueA.compareTo(valueB);
-      } else {
-        return 0;
-      }
-    });
+      });
     return list;
   }
 
   /// Group the list by [f].
   /// Returns a [Map] with the keys and values returned by [f].
-
   Map<K, List<T>> groupBy<K>(K Function(T) f) {
     final map = <K, List<T>>{};
     for (final item in this) {
@@ -1914,15 +1779,13 @@ extension ListUtils<T> on List<T> {
   /// Join to [String] with [separator], [prefix] and [suffix], and [transform] function.
   /// Returns a [String] with the elements joined by [separator], [prefix] and [suffix], and transformed by [transform].
   /// If [transform] is `null`, the elements are converted to [String] with `toString()`.
-
   String joinToString(
     String separator, {
     String prefix = '',
     String suffix = '',
     String Function(T)? transform,
   }) {
-    final buffer = StringBuffer();
-    buffer.write(prefix);
+    final buffer = StringBuffer()..write(prefix);
     for (var i = 0; i < length; i++) {
       if (i > 0) buffer.write(separator);
       buffer.write(transform == null ? this[i].toString() : transform(this[i]));
@@ -2039,7 +1902,9 @@ extension IterableExtensions1<E> on Iterable<E> {
   /// The iterable must have at least one element.
   /// If it has only one element, that element is returned.
   T reduceValue<T>(
-      T Function(T value, T elementVal) combine, GetValue<E, T> getVal) {
+    T Function(T value, T elementVal) combine,
+    GetValue<E, T> getVal,
+  ) {
     final iterator = this.iterator;
     if (!iterator.moveNext()) {
       throw StateError('No element');
@@ -2075,7 +1940,7 @@ extension IterableExtensions1<E> on Iterable<E> {
   // /// If iterable is empty then returns empty iterable.
   // ///
   // /// If iterable have only one element then
-  // /// returns interable with only one element.
+  // /// returns iterable with only one element.
   // Iterable<E> intersperse(E element) =>
   //     isEmpty ? [] : IntersperseIterable(this, element);
   //
@@ -2108,7 +1973,9 @@ extension IterableExtensions1<E> on Iterable<E> {
   /// [getKey] used to get key for result Map.
   /// [getVal] used to get value for result Map.
   Map<TKey, TVal> toMap<TKey, TVal>(
-          GetValue<E, TKey> getKey, GetValue<E, TVal> getVal) =>
+    GetValue<E, TKey> getKey,
+    GetValue<E, TVal> getVal,
+  ) =>
       {for (final e in this) getKey(e): getVal(e)};
 
   // Math
@@ -2154,9 +2021,8 @@ extension IterableExtensions1<E> on Iterable<E> {
   /// It can be property of element, or any another value by element.
   ///
   /// If no elements, return zero.
-  T maxOf<T extends num>(GetValue<E, T> getVal) {
-    return isEmpty ? _zero() : reduceValue(math.max, getVal);
-  }
+  T maxOf<T extends num>(GetValue<E, T> getVal) =>
+      isEmpty ? _zero() : reduceValue(math.max, getVal);
 
   /// Returns the min value of int or double values by elements.
   ///
@@ -2164,9 +2030,8 @@ extension IterableExtensions1<E> on Iterable<E> {
   /// It can be property of element, or any another value by element.
   ///
   /// If no elements, return zero.
-  T minOf<T extends num>(GetValue<E, T> getVal) {
-    return isEmpty ? _zero() : reduceValue(math.min, getVal);
-  }
+  T minOf<T extends num>(GetValue<E, T> getVal) =>
+      isEmpty ? _zero() : reduceValue(math.min, getVal);
 }
 
 extension NullableIterableExtensions<E> on Iterable<E>? {
@@ -2194,7 +2059,7 @@ extension NumIterableExtensions<E extends num> on Iterable<E> {
   E min() => isEmpty ? _zero() : reduce(math.min);
 }
 
-extension BigIntItrableExtention on Iterable<BigInt> {
+extension BigIntIterableExtension on Iterable<BigInt> {
   /// Returns max value of values.
   BigInt min() {
     final min = isEmpty
@@ -2225,8 +2090,6 @@ extension IntIterableExtensions on Iterable<int> {
   int sum() => fold(0, (sum, v) => sum + v);
 
   /// Returns the average value of values.
-  ///
-  /// See [IterableExtensions.avgOf].
   double avg() => isNotEmpty ? sum() / length : 0;
 }
 
@@ -2238,8 +2101,6 @@ extension DoubleIterableExtensions on Iterable<double> {
   double sum() => fold(0, (sum, v) => sum + v);
 
   /// Returns the average value of values.
-  ///
-  /// See [IterableExtensions.avgOfDouble].
   double avg() => isNotEmpty ? sum() / length : 0;
 }
 
@@ -2283,13 +2144,12 @@ extension ListExtensions1<E> on List<E> {
   ///
   /// If [element] is not in the list than just copy will be returned.
   /// If current list is `null` - returns new empty list.
-  List<E> copyWithReplace(E element, E replacement) {
-    return [for (final e in this) e == element ? replacement : e];
-  }
+  List<E> copyWithReplace(E element, E replacement) =>
+      [for (final e in this) e == element ? replacement : e];
 
   /// Copy current list with adding all [elements] at the position of new list.
   ///
-  /// Error throwed due to a value being outside a valid range.
+  /// Error thrown due to a value being outside a valid range.
   List<E> copyWithInsertAll(int index, List<E> elements) =>
       List.from(this)..insertAll(index, elements);
 
@@ -2299,9 +2159,8 @@ extension ListExtensions1<E> on List<E> {
   /// If no elements that satisfy [test] predicate found
   /// than just copy will be returned.
   /// If current list is `null` - returns new empty list.
-  List<E> copyWithReplaceWhere(TestPredicate<E> test, E replacement) {
-    return [for (final e in this) test(e) ? replacement : e];
-  }
+  List<E> copyWithReplaceWhere(TestPredicate<E> test, E replacement) =>
+      [for (final e in this) test(e) ? replacement : e];
 
   // Modification
 
@@ -2359,12 +2218,12 @@ extension ListExtensions1<E> on List<E> {
   // Modification - Sorting
 
   /// Sorts the list in ascending order of the object's field value.
-  void sortBy(Comparable Function(E e) getVal) =>
-      sort((a, b) => getVal(a).compareTo(getVal(b)));
+  void sortBy(Comparable<E> Function(E e) getVal) =>
+      sort((a, b) => getVal(a).compareTo(getVal(b) as E));
 
   /// Sorts the list in descending order of the object's field value.
-  void sortByDescending(Comparable Function(E e) getVal) =>
-      sort((a, b) => getVal(b).compareTo(getVal(a)));
+  void sortByDescending(Comparable<E> Function(E e) getVal) =>
+      sort((a, b) => getVal(b).compareTo(getVal(a) as E));
 }
 
 extension NullableListExtensions<E> on List<E>? {
@@ -2386,7 +2245,7 @@ extension NullableListExtensions<E> on List<E>? {
   /// Copy current list with adding all [elements] at the position of new list.
   ///
   /// If current list is `null` - copy of list [elements] will be created.
-  /// Error throwed due to a value being outside a valid range.
+  /// Error thrown due to a value being outside a valid range.
   List<E> copyWithInsertAll(int index, List<E> elements) =>
       this?.copyWithInsertAll(index, elements) ?? List.from(elements);
 
@@ -2394,9 +2253,8 @@ extension NullableListExtensions<E> on List<E>? {
   ///
   /// If [element] is not in the list than just copy will be returned.
   /// If current list is `null` - returns new empty list.
-  List<E> copyWithReplace(E element, E replacement) {
-    return this?.copyWithReplace(element, replacement) ?? const [];
-  }
+  List<E> copyWithReplace(E element, E replacement) =>
+      this?.copyWithReplace(element, replacement) ?? const [];
 
   /// Copy current list, replacing elements of list that
   /// satisfy [test] predicate with [replacement].
@@ -2404,9 +2262,8 @@ extension NullableListExtensions<E> on List<E>? {
   /// If no elements that satisfy [test] predicate found
   /// than just copy will be returned.
   /// If current list is `null` - returns new empty list.
-  List<E> copyWithReplaceWhere(TestPredicate<E> test, E replacement) {
-    return this?.copyWithReplaceWhere(test, replacement) ?? const [];
-  }
+  List<E> copyWithReplaceWhere(TestPredicate<E> test, E replacement) =>
+      this?.copyWithReplaceWhere(test, replacement) ?? const [];
 }
 
 extension IterableExtension2<T> on Iterable<T> {

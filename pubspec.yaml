@@ -23,17 +23,17 @@ dependencies:
   encrypt: ^5.0.3
 
   #--- Http packages ---#
-  dio: ^5.4.3+1
+  dio: ^5.5.0+1
 
   #--- Hardware packages ---#
   local_auth: ^2.2.0 # biometric authentication
   image_picker: ^1.1.2
-  file_picker: ^8.0.5
+  file_picker: ^8.0.6
   mobile_scanner: ^5.1.1
   path: ^1.9.0
 
   #--- Misc packages ---#
-  logger: ^2.3.0
+  logger: ^2.4.0
 
   flutter:
     sdk: flutter

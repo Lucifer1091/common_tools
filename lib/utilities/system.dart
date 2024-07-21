@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_await_in_return, type_annotate_public_apis, inference_failure_on_instance_creation
+
 part of 'utilities.dart';
 
 /// Utility class for system-level operations in a Flutter application.
@@ -44,52 +46,62 @@ class System {
   ///
   /// This method sets the status bar to a dark theme with dark icons.
   static void setDarkStatusBar() {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      systemNavigationBarColor: Colors.black,
-      systemNavigationBarIconBrightness: Brightness.light,
-      statusBarColor: Colors.transparent,
-      statusBarBrightness: Brightness.light,
-      statusBarIconBrightness: Brightness.dark,
-    ));
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.black,
+        systemNavigationBarIconBrightness: Brightness.light,
+        statusBarColor: Colors.transparent,
+        statusBarBrightness: Brightness.light,
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
   }
 
   /// Set the status bar to a light theme.
   ///
   /// This method sets the status bar to a light theme with light icons.
   static void setLightStatusBar() {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      systemNavigationBarColor: Colors.white,
-      systemNavigationBarIconBrightness: Brightness.dark,
-      statusBarColor: Colors.transparent,
-      statusBarBrightness: Brightness.dark,
-      statusBarIconBrightness: Brightness.light,
-    ));
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.white,
+        systemNavigationBarIconBrightness: Brightness.dark,
+        statusBarColor: Colors.transparent,
+        statusBarBrightness: Brightness.dark,
+        statusBarIconBrightness: Brightness.light,
+      ),
+    );
   }
 
   /// Show the status bar.
   ///
   /// This method manually enables the status bar.
   static Future<void> showStatusBar() async {
-    SystemChrome.setEnabledSystemUIMode(
-      SystemUiMode.manual,
-      overlays: SystemUiOverlay.values,
+    unawaited(
+      SystemChrome.setEnabledSystemUIMode(
+        SystemUiMode.manual,
+        overlays: SystemUiOverlay.values,
+      ),
     );
   }
 
-  /// Enter fullscreen mode (hides status bar and navigation bar).
+  /// Enter full screen mode (hides status bar and navigation bar).
   ///
-  /// This method hides both the status bar and navigation bar to make the application fullscreen.
+  /// This method hides both the status bar and navigation bar to make the application full screen.
   static void enterFullScreen() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+    unawaited(
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []),
+    );
   }
 
-  /// Exit fullscreen mode (makes status bar and navigation bar visible).
+  /// Exit full screen mode (makes status bar and navigation bar visible).
   ///
-  /// This method makes both the status bar and navigation bar visible again after fullscreen mode.
+  /// This method makes both the status bar and navigation bar visible again after full screen mode.
   static void exitFullScreen() {
-    SystemChrome.setEnabledSystemUIMode(
-      SystemUiMode.manual,
-      overlays: SystemUiOverlay.values,
+    unawaited(
+      SystemChrome.setEnabledSystemUIMode(
+        SystemUiMode.manual,
+        overlays: SystemUiOverlay.values,
+      ),
     );
   }
 
@@ -97,39 +109,47 @@ class System {
   ///
   /// This method manually hides the status bar.
   static Future<void> hideStatusBar() async {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+    unawaited(
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []),
+    );
   }
 
   /// Set orientation to portrait mode.
   ///
   /// This method restricts screen orientation to portrait mode only.
   static void setOrientationPortrait() {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitDown,
-      DeviceOrientation.portraitUp,
-    ]);
+    unawaited(
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitDown,
+        DeviceOrientation.portraitUp,
+      ]),
+    );
   }
 
   /// Set orientation to landscape mode.
   ///
   /// This method restricts screen orientation to landscape mode only.
   static void setOrientationLandscape() {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
-      DeviceOrientation.landscapeLeft,
-    ]);
+    unawaited(
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.landscapeRight,
+        DeviceOrientation.landscapeLeft,
+      ]),
+    );
   }
 
   /// Enable rotation to any orientation.
   ///
   /// This method allows the screen orientation to freely rotate between portrait and landscape modes.
   static void enableRotation() {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ]);
+    unawaited(
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ]),
+    );
   }
 
   /// Invoke a native method and get the result asynchronously.
@@ -148,7 +168,7 @@ class System {
   static Future<T?> invokeNativeMethod<T>(
     String channel,
     String method, [
-    dynamic arguments,
+    arguments,
   ]) async {
     var platform = MethodChannel(channel);
     return await platform.invokeMethod<T>(method, arguments);

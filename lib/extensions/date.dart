@@ -242,7 +242,7 @@ extension DateValidators on DateTime? {
   bool equals(DateTime other) => isNotNull && this!.isAtSameMomentAs(other);
 
   /// Check if a date is [equals] to other
-  bool isEqual(other) => equals(other);
+  bool isEqual(DateTime other) => equals(other);
 
   /// Return true if this date day is monday
   bool get isMonday => isNotNull && this!.weekday == DateTime.monday;
@@ -470,9 +470,8 @@ extension DateConversions on DateTime {
   /// print(date.toMonth()); // Output: June
   /// print(date.toMonth(style : Abbreviation.full)); // Output: Jun
   /// ```
-  String toMonth({Abbreviation style = Abbreviation.none}) {
-    return month.toMonth(style: style);
-  }
+  String toMonth({Abbreviation style = Abbreviation.none}) =>
+      month.toMonth(style: style);
 
   /// Converts the weekday of the [DateTime] to a string representing the day's name.
   ///
@@ -491,9 +490,8 @@ extension DateConversions on DateTime {
   /// print(date.toWeekday(style : Abbreviation.semi)); // Output: Thu
   /// print(date.toWeekday(style : Abbreviation.full)); // Output: T
   /// ```
-  String toWeekday({Abbreviation style = Abbreviation.none}) {
-    return weekday.toDay(style: style);
-  }
+  String toWeekday({Abbreviation style = Abbreviation.none}) =>
+      weekday.toDay(style: style);
 
   /// Returns a greeting based on the current time of day.
   ///
@@ -552,7 +550,7 @@ extension DateConversions on DateTime {
     final String day = format(pattern: DateFormats.fullDay);
     final String fullDate = DateFormat.yMMMEd().format(this);
     final String fullTime = DateFormat.jm().format(this);
-    final String fullDateTime = "$fullDate $fullTime";
+    final String fullDateTime = '$fullDate $fullTime';
 
     if (isToday) {
       return 'Today at $time';
@@ -575,7 +573,7 @@ extension DateConversions on DateTime {
   /// Calculates number of weeks for a given year as per https://en.wikipedia.org/wiki/ISO_week_date#Weeks_per_year
   int _numOfWeeks(int year) {
     DateTime dec28 = DateTime(year, 12, 28);
-    int dayOfDec28 = int.parse(DateFormat("D").format(dec28));
+    int dayOfDec28 = int.parse(DateFormat('D').format(dec28));
     return ((dayOfDec28 - dec28.weekday + 10) / 7).floor();
   }
 
@@ -584,7 +582,7 @@ extension DateConversions on DateTime {
   /// Returns the ISO week number.
   /// Calculates week number from a date as per https://en.wikipedia.org/wiki/ISO_week_date#Calculation
   int get weekNumber {
-    int dayOfYear = int.parse(DateFormat("D").format(this));
+    int dayOfYear = int.parse(DateFormat('D').format(this));
     int woy = ((dayOfYear - weekday + 10) / 7).floor();
     if (woy < 1) {
       woy = _numOfWeeks(year - 1);
@@ -597,7 +595,7 @@ extension DateConversions on DateTime {
   /// Calculates the age based on the current date.
   ///
   /// Returns the age in years.
-  int get toAge => ((DateTime.now().difference(this).inDays) ~/ 365);
+  int get toAge => (DateTime.now().difference(this).inDays) ~/ 365;
 
   /// Rounds this [DateTime] to the nearest quarter hour.
   ///
@@ -656,7 +654,7 @@ extension DateConversions on DateTime {
   /// Gets the Unix timestamp of this [DateTime].
   ///
   /// Returns the Unix timestamp in seconds as an integer.
-  int get timeStamp => (millisecondsSinceEpoch ~/ 1000).toInt();
+  int get timeStamp => millisecondsSinceEpoch ~/ 1000;
 
   /// Gets the number of days in the month of this [DateTime].
   ///
@@ -698,7 +696,7 @@ extension DateConversions on DateTime {
   /// and December 31st returns 365 (or 366 in a leap year).
   int get dayOfYear {
     // Get the date of January 1st of the current year
-    DateTime jan1st = DateTime(year, 1, 1);
+    DateTime jan1st = DateTime(year);
 
     // Calculate the difference in days between the current date and January 1st
     int difference = differenceInDays(jan1st);
@@ -790,9 +788,9 @@ extension DateConversions on DateTime {
     final int hours = inMinutes ~/ 60;
     final int minutes = inMinutes - (hours * 60);
 
-    return (timeZoneOffset.isNegative ? "-" : "+") +
+    return (timeZoneOffset.isNegative ? '-' : '+') +
         hours.toString().padLeft(2, '0') +
-        (separateWithColon ? ":" : "") +
+        (separateWithColon ? ':' : '') +
         minutes.toString().padLeft(2, '0');
   }
 
@@ -815,9 +813,7 @@ extension DateConversions on DateTime {
   /// ```dart
   /// DateTime.now().duration(); // Duration from 01.01.1970 until now
   /// ```
-  Duration duration() {
-    return Duration(milliseconds: millisecondsSinceEpoch);
-  }
+  Duration duration() => Duration(milliseconds: millisecondsSinceEpoch);
 }
 
 extension ParseDateTime on String? {
@@ -871,9 +867,8 @@ extension ParseDateTime on String? {
   String? toUtcString({
     bool utc = true,
     String format = 'MMM dd, yyyy h:mm a',
-  }) {
-    return parse(this, format: format, utc: utc)?.toString().split('.')[0];
-  }
+  }) =>
+      parse(this, format: format, utc: utc)?.toString().split('.')[0];
 
   String? detectDateFormat() {
     if (isBlank) return null;
@@ -890,7 +885,7 @@ extension ParseDateTime on String? {
     }
 
     if (patternsFound.isNotEmpty && patternsFound.length > 1) {
-      for (String pattern in patternsFound) {
+      for (final String pattern in patternsFound) {
         bool validatePattern =
             validateDatePattern(expected: this!, pattern: pattern);
         if (validatePattern) {
@@ -906,8 +901,8 @@ extension ParseDateTime on String? {
   }
 
   bool validateDatePattern({
-    String pattern = "yyyy-MM-dd HH:mm:ss",
     required String expected,
+    String pattern = 'yyyy-MM-dd HH:mm:ss',
   }) {
     if (isBlank) return false;
 
@@ -924,10 +919,10 @@ extension ParseDateTime on String? {
     String? dt = date?.toString().trim();
 
     try {
-      if (dt == "" || (dt?.isEmpty ?? true) || dt == null) return null;
+      if (dt == '' || (dt?.isEmpty ?? true) || dt == null) return null;
 
       if (utc) {
-        return DateFormat(format ?? "yyyy-MM-dd HH:mm:ss")
+        return DateFormat(format ?? 'yyyy-MM-dd HH:mm:ss')
             .parse(dt, true)
             .toLocal();
       }
@@ -1008,7 +1003,7 @@ extension DateIntUtils on int {
       'September',
       'October',
       'November',
-      'December'
+      'December',
     ];
     List<String> shortMonths = [
       'Jan',
@@ -1022,7 +1017,7 @@ extension DateIntUtils on int {
       'Sep',
       'Oct',
       'Nov',
-      'Dec'
+      'Dec',
     ];
 
     return style == Abbreviation.full || style == Abbreviation.semi
@@ -1055,7 +1050,7 @@ extension DateIntUtils on int {
       'Thursday',
       'Friday',
       'Saturday',
-      'Sunday'
+      'Sunday',
     ];
     List<String> shortDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     List<String> veryShortDays = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
@@ -1645,12 +1640,12 @@ extension DateTimeGetters on DateTime {
   /// Returns the starting [DateTime] of the current year.
   ///
   /// Returns a new [DateTime] instance set to the start of the year (January 1st, 00:00:00).
-  DateTime get startOfYear => DateTime(year, 1, 1, 0, 0, 0, 0);
+  DateTime get startOfYear => DateTime(year);
 
   /// Returns the starting [DateTime] of the current month.
   ///
   /// Returns a new [DateTime] instance set to the start of the month (first day, 00:00:00).
-  DateTime get startOfMonth => DateTime(year, month, 1, 0, 0, 0, 0);
+  DateTime get startOfMonth => DateTime(year, month);
 
   /// Returns the starting [DateTime] of the current week.
   ///
@@ -1731,15 +1726,14 @@ extension DateTimeGetters on DateTime {
 
   /// Returns the first day of this month
   DateTime get firstDayOfMonth =>
-      isUtc ? DateTime.utc(year, month, 1) : DateTime(year, month, 1);
+      isUtc ? DateTime.utc(year, month) : DateTime(year, month);
 
   /// Returns the last day of this month (considers leap years)
   DateTime get lastDayOfMonth =>
       isUtc ? DateTime.utc(year, month + 1, 0) : DateTime(year, month + 1, 0);
 
   /// Returns the first day of this year
-  DateTime get firstDayOfYear =>
-      isUtc ? DateTime.utc(year, 1, 1) : DateTime(year, 1, 1);
+  DateTime get firstDayOfYear => isUtc ? DateTime.utc(year) : DateTime(year);
 
   /// Returns the last day of this year
   DateTime get lastDayOfYear =>
@@ -1754,7 +1748,6 @@ extension DateTimeGetters on DateTime {
   /// Get Local [DateTime] from this [DateTime]
   DateTime get local => DateTime.fromMicrosecondsSinceEpoch(
         microsecondsSinceEpoch,
-        isUtc: false,
       );
 }
 
@@ -2021,22 +2014,12 @@ extension Date on DateTime {
         year,
         month,
         day,
-        0,
-        0,
-        0,
-        0,
-        0,
       );
     }
     return DateTime(
       year,
       month,
       day,
-      0,
-      0,
-      0,
-      0,
-      0,
     );
   }
 
@@ -2071,8 +2054,10 @@ extension WeekdayFinder on DateTime {
   ///
   /// If `n`th day is today, will return `7 days in the future`.
   DateTime nextWeekday(int weekday) {
-    assert(weekday > -1 && weekday < 8,
-        "[moment_dart] Weekday must be in range `0<=n<=7`");
+    assert(
+      weekday > -1 && weekday < 8,
+      '[moment_dart] Weekday must be in range `0<=n<=7`',
+    );
 
     final int requiredDelta = (weekday - this.weekday) % 7;
 
@@ -2118,8 +2103,10 @@ extension WeekdayFinder on DateTime {
   ///
   /// If today is the `n`th day, will return `7 days in the past`
   DateTime lastWeekday(int weekday) {
-    assert(weekday > -1 && weekday < 8,
-        "[Moment Dart] Weekday must be in range `0<=n<=7`");
+    assert(
+      weekday > -1 && weekday < 8,
+      '[Moment Dart] Weekday must be in range `0<=n<=7`',
+    );
 
     final int requiredDelta = (this.weekday - weekday) % 7;
 
