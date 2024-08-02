@@ -26,7 +26,7 @@ class Validators {
   static final email = MultiValidator(
     [
       minMax(title: 'Email / User Name', min: 4, max: 100),
-      EmailValidator(errorText: "Enter a valid email address."),
+      EmailValidator(errorText: 'Enter a valid email address.'),
     ],
   );
 
@@ -70,19 +70,16 @@ class Validators {
   ///   print(result); // Prints error message if invalid
   /// }
   /// ```
-  static MultiValidator range({
+  static RangeValidator range({
     required String title,
     int min = 0,
     int max = 100,
-  }) {
-    return MultiValidator([
+  }) =>
       RangeValidator(
         min: min,
         max: max,
         errorText: '$title must be between $min to $max.',
-      )
-    ]);
-  }
+      );
 
   /// Validates that the input length is within the specified minimum and maximum.
   ///
@@ -103,12 +100,11 @@ class Validators {
     required String title,
     int min = 0,
     int max = 100,
-  }) {
-    return MultiValidator([
-      Validators.min(title: title, min: min),
-      Validators.max(title: title, max: max),
-    ]);
-  }
+  }) =>
+      MultiValidator([
+        Validators.min(title: title, min: min),
+        Validators.max(title: title, max: max),
+      ]);
 
   /// Validates that the input length does not exceed the specified maximum.
   ///
@@ -124,14 +120,11 @@ class Validators {
   ///   print(result); // Prints error message if invalid
   /// }
   /// ```
-  static MultiValidator max({required String title, int max = 100}) {
-    return MultiValidator([
+  static MaxLengthValidator max({required String title, int max = 100}) =>
       MaxLengthValidator(
         max,
         errorText: '$title should not be greater than $max characters.',
-      )
-    ]);
-  }
+      );
 
   /// Validates that the input length is at least the specified minimum.
   ///
@@ -147,14 +140,11 @@ class Validators {
   ///   print(result); // Prints error message if invalid
   /// }
   /// ```
-  static MultiValidator min({required String title, required int min}) {
-    return MultiValidator([
+  static MinLengthValidator min({required String title, required int min}) =>
       MinLengthValidator(
         min,
         errorText: '$title must be at least $min characters long.',
-      )
-    ]);
-  }
+      );
 }
 
 /// A validator class for ensuring two values are not the same.
