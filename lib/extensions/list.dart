@@ -16,7 +16,7 @@ extension IterableWithIndex<T> on Iterable<T> {
 
   // returns only distinct elements
   Iterable<T> distinctBy(Object Function(T e) getCompareValue) {
-    var result = <T>[];
+    final result = <T>[];
     forEach(
       (element) {
         if (!result.any(
@@ -31,7 +31,7 @@ extension IterableWithIndex<T> on Iterable<T> {
 
   T get getRandomElement {
     final random = math.Random();
-    int index = random.nextInt(length);
+    final int index = random.nextInt(length);
     return elementAt(index);
   }
 
@@ -200,6 +200,27 @@ extension IterableExt<T> on Iterable<T> {
     }
   }
 
+  // /// Returns a new list containing elements at indices between [start]
+  // /// (inclusive) and [end] (inclusive).
+  // ///
+  // /// If [end] is omitted, it is being set to `lastIndex`.
+  // List<T> slice(int start, [int end = -1]) {
+  //   final list = this is List ? this as List<T> : toList();
+  //   var start0 = start;
+  //   var end0 = end;
+
+  //   if (start0 < 0) {
+  //     start0 = start0 + list.length;
+  //   }
+  //   if (end0 < 0) {
+  //     end0 = end0 + list.length;
+  //   }
+
+  //   RangeError.checkValidRange(start0, end0, list.length);
+
+  //   return list.sublist(start0, end0 + 1);
+  // }
+
   /// Transforms an iterable like:
   /// duplicate(3): [a,b] => [a,b,a,b,a,b]
   /// duplicate(2): [a,b] => [a,b,a,b]
@@ -321,17 +342,17 @@ extension MyIterable<T> on Iterable<T>? {
 
 //remove first element in [list]
   List<T> get removeFirstElement {
-    List<T> list = [];
+    final List<T> list = [];
     if (isNullOrEmpty) return list;
-    var thisList = this!.toList();
+    final thisList = this!.toList();
     return thisList..removeAt(0);
   }
 
   //remove Last element in [list]
   List<T> get removeLastElement {
-    List<T> list = [];
+    final List<T> list = [];
     if (isNullOrEmpty) return list;
-    var thisList = this!.toList();
+    final thisList = this!.toList();
     return thisList..removeAt(thisList.length - 1);
   }
 
@@ -346,12 +367,12 @@ extension MyIterable<T> on Iterable<T>? {
     if (this == null) return <T>[];
     if (n <= 0) return [];
 
-    var list = <T>[];
+    final list = <T>[];
     if (this is Iterable) {
       if (n >= this!.length) return this!.toList();
 
       var count = 0;
-      var thisList = this!.toList();
+      final thisList = this!.toList();
       for (final item in thisList) {
         list.add(item);
         if (++count == n) break;
@@ -450,7 +471,7 @@ extension ListExt<T> on List<T>? {
   }
 
   List<T> separatorEvery(T separator, {bool start = false, bool end = false}) {
-    List<T> list = <T>[];
+    final List<T> list = <T>[];
     if (isNullOrEmpty) return list;
 
     ///First item Top separator
@@ -470,8 +491,8 @@ extension ListExt<T> on List<T>? {
   }
 
   List<List<T>> divideListByFunction(bool Function(T) condition) {
-    List<List<T>> nestedLists = [];
-    List<T> currentSublist = [];
+    final List<List<T>> nestedLists = [];
+    final List<T> currentSublist = [];
     if (isNullOrEmpty) return [];
 
     for (final T element in this ?? []) {
@@ -503,7 +524,7 @@ extension ListExt<T> on List<T>? {
       throw ArgumentError('Range size must be greater than zero.');
     }
 
-    List<List<T>> nestedLists = [];
+    final List<List<T>> nestedLists = [];
 
     for (int i = 0; i < this!.length; i += rangeSize) {
       final endIndex =
@@ -574,7 +595,7 @@ extension GenericListExtensions<E> on Iterable<E> {
   /// Returns:
   /// A new list that contains this list repeated [data] times.
   List<E> operator *(int data) {
-    List<E> result = [];
+    final List<E> result = [];
     for (int i = 0; i < data; i++) {
       result.addAll(this);
     }
@@ -643,7 +664,7 @@ extension IntList<T extends num> on Iterable<T> {
     if (length == 0) {
       throw Exception('List is empty');
     }
-    var sorted = [...this]..sort();
+    final sorted = [...this]..sort();
 
     if (length.isEven) {
       return (sorted[length ~/ 2 - 1] + sorted[length ~/ 2]) / 2;
@@ -802,7 +823,7 @@ extension IterableExtensions<T> on Iterable<T>? {
   /// The returned map preserves the entry iteration order of the keys produced from the original collection.
   Map<K, List<R>> groupBy<R, K>(K Function(R e) keySelector) {
     if (this == null) return {};
-    var map = <K, List<R>>{};
+    final map = <K, List<R>>{};
 
     for (final element in this!) {
       map.putIfAbsent(keySelector(element as R), () => []).add(element);
@@ -851,12 +872,12 @@ extension IterableExtensions<T> on Iterable<T>? {
     if (this == null) return <T>[];
     if (n <= 0) return [];
 
-    var list = <T>[];
+    final list = <T>[];
     if (this is Iterable) {
       if (n >= this!.length) return this!.toList();
 
       var count = 0;
-      var thisList = this!.toList();
+      final thisList = this!.toList();
       for (final item in thisList) {
         list.add(item);
         if (++count == n) break;
@@ -1037,10 +1058,10 @@ extension IterableSC<T> on Iterable<T> {
       return const Iterable.empty();
     }
 
-    var countOfChunks = (length / size.toDouble()).ceil();
+    final countOfChunks = (length / size.toDouble()).ceil();
 
     return Iterable.generate(countOfChunks, (int index) {
-      var chunk = skip(index * size).take(size).toList();
+      final chunk = skip(index * size).take(size).toList();
 
       if (fill != null) {
         while (chunk.length < size) {
@@ -1054,23 +1075,14 @@ extension IterableSC<T> on Iterable<T> {
 
   /// Returns the number of elements that matches the [test].
   ///
-  /// If not [test] is specified it will count every element.
+  /// If no [test] is specified it will count every element.
   ///
   /// Example:
   /// ```dart
   /// [1, 2, 3, 13, 14, 15].count();             // 6
   /// [1, 2, 3, 13, 14, 15].count((n) => n > 9); // 3
   /// ```
-  int count([bool Function(T element)? test]) {
-    final testFn = test ?? (_) => true;
-
-    if (isEmpty) {
-      return 0;
-    }
-
-    return map((element) => testFn(element) ? 1 : 0)
-        .reduce((value, element) => value + element);
-  }
+  int count([Selector<T>? test]) => test == null ? length : where(test).length;
 
   /// Returns a new [Iterable] with all elements that satisfy the
   /// predicate [test].
@@ -1212,10 +1224,10 @@ extension IterableSC<T> on Iterable<T> {
   }) {
     final transformFn = valueTransform ?? (element) => element as V;
 
-    var map = <K, List<V>>{};
+    final map = <K, List<V>>{};
 
     forEach((element) {
-      var key = keySelector(element);
+      final key = keySelector(element);
 
       if (!map.containsKey(key)) {
         map[key] = [];
@@ -1247,9 +1259,9 @@ extension IterableSC<T> on Iterable<T> {
   /// ['a', 'ab', 'abc'].associateBy((e) => e.length); // {1: 'a', 2: 'ab', 3: 'abc'}
   /// ```
   Map<K, T> associateBy<K>(K Function(T element) keySelector) {
-    var map = <K, T>{};
+    final map = <K, T>{};
     forEach((element) {
-      var key = keySelector(element);
+      final key = keySelector(element);
       map[key] = element;
     });
     return map;
@@ -1263,7 +1275,7 @@ extension IterableSC<T> on Iterable<T> {
   /// [1, 2, 3].associateWith((e) => e * 1000); // {1: 1000, 2: 2000, 3: 3000}
   /// ```
   Map<T, V> associateWith<V>(V Function(T element) valueSelector) {
-    var map = <T, V>{};
+    final map = <T, V>{};
     forEach((element) {
       map[element] = valueSelector(element);
     });
@@ -1380,7 +1392,7 @@ extension IterableSC<T> on Iterable<T> {
   /// [].withoutFirst(); // [];
   /// ```
   Iterable<T> withoutFirst() sync* {
-    var iter = iterator..moveNext();
+    final iter = iterator..moveNext();
 
     while (iter.moveNext()) {
       yield iter.current;
@@ -1395,17 +1407,17 @@ extension IterableSC<T> on Iterable<T> {
   /// [].withoutLast(); // [];
   /// ```
   Iterable<T> withoutLast() sync* {
-    var iter = iterator;
+    final iter = iterator;
 
-    var hasFirst = iter.moveNext();
+    final hasFirst = iter.moveNext();
 
     if (!hasFirst) {
       return;
     }
 
     while (true) {
-      var value = iter.current;
-      var isLastOne = !iter.moveNext();
+      final value = iter.current;
+      final isLastOne = !iter.moveNext();
       if (!isLastOne) {
         yield value;
       } else {
@@ -1497,7 +1509,7 @@ extension IterableSC<T> on Iterable<T> {
   /// [1, 2, 3].pickOne(); // 2 (or 1 or 3)
   /// ```
   T pickOne([Random? random]) {
-    var list = toList()..shuffle(random);
+    final list = toList()..shuffle(random);
     return list.first;
   }
 
@@ -1509,7 +1521,7 @@ extension IterableSC<T> on Iterable<T> {
   /// [1, 2, 3].pickSome(2); // [1, 2] or [3, 2] and so on...
   /// ```
   List<T> pickSome(int count, [Random? random]) {
-    var list = toList()..shuffle(random);
+    final list = toList()..shuffle(random);
     return list.take(min(count, length)).toList();
   }
 }
@@ -2849,3 +2861,2695 @@ extension ListExtension4<T> on List<T> {
 // }
 
 ///
+
+/// RIterable
+
+extension RIterable<T> on Iterable<T> {
+  /// * return the `length` of the NOT `null` elements
+  int countNotNull() => count((e) => e != null);
+
+  /// counter the element of certain value
+  int countValue(T value) => count((e) => e == value);
+
+  /// * async for each
+  Future<void> loop(
+    FutureOr<void> Function(T e) action,
+  ) async {
+    for (final item in this) {
+      await action(item);
+    }
+  }
+
+  /// * async Map
+  Future<List<S>> asyncMap<S>(
+    FutureOr<S> Function(T e) action,
+  ) async {
+    final list = <S>[];
+    for (final item in this) {
+      list.add(await action(item));
+    }
+    return list;
+  }
+
+  /// * return a new `List` without duplicated `elements`
+  List<T> withoutDuplicate() => toSet().toList();
+
+  /// * return a random element from list
+  /// ! throws `StateError` if list is empty
+  T get random => elementAt(Random().nextInt(length));
+
+  /// * return a random element from list or the e if list is empty
+  // T randomOr(T e) => isEmpty ? e : random;
+
+  /// * return the first element
+  /// * return `null` if isEmpty
+  T? firstOrNull() => isEmpty ? null : first;
+
+  /// * return first element if list is not empty
+  /// * return `value` if isEmpty
+  T firstOr(T value) => firstOrNull() ?? value;
+
+  /// * return the last element
+  /// * return `null` if isEmpty
+  T? lastOrNull() => isEmpty ? null : last;
+
+  /// * return the last element
+  /// * return `value` if isEmpty
+  T lastOr(T value) => lastOrNull() ?? value;
+
+  /// * return element by index
+  /// * return `null` if index out of range
+  T? atOrNull(int index) => length - 1 >= index ? elementAt(index) : null;
+
+  /// * return element by index
+  /// * return `value` if index out of range
+  T atOr(int index, T value) => length - 1 >= index ? elementAt(index) : value;
+
+  /// * return the first match
+  /// * return null if there is no match
+  T? firstWhereOrNull(bool Function(T e) test) {
+    try {
+      return firstWhere(test);
+    } catch (e) {
+      if (e is StateError) return null;
+      rethrow;
+    }
+  }
+
+  /// * like `map()` function but now you have the index with the element
+  List<E> mapWithIndex<E>(E Function(int index, T element) mapper) {
+    final result = <E>[];
+    for (int i = 0; i < length; i++) {
+      result.add(mapper(i, elementAt(i)));
+    }
+    return result;
+  }
+}
+
+/// *
+extension RIterableNull<T> on List<T?> {
+  /// * return the `length` without `null` elements
+  void removeWhereNull() => removeWhere((e) => e == null);
+
+  /// * return the `length` without `null` elements
+  int countWithoutNull() {
+    /// create a new list && remove elements where null
+    final holder = List<T>.from(this)
+      ..removeWhere((element) => element == null);
+
+    /// return the holder elements count
+    return holder.length;
+  }
+
+  /// * return the `count` of the `null` elements
+  int countNull() => count((e) => e == null);
+}
+
+/// list `readableX`
+extension RNumList on Iterable<num> {
+  ///  how many elements == zero
+  int countZeros() => countValue(0);
+
+  /// * return list summation
+  /// * return `null` if list is empty
+  num? sumOrNull() => isEmpty ? null : fold(0, (a, b) => a! + b);
+
+  /// * return list summation
+  /// * return `value` if list is empty
+  num sumOr(num value) => sumOrNull() ?? value;
+
+  /// * return list summation
+  /// * return `0` if  isEmpty
+  num sumOrZero() => sumOrNull() ?? 0;
+
+  /// * return list summation
+  /// ! throws `StateError` if isEmpty
+  num sum() => sumOrNull() ?? (throw StateError('list is empty'));
+
+  /// * return the average of the list
+  /// * return `null` if isEmpty
+  num? averageOrNull() => isEmpty ? null : (sum() / length);
+
+  /// * return list average
+  /// * return `value` if isEmpty
+  num averageOr(num value) => averageOrNull() ?? value;
+
+  /// * return the average of the list
+  /// * return `0` if  isEmpty
+  num averageOrZero() => averageOr(0);
+
+  /// * return list average
+  /// ! throws `StateError` if isEmpty
+  num average() => averageOrNull() ?? (throw StateError('list is empty'));
+
+  /// * return the maximum value in the list
+  /// * return `null` if isEmpty
+  num? maxOrNull() {
+    if (isEmpty) return null;
+    num max = first;
+    for (final n in this) {
+      if (n > max) max = n;
+    }
+    return max;
+  }
+
+  /// * return the element with the max value
+  /// * return `0` if isEmpty
+  num maxOrZero() => maxOrNull() ?? 0;
+
+  /// * return the element with the max value
+  /// * return `value` if isEmpty
+  num maxOr(num value) => maxOrNull() ?? value;
+
+  /// * return the element with the max value
+  /// ! throws `StateError` if isEmpty
+  num max() => maxOrNull() ?? (throw StateError('list is empty'));
+
+  /// * return the minimum value in the list
+  /// * return `null` if isEmpty
+  num? minOrNull() {
+    if (isEmpty) return null;
+    num min = first;
+    for (final n in this) {
+      if (n < min) min = n;
+    }
+    return min;
+  }
+
+  /// * return the element with the minimum value
+  /// * return `value` if isEmpty
+  num minOr(num value) => minOrNull() ?? value;
+
+  /// * return the element with the minimum value
+  /// * return `value` if isEmpty
+  num minOrZero() => minOrNull() ?? 0;
+
+  /// * return the element with the minimum value
+
+  /// * return the element with the max value
+  /// ! throws `StateError` if isEmpty
+  num min() => minOrNull() ?? (throw StateError('list is empty'));
+}
+
+///
+extension RIterableString on Iterable<String> {
+  /// return counter of empty elements in the iterable
+  /// does not count the null values
+  int countEmpty({bool trim = true}) => count(
+        (e) => trim ? e.trim().isEmpty : e.isEmpty,
+      );
+
+  /// return counter of empty elements in the iterable
+  /// does not count the null values
+  int countNotEmpty() => count((e) => e.trim().isNotEmpty);
+}
+
+// /// provides extensions for Iterable
+// extension IterableScrewDriver<E> on Iterable<E> {
+//   /// Returns the second element in the iterable or
+//   /// returns null if iterable is empty or has only 1 element.
+//   E? get secondOrNull => length > 1 ? elementAt(1) : null;
+
+//   /// Returns the third element in the iterable or
+//   /// returns null if iterable is empty or has less than 3 elements.
+//   E? get thirdOrNull => length > 2 ? elementAt(2) : null;
+
+//   /// Returns the index of the last element in the collection.
+//   int get lastIndex => length > 0 ? length - 1 : 0;
+
+//   /// Returns true if the collection only has 1 element.
+//   bool get hasOnlyOneElement => length == 1;
+
+//   /// Appends all elements matching the given [predicate] to
+//   /// the given [destination].
+//   Iterable<E> filterTo(
+//       List<E> destination, bool Function(E element) predicate) {
+//     for (final element in this) {
+//       if (predicate(element)) destination.add(element);
+//     }
+//     return destination;
+//   }
+
+//   /// alias for [Iterable.where]
+//   Iterable<E> filter(bool Function(E element) predicate) =>
+//       filterTo(<E>[], predicate);
+
+//   /// alias for [whereIndexed] which returns a new lazy Iterable.
+//   Iterable<E> filterIndexed(bool Function(int index, E element) test) sync* {
+//     var index = 0;
+//     for (var element in this) {
+//       if (test(index++, element)) yield element;
+//     }
+//   }
+
+//   /// alias for [Iterable.map]
+//   Iterable<R> flatMap<R>(R Function(E element) transform) => map<R>(transform);
+
+//   /// alias for [Iterable.skip]
+//   Iterable<E> drop(int count) => skip(count);
+
+//   /// alias for [Iterable.skip]
+//   Iterable<E> takeLast(int count) {
+//     assert(count > -1);
+//     if (isEmpty) return [];
+//     if (length <= count) return this;
+//     return toList().sublist(length - count, length);
+//   }
+
+//   /// alias for [Iterable.skipWhile]
+//   Iterable<E> dropWhile(bool Function(E element) test) => skipWhile(test);
+
+//   /// alias for [Iterable.skip]
+//   Iterable<E> dropLast(int count) {
+//     assert(count > -1);
+//     if (count == 0) return this;
+//     if (count >= length) return [];
+//     return toList().sublist(0, length - count);
+//   }
+
+//   /// alias for [Iterable.every]
+//   bool all(bool Function(E element) test) => every(test);
+
+//   /// Alias for [associate].
+//   /// Returns a [Map] containing key-value pairs provided by [transform]
+//   /// function applied to elements of the given List.
+//   Map<K, V> toMap<K, V>((K, V) Function(E element) transform) =>
+//       associate<K, V>(transform);
+
+//   /// Returns a [Map] containing key-value pairs provided by [transform]
+//   /// function applied to elements of the given List.
+//   Map<K, V> associate<K, V>((K, V) Function(E element) transform) =>
+//       associateTo(<K, V>{}, transform);
+
+//   /// Populates and returns the [destination] map with key-value pairs
+//   /// provided by [transform] function applied to each element
+//   /// of the given iterable.
+//   Map<K, V> associateTo<K, V>(
+//       Map<K, V> destination, (K, V) Function(E element) transform) {
+//     for (final element in this) {
+//       destination + transform(element);
+//     }
+//     return destination;
+//   }
+
+//   /// Returns a [Map] containing the elements from the given List
+//   /// indexed by the key returned from [keySelector] function applied
+//   /// to each element.
+//   Map<K, E> associateBy<K>(K Function(E element) keySelector) =>
+//       associateByTo(<K, E>{}, keySelector);
+
+//   /// Populates and returns the [destination] mutable map with key-value pairs,
+//   /// where key is provided by the [keySelector] function applied to each
+//   /// element of the given iterable and value is the element itself.
+//   Map<K, E> associateByTo<K>(
+//           Map<K, E> destination, K Function(E element) keySelector) =>
+//       {for (final element in this) keySelector(element): element};
+
+//   /// Returns a [Map] where keys are elements from the given iterable
+//   /// and values are produced by the [valueSelector] function
+//   /// applied to each element.
+//   Map<E, V> associateWith<V>(V Function(E element) valueSelector) =>
+//       associateWithTo(<E, V>{}, valueSelector);
+
+//   /// Populates and returns the [destination] map with key-value
+//   /// pairs for each element of the given iterable,
+//   /// where key is the element itself and value is provided
+//   /// by the [valueSelector] function applied to that key.
+//   Map<E, V> associateWithTo<V>(
+//           Map<E, V> destination, V Function(E element) valueSelector) =>
+//       {for (final element in this) element: valueSelector(element)};
+
+//   /// Groups elements of the original iterable by the key returned by
+//   /// the given [keySelector] function applied to each element
+//   /// and returns a map where each group key is associated with a
+//   /// list of corresponding elements.
+//   Map<K, List<E>> groupBy<K>(K Function(E element) keySelector) =>
+//       groupByTo(<K, List<E>>{}, keySelector);
+
+//   /// Groups elements of the original iterable by the key returned by
+//   /// the given [keySelector] function applied to each element
+//   /// and puts to the [destination] map each group key associated
+//   /// with a list of corresponding elements.
+//   Map<K, List<E>> groupByTo<K>(
+//       Map<K, List<E>> destination, K Function(E element) keySelector) {
+//     for (final element in this) {
+//       final key = keySelector(element);
+//       final list = destination.putIfAbsent(key, () => []);
+//       list.add(element);
+//     }
+//     return destination;
+//   }
+
+//   /// Returns an iterable containing only distinct elements from
+//   /// the given iterable.
+//   Iterable<E> distinct() => toSet().toList();
+
+//   /// Returns an iterable containing only elements from the given iterable
+//   /// having distinct keys returned by the given [selector] function.
+//   Iterable<E> distinctBy<K>(K Function(E element) selector) =>
+//       distinctByTo(<E>[], selector);
+
+//   /// Populates and returns the [destination] list with containing only
+//   /// elements from the given iterable having distinct keys returned by
+//   /// the given [selector] function.
+//   Iterable<E> distinctByTo<K>(
+//       List<E> destination, K Function(E element) selector) {
+//     final set = HashSet<K>();
+//     for (var element in this) {
+//       final key = selector(element);
+//       if (set.add(key)) destination.add(element);
+//     }
+//     return destination;
+//   }
+
+//   /// Returns a set containing all elements that are contained by both
+//   /// [this] iterable and the [other] iterable.
+//   Iterable<E> intersect(Iterable<E> other) =>
+//       (toSet()..retainAll(other)).toList();
+
+//   /// Returns a set containing all elements that are contained by [this]
+//   /// iterable and not contained by the [other] iterable.
+//   Iterable<E> subtract(Iterable<E> other) =>
+//       (toSet()..removeAll(other)).toList();
+
+//   /// Returns an iterable containing all distinct elements from both iterables.
+//   Iterable<E> union(Iterable<E> other) => (toSet()..addAll(other)).toList();
+
+//   /// Returns the number of elements matching the given [predicate].
+//   int count(bool Function(E element) predicate) {
+//     if (isEmpty) return 0;
+//     var count = 0;
+//     for (var element in this) {
+//       if (predicate(element)) ++count;
+//     }
+//     return count;
+//   }
+
+//   /// Accumulates value starting with [initialValue] value and
+//   /// applying [operation] from right to left to each element
+//   /// and current accumulator value.
+//   R foldRight<R>(
+//       R initialValue, R Function(R previousValue, E element) operation) {
+//     var accumulator = initialValue;
+//     if (isNotEmpty) {
+//       for (final element in toList().reversed) {
+//         accumulator = operation(accumulator, element);
+//       }
+//     }
+//     return accumulator;
+//   }
+
+//   /// Accumulates value starting with [initialValue] value and applying
+//   /// [operation] from right to left to each element with its index in
+//   /// the original list and current accumulator value.
+//   R foldRightIndexed<R>(R initialValue,
+//       R Function(int index, R previousValue, E element) operation) {
+//     var accumulator = initialValue;
+//     if (isNotEmpty) {
+//       for (var index = length - 1; index >= 0; index--) {
+//         accumulator = operation(index, accumulator, elementAt(index));
+//       }
+//     }
+//     return accumulator;
+//   }
+
+//   /// Returns a random element from [this]. Returns null if no elements
+//   /// are present.
+//   E? randomOrNull([Random? random]) {
+//     if (isEmpty) return null;
+//     if (length == 1) return first;
+//     return elementAt((random ?? Random()).nextInt(length));
+//   }
+
+//   /// Returns a random element from [this].
+//   /// Throws [StateError] if there are no elements in the collection.
+//   E random([Random? random]) {
+//     if (isEmpty) throw StateError('no elements');
+//     if (length == 1) return first;
+//     return elementAt((random ?? Random()).nextInt(length));
+//   }
+
+//   /// Performs the given [action] on each element and returns the
+//   /// iterable itself afterwards.
+//   Iterable<E> onEach(void Function(E element) action) => this..forEach(action);
+
+//   /// Returns the first element yielding the largest value of the given
+//   /// function or `null` if there are no elements.
+//   E? maxByOrNull<R extends Comparable<dynamic>>(
+//       R Function(E element) selector) {
+//     if (isEmpty) return null;
+//     if (length == 1) return first;
+//     var maxElement = first;
+//     var maxValue = selector(maxElement);
+//     for (final element in this) {
+//       final value = selector(element);
+//       if (maxValue < value) {
+//         maxValue = value;
+//         maxElement = element;
+//       }
+//     }
+//     return maxElement;
+//   }
+
+//   /// Returns the first element yielding the largest value of the given
+//   /// function.
+//   /// Throws [StateError] if there are no elements in the collection.
+//   E maxBy<R extends Comparable<dynamic>>(R Function(E element) selector) {
+//     if (isEmpty) throw StateError('no elements');
+//     if (length == 1) return first;
+//     var maxElement = first;
+//     var maxValue = selector(maxElement);
+//     for (final element in this) {
+//       final value = selector(element);
+//       if (maxValue < value) {
+//         maxValue = value;
+//         maxElement = element;
+//       }
+//     }
+//     return maxElement;
+//   }
+
+//   /// Returns the last element yielding the largest value of the given
+//   /// function or `null` if there are no elements.
+//   E? maxByLastOrNull<R extends Comparable<dynamic>>(
+//       R Function(E element) selector) {
+//     if (isEmpty) return null;
+//     if (length == 1) return first;
+//     var maxElement = first;
+//     var maxValue = selector(maxElement);
+//     for (final element in this) {
+//       final value = selector(element);
+//       if (maxValue <= value) {
+//         maxValue = value;
+//         maxElement = element;
+//       }
+//     }
+//     return maxElement;
+//   }
+
+//   /// Returns the last element yielding the largest value of the given
+//   /// function.
+//   /// Throws [StateError] if there are no elements in the collection.
+//   E maxByLast<R extends Comparable<dynamic>>(R Function(E element) selector) {
+//     if (isEmpty) throw StateError('no elements');
+//     if (length == 1) return first;
+//     var maxElement = first;
+//     var maxValue = selector(maxElement);
+//     for (final element in this) {
+//       final value = selector(element);
+//       if (maxValue <= value) {
+//         maxValue = value;
+//         maxElement = element;
+//       }
+//     }
+//     return maxElement;
+//   }
+
+//   /// Returns the first element yielding the smallest value of the given
+//   /// function or `null` if there are no elements.
+//   E? minByOrNull<R extends Comparable<dynamic>>(
+//       R Function(E element) selector) {
+//     if (isEmpty) return null;
+//     if (length == 1) return first;
+//     var minElement = first;
+//     var minValue = selector(minElement);
+//     for (final element in this) {
+//       final value = selector(element);
+//       if (minValue > value) {
+//         minValue = value;
+//         minElement = element;
+//       }
+//     }
+//     return minElement;
+//   }
+
+//   /// Returns the first element yielding the smallest value of the given
+//   /// function.
+//   /// Throws [StateError] if there are no elements in the collection.
+//   E minBy<R extends Comparable<dynamic>>(R Function(E element) selector) {
+//     if (isEmpty) throw StateError('no elements');
+//     if (length == 1) return first;
+//     var minElement = first;
+//     var minValue = selector(minElement);
+//     for (final element in this) {
+//       final value = selector(element);
+//       if (minValue > value) {
+//         minValue = value;
+//         minElement = element;
+//       }
+//     }
+//     return minElement;
+//   }
+
+//   /// Returns the last element yielding the smallest value of the given
+//   /// function or `null` if there are no elements.
+//   E? minByLastOrNull<R extends Comparable<dynamic>>(
+//       R Function(E element) selector) {
+//     if (isEmpty) return null;
+//     if (length == 1) return first;
+//     var minElement = first;
+//     var minValue = selector(minElement);
+//     for (final element in this) {
+//       final value = selector(element);
+//       if (minValue >= value) {
+//         minValue = value;
+//         minElement = element;
+//       }
+//     }
+//     return minElement;
+//   }
+
+//   /// Returns the last element yielding the smallest value of the given
+//   /// function.
+//   /// Throws [StateError] if there are no elements in the collection.
+//   E minByLast<R extends Comparable<dynamic>>(R Function(E element) selector) {
+//     if (isEmpty) throw StateError('no elements');
+//     if (length == 1) return first;
+//     var minElement = first;
+//     var minValue = selector(minElement);
+//     for (final element in this) {
+//       final value = selector(element);
+//       if (minValue >= value) {
+//         minValue = value;
+//         minElement = element;
+//       }
+//     }
+//     return minElement;
+//   }
+
+//   /// Returns the sum of all values produced by [selector] function
+//   /// applied to each element in the collection.
+//   R sumBy<R extends num>(R Function(E element) selector) => fold<R>(
+//       (R == int ? 0 : 0.0) as R,
+//       (previousValue, element) => previousValue + selector(element) as R);
+
+//   /// Returns the average of all values produced by [selector] function
+//   /// applied to each element in the collection.
+//   double averageBy<R extends num>(R Function(E element) selector) {
+//     if (isEmpty) return 0;
+//     return sumBy(selector) / length;
+//   }
+
+//   /// Alias for [subtract].
+//   Iterable<E> except(Iterable<E> other) => subtract(other);
+
+//   /// Returns true if the collection contains all the elements
+//   /// present in [other] collection.
+//   bool containsAll(Iterable<E> other) => other.every(contains);
+
+//   /// Returns true if the collection doesn't contain any of the elements
+//   /// present in [other] collection.
+//   bool containsNone(Iterable<E> other) =>
+//       none((element) => other.contains(element));
+
+//   /// Returns an iterable containing the items with their respective indices
+//   /// in form of records.
+//   ///
+//   /// One of the use-cases includes iterating over the collection with access
+//   /// to the index of each item in a for loop.
+//   ///
+//   /// e.g.
+//   ///
+//   /// for (final (index, item) in list.records) {
+//   ///   print('$index: $item');
+//   /// }
+//   ///
+//   Iterable<(int, E)> get records sync* {
+//     for (int index = 0; index < length; index++) {
+//       yield (index, elementAt(index));
+//     }
+//   }
+
+//   /// Finds an element where the result of [selector] matches the [query].
+//   /// Throws [StateError] if no element is found.
+//   E findBy<S>(S query, S Function(E item) selector) {
+//     for (final item in this) {
+//       if (selector(item) == query) return item;
+//     }
+//     throw StateError('no element found');
+//   }
+
+//   /// Finds an element where the result of [selector] matches the [query].
+//   /// Returns null if no element is found.
+//   E? findByOrNull<C>(C query, C Function(E item) selector) {
+//     for (final item in this) {
+//       if (selector(item) == query) return item;
+//     }
+//     return null;
+//   }
+
+//   /// Finds all elements where the result of [selector] matches the [query].
+//   /// Returns empty collection if no element is found.
+//   Iterable<E> findAllBy<S>(S query, S Function(E item) selector) sync* {
+//     for (final item in this) {
+//       if (selector(item) == query) yield item;
+//     }
+//   }
+// }
+
+// /// provides extensions for nullable Iterable
+// extension NullableIterableScrewDriver<E> on Iterable<E>? {
+//   /// Returns true if [this] is either null or empty collection.
+//   bool get isNullOrEmpty {
+//     var iterable = this;
+//     return iterable == null || iterable.isEmpty;
+//   }
+
+//   /// Alias for [isNullOrEmpty].
+//   /// Returns true if [this] is either null or empty collection.
+//   bool get isBlank => isNullOrEmpty;
+
+//   /// Alias for [isNotNullOrEmpty].
+//   /// Returns true if [this] is neither null nor empty collection.
+//   bool get isNotBlank => isNotNullOrEmpty;
+
+//   /// Returns true if [this] is neither null nor empty collection.
+//   bool get isNotNullOrEmpty {
+//     var iterable = this;
+//     return iterable != null && iterable.isNotEmpty;
+//   }
+// }
+
+// /// provides extensions for List of integers. e.g. bytes
+// extension IntListScrewdriver on List<int> {
+/// Converts the list of integers to a base64 encoded string. e.g. converting
+/// bytes to base64 string.
+//   String toBase64() => base64Encode(this);
+
+//   /// Converts [this] list of integers to a [Uint8List].
+//   Uint8List toUint8List() => Uint8List.fromList(this);
+
+//   /// Converts [this] list of integers to a [Uint16List].
+//   Uint16List toUint16List() => Uint16List.fromList(this);
+// }
+
+/// provides extensions for List
+extension ListScrewDriver<E> on List<E> {
+  /// adds [element] into the list and returns the list
+  List<E> operator <<(E element) => this..add(element);
+
+  /// Replaces an item in the list with [replacement] where [predicate] returns
+  /// true. Returns true if an item is replaced, false otherwise.
+  bool replaceFirstWhere(E replacement, bool Function(E item) predicate) {
+    if (isEmpty) return false;
+    for (int index = 0; index < length; index++) {
+      if (predicate(elementAt(index))) {
+        this[index] = replacement;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /// Replaces an item in the list with [replacement] where [predicate] returns
+  /// true. Returns true if an item is replaced, false otherwise.
+  bool replaceLastWhere(E replacement, bool Function(E item) predicate) {
+    if (isEmpty) return false;
+    for (int index = length - 1; index >= 0; index--) {
+      if (predicate(elementAt(index))) {
+        this[index] = replacement;
+        return true;
+      }
+    }
+    return false;
+  }
+}
+
+typedef IndexedPredicate<T> = bool Function(int index, T);
+
+extension CollectionsNullableExtensions<T> on Iterable<T>? {
+  /// Returns this Iterable if it's not `null` and the empty list otherwise.
+  Iterable<T> orEmpty() => this ?? [];
+
+  ///Returns `true` if this nullable iterable is either null or empty.
+  bool get isEmptyOrNull => this?.isEmpty ?? true;
+
+  /// Returns `true` if at least one element matches the given [predicate].
+  bool any(bool Function(T element) predicate) {
+    if (this.isEmptyOrNull) return false;
+    for (final element in this.orEmpty()) {
+      if (predicate(element)) return true;
+    }
+    return false;
+  }
+
+  /// Return a list concatenates the output of the current list and another [iterable]
+  List<T> concatWithSingleList(Iterable<T> iterable) {
+    if (isEmptyOrNull || iterable.isEmptyOrNull) return [];
+
+    return <T>[...this.orEmpty(), ...iterable];
+  }
+
+  /// Return a list concatenates the output of the current list and multiple [iterables]
+  List<T> concatWithMultipleList(List<Iterable<T>> iterables) {
+    if (isEmptyOrNull || iterables.isEmptyOrNull) return [];
+    final list = iterables.toList(growable: false).expand((i) => i);
+    return <T>[...this.orEmpty(), ...list];
+  }
+
+  /// Zip is used to combine multiple iterables into a single list that contains
+  /// the combination of them two.
+  Iterable<void> zip<T>(Iterable<T> iterable) sync* {
+    if (iterable.isEmptyOrNull) return;
+    final iterables = List<Iterable>.empty()
+      ..add(this.orEmpty())
+      ..add(iterable);
+
+    final iterators = iterables.map((e) => e.iterator).toList(growable: false);
+    while (iterators.every((e) => e.moveNext())) {
+      yield iterators.map((e) => e.current).toList(growable: false);
+    }
+  }
+}
+
+extension CollectionsExtensions<T> on Iterable<T> {
+  /// Convert iterable to set
+  Set<T> toMutableSet() => Set.from(this);
+
+  /// Returns a set containing all elements that are contained
+  /// by both this set and the specified collection.
+  Set<T> intersect(Iterable<T> other) {
+    final set = this.toMutableSet();
+    set.addAll(other);
+    return set;
+  }
+
+  /// Groups the elements in values by the value returned by key.
+  ///
+  /// Returns a map from keys computed by key to a list of all values for which
+  /// key returns that key. The values appear in the list in the same
+  /// relative order as in values.
+  Map<K, List<T>> groupBy<T, K>(K Function(T e) key) {
+    final map = <K, List<T>>{};
+
+    for (final element in this) {
+      final list = map.putIfAbsent(key(element as T), () => []);
+      list.add(element);
+    }
+    return map;
+  }
+
+  /// Returns a list containing only elements matching the given [predicate].
+  // List<T> filter(bool Function(T element) test) {
+  //   final result = <T>[];
+  //   forEach((e) {
+  //     if (e != null && test(e)) {
+  //       result.add(e);
+  //     }
+  //   });
+  //   return result;
+  // }
+
+  /// Returns a list containing all elements not matching the given [predicate] and will filter nulls as well.
+  List<T> filterNot(bool Function(T element) test) {
+    final result = <T>[];
+    forEach((e) {
+      if (e != null && !test(e)) {
+        result.add(e);
+      }
+    });
+    return result;
+  }
+
+// return the half size of a list
+  int get halfLength => (length / 2).floor();
+
+  /// Returns a list containing first [n] elements.
+  List<T> takeOnly(int n) {
+    if (n == 0) return [];
+
+    final list = List<T>.empty();
+    final thisList = toList();
+    final resultSize = length - n;
+    if (resultSize <= 0) return [];
+    if (resultSize == 1) return [last];
+
+    List.generate(n, (index) {
+      list.add(thisList[index]);
+    });
+    return list;
+  }
+
+  /// Returns a list containing all elements except first [n] elements.
+  List<T> drop(int n) {
+    if (n == 0) return [];
+
+    final list = List<T>.empty();
+    final originalList = toList();
+    final resultSize = length - n;
+    if (resultSize <= 0) return [];
+    if (resultSize == 1) return [last];
+
+    originalList.removeRange(0, n);
+
+    for (final element in originalList) {
+      list.add(element);
+    }
+    return list;
+  }
+
+  // Retuns map operation as a List
+  List<E> mapList<E>(E Function(T e) f) => map(f).toList();
+
+  // Takes the first half of a list
+  List<T> firstHalf() => take(halfLength).toList();
+
+  // Takes the second half of a list
+  List<T> secondHalf() => drop(halfLength).toList();
+
+  /// returns a list with two swapped items
+  /// [i] first item
+  /// [j] second item
+  List<T> swap(int i, int j) {
+    final list = toList();
+    final aux = list[i];
+    list[i] = list[j];
+    list[j] = aux;
+    return list;
+  }
+
+  T getRandom() {
+    final Random generator = Random();
+    final index = generator.nextInt(length);
+    return toList()[index];
+  }
+
+  /// get the first element return null
+  T? get firstOrNull => _elementAtOrNull(0);
+
+  /// get the last element if the list is not empty or return null
+  T? get lastOrNull => isNotEmpty ? last : null;
+
+  T lastOrDefault(T defaultValue) => lastOrNull ?? defaultValue;
+
+  T? firstOrNullWhere(bool Function(T element) predicate) {
+    for (final T element in this) {
+      if (predicate(element)) return element;
+    }
+    return null;
+  }
+
+  /// get the first element or provider default
+  /// example:
+  /// var name = [danny, ronny, james].firstOrDefault["jack"]; // danny
+  /// var name = [].firstOrDefault["jack"]; // jack
+  T firstOrDefault(T defaultValue) => firstOrNull ?? defaultValue;
+
+  /// Will retrun new [Iterable] with all elements that satisfy the predicate [predicate],
+  Iterable<T> whereIndexed(IndexedPredicate<T> predicate) =>
+      _IndexedWhereIterable(this, predicate);
+
+  ///
+  /// Performs the given action on each element on iterable, providing sequential index with the element.
+  /// [item] the element on the current iteration
+  /// [index] the index of the current iteration
+  ///
+  /// example:
+  /// ["a","b","c"].forEachIndexed((element, index) {
+  ///    print("$element, $index");
+  ///  });
+  /// result:
+  /// a, 0
+  /// b, 1
+  /// c, 2
+  void forEachIndexed(void Function(T element, int index) action) {
+    var index = 0;
+    for (final element in this) {
+      action(element, index++);
+    }
+  }
+
+  /// Returns a new list with all elements sorted according to descending
+  /// natural sort order.
+  List<T> sortedDescending() {
+    final list = toList();
+    list.sort((a, b) => -(a as Comparable).compareTo(b));
+    return list;
+  }
+
+  /// Checks if all elements in the specified [collection] are contained in
+  /// this collection.
+  bool containsAll(Iterable<T> collection) {
+    for (final element in collection) {
+      if (!contains(element)) return false;
+    }
+    return true;
+  }
+
+  /// Return a number of the existing elements by a specific predicate
+  /// example:
+  ///  final aboveTwenty = [
+  ///    User(33, "chicko"),
+  ///    User(45, "ronit"),
+  ///    User(19, "amsalam"),
+  ///  ].count((user) => user.age > 20); // 2
+  // int count([bool Function(T element)? predicate]) {
+  //   var count = 0;
+  //   if (predicate == null) {
+  //     return length;
+  //   } else {
+  //     for (final current in this) {
+  //       if (predicate(current)) {
+  //         count++;
+  //       }
+  //     }
+  //   }
+
+  //   return count;
+  // }
+
+  /// Returns `true` if all elements match the given predicate.
+  /// Example:
+  /// [5, 19, 2].all(isEven), isFalse)
+  /// [6, 12, 2].all(isEven), isTrue)
+  bool all(bool Function(T pred)? predicate) {
+    for (final e in this) {
+      if (!predicate!(e)) return false;
+    }
+    return true;
+  }
+
+  /// Returns a list containing only the elements from given collection having distinct keys.
+  ///
+  /// Basically it's just like distinct function but with a predicate
+  /// example:
+  /// [
+  ///    User(22, "Sasha"),
+  ///    User(23, "Mika"),
+  ///    User(23, "Miryam"),
+  ///    User(30, "Josh"),
+  ///    User(36, "Ran"),
+  ///  ].distinctBy((u) => u.age).forEach((user) {
+  ///    print("${user.age} ${user.name}");
+  ///  });
+  ///
+  /// result:
+  /// 22 Sasha
+  /// 23 Mika
+  /// 30 Josh
+  /// 36 Ran
+  List<T> distinctBy(Function(T selector) predicate) {
+    final set = HashSet();
+    final List<T> list = [];
+    toList().forEach((e) {
+      final key = predicate(e);
+      if (set.add(key)) {
+        list.add(e);
+      }
+    });
+
+    return list;
+  }
+
+// get an element at specific index or return null
+  T? _elementAtOrNull(int index) => _elementOrNull(index, (_) => null);
+
+  T? _elementOrNull(int index, T? Function(int index) defaultElement) {
+    // if our index is smaller then 0 return the default
+    if (index < 0) return defaultElement(index);
+
+    var counter = 0;
+    for (final element in this) {
+      if (index == counter++) {
+        return element;
+      }
+    }
+
+    return defaultElement(index);
+  }
+
+  /// Returns a set containing all elements that are contained by this collection
+  /// and not contained by the specified collection.
+  /// The returned set preserves the element iteration order of the original collection.
+  ///
+  /// example:
+  ///
+  /// [1,2,3,4,5,6].subtract([4,5,6])
+  ///
+  /// result:
+  /// 1,2,3
+  Set subtract(Iterable<T> other) {
+    final set = toSet();
+    set.removeAll(other);
+    return set;
+  }
+
+  /// will convert iterable into a Stack data structure
+  /// example:
+  ///  [1,2,3,4].toStack()
+  ///  stack.pop()
+  ///  stack.push(5)
+  ///
+  StackX<T> toStack() {
+    final stack = StackX<T>();
+    stack.addAll(this);
+    return stack;
+  }
+
+  /// Creates a Map instance in which the keys and values are computed from the iterable.
+  Map<dynamic, dynamic> associate(key(element), value(element)) =>
+      Map.fromIterable(this, key: key, value: value);
+}
+
+// A lazy [Iterable] skip elements do **NOT** match the predicate [_f].
+class _IndexedWhereIterable<E> extends Iterable<E> {
+  _IndexedWhereIterable(this._iterable, this._f);
+  final Iterable<E> _iterable;
+  final IndexedPredicate<E> _f;
+
+  @override
+  Iterator<E> get iterator => _IndexedWhereIterator<E>(_iterable.iterator, _f);
+}
+
+/// [Iterator] for [_IndexedWhereIterable]
+class _IndexedWhereIterator<E> implements Iterator<E> {
+  _IndexedWhereIterator(this._iterator, this._f);
+  final Iterator<E> _iterator;
+  final IndexedPredicate<E> _f;
+  int _index = 0;
+
+  @override
+  bool moveNext() {
+    while (_iterator.moveNext()) {
+      if (_f(_index++, _iterator.current)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @override
+  E get current => _iterator.current;
+}
+
+
+// import 'dart:collection';
+// import 'dart:math';
+
+// import 'package:collection/collection.dart' as collection;
+// import 'package:dartx/src/sorted_list.dart';
+
+// extension IterableSecondItem<E> on Iterable<E> {
+//   /// Second element.
+//   ///
+//   /// ```dart
+//   /// [1, 2, 3].second; // 2
+//   /// ```
+//   E get second => elementAt(1);
+// }
+
+// extension IterableThirdItem<E> on Iterable<E> {
+//   /// Third element.
+//   ///
+//   /// ```dart
+//   /// [1, 2, 3].third; // 3
+//   /// ```
+//   E get third => elementAt(2);
+// }
+
+// extension IterableFourthItem<E> on Iterable<E> {
+//   /// Fourth element.
+//   ///
+//   /// ```dart
+//   /// [1, 2, 3, 4].fourth; // 4
+//   /// ```
+//   E get fourth => elementAt(3);
+// }
+
+// extension IterableElementAtOrNull<E> on Iterable<E> {
+//   /// Returns an element at the given [index] or `null` if the [index] is out of
+//   /// bounds of this collection.
+//   ///
+//   /// ```dart
+//   /// final list = [1, 2, 3, 4];
+//   /// final first = list.elementAtOrNull(0); // 1
+//   /// final fifth = list.elementAtOrNull(4); // null
+//   /// ```
+//   E? elementAtOrNull(int index) {
+//     if (index < 0) return null;
+//     var count = 0;
+//     for (final element in this) {
+//       if (index == count++) return element;
+//     }
+//     return null;
+//   }
+// }
+
+// extension IterableElementAtOrDefault<E> on Iterable<E> {
+//   /// Returns an element at the given [index] or [defaultValue] if the [index]
+//   /// is out of bounds of this collection.
+//   ///
+//   /// ```dart
+//   /// final list = [1, 2, 3, 4];
+//   /// final first = list.elementAtOrDefault(0, -1); // 1
+//   /// final fifth = list.elementAtOrDefault(4, -1); // -1
+//   /// ```
+//   E elementAtOrDefault(int index, E defaultValue) {
+//     return elementAtOrElse(index, (_) => defaultValue);
+//   }
+// }
+
+// extension IterableElementAtOrElse<E> on Iterable<E> {
+//   /// Returns an element at the given [index] or the result of calling the
+//   /// [defaultValue] function if the [index] is out of bounds of this
+//   /// collection.
+//   ///
+//   /// ```dart
+//   /// final list = [1, 2, 3, 4];
+//   /// final first = list.elementAtOrElse(0); // 1
+//   /// final fifth = list.elementAtOrElse(4, -1); // -1
+//   /// ```
+//   E elementAtOrElse(int index, E Function(int index) defaultValue) {
+//     if (index < 0) return defaultValue(index);
+//     var count = 0;
+//     for (final element in this) {
+//       if (index == count++) return element;
+//     }
+//     return defaultValue(index);
+//   }
+// }
+
+// extension IterableFirstOrNull<E> on Iterable<E> {
+//   /// First element or `null` if the collection is empty.
+//   ///
+//   /// ```dart
+//   /// final first = [1, 2, 3, 4].firstOrNull; // 1
+//   /// final emptyFirst = [].firstOrNull; // null
+//   /// ```
+//   E? get firstOrNull => isNotEmpty ? first : null;
+// }
+
+// extension IterableFirstOrDefault<E> on Iterable<E> {
+//   /// First element or `defaultValue` if the collection is empty.
+//   ///
+//   /// ```dart
+//   /// final first = [1, 2, 3, 4].firstOrDefault(-1); // 1
+//   /// final emptyFirst = [].firstOrDefault(-1); // -1
+//   /// ```
+//   E firstOrDefault(E defaultValue) => isNotEmpty ? first : defaultValue;
+// }
+
+// extension IterableFirstOrNullWhere<E> on Iterable<E> {
+//   /// Returns the first element matching the given [predicate], or `null` if no
+//   /// such element was found.
+//   ///
+//   /// ```dart
+//   /// final list = ['a', 'Test'];
+//   /// final firstLong= list.firstOrNullWhere((e) => e.length > 1); // 'Test'
+//   /// final firstVeryLong = list.firstOrNullWhere((e) => e.length > 5); // null
+//   /// ```
+//   E? firstOrNullWhere(bool Function(E element) predicate) {
+//     for (final element in this) {
+//       if (predicate(element)) return element;
+//     }
+//     return null;
+//   }
+// }
+
+// extension IterableLastOrNull<E> on Iterable<E> {
+//   /// Last element or `null` if the collection is empty.
+//   ///
+//   /// ```dart
+//   /// final last = [1, 2, 3, 4].lastOrNull; // 4
+//   /// final emptyLast = [].firstOrNull; // null
+//   /// ```
+//   E? get lastOrNull => isNotEmpty ? last : null;
+// }
+
+// extension IterableLastOrElse<E> on Iterable<E> {
+//   /// Last element or `defaultValue` if the collection is empty.
+//   E lastOrElse(E defaultValue) =>
+//       IterableLastOrNull(this).lastOrNull ?? defaultValue;
+// }
+
+// extension IterableLastOrNullWhere<E> on Iterable<E> {
+//   /// Returns the last element matching the given [predicate], or `null` if no
+//   /// such element was found.
+//   E? lastOrNullWhere(bool Function(E element) predicate) {
+//     E? match;
+//     for (final e in this) {
+//       if (predicate(e)) {
+//         match = e;
+//       }
+//     }
+//     return match;
+//   }
+// }
+
+// extension IterableAll<E> on Iterable<E> {
+//   /// Returns true if all elements match the given [predicate] or if the
+//   /// collection is empty.
+//   bool all(bool Function(E element) predicate) {
+//     for (final element in this) {
+//       if (!predicate(element)) {
+//         return false;
+//       }
+//     }
+//     return true;
+//   }
+// }
+
+// extension IterableNone<E> on Iterable<E> {
+//   /// Returns true if no entries match the given [predicate] or if the
+//   /// collection is empty.
+//   bool none(bool Function(E element) predicate) => !any(predicate);
+// }
+
+// extension IterableSlice<E> on Iterable<E> {
+//   /// Returns a new list containing elements at indices between [start]
+//   /// (inclusive) and [end] (inclusive).
+//   ///
+//   /// If [end] is omitted, it is being set to `lastIndex`.
+//   List<E> slice(int start, [int end = -1]) {
+//     final list = this is List ? this as List<E> : toList();
+//     var _start = start;
+//     var _end = end;
+
+//     if (_start < 0) {
+//       _start = _start + list.length;
+//     }
+//     if (_end < 0) {
+//       _end = _end + list.length;
+//     }
+
+//     RangeError.checkValidRange(_start, _end, list.length);
+
+//     return list.sublist(_start, _end + 1);
+//   }
+// }
+
+// extension IterableForEachIndexed<E> on Iterable<E> {
+//   /// Performs the given [action] on each element, providing sequential index
+//   /// with the element.
+//   void forEachIndexed(void Function(E element, int index) action) {
+//     var index = 0;
+//     for (final element in this) {
+//       action(element, index++);
+//     }
+//   }
+// }
+
+// extension IterableContainsAll<E> on Iterable<E> {
+//   /// Checks if all elements in the specified [collection] are contained in
+//   /// this collection.
+//   bool containsAll(Iterable<E> collection) {
+//     for (final element in collection) {
+//       if (!contains(element)) return false;
+//     }
+//     return true;
+//   }
+// }
+
+// extension IterableContainsAny<E> on Iterable<E> {
+//   /// Checks if any elements in the specified [collection] are contained in
+//   /// this collection.
+//   bool containsAny(Iterable<E> collection) {
+//     for (final element in collection) {
+//       if (contains(element)) return true;
+//     }
+//     return false;
+//   }
+// }
+
+// extension IterableContentEquals<E> on Iterable<E> {
+//   /// Returns true if this collection is structurally equal to the [other]
+//   /// collection.
+//   ///
+//   /// I.e. contain the same number of the same elements in the same order.
+//   ///
+//   /// If [checkEqual] is provided, it is used to check if two elements are the
+//   /// same.
+//   bool contentEquals(Iterable<E> other, [bool Function(E a, E b)? checkEqual]) {
+//     final it1 = iterator;
+//     final it2 = other.iterator;
+//     if (checkEqual != null) {
+//       while (it1.moveNext()) {
+//         if (!it2.moveNext()) return false;
+//         if (!checkEqual(it1.current, it2.current)) return false;
+//       }
+//     } else {
+//       while (it1.moveNext()) {
+//         if (!it2.moveNext()) return false;
+//         if (it1.current != it2.current) return false;
+//       }
+//     }
+//     return !it2.moveNext();
+//   }
+// }
+
+// extension IterableSorted<E> on Iterable<E> {
+//   /// Returns a new list with all elements sorted according to natural sort
+//   /// order.
+//   List<E> sorted() {
+//     final list = toList();
+//     list.sort();
+//     return list;
+//   }
+// }
+
+// extension IterableSortedDescending<E> on Iterable<E> {
+//   /// Returns a new list with all elements sorted according to descending
+//   /// natural sort order.
+//   List<E> sortedDescending() {
+//     final list = toList();
+//     list.sort((a, b) => -(a as Comparable).compareTo(b));
+//     return list;
+//   }
+// }
+
+// extension IterableSortedBy<E> on Iterable<E> {
+//   /// Returns a new list with all elements sorted according to natural sort
+//   /// order of the values returned by specified [selector] function.
+//   ///
+//   /// To sort by more than one property, `thenBy()` or `thenByDescending()` can
+//   /// be called afterwards.
+//   ///
+//   /// **Note:** The actual sorting is performed when an element is accessed for
+//   /// the first time.
+//   SortedList<E> sortedBy(Comparable Function(E element) selector) {
+//     return SortedList<E>.withSelector(this, selector, 1, null);
+//   }
+// }
+
+// extension IterableSortedByDescending<E> on Iterable<E> {
+//   /// Returns a new list with all elements sorted according to descending
+//   /// natural sort order of the values returned by specified [selector]
+//   /// function.
+//   ///
+//   /// To sort by more than one property, `thenBy()` or `thenByDescending` can
+//   /// be called afterwards.
+//   ///
+//   /// **Note:** The actual sorting is performed when an element is accessed for
+//   /// the first time.
+//   SortedList<E> sortedByDescending(Comparable Function(E element) selector) {
+//     return SortedList<E>.withSelector(this, selector, -1, null);
+//   }
+// }
+
+// extension IterableSortedWith<E> on Iterable<E> {
+//   /// Returns a new list with all elements sorted according to specified
+//   /// [comparator].
+//   ///
+//   /// To sort by more than one property, `thenBy()` or `thenByDescending` can
+//   /// be called afterwards.
+//   ///
+//   /// **Note:** The actual sorting is performed when an element is accessed for
+//   /// the first time.
+//   SortedList<E> sortedWith(Comparator<E> comparator) {
+//     return SortedList<E>(this, comparator);
+//   }
+// }
+
+// extension IterableJoinToString<E> on Iterable<E> {
+//   /// Creates a string from all the elements separated using [separator] and
+//   /// using the given [prefix] and [postfix] if supplied.
+//   ///
+//   /// If the collection could be huge, you can specify a non-negative value of
+//   /// [limit], in which case only the first [limit] elements will be appended,
+//   /// followed by the [truncated] string (which defaults to `'...'`).
+//   String joinToString({
+//     String separator = ', ',
+//     String Function(E element)? transform,
+//     String prefix = '',
+//     String postfix = '',
+//     int? limit,
+//     String truncated = '...',
+//   }) {
+//     final buffer = StringBuffer();
+//     var count = 0;
+//     for (final element in this) {
+//       if (limit != null && count >= limit) {
+//         buffer.write(truncated);
+//         return buffer.toString();
+//       }
+//       if (count > 0) {
+//         buffer.write(separator);
+//       }
+//       buffer.write(prefix);
+//       if (transform != null) {
+//         buffer.write(transform(element));
+//       } else {
+//         buffer.write(element.toString());
+//       }
+//       buffer.write(postfix);
+
+//       count++;
+//     }
+//     return buffer.toString();
+//   }
+// }
+
+// extension IterableSumBy<E> on Iterable<E> {
+//   /// Returns the sum of all values produced by [selector] function applied to
+//   /// each element in the collection.
+//   T sumBy<T extends num>(T Function(E element) selector) {
+//     var sum = T == double ? 0.0 : 0;
+//     for (final current in this) {
+//       sum += selector(current);
+//     }
+//     return sum as T;
+//   }
+// }
+
+// extension IterableAverageBy<E> on Iterable<E> {
+//   /// Returns the average of values returned by [selector] for all elements in
+//   /// the collection.
+//   double averageBy(num Function(E element) selector) {
+//     var count = 0;
+//     num sum = 0;
+
+//     for (final current in this) {
+//       sum += selector(current);
+//       count++;
+//     }
+
+//     if (count == 0) {
+//       throw StateError('No elements in collection');
+//     } else {
+//       return sum / count;
+//     }
+//   }
+// }
+
+// extension InterableMin<E> on Iterable<E> {
+//   /// Returns the smallest element or `null` if there are no elements.
+//   ///
+//   /// All elements must be of type [Comparable].
+//   E? min() => _minMax(-1);
+// }
+
+// extension _MinMaxHelper<E> on Iterable<E> {
+//   E? _minMax(int order) {
+//     final it = iterator;
+//     if (!it.moveNext()) {
+//       return null;
+//     }
+//     var currentMin = it.current;
+
+//     if (order < 0) {
+//       while (it.moveNext()) {
+//         if ((it.current as Comparable).compareTo(currentMin) <= order) {
+//           currentMin = it.current;
+//         }
+//       }
+//     } else {
+//       while (it.moveNext()) {
+//         if ((it.current as Comparable).compareTo(currentMin) >= order) {
+//           currentMin = it.current;
+//         }
+//       }
+//     }
+
+//     return currentMin;
+//   }
+
+//   E? _minMaxBy(int order, Comparable Function(E element) selector) {
+//     final it = iterator;
+//     if (!it.moveNext()) {
+//       return null;
+//     }
+
+//     var currentMin = it.current;
+//     var currentMinValue = selector(it.current);
+//     while (it.moveNext()) {
+//       final comp = selector(it.current);
+//       if (comp.compareTo(currentMinValue) == order) {
+//         currentMin = it.current;
+//         currentMinValue = comp;
+//       }
+//     }
+
+//     return currentMin;
+//   }
+
+//   E? _minMaxWith(int order, Comparator<E> comparator) {
+//     final it = iterator;
+//     if (!it.moveNext()) {
+//       return null;
+//     }
+//     var currentMin = it.current;
+
+//     while (it.moveNext()) {
+//       if (comparator(it.current, currentMin) == order) {
+//         currentMin = it.current;
+//       }
+//     }
+
+//     return currentMin;
+//   }
+// }
+
+// extension IterableMinBy<E> on Iterable<E> {
+//   /// Returns the first element yielding the smallest value of the given
+//   /// [selector] or `null` if there are no elements.
+//   E? minBy(Comparable Function(E element) selector) => _minMaxBy(-1, selector);
+// }
+
+// extension IterableMinWith<E> on Iterable<E> {
+//   /// Returns the first element having the smallest value according to the
+//   /// provided [comparator] or `null` if there are no elements.
+//   E? minWith(Comparator<E> comparator) => _minMaxWith(-1, comparator);
+// }
+
+// extension IterableMax<E> on Iterable<E> {
+//   /// Returns the largest element or `null` if there are no elements.
+//   ///
+//   /// All elements must be of type [Comparable].
+//   E? max() => _minMax(1);
+// }
+
+// extension IterableMaxBy<E> on Iterable<E> {
+//   /// Returns the first element yielding the largest value of the given
+//   /// [selector] or `null` if there are no elements.
+//   E? maxBy(Comparable Function(E element) selector) => _minMaxBy(1, selector);
+// }
+
+// extension IterableMaxWith<E> on Iterable<E> {
+//   /// Returns the first element having the largest value according to the
+//   /// provided [comparator] or `null` if there are no elements.
+//   E? maxWith(Comparator<E> comparator) => _minMaxWith(1, comparator);
+// }
+
+// extension IterableCount<E> on Iterable<E> {
+//   /// Returns the number of elements matching the given [predicate].
+//   ///
+//   /// If no [predicate] is given, this equals to [length].
+//   int count([bool Function(E element)? predicate]) {
+//     var count = 0;
+//     if (predicate == null) {
+//       return length;
+//     } else {
+//       for (final current in this) {
+//         if (predicate(current)) {
+//           count++;
+//         }
+//       }
+//     }
+
+//     return count;
+//   }
+// }
+
+// extension IterableReversed<E> on Iterable<E> {
+//   /// Returns an [Iterable] of the objects in this list in reverse order.
+//   Iterable<E> get reversed {
+//     return this is List<E> ? (this as List<E>).reversed : toList().reversed;
+//   }
+// }
+
+// extension IterableTakeFirst<E> on Iterable<E> {
+//   /// Returns a list containing first [n] elements.
+//   ///
+//   /// ```dart
+//   /// val chars = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+//   /// print(chars.take(3)) // [1, 2, 3]
+//   /// print(chars.takeWhile((it) => it < 5) // [1, 2, 3, 4]
+//   /// print(chars.takeLast(2)) // [8, 9]
+//   /// print(chars.takeLastWhile((it) => it > 5 }) // [6, 7, 8, 9]
+//   /// ```
+//   List<E> takeFirst(int n) {
+//     final list = this is List<E> ? this as List<E> : toList();
+//     return list.take(n).toList();
+//   }
+// }
+
+// extension IterableTakeLast<E> on Iterable<E> {
+//   /// Returns a list containing last [n] elements.
+//   ///
+//   /// ```dart
+//   /// val chars = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+//   /// print(chars.take(3)) // [1, 2, 3]
+//   /// print(chars.takeWhile((it) => it < 5) // [1, 2, 3, 4]
+//   /// print(chars.takeLast(2)) // [8, 9]
+//   /// print(chars.takeLastWhile((it) => it > 5 }) // [6, 7, 8, 9]
+//   /// ```
+//   List<E> takeLast(int n) {
+//     final list = this is List<E> ? this as List<E> : toList();
+//     return list.reversed.take(n).reversed.toList();
+//   }
+// }
+
+// extension IterableFirstWhile<E> on Iterable<E> {
+//   //// Returns the first elements satisfying the given [predicate].
+//   ///
+//   /// ```dart
+//   /// val chars = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+//   /// print(chars.take(3)) // [1, 2, 3]
+//   /// print(chars.takeWhile((it) => it < 5) // [1, 2, 3, 4]
+//   /// print(chars.takeLast(2)) // [8, 9]
+//   /// print(chars.takeLastWhile((it) => it > 5 }) // [6, 7, 8, 9]
+//   /// ```
+//   Iterable<E> firstWhile(bool Function(E element) predicate) sync* {
+//     for (final element in this) {
+//       if (!predicate(element)) break;
+//       yield element;
+//     }
+//   }
+// }
+
+// extension IterableLastWhile<E> on Iterable<E> {
+//   /// Returns the last elements satisfying the given [predicate].
+//   ///
+//   /// ```dart
+//   /// val chars = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+//   /// print(chars.take(3)) // [1, 2, 3]
+//   /// print(chars.takeWhile((it) => it < 5) // [1, 2, 3, 4]
+//   /// print(chars.takeLast(2)) // [8, 9]
+//   /// print(chars.takeLastWhile((it) => it > 5 }) // [6, 7, 8, 9]
+//   /// ```
+//   Iterable<E> lastWhile(bool Function(E element) predicate) {
+//     final list = ListQueue<E>();
+//     for (final element in reversed) {
+//       if (!predicate(element)) break;
+//       list.addFirst(element);
+//     }
+//     return list;
+//   }
+// }
+
+// extension IterableFilter<E> on Iterable<E> {
+//   /// Returns all elements matching the given [predicate].
+//   Iterable<E> filter(bool Function(E element) predicate) => where(predicate);
+// }
+
+// extension IterableFilterIndexed<E> on Iterable<E> {
+//   /// Returns all elements that satisfy the given [predicate].
+//   Iterable<E> filterIndexed(bool Function(E element, int index) predicate) =>
+//       IterableWhereIndexed(this).whereIndexed(predicate);
+// }
+
+// extension IterableFilterTo<E> on Iterable<E> {
+//   /// Appends all elements matching the given [predicate] to the given
+//   /// [destination].
+//   void filterTo(List<E> destination, bool Function(E element) predicate) =>
+//       whereTo(destination, predicate);
+// }
+
+// extension IterableFilterIndexedTo<E> on Iterable<E> {
+//   /// Appends all elements matching the given [predicate] to the given
+//   /// [destination].
+//   void filterIndexedTo(
+//     List<E> destination,
+//     bool Function(E element, int index) predicate,
+//   ) =>
+//       whereIndexedTo(destination, predicate);
+// }
+
+// extension IterableFilterNot<E> on Iterable<E> {
+//   /// Returns all elements not matching the given [predicate].
+//   Iterable<E> filterNot(bool Function(E element) predicate) =>
+//       IterableWhereNot(this).whereNot(predicate);
+// }
+
+// extension IterableFilterNotIndexed<E> on Iterable<E> {
+//   /// Returns all elements not matching the given [predicate].
+//   Iterable<E> filterNotIndexed(bool Function(E element, int index) predicate) =>
+//       IterableWhereNotIndexed(this).whereNotIndexed(predicate);
+// }
+
+// extension IterableFilterNotTo<E> on Iterable<E> {
+//   /// Appends all elements not matching the given [predicate] to the given
+//   /// [destination].
+//   void filterNotTo(List<E> destination, bool Function(E element) predicate) =>
+//       whereNotTo(destination, predicate);
+// }
+
+// extension IterableFilterNotToIndexed<E> on Iterable<E> {
+//   /// Appends all elements not matching the given [predicate] to the given
+//   /// [destination].
+//   void filterNotToIndexed(
+//     List<E> destination,
+//     bool Function(E element, int index) predicate,
+//   ) =>
+//       whereNotToIndexed(destination, predicate);
+// }
+
+// extension IterableFilterNotNull<E> on Iterable<E?> {
+//   /// Returns a new lazy [Iterable] with all elements which are not null.
+//   Iterable<E> filterNotNull() => whereNotNull();
+// }
+
+// extension IterableWhereIndexed<E> on Iterable<E> {
+//   /// Returns all elements that satisfy the given [predicate].
+//   Iterable<E> whereIndexed(
+//     bool Function(E element, int index) predicate,
+//   ) sync* {
+//     var index = 0;
+//     for (final element in this) {
+//       if (predicate(element, index++)) {
+//         yield element;
+//       }
+//     }
+//   }
+// }
+
+// extension IterableWhereTo<E> on Iterable<E> {
+//   /// Appends all elements matching the given [predicate] to the given
+//   /// [destination].
+//   void whereTo(List<E> destination, bool Function(E element) predicate) {
+//     for (final element in this) {
+//       if (predicate(element)) {
+//         destination.add(element);
+//       }
+//     }
+//   }
+// }
+
+// extension IterableWhereIndexedTo<E> on Iterable<E> {
+//   /// Appends all elements matching the given [predicate] to the given
+//   /// [destination].
+//   void whereIndexedTo(
+//     List<E> destination,
+//     bool Function(E element, int index) predicate,
+//   ) {
+//     var index = 0;
+//     for (final element in this) {
+//       if (predicate(element, index++)) {
+//         destination.add(element);
+//       }
+//     }
+//   }
+// }
+
+// extension IterableWhereNot<E> on Iterable<E> {
+//   /// Returns all elements not matching the given [predicate].
+//   Iterable<E> whereNot(bool Function(E element) predicate) sync* {
+//     for (final element in this) {
+//       if (!predicate(element)) {
+//         yield element;
+//       }
+//     }
+//   }
+// }
+
+// extension IterableWhereNotIndexed<E> on Iterable<E> {
+//   /// Returns all elements not matching the given [predicate].
+//   Iterable<E> whereNotIndexed(
+//     bool Function(E element, int index) predicate,
+//   ) sync* {
+//     var index = 0;
+//     for (final element in this) {
+//       if (!predicate(element, index++)) {
+//         yield element;
+//       }
+//     }
+//   }
+// }
+
+// extension IterableWhereNotTo<E> on Iterable<E> {
+//   /// Appends all elements not matching the given [predicate] to the given
+//   /// [destination].
+//   void whereNotTo(List<E> destination, bool Function(E element) predicate) {
+//     for (final element in this) {
+//       if (!predicate(element)) {
+//         destination.add(element);
+//       }
+//     }
+//   }
+// }
+
+// extension IterableWhereNotToIndexed<E> on Iterable<E> {
+//   /// Appends all elements not matching the given [predicate] to the given
+//   /// [destination].
+//   void whereNotToIndexed(
+//     List<E> destination,
+//     bool Function(E element, int index) predicate,
+//   ) {
+//     var index = 0;
+//     for (final element in this) {
+//       if (!predicate(element, index++)) {
+//         destination.add(element);
+//       }
+//     }
+//   }
+// }
+
+// extension IterableWhereNotNull<E> on Iterable<E?> {
+//   /// Returns a new lazy [Iterable] with all elements which are not null.
+//   Iterable<E> whereNotNull() => where((element) => element != null).cast<E>();
+// }
+
+// extension IterableMapNotNull<E> on Iterable<E> {
+//   /// Returns a new lazy [Iterable] containing only the non-null results of
+//   /// applying the given [transform] function to each element in the original
+//   /// collection.
+//   Iterable<R> mapNotNull<R>(R? Function(E element) transform) sync* {
+//     for (final element in this) {
+//       final result = transform(element);
+//       if (result != null) {
+//         yield result;
+//       }
+//     }
+//   }
+// }
+
+// extension IterableMapIndexed<E> on Iterable<E> {
+//   /// Returns a new lazy [Iterable] containing the results of applying the
+//   /// given [transform] function to each element and its index in the original
+//   /// collection.
+//   Iterable<R> mapIndexed<R>(R Function(int index, E) transform) sync* {
+//     var index = 0;
+//     for (final element in this) {
+//       yield transform(index++, element);
+//     }
+//   }
+// }
+
+// extension IterableMapIndexedNotNull<E> on Iterable<E> {
+//   /// Returns a new lazy [Iterable] containing only the non-null results of
+//   /// applying the given [transform] function to each element and its index
+//   /// in the original collection.
+//   Iterable<R> mapIndexedNotNull<R>(R? Function(int index, E) transform) sync* {
+//     var index = 0;
+//     for (final element in this) {
+//       final result = transform(index++, element);
+//       if (result != null) {
+//         yield result;
+//       }
+//     }
+//   }
+// }
+
+// extension IterableOnEach<E> on Iterable<E> {
+//   /// Returns a new lazy [Iterable] which performs the given action on each
+//   /// element.
+//   Iterable<E> onEach(void Function(E element) action) sync* {
+//     for (final element in this) {
+//       action(element);
+//       yield element;
+//     }
+//   }
+// }
+
+// extension IterableDistinct<E> on Iterable<E> {
+//   /// Returns a new lazy [Iterable] containing only distinct elements from the
+//   /// collection.
+//   ///
+//   /// The elements in the resulting list are in the same order as they were in
+//   /// the source collection.
+//   Iterable<E> distinct() sync* {
+//     final existing = HashSet<E>();
+//     for (final current in this) {
+//       if (existing.add(current)) {
+//         yield current;
+//       }
+//     }
+//   }
+// }
+
+// extension IterableDistinctBy<E> on Iterable<E> {
+//   /// Returns a new lazy [Iterable] containing only elements from the collection
+//   /// having distinct keys returned by the given [selector] function.
+//   ///
+//   /// The elements in the resulting list are in the same order as they were in
+//   /// the source collection.
+//   Iterable<E> distinctBy<R>(R Function(E element) selector) sync* {
+//     final existing = HashSet<R>();
+//     for (final current in this) {
+//       if (existing.add(selector(current))) {
+//         yield current;
+//       }
+//     }
+//   }
+// }
+
+// extension IterableChunked<E> on Iterable<E> {
+//   /// Splits this collection into a new lazy [Iterable] of lists each not
+//   /// exceeding the given [size].
+//   ///
+//   /// The last list in the resulting list may have less elements than the given
+//   /// [size].
+//   ///
+//   /// [size] must be positive and can be greater than the number of elements in
+//   /// this collection.
+//   Iterable<List<E>> chunked(int size) sync* {
+//     if (size < 1) {
+//       throw ArgumentError('Requested chunk size $size is less than one.');
+//     }
+
+//     var currentChunk = <E>[];
+//     for (final current in this) {
+//       currentChunk.add(current);
+//       if (currentChunk.length >= size) {
+//         yield currentChunk;
+//         currentChunk = <E>[];
+//       }
+//     }
+//     if (currentChunk.isNotEmpty) {
+//       yield currentChunk;
+//     }
+//   }
+// }
+
+// extension IterableChunkWhile<E> on Iterable<E> {
+//   /// Splits this collection into a lazy [Iterable] of chunks, where chunks are
+//   /// created as long as [predicate] is true for a pair of entries.
+//   ///
+//   /// For example, one-by-one increasing subsequences can be chunked as follows:
+//   /// ```dart
+//   /// final list = [1, 2, 4, 9, 10, 11, 12, 15, 16, 19, 20, 21];
+//   /// final increasingSubSequences = list.chunkWhile((a, b) => a + 1 == b);
+//   /// ```
+//   ///
+//   /// Here, `increasingSubSequences` would consist of `[1, 2]`, `[4]`,
+//   /// `[9, 10, 11]`, `[12]`, `[15, 16]` and finally `[19, 20, 21]`.
+//   ///
+//   /// See also:
+//   ///  - [splitWhen], which works similarly but with a reverted [predicate].
+//   Iterable<List<E>> chunkWhile(bool Function(E, E) predicate) sync* {
+//     var currentChunk = <E>[];
+//     var hasPrevious = false;
+//     late E previous;
+
+//     for (final element in this) {
+//       if (!hasPrevious || predicate(previous, element)) {
+//         // keep element in current chunk
+//         currentChunk.add(element);
+//       } else {
+//         // start a new chunk containing the new element
+//         yield currentChunk;
+//         currentChunk = [element];
+//       }
+
+//       previous = element;
+//       hasPrevious = true;
+//     }
+
+//     if (currentChunk.isNotEmpty) yield currentChunk;
+//   }
+// }
+
+// extension IterableSplitWhen<E> on Iterable<E> {
+//   /// Splits this collection into a lazy [Iterable], where each split will be
+//   /// make if [predicate] returns true for a pair of entries.
+//   ///
+//   /// For example, one could split the iterable at each changed value like this:
+//   /// ```dart
+//   /// final list = [1, 1, 1, 2, 2, 1, 4, 4];
+//   /// final splitted = list.splitWhen((a, b) => a != b);
+//   /// ```
+//   ///
+//   /// In that example, `splitted` would consist of `[1, 1, 1, 1]`, `[2, 2]`,
+//   /// `[1]`, `[4, 4]`.
+//   ///
+//   /// See also:
+//   ///  - [chunkWhile], which works similarly but with a reverted [predicate].
+//   Iterable<List<E>> splitWhen(bool Function(E, E) predicate) {
+//     return chunkWhile((a, b) => !predicate(a, b));
+//   }
+// }
+
+// extension IterableWindowed<E> on Iterable<E> {
+//   /// Returns a new lazy [Iterable] of windows of the given [size] sliding along
+//   /// this collection with the given [step].
+//   ///
+//   /// The last list may have less elements than the given size.
+//   ///
+//   /// Both [size] and [step] must be positive and can be greater than the number
+//   /// of elements in this collection.
+//   Iterable<List<E>> windowed(
+//     int size, {
+//     int step = 1,
+//     bool partialWindows = false,
+//   }) sync* {
+//     final gap = step - size;
+//     if (gap >= 0) {
+//       var buffer = <E>[];
+//       var skip = 0;
+//       for (final element in this) {
+//         if (skip > 0) {
+//           skip -= 1;
+//           continue;
+//         }
+//         buffer.add(element);
+//         if (buffer.length == size) {
+//           yield buffer;
+//           buffer = <E>[];
+//           skip = gap;
+//         }
+//       }
+//       if (buffer.isNotEmpty && (partialWindows || buffer.length == size)) {
+//         yield buffer;
+//       }
+//     } else {
+//       final buffer = ListQueue<E>(size);
+//       for (final element in this) {
+//         buffer.add(element);
+//         if (buffer.length == size) {
+//           yield buffer.toList();
+//           for (var i = 0; i < step; i++) {
+//             buffer.removeFirst();
+//           }
+//         }
+//       }
+//       if (partialWindows) {
+//         while (buffer.length > step) {
+//           yield buffer.toList();
+//           for (var i = 0; i < step; i++) {
+//             buffer.removeFirst();
+//           }
+//         }
+//         if (buffer.isNotEmpty) {
+//           yield buffer.toList();
+//         }
+//       }
+//     }
+//   }
+// }
+
+// extension IterableFlatMap<E> on Iterable<E> {
+//   /// Returns a new lazy [Iterable] of all elements yielded from results of
+//   /// [transform] function being invoked on each element of this collection.
+//   Iterable<R> flatMap<R>(Iterable<R> Function(E element) transform) sync* {
+//     for (final current in this) {
+//       yield* transform(current);
+//     }
+//   }
+// }
+
+// extension IterableCycle<E> on Iterable<E> {
+//   /// Returns a new lazy [Iterable] which iterates over this collection [n]
+//   /// times.
+//   ///
+//   /// When it reaches the end, it jumps back to the beginning. Returns `null`
+//   /// [n] times if the collection is empty.
+//   ///
+//   /// If [n] is omitted, the Iterable cycles forever.
+//   Iterable<E> cycle([int? n]) sync* {
+//     var it = iterator;
+//     if (!it.moveNext()) {
+//       return;
+//     }
+//     if (n == null) {
+//       yield it.current;
+//       // ignore: literal_only_boolean_expressions
+//       while (true) {
+//         while (it.moveNext()) {
+//           yield it.current;
+//         }
+//         it = iterator;
+//       }
+//     } else {
+//       var count = 0;
+//       yield it.current;
+//       while (count++ < n) {
+//         while (it.moveNext()) {
+//           yield it.current;
+//         }
+//         it = iterator;
+//       }
+//     }
+//   }
+// }
+
+// extension IterableIntersect<E> on Iterable<E> {
+//   /// Returns a new lazy [Iterable] containing all elements that are contained
+//   /// by both this collection and the [other] collection.
+//   ///
+//   /// The returned collection preserves the element iteration order of the
+//   /// this collection.
+//   Iterable<E> intersect(Iterable<E> other) sync* {
+//     final second = HashSet<E>.from(other);
+//     final output = HashSet<E>();
+//     for (final current in this) {
+//       if (second.contains(current)) {
+//         if (output.add(current)) {
+//           yield current;
+//         }
+//       }
+//     }
+//   }
+// }
+
+// extension IterableExcept<E> on Iterable<E> {
+//   /// Returns a new lazy [Iterable] containing all elements of this collection
+//   /// except the elements contained in the given [elements] collection.
+//   Iterable<E> except(Iterable<E> elements) sync* {
+//     for (final current in this) {
+//       if (!elements.contains(current)) yield current;
+//     }
+//   }
+// }
+
+// extension IterableMinus<E> on Iterable<E> {
+//   /// Returns a new list containing all elements of this collection except the
+//   /// elements contained in the given [elements] collection.
+//   List<E> operator -(Iterable<E> elements) => except(elements).toList();
+// }
+
+// extension IterableExceptElement<E> on Iterable<E> {
+//   /// Returns a new lazy [Iterable] containing all elements of this collection
+//   /// except the given [element].
+//   Iterable<E> exceptElement(E element) sync* {
+//     for (final current in this) {
+//       if (element != current) yield current;
+//     }
+//   }
+// }
+
+// extension IterablePrepend<E> on Iterable<E> {
+//   /// Returns a new lazy [Iterable] containing all elements of this collection
+//   /// and then all elements of the given [elements] collection.
+//   Iterable<E> prepend(Iterable<E> elements) sync* {
+//     yield* elements;
+//     yield* this;
+//   }
+// }
+
+// extension IterablePrependElement<E> on Iterable<E> {
+//   /// Returns a new lazy [Iterable] containing all elements of this collection
+//   /// and then the given [element].
+//   Iterable<E> prependElement(E element) sync* {
+//     yield element;
+//     yield* this;
+//   }
+// }
+
+// extension IterableAppend<E> on Iterable<E> {
+//   /// Returns a new lazy [Iterable] containing all elements of the given
+//   /// [elements] collection and then all elements of this collection.
+//   Iterable<E> append(Iterable<E> elements) sync* {
+//     yield* this;
+//     yield* elements;
+//   }
+// }
+
+// extension IterablePlus<E> on Iterable<E> {
+//   /// Returns a new list containing all elements of the given [elements]
+//   /// collection and then all elements of this collection.
+//   List<E> operator +(Iterable<E> elements) => append(elements).toList();
+// }
+
+// extension IterableAppendElement<E> on Iterable<E> {
+//   /// Returns a new lazy [Iterable] containing the given [element] and then all
+//   /// elements of this collection.
+//   Iterable<E> appendElement(E element) sync* {
+//     yield* this;
+//     yield element;
+//   }
+// }
+
+// extension IterableUnion<E> on Iterable<E> {
+//   /// Returns a new lazy [Iterable] containing all distinct elements from
+//   /// both collections.
+//   ///
+//   /// The returned set preserves the element iteration order of this collection.
+//   /// Those elements of the [other] collection that are unique are iterated in
+//   /// the end in the order of the [other] collection.
+//   Iterable<E> union(Iterable<E> other) sync* {
+//     final existing = HashSet<E>();
+//     for (final element in this) {
+//       if (existing.add(element)) yield element;
+//     }
+
+//     for (final element in other) {
+//       if (existing.add(element)) yield element;
+//     }
+//   }
+// }
+
+// extension IterableZip<E> on Iterable<E> {
+//   /// Returns a new lazy [Iterable] of values built from the elements of this
+//   /// collection and the [other] collection with the same index.
+//   ///
+//   /// Using the provided [transform] function applied to each pair of elements.
+//   /// The returned list has length of the shortest collection.
+//   ///
+//   /// Example (with added type definitions for [transform] parameters):
+//   ///
+//   /// ```dart
+//   ///final amounts = [2, 3, 4];
+//   ///final animals = ['dogs', 'birds', 'cats'];
+//   ///final all = amounts.zip(
+//   ///  animals,
+//   ///  (int amount, String animal) => '$amount $animal'
+//   ///);  // returns: ['2 dogs', '3 birds', '4 cats']
+//   /// ```
+//   Iterable<V> zip<R, V>(
+//     Iterable<R> other,
+//     V Function(E a, R b) transform,
+//   ) sync* {
+//     final it1 = iterator;
+//     final it2 = other.iterator;
+//     while (it1.moveNext() && it2.moveNext()) {
+//       yield transform(it1.current, it2.current);
+//     }
+//   }
+// }
+
+// extension IterableToIterable<E> on Iterable<E> {
+//   /// Returns a new lazy [Iterable] with all elements of this collection.
+//   Iterable<E> toIterable() sync* {
+//     yield* this;
+//   }
+// }
+
+// extension IterableAsStream<E> on Iterable<E> {
+//   /// Returns a new [Stream] with all elements of this collection.
+//   Stream<E> asStream() => Stream.fromIterable(this);
+// }
+
+// extension IterableToHashSet<E> on Iterable<E> {
+//   /// Returns a new [HashSet] with all distinct elements of this collection.
+//   HashSet<E> toHashSet() => HashSet.from(this);
+// }
+
+// extension IterableToUnmodifiable<E> on Iterable<E> {
+//   /// Returns an unmodifiable List view of this collection.
+//   List<E> toUnmodifiable() => collection.UnmodifiableListView(this);
+// }
+
+// extension IterableShuffled<E> on Iterable<E> {
+//   /// Returns a new, randomly shuffled list.
+//   ///
+//   /// If [random] is given, it is being used for random number generation.
+//   List<E> shuffled([Random? random]) => toList()..shuffle(random);
+// }
+
+// extension IterableAssociate<E> on Iterable<E> {
+//   /// Returns a Map containing key-value pairs provided by [transform] function
+//   /// applied to elements of this collection.
+//   ///
+//   /// If any of two pairs would have the same key the last one gets added to the
+//   /// map.
+//   Map<K, V> associate<K, V>(MapEntry<K, V> Function(E element) transform) {
+//     final map = <K, V>{};
+//     for (final element in this) {
+//       final entry = transform(element);
+//       map[entry.key] = entry.value;
+//     }
+//     return map;
+//   }
+// }
+
+// extension IterableAssociateBy<E> on Iterable<E> {
+//   /// Returns a Map containing the elements from the collection indexed by
+//   /// the key returned from [keySelector] function applied to each element.
+//   ///
+//   /// If any two elements would have the same key returned by [keySelector] the
+//   /// last one gets added to the map.
+//   Map<K, E> associateBy<K>(K Function(E element) keySelector) {
+//     final map = <K, E>{};
+//     for (final current in this) {
+//       map[keySelector(current)] = current;
+//     }
+//     return map;
+//   }
+// }
+
+// extension IterableAssociateWith<E> on Iterable<E> {
+//   /// Returns a Map containing the values returned from [valueSelector] function
+//   /// applied to each element indexed by the elements from the collection.
+//   ///
+//   /// If any of elements (-> keys) would be the same the last one gets added
+//   /// to the map.
+//   Map<E, V> associateWith<V>(V Function(E element) valueSelector) {
+//     final map = <E, V>{};
+//     for (final current in this) {
+//       map[current] = valueSelector(current);
+//     }
+//     return map;
+//   }
+// }
+
+// extension IterableGroupBy<E> on Iterable<E> {
+//   /// Groups elements of the original collection by the key returned by the
+//   /// given [keySelector] function applied to each element and returns a map.
+//   ///
+//   /// Each group key is associated with a list of corresponding elements.
+//   ///
+//   /// The returned map preserves the entry iteration order of the keys produced
+//   /// from the original collection.
+//   Map<K, List<E>> groupBy<K>(K Function(E element) keySelector) {
+//     return collection.groupBy(this, keySelector);
+//   }
+// }
+
+// extension IterablePartition<E> on Iterable<E> {
+//   /// Splits the collection into two lists according to [predicate].
+//   ///
+//   /// The first list contains elements for which [predicate] yielded true,
+//   /// while the second list contains elements for which [predicate] yielded
+//   /// false.
+//   List<List<E>> partition(bool Function(E element) predicate) {
+//     final t = <E>[];
+//     final f = <E>[];
+//     for (final element in this) {
+//       if (predicate(element)) {
+//         t.add(element);
+//       } else {
+//         f.add(element);
+//       }
+//     }
+//     return [t, f];
+//   }
+// }
+
+// extension IterableCached<E> on Iterable<E> {
+//   /// Returns a new lazy [Iterable] that caches the computation of the current
+//   /// [Iterable].
+//   ///
+//   /// This is an alternative to [toList] to not recompute the collection
+//   /// multiple times, without having to lose the lazy loading aspect of
+//   /// [Iterable].
+//   Iterable<E> get cached => _CachedIterable<E>(this);
+// }
+
+// class _CachedIterable<T> extends IterableBase<T> {
+//   _CachedIterable(Iterable<T> iterable)
+//       : _uncomputedIterator = iterable.iterator;
+
+//   final Iterator<T> _uncomputedIterator;
+//   final _cache = _IterableCache<T>(null);
+
+//   @override
+//   Iterator<T> get iterator => _CachedIterator<T>(_cache, _uncomputedIterator);
+// }
+
+// class _CachedIterator<T> extends Iterator<T> {
+//   _CachedIterator(_IterableCache<T> cache, this._uncomputedIterator)
+//       // ignore: prefer_initializing_formals
+//       : _cache = cache,
+//         _latestValidCache = cache;
+
+//   _IterableCache<T>? _cache;
+
+//   /// A reference to the latest non-null [_cache].
+//   ///
+//   /// This allows adding new items to the cache
+//   _IterableCache<T> _latestValidCache;
+//   final Iterator<T> _uncomputedIterator;
+
+//   @override
+//   T get current => _current as T;
+//   T? _current;
+
+//   @override
+//   bool moveNext() {
+//     final next = _cache?.next;
+//     _cache = next;
+//     if (next != null) {
+//       _current = next.value;
+//       _latestValidCache = next;
+//       return true;
+//     }
+//     if (_uncomputedIterator.moveNext()) {
+//       _current = _uncomputedIterator.current;
+//       assert(_latestValidCache.next == null);
+//       _latestValidCache.next = _IterableCache(current);
+//       _latestValidCache = _latestValidCache.next!;
+//       return true;
+//     }
+//     return false;
+//   }
+// }
+
+// /// A LinkedList that does not throw concurrent modification errors.
+// class _IterableCache<T> {
+//   _IterableCache(this.value);
+
+//   _IterableCache<T>? next;
+//   final T? value;
+// }
+
+// extension IterableIterableX<E> on Iterable<Iterable<E>> {
+//   /// Returns a new lazy [Iterable] of all elements from all collections in this
+//   /// collection.
+//   ///
+//   /// ```dart
+//   /// final nestedList = List([[1, 2, 3], [4, 5, 6]]);
+//   /// final flattened = nestedList.flatten(); // [1, 2, 3, 4, 5, 6]
+//   /// ```
+//   Iterable<E> flatten() sync* {
+//     for (final current in this) {
+//       yield* current;
+//     }
+//   }
+// }
+
+// extension IterableFutureX<E> on Iterable<Future<E>> {
+//   /// Create a stream from a group of futures.
+//   ///
+//   /// The stream reports the results of the futures on the stream in the order
+//   /// in which the futures complete.
+//   /// Each future provides either a data event or an error event,
+//   /// depending on how the future completes.
+//   ///
+//   /// If some futures have already completed when `Stream.fromFutures` is
+//   /// called, their results will be emitted in some unspecified order.
+//   ///
+//   /// When all futures have completed, the stream is closed.
+//   Stream<E> asStreamAwaited() => Stream.fromFutures(this);
+// }
+
+// extension IterableStartsWithExtension<E> on Iterable<E> {
+//  /// Returns if this [Iterable] starts with the elements of [otherIterable].
+  ///
+  /// If [otherIterable] is empty, `true` is returned. If [otherIterable] has
+  /// more elements than this [Iterable], `false` is returned.
+  ///
+  /// ```dart
+  /// [1, 2, 3].startsWith([]); // -> true
+  /// [1, 2, 3].startsWith([1]); // -> true
+  /// [1, 2, 3].startsWith([1, 2]); // -> true
+  /// [1, 2, 3].startsWith([1, 2, 3]); // -> true
+  /// [1, 2, 3].startsWith([1, 2, 3, 4]); // -> false
+  /// [1, 2, 3].startsWith([2, 3]); // -> false
+  /// ```
+//   bool startsWith(Iterable<E> otherIterable) {
+//     final thisIterator = iterator;
+//     final otherIterator = otherIterable.iterator;
+//     if (!otherIterator.moveNext()) return true;
+//     do {
+//       // this iterator is empty or the current elements are different
+//       if (!thisIterator.moveNext() ||
+//           otherIterator.current != thisIterator.current) {
+//         return false;
+//       }
+//     } while (otherIterator.moveNext());
+//     return true;
+//   }
+// }
+
+// import 'package:collection/collection.dart' as collection;
+
+// extension ListExtension<E> on List<E> {
+//   /// Index of the first element or -1 if the collection is empty.
+//   ///
+//   /// ```dart
+//   /// [1, 2, 3].firstIndex; // 0
+//   ///
+//   /// [].firstIndex; // -1
+//   /// ```
+//   int get firstIndex => isNotEmpty ? 0 : -1;
+// }
+
+// extension ListLastIndexExtension<E> on List<E> {
+//   /// Index of the last element or -1 if the collection is empty.
+//   ///
+//   /// ```dart
+//   /// [1, 2, 3].lastIndex; // 2
+//   ///
+//   /// [].lastIndex; // -1
+//   /// ```
+//   int get lastIndex => length - 1;
+// }
+
+// extension ListElementAtOrNull<E> on List<E> {
+//   /// Returns an element at the given [index] or `null` if the [index] is out of
+//   /// bounds of this list.
+//   ///
+//   /// ```dart
+//   /// final list = [1, 2, 3, 4];
+//   /// final first = list.elementAtOrNull(0); // 1
+//   /// final fifth = list.elementAtOrNull(4); // null
+//   /// ```
+//   E? elementAtOrNull(int index) {
+//     if (index < 0) return null;
+//     if (index >= length) return null;
+//     return this[index];
+//   }
+// }
+
+// extension ListIndicesExtension<E> on List<E> {
+//   Iterable<int> get indices sync* {
+//     var index = 0;
+//     while (index <= lastIndex) {
+//       yield index++;
+//     }
+//   }
+// }
+
+// extension ListDropExtension<E> on List<E> {
+//   /// Returns a new list containing all elements except first [n] elements.
+//   List<E> drop(int n) {
+//     if (n < 0) {
+//       throw ArgumentError('Requested element count $n is less than zero.');
+//     }
+//     if (n == 0) toList();
+
+//     final resultSize = length - n;
+//     if (resultSize <= 0) return [];
+//     if (resultSize == 1) return [last!];
+//     return sublist(n);
+//   }
+// }
+
+// extension ListDropWhileExtension<E> on List<E> {
+//   /// Returns a new list containing all elements except last elements that
+//   /// satisfy the given [predicate].
+//   List<E> dropWhile(bool Function(E element) predicate) {
+//     int? startIndex;
+//     for (var i = 0; i < length; i++) {
+//       if (!predicate(this[i])) {
+//         startIndex = i;
+//         break;
+//       }
+//     }
+//     if (startIndex == null) return [];
+//     return sublist(startIndex);
+//   }
+// }
+
+// extension ListDropLastExtension<E> on List<E> {
+//   /// Returns a new list containing all elements except last [n] elements.
+//   List<E> dropLast(int n) {
+//     if (n < 0) {
+//       throw ArgumentError('Requested element count $n is less than zero.');
+//     }
+//     if (n == 0) toList();
+
+//     final resultSize = length - n;
+//     if (resultSize <= 0) return [];
+//     if (resultSize == 1) return [first];
+//     return sublist(0, length - n);
+//   }
+// }
+
+// extension ListDropLastWhileExtension<E> on List<E> {
+//   /// Returns a new list containing all elements except last elements that
+//   /// satisfy the given [predicate].
+//   List<E> dropLastWhile(bool Function(E element) predicate) {
+//     int? endIndex;
+//     for (var i = lastIndex; i >= 0; i--) {
+//       if (!predicate(this[i])) {
+//         endIndex = i;
+//         break;
+//       }
+//     }
+//     if (endIndex == null) return [];
+//     return sublist(0, endIndex + 1);
+//   }
+// }
+
+// extension ListLowerBoundExtension<E> on List<E> {
+//   /// Returns the first position in this list that does not compare less than
+//   /// [value].
+//   ///
+//   /// If this list isn't sorted according to the [compare] function, the result
+//   /// is unpredictable.
+//   ///
+//   /// If [compare] is omitted, this defaults to calling [Comparable.compareTo]
+//   /// on the objects. If any object is not [Comparable], this throws a
+//   /// [TypeError].
+//   ///
+//   /// Returns [length] if all the items in this list compare less than [value].
+//   int lowerBound(E value, {int Function(E a, E b)? compare}) {
+//     return collection.lowerBound(this, value, compare: compare);
+//   }
+// }
+
+// extension ListBinarySearchExtension<E> on List<E> {
+//   /// Returns a position of the [value] in this list, if it is there.
+//   ///
+//   /// If the list isn't sorted according to the [compare] function, the result
+//   /// is unpredictable.
+//   ///
+//   /// If [compare] is omitted, this defaults to calling [Comparable.compareTo]
+//   /// on the objects. If any object is not [Comparable], this throws a
+//   /// [TypeError].
+//   ///
+//   /// Returns -1 if [value] is not in the list by default.
+//   int binarySearch(E value, {int Function(E a, E b)? compare}) {
+//     return collection.binarySearch(this, value, compare: compare);
+//   }
+// }
+
+// extension ListInsertionSortExtension<E> on List<E> {
+//   /// Sort this list between [start] (inclusive) and [end] (exclusive) using
+//   /// insertion sort.
+//   ///
+//   /// If [comparator] is omitted, this defaults to calling
+//   /// [Comparable.compareTo] on the objects. If any object is not [Comparable],
+//   /// this throws a [TypeError].
+//   ///
+//   /// Insertion sort is a simple sorting algorithm. For `n` elements it does on
+//   /// the order of `n * log(n)` comparisons but up to `n` squared moves. The
+//   /// sorting is performed in-place, without using extra memory.
+//   ///
+//   /// For short lists the many moves have less impact than the simple algorithm,
+//   /// and it is often the favored sorting algorithm for short lists.
+//   ///
+//   /// This insertion sort is stable: Equal elements end up in the same order
+//   /// as they started in.
+//   void insertionSort({Comparator<E>? comparator, int start = 0, int? end}) {
+//     collection.insertionSort(this, compare: comparator, start: start, end: end);
+//   }
+// }
+
+// extension ListMergeSortExtension<E> on List<E> {
+//   /// Sorts this list between [start] (inclusive) and [end] (exclusive) using
+//   /// the merge sort algorithm.
+//   ///
+//   /// If [comparator] is omitted, this defaults to calling
+//   /// [Comparable.compareTo] on the objects. If any object is not [Comparable],
+//   /// this throws a [CastError].
+//   ///
+//   /// Merge-sorting works by splitting the job into two parts, sorting each
+//   /// recursively, and then merging the two sorted parts.
+//   ///
+//   /// This takes on the order of `n * log(n)` comparisons and moves to sort
+//   /// `n` elements, but requires extra space of about the same size as the list
+//   /// being sorted.
+//   ///
+//   /// This merge sort is stable: Equal elements end up in the same order
+//   /// as they started in.
+//   void mergeSort({int start = 0, int? end, Comparator<E>? comparator}) {
+//     collection.mergeSort(this, start: start, end: end, compare: comparator);
+//   }
+// }
+
+// extension ListSwapExtension<E> on List<E> {
+//   /// Swaps the elements in the indices provided.
+//   ///
+//   /// ```dart
+//   /// final list = [1, 2, 3, 4];
+//   /// list.swap(0, 2); // [3, 2, 1, 4]
+//   /// ```
+//   void swap(int indexA, int indexB) {
+//     final temp = this[indexA];
+//     this[indexA] = this[indexB];
+//     this[indexB] = temp;
+//   }
+// }
+
+// extension ListFlattenExtension<E> on List<List<E>> {
+//   /// Returns a new [List] of all elements from all lists in this
+//   /// [List].
+//   ///
+//   /// ```dart
+//   /// final nestedList = [[1, 2, 3], [4, 5, 6]];
+//   /// final flattened = nestedList.flatten(); // [1, 2, 3, 4, 5, 6]
+//   /// ```
+//   ///
+//   ///
+//   /// This is a specialization of [IterableIterableX].flatten() which allows
+//   /// accessing elements by index afterwards
+//   ///
+//   /// ```dart
+//   /// final flat = [['a', 'b'], ['c', 'd']].flatten();
+//   /// print(flat[2]); // prints "c"
+//   /// ```
+//   List<E> flatten() => [for (final list in this) ...list];
+// }
+

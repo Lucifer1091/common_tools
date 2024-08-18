@@ -289,7 +289,7 @@ class CustomTextFormField extends StatelessWidget {
             TextSpan(text: labelText),
             if (isRequired) ...[
               if (requiredLabelCharacter != '')
-                const WidgetSpan(child: SpaceW4()),
+                const WidgetSpan(child: Space.w4()),
               TextSpan(
                 text: requiredLabelCharacter,
                 style: context.titleLarge.copyWith(

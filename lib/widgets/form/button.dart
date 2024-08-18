@@ -1,10 +1,10 @@
-import 'package:common_tools/common_tools.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
 import 'package:flutter_inset_box_shadow/flutter_inset_box_shadow.dart';
 
+import '../../common_tools.dart';
 import '../custom/spaces.dart';
 
 enum ButtonType { outline, solid, dotted }
@@ -12,49 +12,6 @@ enum ButtonType { outline, solid, dotted }
 enum ButtonStyleX { concave, convex, none }
 
 class CustomButton extends StatefulWidget {
-  final ButtonType buttonType;
-  final Color backgroundColor;
-  final Color? borderColor;
-  final Color? loaderColor;
-
-  final String? text;
-  final TextStyle? textStyle;
-  final Color? textColor;
-  final FontWeight? fontWeight;
-  final String? secondaryText;
-  final TextStyle? secondaryTextStyle;
-
-  final Widget? icon;
-  final bool showIconOnRight;
-  final double iconSpacing;
-
-  final VoidCallback? onTap;
-  final AsyncCallback? onTapAsync;
-
-  final double radius;
-  final double borderWidth;
-
-  final bool hasInfiniteWidth;
-  final BoxConstraints? constraints;
-
-  final EdgeInsets? padding;
-  final EdgeInsetsGeometry? margin;
-
-  final bool isLoading;
-  final Widget? loadingWidget;
-
-  final Widget? child;
-
-  final List<double>? dashPattern;
-
-  final Color? splashColor;
-
-  final ButtonStyleX style;
-  final double? blurRadius;
-  final Offset? offset;
-  final Color? topLeftColor;
-  final Color? bottomRightColor;
-
   const CustomButton({
     super.key,
     Color? backgroundColor,
@@ -218,6 +175,48 @@ class CustomButton extends StatefulWidget {
           'Cannot provide both a textStyle, a textColor and a fontWeight\n'
           'To provide custom style, use "textStyle: TextStyle()".',
         );
+  final ButtonType buttonType;
+  final Color backgroundColor;
+  final Color? borderColor;
+  final Color? loaderColor;
+
+  final String? text;
+  final TextStyle? textStyle;
+  final Color? textColor;
+  final FontWeight? fontWeight;
+  final String? secondaryText;
+  final TextStyle? secondaryTextStyle;
+
+  final Widget? icon;
+  final bool showIconOnRight;
+  final double iconSpacing;
+
+  final VoidCallback? onTap;
+  final AsyncCallback? onTapAsync;
+
+  final double radius;
+  final double borderWidth;
+
+  final bool hasInfiniteWidth;
+  final BoxConstraints? constraints;
+
+  final EdgeInsets? padding;
+  final EdgeInsetsGeometry? margin;
+
+  final bool isLoading;
+  final Widget? loadingWidget;
+
+  final Widget? child;
+
+  final List<double>? dashPattern;
+
+  final Color? splashColor;
+
+  final ButtonStyleX style;
+  final double? blurRadius;
+  final Offset? offset;
+  final Color? topLeftColor;
+  final Color? bottomRightColor;
 
   @override
   State<CustomButton> createState() => _CustomButtonState();
@@ -233,7 +232,7 @@ class _CustomButtonState extends State<CustomButton> {
         await widget.onTapAsync!();
         if (mounted) setState(() => isLoading = false);
       } else {
-        if (widget.onTap != null) widget.onTap!();
+        widget.onTap?.call();
       }
     } finally {
       if (mounted) setState(() => isLoading = false);
@@ -264,22 +263,21 @@ class _CustomButtonState extends State<CustomButton> {
   }
 
   Widget _buildChild(BuildContext context) {
-    TextStyle style = context.titleMedium.copyWith(
+    final style = context.titleMedium.copyWith(
       color: widget.textColor,
       fontWeight: widget.fontWeight ?? FontWeight.w500,
     );
-    TextStyle style2 = context.titleSmall.copyWith(
+    final style2 = context.titleSmall.copyWith(
       color: widget.textColor,
       fontWeight: widget.fontWeight ?? FontWeight.w400,
     );
 
-    Widget child = showLoading
+    final child = showLoading
         ? _buildLoadingWidget()
         : widget.child ??
             FittedBox(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   if (widget.icon != null && !widget.showIconOnRight)
                     widget.icon!,
@@ -298,7 +296,7 @@ class _CustomButtonState extends State<CustomButton> {
                             overflow: TextOverflow.ellipsis,
                           ),
                         if (widget.secondaryText != null) ...[
-                          const SpaceW4(),
+                          const Space.w4(),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 2),
                             child: Text(
@@ -411,7 +409,7 @@ class _CustomButtonState extends State<CustomButton> {
   }
 
   Widget _buildConvexConcaveButton({Widget? child, bool isConvex = true}) {
-    var blur = widget.blurRadius ?? (isConvex ? 5.0 : 30.0),
+    final blur = widget.blurRadius ?? (isConvex ? 5.0 : 30.0),
         distance = widget.offset ??
             (isConvex ? const Offset(2, 2) : const Offset(28, 28));
 
@@ -462,7 +460,7 @@ class _CustomButtonState extends State<CustomButton> {
   }
 
   Widget _buildLoadingWidget() {
-    double size = (widget.constraints?.minHeight ?? 50) <= 40 ? 20 : 30;
+    final double size = (widget.constraints?.minHeight ?? 50) <= 40 ? 20 : 30;
     return widget.loadingWidget ??
         SizedBox(
           height: size,
@@ -486,19 +484,20 @@ extension SizeX on BoxConstraints? {
 
 // To call the button on Tap manually for loading functionality
 extension GestureDetect on GlobalKey {
-  void get onTap async {
+  Future<void> get onTap async {
     try {
-      RenderBox renderBox = currentContext!.findRenderObject() as RenderBox;
+      final RenderBox renderBox =
+          currentContext!.findRenderObject()! as RenderBox;
 
-      Offset position = renderBox.localToGlobal(Offset.zero);
-      double x = position.dx;
-      double y = position.dy;
+      final position = renderBox.localToGlobal(Offset.zero);
+      final x = position.dx;
+      final y = position.dy;
 
       GestureBinding.instance.handlePointerEvent(
         PointerDownEvent(position: Offset(x, y)),
       ); // trigger button up,
 
-      await Future.delayed(Durations.short1);
+      await Future<void>.delayed(Durations.short1);
       // add delay between up and down button
 
       GestureBinding.instance.handlePointerEvent(

@@ -75,9 +75,8 @@ extension ScopeFunction<T> on T {
 /// ```dart
 /// throwIf(n < 1, () => ArgumentError("n must be greater than 0"));
 /// ```
-void throwIf(bool test, Error Function() errorFactoryFunc) {
-  return throwIfNot(!test, errorFactoryFunc);
-}
+void throwIf(bool test, Error Function() errorFactoryFunc) =>
+    throwIfNot(!test, errorFactoryFunc);
 
 /// Throws an [Error] if predicate [test] is not satisfied
 ///
@@ -88,5 +87,32 @@ void throwIf(bool test, Error Function() errorFactoryFunc) {
 void throwIfNot(bool test, Error Function() errorFactoryFunc) {
   if (!test) {
     throw errorFactoryFunc();
+  }
+}
+
+extension ObjectUtils<T> on T? {
+  /// Returns the result of the [callback] function applied to this value.
+  R? let<R>(R Function(T) callback) {
+    if (this == null) {
+      return null;
+    }
+    return callback.call(this as T);
+  }
+
+  /// Returns the result of the [callback] function applied to this value.
+  T? also(void Function(T) callback) {
+    if (this == null) {
+      return null;
+    }
+    callback.call(this as T);
+    return this;
+  }
+
+  /// cast the object to the specified type [R]
+  R? cast<R>() {
+    if (this is R) {
+      return this as R;
+    }
+    return null;
   }
 }

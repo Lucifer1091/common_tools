@@ -135,7 +135,7 @@ extension StringValidators on String? {
   bool matches({RegExp? regex, String? pattern}) {
     if (isBlank) return false;
 
-    RegExp re = regex ?? RegExp(pattern ?? '');
+    final RegExp re = regex ?? RegExp(pattern ?? '');
     return re.hasMatch(this!);
   }
 
@@ -164,7 +164,8 @@ extension StringValidators on String? {
     } else if (version == '4') {
       if (!matches(regex: Regex.ipv4Maybe)) return false;
 
-      var parts = this!.split('.')..sort((a, b) => int.parse(a) - int.parse(b));
+      final parts = this!.split('.')
+        ..sort((a, b) => int.parse(a) - int.parse(b));
       return int.parse(parts[3]) <= 255;
     }
     return version == '6' && matches(regex: Regex.ipv6);
@@ -239,7 +240,7 @@ extension StringValidators on String? {
 
     final surrogatePairs =
         Regex.surrogatePairsRegExp.allMatches(this!).toList();
-    int len = this!.length - surrogatePairs.length;
+    final int len = this!.length - surrogatePairs.length;
     return len >= min && (max == null || len <= max);
   }
 
@@ -259,7 +260,7 @@ extension StringValidators on String? {
       version = version.toString();
     }
 
-    RegExp? pat = Regex.uuid[version];
+    final RegExp? pat = Regex.uuid[version];
     return pat != null && pat.hasMatch(this!.toUpperCase());
   }
 
@@ -301,7 +302,7 @@ extension StringValidators on String? {
   bool get isCreditCard {
     if (isBlank) return false;
 
-    String sanitized = this!.replaceAll(RegExp('[^0-9]+'), '');
+    final String sanitized = this!.replaceAll(RegExp('[^0-9]+'), '');
 
     if (!sanitized.matches(regex: Regex.creditCard)) return false;
 
@@ -338,7 +339,7 @@ extension StringValidators on String? {
 
     version = version.toString();
 
-    String sanitized = this!.replaceAll(RegExp(r'[\s-]+'), '');
+    final String sanitized = this!.replaceAll(RegExp(r'[\s-]+'), '');
     int checksum = 0;
 
     if (version == '10') {
@@ -356,7 +357,7 @@ extension StringValidators on String? {
     } else if (version == '13') {
       if (!sanitized.matches(regex: Regex.isbn13Maybe)) return false;
 
-      var factor = [1, 3];
+      final factor = [1, 3];
       for (int i = 0; i < 12; i++) {
         checksum += factor[i % 2] * int.parse(sanitized[i]);
       }
@@ -487,7 +488,7 @@ extension StringValidators on String? {
   bool get isStrongPassword {
     if (isBlank) return false;
 
-    var regex = RegExp(
+    final regex = RegExp(
       r'^(?=.*([A-Z]){1,})(?=.*[!@#$&*]{1,})(?=.*[0-9]{1,})(?=.*[a-z]{1,}).{8,100}$',
     );
     return regex.hasMatch(this!);
@@ -545,7 +546,7 @@ extension StringValidators on String? {
       return false;
     }
 
-    Map<String, int> charCount = {};
+    final Map<String, int> charCount = {};
 
     word1!
         .split('')
@@ -749,7 +750,7 @@ extension SanitizerExtensions on String? {
   bool get toBool {
     if (isBlank) return false;
 
-    String? lowerCase = this?.toLowerCase();
+    final String? lowerCase = this?.toLowerCase();
 
     if (this == '1' || lowerCase == 'true' || lowerCase == 'yes') return true;
 
@@ -843,7 +844,7 @@ extension StringConversions on String? {
   String? get toSnakeCase {
     if (isBlank) return this;
 
-    var words = this!.toLowerCase().trim().split(RegExp(r'(\s+)'));
+    final words = this!.toLowerCase().trim().split(RegExp(r'(\s+)'));
     var snakeWord = '';
 
     if (this!.length == 1) return this;
@@ -867,9 +868,9 @@ extension StringConversions on String? {
   String? get toCamelCase {
     if (isBlank) return this;
 
-    var words = this!.trim().split(RegExp(r'(\s+)'));
+    final words = this!.trim().split(RegExp(r'(\s+)'));
 
-    var buffer = StringBuffer()..write(words[0].toLowerCase());
+    final buffer = StringBuffer()..write(words[0].toLowerCase());
 
     for (var i = 1; i < words.length; i++) {
       buffer
@@ -889,7 +890,7 @@ extension StringConversions on String? {
   String? get toTitleCase {
     if (isBlank) return this;
 
-    var words = this!.trim().toLowerCase().split(' ');
+    final words = this!.trim().toLowerCase().split(' ');
     for (var i = 0; i < words.length; i++) {
       words[i] = words[i].substring(0, 1).toUpperCase() + words[i].substring(1);
     }
@@ -965,7 +966,7 @@ extension StringConversions on String? {
   String? get removeLetters {
     if (isBlank) return this;
 
-    var regex = RegExp('([a-zA-Z]+)');
+    final regex = RegExp('([a-zA-Z]+)');
     return this!.replaceAll(regex, '');
   }
 
@@ -983,7 +984,7 @@ extension StringConversions on String? {
   String? get removeNumbers {
     if (isBlank) return this;
 
-    var regex = RegExp(r'(\d+)');
+    final regex = RegExp(r'(\d+)');
     return this!.replaceAll(regex, '');
   }
 
@@ -996,7 +997,7 @@ extension StringConversions on String? {
   String? get onlyNumbers {
     if (isBlank) return this;
 
-    var regex = RegExp('([^0-9]+)');
+    final regex = RegExp('([^0-9]+)');
     return this!.replaceAll(regex, '');
   }
 
@@ -1009,7 +1010,7 @@ extension StringConversions on String? {
   String? get onlyLatin {
     if (isBlank) return this;
 
-    var regex = RegExp(r'([^a-zA-Z\s]+)');
+    final regex = RegExp(r'([^a-zA-Z\s]+)');
     return this!.replaceAll(regex, '');
   }
 
@@ -1024,7 +1025,7 @@ extension StringConversions on String? {
   String? get onlyLetters {
     if (isBlank) return this;
 
-    var regex = RegExp(r'([^α-ωΑ-ΩίϊΐόάέύϋΰήώΊΪΌΆΈΎΫΉΏa-zA-Z\s]+)');
+    final regex = RegExp(r'([^α-ωΑ-ΩίϊΐόάέύϋΰήώΊΪΌΆΈΎΫΉΏa-zA-Z\s]+)');
     return this!.replaceAll(regex, '');
   }
 
@@ -1037,7 +1038,7 @@ extension StringConversions on String? {
   String? get removeSpecial {
     if (isBlank) return this;
 
-    var regex = RegExp(r'[/!@#$%^\-&*()+",.?":{}|<>~_-`]');
+    final regex = RegExp(r'[/!@#$%^\-&*()+",.?":{}|<>~_-`]');
     return this!.replaceAll(regex, '');
   }
 
@@ -1101,7 +1102,7 @@ extension StringConversions on String? {
   String? get stripHtml {
     if (isBlank) return this;
 
-    var regex = RegExp('<[^>]*>');
+    final regex = RegExp('<[^>]*>');
     return this!.replaceAll(regex, '');
   }
 
@@ -1128,8 +1129,8 @@ extension StringConversions on String? {
   String? truncateMiddle(int maxChars) {
     if (isBlank || maxChars <= 0 || maxChars > this!.length) return this;
 
-    int leftChars = (maxChars / 2).ceil();
-    int rightChars = maxChars - leftChars;
+    final int leftChars = (maxChars / 2).ceil();
+    final int rightChars = maxChars - leftChars;
     return '${this!.first(n: leftChars)}...${this!.last(n: rightChars)}';
   }
 
@@ -1142,7 +1143,7 @@ extension StringConversions on String? {
   String? get reverse {
     if (isBlank) return this;
 
-    var letters = this!.split('').toList().reversed;
+    final letters = this!.split('').toList().reversed;
     return letters.reduce((current, next) => current + next);
   }
 
@@ -1225,9 +1226,9 @@ extension StringConversions on String? {
   List<int> findPattern({required String pattern}) {
     if (isBlank) return [];
 
-    List<int> occurrences = [];
+    final List<int> occurrences = [];
     // How many times the pattern can fit the text provided
-    var fitCount = (this!.length / pattern.length).truncate();
+    final fitCount = (this!.length / pattern.length).truncate();
 
     if (fitCount > this!.length) return [];
 
@@ -1295,9 +1296,9 @@ extension StringConversions on String? {
     if (isBlank) return false;
 
     if (this!.length > 1) {
-      var b = this![0].toLowerCase();
+      final b = this![0].toLowerCase();
       for (var i = 1; i < this!.length; i++) {
-        var c = this![i].toLowerCase();
+        final c = this![i].toLowerCase();
         if (c != b) {
           return false;
         }
@@ -1316,7 +1317,7 @@ extension StringConversions on String? {
   String? get shuffle {
     if (isBlank) return this;
 
-    var stringArray = toArray..shuffle();
+    final stringArray = toArray..shuffle();
     return stringArray.join();
   }
 
@@ -1334,7 +1335,7 @@ extension StringConversions on String? {
     if (isBlank) return this;
 
     //var buffer = StringBuffer();
-    var maskChars = mask.toArray;
+    final maskChars = mask.toArray;
     var index = 0;
     var out = '';
     for (final m in maskChars) {
@@ -1485,7 +1486,7 @@ extension StringConversions on String? {
   String? leftOf(String char) {
     if (isBlank) return this;
 
-    int index = this!.indexOf(char);
+    final int index = this!.indexOf(char);
 
     if (index == -1) return null;
 
@@ -1505,7 +1506,7 @@ extension StringConversions on String? {
   String? rightOf(String char) {
     if (isBlank) return this;
 
-    int index = this!.indexOf(char);
+    final int index = this!.indexOf(char);
 
     if (index == -1) return null;
 
@@ -1525,7 +1526,7 @@ extension StringConversions on String? {
   String? get quote {
     if (isBlank) return this;
 
-    String normalizedString = this!.replaceAll('"', '');
+    final String normalizedString = this!.replaceAll('"', '');
 
     return normalizedString.append('"').prepend('"');
   }
@@ -1557,11 +1558,11 @@ extension StringConversions on String? {
 
     if (!this!.contains(pattern)) return '';
 
-    List<String> patternWords = pattern.split(' ');
+    final List<String> patternWords = pattern.split(' ');
 
     if (patternWords.isEmpty) return '';
 
-    int indexOfLastPatternWord = this!.indexOf(patternWords.last);
+    final int indexOfLastPatternWord = this!.indexOf(patternWords.last);
 
     if (patternWords.last.isEmpty) return '';
 
@@ -1584,11 +1585,11 @@ extension StringConversions on String? {
 
     if (!this!.contains(pattern)) return '';
 
-    List<String> patternWords = pattern.split(' ');
+    final List<String> patternWords = pattern.split(' ');
 
     if (patternWords.isEmpty) return '';
 
-    int indexOfFirstPatternWord = this!.indexOf(patternWords.first);
+    final int indexOfFirstPatternWord = this!.indexOf(patternWords.first);
 
     if (patternWords.last.isEmpty) return '';
 
@@ -1681,11 +1682,11 @@ extension StringConversions on String? {
 
     if (!this!.contains(pattern)) return '';
 
-    List<String> patternWords = pattern.split(' ');
+    final List<String> patternWords = pattern.split(' ');
 
     if (patternWords.isEmpty) return '';
 
-    int indexOfLastPatternWord = this!.indexOf(patternWords.last);
+    final int indexOfLastPatternWord = this!.indexOf(patternWords.last);
 
     if (patternWords.last.isEmpty) return '';
 
@@ -1705,11 +1706,11 @@ extension StringConversions on String? {
 
     if (!this!.contains(pattern)) return '';
 
-    List<String> patternWords = pattern.split(' ');
+    final List<String> patternWords = pattern.split(' ');
 
     if (patternWords.isEmpty) return '';
 
-    int indexOfFirstPatternWord = this!.indexOf(patternWords.first);
+    final int indexOfFirstPatternWord = this!.indexOf(patternWords.first);
 
     if (patternWords.last.isEmpty) return '';
 
@@ -1769,11 +1770,11 @@ extension StringConversions on String? {
 
     if (!this!.contains(pattern)) return this;
 
-    List<String> patternWords = pattern.split(' ');
+    final List<String> patternWords = pattern.split(' ');
 
     if (patternWords.isEmpty) return '';
 
-    int indexOfLastPatternWord = this!.indexOf(patternWords.last);
+    final int indexOfLastPatternWord = this!.indexOf(patternWords.last);
 
     if (patternWords.last.isEmpty) return '';
 
@@ -1796,11 +1797,11 @@ extension StringConversions on String? {
 
     if (!this!.contains(pattern)) return this;
 
-    List<String> patternWords = pattern.split(' ');
+    final List<String> patternWords = pattern.split(' ');
 
     if (patternWords.isEmpty) return '';
 
-    int indexOfFirstPatternWord = this!.indexOf(patternWords.first);
+    final int indexOfFirstPatternWord = this!.indexOf(patternWords.first);
 
     if (patternWords.last.isEmpty) return '';
 
@@ -1874,7 +1875,7 @@ extension StringConversions on String? {
   String? replaceFirst(String pattern, String replacement) {
     if (isNull) return this;
 
-    int index = this!.indexOf(pattern);
+    final int index = this!.indexOf(pattern);
 
     if (index == -1) return this!;
 
@@ -1893,7 +1894,7 @@ extension StringConversions on String? {
   String? replaceLast(String pattern, String replacement) {
     if (isNull) return this;
 
-    int index = this!.lastIndexOf(pattern);
+    final int index = this!.lastIndexOf(pattern);
 
     if (index == -1) return this!;
 
@@ -1939,9 +1940,9 @@ extension StringConversions on String? {
     if (isBlank) return this;
 
     if (width <= this!.length) return this;
-    int totalPadding = width - this!.length;
-    int leftPadding = totalPadding ~/ 2;
-    int rightPadding = totalPadding - leftPadding;
+    final int totalPadding = width - this!.length;
+    final int leftPadding = totalPadding ~/ 2;
+    final int rightPadding = totalPadding - leftPadding;
     return fillChar * leftPadding + this! + fillChar * rightPadding;
   }
 }
@@ -1960,8 +1961,8 @@ extension MiscExtensions on String? {
   int readTime({int wordsPerMinute = 200}) {
     if (isBlank) return 0;
 
-    var words = this!.trim().split(RegExp(r'(\s+)'));
-    var magicalNumber = words.length / wordsPerMinute;
+    final words = this!.trim().split(RegExp(r'(\s+)'));
+    final magicalNumber = words.length / wordsPerMinute;
     return (magicalNumber * 100).toInt();
   }
 
@@ -1976,9 +1977,9 @@ extension MiscExtensions on String? {
   int get wordCount {
     if (isBlank) return 0;
 
-    var words = this!.trim().split(RegExp(r'(\s+)'));
+    final words = this!.trim().split(RegExp(r'(\s+)'));
     // We filter out symbols and numbers from the word count
-    var filteredWords = words.where((e) => e.onlyLatin.isNotBlank);
+    final filteredWords = words.where((e) => e.onlyLatin.isNotBlank);
     return filteredWords.length;
   }
 
@@ -1998,7 +1999,7 @@ extension MiscExtensions on String? {
   int get digitCount {
     if (isBlank) return 0;
 
-    RegExp digitsOnly = RegExp(r'\d');
+    final RegExp digitsOnly = RegExp(r'\d');
     return digitsOnly.allMatches(this!).length;
   }
 
@@ -2054,8 +2055,8 @@ extension MiscExtensions on String? {
   List<Map<String, int>> get charOccurrences {
     if (isBlank) return [];
 
-    List<Map<String, int>> occurrences = [];
-    var letters = this!.split('')..sort();
+    final List<Map<String, int>> occurrences = [];
+    final letters = this!.split('')..sort();
     var checkingLetter = letters[0];
     var count = 0;
 
@@ -2086,8 +2087,8 @@ extension MiscExtensions on String? {
 
     if (ignoreSpaces) return this!.replaceAll(' ', '').mostFrequent();
 
-    var occurrences = <String, int>{};
-    var letters = this!.split('')..sort();
+    final occurrences = <String, int>{};
+    final letters = this!.split('')..sort();
     var checkingLetter = letters[0];
     var count = 0;
 
@@ -2838,4 +2839,511 @@ extension Safe1 on String {
 //   /// Returns `true` if [this] is not null, not empty, and does not consist
 //   /// solely of whitespace characters as defined by [String.trim].
 //   bool get isNotNullOrBlank => this?.trim().isNotEmpty ?? false;
+// }
+
+///
+extension RString on String {
+  /// Checks if string is Palindrome.
+  bool get isPalindrome => reversed == this;
+
+  /// Reverse a string
+  String get reversed => split('').reversed.join();
+
+  /// Uppercase first letter inside string and let the others lowercase
+  /// Example:` your name => Your name`
+  String get capitalizeFirst {
+    if (isEmpty) return this;
+    return this[0].toUpperCase() + substring(1).toLowerCase();
+  }
+
+  /// Uppercase first letter inside each word in string
+  /// Example: `your name => Your Name`
+  String get capitalize {
+    if (isEmpty) return this;
+    return split(' ').map((value) => value.capitalizeFirst).join(' ');
+  }
+
+  /// return string lines count
+  int get linesCount => split('\n').length;
+
+  ///  Replaces part of string after the first occurrence of given delimiter with the [replacement] string.
+  ///  If the string does not contain the delimiter, returns [defaultValue] which defaults to the original string.
+  String replaceAfter(
+    String delimiter,
+    String replacement, [
+    String? defaultValue,
+  ]) {
+    final index = indexOf(delimiter);
+    return (index == -1)
+        ? defaultValue ?? this
+        : replaceRange(index + 1, length, replacement);
+  }
+
+  /// Replaces part of string before the first occurrence of given delimiter with the [replacement] string.
+  ///  If the string does not contain the delimiter, returns [missingDelimiterValue!] which defaults to the original string.
+  String replaceBefore(
+    String delimiter,
+    String replacement, [
+    String? defaultValue,
+  ]) {
+    final index = indexOf(delimiter);
+    return (index == -1)
+        ? defaultValue ?? this
+        : replaceRange(0, index, replacement);
+  }
+
+  ///Returns `true` if at least one element matches the given [predicate].
+  /// the [predicate] should have only one character
+  // ignore: use_function_type_syntax_for_parameters
+  bool anyChar(bool predicate(String element)) =>
+      split('').any((s) => predicate(s));
+
+  /// Returns last symbol of string or empty string if `this` is null or empty
+  String get lastOrEmpty => lastOrNull ?? '';
+
+  /// * return the last character
+  /// * return `null` if isEmpty
+  String? get lastOrNull => isEmpty ? null : this[length - 1];
+}
+
+/// convert string to different types
+extension RStringConvert on String {
+  ///Convert  String to List of Characters
+  List<String> toChars() => split('');
+
+  /// convert String to int if is possible
+  /// else throw `FormatException`
+  int toInt() => int.parse(this);
+
+  /// convert String to int if is possible
+  /// else will return null
+  int? toIntOrNull() => int.tryParse(this);
+
+  /// convert String to int if is possible
+  /// else will return value
+  int toIntOr(int value) => toIntOrNull() ?? value;
+
+  /// convert String to `double` if is possible
+  /// else throw `FormatException`
+  double toDouble() => double.parse(this);
+
+  /// convert String to double if is possible
+  /// else will return null
+  double? toDoubleOrNull() => double.tryParse(this);
+
+  /// convert String to double if is possible
+  /// else will return value
+  double toDoubleOr(double value) => toDoubleOrNull() ?? value;
+
+  /// convert String to `DateTime` if is possible
+  /// else throw `FormatException`
+  DateTime toDate() => DateTime.parse(this);
+
+  /// convert String to DateTime if is possible
+  /// else will return null
+  DateTime? toDateOrNull() => DateTime.tryParse(this);
+
+  /// convert String to DateTime if is possible
+  /// else will return value
+  DateTime toDateOr(DateTime value) => toDateOrNull() ?? value;
+
+  /// convert String to DateTime if is possible
+  /// else will return DateTime Now
+  DateTime toDateOrNow() => toDateOrNull() ?? DateTime.now();
+
+  /// convert String to `num` if is possible
+  /// else throw `FormatException`
+  num toNum() => num.parse(this);
+
+  /// convert String to `num` if is possible
+  /// else return `0`
+  num toNumOrZero() => toNumOr(0);
+
+  /// convert String to DateTime if is possible
+  /// else will return null
+  num? toNumOrNull() => num.tryParse(this);
+
+  /// convert String to DateTime if is possible
+  /// else will return value
+  num toNumOr(num value) => toNumOrNull() ?? value;
+}
+
+
+// import 'package:flutter/material.dart';
+// import 'package:fp_extensions/src/regex_pattern.dart';
+// import 'package:intl/intl.dart';
+// import 'package:path/path.dart';
+
+// extension StringNX on String? {
+//   /// isNullOrEmpty
+//   bool get isNullOrEmpty => this == null || this!.isEmpty;
+
+//   /// isNotNullNotEmpty
+//   bool get isNotNullNotEmpty => this != null && this!.isNotEmpty;
+// }
+
+// extension StringX on String {
+//   /// checks whether string is email or not
+//   bool get isEmail => RegExp(RegexPattern.email).hasMatch(this);
+
+//   /// getOrDefault
+//   /// returns default value if blank
+//   String getOrDefault(String value) => isNotBlank ? this : value;
+
+//   /// getOrNull
+//   /// returns null if null or empty
+//   String? getOrNull() => isNotNullNotEmpty ? this : null;
+
+//   /// fileNameFromUri
+//   /// get file name
+//   String get fileNameFromUri {
+//     try {
+//       final url = Uri.parse(this);
+//       return basename(url.toFilePath());
+//     } catch (_) {
+//       return basename(this);
+//     }
+//   }
+
+//   /// converts country code to flag
+//   /// example: 'US'.flag returns 🇺🇸
+//   String get flag {
+//     if (isBlank) return '';
+//     String match(Match match) =>
+//         String.fromCharCode(match.group(0)!.codeUnitAt(0) + 127397);
+//     return toUpperCase().replaceAllMapped(RegExp('[A-Z]'), match);
+//   }
+
+//   /// check isBlank
+//   bool get isBlank => trim().isEmpty;
+
+//   /// checks isNotBlank
+//   bool get isNotBlank => !isBlank;
+
+//   /// capitalize string
+//   String get capitalize => _ReCase(this).capitalize;
+
+//   /// camelCase string
+//   String get camelCase => _ReCase(this).camelCase;
+
+//   /// constantCase string
+//   String get constantCase => _ReCase(this).constantCase;
+
+//   /// sentenceCase string
+//   String get sentenceCase => _ReCase(this).sentenceCase;
+
+//   /// snakeCase string
+//   String get snakeCase => _ReCase(this).snakeCase;
+
+//   /// dotCase string
+//   String get dotCase => _ReCase(this).dotCase;
+
+//   /// paramCase string
+//   String get paramCase => _ReCase(this).paramCase;
+
+//   /// pathCase string
+//   String get pathCase => _ReCase(this).pathCase;
+
+//   /// pascalCase string
+//   String get pascalCase => _ReCase(this).pascalCase;
+
+//   /// headerCase string
+//   String get headerCase => _ReCase(this).headerCase;
+
+//   /// titleCase string
+//   String get titleCase => _ReCase(this).titleCase;
+
+//   /// lowercase
+//   String get lowercase => toLowerCase();
+
+//   /// uppercase
+//   String get uppercase => toUpperCase();
+
+//   /// initials
+//   /// returns the initials of the string
+//   /// if the string is empty, returns an empty string
+//   /// if the string has one word, returns the first two characters
+//   /// if the string has two or more words, returns the first character of the first two words
+//   String get initials => _ReCase(this).initials;
+
+//   /// equalsIgnoreCase
+//   /// equals two strings ignoring case
+//   bool equalsIgnoreCase(String match) {
+//     return toLowerCase() == match.toLowerCase();
+//   }
+
+//   /// compareIgnoreCase
+//   /// compares two strings ignoring case
+//   int compareIgnoreCase(String other) {
+//     return toLowerCase().compareTo(other.toLowerCase());
+//   }
+
+//   /// check given string is valid phone number or not
+//   bool get isValidPhoneNumber {
+//     if (length > 16 || length < 9) return false;
+//     return RegexMatcher.match(this, RegexPattern.phone);
+//   }
+
+//   /// check given string is numeric or not
+//   bool get isNumeric => RegexMatcher.match(this, RegexPattern.number);
+
+//   /// remove whitespace from string
+//   String get removeWhiteSpace {
+//     if (isBlank) return this;
+//     return trim().replaceAll(' ', '');
+//   }
+
+//   /// remove extra space from string
+//   String get removeExtraSpace {
+//     if (isBlank) return this;
+//     return replaceAll(RegExp(r'\s+'), ' ');
+//   }
+
+//   /// remove all \n \r \t from string
+//   String replaceEscaped([String replacement = ' ']) {
+//     if (isBlank) return this;
+//     return trim()
+//         .replaceAll(RegExp(RegexPattern.escapedChar), replacement)
+//         .trim()
+//         .removeExtraSpace;
+//   }
+
+//   /// tries to parse as bool
+//   bool? get toBool {
+//     if (isBlank) return null;
+//     return bool.tryParse(this, caseSensitive: false);
+//   }
+
+//   /// tries to parse int
+//   int? get toInt {
+//     if (isBlank && !isNumeric) return null;
+//     return int.tryParse(this);
+//   }
+
+//   /// tries to parse as double
+//   double? get toDouble {
+//     if (isBlank && !isNumeric) return null;
+//     return double.tryParse(this);
+//   }
+
+//   /// tires to parse as DateTime
+//   /// [inputPattern] is the pattern of the input string
+//   /// [outputPattern] is the pattern of the output string
+//   String parseAndFormat([
+//     String inputPattern = DateFormat.YEAR_NUM_MONTH_DAY,
+//     String outputPattern = DateFormat.YEAR_NUM_MONTH_DAY,
+//     Locale? locale,
+//   ]) {
+//     return DateFormat(outputPattern, locale?.languageCode).format(
+//       DateFormat(inputPattern, locale?.languageCode).parseLoose(this),
+//     );
+//   }
+
+//   /// converts string into DateTime
+//   /// [format] is the pattern of the input string
+//   /// [locale] is the locale of the input string
+//   /// [isUtc] is whether the input string is utc or not
+//   DateTime? parseDateTime({
+//     String? format,
+//     Locale? locale,
+//     bool isUtc = false,
+//   }) {
+//     try {
+//       return DateFormat(format, locale?.languageCode).parse(this, isUtc);
+//     } catch (_) {
+//       return null;
+//     }
+//   }
+
+//   /// checks whether string is url
+//   bool get isUrl => RegexMatcher.match(this, RegexPattern.url);
+
+//   /// checks whether string is uri
+//   bool get isUri => RegexMatcher.match(this, RegexPattern.uri);
+
+//   /// checks whether string is image
+//   bool get isImage => RegexMatcher.match(this, RegexPattern.image);
+
+//   /// checks whether string is video
+//   bool get isVideo => RegexMatcher.match(this, RegexPattern.video);
+
+//   /// checks whether string is audio
+//   bool get isAudio => RegexMatcher.match(this, RegexPattern.audio);
+
+//   /// checks whether string is pdf
+//   bool get isPdf => RegexMatcher.match(this, RegexPattern.pdf);
+
+//   /// checks whether string is text
+//   bool get isTxt => RegexMatcher.match(this, RegexPattern.txt);
+
+//   /// checks whether string is docx
+//   bool get isDocx => RegexMatcher.match(this, RegexPattern.doc);
+
+//   /// checks whether string is xls
+//   bool get isXls => RegexMatcher.match(this, RegexPattern.xls);
+
+//   /// checks whether string is ppt
+//   bool get isPpt => RegexMatcher.match(this, RegexPattern.ppt);
+
+//   /// checks whether string is svg
+//   bool get isSvg => RegexMatcher.match(this, RegexPattern.svg);
+
+//   /// checks whether string is csv
+//   bool get isCsv => RegexMatcher.match(this, RegexPattern.csv);
+
+//   /// checks whether string is xml
+//   bool get isXml => RegexMatcher.match(this, RegexPattern.xml);
+
+//   /// checks whether string is archive
+//   bool get isArchive => RegexMatcher.match(this, RegexPattern.archive);
+
+//   /// checks whether string is json
+//   bool get isJson => RegexMatcher.match(this, RegexPattern.json);
+
+//   /// checks whether string is docx,pdf,xls,ppt, txt.csv,xml,archive or json
+//   bool get isFile =>
+//       isPdf ||
+//       isDocx ||
+//       isPpt ||
+//       isXls ||
+//       isTxt ||
+//       isXml ||
+//       isCsv ||
+//       isArchive ||
+//       isJson;
+// }
+
+// /// use to convert string into different cases
+// ///
+// class _ReCase {
+//   _ReCase(String text) {
+//     originalText = text;
+//     _words = _groupIntoWords(text);
+//   }
+//   final RegExp _upperAlphaRegex = RegExp('[A-Z]');
+
+//   final symbolSet = {' ', '.', '/', '_', r'\', '-'};
+//   late String originalText;
+
+//   late List<String> _words;
+
+//   /// capitalize first letter
+//   String get capitalize => _upperCaseFirstLetter(originalText);
+
+//   /// camelCase
+//   String get camelCase => _getCamelCase();
+
+//   /// CONSTANT_CASE
+//   String get constantCase => _getConstantCase();
+
+//   /// Sentence case
+//   String get sentenceCase => _getSentenceCase();
+
+//   /// snake_case
+//   String get snakeCase => _getSnakeCase();
+
+//   /// dot.case
+//   String get dotCase => _getSnakeCase(separator: '.');
+
+//   /// param-case
+//   String get paramCase => _getSnakeCase(separator: '-');
+
+//   /// path/case
+//   String get pathCase => _getSnakeCase(separator: '/');
+
+//   /// PascalCase
+//   String get pascalCase => _getPascalCase();
+
+//   /// Header-Case
+//   String get headerCase => _getPascalCase(separator: '-');
+
+//   /// Title Case
+//   String get titleCase => _getPascalCase(separator: ' ');
+
+//   /// Initials
+//   /// returns the initials of the string
+//   /// if the string is empty, returns an empty string
+//   /// if the string has one word, returns the first two characters
+//   /// if the string has two or more words, returns the first character of the first two words
+//   String get initials {
+//     if (_words.isEmpty) return '';
+//     if (_words.length == 1) {
+//       return '${_words.first[0].toUpperCase()}${_words.first[1].toUpperCase()}'
+//           .trim();
+//     }
+//     if (_words.length > 2) {
+//       return _words
+//           .getRange(0, 2)
+//           .map((word) => word[0].toUpperCase())
+//           .join()
+//           .trim();
+//     }
+//     return _words.map((word) => word[0].toUpperCase()).join().trim();
+//   }
+
+//   String _getCamelCase({String separator = ''}) {
+//     final words = _words.map(_upperCaseFirstLetter).toList();
+//     if (_words.isNotEmpty) {
+//       words[0] = words[0].toLowerCase();
+//     }
+
+//     return words.join(separator);
+//   }
+
+//   String _getConstantCase({String separator = '_'}) {
+//     final words = _words.map((word) => word.toUpperCase()).toList();
+
+//     return words.join(separator);
+//   }
+
+//   String _getPascalCase({String separator = ''}) {
+//     final words = _words.map(_upperCaseFirstLetter).toList();
+
+//     return words.join(separator);
+//   }
+
+//   String _getSentenceCase({String separator = ' '}) {
+//     final words = _words.map((word) => word.toLowerCase()).toList();
+//     if (_words.isNotEmpty) {
+//       words[0] = _upperCaseFirstLetter(words[0]);
+//     }
+//     return words.join(separator);
+//   }
+
+//   String _getSnakeCase({String separator = '_'}) {
+//     final words = _words.map((word) => word.toLowerCase()).toList();
+//     return words.join(separator);
+//   }
+
+//   String _upperCaseFirstLetter(String word) {
+//     return '${word.substring(0, 1).toUpperCase()}${word.substring(1).toLowerCase()}';
+//   }
+
+//   List<String> _groupIntoWords(String text) {
+//     final sb = StringBuffer();
+//     final words = <String>[];
+//     final isAllCaps = text.toUpperCase() == text;
+
+//     for (var i = 0; i < text.length; i++) {
+//       final char = text[i];
+//       final nextChar = i + 1 == text.length ? null : text[i + 1];
+
+//       if (symbolSet.contains(char)) {
+//         continue;
+//       }
+
+//       sb.write(char);
+
+//       final isEndOfWord = nextChar == null ||
+//           (_upperAlphaRegex.hasMatch(nextChar) && !isAllCaps) ||
+//           symbolSet.contains(nextChar);
+
+//       if (isEndOfWord) {
+//         words.add(sb.toString());
+//         sb.clear();
+//       }
+//     }
+
+//     return words;
+//   }
 // }

@@ -184,19 +184,19 @@ class _BarcodeAndQRScannerState extends State<BarcodeAndQRScanner>
               ],
             ),
           ),
-          const SpaceH30(),
+          const Space.h30(),
           TextButton(
             onPressed: widget.onAddCodeTap,
             child: const Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(Icons.qr_code_2_rounded),
-                SpaceW16(),
+                Space.w16(),
                 Text('Add Code Manually'),
               ],
             ),
           ),
-          const SpaceH30(),
+          const Space.h30(),
         ],
       ).repaintBoundary,
     );
@@ -222,7 +222,7 @@ class _BarcodeAndQRScannerState extends State<BarcodeAndQRScanner>
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const SpaceW24(),
+          const Space.w24(),
           ScannerButton(
             icon: const Icon(
               Icons.arrow_back_ios_new_rounded,
@@ -240,11 +240,11 @@ class _BarcodeAndQRScannerState extends State<BarcodeAndQRScanner>
           ),
           const Spacer(),
           ZoomButtons(controller: controller),
-          const SpaceW12(),
+          const Space.w12(),
           ToggleFlashlightButton(controller: controller),
-          const SpaceW12(),
+          const Space.w12(),
           SwitchCameraButton(controller: controller),
-          const SpaceW12(),
+          const Space.w12(),
         ],
       ),
     );

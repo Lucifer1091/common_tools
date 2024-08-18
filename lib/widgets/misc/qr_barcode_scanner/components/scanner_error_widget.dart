@@ -49,7 +49,7 @@ class ScannerErrorWidget extends StatelessWidget {
                   letterSpacing: 1.5,
                 ),
               ),
-              const SpaceH8(),
+              const Space.h8(),
               Text(
                 error.errorDetails?.message ?? '',
                 style: const TextStyle(fontSize: 16, color: Colors.white),

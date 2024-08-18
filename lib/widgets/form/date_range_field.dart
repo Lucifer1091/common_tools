@@ -192,7 +192,7 @@ class CustomDateRangeField extends StatelessWidget {
           children: [
             TextSpan(text: labelText),
             if (isRequired) ...[
-              const WidgetSpan(child: SpaceW4()),
+              const WidgetSpan(child: Space.w4()),
               TextSpan(
                 text: requiredLabelCharacter,
                 style: context.titleLarge.copyWith(

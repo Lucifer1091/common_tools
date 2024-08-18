@@ -660,7 +660,7 @@ class CancelableCompleter<T> {
         ? [await toReturn]
         : cancelFutures.isNotEmpty
             ? await Future.wait(cancelFutures)
-            : const [];
+            : List<FutureOr<Object?>>.empty();
     return isFuture ? results.first : toReturn;
   }
 }
@@ -690,7 +690,7 @@ class _CancelForwarder<T> {
 Future<void>? _forward(_CancelForwarder<Object?> forwarder) =>
     forwarder._forward();
 
-extension on CancelableCompleter {
+extension CancelableCompleterX<T> on CancelableCompleter<T> {
   void completeErrorIfPending(Object error, StackTrace stackTrace) {
     if (isCompleted) return;
     completeError(error, stackTrace);

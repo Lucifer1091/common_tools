@@ -89,3 +89,24 @@ extension BooleanExtensions on bool? {
     return this != other;
   }
 }
+
+/// * extension for bool
+extension RBool on bool {
+  /// * convert bool to int if true return 1 else 0
+  int toInt() => this ? 1 : 0;
+
+  /// * return reversed bool
+  bool toggle() => !this;
+}
+
+/// Provides extensions for [bool].
+extension BoolScrewdriver on bool {
+  /// Returns opposite of [this]
+  bool get toggled => !this;
+
+  /// Returns 1 if [this] is true and 0 if otherwise.
+  int toInt() => this ? 1 : 0;
+}
+
+/// Generates a random boolean value.
+bool randomBool() => Random().nextBool();

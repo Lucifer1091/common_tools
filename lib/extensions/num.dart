@@ -1,43 +1,70 @@
 // ignore_for_file: constant_identifier_names, non_constant_identifier_names
 part of 'extensions.dart';
 
+/// Check that an integer value is non-zero and positive.
+int checkNonZeroPositive(int value, [String? name, String? message]) {
+  if (value < 1) {
+    throw RangeError.range(value, 1, null, name ?? 'value', message);
+  }
+  return value;
+}
+
 extension NumExtension on num {
   String get compact => NumberFormat.compact().format(this);
 
   String get formatComma => NumberFormat().format(this);
 
   String toSignificantDigits({int digit = 2}) {
-    NumberFormat formatter = NumberFormat('0' * digit);
+    final NumberFormat formatter = NumberFormat('0' * digit);
     return formatter.format(this);
   }
 
+  // String ordinal() {
+  //   final onesPlace = this % 10;
+  //   final tensPlace = ((this / 10).floor()) % 10;
+  //   if (tensPlace == 1) {
+  //     return '${this}th';
+  //   } else {
+  //     switch (onesPlace) {
+  //       case 1:
+  //         return '${this}st';
+  //       case 2:
+  //         return '${this}nd';
+  //       case 3:
+  //         return '${this}rd';
+  //       default:
+  //         return '${this}th';
+  //     }
+  //   }
+  // }
+
   String get ordinal {
-    var specialValue = [11, 12, 13].contains(this % 100);
+    final specialValue = [11, 12, 13].contains(this % 100);
     if (specialValue) {
-      return "${this}th";
+      return '${this}th';
     } else if (toString().length == 1) {
       switch (this) {
         case 0:
-          return "0";
+          return '0';
         case 1:
-          return "${this}st";
+          return '${this}st';
         case 2:
-          return "${this}nd";
+          return '${this}nd';
         case 3:
-          return "${this}rd";
+          return '${this}rd';
         default:
-          return "${this}th";
+          return '${this}th';
       }
     } else {
       switch (this % 10) {
         case 1:
-          return "${this}st";
+          return '${this}st';
         case 2:
-          return "${this}nd";
+          return '${this}nd';
         case 3:
-          return "${this}rd";
+          return '${this}rd';
         default:
-          return "${this}th";
+          return '${this}th';
       }
     }
   }
@@ -51,17 +78,17 @@ extension NumExtension on num {
 
     s = toInt() - (h * 3600) - (m * 60);
 
-    String hourLeft = h.toString().length < 2 ? "0$h" : h.toString();
+    final String hourLeft = h.toString().length < 2 ? '0$h' : h.toString();
 
-    String minuteLeft = m.toString().length < 2 ? "0$m" : m.toString();
+    final String minuteLeft = m.toString().length < 2 ? '0$m' : m.toString();
 
-    String secondsLeft = s.toString().length < 2 ? "0$s" : s.toString();
+    final String secondsLeft = s.toString().length < 2 ? '0$s' : s.toString();
 
     String result;
     if (showSeconds) {
-      result = "$hourLeft:$minuteLeft:$secondsLeft";
+      result = '$hourLeft:$minuteLeft:$secondsLeft';
     } else {
-      result = "$hourLeft:$minuteLeft";
+      result = '$hourLeft:$minuteLeft';
     }
 
     return result;
@@ -69,31 +96,29 @@ extension NumExtension on num {
 
   String getTimeFormatFromDouble() {
     if (this < 0) return '00:00';
-    int flooredValue = floor();
-    num decimalValue = this - flooredValue;
-    String hourValue = flooredValue.toString();
-    String minuteString = _getMinuteString(decimalValue);
+    final int flooredValue = floor();
+    final num decimalValue = this - flooredValue;
+    final String hourValue = flooredValue.toString();
+    final String minuteString = _getMinuteString(decimalValue);
 
     return '$hourValue:$minuteString';
   }
 
   String getTimeStringFromDouble() {
     if (this < 0) return '00:00';
-    int flooredValue = floor();
-    num decimalValue = this - flooredValue;
-    String hourValue = _getHourString(flooredValue);
-    String minuteString = _getMinuteString(decimalValue);
+    final int flooredValue = floor();
+    final num decimalValue = this - flooredValue;
+    final String hourValue = _getHourString(flooredValue);
+    final String minuteString = _getMinuteString(decimalValue);
 
     return '$hourValue:$minuteString';
   }
 
-  String _getMinuteString(num decimalValue) {
-    return '${(decimalValue * 60).toInt()}'.padLeft(2, '0');
-  }
+  String _getMinuteString(num decimalValue) =>
+      '${(decimalValue * 60).toInt()}'.padLeft(2, '0');
 
-  String _getHourString(int flooredValue) {
-    return '${flooredValue % 24}'.padLeft(2, '0');
-  }
+  String _getHourString(int flooredValue) =>
+      '${flooredValue % 24}'.padLeft(2, '0');
 
   /// Converts a file size (in bytes) to a human-readable string with appropriate suffix (Bytes, KB, MB, GB, TB).
   ///
@@ -112,9 +137,9 @@ extension NumExtension on num {
   /// String readableSize = fileSize.fileSizeWithSuffix(dp: 2); // "1.00 MB"
   /// ```
   String fileSizeWithSuffix({int dp = 0}) {
-    if (this <= 0) return "0 bytes";
-    const suffixes = ["bytes", "KB", "MB", "GB", "TB"];
-    var i = (math.log(this) / math.log(1024)).floor();
+    if (this <= 0) return '0 bytes';
+    const suffixes = ['bytes', 'KB', 'MB', 'GB', 'TB'];
+    final i = (math.log(this) / math.log(1024)).floor();
     return '${(this / math.pow(1024, i)).toStringAsFixed(dp)} ${suffixes[i]}';
   }
 
@@ -137,7 +162,7 @@ extension NumExtension on num {
   /// ```
   double fileSize({SizeUnit unit = SizeUnit.MB}) {
     if (this <= 0) return 0;
-    return (this / math.pow(1000, unit.id));
+    return this / math.pow(1000, unit.id);
   }
 
   /// Returns a [bool] if [this] value is between (including) the two
@@ -179,7 +204,7 @@ extension HumanReadableWords on num {
     'six',
     'seven',
     'eight',
-    'nine'
+    'nine',
   ];
 
   static final List<String> _teens = [
@@ -192,7 +217,7 @@ extension HumanReadableWords on num {
     'sixteen',
     'seventeen',
     'eighteen',
-    'nineteen'
+    'nineteen',
   ];
 
   static final List<String> _tens = [
@@ -205,7 +230,7 @@ extension HumanReadableWords on num {
     'sixty',
     'seventy',
     'eighty',
-    'ninety'
+    'ninety',
   ];
 
   static final List<String> _thousands = [
@@ -215,7 +240,7 @@ extension HumanReadableWords on num {
     'billion',
     'trillion',
     'quadrillion',
-    'quintillion'
+    'quintillion',
   ];
 
   /// Converts the number to a human-readable form as words.
@@ -246,7 +271,10 @@ extension HumanReadableWords on num {
     while (integerPart > 0) {
       if (integerPart % 1000 != 0) {
         words = _convertLessThanThousand(
-                integerPart % 1000, thousandCounter > 0, useAnd) +
+              integerPart % 1000,
+              thousandCounter > 0,
+              useAnd,
+            ) +
             (thousandCounter > 0 ? ' ${_thousands[thousandCounter]} ' : '') +
             words;
       }
@@ -256,7 +284,7 @@ extension HumanReadableWords on num {
 
     String fractionalWords = '';
     if (this is double) {
-      String fractionalPart = toString().split('.').last;
+      final String fractionalPart = toString().split('.').last;
       if (int.parse(fractionalPart) > 0) {
         fractionalWords =
             ' point ${fractionalPart.split('').map((digit) => _units[int.parse(digit)]).join(' ')}';
@@ -267,7 +295,10 @@ extension HumanReadableWords on num {
   }
 
   String _convertLessThanThousand(
-      int number, bool isThousandGroup, bool useAnd) {
+    int number,
+    bool isThousandGroup,
+    bool useAnd,
+  ) {
     String words = '';
 
     if (number >= 100) {
@@ -348,7 +379,7 @@ extension DoubleExtensions on double? {
   /// Size squareSize = 50.0.squareSizeBox;
   /// print('Square Size: $squareSize'); // Output: Size(50.0, 50.0)
   /// ```
-  SizedBox get squareSizeBox => SizedBox(width: this!, height: this!);
+  SizedBox get squareSizeBox => SizedBox(width: this, height: this);
 
   /// Returns a square [Size] with the current value as both width and height.
   ///
@@ -415,13 +446,13 @@ extension IntNullableExtensions on int? {
   /// ```dart
   /// 5.months
   /// ```
-  Duration get month => Duration(days: (validate() * 30));
+  Duration get month => Duration(days: validate() * 30);
 
   /// Returns years duration
   /// ```dart
   /// 5.years
   /// ```
-  Duration get years => Duration(days: (validate() * 365));
+  Duration get years => Duration(days: validate() * 365);
 
   /// Returns Size
   Size get size => Size(validate().toDouble(), validate().toDouble());
@@ -460,7 +491,9 @@ extension IntNullableExtensions on int? {
     if (toString().trim().length < n) {
       charCount = toString().trim().length;
     }
-    return (toString().trim().substring(toString().trim().length - charCount))
+    return toString()
+            .trim()
+            .substring(toString().trim().length - charCount)
             .toInt() ??
         0;
   }
@@ -507,19 +540,19 @@ extension IntNullableExtensions on int? {
     String weekName = '';
 
     if (this == 1) {
-      return weekName = isHalfName ? "Mon" : "Monday";
+      return weekName = isHalfName ? 'Mon' : 'Monday';
     } else if (this == 2) {
-      return weekName = isHalfName ? "Tue" : "Tuesday";
+      return weekName = isHalfName ? 'Tue' : 'Tuesday';
     } else if (this == 3) {
-      return weekName = isHalfName ? "Wed" : "Wednesday";
+      return weekName = isHalfName ? 'Wed' : 'Wednesday';
     } else if (this == 4) {
-      return weekName = isHalfName ? "Thu" : "Thursday";
+      return weekName = isHalfName ? 'Thu' : 'Thursday';
     } else if (this == 5) {
-      return weekName = isHalfName ? "Fri" : "Friday";
+      return weekName = isHalfName ? 'Fri' : 'Friday';
     } else if (this == 6) {
-      return weekName = isHalfName ? "Sat" : "Saturday";
+      return weekName = isHalfName ? 'Sat' : 'Saturday';
     } else if (this == 7) {
-      return weekName = isHalfName ? "Sun" : "Sunday";
+      return weekName = isHalfName ? 'Sun' : 'Sunday';
     }
     return weekName;
   }
@@ -553,7 +586,7 @@ extension NumExt on num? {
   /// Get list of random numbers.
   List<num> randomList({int min = 0, int max = 100}) {
     if (isNullOrEmpty) return [];
-    var result = <num>[];
+    final result = <num>[];
     for (var i = 0; i < (this ?? 0); i++) {
       result.add(math.Random().nextInt(max - min) + min);
     }
@@ -574,33 +607,24 @@ extension NumExt on num? {
 }
 
 extension NumExtension2 on num {
-  double asPercentageInDecimal() {
-    return validate() / 100.0;
-  }
+  double asPercentageInDecimal() => validate() / 100.0;
 
-  double calculatePercentageOf(double percentage) {
-    return (validate() * percentage) / 100.0;
-  }
+  double calculatePercentageOf(double percentage) =>
+      (validate() * percentage) / 100.0;
 }
 
 extension DoubleExtension on double {
-  double asPercentageInDecimal() {
-    return validate() / 100.0;
-  }
+  double asPercentageInDecimal() => validate() / 100.0;
 
-  double calculatePercentageOf(double percentage) {
-    return (validate() * percentage) / 100.0;
-  }
+  double calculatePercentageOf(double percentage) =>
+      (validate() * percentage) / 100.0;
 }
 
 extension IntExtension on int {
-  int asPercentageInDecimal() {
-    return validate() ~/ 100.0;
-  }
+  int asPercentageInDecimal() => validate() ~/ 100.0;
 
-  int calculatePercentageOf(double percentage) {
-    return (validate() * percentage) ~/ 100;
-  }
+  int calculatePercentageOf(double percentage) =>
+      (validate() * percentage) ~/ 100;
 }
 
 extension NumTimeExtension<T extends num> on T {
@@ -621,7 +645,8 @@ extension NumTimeExtension<T extends num> on T {
 
   /// Returns a Duration represented in milliseconds
   Duration get milliseconds => Duration(
-      microseconds: (this * Duration.microsecondsPerMillisecond).toInt());
+        microseconds: (this * Duration.microsecondsPerMillisecond).toInt(),
+      );
 
   /// Returns a Duration represented in microseconds
   Duration get microseconds =>
@@ -643,12 +668,10 @@ extension IntSC on int {
   /// 3.rangeTo(1); // [3, 2, 1]
   /// ```
   Iterable<int> rangeTo(int n) {
-    var count = (n - this).abs() + 1;
-    var direction = (n - this).sign;
+    final count = (n - this).abs() + 1;
+    final direction = (n - this).sign;
     var i = this - direction;
-    return Iterable.generate(count, (int index) {
-      return i += direction;
-    });
+    return Iterable.generate(count, (int index) => i += direction);
   }
 
   /// Creates an [Iterable<int>] that contains all values from current integer
@@ -683,9 +706,7 @@ extension IntSC on int {
   /// ```dart
   /// 200.microseconds; // Duration(microseconds: 200);
   /// ```
-  Duration get microseconds {
-    return Duration(microseconds: this);
-  }
+  Duration get microseconds => Duration(microseconds: this);
 
   /// Returns a [Duration] representing the current value as milliseconds.
   ///
@@ -693,9 +714,7 @@ extension IntSC on int {
   /// ```dart
   /// 1000.milliseconds; // Duration(milliseconds: 1000);
   /// ```
-  Duration get milliseconds {
-    return Duration(milliseconds: this);
-  }
+  // Duration get milliseconds => Duration(milliseconds: this);
 
   /// Returns a [Duration] representing the current value as seconds.
   ///
@@ -703,9 +722,7 @@ extension IntSC on int {
   /// ```dart
   /// 30.seconds; // Duration(seconds: 1000);
   /// ```
-  Duration get seconds {
-    return Duration(seconds: this);
-  }
+  Duration get seconds => Duration(seconds: this);
 
   /// Returns a [Duration] representing the current value as minutes.
   ///
@@ -713,9 +730,7 @@ extension IntSC on int {
   /// ```dart
   /// 15.minutes; // Duration(minutes: 15);
   /// ```
-  Duration get minutes {
-    return Duration(minutes: this);
-  }
+  Duration get minutes => Duration(minutes: this);
 
   /// Returns a [Duration] representing the current value as hours.
   ///
@@ -723,9 +738,7 @@ extension IntSC on int {
   /// ```dart
   /// 24.hours; // Duration(hours: 24);
   /// ```
-  Duration get hours {
-    return Duration(hours: this);
-  }
+  Duration get hours => Duration(hours: this);
 
   /// Returns a [Duration] representing the current value as days.
   ///
@@ -733,9 +746,7 @@ extension IntSC on int {
   /// ```dart
   /// 14.days; // Duration(days: 14);
   /// ```
-  Duration get days {
-    return Duration(days: this);
-  }
+  Duration get days => Duration(days: this);
 
   /// Returns a [bool] if [this] value is between (including) the two
   /// numeric values [first] and [second].
@@ -796,10 +807,10 @@ extension NumberUtils on num {
   /// If [precision] is not specified, the default is 2.
 
   String toCurrencyString([String delimiter = ',', int precision = 2]) {
-    var result1 = toPrecision(precision);
-    var parts = result1.split('.');
-    var integer = parts[0];
-    var decimal = parts[1];
+    final result1 = toPrecision(precision);
+    final parts = result1.split('.');
+    final integer = parts[0];
+    final decimal = parts[1];
     var result = '';
     var count = 0;
     for (var i = integer.length - 1; i >= 0; i--) {
@@ -881,71 +892,71 @@ extension NumberUtils on num {
   /// Get the digits after a [substring] in the number
   /// Returns the digits after a [substring] in the number
   num digitsAfter(num substring) {
-    var index = toString().indexOf(substring.toString());
+    final index = toString().indexOf(substring.toString());
     if (index == -1) return 0;
-    var result = toString().substring(index + 1);
+    final result = toString().substring(index + 1);
     return int.parse(result);
   }
 
   /// Get the digits before a [substring] in the number
   /// Returns the digits before a [substring] in the number
   num digitsBefore(num substring) {
-    var index = toString().indexOf(substring.toString());
+    final index = toString().indexOf(substring.toString());
     if (index == -1) return 0;
-    var result = toString().substring(0, index);
+    final result = toString().substring(0, index);
     return int.parse(result);
   }
 
   /// Get the digits between [start] and [end] in the number
   /// Returns the digits between [start] and [end] in the number
   num digitsBetween(num start, num end) {
-    var startIndex = toString().indexOf(start.toString());
+    final startIndex = toString().indexOf(start.toString());
     if (startIndex == -1) return 0;
-    var endIndex = toString().indexOf(end.toString(), startIndex + 1);
+    final endIndex = toString().indexOf(end.toString(), startIndex + 1);
     if (endIndex == -1) return 0;
-    var result = toString().substring(startIndex + 1, endIndex);
+    final result = toString().substring(startIndex + 1, endIndex);
     return int.parse(result);
   }
 
   /// Get the digits before the first occurrence of [substring] in the number
   /// Returns the digits before the first occurrence of [substring] in the number
   num digitsBeforeFirst(num substring) {
-    var index = toString().indexOf(substring.toString());
+    final index = toString().indexOf(substring.toString());
     if (index == -1) return 0;
-    var result = toString().substring(0, index);
+    final result = toString().substring(0, index);
     return int.parse(result);
   }
 
   /// Get the digits after the first occurrence of [substring] in the number
   /// Returns the digits after the first occurrence of [substring] in the number
   num digitsAfterFirst(num substring) {
-    var index = toString().indexOf(substring.toString());
+    final index = toString().indexOf(substring.toString());
     if (index == -1) return 0;
-    var result = toString().substring(index + 1);
+    final result = toString().substring(index + 1);
     return int.parse(result);
   }
 
   /// Get the digits before the last occurrence of [substring] in the number
   /// Returns the digits before the last occurrence of [substring] in the number
   num digitsBeforeLast(num substring) {
-    var index = toString().lastIndexOf(substring.toString());
+    final index = toString().lastIndexOf(substring.toString());
     if (index == -1) return 0;
-    var result = toString().substring(0, index);
+    final result = toString().substring(0, index);
     return int.parse(result);
   }
 
   /// Get the digits after the last occurrence of [substring] in the number
   /// Returns the digits after the last occurrence of [substring] in the number
   num digitsAfterLast(num substring) {
-    var index = toString().lastIndexOf(substring.toString());
+    final index = toString().lastIndexOf(substring.toString());
     if (index == -1) return 0;
-    var result = toString().substring(index + 1);
+    final result = toString().substring(index + 1);
     return int.parse(result);
   }
 
   /// Get the lorem ipsum text of [this] words.
   String loremIpsum() {
-    var words = [
+    final words = [
       'lorem',
       'ipsum',
       'dolor',
@@ -1014,7 +1025,7 @@ extension NumberUtils on num {
       'anim',
       'id',
       'est',
-      'laborum'
+      'laborum',
     ];
 
     var result = '';
@@ -1026,7 +1037,7 @@ extension NumberUtils on num {
 
   /// Get list of random numbers.
   List<num> randomList({int min = 0, int max = 100}) {
-    var result = <num>[];
+    final result = <num>[];
     for (var i = 0; i < this; i++) {
       result.add(Random().nextInt(max - min) + min);
     }
@@ -1048,16 +1059,20 @@ extension NumExtension3<T extends num> on T {
 
   /// Returns `true` if `this` is between the given [min] (inclusive) and [max] (exclusive).
   bool between(num min, num max) {
-    assert(min <= max,
-        'Invalid bounds: $min and $max, min cannot be greater than max');
+    assert(
+      min <= max,
+      'Invalid bounds: $min and $max, min cannot be greater than max',
+    );
     return min <= this && this < max;
   }
 
   /// Returns `true` if this number is outside the given range of [min] (exclusive) and
   /// [max] (exclusive).
   bool outside(num min, num max) {
-    assert(min <= max,
-        'Invalid bounds: $min and $max, min cannot be greater than max');
+    assert(
+      min <= max,
+      'Invalid bounds: $min and $max, min cannot be greater than max',
+    );
     return this < min || this > max;
   }
 }
@@ -1117,4 +1132,393 @@ extension NumExtension3<T extends num> on T {
 //
 //   /// Returns [Duration] of [this] in microseconds.
 //   Duration get microseconds => Duration(microseconds: this);
+// }
+
+///
+extension RNum on num {
+  ///
+  num get half => this / 2;
+
+  ///
+  num get third => this / 3;
+
+  ///
+  num get quarter => this / 4;
+
+  ///
+  num get fifth => this / 4;
+}
+
+final NumberFormat _formatter = NumberFormat('0.##')..minimumFractionDigits = 0;
+
+/// Provides extensions for [double].
+extension DoubleScrewdriver on double {
+  /// Returns to if [this] has .00000 fraction points
+  bool get isWhole =>
+      this != double.infinity &&
+      this != double.negativeInfinity &&
+      !isNaN &&
+      truncate() == this;
+
+  /// Rounds value [precision] number of fraction points.
+  /// Example:
+  /// 2.1234567890.roundToPrecision(0)=> 2
+  /// 2.1234567890.roundToPrecision(1)=> 2.1
+  /// 2.1234567890.roundToPrecision(2)=> 2.12
+  /// 2.1234567890.roundToPrecision(3)=> 2.123
+  double roundToPrecision(int nthPosition) {
+    if (isNaN || isInfinite || this == double.negativeInfinity) return this;
+    _formatter.maximumFractionDigits = nthPosition;
+    return double.parse(_formatter.format(this));
+  }
+
+  /// Returns true if [this] is close to [other] within [precision].
+  /// By default, [precision] is set to 1.0e-8 which is 0.00000001 which makes
+  /// it suitable for most of the cases.
+  bool isCloseTo(double other, {double precision = 1.0e-8}) =>
+      (this - other).abs() <= precision;
+}
+
+/// Generates a non-negative random floating point value uniformly distributed
+/// in the range from 0.0, inclusive, to 1.0, exclusive.
+double randomDouble({double? max}) => Random().nextDouble() * (max ?? 1);
+
+/// Provides extensions for [int].
+extension IntScrewdriver<T> on int {
+  // /// Returns true if [this] represents a leap year
+  // bool get isLeapYear => checkLeapYear(this);
+
+  /// Returns [Duration] equal to [this] no. of weeks
+  Duration get weeks => Duration(days: this * 7);
+
+  /// Returns [DateTime] with date that is [this] weeks ago
+  DateTime get weeksAgo => DateTime.now() - Duration(days: this * 7);
+
+  /// Returns [DateTime] with date that is [this] weeks after
+  DateTime get weeksAfter => DateTime.now() + Duration(days: this * 7);
+
+  /// Returns [Duration] equal to [this] no. of days
+  Duration get days => Duration(days: this);
+
+  /// Returns [DateTime] with date that is [this] days ago
+  DateTime get daysAgo => DateTime.now() - Duration(days: this);
+
+  /// Returns [DateTime] with date that is [this] days after
+  DateTime get daysAfter => DateTime.now() + Duration(days: this);
+
+  /// Returns [Duration] equal to [this] no. of hours
+  Duration get hours => Duration(hours: this);
+
+  /// Returns [DateTime] with time that is [this] hours ago
+  DateTime get hoursAgo => DateTime.now() - Duration(hours: this);
+
+  /// Returns [DateTime] with time that is [this] hours after
+  DateTime get hoursAfter => DateTime.now() + Duration(hours: this);
+
+  /// Returns [Duration] equal to [this] no. of minutes
+  Duration get minutes => Duration(minutes: this);
+
+  /// Returns [DateTime] with time that is [this] minutes ago
+  DateTime get minutesAgo => DateTime.now() - Duration(minutes: this);
+
+  /// Returns [DateTime] with time that is [this] minutes after
+  DateTime get minutesAfter => DateTime.now() + Duration(minutes: this);
+
+  /// Returns [Duration] equal to [this] no. of seconds
+  Duration get seconds => Duration(seconds: this);
+
+  /// Returns [Duration] equal to [this] no. of milliseconds
+  Duration get milliseconds => Duration(milliseconds: this);
+
+  /// Returns [Duration] equal to [this] no. of microseconds
+  Duration get microseconds => Duration(microseconds: this);
+
+  /// Returns no. of digits
+  /// e.g.  3.length   // returns 1
+  ///      21.length   // returns 2
+  ///     541.length  // returns 3
+  int get length => toString().length;
+
+  /// Returns list of digits of [this]
+  /// e.g   12345.digits    // returns [1, 2, 3, 4, 5]
+  /// e.g   8564.digits    // returns [8, 5, 6, 4]
+  List<int> get digits => toString().split('').map(int.parse).toList();
+
+  /// Returns true if [this] can be completely divisible by [divider]
+  bool isDivisibleBy(int divider) => this % divider == 0;
+
+  /// Returns true if [this] can be completely divisible
+  /// by all of the [dividers].
+  bool isDivisibleByAll(List<int> dividers) =>
+      dividers.every((divider) => this % divider == 0);
+
+  /// runs [func] for [this] number of times.
+  /// This is irrespective of the sign of [this]. the for loop will always
+  /// run from 1 to absolute value of [this].
+  ///
+  /// Returns [List] of type [T] where T is the return type of [func]
+  List<T> repeat(T Function(int count) func) =>
+      [for (var i = 1; i <= abs(); i++) func(i)];
+
+  /// Returns true for non-zero values just like C language.
+  /// e.g
+  ///       1.asBool      // returns true
+  ///       0.asBool      // returns false
+  ///     452.asBool      // returns true
+  bool get asBool => this != 0;
+
+  /// Returns [int] as string which has a zero appended as prefix if [this]
+  /// is a single digit value.
+  String twoDigits() => this < 10 ? '0$this' : toString();
+}
+
+/// Generates a non-negative random integer uniformly distributed in the range
+/// rom 0, inclusive, to [max], exclusive.
+/// default [max] is 1_000_000
+int randomInt({int? max}) => Random().nextInt(max ?? 1000000);
+
+/*
+ * Copyright 2020 Idan Ayalon. All rights reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+extension IntExtensions on int {
+  /// Return the min if this number is smaller then minimum
+  /// Return the max if this number is bigger the the maximum
+  /// Return this number if it's between the range
+  int inRangeOf(int min, int max) {
+    if (min.isNull || max.isNull) throw Exception('min or max cannot be null');
+    if (min > max) throw ArgumentError('min must be smaller the max');
+
+    if (this < min) return min;
+    if (this > max) return max;
+    return this;
+  }
+
+  // ignore: unnecessary_null_comparison
+  bool get isNull => this == null;
+
+  /// Returns the absolute value
+  int get absolute => abs();
+
+  /// Returns number of digits in this number
+  int get numberOfDigits => toString().length;
+
+  /// Returns if the number is even
+  bool get isEven => this % 2 == 0;
+
+  /// Returns if the number is odd
+  bool get isOdd => this % 2 != 0;
+
+  /// Returns if the number is positive
+  bool get isPositive => this > 0;
+
+  /// Returns if the number is negative
+  bool get isNegative => this < 0;
+
+  /// Returns tenth of the number
+  double get tenth => this / 10;
+
+  /// Returns fourth of the number
+  double get fourth => this / 4;
+
+  /// Returns third of the number
+  double get third => this / 3;
+
+  /// Returns half of the number
+  double get half => this / 2;
+
+  /// Return this number time two
+  int get doubled => this * 2;
+
+  /// Return this number time three
+  int get tripled => this * 3;
+
+  /// Return this number time four
+  int get quadrupled => this * 4;
+
+  /// Return squared number
+  int get squared => this * this;
+
+  /// Convert this integer into boolean.
+  ///
+  /// Returns `true` if this integer is greater than *0*.
+  bool get asBool => this > 0;
+}
+
+// extension RangeExtensions on int {
+//   /// Returns a sequence of integer, starting from [this],
+//   /// increments by [step] and ends at [end]
+//   Iterable<int> until(int end, {int step = 1}) sync* {
+//     if (step == 0) {
+//       // throw RException.steps();
+//     }
+
+//     int currentNumber = this;
+
+//     if (step > 0) {
+//       while (currentNumber < end) {
+//         yield currentNumber;
+//         currentNumber += step;
+//       }
+//     } else {
+//       while (currentNumber > end) {
+//         yield currentNumber;
+//         currentNumber += step;
+//       }
+//     }
+//   }
+// }
+
+/// Extensions for iterables
+extension IterableNumSumExtension<T extends num> on Iterable<T> {
+  /// Returns the sum of all elements in the collection.
+  T sum() {
+    num sum = 0.0;
+    for (final current in this) {
+      sum += current;
+    }
+    if (T == int) {
+      return sum.toInt() as T;
+    } else {
+      return sum.toDouble() as T;
+    }
+  }
+}
+
+extension IterableNumAverageExtension<T extends num> on Iterable<T> {
+  /// Returns the average of all elements in the collection.
+  double average() {
+    var count = 0;
+    num sum = 0;
+    for (final current in this) {
+      sum += current;
+      count++;
+    }
+
+    if (count == 0) {
+      throw StateError('No elements in collection');
+    } else {
+      return sum / count;
+    }
+  }
+}
+
+extension IterableNumMedianExtension<T extends num> on Iterable<T> {
+  /// Returns the median of the elements in this collection.
+  ///
+  /// Empty collections throw an error.
+  double median() {
+    if (length == 0) throw StateError('No elements in collection');
+    final values = toList()..sort();
+    final size = values.length;
+    if (size.isOdd) {
+      return values[(size / 2).floor()].toDouble();
+    } else {
+      final x = values[(size / 2).floor()];
+      final y = values[(size / 2).floor() - 1];
+      return (x + y) / 2;
+    }
+  }
+}
+
+
+// import 'dart:typed_data';
+
+// import 'package:dartx/dartx.dart';
+
+// extension NumCoerceInExtension<T extends num> on T {
+//   /// Ensures that this value lies in the specified range
+//   /// [minimumValue]..[maximumValue].
+//   ///
+//   /// Return this value if it's in the range, or [minimumValue] if this value
+//   /// is less than [minimumValue], or [maximumValue] if this value is greater
+//   /// than [maximumValue].
+//   ///
+//   /// ```dart
+//   /// print(10.coerceIn(1, 100)) // 10
+//   /// print(0.coerceIn(1, 100)) // 1
+//   /// print(500.coerceIn(1, 100)) // 100
+//   /// 10.coerceIn(100, 0) // will fail with ArgumentError
+//   /// ````
+//   T coerceIn(T minimumValue, [T? maximumValue]) {
+//     if (maximumValue != null && minimumValue > maximumValue) {
+//       throw ArgumentError(
+//         'Cannot coerce value to an empty range: '
+//         'maximum $maximumValue is less than minimum $minimumValue.',
+//       );
+//     }
+//     if (this < minimumValue) return minimumValue;
+//     if (maximumValue != null && this > maximumValue) return maximumValue;
+//     return this;
+//   }
+// }
+
+// extension NumCoerceAtLeastExtension<T extends num> on T {
+//   /// Ensures that this value is not less than the specified [minimumValue].
+//   ///
+//   /// Return this value if it's greater than or equal to the [minimumValue]
+//   /// or the [minimumValue] otherwise.
+//   ///
+//   /// ```dart
+//   /// print(10.coerceAtLeast(5)) // 10
+//   /// print(10.coerceAtLeast(20)) // 20
+//   /// ```
+//   T coerceAtLeast(T minimumValue) => this < minimumValue ? minimumValue : this;
+// }
+
+// extension NumCoerceAtMostExtension<T extends num> on T {
+//   /// Ensures that this value is not greater than the specified [maximumValue].
+//   ///
+//   /// Return this value if it's less than or equal to the [maximumValue] or the
+//   /// [maximumValue] otherwise.
+//   ///
+//   /// ```dart
+//   /// print(10.coerceAtMost(5)) // 5
+//   /// print(10.coerceAtMost(20)) // 10
+//   /// ```
+//   T coerceAtMost(T maximumValue) => this > maximumValue ? maximumValue : this;
+// }
+
+// extension NumCoerceInRangeExtension<T extends num> on T {
+//   /// Returns true if in the [range].
+//   bool inRange(Range<num> range) => range.contains(this);
+// }
+
+// extension NumBetweenExtension<T extends num> on T {
+//   /// Returns true if between [first] and [endInclusive].
+//   ///
+//   /// Alias for `first.rangeTo(endInclusive).contains(this)`
+//   bool between(num first, num endInclusive) =>
+//       first.rangeTo(endInclusive).contains(this);
+// }
+
+// extension IntToBytesExtension<T extends int> on T {
+//   /// Converts this value to binary form.
+//   Uint8List toBytes([Endian endian = Endian.big]) {
+//     final data = ByteData(8);
+//     data.setInt64(0, this, endian);
+//     return data.buffer.asUint8List();
+//   }
+// }
+
+// extension DoubleToBytesExtension<T extends double> on T {
+//   /// Converts this value to binary form.
+//   Uint8List toBytes([Endian endian = Endian.big]) {
+//     final data = ByteData(8);
+//     data.setFloat64(0, this, endian);
+//     return data.buffer.asUint8List();
+//   }
+// }
+
+// extension IntToCharExtension<T extends int> on T {
+//   /// Converts this [int] value to character.
+//   String toChar() => String.fromCharCode(this);
 // }

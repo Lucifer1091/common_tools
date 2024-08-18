@@ -3,6 +3,48 @@ import 'package:flutter/material.dart';
 import 'spaces.dart';
 
 class IconTextButton extends StatelessWidget {
+  const IconTextButton({
+    super.key,
+    this.icon,
+    this.selectedIcon,
+    this.image,
+    this.label,
+    this.onTap,
+    this.onTapDown,
+    this.toolTip,
+    this.mouseCursor = SystemMouseCursors.click,
+    this.enableFeedback = true,
+    this.labelStyle,
+    this.disabledIconColor,
+    this.disabledTextColor,
+    this.disabledImageColorFilter = const ColorFilter.matrix(<double>[
+      0.2126,
+      0.7152,
+      0.0722,
+      0,
+      0,
+      0.2126,
+      0.7152,
+      0.0722,
+      0,
+      0,
+      0.2126,
+      0.7152,
+      0.0722,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+    ]),
+    this.hoverColor,
+    this.highlightColor,
+    this.radius,
+    this.isSelected = false,
+  });
+
   /// Icon to display in button. Leave null to hide icon.
   final Widget? icon;
 
@@ -68,48 +110,6 @@ class IconTextButton extends StatelessWidget {
   /// Defaults to the [InkResponse] radius
   final double? radius;
 
-  const IconTextButton({
-    super.key,
-    this.icon,
-    this.selectedIcon,
-    this.image,
-    this.label,
-    this.onTap,
-    this.onTapDown,
-    this.toolTip,
-    this.mouseCursor = SystemMouseCursors.click,
-    this.enableFeedback = true,
-    this.labelStyle,
-    this.disabledIconColor,
-    this.disabledTextColor,
-    this.disabledImageColorFilter = const ColorFilter.matrix(<double>[
-      0.2126,
-      0.7152,
-      0.0722,
-      0,
-      0,
-      0.2126,
-      0.7152,
-      0.0722,
-      0,
-      0,
-      0.2126,
-      0.7152,
-      0.0722,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      0,
-    ]),
-    this.hoverColor,
-    this.highlightColor,
-    this.radius,
-    this.isSelected = false,
-  });
-
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
@@ -149,7 +149,7 @@ class IconTextButton extends StatelessWidget {
 
       iconWidget = Align(
         alignment: Alignment.topCenter,
-        heightFactor: 1.0,
+        heightFactor: 1,
         child: iconChild,
       );
     }
@@ -181,7 +181,7 @@ class IconTextButton extends StatelessWidget {
         // In this case ColorFilter will ignore transparent areas of your images.
         imageWidget = ColorFiltered(
           colorFilter: disabledImageColorFilter,
-          child: image!,
+          child: image,
         );
       }
     }
@@ -199,7 +199,6 @@ class IconTextButton extends StatelessWidget {
       enableFeedback: enableFeedback,
       radius: radius,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -207,7 +206,7 @@ class IconTextButton extends StatelessWidget {
             duration: Durations.short1,
             child: iconWidget,
           ),
-          const SpaceH4(),
+          const Space.h4(),
           imageWidget,
           labelWidget,
         ],
@@ -217,7 +216,7 @@ class IconTextButton extends StatelessWidget {
     /// conditionally wrap with tooltip
     if (toolTip != null) {
       toolBarButton = Tooltip(
-        message: toolTip!,
+        message: toolTip,
         preferBelow: false,
         child: toolBarButton,
       );

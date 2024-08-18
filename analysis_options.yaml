@@ -150,10 +150,7 @@ linter:
     
     # Maintain consistency in deprecated usage.
     - deprecated_consistency
-    
-    # Describe all properties in diagnostics for better debugging.
-    - diagnostic_describe_all_properties
-    
+        
     # Order directives for better organization.
     - directives_ordering
     
@@ -292,9 +289,6 @@ linter:
     # Avoid classes with only static members for better design.
     - avoid_classes_with_only_static_members
     
-    # Avoid equals and hash code on mutable classes for better design.
-    - avoid_equals_and_hash_code_on_mutable_classes
-    
     # Avoid returning null for better error handling.
     - avoid_returning_null
     
@@ -331,8 +325,8 @@ linter:
     # Prefer asserts with messages for better error handling.
     - prefer_asserts_with_message
     
-    # Prefer expression function bodies for cleaner code.
-    - prefer_expression_function_bodies
+    # # Prefer expression function bodies for cleaner code.
+    # - prefer_expression_function_bodies
     
     # Prefer int literals for better readability.
     - prefer_int_literals
@@ -375,3 +369,58 @@ linter:
     
     # Avoid literal bool comparisons for cleaner code.
     - no_literal_bool_comparisons
+
+    # Avoid empty else statements to reduce unnecessary complexity.
+    - avoid_empty_else
+
+    # Avoid relative imports within the lib directory to maintain consistency.
+    - avoid_relative_lib_imports
+    
+    # Avoid using types as parameter names to prevent confusion.
+    - avoid_types_as_parameter_names
+    
+    # Ensure that only Future objects are awaited to avoid unnecessary complexity.
+    - await_only_futures
+    
+    # Use camel case for type names to follow naming conventions.
+    - camel_case_types
+    
+    # Avoid empty catch blocks to prevent suppressing errors and make debugging easier.
+    - empty_catches
+    
+    # Override both hashCode and equals for proper behavior in collections.
+    - hash_and_equals
+    
+    # Avoid calling collection methods with unrelated types to ensure type safety.
+    - collection_methods_unrelated_type
+    
+    # Ensure switch case values are unique to prevent errors.
+    - no_duplicate_case_values
+    
+    # Avoid non-constant identifier names for consistency and clarity.
+    - non_constant_identifier_names
+    
+    # Prefer final local variables for immutability and clearer intent.
+    - prefer_final_locals
+    
+    # Prefer string interpolation over concatenation for better readability.
+    - prefer_interpolation_to_compose_strings
+    
+    # Use isEmpty for collections and strings for readability and to avoid null checks.
+    - prefer_is_empty
+    
+    # Use isNotEmpty for collections and strings to avoid redundant null checks.
+    - prefer_is_not_empty
+    
+    # Prefer typing uninitialized variables for clarity and type safety.
+    - prefer_typing_uninitialized_variables
+    
+    # Avoid unnecessary null-aware assignments for cleaner code.
+    - unnecessary_null_aware_assignments
+    
+    # Avoid equality checks between unrelated types to prevent runtime errors.
+    - unrelated_type_equality_checks
+    
+    # Use super parameters to simplify constructors and improve readability.
+    - use_super_parameters
+

@@ -102,7 +102,7 @@ class _ZoomButtonsState extends State<ZoomButtons> {
                 await widget.controller.setZoomScale(_zoomFactor);
               },
             ),
-            const SpaceW12(),
+            const Space.w12(),
             ScannerButton(
               icon: const Icon(
                 CupertinoIcons.zoom_in,

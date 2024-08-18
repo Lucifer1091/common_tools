@@ -150,7 +150,7 @@ extension DateRangeConversions on DateTimeRange {
         throw RangeError('Error this: $this; other: $other');
       }
     } else {
-      throw RangeError('DateTimeRanges don\'t cross');
+      throw RangeError("DateTimeRanges don't cross");
     }
   }
 
@@ -162,7 +162,7 @@ extension DateRangeConversions on DateTimeRange {
     if (!cross(other)) {
       if (other.contains(this)) return this;
 
-      throw RangeError('DateTimeRanges don\'t cross');
+      throw RangeError("DateTimeRanges don't cross");
     }
 
     final intersectionStart = Date.max(start, other.start);

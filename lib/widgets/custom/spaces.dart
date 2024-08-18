@@ -1,347 +1,130 @@
 import 'package:flutter/material.dart';
 
-class SpaceH extends StatelessWidget {
-  final double height;
-  const SpaceH({super.key, required this.height});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(height: height);
-  }
-}
-
-class SpaceH2 extends StatelessWidget {
-  const SpaceH2({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(height: 2.0);
-  }
-}
-
-class SpaceH4 extends StatelessWidget {
-  const SpaceH4({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(height: 4.0);
-  }
-}
-
-class SpaceH8 extends StatelessWidget {
-  const SpaceH8({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(height: 8.0);
-  }
-}
-
-class SpaceH10 extends StatelessWidget {
-  const SpaceH10({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(height: 10.0);
-  }
-}
-
-class SpaceH12 extends StatelessWidget {
-  const SpaceH12({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(height: 12.0);
-  }
-}
-
-class SpaceH14 extends StatelessWidget {
-  const SpaceH14({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(height: 14.0);
-  }
-}
-
-class SpaceH16 extends StatelessWidget {
-  const SpaceH16({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(height: 16.0);
-  }
-}
-
-class SpaceH20 extends StatelessWidget {
-  const SpaceH20({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(height: 20.0);
-  }
-}
-
-class SpaceH24 extends StatelessWidget {
-  const SpaceH24({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(height: 24.0);
-  }
-}
-
-class SpaceH30 extends StatelessWidget {
-  const SpaceH30({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(height: 30.0);
-  }
-}
-
-class SpaceH32 extends StatelessWidget {
-  const SpaceH32({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(height: 32.0);
-  }
-}
-
-class SpaceH36 extends StatelessWidget {
-  const SpaceH36({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(height: 36.0);
-  }
-}
-
-class SpaceH40 extends StatelessWidget {
-  const SpaceH40({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(height: 40.0);
-  }
-}
-
-class SpaceH44 extends StatelessWidget {
-  const SpaceH44({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(height: 44.0);
-  }
-}
-
-class SpaceH48 extends StatelessWidget {
-  const SpaceH48({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(height: 48.0);
-  }
-}
-
-class SpaceH60 extends StatelessWidget {
-  const SpaceH60({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(height: 60.0);
-  }
-}
-
-class SpaceH96 extends StatelessWidget {
-  const SpaceH96({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(height: 96.0);
-  }
-}
-
-class SpaceH120 extends StatelessWidget {
-  const SpaceH120({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(height: 120.0);
-  }
-}
-
-class SpaceH180 extends StatelessWidget {
-  const SpaceH180({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(height: 180.0);
-  }
-}
-
-class SpaceH200 extends StatelessWidget {
-  const SpaceH200({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(height: 200.0);
-  }
-}
-
-// Widths
-class SpaceW extends StatelessWidget {
-  final double width;
-
-  const SpaceW({super.key, required this.width});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(width: width);
-  }
-}
-
-class SpaceW2 extends StatelessWidget {
-  const SpaceW2({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(width: 2.0);
-  }
-}
-
-class SpaceW4 extends StatelessWidget {
-  const SpaceW4({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(width: 4.0);
-  }
-}
-
-class SpaceW8 extends StatelessWidget {
-  const SpaceW8({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(width: 8.0);
-  }
-}
-
-class SpaceW10 extends StatelessWidget {
-  const SpaceW10({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(width: 10.0);
-  }
-}
-
-class SpaceW12 extends StatelessWidget {
-  const SpaceW12({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(width: 12.0);
-  }
-}
-
-class SpaceW16 extends StatelessWidget {
-  const SpaceW16({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(width: 16.0);
-  }
-}
-
-class SpaceW20 extends StatelessWidget {
-  const SpaceW20({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(width: 20.0);
-  }
-}
-
-class SpaceW24 extends StatelessWidget {
-  const SpaceW24({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(width: 24.0);
-  }
-}
-
-class SpaceW30 extends StatelessWidget {
-  const SpaceW30({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(width: 30.0);
-  }
-}
-
-class SpaceW36 extends StatelessWidget {
-  const SpaceW36({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(width: 36.0);
-  }
-}
-
-class SpaceW40 extends StatelessWidget {
-  const SpaceW40({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(width: 40.0);
-  }
-}
-
-class SpaceW48 extends StatelessWidget {
-  const SpaceW48({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(width: 48.0);
-  }
-}
-
-class SpaceW60 extends StatelessWidget {
-  const SpaceW60({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(width: 60.0);
-  }
-}
-
-class SpaceW80 extends StatelessWidget {
-  const SpaceW80({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(width: 80.0);
-  }
-}
-
-class SpaceW90 extends StatelessWidget {
-  const SpaceW90({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(width: 90.0);
-  }
-}
-
-class SpaceW100 extends StatelessWidget {
-  const SpaceW100({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(width: 100.0);
-  }
+/// A wrapper around SizedBox for creating consistent gaps in the UI.
+///
+/// By using [Space] instead of [SizedBox], you reduce boilerplate code and ensure
+/// consistency in spacing throughout your UI. This class provides a set of predefined
+/// width and height gaps for easy use.
+///
+/// Examples:
+/// Space.w4() = SizedBox(width: 4.0)
+/// Space.h8() = SizedBox(height: 8.0)
+class Space extends SizedBox {
+  // Widths
+
+  /// A space with a custom width.
+  const Space.w({required double width, super.key}) : super(width: width);
+
+  /// A space with a width of 2
+  const Space.w2({super.key, super.width = 2});
+
+  /// A space with a width of 4
+  const Space.w4({super.key, super.width = 4});
+
+  /// A space with a width of 8
+  const Space.w8({super.key, super.width = 8});
+
+  /// A space with a width of 10
+  const Space.w10({super.key, super.width = 10});
+
+  /// A space with a width of 12
+  const Space.w12({super.key, super.width = 12});
+
+  /// A space with a width of 16
+  const Space.w16({super.key, super.width = 16});
+
+  /// A space with a width of 20
+  const Space.w20({super.key, super.width = 20});
+
+  /// A space with a width of 24
+  const Space.w24({super.key, super.width = 24});
+
+  /// A space with a width of 30
+  const Space.w30({super.key, super.width = 30});
+
+  /// A space with a width of 36
+  const Space.w36({super.key, super.width = 36});
+
+  /// A space with a width of 40
+  const Space.w40({super.key, super.width = 40});
+
+  /// A space with a width of 48
+  const Space.w48({super.key, super.width = 48});
+
+  /// A space with a width of 60
+  const Space.w60({super.key, super.width = 60});
+
+  /// A space with a width of 80
+  const Space.w80({super.key, super.width = 80});
+
+  /// A space with a width of 90
+  const Space.w90({super.key, super.width = 90});
+
+  /// A space with a width of 100
+  const Space.w100({super.key, super.width = 100});
+
+  // Heights
+
+  /// A space with a custom height.
+  const Space.h({required double height, super.key}) : super(height: height);
+
+  /// A space with a height of 2
+  const Space.h2({super.key, super.height = 2});
+
+  /// A space with a height of 4
+  const Space.h4({super.key, super.height = 4});
+
+  /// A space with a height of 8
+  const Space.h8({super.key, super.height = 8});
+
+  /// A space with a height of 10
+  const Space.h10({super.key, super.height = 10});
+
+  /// A space with a height of 12
+  const Space.h12({super.key, super.height = 12});
+
+  /// A space with a height of 14
+  const Space.h14({super.key, super.height = 14});
+
+  /// A space with a height of 16
+  const Space.h16({super.key, super.height = 16});
+
+  /// A space with a height of 20
+  const Space.h20({super.key, super.height = 20});
+
+  /// A space with a height of 24
+  const Space.h24({super.key, super.height = 24});
+
+  /// A space with a height of 30
+  const Space.h30({super.key, super.height = 30});
+
+  /// A space with a height of 32
+  const Space.h32({super.key, super.height = 32});
+
+  /// A space with a height of 36
+  const Space.h36({super.key, super.height = 36});
+
+  /// A space with a height of 40
+  const Space.h40({super.key, super.height = 40});
+
+  /// A space with a height of 44
+  const Space.h44({super.key, super.height = 44});
+
+  /// A space with a height of 48
+  const Space.h48({super.key, super.height = 48});
+
+  /// A space with a height of 60
+  const Space.h60({super.key, super.height = 60});
+
+  /// A space with a height of 96
+  const Space.h96({super.key, super.height = 96});
+
+  /// A space with a height of 120
+  const Space.h120({super.key, super.height = 120});
+
+  /// A space with a height of 180
+  const Space.h180({super.key, super.height = 180});
+
+  /// A space with a height of 200
+  const Space.h200({super.key, super.height = 200});
 }

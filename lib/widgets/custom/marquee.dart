@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class MarqueeSpeed {
-  static const double normal = 150.0;
+  static const double normal = 150;
 }
 
 class CustomMarquee extends StatefulWidget {
@@ -18,7 +18,7 @@ class CustomMarquee extends StatefulWidget {
     this.scrollFromEnd = true,
     this.reverse = true,
     this.scrollDirection = Axis.horizontal,
-    this.delayedStart = const Duration(seconds: 0),
+    this.delayedStart = Duration.zero,
   });
 
   final double? marginLeft;
@@ -120,9 +120,8 @@ class _CustomMarqueeState extends State<CustomMarquee> {
 }
 
 class ScrollNotificationInterceptor extends StatelessWidget {
+  const ScrollNotificationInterceptor({required this.child, super.key});
   final Widget child;
-
-  const ScrollNotificationInterceptor({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {

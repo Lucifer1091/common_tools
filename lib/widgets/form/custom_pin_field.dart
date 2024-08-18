@@ -93,7 +93,7 @@ class CustomPinField extends StatelessWidget {
                   ),
             ),
           ),
-          const SpaceH16(),
+          const Space.h16(),
         ],
         Pinput(
           length: length ?? 4,

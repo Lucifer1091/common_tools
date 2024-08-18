@@ -15,6 +15,16 @@ part of 'utilities.dart';
 /// [showDeviceLogs] when set to true will print exact breakpoints in console
 ///
 class Responsive extends StatelessWidget {
+  const Responsive({
+    required this.compact,
+    this.medium,
+    this.expanded,
+    this.large,
+    this.extraLarge,
+    this.showDeviceLogs = false,
+    super.key,
+  });
+
   final Widget compact;
   final Widget? medium;
   final Widget? expanded;
@@ -22,16 +32,6 @@ class Responsive extends StatelessWidget {
   final Widget? extraLarge;
 
   final bool showDeviceLogs;
-
-  const Responsive({
-    super.key,
-    required this.compact,
-    this.medium,
-    this.expanded,
-    this.large,
-    this.extraLarge,
-    this.showDeviceLogs = false,
-  });
 
   static bool isCompact(BuildContext context) => context.width < 600;
 
@@ -100,17 +100,14 @@ class Responsive extends StatelessWidget {
       builder: (context, constraints) {
         _showLog(context);
 
-        if (isExtraLarge(context)) {
-          return extraLarge ?? large ?? expanded ?? medium ?? compact;
-        } else if (isLarge(context)) {
-          return large ?? expanded ?? medium ?? compact;
-        } else if (isExpanded(context)) {
-          return expanded ?? medium ?? compact;
-        } else if (isMedium(context)) {
-          return medium ?? compact;
-        } else {
-          return compact;
-        }
+        return value<Widget>(
+          context,
+          compact: compact,
+          medium: medium,
+          expanded: expanded,
+          large: large,
+          extraLarge: extraLarge,
+        );
       },
     );
   }
@@ -118,43 +115,33 @@ class Responsive extends StatelessWidget {
   void _showLog(BuildContext context) {
     if (!showDeviceLogs) return;
 
-    if (isExtraLarge(context)) {
-      log.i(
-          "EXTRA LARGE => Width: ${context.width}, Height: ${context.height}");
-    } else if (isLarge(context)) {
-      log.i("LARGE => Width: ${context.width}, Height: ${context.height}");
-    } else if (isExpanded(context)) {
-      log.i("EXPANDED => Width: ${context.width}, Height: ${context.height}");
-    } else if (isMedium(context)) {
-      log.i("MEDIUM => Width: ${context.width}, Height: ${context.height}");
-    } else {
-      log.i("COMPACT => Width: ${context.width}, Height: ${context.height}");
-    }
+    final double height = context.height, width = context.width;
+
+    String size(String title) => '$title => Width: $width, Height: $height';
+
+    final String message = value<String>(
+      context,
+      compact: size('COMPACT'),
+      medium: size('MEDIUM'),
+      expanded: size('EXPANDED'),
+      large: size('LARGE'),
+      extraLarge: size('EXTRA LARGE'),
+    );
+
+    log.i(message);
   }
 
   /// Creates a sample `Responsive` widget for testing purposes.
   static Responsive test() {
-    return Responsive(
+    return const Responsive(
       showDeviceLogs: true,
-      compact: Container(
-        color: Colors.red,
-        child: const Text('COMPACT'),
-      ),
-      medium: Container(
-        color: Colors.blue,
-        child: const Text('MEDIUM'),
-      ),
-      expanded: Container(
-        color: Colors.green,
-        child: const Text('EXPANDED'),
-      ),
-      large: Container(
-        color: Colors.yellow,
-        child: const Text('LARGE'),
-      ),
-      extraLarge: Container(
+      compact: ColoredBox(color: Colors.red, child: Text('COMPACT')),
+      medium: ColoredBox(color: Colors.blue, child: Text('MEDIUM')),
+      expanded: ColoredBox(color: Colors.green, child: Text('EXPANDED')),
+      large: ColoredBox(color: Colors.yellow, child: Text('LARGE')),
+      extraLarge: ColoredBox(
         color: Colors.deepPurpleAccent,
-        child: const Text('EXTRA LARGE'),
+        child: Text('EXTRA LARGE'),
       ),
     );
   }

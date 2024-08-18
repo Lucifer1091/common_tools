@@ -46,7 +46,7 @@ extension DateValidators on DateTime? {
   /// Returns `false` if the [DateTime] is `null`.
   bool get isLeapYear {
     if (this == null) return false;
-    int year = this!.year;
+    final int year = this!.year;
     return (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;
   }
 
@@ -220,12 +220,12 @@ extension DateValidators on DateTime? {
   bool isSameWeek(DateTime? other) {
     if (isNull || other == null) return false;
     // Convert dates to UTC to handle daylight savings time correctly
-    DateTime a = DateTime.utc(this!.year, this!.month, this!.day);
+    final DateTime a = DateTime.utc(this!.year, this!.month, this!.day);
     other = DateTime.utc(other.year, other.month, other.day);
 
     // Calculate ISO week numbers for both dates
-    int aWeek = a.weekNumber;
-    int bWeek = other.weekNumber;
+    final int aWeek = a.weekNumber;
+    final int bWeek = other.weekNumber;
 
     // Compare ISO week numbers to determine if they are in the same week
     return aWeek == bWeek;
@@ -337,9 +337,9 @@ extension DateValidators on DateTime? {
   bool get isNextWeek {
     if (isNull) return false;
 
-    DateTime now = DateTime.now();
-    DateTime startOfNextWeek = now.addDays(7 - now.weekday);
-    DateTime endOfNextWeek = startOfNextWeek.addDays(6);
+    final DateTime now = DateTime.now();
+    final DateTime startOfNextWeek = now.addDays(7 - now.weekday);
+    final DateTime endOfNextWeek = startOfNextWeek.addDays(6);
 
     return this!.isAfter(now) && this!.isBefore(endOfNextWeek);
   }
@@ -358,9 +358,9 @@ extension DateValidators on DateTime? {
   bool get isLastWeek {
     if (isNull) return false;
 
-    DateTime now = DateTime.now();
-    DateTime startOfLastWeek = now.startOfLastWeek;
-    DateTime endOfLastWeek = startOfLastWeek.endOfWeek;
+    final DateTime now = DateTime.now();
+    final DateTime startOfLastWeek = now.startOfLastWeek;
+    final DateTime endOfLastWeek = startOfLastWeek.endOfWeek;
 
     return this!.isAfter(startOfLastWeek) && this!.isBefore(endOfLastWeek);
   }
@@ -572,8 +572,8 @@ extension DateConversions on DateTime {
   /// Returns the number of ISO weeks.
   /// Calculates number of weeks for a given year as per https://en.wikipedia.org/wiki/ISO_week_date#Weeks_per_year
   int _numOfWeeks(int year) {
-    DateTime dec28 = DateTime(year, 12, 28);
-    int dayOfDec28 = int.parse(DateFormat('D').format(dec28));
+    final DateTime dec28 = DateTime(year, 12, 28);
+    final int dayOfDec28 = int.parse(DateFormat('D').format(dec28));
     return ((dayOfDec28 - dec28.weekday + 10) / 7).floor();
   }
 
@@ -582,7 +582,7 @@ extension DateConversions on DateTime {
   /// Returns the ISO week number.
   /// Calculates week number from a date as per https://en.wikipedia.org/wiki/ISO_week_date#Calculation
   int get weekNumber {
-    int dayOfYear = int.parse(DateFormat('D').format(this));
+    final int dayOfYear = int.parse(DateFormat('D').format(this));
     int woy = ((dayOfYear - weekday + 10) / 7).floor();
     if (woy < 1) {
       woy = _numOfWeeks(year - 1);
@@ -609,7 +609,7 @@ extension DateConversions on DateTime {
   /// Returns a new [DateTime] instance rounded to the nearest quarter hour.
   DateTime nearestQuarter() {
     // Calculate the minute value nearest to the quarter-hour mark
-    int roundedMinute = [15, 30, 45, 60][(minute / 15).floor()];
+    final int roundedMinute = [15, 30, 45, 60][(minute / 15).floor()];
 
     // Return a new DateTime instance with the rounded minute value
     return DateTime(year, month, day, hour, roundedMinute);
@@ -627,7 +627,7 @@ extension DateConversions on DateTime {
   /// Returns a new [DateTime] instance rounded to the nearest half hour.
   DateTime nearestHalf() {
     // Calculate the minute value nearest to the half-hour mark
-    int roundedMinute = [30, 60][(minute / 30).floor()];
+    final int roundedMinute = [30, 60][(minute / 30).floor()];
 
     // Return a new DateTime instance with the rounded minute value
     return DateTime(year, month, day, hour, roundedMinute);
@@ -645,7 +645,7 @@ extension DateConversions on DateTime {
   /// Returns a new [DateTime] instance rounded to the nearest half hour.
   DateTime nearestHalfHour() {
     // Calculate the minute value rounded to the nearest half hour
-    int roundedMinute = [0, 30, 60][(minute / 30).round()];
+    final int roundedMinute = [0, 30, 60][(minute / 30).round()];
 
     // Return a new DateTime instance with the rounded minute value
     return DateTime(year, month, day, hour, roundedMinute);
@@ -696,10 +696,10 @@ extension DateConversions on DateTime {
   /// and December 31st returns 365 (or 366 in a leap year).
   int get dayOfYear {
     // Get the date of January 1st of the current year
-    DateTime jan1st = DateTime(year);
+    final DateTime jan1st = DateTime(year);
 
     // Calculate the difference in days between the current date and January 1st
-    int difference = differenceInDays(jan1st);
+    final int difference = differenceInDays(jan1st);
 
     // Add 1 because differenceInDays returns a 0-based difference
     return difference + 1;
@@ -709,8 +709,8 @@ extension DateConversions on DateTime {
   ///
   /// Returns the number of full years between the two dates, considering whole days.
   int differenceInYear(DateTime other) {
-    Duration difference = this.difference(other);
-    int years = difference.inDays ~/ 365;
+    final Duration difference = this.difference(other);
+    final int years = difference.inDays ~/ 365;
 
     return years;
   }
@@ -719,8 +719,8 @@ extension DateConversions on DateTime {
   ///
   /// Returns the number of full months between the two dates, considering whole days.
   int differenceInMonth(DateTime other) {
-    Duration difference = this.difference(other);
-    int months = (difference.inDays % 365) ~/ 30;
+    final Duration difference = this.difference(other);
+    final int months = (difference.inDays % 365) ~/ 30;
 
     return months;
   }
@@ -730,14 +730,14 @@ extension DateConversions on DateTime {
   /// Returns the difference in days as an integer. The calculation is based on
   /// the difference between the dates at midnight, ignoring any time component.
   int differenceInDays(DateTime other) {
-    DateTime a = this;
+    final DateTime a = this;
 
     // Convert both dates to midnight for accurate day difference calculation
-    DateTime aMidnight = DateTime(a.year, a.month, a.day);
-    DateTime bMidnight = DateTime(other.year, other.month, other.day);
+    final DateTime aMidnight = DateTime(a.year, a.month, a.day);
+    final DateTime bMidnight = DateTime(other.year, other.month, other.day);
 
     // Calculate the difference in milliseconds
-    int differenceInMilliseconds =
+    final int differenceInMilliseconds =
         aMidnight.difference(bMidnight).inMilliseconds;
 
     // Convert milliseconds to days
@@ -750,9 +750,9 @@ extension DateConversions on DateTime {
   /// but the time set to midnight (00:00:00).
   DateTime truncateTime() => DateTime(year, month, day);
 
-  /// Creates a [DateTimeRange] from [this] to [other].
+  /// Creates a [DateTimeRange] from this to [other].
   ///
-  /// If [this] is after [other], the range is swapped to maintain chronological order.
+  /// If this is after [other], the range is swapped to maintain chronological order.
   /// Returns a [DateTimeRange] with the correct start and end dates.
   DateTimeRange toRange(DateTime other) {
     if (this <= other) return DateTimeRange(start: this, end: other);
@@ -874,7 +874,7 @@ extension ParseDateTime on String? {
     if (isBlank) return null;
 
     String? finalPattern;
-    List<String> patternsFound = [];
+    final List<String> patternsFound = [];
 
     for (final entry in Regex.dateFormats.entries) {
       final regex = RegExp(entry.key);
@@ -886,7 +886,7 @@ extension ParseDateTime on String? {
 
     if (patternsFound.isNotEmpty && patternsFound.length > 1) {
       for (final String pattern in patternsFound) {
-        bool validatePattern =
+        final bool validatePattern =
             validateDatePattern(expected: this!, pattern: pattern);
         if (validatePattern) {
           finalPattern = pattern;
@@ -907,8 +907,8 @@ extension ParseDateTime on String? {
     if (isBlank) return false;
 
     try {
-      DateTime dateTime = DateFormat(pattern).parse(this!);
-      String formattedDate = DateFormat(pattern).format(dateTime);
+      final DateTime dateTime = DateFormat(pattern).parse(this!);
+      final String formattedDate = DateFormat(pattern).format(dateTime);
       return formattedDate == expected;
     } catch (e) {
       return false;
@@ -916,7 +916,7 @@ extension ParseDateTime on String? {
   }
 
   static DateTime? parse(Object? date, {bool utc = true, String? format}) {
-    String? dt = date?.toString().trim();
+    final String? dt = date?.toString().trim();
 
     try {
       if (dt == '' || (dt?.isEmpty ?? true) || dt == null) return null;
@@ -935,18 +935,18 @@ extension ParseDateTime on String? {
     } catch (e) {
       try {
         // if its failing it means the date format is 2024-04-17T07:20:57.573
-        DateFormat format = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-        DateTime dateTime = format.parse(dt!, utc).toLocal();
+        final DateFormat format = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+        final DateTime dateTime = format.parse(dt!, utc).toLocal();
 
         return dateTime;
       } catch (e) {
-        String? detectedDateFormat = dt.detectDateFormat();
+        final String? detectedDateFormat = dt.detectDateFormat();
 
         if (detectedDateFormat == null) return null;
 
         try {
-          DateFormat outputFormat = DateFormat(detectedDateFormat);
-          DateTime? result = outputFormat.tryParse(dt!, utc);
+          final DateFormat outputFormat = DateFormat(detectedDateFormat);
+          final DateTime? result = outputFormat.tryParse(dt!, utc);
 
           return result;
         } catch (e) {
@@ -959,7 +959,7 @@ extension ParseDateTime on String? {
 
 extension DateIntUtils on int {
   String timeAgo({bool addAgo = true}) {
-    String ago = addAgo ? 'ago' : '';
+    final String ago = addAgo ? 'ago' : '';
 
     final diff = Duration(seconds: this);
     final sec = diff.inSeconds;
@@ -991,7 +991,7 @@ extension DateIntUtils on int {
   ///
   /// Returns the full or abbreviated month name as a string.
   String toMonth({Abbreviation style = Abbreviation.none}) {
-    List<String> months = [
+    final List<String> months = [
       'January',
       'February',
       'March',
@@ -1005,7 +1005,7 @@ extension DateIntUtils on int {
       'November',
       'December',
     ];
-    List<String> shortMonths = [
+    final List<String> shortMonths = [
       'Jan',
       'Feb',
       'Mar',
@@ -1043,7 +1043,7 @@ extension DateIntUtils on int {
   /// print(1.toDay(style: Abbreviation.full)); // Output: M
   /// ```
   String toDay({Abbreviation style = Abbreviation.none}) {
-    List<String> days = [
+    final List<String> days = [
       'Monday',
       'Tuesday',
       'Wednesday',
@@ -1052,8 +1052,16 @@ extension DateIntUtils on int {
       'Saturday',
       'Sunday',
     ];
-    List<String> shortDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    List<String> veryShortDays = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+    final List<String> shortDays = [
+      'Mon',
+      'Tue',
+      'Wed',
+      'Thu',
+      'Fri',
+      'Sat',
+      'Sun'
+    ];
+    final List<String> veryShortDays = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
     if (style == Abbreviation.full) {
       return veryShortDays[this - 1];
@@ -1110,9 +1118,9 @@ extension DateTimeExtension on DateTime? {
   /// Returns the number of seconds between the current DateTime instance and [other].
   /// If [other] is not provided, the current system DateTime is used.
   int countSeconds(DateTime? other) {
-    int difference = (other ?? DateTime.now()).millisecondsSinceEpoch -
+    final int difference = (other ?? DateTime.now()).millisecondsSinceEpoch -
         (this ?? DateTime.now()).millisecondsSinceEpoch;
-    int count = (difference / 1000).truncate();
+    final int count = (difference / 1000).truncate();
     return count;
   }
 
@@ -1121,9 +1129,9 @@ extension DateTimeExtension on DateTime? {
   /// Returns the number of minutes between the current DateTime instance and [other].
   /// If [other] is not provided, the current system DateTime is used.
   int countMinutes(DateTime? other) {
-    int difference = (other ?? DateTime.now()).millisecondsSinceEpoch -
+    final int difference = (other ?? DateTime.now()).millisecondsSinceEpoch -
         (this ?? DateTime.now()).millisecondsSinceEpoch;
-    int count = (difference / 60000).truncate();
+    final int count = (difference / 60000).truncate();
     return count;
   }
 
@@ -1142,9 +1150,9 @@ extension DateTimeExtension on DateTime? {
   /// print('Difference in hours: $differenceInHours'); // Output: 24
   /// ```
   int countHours(DateTime? other) {
-    int difference = (other ?? DateTime.now()).millisecondsSinceEpoch -
+    final int difference = (other ?? DateTime.now()).millisecondsSinceEpoch -
         (this ?? DateTime.now()).millisecondsSinceEpoch;
-    int count = (difference / 3600000).truncate();
+    final int count = (difference / 3600000).truncate();
     return count;
   }
 
@@ -1154,9 +1162,9 @@ extension DateTimeExtension on DateTime? {
   ///
   /// Returns the number of days as an integer value.
   int countDays(DateTime? other) {
-    int difference = (other ?? DateTime.now()).millisecondsSinceEpoch -
+    final int difference = (other ?? DateTime.now()).millisecondsSinceEpoch -
         (this ?? DateTime.now()).millisecondsSinceEpoch;
-    int count = (difference / 86400000).truncate();
+    final int count = (difference / 86400000).truncate();
     return count;
   }
 
@@ -1173,9 +1181,9 @@ extension DateTimeExtension on DateTime? {
   /// print('Weeks difference: $weeksDifference'); // Output: Weeks difference: 41
   /// ```
   int countWeeks(DateTime? other) {
-    int difference = (other ?? DateTime.now()).millisecondsSinceEpoch -
+    final int difference = (other ?? DateTime.now()).millisecondsSinceEpoch -
         (this ?? DateTime.now()).millisecondsSinceEpoch;
-    int count = (difference / 604800000).truncate();
+    final int count = (difference / 604800000).truncate();
     return count;
   }
 
@@ -1193,9 +1201,9 @@ extension DateTimeExtension on DateTime? {
   /// int monthsDifference = startDate.countMonths(endDate); // Output: 334
   /// ```
   int countMonths(DateTime? other) {
-    int difference = (other ?? DateTime.now()).millisecondsSinceEpoch -
+    final int difference = (other ?? DateTime.now()).millisecondsSinceEpoch -
         (this ?? DateTime.now()).millisecondsSinceEpoch;
-    int count = (difference / 2628003000).round();
+    final int count = (difference / 2628003000).round();
     return count;
   }
 
@@ -1212,9 +1220,9 @@ extension DateTimeExtension on DateTime? {
   /// print('Years Difference: $yearsDifference'); // Output: 27
   /// ```
   int countYears(DateTime? other) {
-    int difference = (other ?? DateTime.now()).millisecondsSinceEpoch -
+    final int difference = (other ?? DateTime.now()).millisecondsSinceEpoch -
         (this ?? DateTime.now()).millisecondsSinceEpoch;
-    int count = (difference / 31536000000).truncate();
+    final int count = (difference / 31536000000).truncate();
     return count;
   }
 
@@ -1370,9 +1378,7 @@ extension DateTimeIterables on DateTime {
   /// ```
   DateTime clamp({DateTime? min, DateTime? max}) {
     assert(
-      ((min != null) && (max != null))
-          ? (min.isBefore(max) || (min == max))
-          : true,
+      ((min != null) && (max != null)) && (min.isBefore(max) || (min == max)),
       'DateTime min has to be before or equal to max\n(min: $min - max: $max)',
     );
     if ((min != null) && compareTo(min).isNegative) {
@@ -1399,7 +1405,7 @@ extension DateTimeIterables on DateTime {
     var minDifference = datesArray.first.difference(this).abs();
 
     for (var i = 1; i < datesArray.length; i++) {
-      var difference = datesArray.elementAt(i).difference(this).abs();
+      final difference = datesArray.elementAt(i).difference(this).abs();
       if (difference < minDifference) {
         minDifference = difference;
         index = i;
@@ -1754,12 +1760,12 @@ extension DateTimeGetters on DateTime {
 extension DateTimeSetters on DateTime {
   /// Change [year] of this date
   ///
-  /// set [month] if you want to change it as well, to skip an change other optional field set it as [null]
-  /// set [day] if you want to change it as well, to skip an change other optional field set it as [null]
-  /// set [hour] if you want to change it as well, to skip an change other optional field set it as [null]
-  /// set [minute] if you want to change it as well, to skip an change other optional field set it as [null]
-  /// set [second] if you want to change it as well, to skip an change other optional field set it as [null]
-  /// set [millisecond] if you want to change it as well, to skip an change other optional field set it as [null]
+  /// set [month] if you want to change it as well, to skip an change other optional field set it as null
+  /// set [day] if you want to change it as well, to skip an change other optional field set it as null
+  /// set [hour] if you want to change it as well, to skip an change other optional field set it as null
+  /// set [minute] if you want to change it as well, to skip an change other optional field set it as null
+  /// set [second] if you want to change it as well, to skip an change other optional field set it as null
+  /// set [millisecond] if you want to change it as well, to skip an change other optional field set it as null
   /// set [microsecond] if you want to change it as well
   DateTime setYear(
     int year, [
@@ -1784,11 +1790,11 @@ extension DateTimeSetters on DateTime {
 
   /// Change [month] of this date
   ///
-  /// set [day] if you want to change it as well, to skip an change other optional field set it as [null]
-  /// set [hour] if you want to change it as well, to skip an change other optional field set it as [null]
-  /// set [minute] if you want to change it as well, to skip an change other optional field set it as [null]
-  /// set [second] if you want to change it as well, to skip an change other optional field set it as [null]
-  /// set [millisecond] if you want to change it as well, to skip an change other optional field set it as [null]
+  /// set [day] if you want to change it as well, to skip an change other optional field set it as null
+  /// set [hour] if you want to change it as well, to skip an change other optional field set it as null
+  /// set [minute] if you want to change it as well, to skip an change other optional field set it as null
+  /// set [second] if you want to change it as well, to skip an change other optional field set it as null
+  /// set [millisecond] if you want to change it as well, to skip an change other optional field set it as null
   /// set [microsecond] if you want to change it as well
   DateTime setMonth(
     int month, [
@@ -1829,10 +1835,10 @@ extension DateTimeSetters on DateTime {
 
   /// Change [day] of this date
   ///
-  /// set [hour] if you want to change it as well, to skip an change other optional field set it as [null]
-  /// set [minute] if you want to change it as well, to skip an change other optional field set it as [null]
-  /// set [second] if you want to change it as well, to skip an change other optional field set it as [null]
-  /// set [millisecond] if you want to change it as well, to skip an change other optional field set it as [null]
+  /// set [hour] if you want to change it as well, to skip an change other optional field set it as null
+  /// set [minute] if you want to change it as well, to skip an change other optional field set it as null
+  /// set [second] if you want to change it as well, to skip an change other optional field set it as null
+  /// set [millisecond] if you want to change it as well, to skip an change other optional field set it as null
   /// set [microsecond] if you want to change it as well
   DateTime setDay(
     int day, [
@@ -1876,8 +1882,8 @@ extension DateTimeSetters on DateTime {
 
   /// Change [minute] of this date
   ///
-  /// set [second] if you want to change it as well, to skip an change other optional field set it as [null]
-  /// set [millisecond] if you want to change it as well, to skip an change other optional field set it as [null]
+  /// set [second] if you want to change it as well, to skip an change other optional field set it as null
+  /// set [millisecond] if you want to change it as well, to skip an change other optional field set it as null
   /// set [microsecond] if you want to change it as well
   DateTime setMinute(
     int minute, [
@@ -1898,7 +1904,7 @@ extension DateTimeSetters on DateTime {
 
   /// Change [second] of this date
   ///
-  /// set [millisecond] if you want to change it as well, to skip an change other optional field set it as [null]
+  /// set [millisecond] if you want to change it as well, to skip an change other optional field set it as null
   /// set [microsecond] if you want to change it as well
   DateTime setSecond(
     int second, [
@@ -1957,7 +1963,7 @@ extension Date on DateTime {
   /// Yesterday at same hour / minute / second than now
   static DateTime yesterday() => DateTime.now().previousDay;
 
-  /// Current date (Same as [Date.now])
+  /// Current date (Same as [DateTime.now])
   static DateTime today() => DateTime.now();
 
   static DateTime nowWithTimezone(bool isUtc) {
@@ -2066,37 +2072,37 @@ extension WeekdayFinder on DateTime {
 
   /// Returns new [DateTime] instance of nearest Monday in the Future
   ///
-  /// If [this] is Monday, will return `7 days in the future`
+  /// If this is Monday, will return `7 days in the future`
   DateTime nextMonday() => nextWeekday(DateTime.monday);
 
   /// Returns new [DateTime] instance of nearest Tuesday in the Future
   ///
-  /// If [this] is Tuesday, will return `7 days in the future`
+  /// If this is Tuesday, will return `7 days in the future`
   DateTime nextTuesday() => nextWeekday(DateTime.tuesday);
 
   /// Returns new [DateTime] instance of nearest Wednesday in the Future
   ///
-  /// If [this] is Wednesday, will return `7 days in the future`
+  /// If this is Wednesday, will return `7 days in the future`
   DateTime nextWednesday() => nextWeekday(DateTime.wednesday);
 
   /// Returns new [DateTime] instance of nearest Thursday in the Future
   ///
-  /// If [this] is Thursday, will return `7 days in the future`
+  /// If this is Thursday, will return `7 days in the future`
   DateTime nextThursday() => nextWeekday(DateTime.thursday);
 
   /// Returns new [DateTime] instance of nearest Friday in the Future
   ///
-  /// If [this] is Friday, will return `7 days in the future`
+  /// If this is Friday, will return `7 days in the future`
   DateTime nextFriday() => nextWeekday(DateTime.friday);
 
   /// Returns new [DateTime] instance of nearest Saturday in the Future
   ///
-  /// If [this] is Saturday, will return `7 days in the future`
+  /// If this is Saturday, will return `7 days in the future`
   DateTime nextSaturday() => nextWeekday(DateTime.saturday);
 
   /// Returns new [DateTime] instance of nearest Sunday in the Future
   ///
-  /// If [this] is Sunday, will return `7 days in the future`
+  /// If this is Sunday, will return `7 days in the future`
   DateTime nextSunday() => nextWeekday(DateTime.sunday);
 
   /// Returns new [DateTime] instance of last `n`th weekday
@@ -2115,42 +2121,42 @@ extension WeekdayFinder on DateTime {
 
   /// Returns new [DateTime] instance of nearest Monday in the past
   ///
-  /// If [this] is Monday, will return `7 days in the past`
+  /// If this is Monday, will return `7 days in the past`
   DateTime lastMonday() => lastWeekday(DateTime.monday);
 
   /// Returns new [DateTime] instance of nearest Tuesday in the past
   ///
-  /// If [this] is Tuesday, will return `7 days in the past`
+  /// If this is Tuesday, will return `7 days in the past`
   DateTime lastTuesday() => lastWeekday(DateTime.tuesday);
 
   /// Returns new [DateTime] instance of nearest Wednesday in the past
   ///
-  /// If [this] is Wednesday, will return `7 days in the past`
+  /// If this is Wednesday, will return `7 days in the past`
   DateTime lastWednesday() => lastWeekday(DateTime.wednesday);
 
   /// Returns new [DateTime] instance of nearest Thursday in the past
   ///
-  /// If [this] is Thursday, will return `7 days in the past`
+  /// If this is Thursday, will return `7 days in the past`
   DateTime lastThursday() => lastWeekday(DateTime.thursday);
 
   /// Returns new [DateTime] instance of nearest Friday in the past
   ///
-  /// If [this] is Friday, will return `7 days in the past`
+  /// If this is Friday, will return `7 days in the past`
   DateTime lastFriday() => lastWeekday(DateTime.friday);
 
   /// Returns new [DateTime] instance of nearest Saturday in the past
   ///
-  /// If [this] is Saturday, will return `7 days in the past`
+  /// If this is Saturday, will return `7 days in the past`
   DateTime lastSaturday() => lastWeekday(DateTime.saturday);
 
   /// Returns new [DateTime] instance of nearest Sunday in the past
   ///
-  /// If [this] is Sunday, will return `7 days in the past`
+  /// If this is Sunday, will return `7 days in the past`
   DateTime lastSunday() => lastWeekday(DateTime.sunday);
 }
 
 // extension Date5 on DateTime {
-//   /// Returns true if [this] occurs strictly before [other], accounting for time
+//   /// Returns true if this occurs strictly before [other], accounting for time
 //   /// zones.
 //   ///
 //   /// Alias for [DateTime.isBefore].
@@ -2163,7 +2169,7 @@ extension WeekdayFinder on DateTime {
 //   /// into account, use [DateTime.isAtSameMomentAs] rather than [DateTime.==].
 //   bool operator <(DateTime other) => isBefore(other);
 //
-//   /// Returns true if [this] occurs strictly after [other], accounting for time
+//   /// Returns true if this occurs strictly after [other], accounting for time
 //   /// zones.
 //   ///
 //   /// Alias for [DateTime.isAfter].
@@ -2176,7 +2182,7 @@ extension WeekdayFinder on DateTime {
 //   /// into account, use [DateTime.isAtSameMomentAs] rather than [DateTime.==].
 //   bool operator >(DateTime other) => isAfter(other);
 //
-//   /// Returns true if [this] occurs at or before [other], accounting for time
+//   /// Returns true if this occurs at or before [other], accounting for time
 //   /// zones.
 //   ///
 //   /// Alias for [isAtOrBefore].
@@ -2189,7 +2195,7 @@ extension WeekdayFinder on DateTime {
 //   /// into account, use [DateTime.isAtSameMomentAs] rather than [DateTime.==].
 //   bool operator <=(DateTime other) => isAtOrBefore(other);
 //
-//   /// Returns true if [this] occurs at or after [other], accounting for time
+//   /// Returns true if this occurs at or after [other], accounting for time
 //   /// zones.
 //   ///
 //   /// Alias for [isAtOrAfter].
@@ -2202,19 +2208,19 @@ extension WeekdayFinder on DateTime {
 //   /// into account, use [DateTime.isAtSameMomentAs] rather than [DateTime.==].
 //   bool operator >=(DateTime other) => isAtOrAfter(other);
 //
-//   /// Returns a new [DateTime] instance with [duration] added to [this].
+//   /// Returns a new [DateTime] instance with [duration] added to this.
 //   ///
 //   /// Alias for [DateTime.add].
 //   DateTime operator +(Duration duration) => add(duration);
 //
-//   /// Returns the [Duration] between [this] and [other].
+//   /// Returns the [Duration] between this and [other].
 //   ///
-//   /// The returned [Duration] will be negative if [other] occurs after [this].
+//   /// The returned [Duration] will be negative if [other] occurs after this.
 //   ///
 //   /// Alias for [DateTime.difference].
 //   Duration operator -(DateTime other) => difference(other);
 //
-//   /// Returns true if [this] occurs at or before [other], accounting for time
+//   /// Returns true if this occurs at or before [other], accounting for time
 //   /// zones.
 //   ///
 //   /// Delegates to [DateTime]'s built-in comparison methods and therefore obeys
@@ -2222,10 +2228,300 @@ extension WeekdayFinder on DateTime {
 //   bool isAtOrBefore(DateTime other) =>
 //       isAtSameMomentAs(other) || isBefore(other);
 //
-//   /// Returns true if [this] occurs at or after [other], accounting for time
+//   /// Returns true if this occurs at or after [other], accounting for time
 //   /// zones.
 //   ///
 //   /// Delegates to [DateTime]'s built-in comparison methods and therefore obeys
 //   /// the same contract.
 //   bool isAtOrAfter(DateTime other) => isAtSameMomentAs(other) || isAfter(other);
 // }
+
+
+// part of '../screwdriver.dart';
+
+// /// Provides extensions for [DateTime] class.
+// extension DateTimeScrewdriver on DateTime {
+//   /// Returns an instance of [DateTime] without time related values.
+//   /// This is intended to remove hour, minute, second and millisecond
+//   /// information from [DateTime] instance which leaves only date information.
+//   /// Example:
+//   ///     final date = DateTime().now();   // 26-07-2020 16:54:23
+//   ///     date.dateOnly                    // 26-07-2020
+//   /// This is helpful in cases where comparison of only dates is required.
+//   DateTime get dateOnly => DateTime(year, month, day);
+
+//   /// Returns Duration difference between [this] and current time
+//   Duration fromNow() => difference(now());
+
+//   /// Returns true if the date of [this] occurs before the date of [other].
+//   ///
+//   /// The comparison is independent of whether the time is in UTC or
+//   /// in the local time zone.
+//   bool isBeforeDate(DateTime other) => dateOnly.isBefore(other.dateOnly);
+
+//   /// Returns true if the date of [this] occurs after the date of [other].
+//   ///
+//   /// The comparison is independent of whether the time is in UTC or
+//   /// in the local time zone.
+//   bool isAfterDate(DateTime other) => dateOnly.isAfter(other.dateOnly);
+
+//   /// Returns true if the date of [this] occurs on the same day as
+//   /// the date of [other].
+//   ///
+//   /// The comparison is independent of whether the time is in UTC or
+//   /// in the local time zone.
+//   bool isSameDateAs(DateTime other) =>
+//       dateOnly.isAtSameMomentAs(other.dateOnly);
+
+//   /// Returns true if [this] is same as the date of today.
+//   /// This doesn't account for time.
+//   bool get isToday {
+//     final now = DateTime.now();
+//     return day == now.day && month == now.month && year == now.year;
+//   }
+
+//   /// Returns true if [this] occurs a day before today
+//   /// This doesn't account for time.
+//   bool get isYesterday {
+//     final now = DateTime.now();
+//     final yesterday = DateTime(now.year, now.month, now.day - 1);
+//     return day == yesterday.day &&
+//         month == yesterday.month &&
+//         year == yesterday.year;
+//   }
+
+//   /// Returns true if [this] occurs a day after today
+//   /// This doesn't account for time.
+//   bool get isTomorrow {
+//     final now = DateTime.now();
+//     final tomorrow = DateTime(now.year, now.month, now.day + 1);
+//     return day == tomorrow.day &&
+//         month == tomorrow.month &&
+//         year == tomorrow.year;
+//   }
+
+//   /// Returns true if [this] occurs in past
+//   /// This doesn't account for time.
+//   bool get isPast => isBefore(DateTime.now());
+
+//   /// Returns true if [this] occurs in future
+//   /// This doesn't account for time.
+//   bool get isFuture => isAfter(DateTime.now());
+
+//   /// Returns true if [this] occurs in previous month
+//   bool get isInPreviousMonth {
+//     final now = DateTime.now();
+//     final previousMonth = DateTime(now.year, now.month - 1, now.day);
+//     return month == previousMonth.month && year == previousMonth.year;
+//   }
+
+//   /// Returns true if [this] occurs in previous month
+//   bool get isInNextMonth {
+//     final now = DateTime.now();
+//     final nextMonth = DateTime(now.year, now.month + 1, now.day);
+//     return month == nextMonth.month && year == nextMonth.year;
+//   }
+
+//   /// Returns true if [this] occurs in previous year
+//   bool get isInPreviousYear => year == DateTime.now().year - 1;
+
+//   /// Returns true if [this] occurs in previous year
+//   bool get isInNextYear => year == DateTime.now().year + 1;
+
+//   /// Returns true if [this] occurs on Monday
+//   /// In accordance with ISO 8601, a week starts with Monday,
+//   /// which has the value 1.
+//   bool get isMonday => weekday == DateTime.monday;
+
+//   /// Returns true if [this] occurs on Tuesday
+//   /// In accordance with ISO 8601, a week starts with Monday,
+//   /// which has the value 1.
+//   bool get isTuesday => weekday == DateTime.tuesday;
+
+//   /// Returns true if [this] occurs on Wednesday
+//   /// In accordance with ISO 8601, a week starts with Monday,
+//   /// which has the value 1.
+//   bool get isWednesday => weekday == DateTime.wednesday;
+
+//   /// Returns true if [this] occurs on Thursday
+//   /// In accordance with ISO 8601, a week starts with Monday,
+//   /// which has the value 1.
+//   bool get isThursday => weekday == DateTime.thursday;
+
+//   /// Returns true if [this] occurs on Friday
+//   /// In accordance with ISO 8601, a week starts with Monday,
+//   /// which has the value 1.
+//   bool get isFriday => weekday == DateTime.friday;
+
+//   /// Returns true if [this] occurs on Saturday
+//   /// In accordance with ISO 8601, a week starts with Monday,
+//   /// which has the value 1.
+//   bool get isSaturday => weekday == DateTime.saturday;
+
+//   /// Returns true if [this] occurs on Sunday
+//   /// In accordance with ISO 8601, a week starts with Monday,
+//   /// which has the value 1.
+//   bool get isSunday => weekday == DateTime.sunday;
+
+//   /// Returns true if [this] falls in january
+//   bool get isInJanuary => month == DateTime.january;
+
+//   /// Returns true if [this] falls in february
+//   bool get isInFebruary => month == DateTime.february;
+
+//   /// Returns true if [this] falls in march
+//   bool get isInMarch => month == DateTime.march;
+
+//   /// Returns true if [this] falls in april
+//   bool get isInApril => month == DateTime.april;
+
+//   /// Returns true if [this] falls in may
+//   bool get isInMay => month == DateTime.may;
+
+//   /// Returns true if [this] falls in june
+//   bool get isInJune => month == DateTime.june;
+
+//   /// Returns true if [this] falls in july
+//   bool get isInJuly => month == DateTime.july;
+
+//   /// Returns true if [this] falls in august
+//   bool get isInAugust => month == DateTime.august;
+
+//   /// Returns true if [this] falls in september
+//   bool get isInSeptember => month == DateTime.september;
+
+//   /// Returns true if [this] falls in october
+//   bool get isInOctober => month == DateTime.october;
+
+//   /// Returns true if [this] falls in november
+//   bool get isInNovember => month == DateTime.november;
+
+//   /// Returns true if [this] falls in december
+//   bool get isInDecember => month == DateTime.december;
+
+//   /// Returns true if [this] is a leap year
+//   bool get isLeapYear => checkLeapYear(year);
+
+//   /// Returns true if [this] occurs before [other].
+//   ///
+//   /// The comparison is independent of whether the time is in UTC or
+//   /// in the local time zone.
+//   bool operator <(DateTime other) => isBefore(other);
+
+//   /// Returns true if [this] occurs after [other].
+//   ///
+//   /// The comparison is independent of whether the time is in UTC or
+//   /// in the local time zone.
+//   bool operator >(DateTime other) => isAfter(other);
+
+//   /// Returns true if [this] occurs before or at the same moment as [other].
+//   ///
+//   /// The comparison is independent of whether the time is in UTC or
+//   /// in the local time zone.
+//   bool operator <=(DateTime other) =>
+//       isBefore(other) || isAtSameMomentAs(other);
+
+//   /// Returns true if [this] occurs after or at the same moment as [other].
+//   ///
+//   /// The comparison is independent of whether the time is in UTC or
+//   /// in the local time zone.
+//   bool operator >=(DateTime other) => isAfter(other) || isAtSameMomentAs(other);
+
+//   /// Returns [DateTime] with previous day
+//   DateTime get previousDay => subtract(Duration(days: 1));
+
+//   /// Returns [DateTime] with next day
+//   DateTime get nextDay => add(Duration(days: 1));
+
+//   /// Returns [DateTime] with previous year
+//   DateTime get previousYear => DateTime(
+//       year - 1, month, day, hour, minute, second, millisecond, microsecond);
+
+//   /// Returns [DateTime] with next year
+//   DateTime get nextYear => DateTime(
+//       year + 1, month, day, hour, minute, second, millisecond, microsecond);
+
+//   /// + operator that Adds [duration] to [this]
+//   /// e.g.
+//   ///       DateTime twoDaysAfter = DateTime.now() + 2.days;
+//   DateTime operator +(Duration duration) => add(duration);
+
+//   /// - operator that subtracts [duration] from [this].
+//   /// e.g.
+//   ///       DateTime fiveDaysAgo = DateTime.now() - 5.days;
+//   DateTime operator -(Duration duration) => subtract(duration);
+
+//   /// Returns true if [this] falls between [date1] and [date2] irrespective
+//   /// of the order in the Calender.
+//   bool isBetween(DateTime date1, DateTime date2) =>
+//       (isAfter(date1) && isBefore(date2)) ||
+//       (isAfter(date2) && isBefore(date1));
+
+//   /// Removes any information that is equal to or smaller than milliseconds.
+//   /// Returned instance will have 0 milliseconds and microseconds.
+//   DateTime truncateMicros() =>
+//       DateTime(year, month, day, hour, minute, second, millisecond);
+
+//   /// Removes any information that is equal to or smaller than milliseconds.
+//   /// Returned instance will have 0 milliseconds and microseconds.
+//   DateTime truncateMillis() => DateTime(year, month, day, hour, minute, second);
+
+//   /// Removes any information that is equal to or smaller than seconds.
+//   /// Returned instance will have 0 seconds, milliseconds and microseconds.
+//   DateTime truncateSeconds() => DateTime(year, month, day, hour, minute);
+
+//   /// Removes any information that is equal to or smaller than minutes.
+//   /// Returned instance will have 0 minutes, seconds,
+//   /// milliseconds and microseconds.
+//   DateTime truncateMinutes() => DateTime(year, month, day, hour);
+
+//   /// Formats date using [DateFormat] from intl package.
+//   String format(String pattern) => DateFormat(pattern).format(this);
+
+//   /// Returns [DateTime] with only information that is passed to the method.
+//   /// In contrast to [DateTime.copyWith] method, this method does not copy
+//   /// unspecified fields from the original [DateTime].
+//   DateTime only({
+//     int? year,
+//     int month = 1,
+//     int day = 1,
+//     int hour = 0,
+//     int minute = 0,
+//     int second = 0,
+//     int millisecond = 0,
+//     int microsecond = 0,
+//   }) {
+//     return (isUtc ? DateTime.utc : DateTime.new)(
+//       year ?? this.year,
+//       month,
+//       day,
+//       hour,
+//       minute,
+//       second,
+//       millisecond,
+//       microsecond,
+//     );
+//   }
+// }
+
+// /// shot for [DateTime.now]
+// DateTime now() => DateTime.now();
+
+// /// Returns current date without time information.
+// DateTime get today => DateTime.now().dateOnly;
+
+// /// Returns tomorrow's date without time information.
+// DateTime get tomorrow => DateTime.now().nextDay.dateOnly;
+
+// /// Returns yesterday's date without time information.
+// DateTime get yesterday => DateTime.now().previousDay.dateOnly;
+
+
+
+  // /// Whether the time of the date is zero/empty.
+  // bool get timeIsZero =>
+  //     hour == 0 &&
+  //     minute == 0 &&
+  //     second == 0 &&
+  //     millisecond == 0 &&
+  //     microsecond == 0;

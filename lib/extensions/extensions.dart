@@ -1,13 +1,18 @@
 library extensions;
 
+import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:math' as math;
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+
 import 'package:intl/intl.dart';
 
 import '../constants/constants.dart';
+import '../data_types/stack.dart';
+import '../utilities/utilities.dart';
 
 part 'bool.dart';
 part 'color.dart';

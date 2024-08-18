@@ -14,6 +14,10 @@ typedef IntCallback = void Function(int);
 
 typedef BoolCallback<T> = bool Function(T value);
 
+typedef Selector<T> = bool Function(T value);
+
+typedef FutureOrCallback<T> = FutureOr<T> Function();
+
 /// Callback that accepts an [String] through parameters
 typedef StringCallback = void Function(String value);
 

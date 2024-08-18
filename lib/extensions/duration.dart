@@ -29,11 +29,18 @@ extension DurationTimeExtension on Duration {
   ///
   /// This can be used to delay execution in asynchronous code.
   ///
-  /// Example:
+  /// Example 1:
   /// ```dart
   /// await Duration(seconds: 2).delay;
   /// ```
-  Future<void> get delay => Future.delayed(this);
+  /// Example 2:
+  /// ```dart
+  ///   await 3.seconds.delay(() {
+  ///           ....
+  ///   }
+  ///```
+  Future<T> delay<T>([FutureOrCallback<T>? callback]) =>
+      Future<T>.delayed(this, callback);
 
   /// Returns this [Duration] clamped to be in the range [min]-[max].
   ///
@@ -59,7 +66,7 @@ extension DurationTimeExtension on Duration {
   /// ```
   Duration clamp({Duration? min, Duration? max}) {
     assert(
-      ((min != null) && (max != null)) ? min.compareTo(max) <= 0 : true,
+      ((min != null) && (max != null)) && min.compareTo(max) <= 0,
       'Duration min has to be shorter than max\n(min: $min - max: $max)',
     );
     if ((min != null) && compareTo(min).isNegative) {
@@ -69,4 +76,51 @@ extension DurationTimeExtension on Duration {
     }
     return this;
   }
+}
+
+/// provides extensions for [Duration].
+extension DurationScrewdriver on Duration {
+  /// Returns [DateTime] that is before [this] duration.
+  DateTime get ago => DateTime.now() - this;
+
+  /// Returns [DateTime] that is before [this] duration.
+  DateTime get after => DateTime.now() + this;
+
+  /// Alias for [after]
+  DateTime get fromNow => DateTime.now() + this;
+
+  /// Returns the number of whole years spanned by this Duration.
+  /// Please note that this does not account for leap year.
+  int get inYears => inDays ~/ 365;
+
+  /// Returns true if [this] duration equals to or more than a year.
+  bool get isInYears => inYears > 0;
+
+  /// Returns true if [this] duration equals to or more than a day.
+  bool get isInDays => inDays > 0;
+
+  /// Returns true if [this] duration equals to or more than an hour but
+  /// is less than a day.
+  bool get isInHours => inHours > 0 && !isInDays;
+
+  /// Returns true if [this] duration equals to or more than a minute but
+  /// is less than an hour.
+  bool get isInMinutes => inMinutes > 0 && !isInHours;
+
+  /// Returns true if [this] duration equals to or more than a second but
+  /// is less than a minute.
+  bool get isInSeconds => inSeconds > 0 && !isInMinutes;
+
+  /// Returns true if [this] duration equals to or more than a millisecond but
+  /// is less than a second.
+  bool get isInMillis => inMilliseconds > 0 && !isInSeconds;
+
+  /// Returns remaining minutes after deriving hours.
+  int get absoluteMinutes => inMinutes % Duration.minutesPerHour;
+
+  /// Returns remaining minutes after deriving days.
+  int get absoluteHours => inHours % Duration.hoursPerDay;
+
+  /// Returns remaining minutes after deriving minutes.
+  int get absoluteSeconds => inSeconds % Duration.secondsPerMinute;
 }
