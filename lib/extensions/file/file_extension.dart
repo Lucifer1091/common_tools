@@ -1,9 +1,9 @@
-import 'dart:io';
+import 'dart:io' if (dart.library.html) 'dart:html' show File;
 
 import 'package:mime/mime.dart';
 import 'package:path/path.dart' as p;
 
-import '../constants/constants.dart';
+import '../../constants/constants.dart';
 
 extension FileExtensionX on File {
   /// get fileName from file

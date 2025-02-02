@@ -13,6 +13,7 @@ import 'package:intl/intl.dart';
 import '../constants/constants.dart';
 import '../data_types/stack.dart';
 import '../utilities/utilities.dart';
+import 'index.dart';
 
 part 'bool.dart';
 part 'color.dart';
@@ -27,6 +28,5 @@ part 'list.dart';
 part 'map.dart';
 part 'num.dart';
 part 'scope_functions.dart';
-part 'string.dart';
 part 'time.dart';
 part 'widget.dart';
