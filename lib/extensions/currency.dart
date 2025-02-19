@@ -2,28 +2,22 @@ part of 'extensions.dart';
 
 extension CurrencyStringX on String? {
   String toPrice({bool withSymbol = false, String unit = r'$', int dp = 2}) =>
-      CurrencyExt.toPrice(this, withSymbol: withSymbol, dp: dp);
-
-  String toCost({bool withSymbol = false, String unit = r'$'}) =>
-      CurrencyExt.toCost(this, withSymbol: withSymbol);
+      _CurrencyExt.toPrice(this, withSymbol: withSymbol, dp: dp);
 
   String toPercentage({bool withSymbol = true, int dp = 0}) =>
-      CurrencyExt.toPercentage(this, withSymbol: withSymbol, dp: dp);
+      _CurrencyExt.toPercentage(this, withSymbol: withSymbol, dp: dp);
 }
 
 extension CurrencyNumX on num? {
   String toPrice({bool withSymbol = false, String unit = r'$', int dp = 2}) =>
-      CurrencyExt.toPrice(this, withSymbol: withSymbol, dp: dp);
-
-  String toCost({bool withSymbol = false, String unit = r'$'}) =>
-      CurrencyExt.toCost(this, withSymbol: withSymbol);
+      _CurrencyExt.toPrice(this, withSymbol: withSymbol, dp: dp);
 
   String toPercentage({bool withSymbol = true, int dp = 0}) =>
-      CurrencyExt.toPercentage(this, withSymbol: withSymbol, dp: dp);
+      _CurrencyExt.toPercentage(this, withSymbol: withSymbol, dp: dp);
 }
 
-class CurrencyExt {
-  CurrencyExt._();
+class _CurrencyExt {
+  _CurrencyExt._();
 
   static String toPrice(
     Object? value, {
@@ -35,18 +29,6 @@ class CurrencyExt {
       return '${withSymbol ? '$unit ' : ''}${value.toString().toDouble().toStringAsFixed(dp)}';
     } else {
       return '${withSymbol ? '$unit ' : ''}0${dp == 0 ? '' : '.'}${'0' * dp}';
-    }
-  }
-
-  static String toCost(
-    Object? value, {
-    bool withSymbol = false,
-    String unit = r'$',
-  }) {
-    if (value.toString().isNum) {
-      return '${withSymbol ? '$unit ' : ''}${value.toString().toDouble().toStringAsFixed(4)}';
-    } else {
-      return '${withSymbol ? '$unit ' : ''}0.0000';
     }
   }
 

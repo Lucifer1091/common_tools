@@ -1,4 +1,4 @@
-part of 'extensions.dart';
+import 'package:flutter/material.dart';
 
 extension DateRangeValidators on DateTimeRange? {
   /// Checks if the [DateTimeRange] value is null.

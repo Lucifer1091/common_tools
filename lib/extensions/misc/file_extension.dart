@@ -40,21 +40,21 @@ extension FileExtensionX on File {
       );
 
   /// check weather file is ms doc
-  bool get isDocx => RegexMatcher.matchFile(
+  bool get isDoc => RegexMatcher.matchFile(
         mimeType ?? extension,
         RegexFileType.doc,
       );
 
   /// check whether file is presentation document
-  bool get isPpt => RegexMatcher.matchFile(
+  bool get isPPT => RegexMatcher.matchFile(
         mimeType ?? extension,
         RegexFileType.ppt,
       );
 
   /// check whether file is excel sheet
-  bool get isXls => RegexMatcher.matchFile(
+  bool get isExcel => RegexMatcher.matchFile(
         mimeType ?? extension,
-        RegexFileType.xls,
+        RegexFileType.excel,
       );
 
   /// check whether file is excel sheet
@@ -93,17 +93,21 @@ extension FileExtensionX on File {
         RegexFileType.json,
       );
 
-  /// checks whether given file is docx,pdf,xls,ppt or txt
+  /// checks whether given file is docx, pdf, xls, ppt or txt
   bool get isFile =>
-      isDocx ||
+      isImage ||
+      isSvg ||
+      isVideo ||
+      isAudio ||
       isPdf ||
-      isXls ||
-      isPpt ||
+      isDoc ||
+      isPPT ||
+      isExcel ||
       isTxt ||
-      isCsv ||
       isXml ||
-      isJson ||
-      isArchive;
+      isCsv ||
+      isArchive ||
+      isJson;
 
   /// get file size in mb
   double get sizeInMb {

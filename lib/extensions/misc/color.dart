@@ -1,4 +1,4 @@
-part of 'extensions.dart';
+import 'package:flutter/material.dart';
 
 extension StringToColor on String {
   /// String is in the format "aabbcc" or "ffaabbcc" with an optional leading "#".
@@ -13,10 +13,10 @@ extension StringToColor on String {
 extension HexColor on Color {
   /// Prefixes a hash sign if [leadingHashSign] is set to `true` (default is `true`).
   String toHex({bool leadingHashSign = true}) => '${leadingHashSign ? '#' : ''}'
-      '${alpha.toRadixString(16).padLeft(2, '0')}'
-      '${red.toRadixString(16).padLeft(2, '0')}'
-      '${green.toRadixString(16).padLeft(2, '0')}'
-      '${blue.toRadixString(16).padLeft(2, '0')}';
+      '${a.toInt().toRadixString(16).padLeft(2, '0')}'
+      '${r.toInt().toRadixString(16).padLeft(2, '0')}'
+      '${g.toInt().toRadixString(16).padLeft(2, '0')}'
+      '${b.toInt().toRadixString(16).padLeft(2, '0')}';
 
   /// Lighten the color by [percentage] (0.0 to 1.0).
   Color lighten([double percentage = .1]) {
@@ -79,7 +79,7 @@ extension HexColor on Color {
   /// double brightness = color.getBrightness;
   /// print('Brightness: $brightness'); // Output: 110.622
   /// ```
-  double get getBrightness => (red * 299 + green * 587 + blue * 114) / 1000;
+  double get getBrightness => (r * 299 + g * 587 + b * 114) / 1000;
 
   /// Returns the luminance of the color.
   ///
@@ -105,22 +105,23 @@ extension HexColor on Color {
   ///                                           //   800: Color(0xff1565c0), 900: Color(0xff0d47a1)});
   /// ```
   MaterialColor createMaterialColor() {
-    List<double> strengths = <double>[.05];
-    Map<int, Color> swatch = <int, Color>{};
-    int r = red, g = green, b = blue;
+    final List<double> strengths = <double>[.05];
+    final Map<int, Color> swatch = <int, Color>{};
 
     for (int i = 1; i < 10; i++) {
       strengths.add(0.1 * i);
     }
+
     for (final strength in strengths) {
       final double ds = 0.5 - strength;
       swatch[(strength * 1000).round()] = Color.fromRGBO(
-        r + ((ds < 0 ? r : (255 - r)) * ds).round(),
-        g + ((ds < 0 ? g : (255 - g)) * ds).round(),
-        b + ((ds < 0 ? b : (255 - b)) * ds).round(),
+        (r + ((ds < 0 ? r : (255 - r)) * ds).round()) as int,
+        (g + ((ds < 0 ? g : (255 - g)) * ds).round()) as int,
+        (b + ((ds < 0 ? b : (255 - b)) * ds).round()) as int,
         1,
       );
     }
+
     return MaterialColor(value, swatch);
   }
 }

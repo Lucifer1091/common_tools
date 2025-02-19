@@ -1,4 +1,4 @@
-library extensions;
+library;
 
 import 'dart:async';
 import 'dart:collection';
@@ -12,15 +12,10 @@ import 'package:intl/intl.dart';
 
 import '../constants/constants.dart';
 import '../data_types/stack.dart';
-import '../utilities/utilities.dart';
 import 'index.dart';
 
-part 'bool.dart';
-part 'color.dart';
-part 'context.dart';
 part 'currency.dart';
 part 'date.dart';
-part 'date_time_range.dart';
 part 'duration.dart';
 part 'form.dart';
 part 'generic.dart';

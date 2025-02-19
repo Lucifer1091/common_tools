@@ -107,7 +107,7 @@ extension IterableExt<T> on Iterable<T> {
   /// Adds the [value] to the list if not in the iterable already.
   Iterable<T> putIfAbsent(
     T value, {
-    BoolCallback<T>? equalityBuilder,
+    Selector<T>? equalityBuilder,
   }) {
     final containsValue =
         equalityBuilder != null ? any(equalityBuilder) : contains(value);
@@ -3629,8 +3629,7 @@ extension CollectionsExtensions<T> on Iterable<T> {
   /// Returns a set containing all elements that are contained
   /// by both this set and the specified collection.
   Set<T> intersect(Iterable<T> other) {
-    final set = this.toMutableSet();
-    set.addAll(other);
+    final set = this.toMutableSet()..addAll(other);
     return set;
   }
 
@@ -3941,7 +3940,6 @@ class _IndexedWhereIterator<E> implements Iterator<E> {
   @override
   E get current => _iterator.current;
 }
-
 
 // import 'dart:collection';
 // import 'dart:math';
@@ -5304,18 +5302,18 @@ class _IndexedWhereIterator<E> implements Iterator<E> {
 
 // extension IterableStartsWithExtension<E> on Iterable<E> {
 //  /// Returns if this [Iterable] starts with the elements of [otherIterable].
-  ///
-  /// If [otherIterable] is empty, `true` is returned. If [otherIterable] has
-  /// more elements than this [Iterable], `false` is returned.
-  ///
-  /// ```dart
-  /// [1, 2, 3].startsWith([]); // -> true
-  /// [1, 2, 3].startsWith([1]); // -> true
-  /// [1, 2, 3].startsWith([1, 2]); // -> true
-  /// [1, 2, 3].startsWith([1, 2, 3]); // -> true
-  /// [1, 2, 3].startsWith([1, 2, 3, 4]); // -> false
-  /// [1, 2, 3].startsWith([2, 3]); // -> false
-  /// ```
+///
+/// If [otherIterable] is empty, `true` is returned. If [otherIterable] has
+/// more elements than this [Iterable], `false` is returned.
+///
+/// ```dart
+/// [1, 2, 3].startsWith([]); // -> true
+/// [1, 2, 3].startsWith([1]); // -> true
+/// [1, 2, 3].startsWith([1, 2]); // -> true
+/// [1, 2, 3].startsWith([1, 2, 3]); // -> true
+/// [1, 2, 3].startsWith([1, 2, 3, 4]); // -> false
+/// [1, 2, 3].startsWith([2, 3]); // -> false
+/// ```
 //   bool startsWith(Iterable<E> otherIterable) {
 //     final thisIterator = iterator;
 //     final otherIterator = otherIterable.iterator;
@@ -5557,7 +5555,6 @@ class _IndexedWhereIterator<E> implements Iterator<E> {
 // // and Philippe Fanaro https://github.com/psygo
 // // For more info, see: https://pub.dartlang.org/packages/fast_immutable_collections
 
-
 // /// Combines iterables [a] and [b] into one, by applying the [combine] function.
 // /// If [allowDifferentSizes] is true, it will stop as soon as one of the
 // /// iterables has no more values. If [allowDifferentSizes] is false, it will
@@ -5702,7 +5699,7 @@ class _IndexedWhereIterator<E> implements Iterator<E> {
 //     return result as N;
 //   }
 
-//   /// Returns a zero of type [N]. 
+//   /// Returns a zero of type [N].
 //   N _zeroOf<N extends num>() {
 //     // num is a sealed class with only two subclasses: int and double
 //     // therefore this function should never throw

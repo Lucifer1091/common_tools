@@ -10,8 +10,8 @@ extension MiscExtensions on String? {
   /// You can pass the [wordsPerMinute] parameter for different read speeds.
   /// ### Example
   /// ```dart
-  /// String foo =  'Hello dear friend how you doing ?';
-  /// int readTime = foo.readTime(); // returns 3 seconds.
+  ///  String foo =  'Hello dear friend how you doing ?';
+  ///  int readTime = foo.readTime(); // returns 3 seconds.
   /// ```
   int readTime({int wordsPerMinute = 200}) {
     if (isBlank) return 0;
@@ -26,8 +26,8 @@ extension MiscExtensions on String? {
   /// The pattern is based on spaces.
   /// ### Example
   /// ```dart
-  /// String foo = 'Hello dear friend how you doing ?';
-  /// int count = foo.wordCount; // returns 6 words.
+  ///  String foo = 'Hello dear friend how you doing ?';
+  ///  int count = foo.wordCount; // returns 6 words.
   /// ```
   int get wordCount {
     if (isBlank) return 0;
@@ -43,13 +43,13 @@ extension MiscExtensions on String? {
   ///### Example
   ///
   ///```dart
-  ///String foo = 'Hello World';
-  ///int digitCount = foo.getDigitCount(); // returns 0;
+  ///  String foo = 'Hello World';
+  ///  int digitCount = foo.getDigitCount; // returns 0;
   ///```
   ///
   ///```dart
-  ///String foo = 'Hello World 123';
-  ///int digitCount = foo.getDigitCount(); // returns 3;
+  ///  String foo = 'Hello World 123';
+  ///  int digitCount = foo.getDigitCount; // returns 3;
   ///```
   int get digitCount {
     if (isBlank) return 0;
@@ -58,12 +58,15 @@ extension MiscExtensions on String? {
     return digitsOnly.allMatches(this!).length;
   }
 
+  /// return string lines count
+  int get linesCount => isBlank ? 0 : this!.split('\n').length;
+
   /// Finds a specific's character occurrence in the `String`.
   ///
   /// ### Example
   /// ```dart
-  /// String foo = 'foo';
-  /// int occ = foo.charCount('o'); // returns 2
+  ///  String foo = 'foo';
+  ///  int occ = foo.charCount('o'); // returns 2
   /// ```
   int charCount(String char) {
     if (isBlank) return 0;
@@ -86,15 +89,17 @@ extension MiscExtensions on String? {
   ///
   /// Example:
   /// ```dart
-  /// String text = "hello world, hello!";
-  /// int count = text.countWords("hello"); // 2
+  ///  String text = "hello world, hello!";
+  ///  int count = text.countWords("hello"); // 2
   /// ```
   int countWords(String word) {
-    if (isBlank) return 0;
+    if (isBlank || word.isEmpty) return 0;
 
-    if (word.isEmpty) return 0;
-    final pattern =
-        RegExp(r'\b' + RegExp.escape(word) + r'\b', caseSensitive: false);
+    final pattern = RegExp(
+      r'\b' + RegExp.escape(word) + r'\b',
+      caseSensitive: false,
+    );
+
     return pattern.allMatches(this!).length;
   }
 
@@ -104,8 +109,8 @@ extension MiscExtensions on String? {
   /// ```
   /// ### Example 1
   /// ```dart
-  /// String foo = 'esentis';
-  /// List occurrences = foo.charOccurrences; // returns '[{e:2},{i:1},{n:1},{s:2},]'
+  ///  String foo = 'esentis';
+  ///  List occurrences = foo.charOccurrences; // returns '[{e:2},{i:1},{n:1},{s:2},]'
   /// ```
   List<Map<String, int>> get charOccurrences {
     if (isBlank) return [];
@@ -134,8 +139,8 @@ extension MiscExtensions on String? {
   /// Finds the most frequent character in the `String`.
   /// ### Example 1
   /// ```dart
-  /// String foo = 'Hello World';
-  /// String mostFrequent = foo.mostFrequent; // returns 'l'
+  ///  String foo = 'Hello World';
+  ///  String mostFrequent = foo.mostFrequent; // returns 'l'
   /// ```
   String? mostFrequent({bool ignoreSpaces = false}) {
     if (isBlank) return this;
@@ -171,40 +176,6 @@ extension MiscExtensions on String? {
     });
 
     return mostFrequent;
-  }
-
-  /// Checks whether all characters are contained in the `String`.
-  ///
-  /// The method is case sensitive by default.
-  ///
-  /// ### Example
-  ///
-  /// ```dart
-  /// String foo = 'Hello World';
-  /// bool containsAll = foo.containsAllCharacters('Hello'); // returns true;
-  /// ```
-  ///
-  /// ```dart
-  /// String foo = 'Hello World';
-  /// bool containsAll = foo.containsAllCharacters('Hello!'); // returns false;
-  /// ```
-  bool containsAllCharacters(String characters) {
-    if (isBlank) return false;
-
-    final Map<String, int> letterCounts = {};
-
-    this!.split('').forEach((letter) {
-      letterCounts[letter] = (letterCounts[letter] ?? 0) + 1;
-    });
-
-    for (final letter in characters.split('')) {
-      if (letterCounts[letter] == null || letterCounts[letter]! <= 0) {
-        return false;
-      }
-      letterCounts[letter] = letterCounts[letter]! - 1;
-    }
-
-    return true;
   }
 
   /// Returns a `Set` of the common characters between the two `String`s.
@@ -311,7 +282,7 @@ extension MiscExtensions on String? {
   /// ### Example
   /// ```dart
   /// String foo = ''
-  /// foo.ifEmpty(()=>print('String is null'));
+  /// foo.ifNull('dont be null'); // returns 'dont be null'
   /// ```
   String ifNull(ValueGetter<String> act) {
     if (isNotBlank) return this!;
@@ -319,20 +290,7 @@ extension MiscExtensions on String? {
     return act();
   }
 
-  /// Provide default value if the `String` is `null`.
-  ///
-  /// ### Example
-  /// ```dart
-  /// String? foo = null;
-  /// foo.ifNull('dont be null'); // returns 'dont be null'
-  /// ```
-  String? defaultValue(String defaultValue) {
-    if (isNotBlank) return this;
-
-    return defaultValue;
-  }
-
-  /// Return a empty `String` if this equals [comparisonString]. Otherwise return this.
+  /// Return a empty `String` if this equals [other]. Otherwise return this.
   ///
   /// ### Example
   ///
@@ -340,10 +298,9 @@ extension MiscExtensions on String? {
   /// String t = 'OK'.emptyIf("OK"); // returns "";
   /// String f = 'NO'.emptyIf("YES"); // returns "NO";
   /// ```
-  String? emptyIf(String? comparisonString) =>
-      asIf((s) => s == comparisonString, '', this);
+  String? emptyIf(String? other) => asIf((s) => s == other, '', this);
 
-  /// Return null if this equals [comparisonString]. Otherwise return this.
+  /// Return null if this equals [other]. Otherwise return this.
   ///
   /// ### Example
   ///
@@ -351,12 +308,12 @@ extension MiscExtensions on String? {
   /// String t = 'OK'.nullIf("OK"); // returns null;
   /// String f = 'NO'.nullIf("YES"); // returns "NO";
   /// ```
-  String? nullIf(String? comparisonString) =>
-      asIf((s) => s == comparisonString, null, this);
+  String? nullIf(String? other) => asIf((s) => s == other, null, this);
 
-  /// Return [this if not blank. Otherwise return [newString].
-  String? ifBlank(String? newString) =>
-      asIf((s) => s.isNotBlank, this, newString);
+  /// Return this if not blank. Otherwise return [other].
+  String? ifBlank(String? other) => asIf((s) => s.isNotBlank, this, other);
+
+  String? ifNotBlank(String? other) => asIf((s) => s.isNotBlank, other, this);
 
   /// Compares this using [comparison] and returns [trueString] if true, otherwise return [falseString].
   ///

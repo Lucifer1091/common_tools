@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import '../common_tools.dart';
+import '../extensions/index.dart';
 
 // Decode a string JWT token into a `Map<String, dynamic>`
 class JwtDecoder {

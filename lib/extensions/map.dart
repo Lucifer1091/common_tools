@@ -102,7 +102,7 @@ extension MapUtils<K, V> on Map<K, V> {
   Map<String, V> capitalizeKeys() {
     final map = <String, V>{};
     for (final key in keys) {
-      map[key.toString().capitalize] = this[key] as V;
+      map[key.toString().capitalize!] = this[key] as V;
     }
     return map;
   }
@@ -112,7 +112,7 @@ extension MapUtils<K, V> on Map<K, V> {
   Map<K, String> capitalizeValues() {
     final map = <K, String>{};
     for (final key in keys) {
-      map[key] = this[key].toString().capitalize;
+      map[key] = this[key].toString().capitalize!;
     }
     return map;
   }
@@ -525,7 +525,6 @@ extension MapScrewdriver<K, V> on Map<K, V> {
   }
 }
 
-
 // extension MapAll<K, V> on Map<K, V> {
 //   /// Returns true if all entries match the given [predicate].
 //   /// [predicate] must not be null.
@@ -825,4 +824,3 @@ extension MapScrewdriver<K, V> on Map<K, V> {
 //   /// Converts this pair into a list.
 //   List<T> toList() => [first, second];
 // }
-

@@ -1,77 +1,6 @@
 import 'dart:math' as math show min, max;
 
-/// Utility extension methods for the [Comparable] class.
-extension ComparableBasics<T> on Comparable<T> {
-  /// Returns true if this should be ordered strictly before [other].
-  ///
-  /// Example:
-  /// ```dart
-  /// int a = 5;
-  /// int b = 10;
-  /// print(a < b); // true
-  /// ```
-  ///
-  /// Throws an [ArgumentError] if [other] is `null`.
-  bool operator <(T other) {
-    if (other == null) {
-      throw ArgumentError('other must not be null');
-    }
-    return compareTo(other) < 0;
-  }
-
-  /// Returns true if this should be ordered strictly after [other].
-  ///
-  /// Example:
-  /// ```dart
-  /// int a = 15;
-  /// int b = 10;
-  /// print(a > b); // true
-  /// ```
-  ///
-  /// Throws an [ArgumentError] if [other] is `null`.
-  bool operator >(T other) {
-    if (other == null) {
-      throw ArgumentError('other must not be null');
-    }
-    return compareTo(other) > 0;
-  }
-
-  /// Returns true if this should be ordered before or equal to [other].
-  ///
-  /// Example:
-  /// ```dart
-  /// int a = 5;
-  /// int b = 10;
-  /// print(a <= b); // true
-  /// print(a <= 5); // true
-  /// ```
-  ///
-  /// Throws an [ArgumentError] if [other] is `null`.
-  bool operator <=(T other) {
-    if (other == null) {
-      throw ArgumentError('other must not be null');
-    }
-    return compareTo(other) <= 0;
-  }
-
-  /// Returns true if this should be ordered after or equal to [other].
-  ///
-  /// Example:
-  /// ```dart
-  /// int a = 15;
-  /// int b = 10;
-  /// print(a >= b); // true
-  /// print(a >= 15); // true
-  /// ```
-  ///
-  /// Throws an [ArgumentError] if [other] is `null`.
-  bool operator >=(T other) {
-    if (other == null) {
-      throw ArgumentError('other must not be null');
-    }
-    return compareTo(other) >= 0;
-  }
-}
+import 'helper.dart';
 
 /// Returns the greater of two [Comparable] objects.
 ///
@@ -129,110 +58,53 @@ T min<T extends Comparable<Object>>(T a, T b) {
   return (a <= b) ? a : b;
 }
 
+/// Provides comparison operators for [Comparable] types.
+extension ComparableSmallerExtension<T extends Comparable<T>> on T {
+  bool operator <(T other) => compareTo(other) < 0;
 
-// /// provides extensions for [Comparable]
-// extension ComparableScrewdriver<E extends Comparable<dynamic>> on E {
-//   /// Returns true if [other] object is less than [this].
-//   bool operator <(E other) => compareTo(other) < 0;
+  bool operator <=(T other) => compareTo(other) <= 0;
 
-//   /// Returns true if [other] object is less than or equal to [this].
-//   bool operator <=(E other) => compareTo(other) <= 0;
+  bool operator >(T other) => compareTo(other) > 0;
 
-//   /// Returns true if [other] object is greater than [this].
-//   bool operator >(E other) => compareTo(other) > 0;
+  bool operator >=(T other) => compareTo(other) >= 0;
 
-//   /// Returns true if [other] object is greater than or equal to [this].
-//   bool operator >=(E other) => compareTo(other) >= 0;
+  /// Ensures that this value lies in the specified range
+  /// [min]..[max].
+  ///
+  /// @return this value if it's in the range, or [min]
+  /// if this value is less than [min],
+  /// or [max] if this value is greater than [max].
+  T coerceIn(T min, [T? max]) {
+    if (max != null && min > max) {
+      throw ArgumentError(
+        'Cannot coerce value to an empty range: '
+        'maximum $max is less than minimum $min.',
+      );
+    }
+    if (this < min) return min;
+    if (max != null && this > max) return max;
+    return this;
+  }
 
-//   /// Ensures that this value is not less than the specified [minimum] value.
-//   /// returns this value if it's greater than or equal to the [minimum] value
-//   /// or the [minimum] value otherwise.
-//   E coerceAtLeast(E minimum) => this < minimum ? minimum : this;
+  /// Ensures that this value is not less than the specified [min].
+  ///
+  /// @return this value if it's greater than or equal to the [min]
+  /// or the [min] otherwise.
+  T coerceAtLeast(T min) => this < min ? min : this;
 
-//   /// Ensures that this value is not greater than the specified [maximum] value.
-//   /// Returns this value if it's less than or equal to the [maximum] value
-//   /// or the [maximum] value otherwise.
-//   E coerceAtMost(E maximum) => this > maximum ? maximum : this;
+  /// Ensures that this value is not greater than the specified [max].
+  ///
+  /// @return this value if it's less than or equal to the [max]
+  /// or the [max] otherwise.
+  T coerceAtMost(T max) => this > max ? max : this;
 
-//   /// Ensures that this value lies in the specified range [min] <--> [max].
-//   /// Return this value if it's in the range, or [min] value if this value
-//   /// is less than [min] value, or [max] value if this value is
-//   /// greater than [max] value.
-//   E coerceIn(E min, E max) {
-//     if (min > max) {
-//       throw IllegalArgumentException(
-//           'Cannot coerce value to an empty range: maximum $max is '
-//           'less than minimum $min.');
-//     }
-//     if (this < min) return min;
-//     if (this > max) return max;
-//     return this;
-//   }
-// }
+  /// Returns true when between [first] and [endInclusive]. The order of the
+  /// arguments doesn't matter.
+  ///
+  /// Alias for `first.rangeTo(endInclusive).contains(this)`
+  bool between(T first, T endInclusive) =>
+      first.rangeTo(endInclusive).contains(this);
 
-// /// Provides comparison operators for [Comparable] types.
-// extension ComparableSmallerExtension<T extends Comparable<T>> on T {
-//   bool operator <(T other) => compareTo(other) < 0;
-// }
-
-// extension ComparableSmallerEqualsExtension<T extends Comparable<T>> on T {
-//   bool operator <=(T other) => compareTo(other) <= 0;
-// }
-
-// extension ComparableBiggerExtension<T extends Comparable<T>> on T {
-//   bool operator >(T other) => compareTo(other) > 0;
-// }
-
-// extension ComparableBiggerEqualsExtension<T extends Comparable<T>> on T {
-//   bool operator >=(T other) => compareTo(other) >= 0;
-// }
-
-// extension ComparableCoerceInExtension<T extends Comparable<T>> on T {
-//   /// Ensures that this value lies in the specified range
-//   /// [minimumValue]..[maximumValue].
-//   ///
-//   /// @return this value if it's in the range, or [minimumValue]
-//   /// if this value is less than [minimumValue],
-//   /// or [maximumValue] if this value is greater than [maximumValue].
-//   T coerceIn(T minimumValue, [T? maximumValue]) {
-//     if (maximumValue != null && minimumValue > maximumValue) {
-//       throw ArgumentError(
-//         'Cannot coerce value to an empty range: '
-//         'maximum $maximumValue is less than minimum $minimumValue.',
-//       );
-//     }
-//     if (this < minimumValue) return minimumValue;
-//     if (maximumValue != null && this > maximumValue) return maximumValue;
-//     return this;
-//   }
-// }
-
-// extension ComparableCoerceAtLeastExtension<T extends Comparable<T>> on T {
-//   /// Ensures that this value is not less than the specified [minimumValue].
-//   ///
-//   /// @return this value if it's greater than or equal to the [minimumValue]
-//   /// or the [minimumValue] otherwise.
-//   T coerceAtLeast(T minimumValue) => this < minimumValue ? minimumValue : this;
-// }
-
-// extension ComparableCoerceAtMostExtension<T extends Comparable<T>> on T {
-//   /// Ensures that this value is not greater than the specified [maximumValue].
-//   ///
-//   /// @return this value if it's less than or equal to the [maximumValue]
-//   /// or the [maximumValue] otherwise.
-//   T coerceAtMost(T maximumValue) => this > maximumValue ? maximumValue : this;
-// }
-
-// extension ComparableBetweenExtension<T extends Comparable<T>> on T {
-//   /// Returns true when between [first] and [endInclusive]. The order of the
-//   /// arguments doesn't matter.
-//   ///
-//   /// Alias for `first.rangeTo(endInclusive).contains(this)`
-//   bool between(T first, T endInclusive) =>
-//       first.rangeTo(endInclusive).contains(this);
-// }
-
-// extension ComparableInRangeExtension<T extends Comparable<T>> on T {
-//   /// Returns true if in the [range].
-//   bool inRange(Range<T> range) => range.contains(this);
-// }
+  /// Returns true if in the [range].
+  bool inRange(Range<T> range) => range.contains(this);
+}

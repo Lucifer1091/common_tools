@@ -36,72 +36,65 @@ extension StringValidators on String? {
   /// Checks if the `String` is not blank (null, empty or only white spaces).
   bool get isNotBlank => !isBlank;
 
-  /// Check if the string exactly matches with the [comparison]
-  bool equals(Object? comparison) {
-    if (comparison == null) {
-      // Explicitly check if `comparison` is null because calling `toString`
-      // on `null` will return 'null'. This is an issue when comparing to
-      // the string 'null'. Also, `str` will never be null so if `comparison`
-      // is null we can simply return false.
-      return false;
-    }
-    return this == comparison.toString();
-  }
+  /// Check if the string is an email
+  bool get isEmail => isNotBlank && lowercase.matches(regex: Regex.email);
 
-  /// Check if string matches the [pattern] or [regex].
-  bool matches({RegExp? regex, String? pattern}) {
+  /// check given string is valid phone number or not
+  bool get isPhoneNumber {
     if (isBlank) return false;
 
-    final RegExp re = regex ?? RegExp(pattern ?? '');
-    return re.hasMatch(this!);
-  }
+    if (this!.length > 16 || this!.length < 9) return false;
 
-  /// Check if the string is an email
-  bool get isEmail =>
-      isNotBlank && this!.toLowerCase().matches(regex: Regex.email);
+    return RegexMatcher.match(this, regex: Regex.phone);
+  }
 
   /// Check if the string is a URL
   bool get isUrl => isNotBlank && (Uri.tryParse(this!)?.isAbsolute ?? false);
 
-  /// Check if the string is an IP ([version] 4 or 6)
-  ///
-  /// [version] is a String or an `int` with options 4 and 6 only.
-  bool isIP([Object? version]) {
-    if (isBlank) return false;
-
-    assert(
-      version == null || version is String || version is int,
-      'IP can only be a String or int',
-    );
-
-    version = version.toString();
-
-    if (version == 'null') {
-      return isIP(4) || isIP(6);
-    } else if (version == '4') {
-      if (!matches(regex: Regex.ipv4Maybe)) return false;
-
-      final parts = this!.split('.')
-        ..sort((a, b) => int.parse(a) - int.parse(b));
-      return int.parse(parts[3]) <= 255;
-    }
-    return version == '6' && matches(regex: Regex.ipv6);
-  }
-
   /// Check if the string contains only letters (a-zA-Z).
   bool get isAlpha => matches(regex: Regex.alpha);
+
+  /// Checks if the `String` has only Latin characters.
+  /// ### Example
+  /// ```dart
+  /// String foo = 'this is a τεστ';
+  /// bool isLatin = foo.isLatin; // returns false
+  /// String foo2 = 'this is hello world';
+  /// bool isLatin2 = foo2.isLatin; // returns true
+  /// ```
+  bool get isLatin {
+    if (isBlank) return false;
+
+    return RegExp(r'^[a-zA-Z\s]+$').hasMatch(this!);
+  }
+
+  /// Returns `true` if the `String` contains only letters (Latin or Greek).
+  ///
+  /// ### Example
+  ///
+  /// ```dart
+  /// String text = 'hello world';
+  /// bool isLettersOnly = text.isLettersOnly; // Returns true
+  /// ```
+  bool get isLettersOnly {
+    if (isBlank) return false;
+
+    final onlyLetters = this!.onlyLetters;
+
+    return onlyLetters?.length == this!.length;
+  }
 
   /// Check if the string contains only letters and numbers
   bool get isAlphanumeric => matches(regex: Regex.alphanumeric);
 
   /// Check if the string contains only numbers
-  bool get isNum => isNotBlank && num.tryParse(this!) != null;
+  bool get isNum => toNumOrNull() != null;
 
   /// Check if the string is an integer
-  bool get isInt => isNotBlank && int.tryParse(this!) != null;
+  bool get isInt => toIntOrNull() != null;
 
-  /// Check if the string is a float
-  bool get isFloat => isNotBlank && double.tryParse(this!) != null;
+  /// Check if the string is a double
+  bool get isDouble => toDoubleOrNull() != null;
 
   /// Check if a string is base64 encoded
   bool get isBase64 => matches(regex: Regex.base64);
@@ -113,10 +106,25 @@ extension StringValidators on String? {
   bool get isHexColor => matches(regex: Regex.hexColor);
 
   /// Check if the string is lowercase
-  bool get isLowerCase => isNotBlank && this == this!.toLowerCase();
+  bool get isLowerCase => isNotBlank && this == lowercase;
 
   /// Check if the string is uppercase
-  bool get isUpperCase => isNotBlank && this == this!.toUpperCase();
+  bool get isUpperCase => isNotBlank && this == uppercase;
+
+  /// Checks whether the `String` is consisted of both upper and lower case letters.
+  ///
+  /// ### Example
+  ///
+  /// ```dart
+  /// String foo = 'Hello World';
+  /// bool isMixedCase = foo.isMixedCase; // returns true;
+  /// ```
+  ///
+  /// ```dart
+  /// String foo = 'hello world';
+  /// bool isMixedCase = foo.isMixedCase; // returns false;
+  ///
+  bool get isMixedCase => !isUpperCase && !isLowerCase;
 
   /// Check if the string is a number that's divisible by another
   ///
@@ -143,27 +151,11 @@ extension StringValidators on String? {
     }
   }
 
-  /// Check if the string's length falls in a range
+  /// Check if the string's length falls in a range.
   /// If no max is given then any length above min is ok.
-  ///
-  /// Note: this function takes into account surrogate pairs.
-  /// Surrogate pairs are character representations in source code that
-  /// represent a single character that consists of a sequence of two Unicode
-  /// values. In a coded pair, the first value is a high surrogate and the
-  /// second is a low surrogate. A high surrogate is a character in the range
-  /// U+D800 through U+DBFF
   bool isLength(int min, [int? max]) {
     if (isBlank) return false;
 
-    final surrogatePairs =
-        Regex.surrogatePairsRegExp.allMatches(this!).toList();
-    final int len = this!.length - surrogatePairs.length;
-    return len >= min && (max == null || len <= max);
-  }
-
-  /// Check if the string's length (in bytes) falls in a range.
-  bool isByteLength(int min, [int? max]) {
-    if (isBlank) return false;
     return this!.length >= min && (max == null || this!.length <= max);
   }
 
@@ -177,8 +169,9 @@ extension StringValidators on String? {
       version = version.toString();
     }
 
-    final RegExp? pat = Regex.uuid[version];
-    return pat != null && pat.hasMatch(this!.toUpperCase());
+    final RegExp? pattern = Regex.uuid[version];
+
+    return uppercase.matches(regex: pattern);
   }
 
   /// Checks whether the `String` is a valid Guid.
@@ -194,19 +187,9 @@ extension StringValidators on String? {
   /// ```
   bool get isGuid => matches(regex: Regex.guid);
 
-  /// Check if the string is in an array of given values
-  bool isIn(Object? values) {
-    if (isBlank || values == null) return false;
+  bool get isSha1 => matches(regex: Regex.sha1);
 
-    if (values is String) return values.contains(this!);
-
-    if (values is! Iterable) return false;
-
-    for (final Object? value in values) {
-      if (value.toString() == this) return true;
-    }
-    return false;
-  }
+  bool get isSha256 => matches(regex: Regex.sha256);
 
   /// Checks if the `String` provided is a valid credit card number using Luhn Algorithm.
   ///
@@ -284,6 +267,37 @@ extension StringValidators on String? {
     return false;
   }
 
+  /// Check if the string is an IP ([version] 4 or 6)
+  ///
+  /// [version] is a String or an `int` with options 4 and 6 only.
+  bool isIP([Object? version]) {
+    if (isBlank) return false;
+
+    assert(
+      version == null || version is String || version is int,
+      'IP can only be a String or int',
+    );
+
+    version = version.toString();
+
+    if (version == 'null') {
+      return isIP(4) || isIP(6);
+    } else if (version == '4') {
+      if (!matches(regex: Regex.ipv4Maybe)) return false;
+
+      final parts = this!.split('.')
+        ..sort((a, b) => int.parse(a) - int.parse(b));
+      return int.parse(parts[3]) <= 255;
+    }
+    return version == '6' && matches(regex: Regex.ipv6);
+  }
+
+  bool get isMacAddress {
+    if (isBlank) return false;
+
+    return matches(regex: Regex.macAddress);
+  }
+
   /// Checks if the `String` is a valid `json` format.
   ///
   /// ### Example
@@ -331,63 +345,6 @@ extension StringValidators on String? {
   /// ```
   bool get isAscii => matches(regex: Regex.ascii);
 
-  /// Checks if the given string contains any full-width characters.
-  ///
-  /// This function uses a regular expression to determine if the input string
-  /// contains any full-width characters. Full-width characters include characters
-  /// that are not ASCII, half-width katakana, half-width Hangul, and certain symbols and digits.
-  ///
-  /// - Parameter [str]: The input string to check for full-width characters.
-  ///
-  /// Returns:
-  /// - `true` if the input string contains any full-width characters, `false` otherwise.
-  ///
-  /// Example:
-  /// ```dart
-  /// String text = "Hello, こんにちは!";
-  /// bool hasFullWidth = text.isFullWidth; // true
-  /// ```
-  bool get isFullWidth => matches(regex: Regex.fullWidth);
-
-  /// Checks if the given string contains any half-width characters.
-  ///
-  /// This function uses a regular expression to determine if the input string
-  /// contains any half-width characters. Half-width characters include ASCII,
-  /// half-width katakana, half-width Hangul, and certain symbols and digits.
-  ///
-  /// - Parameter [str]: The input string to check for half-width characters.
-  ///
-  /// Returns:
-  /// - `true` if the input string contains any half-width characters, `false` otherwise.
-  ///
-  /// Example:
-  /// ```dart
-  /// String text = "Hello, こんにちは!";
-  /// bool hasHalfWidth = text.isHalfWidth; // true
-  /// ```
-  bool get isHalfWidth => matches(regex: Regex.halfWidth);
-
-  /// Check if the string contains a mixture of full and half-width chars
-  bool get isVariableWidth => isFullWidth && isHalfWidth;
-
-  /// Checks if the given string contains any surrogate pairs.
-  ///
-  /// This function uses a regular expression to determine if the input string
-  /// contains any surrogate pairs, which are used to represent characters outside
-  /// the Basic Multilingual Plane in UTF-16 encoding.
-  ///
-  /// - Parameter [str]: The input string to check for surrogate pairs.
-  ///
-  /// Returns:
-  /// - `true` if the input string contains any surrogate pairs, `false` otherwise.
-  ///
-  /// Example:
-  /// ```dart
-  /// String text = "Hello, 𠀋!";
-  /// bool hasSurrogatePairs = text.isSurrogatePair; // true
-  /// ```
-  bool get isSurrogatePair => matches(regex: Regex.surrogatePairsRegExp);
-
   /// Checks whether the `String` complies to below rules :
   ///  * At least 1 uppercase
   ///  * At least 1 special character
@@ -405,40 +362,7 @@ extension StringValidators on String? {
   bool get isStrongPassword {
     if (isBlank) return false;
 
-    final regex = RegExp(
-      r'^(?=.*([A-Z]){1,})(?=.*[!@#$&*]{1,})(?=.*[0-9]{1,})(?=.*[a-z]{1,}).{8,100}$',
-    );
-    return regex.hasMatch(this!);
-  }
-
-  /// Checks if the `String` has only Latin characters.
-  /// ### Example
-  /// ```dart
-  /// String foo = 'this is a τεστ';
-  /// bool isLatin = foo.isLatin; // returns false
-  /// String foo2 = 'this is hello world';
-  /// bool isLatin2 = foo2.isLatin; // returns true
-  /// ```
-  bool get isLatin {
-    if (isBlank) return false;
-
-    return RegExp(r'^[a-zA-Z\s]+$').hasMatch(this!);
-  }
-
-  /// Returns `true` if the `String` contains only letters (Latin or Greek).
-  ///
-  /// ### Example
-  ///
-  /// ```dart
-  /// String text = 'hello world';
-  /// bool isLettersOnly = text.isLettersOnly; // Returns true
-  /// ```
-  bool get isLettersOnly {
-    if (isBlank) return false;
-
-    final onlyLetters = this!.onlyLetters;
-
-    return onlyLetters?.length == this!.length;
+    return Regex.password.hasMatch(this!);
   }
 
   /// Checks whether the `String` is an anagram of the provided `String`.
@@ -454,10 +378,10 @@ extension StringValidators on String? {
   /// String foo = 'Hello World';
   /// bool isAnagram = foo.isAnagramOf('World Hello!'); // returns false;
   /// ```
-  bool isAnagramOf(String s) {
-    if (isBlank || s.isBlank) return false;
+  bool isAnagramOf(String other) {
+    if (isBlank || other.isBlank) return false;
 
-    final String? word1 = removeWhiteSpace, word2 = s.removeWhiteSpace;
+    final String? word1 = removeWhiteSpace, word2 = other.removeWhiteSpace;
 
     if (word1.isBlank || word2.isBlank || word1?.length != word2?.length) {
       return false;
@@ -495,23 +419,10 @@ extension StringValidators on String? {
     return this == reverse;
   }
 
-  /// Checks whether the `String` is consisted of both upper and lower case letters.
-  ///
-  /// ### Example
-  ///
-  /// ```dart
-  /// String foo = 'Hello World';
-  /// bool isMixedCase = foo.isMixedCase; // returns true;
-  /// ```
-  ///
-  /// ```dart
-  /// String foo = 'hello world';
-  /// bool isMixedCase = foo.isMixedCase; // returns false;
-  ///
-  bool get isMixedCase {
+  bool get hasEscapedChars {
     if (isBlank) return false;
 
-    return this!.toUpperCase() != this && this!.toLowerCase() != this;
+    return this!.contains(Regex.escapedChar);
   }
 
   /// Checks whether the `String` has any whitespace characters.
@@ -530,7 +441,7 @@ extension StringValidators on String? {
   bool get hasWhitespace {
     if (isBlank) return false;
 
-    return this!.contains(RegExp(r'\s'));
+    return this!.contains(Regex.whiteSpaces);
   }
 
   /// Checks if the given string contains any special characters.
@@ -542,8 +453,6 @@ extension StringValidators on String? {
   /// contains any special characters. If the string contains only valid characters
   /// (letters, digits, spaces), the function returns false. Otherwise, it returns true.
   ///
-  /// - Parameter [str]: The input string to check for special characters.
-  ///
   /// Returns:
   /// - `true` if the input string contains any special characters, `false` otherwise.
   ///
@@ -553,6 +462,48 @@ extension StringValidators on String? {
   /// bool hasSpecialChar = text.hasSpecial; // true
   /// ```
   bool get hasSpecial => matches(regex: RegExp(r'^[a-zA-Z0-9 ]+$'));
+
+  /// Checks if the `String` is consisted of same characters (ignores cases).
+  ///
+  /// ### Example
+  /// ```dart
+  /// String foo1 = 'ttttttt'
+  /// bool hasSame1 = foo.hasSameCharacters; // true;
+  /// ```
+  /// ```dart
+  /// String foo = 'ttttttt12'
+  /// bool hasSame2 = foo.hasSameCharacters;  // false;
+  /// ```
+  bool get hasSameCharacters {
+    if (isBlank) return false;
+
+    if (this!.length > 1) {
+      final b = this![0].lowercase;
+
+      for (var i = 1; i < this!.length; i++) {
+        final c = this![i].lowercase;
+        if (c != b) return false;
+      }
+    }
+    return true;
+  }
+
+  /// Check if string matches the [pattern] or [regex].
+  bool matches({RegExp? regex, String? pattern}) {
+    return RegexMatcher.match(this, regex: regex, pattern: pattern);
+  }
+
+  /// Check if the string exactly matches with the [comparison]
+  bool equals(Object? comparison) {
+    if (comparison == null) {
+      // Explicitly check if `comparison` is null because calling `toString`
+      // on `null` will return 'null'. This is an issue when comparing to
+      // the string 'null'. Also, `str` will never be null so if `comparison`
+      // is null we can simply return false.
+      return false;
+    }
+    return this == comparison.toString();
+  }
 
   /// Checks if the current string equals the specified [other] string, ignoring case.
   ///
@@ -566,9 +517,7 @@ extension StringValidators on String? {
   /// ```
   bool equalsIgnoreCase(String? other) =>
       (isBlank && other == null) ||
-      (isNotBlank &&
-          other != null &&
-          this?.toLowerCase() == other.toLowerCase());
+      (isNotBlank && other.isNotBlank && lowercase == other.lowercase);
 
   /// Checks if the current string contains the specified [other] string, ignoring case.
   ///
@@ -583,19 +532,100 @@ extension StringValidators on String? {
   bool containsIgnoreCase(String other) {
     if (isBlank) return false;
 
-    return this!.toLowerCase().contains(other.toLowerCase());
+    return lowercase!.contains(other.toLowerCase());
   }
 
   /// Compares this and [other] after converting to lower case.
   ///
   /// Both this and [other] must not be null.
   int compareIgnoreCase(String other) =>
-      isNotBlank ? this!.toLowerCase().compareTo(other.toLowerCase()) : 0;
+      isNotBlank ? lowercase!.compareTo(other.toLowerCase()) : 0;
 
+  /// Returns `true` if at least one element matches the given [predicate].
+  /// the [predicate] should have only one character
+  bool anyChar(Selector<String> predicate) {
+    if (isBlank) return false;
+
+    return this!.split('').any((s) => predicate(s));
+  }
+
+  /// Check if the string is in an array of given values
+  bool isIn(Object? values) {
+    if (isBlank || values == null) return false;
+
+    if (values is String) return values.contains(this!);
+
+    if (values is! Iterable) return false;
+
+    for (final Object? value in values) {
+      if (value.toString() == this) return true;
+    }
+    return false;
+  }
+
+  /// Checks if the `String` matches **ANY** of the given [patterns].
+  ///
+  /// ### Example
+  ///
+  /// ```dart
+  /// bool contains = "abracadabra".containsAny(["a", "p"]); // returns true;
+  /// ```
+  bool containsAny(List<String?> patterns) {
+    if (isNotBlank) {
+      for (final String? item
+          in patterns.where((element) => element.isNotBlank)) {
+        if (this!.contains(item!)) return true;
+      }
+    }
+    return false;
+  }
+
+  /// Checks if the `String` matches **ALL** given [patterns].
+  ///
+  /// ### Example
+  ///
+  /// ```dart
+  /// bool contains = "abracadabra".containsAll(["abra", "cadabra"]; // returns true;
+  /// ```
+  bool containsAll(List<String?> patterns) {
+    for (final String? item
+        in patterns.where((element) => element.isNotBlank)) {
+      if (isBlank || !this!.contains(item!)) return false;
+    }
+    return true;
+  }
+
+  /// Checks whether all characters are contained in the `String`.
+  ///
+  /// The method is case sensitive by default.
+  ///
+  /// ### Example
+  ///
+  /// ```dart
+  ///  String foo = 'Hello World';
+  ///  bool containsAll = foo.containsAllCharacters('Hello'); // returns true;
+  /// ```
+  ///
+  /// ```dart
+  ///  String foo = 'Hello World';
+  ///  bool containsAll = foo.containsAllCharacters('Hello!'); // returns false;
+  /// ```
+  bool containsAllCharacters(String pattern) {
+    for (final String item in pattern.split('')) {
+      if (isBlank || !this!.contains(item)) return false;
+    }
+
+    return true;
+  }
+}
+
+extension StringToFileValidators on String? {
   /// Check if the string is a image path or url
   bool get isImage =>
       isNotBlank &&
-      (matches(regex: Regex.image) || this!.startsWith('data:image'));
+      (matches(regex: Regex.image) ||
+          matches(regex: Regex.imageUrl) ||
+          this!.startsWith('data:image'));
 
   /// Audio regex
   bool get isAudio => matches(regex: Regex.audio);
@@ -615,12 +645,37 @@ extension StringValidators on String? {
   /// PPT regex
   bool get isPPT => matches(regex: Regex.ppt);
 
-  /// Document regex
-  bool get isApk => matches(regex: Regex.apk);
-
   /// PDF regex
   bool get isPdf => matches(regex: Regex.pdf);
 
-  /// HTML regex
-  bool get isHtml => matches(regex: Regex.html);
+  /// checks whether string is svg
+  bool get isSvg => matches(regex: Regex.svg);
+
+  /// checks whether string is csv
+  bool get isCsv => matches(regex: Regex.csv);
+
+  /// checks whether string is xml
+  bool get isXml => matches(regex: Regex.xml);
+
+  /// checks whether string is archive
+  bool get isArchive => matches(regex: Regex.archive);
+
+  /// checks whether string is json
+  bool get isJsonFile => matches(regex: Regex.json);
+
+  /// checks whether string is docx, pdf, xls, ppt, txt, csv, xml, archive or json
+  bool get isFile =>
+      isImage ||
+      isSvg ||
+      isVideo ||
+      isAudio ||
+      isPdf ||
+      isDoc ||
+      isPPT ||
+      isExcel ||
+      isTxt ||
+      isXml ||
+      isCsv ||
+      isArchive ||
+      isJsonFile;
 }
