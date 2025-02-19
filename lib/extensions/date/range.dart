@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'misc.dart';
+import 'validators.dart';
+
 extension DateRangeValidators on DateTimeRange? {
   /// Checks if the [DateTimeRange] value is null.
   bool get isNull => this == null;
@@ -17,7 +20,9 @@ extension DateRangeValidators on DateTimeRange? {
     if (isNull || start == null || end == null) return false;
 
     if (this!.start.isBeforeOrEqualTo(end) &&
-        start.isBeforeOrEqualTo(this!.end)) return true;
+        start.isBeforeOrEqualTo(this!.end)) {
+      return true;
+    }
 
     return false;
   }
@@ -27,9 +32,7 @@ extension DateRangeValidators on DateTimeRange? {
   /// Returns `true` if the [date] falls on or between the start and end dates.
   /// Otherwise, returns `false`.
   bool includes(DateTime date) =>
-      isNotNull &&
-      (date.isAfter(this!.start) || date.isAtSameMomentAs(this!.start)) &&
-      (date.isBefore(this!.end) || date.isAtSameMomentAs(this!.end));
+      isNotNull && date.isBetween(this?.start, this?.end);
 
   /// Checks if the [range] is completely within this range.
   ///
@@ -51,8 +54,8 @@ extension DateRangeValidators on DateTimeRange? {
   /// Returns `true` if the start and end of the [range] are the same as this range.
   bool equals(DateTimeRange range) =>
       isNotNull &&
-      this!.start.isAtSameMomentAs(range.start) &&
-      this!.end.isAtSameMomentAs(range.end);
+      this!.start.equals(range.start) &&
+      this!.end.equals(range.end);
 
   /// Static method to determine if two date ranges overlap.
   ///
