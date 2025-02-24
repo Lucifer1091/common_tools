@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pinput/pinput.dart';
 
+import '../../common_tools.dart';
 import '../custom/spaces.dart';
 import 'text_form_field.dart';
 
@@ -56,25 +57,25 @@ class CustomPinField extends StatelessWidget {
       margin: margin ?? const EdgeInsets.symmetric(horizontal: 8 / 2),
       textStyle: textStyle ??
           TextStyle(
-            fontSize: context.headlineMedium.fontSize!,
+            fontSize: context.headlineMedium?.fontSize!,
             color: Colors.black,
             fontWeight: FontWeight.w500,
           ),
       decoration: BoxDecoration(
-        color: context.scaffoldBackgroundColor,
+        color: context.backgroundColor,
         border: Border.all(color: const Color(0xFFCECECE), width: 1.27),
         borderRadius: BorderRadius.circular(radius ?? 14),
       ),
     );
 
     final focusedPinTheme = defaultPinTheme.copyDecorationWith(
-      color: context.scaffoldBackgroundColor,
+      color: context.backgroundColor,
       border: Border.all(color: context.primaryColor, width: 2),
     );
 
     final submittedPinTheme = defaultPinTheme.copyWith(
       decoration: defaultPinTheme.decoration?.copyWith(
-        color: context.scaffoldBackgroundColor,
+        color: context.backgroundColor,
         border: Border.all(color: const Color(0xFFCECECE), width: 1.27),
       ),
     );
@@ -88,7 +89,7 @@ class CustomPinField extends StatelessWidget {
             child: Text(
               title ?? '',
               style: titleStyle ??
-                  context.titleMedium.copyWith(
+                  context.titleMedium?.copyWith(
                     fontWeight: FontWeight.w500,
                   ),
             ),
@@ -106,7 +107,7 @@ class CustomPinField extends StatelessWidget {
           cursor: Text(
             '|',
             style: textStyle ??
-                context.headlineMedium.copyWith(fontWeight: FontWeight.w300),
+                context.headlineMedium?.copyWith(fontWeight: FontWeight.w300),
           ),
           onCompleted: onCompleted,
           onSubmitted: onSubmitted,

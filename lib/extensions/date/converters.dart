@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../common_tools.dart';
-import '../index.dart';
-import 'operators.dart';
-import 'validators.dart';
+import '../num/converters.dart';
 
 enum Abbreviation {
   /// Full form.
@@ -477,120 +475,6 @@ extension ParseDateTime on String? {
           return null;
         }
       }
-    }
-  }
-}
-
-extension DateIntUtils on int {
-  String timeAgo({bool addAgo = true}) {
-    final String ago = addAgo ? 'ago' : '';
-
-    final diff = Duration(seconds: this);
-    final sec = diff.inSeconds;
-
-    if (diff.inDays > 365) {
-      return "${(diff.inDays / 365).floor()} ${(diff.inDays / 365).floor() == 1 ? "year" : "years"}${' $ago'}";
-    }
-    if (diff.inDays > 30) {
-      return "${(diff.inDays / 30).floor()} ${(diff.inDays / 30).floor() == 1 ? "month" : "months"}${' $ago'}";
-    }
-    if (diff.inDays > 7) {
-      return "${(diff.inDays / 7).floor()} ${(diff.inDays / 7).floor() == 1 ? "week" : "weeks"}${' $ago'}";
-    } else if (diff.inDays > 0) {
-      return "${diff.inDays} ${diff.inDays == 1 ? "day" : "days"}${' $ago'}";
-    } else if (diff.inHours > 0) {
-      return "${diff.inHours} ${diff.inHours == 1 ? "hour" : "hours"}${' $ago'}";
-    } else if (diff.inMinutes > 0) {
-      return "${diff.inMinutes} ${diff.inMinutes == 1 ? "minute" : "minutes"}${' $ago'}";
-    } else {
-      return "$sec ${sec == 1 ? "second" : "seconds"}${' $ago'}";
-    }
-  }
-
-  /// Converts an integer to the corresponding month's name.
-  ///
-  /// If [Abbreviation] is [Abbreviation.none], returns the normal form of the month's name.
-  ///
-  /// If [Abbreviation] is [Abbreviation.full], returns the abbreviated form of the month's name.
-  ///
-  /// Returns the full or abbreviated month name as a string.
-  String toMonth({Abbreviation style = Abbreviation.none}) {
-    final List<String> months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
-    final List<String> shortMonths = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-
-    return style == Abbreviation.full || style == Abbreviation.semi
-        ? shortMonths[this - 1]
-        : months[this - 1];
-  }
-
-  /// Converts an integer representing the day of the week (1 for Monday through 7 for Sunday)
-  /// to the corresponding day's name.
-  ///
-  /// If [Abbreviation] is [Abbreviation.none], returns the normal form of the day's name (e.g., Monday).
-  ///
-  /// If [Abbreviation] is [Abbreviation.semi], returns the abbreviated form of the day's name (e.g., "Mon" for Monday).
-  ///
-  /// If [Abbreviation] is [Abbreviation.full], returns a very short form of the day's name (e.g., "M" for Monday).
-  ///
-  /// Returns the full, abbreviated, or very short day name as a string.
-  ///
-  /// Example:
-  /// ```dart
-  /// print(1.toDay()); // Output: Monday
-  /// print(1.toDay(style: Abbreviation.semi)); // Output: Mon
-  /// print(1.toDay(style: Abbreviation.full)); // Output: M
-  /// ```
-  String toDay({Abbreviation style = Abbreviation.none}) {
-    final List<String> days = [
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
-      'Sunday',
-    ];
-    final List<String> shortDays = [
-      'Mon',
-      'Tue',
-      'Wed',
-      'Thu',
-      'Fri',
-      'Sat',
-      'Sun'
-    ];
-    final List<String> veryShortDays = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-
-    if (style == Abbreviation.full) {
-      return veryShortDays[this - 1];
-    } else {
-      return style == Abbreviation.semi ? shortDays[this - 1] : days[this - 1];
     }
   }
 }

@@ -1,4 +1,4 @@
-part of 'extensions.dart';
+import '../../common_tools.dart';
 
 extension CurrencyStringX on String? {
   String toPrice({bool withSymbol = false, String unit = r'$', int dp = 2}) =>

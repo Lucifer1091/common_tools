@@ -1,5 +1,5 @@
 import 'dart:async';
-import '../extensions/either.dart';
+import '../extensions/generic/either.dart';
 
 typedef Lazy<T> = T Function();
 

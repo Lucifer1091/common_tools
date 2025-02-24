@@ -1,3 +1,4 @@
+import '../../common_tools.dart';
 import '../../extensions/extensions.dart';
 import 'package:flutter/material.dart';
 
@@ -89,7 +90,7 @@ class CustomBanner extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 6),
                 child: Text(
                   label!,
-                  style: context.bodySmall.copyWith(
+                  style: context.bodySmall?.copyWith(
                     color: labelColor ?? Colors.white,
                   ),
                   overflow: TextOverflow.ellipsis,

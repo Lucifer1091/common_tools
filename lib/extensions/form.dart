@@ -7,9 +7,7 @@ extension FormStateX on GlobalKey<FormState>? {
     return this!.currentState?.validate() ?? false;
   }
 
-  bool isNotValid() {
-    return !isValid();
-  }
+  bool isNotValid() => !isValid();
 
   void reset() {
     if (this == null) return;

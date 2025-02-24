@@ -254,7 +254,7 @@ class CustomTextFormField extends StatelessWidget {
           onChanged: onChanged,
           obscureText: obscureText ?? false,
           style: textStyle ??
-              context.titleMedium.copyWith(
+              context.titleMedium?.copyWith(
                 color: textColor ?? Colors.black,
                 fontWeight: FontWeight.w400,
               ),
@@ -281,7 +281,7 @@ class CustomTextFormField extends StatelessWidget {
         textAlign: TextAlign.center,
         text: TextSpan(
           style: labelStyle ??
-              context.bodyLarge.copyWith(
+              context.bodyLarge?.copyWith(
                 color: labelColor ?? (_readOnly ? Colors.black : Colors.black),
                 fontWeight: FontWeight.w400,
               ),
@@ -292,7 +292,7 @@ class CustomTextFormField extends StatelessWidget {
                 const WidgetSpan(child: Space.w4()),
               TextSpan(
                 text: requiredLabelCharacter,
-                style: context.titleLarge.copyWith(
+                style: context.titleLarge?.copyWith(
                   color: requiredLabelColor ?? const Color(0xFFF1291A),
                   fontWeight: FontWeight.w500,
                 ),
@@ -413,7 +413,7 @@ class CustomTextFormField extends StatelessWidget {
       filled: true,
       alignLabelWithHint: true,
       focusColor: context.primaryColor,
-      errorStyle: context.bodySmall.copyWith(
+      errorStyle: context.bodySmall?.copyWith(
         fontSize: errorFontSize,
         color: errorColor ?? context.errorColor,
       ),

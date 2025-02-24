@@ -1,0 +1,210 @@
+import 'dart:async';
+import 'dart:convert';
+
+/// Extension on nullable types providing scope functions similar to Kotlin.
+extension ScopeFunction<T> on T? {
+  /// Checks whether the value is "truthy", meaning:
+  /// - `true` for boolean values
+  /// - Non-zero for numeric values
+  /// - Non-empty for strings, iterables, and maps
+  /// - `false` otherwise
+  ///
+  /// Example:
+  /// ```dart
+  /// print(0.isTruthy); // false
+  /// print('Hello'.isTruthy); // true
+  /// print([].isTruthy); // false
+  /// ```
+  bool get isTruthy => switch (this) {
+        final bool value => value,
+        final num value => value != 0,
+        final String value => value.isNotEmpty,
+        final Iterable<dynamic> value => value.isNotEmpty,
+        final Map<dynamic, dynamic> value => value.isNotEmpty,
+        _ => false,
+      };
+
+  /// Checks whether the value is "falsy" (opposite of `isTruthy`).
+  bool get isFalsy => !isTruthy;
+
+  /// Calls the specified function [callback] with `this` as its argument and returns its result.
+  ///
+  /// Example:
+  /// ```dart
+  /// int? number = 5;
+  /// String? result = number.let((it) => 'Number is $it');
+  /// print(result); // Output: Number is 5
+  /// ```
+  R? let<R>(R Function(T it) callback) {
+    if (this == null) return null;
+    return callback(this as T);
+  }
+
+  /// Calls the specified function [callback] with `this` as its argument and returns `this`.
+  ///
+  /// Example:
+  /// ```dart
+  /// var person = Person('John').also((it) => it.name = 'Doe');
+  /// print(person.name); // Output: Doe
+  /// ```
+  T? also(void Function(T it) callback) {
+    if (this == null) return null;
+    callback(this as T);
+    return this;
+  }
+
+  /// Calls the specified function [op] without passing `this` and returns its result.
+  ///
+  /// Example:
+  /// ```dart
+  /// var result = 'Hello'.run(() => 'Hello World');
+  /// print(result); // Output: Hello World
+  /// ```
+  R run<R>(R Function() op) => op();
+
+  /// Calls the specified function [op] and returns `this`, useful for chaining.
+  ///
+  /// Example:
+  /// ```dart
+  /// var list = [1, 2, 3].apply(() => print('List has ${list.length} elements'));
+  /// ```
+  T? apply(void Function() op) {
+    op();
+    return this;
+  }
+
+  /// Returns `this` if it satisfies the given predicate [test], otherwise returns `null`.
+  ///
+  /// Example:
+  /// ```dart
+  /// int? number = 5.takeIf((it) => it > 3);
+  /// print(number); // Output: 5
+  ///
+  /// number = 5.takeIf((it) => it > 6);
+  /// print(number); // Output: null
+  /// ```
+  T? takeIf(bool Function(T it) test) {
+    if (this != null && test(this as T)) return this;
+    return null;
+  }
+
+  /// Returns `this` if it does **not** satisfy the given predicate [test], otherwise returns `null`.
+  ///
+  /// Example:
+  /// ```dart
+  /// int? number = 5.takeUnless((it) => it > 6);
+  /// print(number); // Output: 5
+  ///
+  /// number = 5.takeUnless((it) => it > 3);
+  /// print(number); // Output: null
+  /// ```
+  T? takeUnless(bool Function(T it) test) {
+    if (this != null && !test(this as T)) return this;
+    return null;
+  }
+
+  /// Attempts to cast `this` to the specified type [R].
+  ///
+  /// Returns `this` as `R` if possible, otherwise returns `null`.
+  ///
+  /// Example:
+  /// ```dart
+  /// var str = 'Hello';
+  /// var number = str.cast<int>(); // null
+  ///
+  /// var value = 42;
+  /// var castedValue = value.cast<num>(); // 42
+  /// ```
+  R? cast<R>() {
+    if (this is R) return this as R;
+    return null;
+  }
+}
+
+/// Throws an [Error] if the given [test] condition evaluates to `true`.
+///
+/// Example:
+/// ```dart
+/// throwIf(n < 1, () => ArgumentError("n must be greater than 0"));
+/// ```
+void throwIf(bool test, Error Function() errorFactoryFunc) {
+  if (test) {
+    throw errorFactoryFunc();
+  }
+}
+
+/// Throws an [Error] if the given [test] condition evaluates to `false`.
+///
+/// Example:
+/// ```dart
+/// throwIfNot(n > 1, () => ArgumentError("n must be greater than 0"));
+/// ```
+void throwIfNot(bool test, Error Function() errorFactoryFunc) {
+  if (!test) {
+    throw errorFactoryFunc();
+  }
+}
+
+/// Executes a provided action and handles potential errors.
+///
+/// If an exception occurs during execution, the optional [onError] function is called.
+/// If [onError] is not provided or returns `null`, the error is swallowed.
+///
+/// Example:
+/// ```dart
+/// var result = runCaching(() => int.parse('123'));
+/// print(result); // 123
+///
+/// var errorResult = runCaching(() => int.parse('abc'), onError: (e, s) => 0);
+/// print(errorResult); // 0
+/// ```
+FutureOr<T?> runCaching<T>(
+  FutureOr<T?> Function() action, {
+  FutureOr<T?> Function(Object error, StackTrace stacktrace)? onError,
+}) {
+  try {
+    final result = action.call();
+
+    if (result is Future<T?>) {
+      return result.then(
+        (value) => value,
+        onError: (error, stacktrace) {
+          try {
+            return onError?.call(error as Object, stacktrace as StackTrace);
+          } catch (_) {
+            return null; // Swallow error if `onError` throws
+          }
+        },
+      ).catchError((_) => null); // Swallow final errors
+    }
+
+    return result;
+  } catch (error, stacktrace) {
+    try {
+      return onError?.call(error, stacktrace);
+    } catch (_) {
+      return null; // Swallow error if `onError` throws
+    }
+  }
+}
+
+/// A safe JSON decoding function that returns `null` if decoding fails.
+///
+/// Example:
+/// ```dart
+/// var jsonData = tryJsonDecode('{"name": "John"}');
+/// print(jsonData?['name']); // John
+///
+/// var invalidJson = tryJsonDecode('invalid json');
+/// print(invalidJson); // null
+/// ```
+dynamic tryJsonDecode(
+  String value, {
+  Object? Function(Object? key, Object? value)? reviver,
+}) {
+  try {
+    return jsonDecode(value, reviver: reviver);
+  } catch (e) {
+    return null;
+  }
+}

@@ -137,7 +137,7 @@ class CustomDateRangeField extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               helpTextStyle:
-                  context.bodyMedium.copyWith(color: context.primaryColor),
+                  context.bodyMedium?.copyWith(color: context.primaryColor),
             ),
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
@@ -185,7 +185,7 @@ class CustomDateRangeField extends StatelessWidget {
         overflow: TextOverflow.ellipsis,
         text: TextSpan(
           style: labelStyle ??
-              context.bodyLarge.copyWith(
+              context.bodyLarge?.copyWith(
                 color: labelColor ?? Colors.black,
                 fontWeight: FontWeight.w400,
               ),
@@ -195,7 +195,7 @@ class CustomDateRangeField extends StatelessWidget {
               const WidgetSpan(child: Space.w4()),
               TextSpan(
                 text: requiredLabelCharacter,
-                style: context.titleLarge.copyWith(
+                style: context.titleLarge?.copyWith(
                   color: requiredLabelColor ?? const Color(0xFFF1291A),
                   fontWeight: FontWeight.w500,
                 ),
@@ -205,7 +205,7 @@ class CustomDateRangeField extends StatelessWidget {
         ),
       ),
       hintStyle: textStyle ??
-          context.titleMedium.copyWith(
+          context.titleMedium?.copyWith(
             color: textColor ?? Colors.black,
             fontWeight: FontWeight.w400,
           ),
@@ -294,7 +294,7 @@ class CustomDateRangeField extends StatelessWidget {
       filled: true,
       alignLabelWithHint: true,
       focusColor: context.primaryColor,
-      errorStyle: context.bodySmall.copyWith(
+      errorStyle: context.bodySmall?.copyWith(
         color: errorColor ?? context.errorColor,
       ),
       errorMaxLines: 2,

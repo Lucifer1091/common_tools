@@ -178,7 +178,7 @@ class _BarcodeAndQRScannerState extends State<BarcodeAndQRScanner>
                 _buildORDivider(),
                 Text(
                   'OR',
-                  style: context.labelSmall.copyWith(color: Colors.white),
+                  style: context.labelSmall?.copyWith(color: Colors.white),
                 ),
                 _buildORDivider(),
               ],

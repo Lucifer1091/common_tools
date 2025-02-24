@@ -1,7 +1,8 @@
-part of 'extensions.dart';
+import '../../common_tools.dart';
 
 extension DurationTimeExtension on Duration {
   static const int daysPerWeek = 7;
+
   static const int nanosecondsPerMicrosecond = 1000;
 
   /// Returns the duration represented in weeks.
@@ -10,6 +11,7 @@ extension DurationTimeExtension on Duration {
   int get inWeeks => (inDays / daysPerWeek).ceil();
 
   /// Returns a [DateTime] in the future by adding this [Duration] to the current time.
+  ///
   ///
   /// Example:
   /// ```dart
@@ -76,18 +78,6 @@ extension DurationTimeExtension on Duration {
     }
     return this;
   }
-}
-
-/// provides extensions for [Duration].
-extension DurationScrewdriver on Duration {
-  /// Returns [DateTime] that is before [this] duration.
-  DateTime get ago => DateTime.now() - this;
-
-  /// Returns [DateTime] that is before [this] duration.
-  DateTime get after => DateTime.now() + this;
-
-  /// Alias for [after]
-  DateTime get fromNow => DateTime.now() + this;
 
   /// Returns the number of whole years spanned by this Duration.
   /// Please note that this does not account for leap year.

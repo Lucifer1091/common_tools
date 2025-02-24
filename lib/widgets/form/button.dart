@@ -263,11 +263,11 @@ class _CustomButtonState extends State<CustomButton> {
   }
 
   Widget _buildChild(BuildContext context) {
-    final style = context.titleMedium.copyWith(
+    final style = context.titleMedium?.copyWith(
       color: widget.textColor,
       fontWeight: widget.fontWeight ?? FontWeight.w500,
     );
-    final style2 = context.titleSmall.copyWith(
+    final style2 = context.titleSmall?.copyWith(
       color: widget.textColor,
       fontWeight: widget.fontWeight ?? FontWeight.w400,
     );

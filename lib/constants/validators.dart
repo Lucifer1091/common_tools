@@ -243,7 +243,7 @@ class DateValidatorX {
     DateTimeRange? firstRange,
     String? endDate, {
     bool checkDayCount = false,
-    String pattern = "MMM dd, yyyy",
+    String pattern = 'MMM dd, yyyy',
   }) {
     if (firstRange == null || endDate == null) return null;
 

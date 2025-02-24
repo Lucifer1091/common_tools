@@ -1,63 +1,5 @@
 part of 'extensions.dart';
 
-extension IterableWithIndex<T> on Iterable<T> {
-  Iterable<T> sortByAsc<TSelected extends Comparable<TSelected>>(
-    TSelected Function(T) selector,
-  ) =>
-      toList()..sort((a, b) => selector(a).compareTo(selector(b)));
-
-  Iterable<T> sortByDesc<TSelected extends Comparable<TSelected>>(
-    TSelected Function(T) selector,
-  ) =>
-      toList()..sort((a, b) => selector(b).compareTo(selector(a)));
-
-  Iterable<E> mapWithIndex<E>(E Function(int index, T value) f) =>
-      Iterable<int>.generate(length).map((int i) => f(i, elementAt(i)));
-
-  // returns only distinct elements
-  Iterable<T> distinctBy(Object Function(T e) getCompareValue) {
-    final result = <T>[];
-    forEach(
-      (element) {
-        if (!result.any(
-          (x) => getCompareValue(x) == getCompareValue(element),
-        )) {
-          result.add(element);
-        }
-      },
-    );
-    return result;
-  }
-
-  T get getRandomElement {
-    final random = math.Random();
-    final int index = random.nextInt(length);
-    return elementAt(index);
-  }
-
-  // T? firstWhereOrNull(bool Function(T element) comparator) {
-  //   try {
-  //     return firstWhere(comparator);
-  //   } on StateError catch (_) {
-  //     return null;
-  //   }
-  // }
-}
-
-/// Common Operations for Iterables with nullable items.
-extension IterableOptionalExt<T> on Iterable<T?> {
-  /// Returns a new list the the non-null items.
-  ///
-  /// Same as `where((el) => el != null)`
-  List<T> removeNull() {
-    final list = <T>[];
-    for (final element in this) {
-      if (element != null) list.add(element);
-    }
-    return list;
-  }
-}
-
 /// Common Operations for Iterables with items.
 extension IterableExt<T> on Iterable<T> {
   /// Returns a new list. If `b == true` it will be reversed.
@@ -129,9 +71,6 @@ extension IterableExt<T> on Iterable<T> {
       return result;
     }
   }
-
-  /// Returns `true` if the iterable is has an element of type [S].
-  bool anyType<S extends T>() => whereType<S>().isNotEmpty;
 
   /// Extract one random item from the list
   T random() => toList()[math.Random().nextInt(length)];
@@ -310,12 +249,6 @@ extension EnumByName<T extends Enum> on Iterable<T> {
 }
 
 extension MyIterable<T> on Iterable<T>? {
-  /// Returns `true` if this nullable iterable is either `null` or empty.
-  bool get isNullOrEmpty => this == null || this!.isEmpty;
-
-  /// Returns `false` if this nullable iterable is either `null` or empty.
-  bool get isNotNullOrEmpty => this != null && this!.isNotEmpty;
-
   T? get firstOrNull => isNullOrEmpty ? null : this!.first;
 
   /// Returns the last element matching the given [test], or null if element was not found.
@@ -433,8 +366,6 @@ extension ListExt<T> on List<T>? {
   ///convert List to List of widget
   List<Widget> toWidgetList(Widget Function(T value) mapFunc) =>
       isNullOrEmpty ? [] : [...this!.map(mapFunc)];
-
-  bool get isNullOrEmpty => this == null || (this?.isEmpty ?? true);
 
   int? get lastIndex => isNullOrEmpty ? this!.length - 1 : null;
 
@@ -574,9 +505,6 @@ extension ListExtension<T> on List<T> {
         (Map<K, List<T>> map, T element) =>
             map..putIfAbsent(keyFunction(element), () => <T>[]).add(element),
       );
-
-  // This getter checks if the List contains exactly one element.
-  bool get isSingle => length == 1;
 }
 
 /// List extensions.
@@ -3887,9 +3815,8 @@ extension CollectionsExtensions<T> on Iterable<T> {
   ///
   /// result:
   /// 1,2,3
-  Set subtract(Iterable<T> other) {
-    final set = toSet();
-    set.removeAll(other);
+  Set<T> subtract(Iterable<T> other) {
+    final set = toSet()..removeAll(other);
     return set;
   }
 

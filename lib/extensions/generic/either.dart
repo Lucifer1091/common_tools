@@ -1,8 +1,6 @@
-// ignore_for_file: use_to_and_as_if_applicable, comment_references
-
 import 'dart:async';
 
-import '../data_types/either.dart';
+import '../../data_types/either.dart';
 
 /// Provide [left] and [right] extensions on any types.
 extension ToEitherObjectExtension<T> on T {

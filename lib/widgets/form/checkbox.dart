@@ -86,7 +86,7 @@ class CustomCheckBox extends StatelessWidget {
     return Text(
       title!,
       style: titleStyle ??
-          context.bodyLarge.copyWith(
+          context.bodyLarge?.copyWith(
             color: Colors.red,
             fontWeight: FontWeight.w400,
           ),

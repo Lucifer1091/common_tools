@@ -122,7 +122,7 @@ extension MapUtils<K, V> on Map<K, V> {
   Map<String, V> camelCaseKeys() {
     final map = <String, V>{};
     for (final key in keys) {
-      map[key.toString().toCamelCase!] = this[key] as V;
+      map[key.toString().camelCase!] = this[key] as V;
     }
     return map;
   }
@@ -132,7 +132,7 @@ extension MapUtils<K, V> on Map<K, V> {
   Map<K, String> camelCaseValues() {
     final map = <K, String>{};
     for (final key in keys) {
-      map[key] = this[key].toString().toCamelCase!;
+      map[key] = this[key].toString().camelCase!;
     }
     return map;
   }
@@ -142,7 +142,7 @@ extension MapUtils<K, V> on Map<K, V> {
   Map<String, V> snakeCaseKeys() {
     final map = <String, V>{};
     for (final key in keys) {
-      map[key.toString().toSnakeCase!] = this[key] as V;
+      map[key.toString().snakeCase!] = this[key] as V;
     }
     return map;
   }
@@ -153,7 +153,7 @@ extension MapUtils<K, V> on Map<K, V> {
   Map<K, String> snakeCaseValues() {
     final map = <K, String>{};
     for (final key in keys) {
-      map[key] = this[key].toString().toSnakeCase!;
+      map[key] = this[key].toString().snakeCase!;
     }
     return map;
   }
@@ -163,7 +163,7 @@ extension MapUtils<K, V> on Map<K, V> {
   Map<String, V> kebabCaseKeys() {
     final map = <String, V>{};
     for (final key in keys) {
-      map[key.toString().toKebabCase!] = this[key] as V;
+      map[key.toString().paramCase!] = this[key] as V;
     }
     return map;
   }
@@ -173,7 +173,7 @@ extension MapUtils<K, V> on Map<K, V> {
   Map<K, String> kebabCaseValues() {
     final map = <K, String>{};
     for (final key in keys) {
-      map[key] = this[key].toString().toKebabCase!;
+      map[key] = this[key].toString().paramCase!;
     }
     return map;
   }

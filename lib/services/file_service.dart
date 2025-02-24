@@ -272,7 +272,7 @@ class FileService {
   }) async =>
       BottomSheets.show<XFile?>(
         context,
-        color: context.scaffoldBackgroundColor,
+        color: context.backgroundColor,
         showDivider: false,
         maxHeight: 160,
         maxWidth: 500,
@@ -304,7 +304,7 @@ class FileService {
             },
             leading: Icon(
               Icons.camera_alt_outlined,
-              color: context.primary,
+              color: context.primaryColor,
             ),
             title: Text(
               'Capture from camera',
@@ -321,7 +321,7 @@ class FileService {
               },
               leading: Icon(
                 Icons.photo_size_select_actual_outlined,
-                color: context.primary,
+                color: context.primaryColor,
               ),
               title: Text(
                 'Upload from gallery',
@@ -338,7 +338,7 @@ class FileService {
               },
               leading: Icon(
                 Icons.upload_file_outlined,
-                color: context.primary,
+                color: context.primaryColor,
               ),
               title: Text(
                 'Upload from storage',

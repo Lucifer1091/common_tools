@@ -64,7 +64,7 @@ class CustomSwitch extends StatelessWidget {
     return Text(
       title!,
       style: titleStyle ??
-          context.bodyLarge.copyWith(
+          context.bodyLarge?.copyWith(
             color: enabled ? titleColor ?? Colors.black : Colors.black,
             fontWeight: FontWeight.w400,
           ),
