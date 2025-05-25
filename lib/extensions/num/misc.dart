@@ -223,6 +223,7 @@ extension IterableNumSumExtension<T extends num> on Iterable<T> {
   double average() {
     var count = 0;
     num sum = 0;
+    
     for (final current in this) {
       sum += current;
       count++;

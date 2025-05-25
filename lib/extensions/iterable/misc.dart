@@ -22,8 +22,8 @@ extension BigIntIterableExtension on Iterable<BigInt>? {
 
 /// provides extensions for List of integers. e.g. bytes
 extension IntListScrewdriver on List<int> {
-// / Converts the list of integers to a base64 encoded string. e.g. converting
-// / bytes to base64 string.
+  // / Converts the list of integers to a base64 encoded string. e.g. converting
+  // / bytes to base64 string.
   String toBase64() => base64Encode(this);
 
   /// Converts list of integers to a [Uint8List].
@@ -42,7 +42,7 @@ extension IterableJoinToString<T> on Iterable<T> {
   /// followed by the [truncated] string (which defaults to `'...'`).
   String joinToString({
     String separator = ', ',
-    GetValue<T, String>? transform,
+    Transformer<T, String>? transform,
     String prefix = '',
     String postfix = '',
     int? limit,

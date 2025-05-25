@@ -104,7 +104,7 @@ extension CollectionsExtensions<T> on Iterable<T> {
     return result;
   }
 
-// return the half size of a list
+  // return the half size of a list
   int get halfLength => (length / 2).floor();
 
   /// Returns a list containing first [n] elements.
@@ -194,9 +194,7 @@ extension CollectionsExtensions<T> on Iterable<T> {
       return length;
     } else {
       for (final current in this) {
-        if (predicate(current)) {
-          count++;
-        }
+        if (predicate(current)) count++;
       }
     }
 
@@ -313,8 +311,7 @@ extension CollectionsExtensions<T> on Iterable<T> {
   void filterIndexedTo(
     List<T> destination,
     bool Function(T element, int index) predicate,
-  ) =>
-      whereIndexedTo(destination, predicate);
+  ) => whereIndexedTo(destination, predicate);
 
   /// Appends all elements not matching the given [predicate] to the given
   /// [destination].
@@ -326,8 +323,7 @@ extension CollectionsExtensions<T> on Iterable<T> {
   void filterNotToIndexed(
     List<T> destination,
     bool Function(T element, int index) predicate,
-  ) =>
-      whereNotToIndexed(destination, predicate);
+  ) => whereNotToIndexed(destination, predicate);
 }
 
 extension IterableWhereIndexed<T> on Iterable<T> {
@@ -485,7 +481,7 @@ extension IterableMapNotNull<T> on Iterable<T> {
   ///
   /// The elements in the resulting list are in the same order as they were in
   /// the source collection.
-  Iterable<T> distinctBy<R>(GetValue<T, R> selector) sync* {
+  Iterable<T> distinctBy<R>(Transformer<T, R> selector) sync* {
     final existing = HashSet<R>();
     for (final current in this) {
       if (existing.add(selector(current))) {

@@ -2,11 +2,9 @@ import '../../common_tools.dart';
 
 /// Common Operations for Iterables with nullable items.
 extension IterableValidators<T> on Iterable<T>? {
-  /// Alias for [isNullOrEmpty].
   /// Returns true if [T] is either null or empty collection.
   bool get isBlank => this?.isEmpty ?? true;
 
-  /// Alias for [isNotNullOrEmpty].
   /// Returns true if [T] is neither null nor empty collection.
   bool get isNotBlank => !isBlank;
 
@@ -16,6 +14,29 @@ extension IterableValidators<T> on Iterable<T>? {
   /// Returns true if no entries match the given [predicate] or if the
   /// collection is empty.
   bool none(Selector<T> predicate) => isNotBlank && !this!.any(predicate);
+
+  /// Returns `true` if there is exactly one element of [this] which satisfies
+  /// [test].
+  ///
+  /// Example:
+  /// ```dart
+  /// [1, 2, 3].one((e) => e == 2); // 1 element satisfies. Returns true.
+  /// [1, 2, 3].one((e) => e > 4); // No element satisfies. Returns false.
+  /// [1, 2, 3].one((e) => e > 1); // >1 element satisfies. Returns false.
+  /// ```
+  bool one(Selector<T> test) {
+    if (isBlank) return false;
+
+    bool found = false;
+
+    for (final element in this!) {
+      if (test(element)) {
+        if (found) return false;
+        found = true;
+      }
+    }
+    return found;
+  }
 
   /// Returns `true` if the iterable is has an element of type [S].
   bool anyType<S extends T>() => this?.whereType<S>().isNotEmpty ?? false;
@@ -49,7 +70,7 @@ extension IterableValidators<T> on Iterable<T>? {
   ///
   /// If [compare] is provided, it is used to check if two elements are the
   /// same.
-  bool contentEquals(Iterable<T>? other, [Comparator<T>? compare]) {
+  bool contentEquals(Iterable<T>? other, [IsEqual<T>? compare]) {
     if (isBlank || other.isBlank) return false;
 
     final it1 = this!.iterator, it2 = other!.iterator;

@@ -1,4 +1,5 @@
 import 'package:common_tools/common_tools.dart';
+import 'package:common_tools/extensions/iterable/converters.dart';
 import 'package:common_tools/extensions/num/converters.dart';
 import 'package:common_tools/extensions/num/validators.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,6 +11,7 @@ void main() {
   final DateTime date = DateTime(2024, 6, 30);
 
   final List<int> a = [];
+  final Iterable<int> iterable = [1, 2, 3, 4, 5]; 
 
   final int b = 5;
   //
@@ -18,4 +20,6 @@ void main() {
   // log.f(date.startOfLastWeek);
 
   log.i(20000.toClockFormat(showSeconds: true));
+  log.e(iterable.chunksOrFill(2));
+  log.d(iterable.associateBy((element) => element));
 }

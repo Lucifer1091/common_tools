@@ -5,7 +5,7 @@ typedef Json = Map<String, dynamic>;
 typedef DynamicJson = Map<dynamic, dynamic>;
 
 typedef Selector<T> = bool Function(T value);
-typedef Comparator<T> = bool Function(T a, T b);
+typedef IsEqual<T> = bool Function(T a, T b);
 typedef FutureOrCallback<T> = FutureOr<T> Function();
 
 typedef GenericCallback<T> = void Function(T value);
@@ -20,7 +20,7 @@ typedef ContextCallback = GenericCallback<BuildContext>;
 typedef BottomSheetBuilder = Future<T?> Function<T>(Widget child);
 
 /// Function that gets value [T] for that element.
-typedef GetValue<E, T> = T Function(E element);
+typedef Transformer<E, T> = T Function(E element);
 
 typedef MapIndexedValue<E, T> = T Function(int index, E element);
 

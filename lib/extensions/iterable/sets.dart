@@ -135,7 +135,7 @@ extension SetBasics<T> on Set<T>? {
   /// //   3: {'aaa', 'bbb'}
   /// // }
   /// ```
-  Map<K, Set<T>> classify<K>(GetValue<T, K> classifier) {
+  Map<K, Set<T>> classify<K>(Transformer<T, K> classifier) {
     if (isBlank) return {};
 
     final groups = <K, Set<T>>{};
