@@ -15,7 +15,7 @@ extension IterableValidators<T> on Iterable<T>? {
   /// collection is empty.
   bool none(Selector<T> predicate) => isNotBlank && !this!.any(predicate);
 
-  /// Returns `true` if there is exactly one element of [this] which satisfies
+  /// Returns `true` if there is exactly one element of [Iterable] which satisfies
   /// [test].
   ///
   /// Example:
@@ -41,16 +41,15 @@ extension IterableValidators<T> on Iterable<T>? {
   /// Returns `true` if the iterable is has an element of type [S].
   bool anyType<S extends T>() => this?.whereType<S>().isNotEmpty ?? false;
 
-  /// Checks if all elements in the specified [other] are contained in
-  /// T collection.
-  bool containsAll(Iterable<T>? other) {
-    if (isBlank || other.isBlank) return false;
+  /// Returns true if the collection contains all the elements
+  /// present in [other] collection.
+  bool containsAll(Iterable<T>? other) =>
+      this != null && (other?.every(this!.contains) ?? false);
 
-    for (final element in other!) {
-      if (!this!.contains(element)) return false;
-    }
-    return true;
-  }
+  /// Returns true if the collection doesn't contain any of the elements
+  /// present in [other] collection.
+  bool containsNone(Iterable<T>? other) =>
+      none((element) => other?.contains(element) ?? false);
 
   /// Checks if any elements in the specified [other] are contained in
   /// T collection.

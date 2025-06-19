@@ -3,7 +3,6 @@ import 'dart:collection';
 import '../../constants/constants.dart';
 import '../../data_types/stack.dart';
 import 'index.dart';
-import 'operators.dart';
 
 extension IterableSanitizers2<T> on Iterable<T> {
   Iterable<T> sortByAsc<E extends Comparable<E>>(E Function(T) selector) =>
@@ -31,44 +30,6 @@ extension IterableSanitizers2<T> on Iterable<T> {
     }
     return l;
   }
-
-  /// Contiguous slices of `this` with the given [length].
-  ///
-  /// Each slice is [length] elements long, except for the last one which may be
-  /// shorter if `this` contains too few elements. Each slice begins after the
-  /// last one ends. The [length] must be greater than zero.
-  ///
-  /// For example, `{1, 2, 3, 4, 5}.slices(2)` returns `([1, 2], [3, 4], [5])`.
-  Iterable<List<T>> slices(int length) sync* {
-    if (length < 1) throw RangeError.range(length, 1, null, 'length');
-
-    final iterator = this.iterator;
-    while (iterator.moveNext()) {
-      final slice = [iterator.current];
-      for (var i = 1; i < length && iterator.moveNext(); i++) {
-        slice.add(iterator.current);
-      }
-      yield slice;
-    }
-  }
-
-  /// Returns a new list containing elements at indices between [start]
-  /// (inclusive) and [end] (inclusive).
-  ///
-  /// If [end] is omitted, it is being set to `lastIndex`.
-  List<T> slice(int start, [int end = -1]) {
-    final list = this is List ? this as List<T> : toList();
-    var start0 = start;
-    var end0 = end;
-
-    if (start0 < 0) start0 = start0 + list.length;
-
-    if (end0 < 0) end0 = end0 + list.length;
-
-    RangeError.checkValidRange(start0, end0, list.length);
-
-    return list.sublist(start0, end0 + 1);
-  }
 }
 
 extension CollectionsExtensions<T> on Iterable<T> {
@@ -80,28 +41,6 @@ extension CollectionsExtensions<T> on Iterable<T> {
   Set<T> intersect(Iterable<T> other) {
     final set = this.toMutableSet()..addAll(other);
     return set;
-  }
-
-  /// Returns a list containing only elements matching the given [test].
-  List<T> filter(bool Function(T element) test) {
-    final result = <T>[];
-    forEach((e) {
-      if (e != null && test(e)) {
-        result.add(e);
-      }
-    });
-    return result;
-  }
-
-  /// Returns a list containing all elements not matching the given [test] and will filter nulls as well.
-  List<T> filterNot(bool Function(T element) test) {
-    final result = <T>[];
-    forEach((e) {
-      if (e != null && !test(e)) {
-        result.add(e);
-      }
-    });
-    return result;
   }
 
   // return the half size of a list
@@ -133,11 +72,10 @@ extension CollectionsExtensions<T> on Iterable<T> {
     if (resultSize <= 0) return [];
     if (resultSize == 1) return [last];
 
-    originalList.removeRange(0, n);
+    originalList
+      ..removeRange(0, n)
+      ..forEach(list.add);
 
-    for (final element in originalList) {
-      list.add(element);
-    }
     return list;
   }
 
@@ -179,26 +117,6 @@ extension CollectionsExtensions<T> on Iterable<T> {
     for (final element in this) {
       action(index++, element);
     }
-  }
-
-  /// Return a number of the existing elements by a specific predicate
-  /// example:
-  ///  final aboveTwenty = [
-  ///    User(33, "chicko"),
-  ///    User(45, "ronit"),
-  ///    User(19, "amsalam"),
-  ///  ].count((user) => user.age > 20); // 2
-  int count([Selector<T>? predicate]) {
-    var count = 0;
-    if (predicate == null) {
-      return length;
-    } else {
-      for (final current in this) {
-        if (predicate(current)) count++;
-      }
-    }
-
-    return count;
   }
 
   /// Returns a set containing all elements that are contained by this collection
@@ -293,37 +211,6 @@ extension CollectionsExtensions<T> on Iterable<T> {
     }
     return list;
   }
-
-  /// Returns all elements matching the given [predicate].
-  Iterable<T> filter(bool Function(T element) predicate) => where(predicate);
-
-  /// Returns all elements that satisfy the given [predicate].
-  Iterable<T> filterIndexed(bool Function(T element, int index) predicate) =>
-      IterableWhereIndexed(this).whereIndexed(predicate);
-
-  /// Appends all elements matching the given [predicate] to the given
-  /// [destination].
-  void filterTo(List<T> destination, bool Function(T element) predicate) =>
-      whereTo(destination, predicate);
-
-  /// Appends all elements matching the given [predicate] to the given
-  /// [destination].
-  void filterIndexedTo(
-    List<T> destination,
-    bool Function(T element, int index) predicate,
-  ) => whereIndexedTo(destination, predicate);
-
-  /// Appends all elements not matching the given [predicate] to the given
-  /// [destination].
-  void filterNotTo(List<T> destination, bool Function(T element) predicate) =>
-      whereNotTo(destination, predicate);
-
-  /// Appends all elements not matching the given [predicate] to the given
-  /// [destination].
-  void filterNotToIndexed(
-    List<T> destination,
-    bool Function(T element, int index) predicate,
-  ) => whereNotToIndexed(destination, predicate);
 }
 
 extension IterableWhereIndexed<T> on Iterable<T> {
@@ -453,178 +340,6 @@ extension IterableMapNotNull<T> on Iterable<T> {
     }
   }
 
-  /// Returns a new lazy [Iterable] which performs the given action on each
-  /// element.
-  Iterable<T> onEach(void Function(T element) action) sync* {
-    for (final element in this) {
-      action(element);
-      yield element;
-    }
-  }
-
-  /// Returns a new lazy [Iterable] containing only distinct elements from the
-  /// collection.
-  ///
-  /// The elements in the resulting list are in the same order as they were in
-  /// the source collection.
-  Iterable<T> distinct() sync* {
-    final existing = HashSet<T>();
-    for (final current in this) {
-      if (existing.add(current)) {
-        yield current;
-      }
-    }
-  }
-
-  /// Returns a new lazy [Iterable] containing only elements from the collection
-  /// having distinct keys returned by the given [selector] function.
-  ///
-  /// The elements in the resulting list are in the same order as they were in
-  /// the source collection.
-  Iterable<T> distinctBy<R>(Transformer<T, R> selector) sync* {
-    final existing = HashSet<R>();
-    for (final current in this) {
-      if (existing.add(selector(current))) {
-        yield current;
-      }
-    }
-  }
-
-  /// Splits this collection into a new lazy [Iterable] of lists each not
-  /// exceeding the given [size].
-  ///
-  /// The last list in the resulting list may have less elements than the given
-  /// [size].
-  ///
-  /// [size] must be positive and can be greater than the number of elements in
-  /// this collection.
-  Iterable<List<T>> chunked(int size) sync* {
-    if (size < 1) {
-      throw ArgumentError('Requested chunk size $size is less than one.');
-    }
-
-    var currentChunk = <T>[];
-    for (final current in this) {
-      currentChunk.add(current);
-      if (currentChunk.length >= size) {
-        yield currentChunk;
-        currentChunk = <T>[];
-      }
-    }
-    if (currentChunk.isNotEmpty) {
-      yield currentChunk;
-    }
-  }
-
-  /// Splits this collection into a lazy [Iterable] of chunks, where chunks are
-  /// created as long as [predicate] is true for a pair of entries.
-  ///
-  /// For example, one-by-one increasing subsequences can be chunked as follows:
-  /// ```dart
-  /// final list = [1, 2, 4, 9, 10, 11, 12, 15, 16, 19, 20, 21];
-  /// final increasingSubSequences = list.chunkWhile((a, b) => a + 1 == b);
-  /// ```
-  ///
-  /// Here, `increasingSubSequences` would consist of `[1, 2]`, `[4]`,
-  /// `[9, 10, 11]`, `[12]`, `[15, 16]` and finally `[19, 20, 21]`.
-  ///
-  /// See also:
-  ///  - [splitWhen], which works similarly but with a reverted [predicate].
-  Iterable<List<T>> chunkWhile(bool Function(T, T) predicate) sync* {
-    var currentChunk = <T>[];
-    var hasPrevious = false;
-    late T previous;
-
-    for (final element in this) {
-      if (!hasPrevious || predicate(previous, element)) {
-        // keep element in current chunk
-        currentChunk.add(element);
-      } else {
-        // start a new chunk containing the new element
-        yield currentChunk;
-        currentChunk = [element];
-      }
-
-      previous = element;
-      hasPrevious = true;
-    }
-
-    if (currentChunk.isNotEmpty) yield currentChunk;
-  }
-
-  /// Splits this collection into a lazy [Iterable], where each split will be
-  /// make if [predicate] returns true for a pair of entries.
-  ///
-  /// For example, one could split the iterable at each changed value like this:
-  /// ```dart
-  /// final list = [1, 1, 1, 2, 2, 1, 4, 4];
-  /// final splitted = list.splitWhen((a, b) => a != b);
-  /// ```
-  ///
-  /// In that example, `splitted` would consist of `[1, 1, 1, 1]`, `[2, 2]`,
-  /// `[1]`, `[4, 4]`.
-  ///
-  /// See also:
-  ///  - [chunkWhile], which works similarly but with a reverted [predicate].
-  Iterable<List<T>> splitWhen(bool Function(T, T) predicate) {
-    return chunkWhile((a, b) => !predicate(a, b));
-  }
-
-  /// Returns a new lazy [Iterable] of windows of the given [size] sliding along
-  /// this collection with the given [step].
-  ///
-  /// The last list may have less elements than the given size.
-  ///
-  /// Both [size] and [step] must be positive and can be greater than the number
-  /// of elements in this collection.
-  Iterable<List<T>> windowed(
-    int size, {
-    int step = 1,
-    bool partialWindows = false,
-  }) sync* {
-    final gap = step - size;
-    if (gap >= 0) {
-      var buffer = <T>[];
-      var skip = 0;
-      for (final element in this) {
-        if (skip > 0) {
-          skip -= 1;
-          continue;
-        }
-        buffer.add(element);
-        if (buffer.length == size) {
-          yield buffer;
-          buffer = <T>[];
-          skip = gap;
-        }
-      }
-      if (buffer.isNotEmpty && (partialWindows || buffer.length == size)) {
-        yield buffer;
-      }
-    } else {
-      final buffer = ListQueue<T>(size);
-      for (final element in this) {
-        buffer.add(element);
-        if (buffer.length == size) {
-          yield buffer.toList();
-          for (var i = 0; i < step; i++) {
-            buffer.removeFirst();
-          }
-        }
-      }
-      if (partialWindows) {
-        while (buffer.length > step) {
-          yield buffer.toList();
-          for (var i = 0; i < step; i++) {
-            buffer.removeFirst();
-          }
-        }
-        if (buffer.isNotEmpty) {
-          yield buffer.toList();
-        }
-      }
-    }
-  }
 
   /// Returns a new lazy [Iterable] of all elements yielded from results of
   /// [transform] function being invoked on each element of this collection.

@@ -26,6 +26,15 @@ extension NumListConverter<T extends num> on Iterable<T>? {
   /// * return `0` if  isEmpty
   num sumOrZero() => sumOrNull() ?? _zero();
 
+  /// Returns the sum of all values produced by [selector] function
+  /// applied to each element in the collection.
+  R? sumBy<R extends num>(Transformer<T, R> selector) =>
+      this?.fold<R>(
+        _zero() as R,
+        (previous, element) => previous + selector(element) as R,
+      ) ??
+      _zero() as R;
+
   /// * return the average of the list
   /// * return `null` if isEmpty
   num? averageOrNull() => isBlank ? null : (sumOrZero() / length);
@@ -38,6 +47,14 @@ extension NumListConverter<T extends num> on Iterable<T>? {
   /// * return `0` if  isEmpty
   num averageOrZero() => averageOr(_zero());
 
+  /// Returns the average of all values produced by [selector] function
+  /// applied to each element in the collection.
+  num averageBy<R extends num>(Transformer<T, R> selector) {
+    if (isBlank) return _zero();
+
+    return sumBy(selector)! / length;
+  }
+
   /// * return the maximum value in the list
   /// * return `null` if isEmpty
   num? maxOrNull() => isBlank ? null : this!.reduce(math.max);
@@ -49,6 +66,22 @@ extension NumListConverter<T extends num> on Iterable<T>? {
   /// * return the element with the max value
   /// * return `value` if isEmpty
   num maxOr(num value) => maxOrNull() ?? value;
+
+  /// Returns the maximum value based on the [comparator] function.
+  /// If collection is empty this returns `null`.
+  ///
+  /// Example:
+  /// ```dart
+  /// [90, 10, 20, 30].maxBy((a, b) => a.compareTo(b)); // 90
+  /// persons.maxBy((a, b) => a.age.compareTo(b.age));  // the oldest person
+  /// ```
+  T? maxBy(Comparator<T> comparator) {
+    if (isBlank) return null;
+
+    return this!.reduce(
+      (value, element) => comparator(value, element) > 0 ? value : element,
+    );
+  }
 
   /// Returns the index where the max number of this list is.
   int get maxIndex =>
@@ -65,6 +98,22 @@ extension NumListConverter<T extends num> on Iterable<T>? {
   /// * return the element with the minimum value
   /// * return `value` if isEmpty
   num minOrZero() => minOrNull() ?? _zero();
+
+  /// Returns the minimal value based on the [comparator] function.
+  /// If collection is empty this returns `null`.
+  ///
+  /// Example:
+  /// ```dart
+  /// [1, 0, 2].minBy((a, b) => a.compareTo(b));       // 0
+  /// persons.minBy((a, b) => a.age.compareTo(b.age)); // the youngest person
+  /// ```
+  T? minBy(Comparator<T> comparator) {
+    if (isBlank) return null;
+
+    return this!.reduce(
+      (value, element) => comparator(value, element) < 0 ? value : element,
+    );
+  }
 
   /// Returns the index where the min number of this list is.
   int get minIndex =>
@@ -182,24 +231,17 @@ extension RIterableNull<T> on List<T?> {
   }
 
   /// * return the `length` without `null` elements
-  int countWithoutNull() {
-    /// create a new list && remove elements where null
-    final holder = List<T>.from(this)
-      ..removeWhere((element) => element == null);
-
-    /// return the holder elements count
-    return holder.length;
-  }
+  int countWithoutNull() => count<T>((e) => e != null);
 
   /// * return the `count` of the `null` elements
-  int countNull() => count((e) => e == null);
+  int countNull() => count<T>((e) => e == null);
 }
 
 extension RIterableString on Iterable<String> {
   /// return counter of empty elements in the iterable
   /// does not count the null values
   int countEmpty({bool trim = true}) =>
-      count((e) => trim ? e.trim().isEmpty : e.isEmpty);
+      count<String>((e) => trim ? e.trim().isEmpty : e.isEmpty);
 
   /// return counter of empty elements in the iterable
   /// does not count the null values
@@ -208,50 +250,6 @@ extension RIterableString on Iterable<String> {
 
 /// provides extensions for Iterable
 extension IterableScrewDriver<T> on Iterable<T>? {
-  /// Returns a list containing only elements matching the given [predicate!]
-  List<T> filter(bool Function(T element) test) {
-    if (isBlank) return <T>[];
-
-    final result = <T>[];
-    for (final e in this!) {
-      if (test(e)) result.add(e);
-    }
-    return result;
-  }
-
-  /// Returns a list containing all elements not matching the given [predicate!]
-  List<T> filterNot(bool Function(T element) test) {
-    if (isBlank) return <T>[];
-
-    final result = <T>[];
-    for (final e in this!) {
-      if (!test(e)) result.add(e);
-    }
-    return result;
-  }
-
-  /// Returns a list containing all elements that are not null
-  List<T> filterNotNull() {
-    if (isBlank) return <T>[];
-
-    final result = <T>[];
-    for (final e in this!) {
-      if (e != null) result.add(e);
-    }
-    return result;
-  }
-
-  /// Appends all elements matching the given [predicate] to
-  /// the given [destination].
-  Iterable<T> filterTo(List<T> destination, Selector<T> predicate) {
-    if (isBlank) return <T>[];
-
-    for (final element in this!) {
-      if (predicate(element)) destination.add(element);
-    }
-    return destination;
-  }
-
   /// Returns a map that contains [MapEntry]s provided by a [transform] function.
   ///
   /// If two elements share the same key, the last one gets added to the map.
@@ -260,14 +258,14 @@ extension IterableScrewDriver<T> on Iterable<T>? {
   /// ```dart
   /// [1, 2, 3].associate((e) => MapEntry('key_$e', e * 100)); // {'key_1': 100, 'key_2': 200, 'key_3': 300}
   /// ```
-  Map<K, V> associate<K, V>(MapEntry<K, V> Function(T element) transform) {
+  Map<K, V> associate<K, V>(Transformer<T, MapEntry<K, V>> transform) {
     if (isBlank) return <K, V>{};
 
     return Map.fromEntries(this!.map(transform));
   }
 
   /// Returns a map where every element is associated by a key produced from
-  /// the [selector] function.
+  /// the [transform] function.
   ///
   /// If two elements share the same key, the last one gets added to the map.
   ///
@@ -275,37 +273,37 @@ extension IterableScrewDriver<T> on Iterable<T>? {
   /// ```dart
   /// ['a', 'ab', 'abc'].associateBy((e) => e.length); // {1: 'a', 2: 'ab', 3: 'abc'}
   /// ```
-  Map<K, T> associateBy<K>(K Function(T element) selector) {
+  Map<K, T> associateBy<K>(Transformer<T, K> transform) {
     if (isBlank) return <K, T>{};
 
     final map = <K, T>{};
     for (final element in this!) {
-      final key = selector(element);
+      final key = transform(element);
       map[key] = element;
     }
     return map;
   }
 
   /// Returns a map where every element is used as a key that is associated
-  /// with a value produced by the [selector] function.
+  /// with a value produced by the [transform] function.
   ///
   /// Example:
   /// ```dart
   /// [1, 2, 3].associateWith((e) => e * 1000); // {1: 1000, 2: 2000, 3: 3000}
   /// ```
-  Map<T, V> associateWith<V>(V Function(T element) selector) {
+  Map<T, V> associateWith<V>(Transformer<T, V> transform) {
     if (isBlank) return <T, V>{};
 
     final map = <T, V>{};
     for (final element in this!) {
-      map[element] = selector(element);
+      map[element] = transform(element);
     }
     return map;
   }
 
   Map<K, List<V>> groupBy<K, V>(
-    K Function(T element) selector, {
-    V Function(T element)? transform,
+    Transformer<T, K> selector, {
+    Transformer<T, V>? transform,
   }) {
     if (isBlank) return <K, List<V>>{};
 
@@ -373,7 +371,7 @@ extension IterableScrewDriver<T> on Iterable<T>? {
   /// Performs the given [action] on each element and returns the
   /// iterable itself afterwards.
   Iterable<T> onEach(GenericCallback<T> action) sync* {
-    if (isBlank) yield* Iterable.empty();
+    if (isBlank) return;
 
     final it = this!.iterator;
 
@@ -395,35 +393,8 @@ extension IterableScrewDriver<T> on Iterable<T>? {
     }
   }
 
-  /// Returns the sum of all values produced by [selector] function
-  /// applied to each element in the collection.
-  R? sumBy<R extends num>(Transformer<T, R> selector) =>
-      this?.fold<R>(
-        _zero() as R,
-        (previous, element) => previous + selector(element) as R,
-      ) ??
-      _zero() as R;
-
-  /// Returns the average of all values produced by [selector] function
-  /// applied to each element in the collection.
-  num averageBy<R extends num>(Transformer<T, R> selector) {
-    if (isBlank) return _zero();
-
-    return sumBy(selector)! / length;
-  }
-
   /// Alias for [subtract].
   Iterable<T> except(Iterable<T> other) => subtract(other);
-
-  /// Returns true if the collection contains all the elements
-  /// present in [other] collection.
-  bool containsAll(Iterable<T> other) =>
-      this != null && other.every(this!.contains);
-
-  /// Returns true if the collection doesn't contain any of the elements
-  /// present in [other] collection.
-  bool containsNone(Iterable<T> other) =>
-      none((element) => other.contains(element));
 
   /// Returns an iterable containing the items with their respective indices
   /// in form of records.
@@ -648,19 +619,33 @@ extension IterableGetters<T> on Iterable<T>? {
     return <T>[...this.orEmpty(), ...list];
   }
 
-  /// Zip is used to combine multiple iterables into a single list that contains
-  /// the combination of them two.
-  Iterable<void> zip(Iterable<T>? iterable) sync* {
-    if (iterable.isBlank) return;
+  /// Returns a new lazy [Iterable] of values built from the elements of this
+  /// collection and the [other] collection with the same index.
+  ///
+  /// Using the provided [transform] function applied to each pair of elements.
+  /// The returned list has length of the shortest collection.
+  ///
+  /// Example (with added type definitions for [transform] parameters):
+  ///
+  /// ```dart
+  ///final amounts = [2, 3, 4];
+  ///final animals = ['dogs', 'birds', 'cats'];
+  ///final all = amounts.zip(
+  ///  animals,
+  ///  (int amount, String animal) => '$amount $animal'
+  ///);  // returns: ['2 dogs', '3 birds', '4 cats']
+  /// ```
+  Iterable<V> zip<R, V>(
+    Iterable<R> other,
+    V Function(T a, R b) transform,
+  ) sync* {
+    if (isBlank || other.isBlank) return;
 
-    final iterables =
-        List<Iterable<T>>.empty()
-          ..add(orEmpty())
-          ..add(iterable!);
+    final it1 = this!.iterator;
+    final it2 = other.iterator;
 
-    final iterators = iterables.map((e) => e.iterator).toList(growable: false);
-    while (iterators.every((e) => e.moveNext())) {
-      yield iterators.map((e) => e.current).toList(growable: false);
+    while (it1.moveNext() && it2.moveNext()) {
+      yield transform(it1.current, it2.current);
     }
   }
 
@@ -690,7 +675,10 @@ extension IterableGetters<T> on Iterable<T>? {
   /// // => [[1, 2], [3, 4], [5, 6], [7, 8], [9]]
   /// ```
   Iterable<List<T>> chunks(int size) sync* {
-    if (isBlank || size <= 0) yield List<T>.empty();
+    if (isBlank || size <= 0) {
+      yield List<T>.empty();
+      return;
+    }
 
     final len = this!.length;
 
@@ -707,12 +695,15 @@ extension IterableGetters<T> on Iterable<T>? {
   ///
   /// Example:
   /// ```dart
-  /// [1, 2, 3, 4, 5, 6].chunked(2);        // [[1, 2], [3, 4], [5, 6]]
-  /// [1, 2, 3].chunked(2);                 // [[1, 2], [3]]
-  /// [1, 2, 3].chunked(2, fill: () => 99); // [[1, 2], [3, 99]]
+  /// [1, 2, 3, 4, 5, 6].chunksOrFill(2);        // [[1, 2], [3, 4], [5, 6]]
+  /// [1, 2, 3].chunksOrFill(2);                 // [[1, 2], [3]]
+  /// [1, 2, 3].chunksOrFill(2, fill: () => 99); // [[1, 2], [3, 99]]
   /// ```
   Iterable<List<T>> chunksOrFill(int size, {T Function()? fill}) sync* {
-    if (isBlank || size <= 0) yield List<T>.empty();
+    if (isBlank || size <= 0) {
+      yield List<T>.empty();
+      return;
+    }
 
     final len = this!.length;
 
@@ -730,29 +721,132 @@ extension IterableGetters<T> on Iterable<T>? {
     }
   }
 
-  //   Iterable<List<T>> chunked(int size, {T Function()? fill}) {
-  //   if (size <= 0) {
-  //     throw ArgumentError('chunkSize must be positive integer greater than 0.');
-  //   }
+  /// Splits this collection into a lazy [Iterable] of chunks, where chunks are
+  /// created as long as [predicate] is true for a pair of entries.
+  ///
+  /// For example, one-by-one increasing subsequences can be chunked as follows:
+  /// ```dart
+  /// final list = [1, 2, 4, 9, 10, 11, 12, 15, 16, 19, 20, 21];
+  /// final increasingSubSequences = list.chunkWhile((a, b) => a + 1 == b);
+  /// ```
+  ///
+  /// Here, `increasingSubSequences` would consist of `[1, 2]`, `[4]`,
+  /// `[9, 10, 11]`, `[12]`, `[15, 16]` and finally `[19, 20, 21]`.
+  ///
+  /// See also:
+  ///  - [splitWhen], which works similarly but with a reverted [predicate].
+  Iterable<List<T>> chunkWhile(bool Function(T, T) predicate) sync* {
+    if (isBlank) {
+      yield List<T>.empty();
+      return;
+    }
 
-  //   if (isEmpty) {
-  //     return const Iterable.empty();
-  //   }
+    var currentChunk = <T>[];
+    var hasPrevious = false;
+    late T previous;
 
-  //   final countOfChunks = (length / size.toDouble()).ceil();
+    for (final element in this!) {
+      if (!hasPrevious || predicate(previous, element)) {
+        // keep element in current chunk
+        currentChunk.add(element);
+      } else {
+        // start a new chunk containing the new element
+        yield currentChunk;
+        currentChunk = [element];
+      }
 
-  //   return Iterable.generate(countOfChunks, (int index) {
-  //     final chunk = skip(index * size).take(size).toList();
+      previous = element;
+      hasPrevious = true;
+    }
 
-  //     if (fill != null) {
-  //       while (chunk.length < size) {
-  //         chunk.add(fill());
-  //       }
-  //     }
+    if (currentChunk.isNotEmpty) yield currentChunk;
+  }
 
-  //     return chunk;
-  //   });
-  // }
+  /// Splits this collection into a lazy [Iterable], where each split will be
+  /// make if [predicate] returns true for a pair of entries.
+  ///
+  /// For example, one could split the iterable at each changed value like this:
+  /// ```dart
+  /// final list = [1, 1, 1, 2, 2, 1, 4, 4];
+  /// final splitted = list.splitWhen((a, b) => a != b);
+  /// ```
+  ///
+  /// In that example, `splitted` would consist of `[1, 1, 1, 1]`, `[2, 2]`,
+  /// `[1]`, `[4, 4]`.
+  ///
+  /// See also:
+  ///  - [chunkWhile], which works similarly but with a reverted [predicate].
+  Iterable<List<T>> splitWhen(bool Function(T, T) predicate) {
+    return chunkWhile((a, b) => !predicate(a, b));
+  }
+
+  /// Returns a new lazy [Iterable] of windows of the given [size] sliding along
+  /// this collection with the given [step].
+  ///
+  /// The last list may have less elements than the given size.
+  ///
+  /// Both [size] and [step] must be positive and can be greater than the number
+  /// of elements in this collection.
+  Iterable<List<T>> windowed(
+    int size, {
+    int step = 1,
+    bool partialWindows = false,
+  }) sync* {
+    if (size <= 0 || step <= 0) {
+      throw ArgumentError(
+        'Size and step must be positive integers greater than 0.',
+      );
+    }
+
+    if (isBlank) {
+      yield List<T>.empty();
+      return;
+    }
+
+    final gap = step - size;
+
+    if (gap >= 0) {
+      var buffer = <T>[];
+      var skip = 0;
+      for (final element in this!) {
+        if (skip > 0) {
+          skip -= 1;
+          continue;
+        }
+        buffer.add(element);
+        if (buffer.length == size) {
+          yield buffer;
+          buffer = <T>[];
+          skip = gap;
+        }
+      }
+      if (buffer.isNotEmpty && (partialWindows || buffer.length == size)) {
+        yield buffer;
+      }
+    } else {
+      final buffer = ListQueue<T>(size);
+      for (final element in this!) {
+        buffer.add(element);
+        if (buffer.length == size) {
+          yield buffer.toList();
+          for (var i = 0; i < step; i++) {
+            buffer.removeFirst();
+          }
+        }
+      }
+      if (partialWindows) {
+        while (buffer.length > step) {
+          yield buffer.toList();
+          for (var i = 0; i < step; i++) {
+            buffer.removeFirst();
+          }
+        }
+        if (buffer.isNotEmpty) {
+          yield buffer.toList();
+        }
+      }
+    }
+  }
 
   /// Performs the given action on each element on iterable, providing sequential index with the element.
   /// [element!] the element on the current iteration

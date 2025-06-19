@@ -1,12 +1,10 @@
 import 'dart:collection';
-import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
 import '../../common_tools.dart';
 import 'index.dart';
 
-/// List extensions.
 extension GenericListExtensions<T> on Iterable<T> {
   /// Returns a new list that contains this list repeated [data] times.
   ///
@@ -29,21 +27,13 @@ extension GenericListExtensions<T> on Iterable<T> {
     return result;
   }
 
-  /// Returns a new list that contains the elements of this list followed by the elements of [data].
-  ///
-  /// The [data] argument specifies the list to concatenate with this list.
-  ///
-  /// Example:
-  /// ```dart
-  /// List<int> numbers1 = [1, 2, 3];
-  /// List<int> numbers2 = [4, 5, 6];
-  /// List<int> concatenatedNumbers = numbers1 + numbers2;
-  /// print(concatenatedNumbers); // Output: [1, 2, 3, 4, 5, 6]
-  /// ```
-  ///
-  /// Returns:
-  /// A new list that contains the elements of this list followed by the elements of [data].
-  List<T> operator +(List<T> data) => [...this, ...data];
+  /// Returns a new list containing all elements of the given [elements]
+  /// collection and then all elements of this collection.
+  List<T> operator +(Iterable<T> elements) => append(elements).toList();
+
+  /// Returns a new list containing all elements of this collection except the
+  /// elements contained in the given [elements] collection.
+  List<T> operator -(Iterable<T> elements) => except(elements).toList();
 }
 
 extension ListExt<T> on List<T>? {
@@ -82,7 +72,7 @@ extension ListExt<T> on List<T>? {
     return list;
   }
 
-  List<List<T>> divideListByFunction(bool Function(T) condition) {
+  List<List<T>> divideListByFunction(Selector<T> condition) {
     final List<List<T>> nestedLists = [];
     final List<T> currentSublist = [];
 
@@ -130,38 +120,6 @@ extension ListExt<T> on List<T>? {
 
 /// Supercharged extensions on [Iterable] like [List] and [Set].
 extension IterableSC<T> on Iterable<T> {
-  /// Returns the minimal value based on the [comparator] function.
-  /// If collection is empty this returns `null`.
-  ///
-  /// Example:
-  /// ```dart
-  /// [1, 0, 2].minBy((a, b) => a.compareTo(b));       // 0
-  /// persons.minBy((a, b) => a.age.compareTo(b.age)); // the youngest person
-  /// ```
-  T? minBy(Comparator<T> comparator) {
-    if (isBlank) return null;
-
-    return reduce(
-      (value, element) => comparator(value, element) < 0 ? value : element,
-    );
-  }
-
-  /// Returns the maximum value based on the [comparator] function.
-  /// If collection is empty this returns `null`.
-  ///
-  /// Example:
-  /// ```dart
-  /// [90, 10, 20, 30].maxBy((a, b) => a.compareTo(b)); // 90
-  /// persons.maxBy((a, b) => a.age.compareTo(b.age));  // the oldest person
-  /// ```
-  T? maxBy(Comparator<T> comparator) {
-    if (isBlank) return null;
-
-    return reduce(
-      (value, element) => comparator(value, element) > 0 ? value : element,
-    );
-  }
-
   /// Lazily returns all values without the first one.
   ///
   /// Example:
@@ -305,7 +263,7 @@ extension ListUtils<T> on List<T> {
 
   /// Clear and add all elements of [List] [other] to the list.
   void clearAndAddAll(List<T> other) {
-    if (isEmpty && other.isEmpty) return;
+    if (isBlank && other.isBlank) return;
     clear();
     addAll(other);
   }
@@ -634,10 +592,6 @@ extension FicIterableExtension<T> on Iterable<T> {
 }
 
 extension IterableMinus<T> on Iterable<T> {
-  /// Returns a new list containing all elements of this collection except the
-  /// elements contained in the given [elements] collection.
-  List<T> operator -(Iterable<T> elements) => except(elements).toList();
-
   /// Returns a new lazy [Iterable] containing all elements of this collection
   /// except the given [element].
   Iterable<T> exceptElement(T element) sync* {
@@ -667,10 +621,6 @@ extension IterableMinus<T> on Iterable<T> {
     yield* elements;
   }
 
-  /// Returns a new list containing all elements of the given [elements]
-  /// collection and then all elements of this collection.
-  List<T> operator +(Iterable<T> elements) => append(elements).toList();
-
   /// Returns a new lazy [Iterable] containing the given [element] and then all
   /// elements of this collection.
   Iterable<T> appendElement(T element) sync* {
@@ -686,39 +636,13 @@ extension IterableMinus<T> on Iterable<T> {
   /// the end in the order of the [other] collection.
   Iterable<T> union(Iterable<T> other) sync* {
     final existing = HashSet<T>();
+
     for (final element in this) {
       if (existing.add(element)) yield element;
     }
 
     for (final element in other) {
       if (existing.add(element)) yield element;
-    }
-  }
-
-  /// Returns a new lazy [Iterable] of values built from the elements of this
-  /// collection and the [other] collection with the same index.
-  ///
-  /// Using the provided [transform] function applied to each pair of elements.
-  /// The returned list has length of the shortest collection.
-  ///
-  /// Example (with added type definitions for [transform] parameters):
-  ///
-  /// ```dart
-  ///final amounts = [2, 3, 4];
-  ///final animals = ['dogs', 'birds', 'cats'];
-  ///final all = amounts.zip(
-  ///  animals,
-  ///  (int amount, String animal) => '$amount $animal'
-  ///);  // returns: ['2 dogs', '3 birds', '4 cats']
-  /// ```
-  Iterable<V> zip<R, V>(
-    Iterable<R> other,
-    V Function(T a, R b) transform,
-  ) sync* {
-    final it1 = iterator;
-    final it2 = other.iterator;
-    while (it1.moveNext() && it2.moveNext()) {
-      yield transform(it1.current, it2.current);
     }
   }
 
@@ -732,46 +656,6 @@ extension IterableMinus<T> on Iterable<T> {
 
   /// Returns a new [HashSet] with all distinct elements of this collection.
   HashSet<T> toHashSet() => HashSet.from(this);
-
-  /// Returns a Map containing key-value pairs provided by [transform] function
-  /// applied to elements of this collection.
-  ///
-  /// If any of two pairs would have the same key the last one gets added to the
-  /// map.
-  Map<K, V> associate<K, V>(MapEntry<K, V> Function(T element) transform) {
-    final map = <K, V>{};
-    for (final element in this) {
-      final entry = transform(element);
-      map[entry.key] = entry.value;
-    }
-    return map;
-  }
-
-  /// Returns a Map containing the elements from the collection indexed by
-  /// the key returned from [keySelector] function applied to each element.
-  ///
-  /// If any two elements would have the same key returned by [keySelector] the
-  /// last one gets added to the map.
-  Map<K, T> associateBy<K>(K Function(T element) keySelector) {
-    final map = <K, T>{};
-    for (final current in this) {
-      map[keySelector(current)] = current;
-    }
-    return map;
-  }
-
-  /// Returns a Map containing the values returned from [valueSelector] function
-  /// applied to each element indexed by the elements from the collection.
-  ///
-  /// If any of elements (-> keys) would be the same the last one gets added
-  /// to the map.
-  Map<T, V> associateWith<V>(V Function(T element) valueSelector) {
-    final map = <T, V>{};
-    for (final current in this) {
-      map[current] = valueSelector(current);
-    }
-    return map;
-  }
 
   /// Splits the collection into two lists according to [predicate].
   ///
@@ -789,37 +673,5 @@ extension IterableMinus<T> on Iterable<T> {
       }
     }
     return [t, f];
-  }
-}
-
-/// Combines iterables [a] and [b] into one, by applying the [combine] function.
-/// If [allowDifferentSizes] is true, it will stop as soon as one of the
-/// iterables has no more values. If [allowDifferentSizes] is false, it will
-/// throw an error if the iterables have different length.
-///
-/// See also: [IterableZip]
-///
-Iterable<R> combineIterables<A, B, R>(
-  Iterable<A> a,
-  Iterable<B> b,
-  R Function(A, B) combine, {
-  bool allowDifferentSizes = false,
-}) sync* {
-  final Iterator<A> iterA = a.iterator;
-  final Iterator<B> iterB = b.iterator;
-
-  while (iterA.moveNext()) {
-    if (!iterB.moveNext()) {
-      if (allowDifferentSizes) {
-        return;
-      } else {
-        throw StateError("Can't combine iterables of different sizes (a > b).");
-      }
-    }
-    yield combine(iterA.current, iterB.current);
-  }
-
-  if (iterB.moveNext() && !allowDifferentSizes) {
-    throw StateError("Can't combine iterables of different sizes (a < b).");
   }
 }
