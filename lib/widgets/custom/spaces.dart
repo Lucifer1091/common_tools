@@ -13,7 +13,7 @@ class Space extends SizedBox {
   // Widths
 
   /// A space with a custom width.
-  const Space.w({required double width, super.key}) : super(width: width);
+  const Space.w(double width, {super.key}) : super(width: width);
 
   /// A space with a width of 2
   const Space.w2({super.key, super.width = 2});
@@ -66,7 +66,7 @@ class Space extends SizedBox {
   // Heights
 
   /// A space with a custom height.
-  const Space.h({required double height, super.key}) : super(height: height);
+  const Space.h(double height, {super.key}) : super(height: height);
 
   /// A space with a height of 2
   const Space.h2({super.key, super.height = 2});

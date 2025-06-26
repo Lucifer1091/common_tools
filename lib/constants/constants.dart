@@ -1,4 +1,4 @@
-library constants;
+library;
 
 import 'dart:async';
 import 'dart:math' as math;

@@ -170,7 +170,7 @@ class System {
     String method, [
     arguments,
   ]) async {
-    var platform = MethodChannel(channel);
+    final platform = MethodChannel(channel);
     return await platform.invokeMethod<T>(method, arguments);
   }
 }

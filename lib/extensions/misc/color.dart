@@ -12,7 +12,8 @@ extension StringToColor on String {
 
 extension HexColor on Color {
   /// Prefixes a hash sign if [leadingHashSign] is set to `true` (default is `true`).
-  String toHex({bool leadingHashSign = true}) => '${leadingHashSign ? '#' : ''}'
+  String toHex({bool leadingHashSign = true}) =>
+      '${leadingHashSign ? '#' : ''}'
       '${a.toInt().toRadixString(16).padLeft(2, '0')}'
       '${r.toInt().toRadixString(16).padLeft(2, '0')}'
       '${g.toInt().toRadixString(16).padLeft(2, '0')}'
@@ -90,38 +91,4 @@ extension HexColor on Color {
   /// print('Luminance: $luminance'); // Output: 0.2126
   /// ```
   double get getLuminance => computeLuminance();
-
-  /// Creates a MaterialColor from the color.
-  ///
-  /// Example:
-  /// ```dart
-  /// Color color = Colors.blue;
-  /// MaterialColor materialColor = color.createMaterialColor();
-  /// print('Material Color: $materialColor'); // Output: MaterialColor(primary value: 428051,
-  ///                                           //   {50: Color(0xffe3f2fd), 100: Color(0xffbbdefb),
-  ///                                           //   200: Color(0xff90caf9), 300: Color(0xff64b5f6),
-  ///                                           //   400: Color(0xff42a5f5), 500: Color(0xff2196f3),
-  ///                                           //   600: Color(0xff1e88e5), 700: Color(0xff1976d2),
-  ///                                           //   800: Color(0xff1565c0), 900: Color(0xff0d47a1)});
-  /// ```
-  MaterialColor createMaterialColor() {
-    final List<double> strengths = <double>[.05];
-    final Map<int, Color> swatch = <int, Color>{};
-
-    for (int i = 1; i < 10; i++) {
-      strengths.add(0.1 * i);
-    }
-
-    for (final strength in strengths) {
-      final double ds = 0.5 - strength;
-      swatch[(strength * 1000).round()] = Color.fromRGBO(
-        (r + ((ds < 0 ? r : (255 - r)) * ds).round()) as int,
-        (g + ((ds < 0 ? g : (255 - g)) * ds).round()) as int,
-        (b + ((ds < 0 ? b : (255 - b)) * ds).round()) as int,
-        1,
-      );
-    }
-
-    return MaterialColor(value, swatch);
-  }
 }

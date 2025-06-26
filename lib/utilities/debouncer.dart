@@ -1,120 +1,21 @@
 part of 'utilities.dart';
 
-/// A utility class for debouncing actions.
-///
-/// The `Debouncer` class is designed to delay the execution of a function
-/// until a specified period has elapsed since the last time it was invoked.
-/// This is particularly useful for scenarios such as user input where you
-/// want to reduce the frequency of actions like API calls or expensive
-/// computations.
-///
-/// Example usage:
-/// ```dart
-/// final debouncer = Debouncer(milliseconds: 500);
-///
-/// void onUserInput(String input) {
-///   debouncer.run(() {
-///     // Code to execute after the debounce period
-///     print('User input: $input');
-///   });
-/// }
-/// ```
-class Debouncer {
-  /// Creates a [Debouncer] with the specified debounce duration.
-  ///
-  /// The [milliseconds] parameter specifies the duration in milliseconds
-  /// to wait before executing the action.
-  Debouncer({required this.milliseconds});
-
-  /// The debounce duration in milliseconds.
-  final int milliseconds;
-
-  /// Timer used to manage the debounce period.
-  Timer? _timer;
-
-  /// Runs the provided [action] after the debounce period.
-  ///
-  /// If this method is called again before the debounce period ends,
-  /// the previous timer is canceled, and the debounce period restarts.
-  ///
-  /// - [action]: The callback function to execute after the debounce period.
-  void run(VoidCallback action) {
-    _timer?.cancel();
-    _timer = Timer(Duration(milliseconds: milliseconds), action);
-  }
-}
-
-/// A utility class for throttling actions.
-///
-/// The `Throttler` class ensures that a function is executed at most once
-/// in a specified time interval. This is useful for scenarios where
-/// frequent events need to be handled at regular intervals, such as during
-/// window resizing or scrolling.
-///
-/// Example usage:
-/// ```dart
-/// final throttler = Throttler(milliseconds: 500);
-///
-/// void onScroll() {
-///   throttler.run(() {
-///     // Code to execute during the throttle period
-///     print('Scroll event');
-///   });
-/// }
-/// ```
-class Throttler {
-  /// Creates a [Throttler] with the specified throttle duration.
-  ///
-  /// The [milliseconds] parameter specifies the duration in milliseconds
-  /// to wait before allowing the next execution of the action.
-  Throttler({required this.milliseconds});
-
-  /// The throttle duration in milliseconds.
-  final int milliseconds;
-
-  /// Timer used to manage the throttle period.
-  Timer? _timer;
-
-  /// Flag indicating if the action is available to run.
-  bool _isAvailable = true;
-
-  /// Runs the provided [action] if the throttle period has elapsed.
-  ///
-  /// If this method is called again before the throttle period ends,
-  /// the call is ignored until the period has elapsed.
-  ///
-  /// - [action]: The callback function to execute during the throttle period.
-  void run(VoidCallback action) {
-    _timer?.cancel();
-    if (_isAvailable) {
-      action();
-      _isAvailable = false;
-      _timer = Timer(Duration(milliseconds: milliseconds), () {
-        _isAvailable = true;
-      });
-    }
-  }
-}
-
-/// typedef for action function for [DeBouncer]
-typedef DeBounceAction<R> = FutureOr<R> Function();
-
 /// de-bounces [run] method calls and runs it only once in given [duration].
 /// It will ignore any calls to [run] until [duration] has passed since the
 /// last call to [run].
 /// It can be used to de-bounce any method calls like search, filter, etc.
-final class DeBouncer {
+final class Debouncer {
   /// Allows to create an instance with optional [Duration] with
   /// immediateFirstRun set to false. See [immediateFirstRun] for more details.
-  DeBouncer([Duration? duration])
-      : duration = duration ?? const Duration(milliseconds: 300),
-        immediateFirstRun = false;
+  Debouncer([Duration? duration])
+    : duration = duration ?? const Duration(milliseconds: 300),
+      immediateFirstRun = false;
 
   /// Allows to create an instance with optional [Duration] with
   /// immediateFirstRun set to true. See [immediateFirstRun] for more details.
-  DeBouncer.immediate([Duration? duration])
-      : duration = duration ?? const Duration(milliseconds: 300),
-        immediateFirstRun = true;
+  Debouncer.immediate([Duration? duration])
+    : duration = duration ?? const Duration(milliseconds: 300),
+      immediateFirstRun = true;
 
   /// de-bounce period. Default is 300 milliseconds.
   /// It will ignore any calls to [run] until [duration] has passed since the
@@ -151,9 +52,11 @@ final class DeBouncer {
   /// Note that returned future will complete with the result of the [action]
   /// call only when it is executed. If the [action] is not executed due to
   /// debouncing, the returned future will not complete.
-  Future<R> run<R>(DeBounceAction<R> action, {bool? immediateFirstRun}) {
+  Future<R> run<R>(FutureOrCallback<R> action, {bool? immediateFirstRun}) {
     immediateFirstRun ??= this.immediateFirstRun;
+
     final completer = Completer<R>();
+
     if (immediateFirstRun && !isRunning) {
       // Execute the action immediately and cancel the previous timer if any!
       _timer?.cancel();
@@ -168,8 +71,9 @@ final class DeBouncer {
     return completer.future;
   }
 
-  Future<R> _runAction<R>(DeBounceAction<R> action, Completer<R> completer) {
+  Future<R> _runAction<R>(FutureOrCallback<R> action, Completer<R> completer) {
     final FutureOr<R> result = action();
+
     if (result is Future<R>) {
       // action is async and returns a future. Wait for the future to complete
       // and then complete the completer.
@@ -198,7 +102,7 @@ final class DeBouncer {
   ///
   /// Returns a [Future] that completes with the result of the [action] call
   /// when it is executed. See [run] for more details.
-  Future<R> call<R>(DeBounceAction<R> action) => run<R>(action);
+  Future<R> call<R>(FutureOrCallback<R> action) => run<R>(action);
 
   /// Allows to cancel current timer.
   void cancel() {
@@ -207,66 +111,87 @@ final class DeBouncer {
   }
 }
 
-/// global instance of [DeBouncer] to be used for debouncing actions. It can be
-/// used to debounce actions across the application. Use [debounce] function to
-/// debounce actions using this instance.
-///
-/// CAUTION:
-/// This instance will be shared across the application. If you want to have
-/// different debounce settings for different actions, you should create an
-/// instance of [DeBouncer] and use it for debouncing actions.
-///
-/// Also, it is recommended to use this instance only for simple use cases where
-/// you don't need to debounce 2 different actions at the same time! Otherwise,
-/// it will cause conflicts between the actions and you may not get the desired
-/// results. If you need to debounce multiple actions, you should create an
-/// instance of [DeBouncer] for each action.
-///
-/// See [debounce] function for more details.
-final DeBouncer debouncer = DeBouncer();
+class Throttler {
+  Throttler([Duration? duration, this.immediateFirstRun = false])
+    : duration = duration ?? const Duration(milliseconds: 300);
 
-/// Helper function to debounce [action] calls using global [deBouncer] instance.
-/// If [immediateFirstRun] is set to true, it will run the [action] immediately
-/// for the first call and then it will wait for [duration] to run the next call
-/// if there's any.
-///
-/// This is helpful when you want to debounce a method call without creating an
-/// instance of [DeBouncer] class. However, you can create an instance of
-/// [DeBouncer] and use it for debouncing actions as well.
-///
-/// CAUTION:
-/// This function will use the global instance of [DeBouncer] and it will be
-/// shared across the application. If you want to have different debounce
-/// settings for different actions, you should create an instance of
-/// [DeBouncer] and use it for debouncing actions.
-///
-/// Also, it is recommended to
-/// use this function only for simple use cases where you don't need to
-/// debounce 2 different actions at the same time! Otherwise, it will cause
-/// conflicts between the actions and you may not get the desired results.
-/// If you need to debounce multiple actions, you should create an instance
-/// of [DeBouncer] for each action.
-///
-/// To cancel the current timer, you can call [DeBouncer.cancel] method on
-/// the global instance of [deBouncer].
-///
-/// e.g.
-/// ```dart
-/// // Using global instance of deBouncer to debounce actions.
-/// debounce(() {
-///   // your action here
-///   print('debounced action');
-/// });
-/// ```
-///
-/// ```dart
-/// debouncer.cancel(); // cancels the current action on global instance.
-/// ```
-///
-/// This will run the action immediately for the first call and then it will
-/// wait for 300 milliseconds to run the next call if there's any.
-Future<R> debounce<R>(
-  DeBounceAction<R> action, {
-  bool immediateFirstRun = false,
-}) =>
-    debouncer.run<R>(action, immediateFirstRun: immediateFirstRun);
+  Throttler.immediate([Duration? duration])
+    : duration = duration ?? const Duration(milliseconds: 300),
+      immediateFirstRun = true;
+
+  /// The throttle duration.
+  final Duration duration;
+
+  /// If true, the first call is executed immediately.
+  final bool immediateFirstRun;
+
+  Timer? _timer;
+  bool _isAvailable = true;
+
+  /// Returns true if a throttle is in progress.
+  bool get isRunning => _timer?.isActive ?? false;
+
+  /// Runs [action] if throttle period has elapsed.
+  /// Returns a [Future] that completes with the result of [action] when executed.
+  Future<R> run<R>(FutureOrCallback<R> action, {bool? immediateFirstRun}) {
+    immediateFirstRun ??= this.immediateFirstRun;
+    final completer = Completer<R>();
+
+    if (immediateFirstRun && _isAvailable) {
+      _timer?.cancel();
+      _isAvailable = false;
+      _timer = Timer(duration, () {
+        _isAvailable = true;
+      });
+      _runAction<R>(action, completer);
+      return completer.future;
+    }
+
+    if (_isAvailable) {
+      _isAvailable = false;
+      _timer = Timer(duration, () {
+        _isAvailable = true;
+      });
+      _runAction<R>(action, completer);
+      return completer.future;
+    }
+
+    // If throttled, return a future that never completes.
+    return completer.future;
+  }
+
+  Future<void> _runAction<R>(
+    FutureOrCallback<R> action,
+    Completer<R> completer,
+  ) async {
+    try {
+      final result = await action();
+      completer.complete(result);
+    } catch (e, s) {
+      completer.completeError(e, s);
+    }
+  }
+
+  /// alias for [run]. This also makes it so that you can use the instance
+  /// as a function.
+  ///
+  /// e.g.
+  /// ```dart
+  /// final throttler = Throttler();
+  /// throttler(() async {
+  ///   // your action here
+  ///   print('throttled action');
+  /// });
+  /// ```
+  ///
+  /// Returns a [Future] that completes with the result of the [action] call
+  /// when it is executed. See [run] for more details.
+  Future<R> call<R>(FutureOrCallback<R> action) => run<R>(action);
+
+  /// Allows to cancel current timer.
+  void cancel() {
+    _timer?.cancel();
+    _timer = null;
+    _isAvailable = true;
+  }
+}

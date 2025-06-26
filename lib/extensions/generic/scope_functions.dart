@@ -27,6 +27,9 @@ extension ScopeFunction<T> on T? {
   /// Checks whether the value is "falsy" (opposite of `isTruthy`).
   bool get isFalsy => !isTruthy;
 
+  /// Return the fallback value if the provided value is null
+  T orDefault(T fallback) => this ?? fallback;
+
   /// Calls the specified function [callback] with `this` as its argument and returns its result.
   ///
   /// Example:

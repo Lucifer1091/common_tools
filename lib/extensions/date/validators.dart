@@ -156,7 +156,7 @@ extension DateValidators on DateTime? {
         : (isAfter(start) && isBefore(end));
   }
 
-  /// Returns true if the date of [this] occurs before the date of [other].
+  /// Returns true if the date of [DateTime] occurs before the date of [other].
   ///
   /// The comparison is independent of whether the time is in UTC or
   /// in the local time zone.
@@ -165,7 +165,7 @@ extension DateValidators on DateTime? {
     return this!.startOfDay.isBefore(other.startOfDay);
   }
 
-  /// Returns true if the date of [this] occurs after the date of [other].
+  /// Returns true if the date of [DateTime] occurs after the date of [other].
   ///
   /// The comparison is independent of whether the time is in UTC or
   /// in the local time zone.
@@ -209,7 +209,7 @@ extension DateValidators on DateTime? {
     return isSameDate(other) && isSameTime(other);
   }
 
-  /// Returns true if the date of [this] occurs on the same day as
+  /// Returns true if the date of [DateTime] occurs on the same day as
   /// the date of [other].
   ///
   /// The comparison is independent of whether the time is in UTC or
@@ -406,7 +406,7 @@ extension DateValidators on DateTime? {
   /// ```
   bool get isFuture => isAfter(DateTime.now());
 
-  /// Returns true if [this] occurs in previous month
+  /// Returns true if [DateTime] occurs in previous month
   bool get isInPreviousMonth {
     if (this == null) return false;
 
@@ -417,7 +417,7 @@ extension DateValidators on DateTime? {
         this!.year == previousMonth.year;
   }
 
-  /// Returns true if [this] occurs in previous month
+  /// Returns true if [DateTime] occurs in previous month
   bool get isInNextMonth {
     if (this == null) return false;
 
@@ -427,48 +427,48 @@ extension DateValidators on DateTime? {
     return this!.month == nextMonth.month && this!.year == nextMonth.year;
   }
 
-  /// Returns true if [this] occurs in previous year
+  /// Returns true if [DateTime] occurs in previous year
   bool get isInPreviousYear =>
       this != null && this!.year == DateTime.now().year - 1;
 
-  /// Returns true if [this] occurs in previous year
+  /// Returns true if [DateTime] occurs in next year
   bool get isInNextYear =>
       this != null && this!.year == DateTime.now().year + 1;
 
-  /// Returns true if [this] falls in january
+  /// Returns true if [DateTime] falls in january
   bool get isInJanuary => this != null && this!.month == DateTime.january;
 
-  /// Returns true if [this] falls in february
+  /// Returns true if [DateTime] falls in february
   bool get isInFebruary => this != null && this!.month == DateTime.february;
 
-  /// Returns true if [this] falls in march
+  /// Returns true if [DateTime] falls in march
   bool get isInMarch => this != null && this!.month == DateTime.march;
 
-  /// Returns true if [this] falls in april
+  /// Returns true if [DateTime] falls in april
   bool get isInApril => this != null && this!.month == DateTime.april;
 
-  /// Returns true if [this] falls in may
+  /// Returns true if [DateTime] falls in may
   bool get isInMay => this != null && this!.month == DateTime.may;
 
-  /// Returns true if [this] falls in june
+  /// Returns true if [DateTime] falls in june
   bool get isInJune => this != null && this!.month == DateTime.june;
 
-  /// Returns true if [this] falls in july
+  /// Returns true if [DateTime] falls in july
   bool get isInJuly => this != null && this!.month == DateTime.july;
 
-  /// Returns true if [this] falls in august
+  /// Returns true if [DateTime] falls in august
   bool get isInAugust => this != null && this!.month == DateTime.august;
 
-  /// Returns true if [this] falls in september
+  /// Returns true if [DateTime] falls in september
   bool get isInSeptember => this != null && this!.month == DateTime.september;
 
-  /// Returns true if [this] falls in october
+  /// Returns true if [DateTime] falls in october
   bool get isInOctober => this != null && this!.month == DateTime.october;
 
-  /// Returns true if [this] falls in november
+  /// Returns true if [DateTime] falls in november
   bool get isInNovember => this != null && this!.month == DateTime.november;
 
-  /// Returns true if [this] falls in december
+  /// Returns true if [DateTime] falls in december
   bool get isInDecember => this != null && this!.month == DateTime.december;
 
   /// Checks if the current date is between the specified start date and end date.

@@ -17,7 +17,7 @@ enum ImageColor {
   brown,
   grey,
   black,
-  white
+  white,
 }
 
 class RandomImage {
@@ -36,13 +36,13 @@ class RandomImage {
   /// String customImageUrl = RandomImage.picsumImage(300, 400);
   /// ```
   static String picsumImage([int width = 200, int height = 200]) {
-    return "https://picsum.photos/$width/$height";
+    return 'https://picsum.photos/$width/$height';
   }
 
   /// Generates a random image URL from robohash with the specified dimensions and category filter.
   /// https://robohash.org/
   ///
-  /// The [width] and [height] parameters specify the dimensions of the image.
+  /// The [size] parameter specify the dimensions of the image.
   /// The [category] parameter specifies the category of the image.
   ///
   /// Returns a string representing the URL of the random image.
@@ -52,7 +52,7 @@ class RandomImage {
     ImageSet set = ImageSet.any,
     ImageBg bg = ImageBg.any,
     ImageType imageType = ImageType.png,
-    String category = "photo",
+    String category = 'photo',
     ImageColor? color,
   }) {
     final imageColor = color != null ? '&color=${color.name}' : '';
@@ -62,7 +62,7 @@ class RandomImage {
   }
 
   /// Generates a random image URL from dummy image with the specified dimensions .
-  /// The [width] and [height] parameters specify the dimensions of the image.
+  /// The [size] parameter specify the dimensions of the image.
   /// Returns a string representing the URL of the random image.
   static String dummyImage({
     String? text,
@@ -74,7 +74,7 @@ class RandomImage {
     final imageSize = '${size.width.toInt()}x${size.height.toInt()}';
     final imageText = text ?? imageSize;
     final data =
-        "https://dummyimage.com/$imageSize.${imageType.name}/${bgColor.toHex(leadingHashSign: false)}/${fgColor.toHex(leadingHashSign: false)}&text=$imageText";
+        'https://dummyimage.com/$imageSize.${imageType.name}/${bgColor.toHex(leadingHashSign: false)}/${fgColor.toHex(leadingHashSign: false)}&text=$imageText';
     return data;
   }
 }
@@ -88,26 +88,29 @@ class Faker {
   ///
   /// Returns a [String] containing Lorem Ipsum text.
   static String generateLoremIpsumWords([num length = 50]) {
-    var words =
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-            .split(" ");
-    var result = '';
-    for (var i = 0; i < (length); i++) {
-      result += '${words[i % words.length]} ';
+    final words =
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+            .split(' ');
+
+    final StringBuffer buffer = StringBuffer();
+
+    for (var i = 0; i < length; i++) {
+      buffer.write('${words[i % words.length]} ');
     }
-    return result.trim();
+
+    return buffer.toString().trim();
   }
 
   /// Generates a random full name.
   ///
   /// Returns a [String] containing a randomly generated full name.
   static String generateName() {
-    var firstNames = ['John', 'Jane', 'Michael', 'Emily', 'David', 'Sarah'];
-    var lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones'];
+    final firstNames = ['John', 'Jane', 'Michael', 'Emily', 'David', 'Sarah'];
+    final lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones'];
 
-    var random = Random();
-    var firstName = firstNames[random.nextInt(firstNames.length)];
-    var lastName = lastNames[random.nextInt(lastNames.length)];
+    final random = Random();
+    final firstName = firstNames[random.nextInt(firstNames.length)];
+    final lastName = lastNames[random.nextInt(lastNames.length)];
 
     return '$firstName $lastName';
   }
@@ -116,17 +119,17 @@ class Faker {
   ///
   /// Returns a [String] containing a randomly generated email address.
   static String generateEmail([String? name]) {
-    var domains = [
+    final domains = [
       'gmail.com',
       'yahoo.com',
       'hotmail.com',
       'example.com',
-      'test.com'
+      'test.com',
     ];
 
-    var random = Random();
-    var username = (name ?? generateName()).replaceAll(' ', '').toLowerCase();
-    var domain = domains[random.nextInt(domains.length)];
+    final random = Random();
+    final username = (name ?? generateName()).replaceAll(' ', '').toLowerCase();
+    final domain = domains[random.nextInt(domains.length)];
 
     return '$username@$domain';
   }
@@ -135,34 +138,35 @@ class Faker {
   ///
   /// Returns a [String] containing a randomly generated phone number.
   static String generatePhoneNumber() {
-    var random = Random();
+    final random = Random();
     // Ensures the first digit is between 2 and 9
-    var firstDigit = 2 + random.nextInt(8);
-    var phoneNumber = '$firstDigit';
+    final firstDigit = 2 + random.nextInt(8);
+
+    final StringBuffer buffer = StringBuffer()..write('$firstDigit');
 
     for (var i = 0; i < 9; i++) {
-      phoneNumber += random.nextInt(10).toString();
+      buffer.write(random.nextInt(10).toString());
       if (i == 2 || i == 5) {
-        phoneNumber += '-';
+        buffer.write('-');
       }
     }
-    return phoneNumber;
+    return buffer.toString();
   }
 
   /// Generates a random address.
   ///
   /// Returns a [String] containing a randomly generated address.
   static String generateAddress() {
-    var streets = ['Main St', 'Oak Ave', 'Cedar Dr', 'Pine Rd', 'Elm St'];
-    var cities = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix'];
-    var states = ['CA', 'TX', 'NY', 'FL', 'IL'];
-    var zipCodes = ['10001', '90001', '60601', '77001', '85001'];
+    final streets = ['Main St', 'Oak Ave', 'Cedar Dr', 'Pine Rd', 'Elm St'];
+    final cities = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix'];
+    final states = ['CA', 'TX', 'NY', 'FL', 'IL'];
+    final zipCodes = ['10001', '90001', '60601', '77001', '85001'];
 
-    var random = Random();
-    var street = streets[random.nextInt(streets.length)];
-    var city = cities[random.nextInt(cities.length)];
-    var state = states[random.nextInt(states.length)];
-    var zipCode = zipCodes[random.nextInt(zipCodes.length)];
+    final random = Random();
+    final street = streets[random.nextInt(streets.length)];
+    final city = cities[random.nextInt(cities.length)];
+    final state = states[random.nextInt(states.length)];
+    final zipCode = zipCodes[random.nextInt(zipCodes.length)];
 
     return '$street, $city, $state $zipCode';
   }
@@ -171,8 +175,8 @@ class Faker {
   ///
   /// Returns a [Json] user object with randomly generated attributes.
   static Json generateUser([int minAge = 18, int maxAge = 65]) {
-    String name = generateName();
-    var random = Random();
+    final String name = generateName();
+    final random = Random();
 
     return {
       'id': Guid.ulid(),
@@ -196,7 +200,7 @@ class Faker {
     int minAge = 18,
     int maxAge = 65,
   ]) {
-    List<Json> users = [];
+    final List<Json> users = [];
     for (var i = 0; i < count; i++) {
       users.add(generateUser(minAge, maxAge));
     }

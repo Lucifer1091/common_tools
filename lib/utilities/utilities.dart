@@ -1,18 +1,19 @@
 library;
 
 import 'dart:async';
+import 'dart:isolate';
 import 'dart:math';
 
-import 'package:common_tools/common_tools.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/foundation.dart';
-import 'package:logger/logger.dart' as logger;
-import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:flutter/services.dart' as service;
-import 'dart:isolate';
+import 'package:flutter/services.dart';
+import 'package:logger/logger.dart' as logger;
+
+import '../common_tools.dart';
 
 part 'cancelable_retry.dart';
 part 'clipboard.dart';
