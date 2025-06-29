@@ -2,6 +2,17 @@ import 'package:flutter/material.dart';
 
 /// A high-performance reusable widget providing smooth view transitions with fade and slide animations.
 class FadeSlideTransition extends StatefulWidget {
+  const FadeSlideTransition({
+    required this.child,
+    super.key,
+    this.duration = const Duration(milliseconds: 350),
+    this.fadeCurve = Curves.easeOut,
+    this.slideCurve = Curves.easeOutCubic,
+    this.initialSlideOffset = const Offset(0.05, 0),
+    this.transitionKey,
+    this.onTransitionComplete,
+  });
+
   final Widget child;
   final Duration duration;
   final Curve fadeCurve;
@@ -11,17 +22,6 @@ class FadeSlideTransition extends StatefulWidget {
   /// Key that triggers transition when changed.
   final Key? transitionKey;
   final VoidCallback? onTransitionComplete;
-
-  const FadeSlideTransition({
-    super.key,
-    required this.child,
-    this.duration = const Duration(milliseconds: 350),
-    this.fadeCurve = Curves.easeOut,
-    this.slideCurve = Curves.easeOutCubic,
-    this.initialSlideOffset = const Offset(0.05, 0),
-    this.transitionKey,
-    this.onTransitionComplete,
-  });
 
   static FadeSlideTransition fast({
     required Widget child,
@@ -110,10 +110,10 @@ class _FadeSlideTransitionState extends State<FadeSlideTransition>
   }
 
   void _createAnimations() {
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: Interval(0.0, 0.6, curve: widget.fadeCurve),
+        curve: Interval(0, 0.6, curve: widget.fadeCurve),
       ),
     );
 
@@ -145,7 +145,8 @@ class _FadeSlideTransitionState extends State<FadeSlideTransition>
     }
 
     // Uses widget identity comparison for performance
-    return _displayedChildNotifier.value.runtimeType != widget.child.runtimeType ||
+    return _displayedChildNotifier.value.runtimeType !=
+            widget.child.runtimeType ||
         _displayedChildNotifier.value.key != widget.child.key;
   }
 

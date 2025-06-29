@@ -360,8 +360,8 @@ extension MapBasics<K, V> on Map<K, V> {
   /// map.whereKey((key) => key.length > 1); // {'bb': 2, 'ccc': 3}
   /// ```
   Map<K, V> whereKey(bool Function(K) test) =>
-      // Entries do not need to be cloned because they are const.
-      Map.fromEntries(entries.where((entry) => test(entry.key)));
+  // Entries do not need to be cloned because they are const.
+  Map.fromEntries(entries.where((entry) => test(entry.key)));
 
   /// Returns a new [Map] containing all the entries of this for which the
   /// value satisfies [test].
@@ -372,8 +372,8 @@ extension MapBasics<K, V> on Map<K, V> {
   /// map.whereValue((value) => value > 1); // {'b': 2, 'c': 3}
   /// ```
   Map<K, V> whereValue(bool Function(V) test) =>
-      // Entries do not need to be cloned because they are const.
-      Map.fromEntries(entries.where((entry) => test(entry.value)));
+  // Entries do not need to be cloned because they are const.
+  Map.fromEntries(entries.where((entry) => test(entry.value)));
 
   /// Returns a new [Map] where each entry is inverted, with the key becoming
   /// the value and the value becoming the key.
@@ -438,27 +438,22 @@ extension RMap<K, V> on Map<K, V> {
   /// * return the map without key of null values
   Map<K, V> exceptNull() {
     final holder = Map<K, V>.of(this)
-      ..removeWhere(
-        (key, value) => value == null,
-      );
+      ..removeWhere((key, value) => value == null);
     return holder;
   }
 
   /// * return the map without  key of null values and empty
   Map<K, V?> exceptNullAndEmpty() {
-    final holder = Map<K, V?>.of(this)
-      ..removeWhere(
-        (key, value) => value == null || value is String && value.isEmpty,
-      );
+    final holder = Map<K, V?>.of(this)..removeWhere(
+      (key, value) => value == null || value is String && value.isEmpty,
+    );
     return holder;
   }
 
   /// * return the map without  key of empty values
   Map<K, V?> exceptEmpty() {
     final holder = Map<K, V?>.of(this)
-      ..removeWhere(
-        (key, value) => value is String && value.isEmpty,
-      );
+      ..removeWhere((key, value) => value is String && value.isEmpty);
     return holder;
   }
 }
@@ -482,23 +477,23 @@ extension MapScrewdriver<K, V> on Map<K, V> {
   /// Returns a new [Map] with the same keys and values but only contains
   /// the keys present in [keys].
   Map<K, V> only(Iterable<K> keys) => {
-        for (final MapEntry(:key, :value) in entries)
-          if (keys.contains(key)) key: value,
-      };
+    for (final MapEntry(:key, :value) in entries)
+      if (keys.contains(key)) key: value,
+  };
 
   /// Returns a new [Map] with the same keys and values as [this] where the
   /// key-value pair satisfies the [test] function. Similar to [Iterable.where].
   Map<K, V> where(bool Function(K key, V value) test) => {
-        for (final MapEntry(:key, :value) in entries)
-          if (test(key, value)) key: value,
-      };
+    for (final MapEntry(:key, :value) in entries)
+      if (test(key, value)) key: value,
+  };
 
   /// Returns a new [Map] with the same keys and values as [this] where the
   /// key-value pair doesn't satisfy the [test] function.
   Map<K, V> whereNot(bool Function(K key, V value) test) => {
-        for (final MapEntry(:key, :value) in entries)
-          if (!test(key, value)) key: value,
-      };
+    for (final MapEntry(:key, :value) in entries)
+      if (!test(key, value)) key: value,
+  };
 
   /// Similar to [Map.entries] but returns an iterable of records instead of
   /// [MapEntry].
@@ -636,12 +631,187 @@ extension MapScrewdriver<K, V> on Map<K, V> {
 //   }
 // }
 
-// extension MapGetOrElse<K, V> on Map<K, V> {
-//   /// Returns the value for the given key, or the result of the [defaultValue] function if there was no entry for the given key.
-//   V getOrElse(K key, V Function() defaultValue) {
-//     return this[key] ?? defaultValue();
-//   }
-// }
+extension MapGetOrElse<K, V> on Map<K, V> {
+  /// Returns the value for the given key, or the result of the [defaultValue] function if there was no entry for the given key.
+  V getOrElse(K key, V Function() defaultValue) {
+    return this[key] ?? defaultValue();
+  }
+}
+
+extension JsonGetters<K, V> on Map<K, V> {
+  /// Parses the value for the given [key] to type [T].
+  /// If the value is not found or cannot be parsed, it returns the provided [value
+  T parse<T>(String key, {required T value}) {
+    return parseOrNull<T>(key) ?? value;
+  }
+
+  /// Parses the value for the given [key] to type [T].
+  /// If the value is not found or cannot be parsed, it returns `null`.
+  T? parseOrNull<T>(String key) {
+    if (!containsKey(key)) return null;
+
+    final data = this[key];
+
+    if (data is T) {
+      return data;
+    } else if (data is String && T == DateTime) {
+      return ParseDateTime.parse(data) as T;
+    } else if (data is String && T == num) {
+      return data.toNumOrNull() as T;
+    } else if (data is String && T == int) {
+      return data.toIntOrNull() as T;
+    } else if (data is String && T == double) {
+      return data.toDoubleOrNull() as T;
+    } else if (data is String && T == bool) {
+      return data.toBoolOrNull() as T;
+    } else {
+      return null;
+    }
+  }
+
+  String getString(String key, {required String value}) {
+    return getStringOrNull(key) ?? value;
+  }
+
+  String? getStringOrNull(String key) {
+    if (!containsKey(key)) return null;
+
+    final data = this[key];
+
+    if (data is String) {
+      return data;
+    } else if (data is num || data is bool) {
+      return data.toString();
+    } else {
+      return null;
+    }
+  }
+
+  num getNum(String key, {required num value}) {
+    return getNumOrNull(key) ?? value;
+  }
+
+  num? getNumOrNull(String key) {
+    if (!containsKey(key)) return null;
+
+    final data = this[key];
+
+    if (data is num) {
+      return data;
+    } else if (data is String) {
+      return data.toNumOrNull();
+    } else {
+      return null;
+    }
+  }
+
+  int getInt(String key, {required int value}) {
+    return getIntOrNull(key) ?? value;
+  }
+
+  int? getIntOrNull(String key) {
+    if (!containsKey(key)) return null;
+
+    final data = this[key];
+
+    if (data is int) {
+      return data;
+    } else if (data is String) {
+      return data.toIntOrNull();
+    } else {
+      return null;
+    }
+  }
+
+  double getDouble(String key, {required double value}) {
+    return getDoubleOrNull(key) ?? value;
+  }
+
+  double? getDoubleOrNull(String key) {
+    if (!containsKey(key)) return null;
+
+    final data = this[key];
+
+    if (data is double) {
+      return data;
+    } else if (data is String) {
+      return data.toDoubleOrNull();
+    } else {
+      return null;
+    }
+  }
+
+  bool getBool(String key, {required bool value}) {
+    return getBoolOrNull(key) ?? value;
+  }
+
+  bool? getBoolOrNull(String key) {
+    if (!containsKey(key)) return null;
+
+    final data = this[key];
+
+    if (data is bool) {
+      return data;
+    } else if (data is String) {
+      return data.toBoolOrNull();
+    } else {
+      return null;
+    }
+  }
+
+  DateTime getDateTime(String key, {required DateTime value}) {
+    return getDateTimeOrNull(key) ?? value;
+  }
+
+  DateTime? getDateTimeOrNull(String key) {
+    if (!containsKey(key)) return null;
+
+    final data = this[key];
+
+    if (data is DateTime) {
+      return data;
+    } else if (data is String) {
+      return ParseDateTime.parse(data);
+    } else {
+      return null;
+    }
+  }
+
+  List<T> getList<T>(String key, {required List<T> value}) {
+    return getListOrNull<T>(key) ?? value;
+  }
+
+  List<T>? getListOrNull<T>(String key) {
+    if (!containsKey(key)) return null;
+
+    final data = this[key];
+
+    if (data is List<T>) {
+      return data;
+    } else {
+      return null;
+    }
+  }
+
+  Map<String, dynamic> getMap(
+    String key, {
+    required Map<String, dynamic> value,
+  }) {
+    return getMapOrNull(key) ?? value;
+  }
+
+  Map<String, dynamic>? getMapOrNull(String key) {
+    if (!containsKey(key)) return null;
+
+    final data = this[key];
+
+    if (data is Map<String, dynamic>) {
+      return data;
+    } else {
+      return null;
+    }
+  }
+}
 
 // extension MapEntries<K, V> on Map<K, V> {
 //   /// Maps [entries] in this map to a [List<R>]

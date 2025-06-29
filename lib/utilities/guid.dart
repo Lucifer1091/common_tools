@@ -34,10 +34,10 @@ class Guid {
   /// Example usage:
   /// ```dart
   /// // Generate a UUID with the default length of 36 characters
-  /// String uuid = Uuid.create();
+  /// String uuid = Guid.uuid();
   ///
   /// // Generate a UUID with a custom length of 32 characters
-  /// String customUuid = Uuid.create(32);
+  /// String customUuid = Guid.uuid(32);
   /// ```
   static String uuid([int len = 36]) {
     const chars =
@@ -59,7 +59,7 @@ class Guid {
   /// Example usage:
   /// ```dart
   /// // Generate a ULID
-  /// String ulid = Uuid.createUlid();
+  /// String ulid = Guid.ulid();
   /// ```
   static String ulid() {
     final timestamp = DateTime.now().millisecondsSinceEpoch;
@@ -73,10 +73,11 @@ class Guid {
     }
 
     final timePart = encodeTime(timestamp, 10);
-    final randomPart = List.generate(
-      16,
-      (_) => encodingChars[_random.nextInt(encodingChars.length)],
-    ).join();
+    final randomPart =
+        List.generate(
+          16,
+          (_) => encodingChars[_random.nextInt(encodingChars.length)],
+        ).join();
 
     return timePart + randomPart;
   }

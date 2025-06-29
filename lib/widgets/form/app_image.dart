@@ -4,7 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../../utility/logger.dart';
 import 'app_circle_image.dart' show ImageSourceType;
 
 /// A versatile image widget supporting multiple source types with unified API.
@@ -185,7 +184,7 @@ class AppImage extends StatelessWidget {
       }
       return null;
     } catch (e) {
-      logger.e('Error calculating cache width', error: e);
+      // logger.e('Error calculating cache width', error: e);
       return null;
     }
   }
@@ -289,11 +288,11 @@ class AppImage extends StatelessWidget {
       }
     } catch (e, stackTrace) {
       // Comprehensive fallback for unexpected errors
-      logger.e(
-        'Unexpected error in toDecorationImage: $e',
-        error: e,
-        stackTrace: stackTrace,
-      );
+      // logger.e(
+      //   'Unexpected error in toDecorationImage: $e',
+      //   error: e,
+      //   stackTrace: stackTrace,
+      // );
 
       return DecorationImage(
         image:

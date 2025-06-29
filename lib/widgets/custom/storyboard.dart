@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:mabe_utils/mabe_utils.dart';
 
 /// Builder for the stories.
 typedef StoryBuilder = Widget Function(
@@ -213,7 +212,7 @@ class _StoryboardState extends State<Storyboard> with SingleTickerProviderStateM
                           ),
                         ),
                       ),
-                    ).gap(widget.indicatorGap, wrap: true),
+                    ),
                   ),
                   if (widget.header != null) widget.header!,
                 ],

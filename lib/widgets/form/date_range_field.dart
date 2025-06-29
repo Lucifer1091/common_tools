@@ -127,11 +127,11 @@ class CustomDateRangeField extends StatelessWidget {
               primary: context.primaryColor,
               onSurface: context.primaryColor,
             ),
-            dialogTheme: DialogTheme(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
+            // dialogTheme: DialogTheme(
+            //   shape: RoundedRectangleBorder(
+            //     borderRadius: BorderRadius.circular(12),
+            //   ),
+            // ),
             timePickerTheme: TimePickerThemeData(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),

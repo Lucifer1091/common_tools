@@ -83,25 +83,25 @@ extension DurationTimeExtension on Duration {
   /// Please note that this does not account for leap year.
   int get inYears => inDays ~/ 365;
 
-  /// Returns true if [this] duration equals to or more than a year.
+  /// Returns true if [Duration] duration equals to or more than a year.
   bool get isInYears => inYears > 0;
 
-  /// Returns true if [this] duration equals to or more than a day.
+  /// Returns true if [Duration] duration equals to or more than a day.
   bool get isInDays => inDays > 0;
 
-  /// Returns true if [this] duration equals to or more than an hour but
+  /// Returns true if [Duration] duration equals to or more than an hour but
   /// is less than a day.
   bool get isInHours => inHours > 0 && !isInDays;
 
-  /// Returns true if [this] duration equals to or more than a minute but
+  /// Returns true if [Duration] duration equals to or more than a minute but
   /// is less than an hour.
   bool get isInMinutes => inMinutes > 0 && !isInHours;
 
-  /// Returns true if [this] duration equals to or more than a second but
+  /// Returns true if [Duration] duration equals to or more than a second but
   /// is less than a minute.
   bool get isInSeconds => inSeconds > 0 && !isInMinutes;
 
-  /// Returns true if [this] duration equals to or more than a millisecond but
+  /// Returns true if [Duration] duration equals to or more than a millisecond but
   /// is less than a second.
   bool get isInMillis => inMilliseconds > 0 && !isInSeconds;
 

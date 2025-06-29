@@ -16,6 +16,11 @@ extension BooleanExtensions on bool? {
   /// Returns 1 if the value is true, otherwise returns 0.
   int get toInt => this != null && this! ? 1 : 0;
 
+  /// Converts the nullable boolean to its binary representation as a string.
+  ///
+  /// Returns `'1'` if the value is non-null and true, otherwise returns `'0'`.
+  String get binary => (this ?? false) ? '1' : '0';
+
   /// Toggles the boolean value.
   ///
   /// If the value is true, it returns false.

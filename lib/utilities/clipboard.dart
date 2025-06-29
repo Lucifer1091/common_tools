@@ -19,7 +19,7 @@ part of 'utilities.dart';
 ///   print('Pasted text: $text');
 /// }
 /// ```
-class Clipboard {
+sealed class Clipboard {
   // Private constructor to prevent instantiation
   Clipboard._();
 

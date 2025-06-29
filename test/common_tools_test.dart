@@ -27,14 +27,31 @@ Future<void> main() async {
   //   ..d(iterable.associateBy((element) => element))
   //   ..w(iterable.where((element) => element.isEven).toList());
 
-  // final DeBouncer debouncer = DeBouncer(Duration(seconds: 1));
+  final userMap = <String, dynamic>{
+    'name': 'John',
+    'age': 30,
+    'scores': [1, 2, 3],
+  };
 
-  // await debouncer.run(() async {
-  //   log.i('Debouncer run called');
-  // });
-  final Throttler throttler = Throttler(Duration(seconds: 1));
+  log.i('User from JSON: ${User.fromJson(userMap).toJson()}');
+}
 
-  throttler.run(() async {
-    log.i('Throttler run called');
-  });
+class User {
+  User({required this.name, required this.age, required this.scores});
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      name: json.getString('name', value: 'Unknown'),
+      age: json.getInt('age', value: 0),
+      scores: json.getList<int>('scores', value: [0]),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {'name': name, 'age': age, 'scores': scores};
+  }
+
+  final String name;
+  final int age;
+  final List<int> scores;
 }

@@ -18,7 +18,7 @@ extension NumValidators on num? {
   /// Returns `true` if the number is negative, `false` otherwise.
   bool get isNegative => getOr() < 0;
 
-  /// Returns to if [this] has .00000 fraction points
+  /// Returns to if [num] has .00000 fraction points
   bool get isWhole =>
       isNotNull &&
       this != double.infinity &&
@@ -73,22 +73,22 @@ extension NumValidators on num? {
   /// Returns `true` if the number contains [substring], `false` otherwise.
   bool contains(num substring) => toString().contains(substring.toString());
 
-  /// Returns true if [this] is close to [other] within [precision].
+  /// Returns true if [num] is close to [other] within [precision].
   /// By default, [precision] is set to 1.0e-8 which is 0.00000001 which makes
   /// it suitable for most of the cases.
   bool isCloseTo(double other, {double precision = 1.0e-8}) =>
       (getOr() - other).abs() <= precision;
 
-  /// Returns true if [this] represents a leap year
+  /// Returns true if [num] represents a leap year
   bool get isLeapYear {
     final int year = toInt();
     return (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;
   }
 
-  /// Returns true if [this] can be completely divisible by [divider]
+  /// Returns true if [num] can be completely divisible by [divider]
   bool isDivisibleBy(int divider) => getOr() % divider == 0;
 
-  /// Returns true if [this] can be completely divisible
+  /// Returns true if [num] can be completely divisible
   /// by all of the [dividers].
   bool isDivisibleByAll(List<int> dividers) =>
       dividers.every((divider) => getOr() % divider == 0);

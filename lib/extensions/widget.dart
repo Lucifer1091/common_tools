@@ -14,28 +14,31 @@ extension WidgetExtensions on Widget {
   }
 
   Widget center({
+    Key? key,
     double? widthFactor,
     double? heightFactor,
     bool enabled = true,
   }) =>
-      enabled
-          ? Center(
-            widthFactor: widthFactor,
-            heightFactor: heightFactor,
-            child: this,
-          )
-          : this;
+      Center(
+        key: key,
+        widthFactor: widthFactor,
+        heightFactor: heightFactor,
+        child: this,
+      ).showIfOrNull(enabled) ??
+      this;
 
   Widget expanded({int flex = 1, bool enabled = true}) =>
-      enabled ? Expanded(flex: flex, child: this) : this;
+      Expanded(flex: flex, child: this).showIfOrNull(enabled) ?? this;
 
   Widget flexible({
     int flex = 1,
     FlexFit fit = FlexFit.loose,
     bool enabled = true,
-  }) => enabled ? Flexible(flex: flex, fit: fit, child: this) : this;
+  }) =>
+      Flexible(flex: flex, fit: fit, child: this).showIfOrNull(enabled) ?? this;
 
   Widget padding({
+    double? all,
     double? left,
     double? top,
     double? right,
@@ -45,23 +48,66 @@ extension WidgetExtensions on Widget {
     bool enabled = true,
     Key? key,
   }) =>
-      enabled
-          ? Padding(
-            key: key,
-            padding: EdgeInsets.all(0).except(
-              left: left,
-              top: top,
-              right: right,
-              bottom: bottom,
-              vertical: vertical,
-              horizontal: horizontal,
-            ),
-            child: this,
-          )
-          : this;
+      Padding(
+        key: key,
+        padding: EdgeInsets.all(all ?? 0).except(
+          left: left,
+          top: top,
+          right: right,
+          bottom: bottom,
+          vertical: vertical,
+          horizontal: horizontal,
+        ),
+        child: this,
+      ).showIfOrNull(enabled) ??
+      this;
 
   Widget opacity({required double opacity, bool enabled = true}) =>
-      enabled ? Opacity(opacity: opacity, child: this) : this;
+      Opacity(opacity: opacity, child: this).showIfOrNull(enabled) ?? this;
+
+  /// add rotation to parent widget
+  Widget rotate({
+    required double angle,
+    bool transformHitTests = true,
+    Offset? origin,
+  }) {
+    return Transform.rotate(
+      origin: origin,
+      angle: angle,
+      transformHitTests: transformHitTests,
+      child: this,
+    );
+  }
+
+  /// add scaling to parent widget
+  Widget scale({
+    required double scale,
+    Offset? origin,
+    AlignmentGeometry? alignment,
+    bool transformHitTests = true,
+  }) {
+    return Transform.scale(
+      scale: scale,
+      origin: origin,
+      alignment: alignment,
+      transformHitTests: transformHitTests,
+      child: this,
+    );
+  }
+
+  /// add translate to parent widget
+  Widget translate({
+    required Offset offset,
+    bool transformHitTests = true,
+    Key? key,
+  }) {
+    return Transform.translate(
+      offset: offset,
+      transformHitTests: transformHitTests,
+      key: key,
+      child: this,
+    );
+  }
 
   Widget sizedBox({
     double? width,
@@ -69,16 +115,34 @@ extension WidgetExtensions on Widget {
     bool enabled = true,
     Key? key,
   }) =>
-      enabled
-          ? SizedBox(key: key, width: width, height: height, child: this)
-          : this;
+      SizedBox(
+        key: key,
+        width: width,
+        height: height,
+        child: this,
+      ).showIfOrNull(enabled) ??
+      this;
 
+  /// add FittedBox to parent widget
+  Widget fit({BoxFit? fit, AlignmentGeometry? alignment}) {
+    return FittedBox(
+      fit: fit ?? BoxFit.contain,
+      alignment: alignment ?? Alignment.center,
+      child: this,
+    );
+  }
+
+  /// Returns a widget that is shown conditionally based on the [condition].
+  /// If [condition] is true, the widget is returned; otherwise, null is returned
   Widget? showIfOrNull(bool condition) {
     if (condition) return this;
 
     return null;
   }
 
+  /// Returns a widget that is shown conditionally based on the [condition].
+  /// If [condition] is true, the widget is returned; otherwise, an [EmptyPlaceholder] widget is returned.
+  /// This is useful for cases where you want to display an empty placeholder when the condition is
   Widget showIfOrEmpty(bool condition) {
     if (condition) return this;
 
@@ -109,6 +173,24 @@ extension WidgetExtensions on Widget {
       child: this,
     );
   }
+
+  /// Wraps the widget in a [GestureDetector] to handle tap and double-tap events.
+  /// The [onTap] and [onDoubleTap] callbacks are optional.
+  /// The [opaque] parameter determines the hit test behavior.
+  Widget clickable({
+    VoidCallback? onTap,
+    VoidCallback? onDoubleTap,
+    Key? key,
+    bool opaque = true,
+  }) =>
+      GestureDetector(
+        key: key,
+        onTap: onTap,
+        onDoubleTap: onDoubleTap,
+        behavior:
+            opaque ? HitTestBehavior.opaque : HitTestBehavior.deferToChild,
+        child: this,
+      ).mouseRegion;
 
   Tooltip tooltip({
     required String msg,
