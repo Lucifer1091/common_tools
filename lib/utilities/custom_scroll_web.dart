@@ -4,12 +4,18 @@ class BouncingScrollBehavior extends ScrollBehavior {
   // Disable overscroll glow.
   @override
   Widget buildOverscrollIndicator(
-      BuildContext context, Widget child, ScrollableDetails details) {
+    BuildContext context,
+    Widget child,
+    ScrollableDetails details,
+  ) {
     return child;
   }
 
   Widget buildViewportChrome(
-      BuildContext context, Widget child, AxisDirection axisDirection) {
+    BuildContext context,
+    Widget child,
+    AxisDirection axisDirection,
+  ) {
     return child;
   }
 
@@ -29,14 +35,14 @@ class BouncingScrollBehavior extends ScrollBehavior {
 ///      ),
 /// ```
 class BouncingScrollWrapperX extends StatelessWidget {
-  final Widget child;
-  final bool dragWithMouse;
-
   const BouncingScrollWrapperX({
-    super.key,
     required this.child,
+    super.key,
     this.dragWithMouse = false,
   });
+  
+  final Widget child;
+  final bool dragWithMouse;
 
   static Widget builder(
     BuildContext context,
@@ -52,12 +58,16 @@ class BouncingScrollWrapperX extends StatelessWidget {
       behavior: BouncingScrollBehavior().copyWith(
         overscroll: false,
         scrollbars: false,
-        dragDevices: dragWithMouse
-            ? {
-                PointerDeviceKind.touch,
-                PointerDeviceKind.mouse,
-              }
-            : null,
+        dragDevices:
+            dragWithMouse
+                ? {
+                  PointerDeviceKind.touch,
+                  PointerDeviceKind.mouse,
+                  PointerDeviceKind.stylus,
+                  PointerDeviceKind.trackpad,
+                  PointerDeviceKind.invertedStylus,
+                }
+                : null,
       ),
       child: child,
     );
@@ -68,7 +78,10 @@ class ClampingScrollBehavior extends ScrollBehavior {
   // Disable overscroll glow.
   @override
   Widget buildOverscrollIndicator(
-      BuildContext context, Widget child, ScrollableDetails details) {
+    BuildContext context,
+    Widget child,
+    ScrollableDetails details,
+  ) {
     return child;
   }
 
@@ -88,14 +101,13 @@ class ClampingScrollBehavior extends ScrollBehavior {
 ///      ),
 /// ```
 class ClampingScrollWrapperX extends StatelessWidget {
-  final Widget child;
-  final bool dragWithMouse;
-
   const ClampingScrollWrapperX({
-    super.key,
     required this.child,
+    super.key,
     this.dragWithMouse = false,
   });
+  final Widget child;
+  final bool dragWithMouse;
 
   static Widget builder(
     BuildContext context,
@@ -111,12 +123,10 @@ class ClampingScrollWrapperX extends StatelessWidget {
       behavior: ClampingScrollBehavior().copyWith(
         overscroll: false,
         scrollbars: false,
-        dragDevices: dragWithMouse
-            ? {
-                PointerDeviceKind.touch,
-                PointerDeviceKind.mouse,
-              }
-            : null,
+        dragDevices:
+            dragWithMouse
+                ? {PointerDeviceKind.touch, PointerDeviceKind.mouse}
+                : null,
       ),
       child: child,
     );
@@ -134,7 +144,7 @@ class ClampingScrollWrapperX extends StatelessWidget {
 class MyCustomScrollBehavior extends MaterialScrollBehavior {
   @override
   Set<PointerDeviceKind> get dragDevices => {
-        PointerDeviceKind.touch,
-        PointerDeviceKind.mouse,
-      };
+    PointerDeviceKind.touch,
+    PointerDeviceKind.mouse,
+  };
 }

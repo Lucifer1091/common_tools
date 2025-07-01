@@ -31,3 +31,10 @@ extension StateExtensions<T extends StatefulWidget> on State<T> {
     }
   }
 }
+
+mixin StatefulMixin<T extends StatefulWidget> on State<T> {
+  /// Dynamic [setState] method
+  void setStateIfMounted(VoidCallback callback) {
+    if (mounted) setState(callback);
+  }
+}

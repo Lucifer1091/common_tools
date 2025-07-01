@@ -2,9 +2,9 @@ library;
 
 import 'dart:collection';
 import 'dart:convert';
+import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 import '../widgets/widgets.dart';
 import 'index.dart';

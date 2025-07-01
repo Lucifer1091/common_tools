@@ -3,6 +3,22 @@ part of 'utilities.dart';
 class CommonUtils {
   CommonUtils._();
 
+  void timer({
+    required Duration duration,
+    required void Function(Duration time) onTick,
+    VoidCallback? onDone,
+  }) {
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      if (duration.inSeconds == 0) {
+        timer.cancel();
+        onDone?.call();
+      } else {
+        duration = duration - Duration(seconds: 1);
+        onTick.call(duration);
+      }
+    });
+  }
+
   /// Utility function to make a value nullable.
   ///
   /// This function is used to ensure that the provided value is nullable.
@@ -34,9 +50,9 @@ class CommonUtils {
   ///
   /// - [onCreated]: The callback function to be executed after the build is created.
   static void afterBuildCreated(VoidCallback? onCreated) {
-    makeNullable(SchedulerBinding.instance)?.addPostFrameCallback(
-      (_) => onCreated?.call(),
-    );
+    makeNullable(
+      SchedulerBinding.instance,
+    )?.addPostFrameCallback((_) => onCreated?.call());
   }
 
   /// mailto: function to open native email app

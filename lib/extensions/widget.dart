@@ -62,8 +62,15 @@ extension WidgetExtensions on Widget {
       ).showIfOrNull(enabled) ??
       this;
 
+  Widget colored({required Color color}) {
+    return ColoredBox(color: color, child: this);
+  }
+
   Widget opacity({required double opacity, bool enabled = true}) =>
       Opacity(opacity: opacity, child: this).showIfOrNull(enabled) ?? this;
+
+  Widget align({AlignmentGeometry? align}) =>
+      Align(alignment: align ?? Alignment.center, child: this);
 
   /// add rotation to parent widget
   Widget rotate({
@@ -221,6 +228,28 @@ extension WidgetExtensions on Widget {
             )
             : null,
     preferBelow: preferBelow,
+    child: this,
+  );
+
+  Widget blur({double? x, double? y}) => ImageFiltered(
+    imageFilter: ImageFilter.blur(sigmaX: x ?? 3, sigmaY: y ?? 3),
+    child: this,
+  );
+
+  Widget bgBlur({double blurRadius = 10, double? sigmaX, double? sigmaY}) =>
+      BackdropFilter(
+        filter: ImageFilter.blur(
+          sigmaX: sigmaX ?? blurRadius,
+          sigmaY: sigmaY ?? blurRadius,
+        ),
+        child: this,
+      );
+
+  Widget gradient(Gradient gradient, [BlendMode? blendMode]) => ShaderMask(
+    shaderCallback: (Rect bounds) {
+      return gradient.createShader(bounds);
+    },
+    blendMode: blendMode ?? BlendMode.dstIn,
     child: this,
   );
 
