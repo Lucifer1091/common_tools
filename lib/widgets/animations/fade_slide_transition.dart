@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 /// A high-performance reusable widget providing smooth view transitions with fade and slide animations.
@@ -155,7 +157,7 @@ class _FadeSlideTransitionState extends State<FadeSlideTransition>
     _pendingChild = widget.child;
 
     if (!_isTransitioningNotifier.value) {
-      _performTransition();
+      unawaited(_performTransition());
     }
     // If already transitioning, _pendingChild will be picked up by the next cycle
   }

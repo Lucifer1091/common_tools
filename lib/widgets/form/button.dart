@@ -5,7 +5,7 @@ import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
 import 'package:flutter_inset_box_shadow/flutter_inset_box_shadow.dart';
 
 import '../../common_tools.dart';
-import '../custom/spaces.dart';
+import '../layout/spaces.dart';
 
 enum ButtonType { outline, solid, dotted }
 
@@ -45,13 +45,13 @@ class CustomButton extends StatefulWidget {
     this.offset,
     this.topLeftColor,
     this.bottomRightColor,
-  })  : backgroundColor = backgroundColor ?? Colors.blue,
-        assert(
-          (textStyle == null || textColor == null) &&
-              (textStyle == null || fontWeight == null),
-          'Cannot provide both a textStyle, a textColor and a fontWeight\n'
-          'To provide custom, use "textStyle: TextStyle()".',
-        );
+  }) : backgroundColor = backgroundColor ?? Colors.blue,
+       assert(
+         (textStyle == null || textColor == null) &&
+             (textStyle == null || fontWeight == null),
+         'Cannot provide both a textStyle, a textColor and a fontWeight\n'
+         'To provide custom, use "textStyle: TextStyle()".',
+       );
 
   const CustomButton.solid({
     super.key,
@@ -84,15 +84,15 @@ class CustomButton extends StatefulWidget {
     this.offset,
     this.topLeftColor,
     this.bottomRightColor,
-  })  : buttonType = ButtonType.solid,
-        backgroundColor = backgroundColor ?? Colors.blue,
-        dashPattern = null,
-        assert(
-          (textStyle == null || textColor == null) &&
-              (textStyle == null || fontWeight == null),
-          'Cannot provide both a textStyle, a textColor and a fontWeight\n'
-          'To provide custom, use "textStyle: TextStyle()".',
-        );
+  }) : buttonType = ButtonType.solid,
+       backgroundColor = backgroundColor ?? Colors.blue,
+       dashPattern = null,
+       assert(
+         (textStyle == null || textColor == null) &&
+             (textStyle == null || fontWeight == null),
+         'Cannot provide both a textStyle, a textColor and a fontWeight\n'
+         'To provide custom, use "textStyle: TextStyle()".',
+       );
 
   const CustomButton.outline({
     super.key,
@@ -120,20 +120,20 @@ class CustomButton extends StatefulWidget {
     this.margin,
     this.splashColor,
     this.loaderColor,
-  })  : buttonType = ButtonType.outline,
-        backgroundColor = backgroundColor ?? Colors.blue,
-        dashPattern = null,
-        blurRadius = null,
-        offset = null,
-        topLeftColor = null,
-        bottomRightColor = null,
-        style = ButtonStyleX.none,
-        assert(
-          (textStyle == null || textColor == null) &&
-              (textStyle == null || fontWeight == null),
-          'Cannot provide both a textStyle, a textColor and a fontWeight\n'
-          'To provide custom, use "textStyle: TextStyle()".',
-        );
+  }) : buttonType = ButtonType.outline,
+       backgroundColor = backgroundColor ?? Colors.blue,
+       dashPattern = null,
+       blurRadius = null,
+       offset = null,
+       topLeftColor = null,
+       bottomRightColor = null,
+       style = ButtonStyleX.none,
+       assert(
+         (textStyle == null || textColor == null) &&
+             (textStyle == null || fontWeight == null),
+         'Cannot provide both a textStyle, a textColor and a fontWeight\n'
+         'To provide custom, use "textStyle: TextStyle()".',
+       );
 
   const CustomButton.dotted({
     super.key,
@@ -167,14 +167,14 @@ class CustomButton extends StatefulWidget {
     this.offset,
     this.topLeftColor,
     this.bottomRightColor,
-  })  : buttonType = ButtonType.dotted,
-        backgroundColor = backgroundColor ?? Colors.blue,
-        assert(
-          (textStyle == null || textColor == null) &&
-              (textStyle == null || fontWeight == null),
-          'Cannot provide both a textStyle, a textColor and a fontWeight\n'
-          'To provide custom style, use "textStyle: TextStyle()".',
-        );
+  }) : buttonType = ButtonType.dotted,
+       backgroundColor = backgroundColor ?? Colors.blue,
+       assert(
+         (textStyle == null || textColor == null) &&
+             (textStyle == null || fontWeight == null),
+         'Cannot provide both a textStyle, a textColor and a fontWeight\n'
+         'To provide custom style, use "textStyle: TextStyle()".',
+       );
   final ButtonType buttonType;
   final Color backgroundColor;
   final Color? borderColor;
@@ -250,13 +250,14 @@ class _CustomButtonState extends State<CustomButton> {
     return Padding(
       padding: widget.margin ?? EdgeInsets.zero,
       child: ConstrainedBox(
-        constraints: widget.hasInfiniteWidth
-            ? BoxConstraints(
-                minWidth: double.infinity,
-                minHeight: widget.constraints?.minHeight ?? 50,
-              )
-            : widget.constraints ??
-                const BoxConstraints(minWidth: 100, minHeight: 50),
+        constraints:
+            widget.hasInfiniteWidth
+                ? BoxConstraints(
+                  minWidth: double.infinity,
+                  minHeight: widget.constraints?.minHeight ?? 50,
+                )
+                : widget.constraints ??
+                    const BoxConstraints(minWidth: 100, minHeight: 50),
         child: _buildButton(context),
       ),
     );
@@ -272,50 +273,51 @@ class _CustomButtonState extends State<CustomButton> {
       fontWeight: widget.fontWeight ?? FontWeight.w400,
     );
 
-    final child = showLoading
-        ? _buildLoadingWidget()
-        : widget.child ??
-            FittedBox(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  if (widget.icon != null && !widget.showIconOnRight)
-                    widget.icon!,
-                  if (widget.text != null || widget.secondaryText != null)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: <Widget>[
-                        if (widget.icon != null && !widget.showIconOnRight)
-                          SizedBox(width: widget.iconSpacing),
-                        if (widget.text != null)
-                          Text(
-                            widget.text!,
-                            style: widget.textStyle ?? style,
-                            textAlign: TextAlign.center,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        if (widget.secondaryText != null) ...[
-                          const Space.w4(),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 2),
-                            child: Text(
-                              widget.secondaryText!,
-                              style: widget.secondaryTextStyle ?? style2,
-                              textAlign: TextAlign.center,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                        if (widget.icon != null && widget.showIconOnRight)
-                          SizedBox(width: widget.iconSpacing),
-                      ],
-                    ),
-                  if (widget.icon != null && widget.showIconOnRight)
-                    widget.icon!,
-                ],
-              ),
-            );
+    final child =
+        showLoading
+            ? _buildLoadingWidget()
+            : widget.child ??
+                FittedBox(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      if (widget.icon != null && !widget.showIconOnRight)
+                        widget.icon!,
+                      if (widget.text != null || widget.secondaryText != null)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: <Widget>[
+                            if (widget.icon != null && !widget.showIconOnRight)
+                              SizedBox(width: widget.iconSpacing),
+                            if (widget.text != null)
+                              Text(
+                                widget.text!,
+                                style: widget.textStyle ?? style,
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            if (widget.secondaryText != null) ...[
+                              const Space.w4(),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 2),
+                                child: Text(
+                                  widget.secondaryText!,
+                                  style: widget.secondaryTextStyle ?? style2,
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                            if (widget.icon != null && widget.showIconOnRight)
+                              SizedBox(width: widget.iconSpacing),
+                          ],
+                        ),
+                      if (widget.icon != null && widget.showIconOnRight)
+                        widget.icon!,
+                    ],
+                  ),
+                );
 
     if (widget.buttonType == ButtonType.outline) return child;
 
@@ -327,7 +329,6 @@ class _CustomButtonState extends State<CustomButton> {
         return _buildConvexConcaveButton(child: child);
 
       case ButtonStyleX.none:
-      default:
         return child;
     }
   }
@@ -410,7 +411,8 @@ class _CustomButtonState extends State<CustomButton> {
 
   Widget _buildConvexConcaveButton({Widget? child, bool isConvex = true}) {
     final blur = widget.blurRadius ?? (isConvex ? 5.0 : 30.0),
-        distance = widget.offset ??
+        distance =
+            widget.offset ??
             (isConvex ? const Offset(2, 2) : const Offset(28, 28));
 
     return Container(
@@ -453,9 +455,6 @@ class _CustomButtonState extends State<CustomButton> {
 
       case ButtonType.dotted:
         return _buildDottedButton(child: _buildChild(context));
-
-      default:
-        return _buildSolidButton(child: _buildChild(context));
     }
   }
 
@@ -466,7 +465,8 @@ class _CustomButtonState extends State<CustomButton> {
           height: size,
           width: size,
           child: CircularProgressIndicator(
-            color: widget.loaderColor ??
+            color:
+                widget.loaderColor ??
                 (widget.buttonType != ButtonType.outline
                     ? Colors.white
                     : widget.backgroundColor),

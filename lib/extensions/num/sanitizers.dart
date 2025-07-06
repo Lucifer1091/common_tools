@@ -1,4 +1,4 @@
-import 'converters.dart';
+import '../../common_tools.dart';
 
 extension NumSanitizers on num? {
   /// Swap the sign of the number.
@@ -18,6 +18,9 @@ extension NumSanitizers on num? {
 
   /// Returns tenth of the number
   double get tenth => getOr() / 10;
+
+  /// Returns the absolute value
+  double get absolute => toDouble().abs();
 
   /// Return this number time two
   num get doubled => getOr() * 2;
@@ -41,6 +44,20 @@ extension NumSanitizers on num? {
       number = (number / 10).floor();
     }
     return sum;
+  }
+
+  /// Return the min if this number is smaller then minimum
+  /// Return the max if this number is bigger the the maximum
+  /// Return this number if it's between the range
+  num inRangeOf(num min, num max) {
+    if (isNull) return 0;
+
+    if (min.isNull || max.isNull) throw Exception('min or max cannot be null');
+    if (min > max) throw ArgumentError('min must be smaller the max');
+
+    if (this! < min) return min;
+    if (this! > max) return max;
+    return this!;
   }
 
   /// Get the digits after a [substring] in the number

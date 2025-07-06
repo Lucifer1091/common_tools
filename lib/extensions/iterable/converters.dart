@@ -26,15 +26,6 @@ extension NumListConverter<T extends num> on Iterable<T>? {
   /// * return `0` if  isEmpty
   num sumOrZero() => sumOrNull() ?? _zero();
 
-  /// Returns the sum of all values produced by [selector] function
-  /// applied to each element in the collection.
-  R? sumBy<R extends num>(Transformer<T, R> selector) =>
-      this?.fold<R>(
-        _zero() as R,
-        (previous, element) => previous + selector(element) as R,
-      ) ??
-      _zero() as R;
-
   /// * return the average of the list
   /// * return `null` if isEmpty
   num? averageOrNull() => isBlank ? null : (sumOrZero() / length);
@@ -47,14 +38,6 @@ extension NumListConverter<T extends num> on Iterable<T>? {
   /// * return `0` if  isEmpty
   num averageOrZero() => averageOr(_zero());
 
-  /// Returns the average of all values produced by [selector] function
-  /// applied to each element in the collection.
-  num averageBy<R extends num>(Transformer<T, R> selector) {
-    if (isBlank) return _zero();
-
-    return sumBy(selector)! / length;
-  }
-
   /// * return the maximum value in the list
   /// * return `null` if isEmpty
   num? maxOrNull() => isBlank ? null : this!.reduce(math.max);
@@ -66,22 +49,6 @@ extension NumListConverter<T extends num> on Iterable<T>? {
   /// * return the element with the max value
   /// * return `value` if isEmpty
   num maxOr(num value) => maxOrNull() ?? value;
-
-  /// Returns the maximum value based on the [comparator] function.
-  /// If collection is empty this returns `null`.
-  ///
-  /// Example:
-  /// ```dart
-  /// [90, 10, 20, 30].maxBy((a, b) => a.compareTo(b)); // 90
-  /// persons.maxBy((a, b) => a.age.compareTo(b.age));  // the oldest person
-  /// ```
-  T? maxBy(Comparator<T> comparator) {
-    if (isBlank) return null;
-
-    return this!.reduce(
-      (value, element) => comparator(value, element) > 0 ? value : element,
-    );
-  }
 
   /// Returns the index where the max number of this list is.
   int get maxIndex =>
@@ -98,22 +65,6 @@ extension NumListConverter<T extends num> on Iterable<T>? {
   /// * return the element with the minimum value
   /// * return `value` if isEmpty
   num minOrZero() => minOrNull() ?? _zero();
-
-  /// Returns the minimal value based on the [comparator] function.
-  /// If collection is empty this returns `null`.
-  ///
-  /// Example:
-  /// ```dart
-  /// [1, 0, 2].minBy((a, b) => a.compareTo(b));       // 0
-  /// persons.minBy((a, b) => a.age.compareTo(b.age)); // the youngest person
-  /// ```
-  T? minBy(Comparator<T> comparator) {
-    if (isBlank) return null;
-
-    return this!.reduce(
-      (value, element) => comparator(value, element) < 0 ? value : element,
-    );
-  }
 
   /// Returns the index where the min number of this list is.
   int get minIndex =>
@@ -147,22 +98,62 @@ extension NumListConverter<T extends num> on Iterable<T>? {
   /// List<int> numbers = [1, 2, 3, 4];
   /// print(numbers.median); // Output: 2.5
   /// ```
-  num? medianOrNull() {
+  num? median() {
     if (isBlank) return null;
 
     final sorted = [...this!]..sort();
+    final middle = length ~/ 2;
 
-    final length = this!.length;
+    if (length.isEven) return (sorted[middle - 1] + sorted[middle]) / 2;
 
-    if (length.isEven) {
-      return (sorted[length ~/ 2 - 1] + sorted[length ~/ 2]) / 2;
-    }
-    return sorted[length ~/ 2];
+    return sorted[middle];
   }
 
-  num medianOr(num value) => medianOrNull() ?? value;
+  /// Finds the mode(s) of the numbers in the iterable.
+  ///
+  /// Returns a list of numbers that appear most frequently.
+  List<num>? mode() {
+    if (isBlank) return null;
 
-  num medianOrZero() => medianOrNull() ?? _zero();
+    final frequencyMap = <num, int>{};
+    for (final value in this!) {
+      frequencyMap[value] = (frequencyMap[value] ?? 0) + 1;
+    }
+
+    final maxFrequency = frequencyMap.values.reduce(math.max);
+    return frequencyMap.entries
+        .where((entry) => entry.value == maxFrequency)
+        .map((entry) => entry.key)
+        .toList();
+  }
+
+  num? sumOfSquares() => this?.map((value) => value * value).sumOrNull();
+
+  /// Computes the variance of the numbers in the iterable.
+  num? variance() {
+    final m = averageOrNull();
+    if (m == null) return null;
+
+    return orEmpty().map((value) => math.pow(value - m, 2)).averageOrNull();
+  }
+
+  /// Calculates the standard deviation of the numbers in the iterable.
+  num? standardDeviation() {
+    final v = variance();
+
+    return v != null ? math.sqrt(v) : null;
+  }
+
+  /// Computes the specified [percentile] of the numbers in the iterable.
+  ///
+  /// The [percentile] should be a value between 0 and 100.
+  num? percentile(double percentile) {
+    if (isBlank) return null;
+
+    final sorted = List<num>.from(orEmpty())..sort();
+    final index = (percentile * (sorted.length - 1)).round();
+    return sorted[index];
+  }
 }
 
 /// Common extensions for iterables composed of enums
@@ -194,14 +185,14 @@ extension EnumConverter<T extends Enum> on Iterable<T> {
 
   T byNameOr(String name, T orElse) => byNameOrNull(name) ?? orElse;
 
-  T? byValueOrNull(Selector<T> test) {
+  T? byValueOrNull(Predicate<T> test) {
     for (final value in this) {
       if (test(value)) return value;
     }
     return null;
   }
 
-  T byValueOr(Selector<T> test, T orElse) => byValueOrNull(test) ?? orElse;
+  T byValueOr(Predicate<T> test, T orElse) => byValueOrNull(test) ?? orElse;
 }
 
 /// Common extensions for iterables composed of more lists
@@ -250,6 +241,51 @@ extension RIterableString on Iterable<String> {
 
 /// provides extensions for Iterable
 extension IterableScrewDriver<T> on Iterable<T>? {
+  /// Returns the sum of all values produced by [selector] function
+  /// applied to each element in the collection.
+  R? sumBy<R extends num>(Transformer<T, R> selector) =>
+      this?.fold<R>(
+        _zero() as R,
+        (previous, element) => previous + selector(element) as R,
+      ) ??
+      _zero() as R;
+
+  num prodBy<R extends num>(Transformer<T, R> selector) =>
+      this?.fold<R>(
+        _zero() as R,
+        (previous, element) => previous * selector(element) as R,
+      ) ??
+      _zero() as R;
+
+  /// Returns the average of all values produced by [selector] function
+  /// applied to each element in the collection.
+  num averageBy<R extends num>(Transformer<T, R> selector) =>
+      isBlank ? _zero() : sumBy(selector)! / length;
+
+  /// Returns the maximum value based on the [comparator] function.
+  /// If collection is empty this returns `null`.
+  ///
+  /// Example:
+  /// ```dart
+  /// [90, 10, 20, 30].maxBy((a, b) => a.compareTo(b)); // 90
+  /// persons.maxBy((a, b) => a.age.compareTo(b.age));  // the oldest person
+  /// ```
+  T? maxBy(Comparator<T> comparator) => this?.reduce(
+    (value, element) => comparator(value, element) > 0 ? value : element,
+  );
+
+  /// Returns the minimal value based on the [comparator] function.
+  /// If collection is empty this returns `null`.
+  ///
+  /// Example:
+  /// ```dart
+  /// [1, 0, 2].minBy((a, b) => a.compareTo(b));       // 0
+  /// persons.minBy((a, b) => a.age.compareTo(b.age)); // the youngest person
+  /// ```
+  T? minBy(Comparator<T> comparator) => this?.reduce(
+    (value, element) => comparator(value, element) < 0 ? value : element,
+  );
+
   /// Returns a map that contains [MapEntry]s provided by a [transform] function.
   ///
   /// If two elements share the same key, the last one gets added to the map.
@@ -360,7 +396,7 @@ extension IterableScrewDriver<T> on Iterable<T>? {
   Set<T> union(Iterable<T> other) => toSet()..addAll(other);
 
   /// Returns the number of elements matching the given [predicate].
-  int count<E>([Selector<T>? predicate]) {
+  int count<E>([Predicate<T>? predicate]) {
     if (isBlank) return -1;
 
     if (predicate == null) return length;
@@ -420,6 +456,8 @@ extension IterableScrewDriver<T> on Iterable<T>? {
 extension IterableGetters<T> on Iterable<T>? {
   /// Returns this Iterable if it's not `null` and the empty list otherwise.
   Iterable<T> orEmpty() => this ?? [];
+
+  List<T> asList() => this?.toList() ?? <T>[];
 
   /// Returns an element at the given [index] or `null` if the [index] is out of
   /// bounds of this collection.
@@ -489,7 +527,7 @@ extension IterableGetters<T> on Iterable<T>? {
   /// final firstLong= list.firstWhereOrNull((e) => e.length > 1); // 'Test'
   /// final firstVeryLong = list.firstWhereOrNull((e) => e.length > 5); // null
   /// ```
-  T? firstWhereOrNull(Selector<T> predicate) {
+  T? firstWhereOrNull(Predicate<T> predicate) {
     if (isBlank) return null;
 
     for (final element in this!) {
@@ -512,7 +550,7 @@ extension IterableGetters<T> on Iterable<T>? {
 
   /// Returns the last element matching the given [predicate], or `null` if no
   /// such element was found.
-  T? lastWhereOrNull(Selector<T> predicate) {
+  T? lastWhereOrNull(Predicate<T> predicate) {
     if (isBlank) return null;
 
     for (final element in this!.reversed) {
@@ -531,7 +569,7 @@ extension IterableGetters<T> on Iterable<T>? {
 
   /// Returns count of elements that matches the given [predicate].
   /// Returns -1 if iterable is null
-  int countWhere(Selector<T> predicate) {
+  int countWhere(Predicate<T> predicate) {
     if (isBlank) return -1;
 
     return this!.where(predicate).length;

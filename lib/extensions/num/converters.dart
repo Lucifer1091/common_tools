@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 import '../date/index.dart';
 import '../string/index.dart';
+import 'operators.dart';
 import 'validators.dart';
 
 extension NumConverters on num? {
@@ -33,10 +34,42 @@ extension NumConverters on num? {
   /// Converts radians to degrees.
   double? radiansToDegrees() => isNotNull ? this! * (180.0 / pi) : null;
 
-  double asPercentageInDecimal() => getOr() / 100.0;
+  double asPercentage() => getOr() / 100.0;
 
-  double calculatePercentageOf(double percentage) =>
-      (getOr() * percentage) / 100.0;
+  double percentageOf(double percentage) => (getOr() * percentage) / 100.0;
+
+  /// Converts this double to a fraction string representation.
+  String asFraction() {
+    final intPart = getOr().truncate();
+    final fraction = getOr() - intPart;
+    if (fraction == 0) return intPart.toString();
+    final gcd = NumbersHelper.gcd((fraction * 1000000).round(), 1000000);
+    return '${intPart != 0 ? '$intPart ' : ''}${(fraction * 1000000 / gcd).round()}/${1000000 ~/ gcd}';
+  }
+
+  /// Converts this integer to a binary string.
+  String toBinaryString() => toInt().toRadixString(2);
+
+  /// Converts this integer to a hexadecimal string.
+  String toHexString() => toInt().toRadixString(16).toUpperCase();
+
+  /// Returns the number of set bits in this integer's binary representation.
+  int bitCount() => toInt().toBinaryString().replaceAll('0', '').length;
+
+  /// Returns the percentage of `this` value relative to [total], optionally allowing decimals.
+  num percentage(num total, {bool allowDecimals = true, int dp = 2}) {
+    if (this != null) {
+      final result = this! >= total ? 100 : max((this! / total) * 100, 0);
+
+      if (allowDecimals) {
+        return double.parse(result.toStringAsFixed(dp));
+      } else {
+        return result.toInt();
+      }
+    }
+
+    return 0;
+  }
 
   /// Converts a file size (in bytes) to a specified unit (Bytes, KB, MB, GB, TB).
   ///
@@ -174,7 +207,7 @@ extension NumConverters on num? {
     return (getOr() * digitValue).roundToDouble() / digitValue;
   }
 
-  /// Rounds value [precision] number of fraction points.
+  /// Rounds value [nthPosition] number of fraction points.
   /// Example:
   /// 2.1234567890.roundToPrecision(0)=> 2
   /// 2.1234567890.roundToPrecision(1)=> 2.1

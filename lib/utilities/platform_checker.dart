@@ -48,6 +48,16 @@ class PlatformChecker {
     return 'Unknown';
   }
 
+  static TargetPlatform get targetPlatform {
+    if (isAndroid) return TargetPlatform.android;
+    if (isIOS) return TargetPlatform.iOS;
+    if (isMacOS) return TargetPlatform.macOS;
+    if (isWindows) return TargetPlatform.windows;
+    if (isLinux) return TargetPlatform.linux;
+    if (isFuchsia) return TargetPlatform.fuchsia;
+    return TargetPlatform.android;
+  }
+
   /// Prints the current platform.
   static void printCurrentPlatform() {
     log.f('Current platform: $currentPlatform');

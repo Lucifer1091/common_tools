@@ -2,6 +2,14 @@ import 'package:flutter/widgets.dart';
 
 /// An extension on [AsyncSnapshot] providing a [when] method.
 extension AsyncSnapshotExt<T> on AsyncSnapshot<T> {
+  bool get isNone => connectionState == ConnectionState.none;
+
+  bool get isWaiting => connectionState == ConnectionState.waiting;
+
+  bool get isActive => connectionState == ConnectionState.active;
+
+  bool get isDone => connectionState == ConnectionState.done;
+
   /// Check if the [AsyncSnapshot] has data.
   bool get hasData =>
       connectionState == ConnectionState.active ||
@@ -13,9 +21,6 @@ extension AsyncSnapshotExt<T> on AsyncSnapshot<T> {
       (connectionState == ConnectionState.active ||
           connectionState == ConnectionState.done) &&
       error != null;
-
-  /// Check if the [AsyncSnapshot] is still waiting for data.
-  bool get isLoading => connectionState == ConnectionState.waiting;
 
   ///  **Perform conditional actions based on the state of the [AsyncSnapshot].**
   ///
@@ -73,7 +78,7 @@ extension AsyncSnapshotExt<T> on AsyncSnapshot<T> {
         }
       case ConnectionState.done:
         if (hasError) {
-          return error(this.error!, stackTrace!);
+          return error(this.error!, stackTrace);
         } else {
           return data!(this.data as T, true);
         }

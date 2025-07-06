@@ -1,7 +1,3 @@
-// Copyright 2023 kenresoft. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 import 'package:flutter/material.dart';
 
 /// A widget that applies a fade and scale animation to its child.
@@ -9,6 +5,17 @@ import 'package:flutter/material.dart';
 /// The animation starts with the child being invisible and scaled down,
 /// and then fades in and scales up to its normal size.
 class AnimatedFadeScale extends StatefulWidget {
+  const AnimatedFadeScale({
+    required this.child,
+    super.key,
+    this.duration = const Duration(milliseconds: 300),
+    this.delay = Duration.zero,
+    this.curve = Curves.easeInOut,
+    this.beginScale = 0.92,
+    this.endScale = 1.0,
+    this.value,
+  });
+
   /// The child widget to be animated.
   final Widget child;
 
@@ -35,17 +42,6 @@ class AnimatedFadeScale extends StatefulWidget {
   /// the animation will run automatically based on the [duration] and [delay].
   final double? value;
 
-  const AnimatedFadeScale({
-    super.key,
-    required this.child,
-    this.duration = const Duration(milliseconds: 300),
-    this.delay = Duration.zero,
-    this.curve = Curves.easeInOut,
-    this.beginScale = 0.92,
-    this.endScale = 1.0,
-    this.value,
-  });
-
   @override
   State<AnimatedFadeScale> createState() => _AnimatedFadeScaleState();
 }
@@ -67,8 +63,8 @@ class _AnimatedFadeScaleState extends State<AnimatedFadeScale>
     );
 
     _opacityAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
+      begin: 0,
+      end: 1,
     ).animate(CurvedAnimation(parent: _controller, curve: widget.curve));
 
     _scaleAnimation = Tween<double>(
@@ -99,8 +95,9 @@ class _AnimatedFadeScaleState extends State<AnimatedFadeScale>
       if (widget.value != null) {
         _controller.value = widget.value!;
       } else {
-        _controller.reset();
-        _controller.forward();
+        _controller
+          ..reset()
+          ..forward();
       }
     }
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../common_tools.dart';
+import '../../widgets/layout/adaptive_ui.dart';
+import '../../widgets/layout/responsive.dart';
 
 extension ContextSizeExtension on BuildContext {
   /// Equivalent as `Navigator.of(context)`
@@ -51,11 +52,11 @@ extension ContextSizeExtension on BuildContext {
 
   bool get isPortrait => mediaQuery.orientation == Orientation.portrait;
 
-  bool get isCompact => Responsive.isCompact(this);
-  bool get isMedium => Responsive.isMedium(this);
-  bool get isExpanded => Responsive.isExpanded(this);
-  bool get isLarge => Responsive.isLarge(this);
-  bool get isExtraLarge => Responsive.isExtraLarge(this);
+  bool get isCompact => readBreakpoint.isCompact;
+  bool get isMedium => readBreakpoint.isMedium;
+  bool get isExpanded => readBreakpoint.isExpanded;
+  bool get isLarge => readBreakpoint.isLarge;
+  bool get isExtraLarge => readBreakpoint.isExtraLarge;
 
   T value<T>({
     required T compact,
@@ -92,12 +93,8 @@ extension ContextSizeExtension on BuildContext {
   }
 
   /// percent with
-  double pw(double percent) {
-    return width * (percent / 100);
-  }
+  double pw(double percent) => width * (percent / 100);
 
   /// percent height
-  double ph(double percent) {
-    return height * (percent / 100);
-  }
+  double ph(double percent) => height * (percent / 100);
 }

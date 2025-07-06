@@ -59,26 +59,28 @@ class _CustomDropdownState extends State<CustomDropdown> {
   }
 
   OverlayEntry _createFloatingDropdown() {
-    return OverlayEntry(builder: (context) {
-      return Positioned(
-        left: xPosition,
-        width: width,
-        top: yPosition + height,
-        height: 4 * height + 40,
-        child: DropDown(
-          selectedText: widget.selectedText,
-          itemHeight: height,
-          primaryColor: widget.primaryColor,
-          secondaryColor: widget.secondaryColor,
-          textColor: widget.textColor,
-          items: widget.items,
-          onChange: (value) {
-            widget.onChange!(value);
-            hideOverlay();
-          },
-        ),
-      );
-    });
+    return OverlayEntry(
+      builder: (context) {
+        return Positioned(
+          left: xPosition,
+          width: width,
+          top: yPosition + height,
+          height: 4 * height + 40,
+          child: DropDown(
+            selectedText: widget.selectedText,
+            itemHeight: height,
+            primaryColor: widget.primaryColor,
+            secondaryColor: widget.secondaryColor,
+            textColor: widget.textColor,
+            items: widget.items,
+            onChange: (value) {
+              widget.onChange!(value);
+              hideOverlay();
+            },
+          ),
+        );
+      },
+    );
   }
 
   void showDropDownOverlay() {
@@ -161,9 +163,7 @@ class _DropDownState extends State<DropDown> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        const SizedBox(
-          height: 5,
-        ),
+        const SizedBox(height: 5),
         Align(
           alignment: const Alignment(-0.85, 0),
           child: ClipPath(
@@ -171,41 +171,36 @@ class _DropDownState extends State<DropDown> {
             child: Container(
               height: 20,
               width: 30,
-              decoration: BoxDecoration(
-                color: widget.primaryColor,
-              ),
+              decoration: BoxDecoration(color: widget.primaryColor),
             ),
           ),
         ),
         Material(
           elevation: 20,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           color: widget.primaryColor,
           child: Container(
             height: 4 * widget.itemHeight,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-            ),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
             child: SingleChildScrollView(
               child: Column(
-                children: widget.items.map((item) {
-                  return DropDownItem(
-                    text: item,
-                    isFirstItem: widget.items.first == item,
-                    isLastItem: widget.items.last == item,
-                    onChange: (value) {
-                      widget.onChange!(value);
-                      setState(() {
-                        selected = value;
-                      });
-                    },
-                    isSelected: selected == item,
-                    primaryColor: widget.primaryColor,
-                    secondaryColor: widget.secondaryColor,
-                  );
-                }).toList(),
+                children:
+                    widget.items.map((item) {
+                      return DropDownItem(
+                        text: item,
+                        isFirstItem: widget.items.first == item,
+                        isLastItem: widget.items.last == item,
+                        onChange: (value) {
+                          widget.onChange!(value);
+                          setState(() {
+                            selected = value;
+                          });
+                        },
+                        isSelected: selected == item,
+                        primaryColor: widget.primaryColor,
+                        secondaryColor: widget.secondaryColor,
+                      );
+                    }).toList(),
               ),
             ),
           ),
@@ -264,11 +259,7 @@ class DropDownItem extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            if (iconData != null)
-              Icon(
-                iconData,
-                color: textColor,
-              ),
+            if (iconData != null) Icon(iconData, color: textColor),
           ],
         ),
       ),

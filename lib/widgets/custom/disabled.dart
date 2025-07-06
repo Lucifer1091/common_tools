@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../common_tools.dart';
-import 'alert_manager.dart';
+import '../dialogs/alert_manager.dart';
 
 /// Marks [child] as disabled by reducing its opacity to half and ignoring
 /// pointers.
@@ -39,6 +39,7 @@ class Disabled extends StatelessWidget {
             isDisabled
                 ? () {
                   onDisabledTapped?.call(context);
+
                   if (reason == null) return;
                   final alertManager = AlertManager.maybeOf(context);
                   alertManager?.alert(msg: reason!);

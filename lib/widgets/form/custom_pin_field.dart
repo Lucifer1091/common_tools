@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:pinput/pinput.dart';
 
 import '../../common_tools.dart';
-import '../custom/spaces.dart';
+import '../layout/spaces.dart';
 import 'text_form_field.dart';
 
 class CustomPinField extends StatelessWidget {

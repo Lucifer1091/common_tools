@@ -148,12 +148,12 @@ extension WidgetExtensions on Widget {
   }
 
   /// Returns a widget that is shown conditionally based on the [condition].
-  /// If [condition] is true, the widget is returned; otherwise, an [EmptyPlaceholder] widget is returned.
+  /// If [condition] is true, the widget is returned; otherwise, an [NoWidget] widget is returned.
   /// This is useful for cases where you want to display an empty placeholder when the condition is
   Widget showIfOrEmpty(bool condition) {
     if (condition) return this;
 
-    return const EmptyPlaceholder();
+    return const NoWidget();
   }
 
   /// Returns a widget that is disabled based on the [disable] parameter.

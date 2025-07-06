@@ -13,9 +13,9 @@ Future<void> main() async {
   // final DateTime date = DateTime(2024, 6, 30);
 
   // final List<int> a = [];
-  // final Iterable<int> iterable = [1, 2, 3, 4, 5];
+  final Iterable<int> iterable = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-  // final int b = 5;
+  final int b = 5;
   //
   // // log.f(date.isLastWeek);
   // log.w(date.startOfWeek);
@@ -27,13 +27,15 @@ Future<void> main() async {
   //   ..d(iterable.associateBy((element) => element))
   //   ..w(iterable.where((element) => element.isEven).toList());
 
-  final userMap = <String, dynamic>{
-    'name': 'John',
-    'age': 30,
-    'scores': [1, 2, 3],
-  };
+  // final userMap = <String, dynamic>{
+  //   'name': 'John',
+  //   'age': 30,
+  //   'scores': [1, 2, 3],
+  // };
 
-  log.i('User from JSON: ${User.fromJson(userMap).toJson()}');
+  // log.i('User from JSON: ${User.fromJson(userMap).toJson()}');
+
+  log.f(iterable.variance());
 }
 
 class User {

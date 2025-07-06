@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import '../num/operators.dart';
 import 'index.dart';
 
 /// convert string to different types
@@ -87,6 +88,10 @@ extension StringConversions on String? {
   }
 
   bool toBoolOr(bool value) => toBoolOrNull() ?? value;
+
+  /// Returns the integer value of the Roman numeral string.
+  int? get fromRomanNumeral =>
+      this == null ? null : NumbersHelper.fromRomanNumeral(this!);
 
   /// Generic string to enum function
   ///
@@ -199,7 +204,7 @@ extension StringConversions on String? {
     return [
       this!.substring(0, matchStart),
       this!.substring(matchStart, matchEnd),
-      this!.substring(matchEnd)
+      this!.substring(matchEnd),
     ];
   }
 }
@@ -379,7 +384,8 @@ class _ReCase {
 
       sb.write(char);
 
-      final isEndOfWord = nextChar == null ||
+      final isEndOfWord =
+          nextChar == null ||
           (_upperAlphaRegex.hasMatch(nextChar) && !isAllCaps) ||
           symbolSet.contains(nextChar);
 

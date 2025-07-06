@@ -1,3 +1,4 @@
+export 'async.dart';
 export 'bool.dart';
 export 'color.dart';
 export 'duration.dart';

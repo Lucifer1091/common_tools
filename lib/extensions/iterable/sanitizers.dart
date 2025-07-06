@@ -340,7 +340,6 @@ extension IterableMapNotNull<T> on Iterable<T> {
     }
   }
 
-
   /// Returns a new lazy [Iterable] of all elements yielded from results of
   /// [transform] function being invoked on each element of this collection.
   Iterable<R> flatMap<R>(Iterable<R> Function(T element) transform) sync* {
@@ -451,7 +450,7 @@ extension ListExtension2<T> on List<T> {
 
   /// Returns a new list containing all elements except last elements that
   /// satisfy the given [predicate].
-  List<T> dropWhile(Selector<T> predicate) {
+  List<T> dropWhile(Predicate<T> predicate) {
     int? startIndex;
     for (var i = 0; i < length; i++) {
       if (!predicate(this[i])) {
@@ -478,7 +477,7 @@ extension ListExtension2<T> on List<T> {
 
   /// Returns a new list containing all elements except last elements that
   /// satisfy the given [predicate].
-  List<T> dropLastWhile(Selector<T> predicate) {
+  List<T> dropLastWhile(Predicate<T> predicate) {
     int? endIndex;
     for (var i = lastIndex; i >= 0; i--) {
       if (!predicate(this[i])) {
@@ -507,7 +506,7 @@ extension IterableSanitizers<T> on Iterable<T>? {
   int get length => this?.length ?? 0;
 
   /// Adds the [value] to the list if not in the iterable already.
-  Iterable<T> putIfAbsent(T value, {Selector<T>? compare}) {
+  Iterable<T> putIfAbsent(T value, {Predicate<T>? compare}) {
     if (isBlank) return <T>[];
 
     if (compare != null ? this!.any(compare) : this!.contains(value)) {

@@ -80,4 +80,35 @@ class CommonUtils {
       query: 'to=${to.join(',')}$subject0$body0$cc0$bcc0',
     );
   }
+
+  /// returns random bool.
+  bool randomBool([int? seed]) => Random(seed).nextBool();
+
+  /// returns random int between [min] (inclusive, default 0) and [max] (exclusive, default 100).
+  int randomInt(int max, [int? min, int? seed]) {
+    if (min != null) {
+      assert(max > min, 'max must be greater than min');
+    }
+    final rand = Random(seed);
+    return (min ?? 0) + rand.nextInt(max - (min ?? 0));
+  }
+
+  /// returns random double between [min] (inclusive, default 0) and [max] (exclusive, default 1).
+  double randomDouble([double? max, double? min, int? seed]) {
+    if (min != null && max != null) {
+      assert(max > min, 'max must be greater than min');
+    }
+    final rand = Random(seed);
+    return (min ?? 0) + rand.nextDouble() * (max ?? 1 - (min ?? 0));
+  }
+
+  /// returns random string.
+  String randomString(int length, [int? seed]) {
+    const characters =
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    return List.generate(
+      length,
+      (index) => characters[randomInt(characters.length, seed)],
+    ).join();
+  }
 }

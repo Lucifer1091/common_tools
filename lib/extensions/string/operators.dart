@@ -231,8 +231,11 @@ extension StringOperators on String? {
 
     return (index == -1)
         ? (defaultValue ?? this)
-        : this!
-            .replaceRange(index + delimiter.length, this!.length, replacement);
+        : this!.replaceRange(
+          index + delimiter.length,
+          this!.length,
+          replacement,
+        );
   }
 
   /// Replaces the part of the string before the first occurrence of the given [delimiter]
@@ -530,4 +533,16 @@ extension StringOperators on String? {
 
     return stringArray.join();
   }
+
+  /// Measures how similar this string is to another string using the specified algorithm.
+  /// it uses the public [StringSimilarity] class which offers different methods
+  /// for measuring how similar two strings are.
+  double compareWith(
+    String other,
+    SimilarityAlgorithm algorithm, {
+    StringSimilarityConfig config = const StringSimilarityConfig(),
+  }) =>
+      isBlank
+          ? 0.0
+          : StringSimilarity.compare(this!, other, algorithm, config: config);
 }

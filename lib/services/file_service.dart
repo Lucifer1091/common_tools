@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as p;
 
 import '../common_tools.dart';
+import '../widgets/layout/responsive.dart';
 
 class FileService {
   FileService._();
@@ -66,7 +67,8 @@ class FileService {
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: allowedExtensions ??
+        allowedExtensions:
+            allowedExtensions ??
             [
               'jpg',
               'jpeg',
@@ -239,12 +241,16 @@ class FileService {
       if (isFilePicker) {
         source = await pickFile(allowedExtensions: allowedExtensions);
       } else {
-        source = Responsive.isCompact(context)
-            ? await _showImagePickerSheet(
-                context,
-                isFilePicker: isFilePicker,
-              )
-            : await _showImagePickerDialog(context, isFilePicker: isFilePicker);
+        source =
+            context.isCompact
+                ? await _showImagePickerSheet(
+                  context,
+                  isFilePicker: isFilePicker,
+                )
+                : await _showImagePickerDialog(
+                  context,
+                  isFilePicker: isFilePicker,
+                );
       }
     }
     return source;
@@ -253,34 +259,28 @@ class FileService {
   static Future<XFile?> _showImagePickerDialog(
     BuildContext context, {
     bool isFilePicker = false,
-  }) =>
-      Dialogs.show<XFile?>(
-        context,
-        content: SizedBox(
-          width: 400,
-          height: 120,
-          child: Center(
-            child:
-                _buildImagePickerContent(context, isFilePicker: isFilePicker),
-          ),
-        ),
-      );
+  }) => Dialogs.show<XFile?>(
+    context,
+    content: SizedBox(
+      width: 400,
+      height: 120,
+      child: Center(
+        child: _buildImagePickerContent(context, isFilePicker: isFilePicker),
+      ),
+    ),
+  );
 
   static Future<XFile?> _showImagePickerSheet(
     BuildContext context, {
     bool isFilePicker = false,
-  }) async =>
-      BottomSheets.show<XFile?>(
-        context,
-        color: context.backgroundColor,
-        showDivider: false,
-        maxHeight: 160,
-        maxWidth: 500,
-        bottomSheet: _buildImagePickerContent(
-          context,
-          isFilePicker: isFilePicker,
-        ),
-      );
+  }) async => BottomSheets.show<XFile?>(
+    context,
+    color: context.backgroundColor,
+    showDivider: false,
+    maxHeight: 160,
+    maxWidth: 500,
+    bottomSheet: _buildImagePickerContent(context, isFilePicker: isFilePicker),
+  );
 
   static Widget _buildImagePickerContent(
     BuildContext context, {
@@ -295,9 +295,9 @@ class FileService {
         children: [
           ListTile(
             onTap: () async {
-              image = await pickImage(
-                imageSource: ImageSource.camera,
-              ).then((value) {
+              image = await pickImage(imageSource: ImageSource.camera).then((
+                value,
+              ) {
                 Navigator.of(context).pop<XFile>(image);
                 return value;
               });
@@ -306,10 +306,7 @@ class FileService {
               Icons.camera_alt_outlined,
               color: context.primaryColor,
             ),
-            title: Text(
-              'Capture from camera',
-              style: context.bodyLarge,
-            ),
+            title: Text('Capture from camera', style: context.bodyLarge),
           ),
           if (!isFilePicker) ...[
             ListTile(
@@ -323,10 +320,7 @@ class FileService {
                 Icons.photo_size_select_actual_outlined,
                 color: context.primaryColor,
               ),
-              title: Text(
-                'Upload from gallery',
-                style: context.bodyLarge,
-              ),
+              title: Text('Upload from gallery', style: context.bodyLarge),
             ),
           ] else ...[
             ListTile(
@@ -340,10 +334,7 @@ class FileService {
                 Icons.upload_file_outlined,
                 color: context.primaryColor,
               ),
-              title: Text(
-                'Upload from storage',
-                style: context.bodyLarge,
-              ),
+              title: Text('Upload from storage', style: context.bodyLarge),
             ),
           ],
         ],

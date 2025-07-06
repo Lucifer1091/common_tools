@@ -13,7 +13,7 @@ extension IterableValidators<T> on Iterable<T>? {
 
   /// Returns true if no entries match the given [predicate] or if the
   /// collection is empty.
-  bool none(Selector<T> predicate) => isNotBlank && !this!.any(predicate);
+  bool none(Predicate<T> predicate) => isNotBlank && !this!.any(predicate);
 
   /// Returns `true` if there is exactly one element of [Iterable] which satisfies
   /// [test].
@@ -24,7 +24,7 @@ extension IterableValidators<T> on Iterable<T>? {
   /// [1, 2, 3].one((e) => e > 4); // No element satisfies. Returns false.
   /// [1, 2, 3].one((e) => e > 1); // >1 element satisfies. Returns false.
   /// ```
-  bool one(Selector<T> test) {
+  bool one(Predicate<T> test) {
     if (isBlank) return false;
 
     bool found = false;

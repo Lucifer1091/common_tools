@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class DismissKeyboard extends StatelessWidget {
-  final Widget child;
+  const DismissKeyboard({required this.child, super.key});
 
-  const DismissKeyboard({super.key, required this.child});
+  final Widget child;
 
   // Can be added in Context Extensions
   static void hideKeyboard(BuildContext context) {
@@ -17,8 +17,9 @@ class DismissKeyboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
-        FocusScopeNode currentFocus = FocusScope.of(context);
+        final FocusScopeNode currentFocus = FocusScope.of(context);
         if (!currentFocus.hasPrimaryFocus &&
             currentFocus.focusedChild != null) {
           FocusManager.instance.primaryFocus?.unfocus();

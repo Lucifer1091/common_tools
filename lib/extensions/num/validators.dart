@@ -1,4 +1,7 @@
+import 'dart:math' as math;
+
 import 'converters.dart';
+import 'operators.dart';
 
 extension NumValidators on num? {
   /// Returns `true` if this nullable iterable is either `null` or empty.
@@ -92,4 +95,60 @@ extension NumValidators on num? {
   /// by all of the [dividers].
   bool isDivisibleByAll(List<int> dividers) =>
       dividers.every((divider) => getOr() % divider == 0);
+
+  /// Checks if this number is approximately equal to [other] within a [tolerance].
+  bool isApproximatelyEqual(num other, {double tolerance = 0.01}) {
+    return this != null && (this! - other).abs() <= tolerance;
+  }
+
+  /// Checks if this integer is a prime number.
+  bool isPrime() {
+    final value = getOr().toInt();
+    if (value <= 1) return false;
+
+    for (var i = 2; i <= math.sqrt(value).toInt(); i++) {
+      if (value % i == 0) return false;
+    }
+    return true;
+  }
+
+  /// Checks if this integer is a perfect square.
+  bool isPerfectSquare() {
+    final value = getOr().toInt();
+    if (value < 0) return false;
+
+    final root = math.sqrt(value).toInt();
+    return root * root == value;
+  }
+
+  /// Checks if this integer is a perfect cube.
+  bool isPerfectCube() {
+    final n = getOr().abs();
+    var cubeRoot = 0;
+    while (cubeRoot * cubeRoot * cubeRoot < n) {
+      cubeRoot++;
+    }
+    return cubeRoot * cubeRoot * cubeRoot == n;
+  }
+
+  /// Checks if this integer is a Fibonacci number.
+  bool isFibonacci() {
+    final value = getOr().toInt();
+
+    final n1 = 5 * value * value + 4;
+    final n2 = 5 * value * value - 4;
+
+    return NumbersHelper.isPerfectSquare(n1) ||
+        NumbersHelper.isPerfectSquare(n2);
+  }
+
+  /// Checks if this integer is a power of [base].
+  bool isPowerOf(int base) {
+    if (base <= 1) return this == base;
+    var n = getOr().toInt();
+    while (n % base == 0) {
+      n ~/= base;
+    }
+    return n == 1;
+  }
 }

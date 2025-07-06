@@ -37,8 +37,8 @@ extension NumHelper on num? {
 
     num current = getOr();
 
-    while (
-        (direction > 0 && current < end) || (direction < 0 && current > end)) {
+    while ((direction > 0 && current < end) ||
+        (direction < 0 && current > end)) {
       yield current;
       current += stepSize;
     }
@@ -81,7 +81,7 @@ extension NumHelper on num? {
     }
   }
 
-  /// Executes the function [action] for [this] times.
+  /// Executes the function [action] for [num] times.
   ///
   /// Example:
   /// 3.times(() => print('Hello')); // Hello... Hello... Hello
@@ -89,22 +89,14 @@ extension NumHelper on num? {
     0.until(toInt()).forEach((_) => action());
   }
 
-  /// runs [func] for [this] number of times.
-  /// This is irrespective of the sign of [this]. the for loop will always
-  /// run from 1 to absolute value of [this].
+  /// runs [func] for [num] number of times.
+  /// This is irrespective of the sign of [num]. the for loop will always
+  /// run from 1 to absolute value of [num].
   ///
   /// Returns [List] of type [T] where T is the return type of [func]
-  List<T> repeat<T>(T Function(int count) func) =>
-      [for (var i = 1; i <= toInt().abs(); i++) func(i)];
-
-  /// Generates a non-negative random floating point value uniformly distributed
-  /// in the range from 0.0, inclusive, to 1.0, exclusive.
-  double randomDouble({double? max}) => Random().nextDouble() * (max ?? 1);
-
-  /// Generates a non-negative random integer uniformly distributed in the range
-  /// rom 0, inclusive, to [max], exclusive.
-  /// default [max] is 1_000_000
-  int randomInt({int? max}) => Random().nextInt(max ?? 1000000);
+  List<T> repeat<T>(T Function(int count) func) => [
+    for (var i = 1; i <= toInt().abs(); i++) func(i),
+  ];
 
   /// Get list of random numbers.
   List<num> randomList({int min = 0, int max = 100}) {
@@ -119,7 +111,7 @@ extension NumHelper on num? {
     return result;
   }
 
-  /// Get the lorem ipsum text of [this] words.
+  /// Get the lorem ipsum text of [num] words.
   String loremIpsum() {
     if (isNull) return '';
 
@@ -202,53 +194,5 @@ extension NumHelper on num? {
     }
 
     return buffer.toString();
-  }
-}
-
-extension IterableNumSumExtension<T extends num> on Iterable<T> {
-  /// Returns the sum of all elements in the collection.
-  T sum() {
-    num sum = 0.0;
-    for (final current in this) {
-      sum += current;
-    }
-    if (T == int) {
-      return sum.toInt() as T;
-    } else {
-      return sum.toDouble() as T;
-    }
-  }
-
-  /// Returns the average of all elements in the collection.
-  double average() {
-    var count = 0;
-    num sum = 0;
-    
-    for (final current in this) {
-      sum += current;
-      count++;
-    }
-
-    if (count == 0) {
-      throw StateError('No elements in collection');
-    } else {
-      return sum / count;
-    }
-  }
-
-  /// Returns the median of the elements in this collection.
-  ///
-  /// Empty collections throw an error.
-  double median() {
-    if (length == 0) throw StateError('No elements in collection');
-    final values = toList()..sort();
-    final size = values.length;
-    if (size.isOdd) {
-      return values[(size / 2).floor()].toDouble();
-    } else {
-      final x = values[(size / 2).floor()];
-      final y = values[(size / 2).floor() - 1];
-      return (x + y) / 2;
-    }
   }
 }

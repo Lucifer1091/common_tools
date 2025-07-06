@@ -1,5 +1,6 @@
-import 'package:common_tools/extensions/extensions.dart';
 import 'package:flutter/material.dart';
+
+import '../../extensions/extensions.dart';
 
 class MultiSelectController {
   List<int> selectedIndexes = [];

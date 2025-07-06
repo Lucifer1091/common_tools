@@ -1,7 +1,32 @@
-import 'package:common_tools/common_tools.dart';
 import 'package:flutter/material.dart';
 
+import '../../common_tools.dart';
+
 class CustomCheckBox extends StatelessWidget {
+  const CustomCheckBox({
+    super.key,
+    this.size = 24,
+    this.value = false,
+    this.tristate = false,
+    this.enabled = true,
+    this.onChanged,
+    this.radius,
+    this.activeColor,
+    this.borderColor,
+    this.checkColor,
+    this.padding,
+    this.title,
+    this.titleColor,
+    this.titleStyle,
+    this.iconTitleSpacing,
+    this.showCheckAfterText = true,
+    this.showSpacer = false,
+  }) : assert(
+         titleStyle == null || titleColor == null,
+         'Cannot provide both a titleStyle and a titleColor\n'
+         'To provide custom, use "titleStyle: TextStyle()".',
+       );
+
   final bool enabled;
   final bool? value;
   final bool tristate;
@@ -22,30 +47,6 @@ class CustomCheckBox extends StatelessWidget {
   final bool showSpacer;
 
   final bool showCheckAfterText;
-
-  const CustomCheckBox({
-    super.key,
-    this.size = 24,
-    this.value = false,
-    this.tristate = false,
-    this.enabled = true,
-    this.onChanged,
-    this.radius,
-    this.activeColor,
-    this.borderColor,
-    this.checkColor,
-    this.padding,
-    this.title,
-    this.titleColor,
-    this.titleStyle,
-    this.iconTitleSpacing,
-    this.showCheckAfterText = true,
-    this.showSpacer = false,
-  }) : assert(
-          titleStyle == null || titleColor == null,
-          'Cannot provide both a titleStyle and a titleColor\n'
-          'To provide custom, use "titleStyle: TextStyle()".',
-        );
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +86,8 @@ class CustomCheckBox extends StatelessWidget {
   Text _buildTitleText(BuildContext context) {
     return Text(
       title!,
-      style: titleStyle ??
+      style:
+          titleStyle ??
           context.bodyLarge?.copyWith(
             color: Colors.red,
             fontWeight: FontWeight.w400,
@@ -95,7 +97,10 @@ class CustomCheckBox extends StatelessWidget {
   }
 
   SizedBox _buildCheckBox(
-      Color activeColor, Color checkColor, Color borderColor) {
+    Color activeColor,
+    Color checkColor,
+    Color borderColor,
+  ) {
     return SizedBox(
       width: size,
       height: size,
@@ -107,9 +112,7 @@ class CustomCheckBox extends StatelessWidget {
           checkColor: checkColor,
           value: value,
           tristate: tristate,
-          side: BorderSide(
-            color: value ?? false ? activeColor : borderColor,
-          ),
+          side: BorderSide(color: value ?? false ? activeColor : borderColor),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(radius ?? 3),
           ),
@@ -119,9 +122,6 @@ class CustomCheckBox extends StatelessWidget {
     );
   }
 
-  Widget get spacer => showSpacer
-      ? const Spacer()
-      : SizedBox(
-          width: iconTitleSpacing ?? 12,
-        );
+  Widget get spacer =>
+      showSpacer ? const Spacer() : SizedBox(width: iconTitleSpacing ?? 12);
 }

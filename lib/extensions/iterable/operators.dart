@@ -72,7 +72,7 @@ extension ListExt<T> on List<T>? {
     return list;
   }
 
-  List<List<T>> divideListByFunction(Selector<T> condition) {
+  List<List<T>> divideListByFunction(Predicate<T> condition) {
     final List<List<T>> nestedLists = [];
     final List<T> currentSublist = [];
 
@@ -166,7 +166,7 @@ extension IterableSC<T> on Iterable<T> {
   /// ```dart
   /// [1, 2, 3].replaceWhere((n) => n < 3, 0); // [0, 0, 3]
   /// ```
-  Iterable<T> replaceWhere(Selector<T> comparator, T replacement) sync* {
+  Iterable<T> replaceWhere(Predicate<T> comparator, T replacement) sync* {
     final it = iterator;
 
     while (it.moveNext()) {
@@ -184,7 +184,7 @@ extension IterableSC<T> on Iterable<T> {
   /// ```dart
   /// [1, 2, 3].replaceFirstWhere((n) => n < 3, 0); // [0, 2, 3]
   /// ```
-  Iterable<T> replaceFirstWhere(Selector<T> comparator, T replacement) sync* {
+  Iterable<T> replaceFirstWhere(Predicate<T> comparator, T replacement) sync* {
     final it = iterator;
     while (it.moveNext()) {
       if (comparator(it.current)) {
@@ -200,7 +200,7 @@ extension IterableSC<T> on Iterable<T> {
 
   /// Replaces an item in the list with [replacement] where [comparator] returns
   /// true. Returns true if an item is replaced, false otherwise.
-  Iterable<T> replaceLastWhere(Selector<T> comparator, T replacement) sync* {
+  Iterable<T> replaceLastWhere(Predicate<T> comparator, T replacement) sync* {
     final it = iterator;
     var found = false;
 
@@ -352,7 +352,7 @@ extension ListUtils<T> on List<T> {
 
   /// Take while [selector] is true.
   /// Returns a new list with the elements taken while [selector] is true.
-  List<T> takeWhile(Selector<T> selector) {
+  List<T> takeWhile(Predicate<T> selector) {
     final list = <T>[];
     for (final item in this) {
       if (selector(item)) {
@@ -367,7 +367,7 @@ extension ListUtils<T> on List<T> {
   /// Take if [selector] is true.
   ///  Returns a new list with the elements taken if [selector] is true.
 
-  List<T> takeIf(Selector<T> selector) {
+  List<T> takeIf(Predicate<T> selector) {
     final list = <T>[];
     for (final item in this) {
       if (selector(item)) {
@@ -413,7 +413,7 @@ extension ListExtensions1<T> on List<T> {
   /// If no elements that satisfy [test] predicate found
   /// than just copy will be returned.
   /// If current list is `null` - returns new empty list.
-  List<T> copyWithReplaceWhere(Selector<T> test, T replacement) => [
+  List<T> copyWithReplaceWhere(Predicate<T> test, T replacement) => [
     for (final e in this) test(e) ? replacement : e,
   ];
 
@@ -422,7 +422,7 @@ extension ListExtensions1<T> on List<T> {
   ///
   /// Returns `true` if at least one element was replaced.
   /// If no elements that satisfy [test] predicate found than will be no changes.
-  bool replaceWhere(Selector<T> test, T replacement) {
+  bool replaceWhere(Predicate<T> test, T replacement) {
     var found = false;
     final len = length;
 
@@ -482,7 +482,7 @@ extension NullableListExtensions<E> on List<E>? {
   /// If no elements that satisfy [test] predicate found
   /// than just copy will be returned.
   /// If current list is `null` - returns new empty list.
-  List<E> copyWithReplaceWhere(Selector<E> test, E replacement) =>
+  List<E> copyWithReplaceWhere(Predicate<E> test, E replacement) =>
       this?.copyWithReplaceWhere(test, replacement) ?? const [];
 }
 

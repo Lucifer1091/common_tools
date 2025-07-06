@@ -4,7 +4,7 @@ typedef StringMap = Map<String, String>;
 typedef Json = Map<String, dynamic>;
 typedef DynamicJson = Map<dynamic, dynamic>;
 
-typedef Selector<T> = bool Function(T value);
+typedef Predicate<T> = bool Function(T value);
 typedef IsEqual<T> = bool Function(T a, T b);
 typedef FutureOrCallback<T> = FutureOr<T> Function();
 

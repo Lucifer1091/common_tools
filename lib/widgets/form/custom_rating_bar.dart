@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class CustomRatingBar extends StatefulWidget {
-
   const CustomRatingBar({
     super.key,
     this.initialRating = 0.0,
@@ -21,6 +20,7 @@ class CustomRatingBar extends StatefulWidget {
     this.itemBuilder,
     this.direction = Axis.horizontal,
   });
+
   /// Initial rating value
   final double initialRating;
 
@@ -31,7 +31,7 @@ class CustomRatingBar extends StatefulWidget {
   final double iconSize;
 
   /// Function called when rating changes
-  final Function(double)? onRatingChanged;
+  final ValueChanged<double>? onRatingChanged;
 
   /// Icon to display for rating
   final IconData activeIcon;
@@ -91,7 +91,7 @@ class _CustomRatingBarState extends State<CustomRatingBar>
     );
 
     _animation = Tween<double>(
-      begin: 0.0,
+      begin: 0,
       end: _rating,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
@@ -122,7 +122,7 @@ class _CustomRatingBarState extends State<CustomRatingBar>
         begin: _animation.value,
         end: _rating,
       ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
-      _controller.forward(from: 0.0);
+      _controller.forward(from: 0);
     }
   }
 
@@ -238,12 +238,10 @@ class _CustomRatingBarState extends State<CustomRatingBar>
         ).animate(
           CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
         );
-        _controller.forward(from: 0.0);
+        _controller.forward(from: 0);
       });
 
-      if (widget.onRatingChanged != null) {
-        widget.onRatingChanged!(_rating);
-      }
+      widget.onRatingChanged?.call(_rating);
     }
   }
 
@@ -325,7 +323,7 @@ class _CustomRatingBarState extends State<CustomRatingBar>
             ),
             if (widget.showRatingText)
               Padding(
-                padding: const EdgeInsets.only(top: 8.0),
+                padding: const EdgeInsets.only(top: 8),
                 child: Text(
                   _animation.value.toStringAsFixed(
                     widget.allowHalfRating ? 1 : 0,
@@ -382,7 +380,6 @@ class _CustomRatingBarState extends State<CustomRatingBar>
 }
 
 class _RatingClipper extends CustomClipper<Rect> {
-
   _RatingClipper(this.fillLevel, this.direction);
   final double fillLevel;
   final Axis direction;

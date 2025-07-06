@@ -489,8 +489,23 @@ extension StringValidators on String? {
   }
 
   /// Check if string matches the [pattern] or [regex].
-  bool matches({RegExp? regex, String? pattern}) {
-    return RegexMatcher.match(this, regex: regex, pattern: pattern);
+  bool matches({
+    RegExp? regex,
+    String? pattern,
+    bool multiLine = false,
+    bool caseSensitive = true,
+    bool unicode = false,
+    bool dotAll = false,
+  }) {
+    return RegexMatcher.match(
+      this,
+      regex: regex,
+      pattern: pattern,
+      multiLine: multiLine,
+      caseSensitive: caseSensitive,
+      unicode: unicode,
+      dotAll: dotAll,
+    );
   }
 
   /// Check if the string exactly matches with the [comparison]
@@ -543,7 +558,7 @@ extension StringValidators on String? {
 
   /// Returns `true` if at least one element matches the given [predicate].
   /// the [predicate] should have only one character
-  bool anyChar(Selector<String> predicate) {
+  bool anyChar(Predicate<String> predicate) {
     if (isBlank) return false;
 
     return this!.split('').any((s) => predicate(s));
@@ -572,8 +587,9 @@ extension StringValidators on String? {
   /// ```
   bool containsAny(List<String?> patterns) {
     if (isNotBlank) {
-      for (final String? item
-          in patterns.where((element) => element.isNotBlank)) {
+      for (final String? item in patterns.where(
+        (element) => element.isNotBlank,
+      )) {
         if (this!.contains(item!)) return true;
       }
     }
@@ -588,8 +604,9 @@ extension StringValidators on String? {
   /// bool contains = "abracadabra".containsAll(["abra", "cadabra"]; // returns true;
   /// ```
   bool containsAll(List<String?> patterns) {
-    for (final String? item
-        in patterns.where((element) => element.isNotBlank)) {
+    for (final String? item in patterns.where(
+      (element) => element.isNotBlank,
+    )) {
       if (isBlank || !this!.contains(item!)) return false;
     }
     return true;

@@ -13,16 +13,19 @@ class Regex {
     r'^(?=.*([A-Z]){1,})(?=.*[!@#$&*]{1,})(?=.*[0-9]{1,})(?=.*[a-z]{1,}).{8,100}$',
   );
 
-  static RegExp ipv4Maybe =
-      RegExp(r'^(\d?\d?\d)\.(\d?\d?\d)\.(\d?\d?\d)\.(\d?\d?\d)$');
-  static RegExp ipv6 =
-      RegExp(r'^::|^::1|^([a-fA-F0-9]{1,4}::?){1,7}([a-fA-F0-9]{1,4})$');
+  static RegExp ipv4Maybe = RegExp(
+    r'^(\d?\d?\d)\.(\d?\d?\d)\.(\d?\d?\d)\.(\d?\d?\d)$',
+  );
+  static RegExp ipv6 = RegExp(
+    r'^::|^::1|^([a-fA-F0-9]{1,4}::?){1,7}([a-fA-F0-9]{1,4})$',
+  );
 
   /// MAC Address RegExp
   ///
   /// Example: 00:0a:95:9d:68:16
-  static RegExp macAddress =
-      RegExp(r'^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$');
+  static RegExp macAddress = RegExp(
+    r'^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$',
+  );
 
   /// Escaped character RegExp
   ///
@@ -51,14 +54,16 @@ class Regex {
   /// SHA1 regex
   ///
   /// Example: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12
-  static RegExp sha1 =
-      RegExp(r'^(([A-Fa-f0-9]{2}\:){19}[A-Fa-f0-9]{2}|[A-Fa-f0-9]{40})$');
+  static RegExp sha1 = RegExp(
+    r'^(([A-Fa-f0-9]{2}\:){19}[A-Fa-f0-9]{2}|[A-Fa-f0-9]{40})$',
+  );
 
   /// SHA256 regex
   ///
   /// Example: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12
-  static RegExp sha256 =
-      RegExp(r'^([A-Fa-f0-9]{2}\:){31}[A-Fa-f0-9]{2}|[A-Fa-f0-9]{64}$');
+  static RegExp sha256 = RegExp(
+    r'^([A-Fa-f0-9]{2}\:){31}[A-Fa-f0-9]{2}|[A-Fa-f0-9]{64}$',
+  );
 
   static Map<String, RegExp> uuid = {
     '3': RegExp(
@@ -82,8 +87,9 @@ class Regex {
   static RegExp multibyte = RegExp(r'[^\x00-\x7F]');
   static RegExp ascii = RegExp(r'^[\x00-\x7F]+$');
 
-  static RegExp imageUrl =
-      RegExp(r'(http(s?):)([/|.\w\s-])*\.(?:jpg|gif|png|jpeg|bmp|webp)');
+  static RegExp imageUrl = RegExp(
+    r'(http(s?):)([/|.\w\s-])*\.(?:jpg|gif|png|jpeg|bmp|webp)',
+  );
 
   /// Image RegExp
   ///
@@ -100,8 +106,9 @@ class Regex {
   static RegExp audio = RegExp(r'.(mp3|wav|wma|amr|ogg|wav|flac|aac)$');
   static RegExp mimeTypeAudio = RegExp(r'^audio\/.*$');
 
-  static RegExp video =
-      RegExp(r'.(mp4|avi|wmv|rmvb|mpg|mpeg|3gp|mkv|flv|mov|webm)$');
+  static RegExp video = RegExp(
+    r'.(mp4|avi|wmv|rmvb|mpg|mpeg|3gp|mkv|flv|mov|webm)$',
+  );
   static RegExp mimeTypeVideo = RegExp(r'^video\/.*$');
 
   static RegExp txt = RegExp(r'.(txt|rtf)$');
@@ -132,8 +139,9 @@ class Regex {
   static RegExp mimeTypeJson = RegExp(r'^application\/json$');
 
   static RegExp archive = RegExp(r'.(zip|rar|7z|tar|gz)$');
-  static RegExp mimeTypeArchive =
-      RegExp(r'^application\/(zip|x-tar|x-gzip|x-bzip2)$');
+  static RegExp mimeTypeArchive = RegExp(
+    r'^application\/(zip|x-tar|x-gzip|x-bzip2)$',
+  );
 
   static RegExp xml = RegExp(r'.xml$');
   static RegExp mimeTypeXml = RegExp(r'^(application\/xml|text\/xml)$');
@@ -195,10 +203,26 @@ abstract class RegexMatcher {
   const RegexMatcher._();
 
   /// Matches the input with the given pattern
-  static bool match(String? input, {RegExp? regex, String? pattern}) {
+  static bool match(
+    String? input, {
+    RegExp? regex,
+    String? pattern,
+    bool multiLine = false,
+    bool caseSensitive = true,
+    bool unicode = false,
+    bool dotAll = false,
+  }) {
     if (input.isBlank || (regex == null && pattern == null)) return false;
 
-    return (regex ?? RegExp(pattern ?? '')).hasMatch(input!);
+    return (regex ??
+            RegExp(
+              pattern ?? '',
+              multiLine: multiLine,
+              caseSensitive: caseSensitive,
+              unicode: unicode,
+              dotAll: dotAll,
+            ))
+        .hasMatch(input!);
   }
 
   /// matches the input with the given patterns
@@ -214,36 +238,36 @@ abstract class RegexMatcher {
   /// Matches the input with the given pattern for the given file type
   static bool matchFile(String input, RegexFileType type) {
     return switch (type) {
-      RegexFileType.image => matchMultiple(
-          input,
-          [Regex.image, Regex.mimeTypeImage],
-        ),
+      RegexFileType.image => matchMultiple(input, [
+        Regex.image,
+        Regex.mimeTypeImage,
+      ]),
       RegexFileType.svg => matchMultiple(input, [Regex.svg, Regex.mimeTypeSvg]),
-      RegexFileType.audio => matchMultiple(
-          input,
-          [Regex.audio, Regex.mimeTypeAudio],
-        ),
-      RegexFileType.video => matchMultiple(
-          input,
-          [Regex.video, Regex.mimeTypeVideo],
-        ),
+      RegexFileType.audio => matchMultiple(input, [
+        Regex.audio,
+        Regex.mimeTypeAudio,
+      ]),
+      RegexFileType.video => matchMultiple(input, [
+        Regex.video,
+        Regex.mimeTypeVideo,
+      ]),
       RegexFileType.txt => matchMultiple(input, [Regex.txt, Regex.mimeTypeTxt]),
       RegexFileType.doc => matchMultiple(input, [Regex.doc, Regex.mimeTypeDoc]),
       RegexFileType.csv => matchMultiple(input, [Regex.csv, Regex.mimeTypeCsv]),
-      RegexFileType.excel => matchMultiple(
-          input,
-          [Regex.excel, Regex.mimeTypeExcel],
-        ),
+      RegexFileType.excel => matchMultiple(input, [
+        Regex.excel,
+        Regex.mimeTypeExcel,
+      ]),
       RegexFileType.ppt => matchMultiple(input, [Regex.ppt, Regex.mimeTypePpt]),
       RegexFileType.pdf => matchMultiple(input, [Regex.pdf, Regex.mimeTypePdf]),
-      RegexFileType.json => matchMultiple(
-          input,
-          [Regex.json, Regex.mimeTypeJson],
-        ),
-      RegexFileType.archive => matchMultiple(
-          input,
-          [Regex.archive, Regex.mimeTypeArchive],
-        ),
+      RegexFileType.json => matchMultiple(input, [
+        Regex.json,
+        Regex.mimeTypeJson,
+      ]),
+      RegexFileType.archive => matchMultiple(input, [
+        Regex.archive,
+        Regex.mimeTypeArchive,
+      ]),
       RegexFileType.xml => matchMultiple(input, [Regex.xml, Regex.mimeTypeXml]),
     };
   }

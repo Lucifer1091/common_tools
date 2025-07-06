@@ -1,13 +1,27 @@
-import 'package:common_tools/common_tools.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
-import '../../custom/spaces.dart';
-import 'components/scanner_error_widget.dart';
+import '../../../common_tools.dart';
+import '../../layout/responsive.dart';
+import '../../layout/spaces.dart';
 import 'components/scanner_buttons.dart';
+import 'components/scanner_error_widget.dart';
 import 'components/scanner_overlays.dart';
 
 class BarcodeAndQRScanner extends StatefulWidget {
+  const BarcodeAndQRScanner({
+    required this.onDetect,
+    super.key,
+    this.controller,
+    this.scanQrCode = false,
+    this.torchEnabled = false,
+    this.cameraFace = CameraFacing.back,
+    this.onAddCodeTap,
+    this.onBackTap,
+  });
+
   final bool scanQrCode;
   final bool torchEnabled;
   final CameraFacing cameraFace;
@@ -15,17 +29,6 @@ class BarcodeAndQRScanner extends StatefulWidget {
   final VoidCallback? onBackTap;
   final VoidCallback? onAddCodeTap;
   final MobileScannerController? controller;
-
-  const BarcodeAndQRScanner({
-    super.key,
-    this.controller,
-    this.scanQrCode = false,
-    this.torchEnabled = false,
-    this.cameraFace = CameraFacing.back,
-    required this.onDetect,
-    this.onAddCodeTap,
-    this.onBackTap,
-  });
 
   @override
   State<BarcodeAndQRScanner> createState() => _BarcodeAndQRScannerState();
@@ -40,9 +43,9 @@ class _BarcodeAndQRScannerState extends State<BarcodeAndQRScanner>
 
   void animateScanAnimation(bool reverse) {
     if (reverse) {
-      _animationController.reverse(from: 1.0);
+      _animationController.reverse(from: 1);
     } else {
-      _animationController.forward(from: 0.0);
+      _animationController.forward(from: 0);
     }
   }
 
@@ -53,14 +56,15 @@ class _BarcodeAndQRScannerState extends State<BarcodeAndQRScanner>
         duration: const Duration(milliseconds: 1500),
         vsync: this,
       );
-      _animationController.addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          animateScanAnimation(true);
-        } else if (status == AnimationStatus.dismissed) {
-          animateScanAnimation(false);
-        }
-      });
-      _animationController.forward(from: 0.0);
+      _animationController
+        ..addStatusListener((status) {
+          if (status == AnimationStatus.completed) {
+            animateScanAnimation(true);
+          } else if (status == AnimationStatus.dismissed) {
+            animateScanAnimation(false);
+          }
+        })
+        ..forward(from: 0);
     }
     controller = widget.controller ?? initController;
 
@@ -111,7 +115,8 @@ class _BarcodeAndQRScannerState extends State<BarcodeAndQRScanner>
     //   height: height,
     // );
 
-    final mustRotate = !PlatformChecker.isWeb &&
+    final mustRotate =
+        !PlatformChecker.isWeb &&
         MediaQuery.of(context).orientation == Orientation.landscape;
 
     final cameraBox = MobileScanner(
@@ -119,27 +124,28 @@ class _BarcodeAndQRScannerState extends State<BarcodeAndQRScanner>
       onDetect: widget.onDetect,
       // scanWindow: PlatformChecker.isWeb ? null : scanWindow,
       // scanWindowUpdateThreshold: PlatformChecker.isWeb ? 200.0 : 0.0,
-      overlayBuilder: PlatformChecker.isWeb || !Responsive.isCompact(context)
-          ? null
-          : (context, constraints) {
-              return ScannerAnimation(
-                stopped: false,
-                width: width * .80,
-                height: constraints.maxHeight,
-                animation: _animationController,
-              );
-            },
+      overlayBuilder:
+          PlatformChecker.isWeb || !context.isCompact
+              ? null
+              : (context, constraints) {
+                return ScannerAnimation(
+                  stopped: false,
+                  width: width * .80,
+                  height: constraints.maxHeight,
+                  animation: _animationController,
+                );
+              },
       errorBuilder: (_, error, child) {
         return ScannerErrorWidget(error: error, isRotated: mustRotate);
       },
     );
 
     return Scaffold(
-      backgroundColor: const Color(0xFF040404).withOpacity(0.58),
+      backgroundColor: const Color(0xFF040404).withValues(alpha: 0.58),
       body: ValueListenableBuilder(
         valueListenable: controller,
         builder: (context, state, child) {
-          bool isStarted = state.isInitialized || state.isRunning;
+          final bool isStarted = state.isInitialized || state.isRunning;
 
           return Stack(
             children: [
@@ -166,39 +172,38 @@ class _BarcodeAndQRScannerState extends State<BarcodeAndQRScanner>
       bottom: 20,
       right: 0,
       left: 0,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: context.width,
-            child: Row(
-              children: [
-                _buildORDivider(),
-                Text(
-                  'OR',
-                  style: context.labelSmall?.copyWith(color: Colors.white),
+      child:
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: context.width,
+                child: Row(
+                  children: [
+                    _buildORDivider(),
+                    Text(
+                      'OR',
+                      style: context.labelSmall?.copyWith(color: Colors.white),
+                    ),
+                    _buildORDivider(),
+                  ],
                 ),
-                _buildORDivider(),
-              ],
-            ),
-          ),
-          const Space.h30(),
-          TextButton(
-            onPressed: widget.onAddCodeTap,
-            child: const Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.qr_code_2_rounded),
-                Space.w16(),
-                Text('Add Code Manually'),
-              ],
-            ),
-          ),
-          const Space.h30(),
-        ],
-      ).repaintBoundary,
+              ),
+              const Space.h30(),
+              TextButton(
+                onPressed: widget.onAddCodeTap,
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.qr_code_2_rounded),
+                    Space.w16(),
+                    Text('Add Code Manually'),
+                  ],
+                ),
+              ),
+              const Space.h30(),
+            ],
+          ).repaintBoundary,
     );
   }
 
@@ -220,7 +225,6 @@ class _BarcodeAndQRScannerState extends State<BarcodeAndQRScanner>
         ),
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Space.w24(),
           ScannerButton(
@@ -253,8 +257,8 @@ class _BarcodeAndQRScannerState extends State<BarcodeAndQRScanner>
   @override
   void dispose() {
     _animationController.dispose();
-    controller.stop();
-    controller.dispose();
+    unawaited(controller.stop());
+    unawaited(controller.dispose());
     super.dispose();
   }
 }
