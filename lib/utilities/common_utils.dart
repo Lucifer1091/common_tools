@@ -92,7 +92,7 @@ class CommonImageUtils {
 
     buildOwner.buildScope(rootElement);
 
-    if (delay > Duration.zero) await Future.delayed(delay);
+    if (delay > Duration.zero) await Future<void>.delayed(delay);
 
     buildOwner
       ..buildScope(rootElement)

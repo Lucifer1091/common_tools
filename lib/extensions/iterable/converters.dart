@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:collection';
 import 'dart:math' as math;
 
+import 'package:flutter/material.dart';
+
 import '../../common_tools.dart';
 import 'index.dart';
 
@@ -406,7 +408,7 @@ extension IterableScrewDriver<T> on Iterable<T>? {
 
   /// Performs the given [action] on each element and returns the
   /// iterable itself afterwards.
-  Iterable<T> onEach(GenericCallback<T> action) sync* {
+  Iterable<T> onEach(ValueChanged<T> action) sync* {
     if (isBlank) return;
 
     final it = this!.iterator;
@@ -615,7 +617,7 @@ extension IterableGetters<T> on Iterable<T>? {
     return list.take(count).toList();
   }
 
-  /// Returns an [Iterable] containing the first [end] elements of [this],
+  /// Returns an [Iterable] containing the first [end] elements of [Iterable],
   /// excluding the first [start] elements.
   ///
   /// This method is a generalization of [List.getRange] to [Iterable]s,

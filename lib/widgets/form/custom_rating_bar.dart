@@ -381,6 +381,7 @@ class _CustomRatingBarState extends State<CustomRatingBar>
 
 class _RatingClipper extends CustomClipper<Rect> {
   _RatingClipper(this.fillLevel, this.direction);
+
   final double fillLevel;
   final Axis direction;
 

@@ -1,6 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+import '../layout/no_widget.dart';
+
 typedef TypedListViewBuilder<T> = Widget Function(int index, T item);
 
 /// A type-safe ListView that allows for easy customization with headers,
@@ -199,6 +201,7 @@ class TypedListView<E> extends StatelessWidget {
     final paginationOffset = paginationWidget != null ? 1 : 0;
     final separatorCount =
         (separatorBuilder != null && items.length > 1) ? items.length - 1 : 0;
+
     final totalItemCount =
         headerOffset +
         items.length +
@@ -239,6 +242,6 @@ class TypedListView<E> extends StatelessWidget {
     }
 
     // Return an empty widget if index is out of bounds
-    return const SizedBox.shrink();
+    return const NoWidget();
   }
 }

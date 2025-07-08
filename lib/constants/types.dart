@@ -8,14 +8,12 @@ typedef Predicate<T> = bool Function(T value);
 typedef IsEqual<T> = bool Function(T a, T b);
 typedef FutureOrCallback<T> = FutureOr<T> Function();
 
-typedef GenericCallback<T> = void Function(T value);
-
-typedef BoolCallback = GenericCallback<bool>;
-typedef NumCallback = GenericCallback<num>;
-typedef IntCallback = GenericCallback<int>;
-typedef DoubleCallback = GenericCallback<double>;
-typedef StringCallback = GenericCallback<String>;
-typedef ContextCallback = GenericCallback<BuildContext>;
+typedef BoolCallback = ValueChanged<bool>;
+typedef NumCallback = ValueChanged<num>;
+typedef IntCallback = ValueChanged<int>;
+typedef DoubleCallback = ValueChanged<double>;
+typedef StringCallback = ValueChanged<String>;
+typedef ContextCallback = ValueChanged<BuildContext>;
 
 typedef BottomSheetBuilder = Future<T?> Function<T>(Widget child);
 

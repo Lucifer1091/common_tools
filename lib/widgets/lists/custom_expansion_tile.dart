@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart' hide ListTile, ListTileControlAffinity;
+import 'dart:async';
 
-import 'groovin_list_tile.dart';
+import 'package:flutter/material.dart' hide ListTileControlAffinity;
+
+import 'custom_list_tile.dart';
 
 const Duration _kExpand = Duration(milliseconds: 200);
 
@@ -8,14 +10,14 @@ const Duration _kExpand = Duration(milliseconds: 200);
 ///
 /// It allows for customizing the [BoxDecoration] and the border
 /// radius of the [InkWell] of the [ListTile] that the [ExpansionTile] creates.
-class GroovinExpansionTile extends StatefulWidget {
+class CustomExpansionTile extends StatefulWidget {
   /// Creates a [ListTile] with a trailing button that expands or collapses
   /// the tile to reveal or hide the [children]. The [initiallyExpanded] property must
   /// be non-null.
-  const GroovinExpansionTile({
+  const CustomExpansionTile({
+    required this.title,
     super.key,
     this.leading,
-    required this.title,
     this.subtitle,
     this.onExpansionChanged,
     this.children = const <Widget>[],
@@ -32,13 +34,13 @@ class GroovinExpansionTile extends StatefulWidget {
     this.controlAffinity,
     this.defaultTrailingIconColor = Colors.grey,
     this.trailing,
-    this.boxDecoration,
+    this.decoration,
     this.inkwellRadius,
   }) : assert(
-          expandedCrossAxisAlignment != CrossAxisAlignment.baseline,
-          'CrossAxisAlignment.baseline is not supported since the expanded children '
-          'are aligned in a column, not a row. Try to use another constant.',
-        );
+         expandedCrossAxisAlignment != CrossAxisAlignment.baseline,
+         'CrossAxisAlignment.baseline is not supported since the expanded children '
+         'are aligned in a column, not a row. Try to use another constant.',
+       );
 
   /// A widget to display before the title.
   ///
@@ -205,7 +207,7 @@ class GroovinExpansionTile extends StatefulWidget {
   final ListTileControlAffinity? controlAffinity;
 
   /// BoxDecoration for this widget
-  final BoxDecoration? boxDecoration;
+  final BoxDecoration? decoration;
 
   /// Represents the radius of the corners of the InkWell used by GroovinListTile
   final BorderRadius? inkwellRadius;
@@ -214,15 +216,18 @@ class GroovinExpansionTile extends StatefulWidget {
   final Color? defaultTrailingIconColor;
 
   @override
-  State<GroovinExpansionTile> createState() => _GroovinExpansionTileState();
+  State<CustomExpansionTile> createState() => _CustomExpansionTileState();
 }
 
-class _GroovinExpansionTileState extends State<GroovinExpansionTile>
+class _CustomExpansionTileState extends State<CustomExpansionTile>
     with SingleTickerProviderStateMixin {
-  static final Animatable<double> _easeInTween =
-      CurveTween(curve: Curves.easeIn);
-  static final Animatable<double> _halfTween =
-      Tween<double>(begin: 0.0, end: 0.5);
+  static final Animatable<double> _easeInTween = CurveTween(
+    curve: Curves.easeIn,
+  );
+  static final Animatable<double> _halfTween = Tween<double>(
+    begin: 0,
+    end: 0.5,
+  );
 
   final ColorTween _borderColorTween = ColorTween();
   final ColorTween _headerColorTween = ColorTween();
@@ -244,7 +249,8 @@ class _GroovinExpansionTileState extends State<GroovinExpansionTile>
     _iconTurns = _controller.drive(_halfTween.chain(_easeInTween));
     _iconColor = _controller.drive(_iconColorTween.chain(_easeInTween));
 
-    _isExpanded = PageStorage.of(context).readState(context) as bool? ??
+    _isExpanded =
+        PageStorage.of(context).readState(context) as bool? ??
         widget.initiallyExpanded;
     if (_isExpanded) _controller.value = 1.0;
   }
@@ -261,12 +267,14 @@ class _GroovinExpansionTileState extends State<GroovinExpansionTile>
       if (_isExpanded) {
         _controller.forward();
       } else {
-        _controller.reverse().then<void>((void value) {
-          if (!mounted) return;
-          setState(() {
-            // Rebuild without widget.children.
-          });
-        });
+        unawaited(
+          _controller.reverse().then<void>((void value) {
+            if (!mounted) return;
+            setState(() {
+              // Rebuild without widget.children.
+            });
+          }),
+        );
       }
       PageStorage.of(context).writeState(context, _isExpanded);
     });
@@ -275,7 +283,8 @@ class _GroovinExpansionTileState extends State<GroovinExpansionTile>
 
   // Platform or null affinity defaults to trailing.
   ListTileControlAffinity _effectiveAffinity(
-      ListTileControlAffinity? affinity) {
+    ListTileControlAffinity? affinity,
+  ) {
     switch (affinity ?? ListTileControlAffinity.trailing) {
       case ListTileControlAffinity.leading:
         return ListTileControlAffinity.leading;
@@ -294,75 +303,90 @@ class _GroovinExpansionTileState extends State<GroovinExpansionTile>
 
   Widget? _buildLeadingIcon(BuildContext context) {
     if (_effectiveAffinity(widget.controlAffinity) !=
-        ListTileControlAffinity.leading) return null;
+        ListTileControlAffinity.leading) {
+      return null;
+    }
     return _buildIcon(context);
   }
 
   Widget? _buildTrailingIcon(BuildContext context) {
     if (_effectiveAffinity(widget.controlAffinity) !=
-        ListTileControlAffinity.trailing) return null;
+        ListTileControlAffinity.trailing) {
+      return null;
+    }
     return _buildIcon(context);
   }
 
   Widget _buildChildren(BuildContext context, Widget? child) {
-    final ExpansionTileThemeData expansionTileTheme =
-        ExpansionTileTheme.of(context);
-    return Container(
-      decoration: widget.boxDecoration,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          ListTileTheme.merge(
-            iconColor: _iconColor.value ?? expansionTileTheme.iconColor,
-            //textColor: _headerColor.value,
-            child: GroovinListTile(
-              inkwellRadius: widget.inkwellRadius,
-              onTap: _handleTap,
-              contentPadding:
-                  widget.tilePadding ?? expansionTileTheme.tilePadding,
-              leading: widget.leading ?? _buildLeadingIcon(context),
-              title: widget.title,
-              subtitle: widget.subtitle,
-              trailing: widget.trailing ?? _buildTrailingIcon(context),
-            ),
-          ),
-          ClipRect(
-            child: Align(
-              alignment: widget.expandedAlignment ??
-                  expansionTileTheme.expandedAlignment ??
-                  Alignment.center,
-              heightFactor: _heightFactor.value,
-              child: child,
-            ),
-          ),
-        ],
-      ),
+    final ExpansionTileThemeData expansionTileTheme = ExpansionTileTheme.of(
+      context,
     );
+    final column = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        ListTileTheme.merge(
+          iconColor: _iconColor.value ?? expansionTileTheme.iconColor,
+          //textColor: _headerColor.value,
+          child: CustomListTile(
+            inkwellRadius: widget.inkwellRadius,
+            onTap: _handleTap,
+            contentPadding:
+                widget.tilePadding ?? expansionTileTheme.tilePadding,
+            leading: widget.leading ?? _buildLeadingIcon(context),
+            title: widget.title,
+            subtitle: widget.subtitle,
+            trailing: widget.trailing ?? _buildTrailingIcon(context),
+          ),
+        ),
+        ClipRect(
+          child: Align(
+            alignment:
+                widget.expandedAlignment ??
+                expansionTileTheme.expandedAlignment ??
+                Alignment.center,
+            heightFactor: _heightFactor.value,
+            child: child,
+          ),
+        ),
+      ],
+    );
+
+    if (widget.decoration != null) {
+      return DecoratedBox(decoration: widget.decoration!, child: column);
+    }
+
+    return column;
   }
 
   @override
   void didChangeDependencies() {
     final ThemeData theme = Theme.of(context);
-    final ExpansionTileThemeData expansionTileTheme =
-        ExpansionTileTheme.of(context);
+    final ExpansionTileThemeData expansionTileTheme = ExpansionTileTheme.of(
+      context,
+    );
     final ColorScheme colorScheme = theme.colorScheme;
     _borderColorTween.end = theme.dividerColor;
     _headerColorTween
-      ..begin = widget.collapsedTextColor ??
+      ..begin =
+          widget.collapsedTextColor ??
           expansionTileTheme.collapsedTextColor ??
           theme.textTheme.titleMedium!.color
-      ..end = widget.textColor ??
+      ..end =
+          widget.textColor ??
           expansionTileTheme.textColor ??
           colorScheme.primary;
     _iconColorTween
-      ..begin = widget.defaultTrailingIconColor ??
+      ..begin =
+          widget.defaultTrailingIconColor ??
           expansionTileTheme.collapsedIconColor ??
           theme.unselectedWidgetColor
-      ..end = widget.defaultTrailingIconColor ??
+      ..end =
+          widget.defaultTrailingIconColor ??
           expansionTileTheme.iconColor ??
           colorScheme.primary;
     _backgroundColorTween
-      ..begin = widget.collapsedBackgroundColor ??
+      ..begin =
+          widget.collapsedBackgroundColor ??
           expansionTileTheme.collapsedBackgroundColor
       ..end = widget.backgroundColor ?? expansionTileTheme.backgroundColor;
     super.didChangeDependencies();
@@ -370,8 +394,9 @@ class _GroovinExpansionTileState extends State<GroovinExpansionTile>
 
   @override
   Widget build(BuildContext context) {
-    final ExpansionTileThemeData expansionTileTheme =
-        ExpansionTileTheme.of(context);
+    final ExpansionTileThemeData expansionTileTheme = ExpansionTileTheme.of(
+      context,
+    );
     final bool closed = !_isExpanded && _controller.isDismissed;
     final bool shouldRemoveChildren = closed && !widget.maintainState;
 
@@ -380,7 +405,8 @@ class _GroovinExpansionTileState extends State<GroovinExpansionTile>
       child: TickerMode(
         enabled: !closed,
         child: Padding(
-          padding: widget.childrenPadding ??
+          padding:
+              widget.childrenPadding ??
               expansionTileTheme.childrenPadding ??
               EdgeInsets.zero,
           child: Column(

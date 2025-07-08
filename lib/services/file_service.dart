@@ -5,7 +5,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as p;
 
 import '../common_tools.dart';
-import '../widgets/layout/responsive.dart';
 
 class FileService {
   FileService._();
@@ -43,7 +42,7 @@ class FileService {
       } else {
         // For Windows / MacOs / Linux
 
-        FilePickerResult? result = await FilePicker.platform.pickFiles(
+        final FilePickerResult? result = await FilePicker.platform.pickFiles(
           type: FileType.custom,
           allowedExtensions: ['jpg', 'jpeg', 'png'],
         );
@@ -65,7 +64,7 @@ class FileService {
     List<String>? allowedExtensions,
   }) async {
     try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
+      final FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions:
             allowedExtensions ??
@@ -85,7 +84,7 @@ class FileService {
 
       if (result == null) return null;
 
-      String? fileExt = result.files.single.extension?.toLowerCase();
+      final String? fileExt = result.files.single.extension?.toLowerCase();
 
       if (fileExt == 'jpg' ||
           fileExt == 'jpeg' ||
@@ -137,7 +136,7 @@ class FileService {
       } else {
         // For Windows / MacOs / Linux
 
-        FilePickerResult? result = await FilePicker.platform.pickFiles(
+        final FilePickerResult? result = await FilePicker.platform.pickFiles(
           type: FileType.image,
           allowMultiple: true,
         );
@@ -159,7 +158,7 @@ class FileService {
     List<String>? allowedExtensions,
   }) async {
     try {
-      List<String> fileExtensions = [
+      final List<String> fileExtensions = [
         'jpg',
         'jpeg',
         'png',
@@ -176,7 +175,7 @@ class FileService {
         'mp4',
       ];
 
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
+      final FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowMultiple: true,
         allowedExtensions: allowedExtensions ?? fileExtensions,
@@ -185,7 +184,7 @@ class FileService {
       if (result == null) return null;
 
       for (final PlatformFile file in result.files) {
-        String? fileExt = file.extension?.toLowerCase();
+        final String? fileExt = file.extension?.toLowerCase();
 
         if (!fileExtensions.contains(fileExt)) {
           SnackBars.error(title: 'Invalid File Format.');
@@ -193,7 +192,7 @@ class FileService {
         }
       }
 
-      List<XFile> files = [];
+      final List<XFile> files = [];
 
       if (PlatformChecker.isWeb) {
         for (final PlatformFile file in result.files) {

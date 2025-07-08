@@ -30,13 +30,13 @@ class OptimizedCard extends StatefulWidget {
     this.onPressed,
   });
 
-  //Width of the card.
+  // Width of the card.
   final double? width;
 
-  //Height of the card.
+  // Height of the card.
   final double? height;
 
-  //Padding of the card.
+  // Padding of the card.
   final EdgeInsetsGeometry? padding;
 
   /// The card's background color.

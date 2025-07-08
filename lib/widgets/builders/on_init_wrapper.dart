@@ -2,6 +2,11 @@ import 'package:flutter/widgets.dart';
 
 /// Allows to wrap any stateless widget that needs to execute a one time
 /// command on init.
+/// OnInitWrapper is a handy utility for simple, one-time effects in otherwise
+/// stateless widget trees.
+/// It is a good practice for small, isolated side effects, but not a
+/// replacement for proper state management or lifecycle handling in complex widgets.
+///
 class OnInitWrapper extends StatefulWidget {
   /// Allows to wrap any stateless widget that needs to execute a one time
   /// command on init.

@@ -74,27 +74,3 @@ class GradientWidget extends StatelessWidget {
     );
   }
 }
-
-class GradientText extends StatelessWidget {
-  const GradientText({
-    required this.textWidget,
-    required this.gradient,
-    super.key,
-  });
-
-  GradientText.colors({
-    required this.textWidget,
-    required List<Color> colors,
-    super.key,
-    AlignmentGeometry begin = Alignment.centerLeft,
-    AlignmentGeometry end = Alignment.centerRight,
-  }) : gradient = LinearGradient(colors: colors, begin: begin, end: end);
-
-  final Text textWidget;
-  final Gradient gradient;
-
-  @override
-  Widget build(BuildContext context) {
-    return ShaderMask(shaderCallback: gradient.createShader, child: textWidget);
-  }
-}
