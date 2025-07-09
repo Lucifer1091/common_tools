@@ -29,3 +29,27 @@ class DismissKeyboard extends StatelessWidget {
     );
   }
 }
+
+/// Example usage:
+///
+/// ```dart
+/// return Navigator(
+///   key: Get.nestedKey(AppStrings.GET_NESTED_KEY_1),
+///   onGenerateRoute: AppPages.onGenerateRoute,
+///   initialRoute: _initialRouteName,
+///   observers: [KeyboardDismissalNavigatorObserver()],
+/// );
+/// ```
+class KeyboardDismissalNavigatorObserver extends NavigatorObserver {
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    FocusManager.instance.primaryFocus?.unfocus();
+    super.didPush(route, previousRoute);
+  }
+
+  @override
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    FocusManager.instance.primaryFocus?.unfocus();
+    super.didPop(route, previousRoute);
+  }
+}

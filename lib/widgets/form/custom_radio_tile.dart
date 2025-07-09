@@ -59,7 +59,7 @@ class CustomRadioTile<T> extends StatelessWidget {
       scale: radioScaleFactor,
       child: Radio<T>(
         value: value,
-        fillColor: MaterialStateColor.resolveWith(
+        fillColor: WidgetStateColor.resolveWith(
           (states) => color ?? Colors.black,
         ),
         groupValue: selected,

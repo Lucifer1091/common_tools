@@ -27,6 +27,7 @@ dependencies:
 
   #--- Http packages ---#
   dio: ^5.8.0+1
+  url_launcher: ^6.3.1
 
   #--- Hardware packages ---#
   local_auth: ^2.3.0 # biometric authentication

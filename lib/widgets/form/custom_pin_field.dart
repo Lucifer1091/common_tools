@@ -1,4 +1,3 @@
-import 'package:common_tools/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pinput/pinput.dart';
@@ -8,6 +7,27 @@ import '../layout/spaces.dart';
 import 'text_form_field.dart';
 
 class CustomPinField extends StatelessWidget {
+  const CustomPinField({
+    required this.controller,
+    super.key,
+    this.onCompleted,
+    this.onSubmitted,
+    this.isRequired = false,
+    this.textInputAction,
+    this.title,
+    this.titleStyle,
+    this.height,
+    this.width,
+    this.textStyle,
+    this.length,
+    this.margin,
+    this.radius,
+    this.focusNode,
+    this.onChanged,
+    this.errorMsg,
+    this.errorTextStyle,
+  });
+
   final TextEditingController controller;
   final void Function(String)? onCompleted;
   final void Function(String)? onSubmitted;
@@ -28,34 +48,14 @@ class CustomPinField extends StatelessWidget {
   final String? errorMsg;
   final TextStyle? errorTextStyle;
 
-  const CustomPinField({
-    super.key,
-    required this.controller,
-    this.onCompleted,
-    this.onSubmitted,
-    this.isRequired = false,
-    this.textInputAction,
-    this.title,
-    this.titleStyle,
-    this.height,
-    this.width,
-    this.textStyle,
-    this.length,
-    this.margin,
-    this.radius,
-    this.focusNode,
-    this.onChanged,
-    this.errorMsg,
-    this.errorTextStyle,
-  });
-
   @override
   Widget build(BuildContext context) {
     final defaultPinTheme = PinTheme(
       height: height ?? 100,
       width: width ?? 90,
       margin: margin ?? const EdgeInsets.symmetric(horizontal: 8 / 2),
-      textStyle: textStyle ??
+      textStyle:
+          textStyle ??
           TextStyle(
             fontSize: context.headlineMedium?.fontSize!,
             color: Colors.black,
@@ -88,10 +88,9 @@ class CustomPinField extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Text(
               title ?? '',
-              style: titleStyle ??
-                  context.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
+              style:
+                  titleStyle ??
+                  context.titleMedium?.copyWith(fontWeight: FontWeight.w500),
             ),
           ),
           const Space.h16(),
@@ -102,17 +101,15 @@ class CustomPinField extends StatelessWidget {
           defaultPinTheme: defaultPinTheme,
           focusedPinTheme: focusedPinTheme,
           submittedPinTheme: submittedPinTheme,
-          pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
-          showCursor: true,
           cursor: Text(
             '|',
-            style: textStyle ??
+            style:
+                textStyle ??
                 context.headlineMedium?.copyWith(fontWeight: FontWeight.w300),
           ),
           onCompleted: onCompleted,
           onSubmitted: onSubmitted,
           closeKeyboardWhenCompleted: false,
-          readOnly: false,
           textInputAction: textInputAction,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           errorTextStyle: errorTextStyle,

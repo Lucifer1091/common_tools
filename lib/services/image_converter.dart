@@ -1,10 +1,12 @@
-import 'dart:io';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:image_picker/image_picker.dart';
 
 class ImageConverter {
+  ImageConverter._();
+
   static Future<String> toBase64String(Object object) async {
     switch (object) {
       case == XFile:

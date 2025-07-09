@@ -1,8 +1,10 @@
 import 'package:flutter/services.dart';
-import 'package:local_auth/local_auth.dart';
 import 'package:local_auth/error_codes.dart' as auth_error;
+import 'package:local_auth/local_auth.dart';
 
 class Biometric {
+  Biometric._();
+
   static final _auth = LocalAuthentication();
 
   static Future<bool> get isSupported async {

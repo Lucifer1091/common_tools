@@ -500,6 +500,22 @@ extension ListExtension2<T> on List<T> {
     this[indexA] = this[indexB];
     this[indexB] = temp;
   }
+
+  /// Replaces the first element in the list that matches the [predicate]
+  /// with the [newElement]. If no matching element is found, no replacement occurs.
+  void replaceWhere(
+    bool Function(T element) predicate, {
+    T? newElement,
+    T Function(T)? replaceWith,
+  }) {
+    if (newElement == null && replaceWith == null) return;
+
+    final index = indexWhere(predicate);
+
+    if (index != -1) {
+      this[index] = replaceWith?.call(this[index]) ?? newElement!;
+    }
+  }
 }
 
 extension IterableSanitizers<T> on Iterable<T>? {
