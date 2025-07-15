@@ -1,13 +1,6 @@
 import 'package:dio/dio.dart';
 
-import '../../exports/index.dart';
-
-class ApiException implements Exception {
-  final String url;
-  final String message;
-  final int? statusCode;
-  final Response? response;
-
+class ApiException<T> implements Exception {
   ApiException({
     required this.url,
     required this.message,
@@ -15,12 +8,17 @@ class ApiException implements Exception {
     this.statusCode,
   });
 
+  final String url;
+  final String message;
+  final int? statusCode;
+  final Response<T>? response;
+
   /// IMPORTANT NOTE
   /// here you can take advantage of toString() method to display the error for user
   /// lets make an example
   /// so in onError method when you make api you can just user apiExceptionInstance.toString() to get the error message from api
   @override
-  toString() {
-    return message.isNotEmpty ? message : AppStrings.SOMETHING_WENT_WRONG;
+  String toString() {
+    return message.isNotEmpty ? message : 'AppStrings.SOMETHING_WENT_WRONG';
   }
 }

@@ -38,22 +38,22 @@ Future<void> main() async {
   log.f(iterable.variance());
 }
 
-class User {
-  User({required this.name, required this.age, required this.scores});
+// class User {
+//   User({required this.name, required this.age, required this.scores});
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      name: json.getString('name', value: 'Unknown'),
-      age: json.getInt('age', value: 0),
-      scores: json.getList<int>('scores', value: [0]),
-    );
-  }
+//   factory User.fromJson(Map<String, dynamic> json) {
+//     return User(
+//       name: json.getString('name', value: 'Unknown'),
+//       age: json.getInt('age', value: 0),
+//       scores: json.getList<int>('scores', value: [0]),
+//     );
+//   }
 
-  Map<String, dynamic> toJson() {
-    return {'name': name, 'age': age, 'scores': scores};
-  }
+//   Map<String, dynamic> toJson() {
+//     return {'name': name, 'age': age, 'scores': scores};
+//   }
 
-  final String name;
-  final int age;
-  final List<int> scores;
-}
+//   final String name;
+//   final int age;
+//   final List<int> scores;
+// }

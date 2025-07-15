@@ -25,4 +25,9 @@ class TextEditController extends TextEditingController {
   void append(String input) => text = '$text$input';
 
   void appendNewLine(String input) => text = '$text\n$input';
+
+  /// Select all the [text]
+  void selectAll() {
+    selection = TextSelection(baseOffset: 0, extentOffset: text.length);
+  }
 }

@@ -22,6 +22,27 @@ typedef Formatters = List<TextInputFormatter>;
 class InputFormat {
   InputFormat._();
 
+  static final percentage = <TextInputFormatter>[
+    // Replace comma with a period to ensure decimal consistency
+    FilteringTextInputFormatter.deny(',', replacementString: '.'),
+
+    // Allow numbers between 0 and 100 with up to two decimal places
+    TextInputFormatter.withFunction((oldValue, newValue) {
+      final text = newValue.text;
+
+      // Allow empty input
+      if (text.isEmpty) return newValue;
+
+      // Validate numbers between 0 and 100 with up to two decimal places
+      final regex = RegExp(r'^100$|^100\.0{0,2}$|^\d{1,2}(\.\d{0,2})?$');
+
+      if (regex.hasMatch(text)) return newValue;
+
+      // If invalid, return the old value
+      return oldValue;
+    }),
+  ];
+
   /// Returns a list of [TextInputFormatter] that allows only numeric input.
   ///
   /// The [max] parameter specifies the maximum length of the input.
@@ -31,12 +52,12 @@ class InputFormat {
   /// inputFormatters: InputFormat.number(max: 8);
   /// ```
   static List<TextInputFormatter> number({int max = 8}) => <TextInputFormatter>[
-        FilteringTextInputFormatter.digitsOnly,
-        LengthLimitingTextInputFormatter(
-          max,
-          maxLengthEnforcement: MaxLengthEnforcement.enforced,
-        ),
-      ];
+    FilteringTextInputFormatter.digitsOnly,
+    LengthLimitingTextInputFormatter(
+      max,
+      maxLengthEnforcement: MaxLengthEnforcement.enforced,
+    ),
+  ];
 
   /// Returns a list of [TextInputFormatter] that allows only decimal input.
   ///
@@ -69,7 +90,11 @@ class InputFormat {
       <TextInputFormatter>[
         FilteringTextInputFormatter.deny(',', replacementString: '.'),
         FilteringTextInputFormatter.allow(
-          RegExp(r'(^\d*\.?\d{0,' '$dp' '}\$)'),
+          RegExp(
+            r'(^\d*\.?\d{0,'
+            '$dp'
+            '}\$)',
+          ),
         ),
         LengthLimitingTextInputFormatter(
           max,
@@ -90,7 +115,11 @@ class InputFormat {
       <TextInputFormatter>[
         FilteringTextInputFormatter.deny(',', replacementString: '.'),
         FilteringTextInputFormatter.allow(
-          RegExp(r'^[-+]?\d*\.?\d{0,' '$dp' '}\$)'),
+          RegExp(
+            r'^[-+]?\d*\.?\d{0,'
+            '$dp'
+            '}\$)',
+          ),
         ),
         LengthLimitingTextInputFormatter(
           max,
@@ -230,10 +259,14 @@ class NoLeadingSpaceFormatter extends TextInputFormatter {
       return TextEditingValue(
         text: trimmedText,
         selection: newValue.selection.copyWith(
-          baseOffset:
-              math.min(trimmedText.length, newValue.selection.baseOffset),
-          extentOffset:
-              math.min(trimmedText.length, newValue.selection.extentOffset),
+          baseOffset: math.min(
+            trimmedText.length,
+            newValue.selection.baseOffset,
+          ),
+          extentOffset: math.min(
+            trimmedText.length,
+            newValue.selection.extentOffset,
+          ),
         ),
       );
     }
@@ -298,7 +331,9 @@ class NoSpaceFormatter extends TextInputFormatter {
 class IpAddressInputFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     var text = newValue.text;
 
     if (newValue.selection.baseOffset == 0) {
@@ -346,7 +381,8 @@ class IpAddressInputFormatter extends TextInputFormatter {
 
     var string = buffer.toString();
     return newValue.copyWith(
-        text: string,
-        selection: TextSelection.collapsed(offset: string.length));
+      text: string,
+      selection: TextSelection.collapsed(offset: string.length),
+    );
   }
 }

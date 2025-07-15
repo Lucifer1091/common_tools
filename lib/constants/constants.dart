@@ -11,5 +11,6 @@ import '../extensions/index.dart';
 
 part 'input_formatters.dart';
 part 'regex.dart';
+part 'theme_colors.dart';
 part 'types.dart';
 part 'validators.dart';

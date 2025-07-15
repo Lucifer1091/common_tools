@@ -469,7 +469,7 @@ extension IterableGetters<T> on Iterable<T>? {
   /// final first = list.elementAtOrNull(0); // 1
   /// final fifth = list.elementAtOrNull(4); // null
   /// ```
-  T? elementAtOrNull(int index) {
+  T? getOrNull(int index) {
     if (isBlank || index < 0) return null;
 
     final iterator = this!.iterator;
@@ -490,7 +490,7 @@ extension IterableGetters<T> on Iterable<T>? {
   /// final first = list.elementAtOrDefault(0, -1); // 1
   /// final fifth = list.elementAtOrDefault(4, -1); // -1
   /// ```
-  T elementAtOr(int index, T value) => elementAtOrElse(index, (_) => value);
+  T getOr(int index, T value) => getOrElse(index, (_) => value);
 
   /// Returns an element at the given [index] or the result of calling the
   /// [orElse] function if the [index] is out of bounds of this
@@ -501,8 +501,8 @@ extension IterableGetters<T> on Iterable<T>? {
   /// final first = list.elementAtOrElse(0); // 1
   /// final fifth = list.elementAtOrElse(4, -1); // -1
   /// ```
-  T elementAtOrElse(int index, Transformer<int, T> orElse) {
-    return elementAtOrNull(index) ?? orElse(index);
+  T getOrElse(int index, Transformer<int, T> orElse) {
+    return getOrNull(index) ?? orElse(index);
   }
 
   /// First element or `null` if the collection is empty.

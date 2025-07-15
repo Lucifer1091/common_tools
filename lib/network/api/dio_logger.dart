@@ -3,8 +3,9 @@ import 'dart:developer' as dev;
 import 'dart:math' as math;
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
-import '../../exports/index.dart' hide FormData;
+import 'isolate_parser.dart';
 
 enum LogColor { none, black, red, green, yellow, blue, magenta, cyan, white }
 
@@ -24,6 +25,23 @@ const _prefix = 'dio_logger';
 const _startTimeKey = '$_prefix@start_time';
 
 class DioLogger extends Interceptor {
+  DioLogger({
+    this.request = true,
+    this.requestHeader = false,
+    this.requestBody = false,
+    this.responseHeader = false,
+    this.responseBody = true,
+    this.error = true,
+    this.maxWidth = 90,
+    this.compact = true,
+    this.logPrint = print,
+    this.requestColor = LogColor.yellow,
+    this.responseColor = LogColor.green,
+    this.errorColor = LogColor.red,
+    this.logType = LogType.none,
+    this.showTimeInMs = false,
+  });
+
   /// Print request [Options]
   final bool request;
 
@@ -79,23 +97,6 @@ class DioLogger extends Interceptor {
 
   final JsonEncoder _encoder = const JsonEncoder.withIndent('\t');
 
-  DioLogger({
-    this.request = true,
-    this.requestHeader = false,
-    this.requestBody = false,
-    this.responseHeader = false,
-    this.responseBody = true,
-    this.error = true,
-    this.maxWidth = 90,
-    this.compact = true,
-    this.logPrint = print,
-    this.requestColor = LogColor.yellow,
-    this.responseColor = LogColor.green,
-    this.errorColor = LogColor.red,
-    this.logType = LogType.none,
-    this.showTimeInMs = false,
-  });
-
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     if (request && logType != LogType.mini) {
@@ -107,8 +108,7 @@ class DioLogger extends Interceptor {
         header: 'Query Parameters',
         color: requestColor,
       );
-      final requestHeaders = <String, dynamic>{};
-      requestHeaders.addAll(options.headers);
+      final requestHeaders = <String, dynamic>{}..addAll(options.headers);
       requestHeaders['contentType'] = options.contentType?.toString();
       requestHeaders['responseType'] = options.responseType.toString();
       requestHeaders['followRedirects'] = options.followRedirects;
@@ -129,11 +129,12 @@ class DioLogger extends Interceptor {
         }
 
         if (data is FormData) {
-          final formDataMap = <String, dynamic>{}
-            ..addEntries(data.fields)
-            ..addEntries(data.files);
+          final formDataMap =
+              <String, dynamic>{}
+                ..addEntries(data.fields)
+                ..addEntries(data.files);
 
-          Map result = {};
+          final Map result = {};
 
           formDataMap.forEach((key, value) {
             dynamic temp;
@@ -167,13 +168,14 @@ class DioLogger extends Interceptor {
       if (err.type == DioExceptionType.badResponse) {
         final uri = err.response?.requestOptions.uri;
         _printBoxed(
-          header: 'DioError ║ Status: ${err.response?.statusCode} '
+          header:
+              'DioError ║ Status: ${err.response?.statusCode} '
               '${err.response?.statusMessage}',
           text: uri.toString(),
           color: errorColor,
         );
         if (err.response != null && err.response?.data != null) {
-          _logPrint('╔ ${err.type.toString()}', color: errorColor);
+          _logPrint('╔ ${err.type}', color: errorColor);
           _printResponse(err.response!, color: errorColor);
         }
         _printLine('╚', '╝', errorColor);
@@ -191,12 +193,15 @@ class DioLogger extends Interceptor {
 
   @override
   Future<void> onResponse(
-      Response response, ResponseInterceptorHandler handler) async {
+    Response response,
+    ResponseInterceptorHandler handler,
+  ) async {
     _printResponseHeader(response);
     if (responseHeader && logType != LogType.mini) {
       final responseHeaders = <String, String>{};
-      response.headers
-          .forEach((k, list) => responseHeaders[k] = list.toString());
+      response.headers.forEach(
+        (k, list) => responseHeaders[k] = list.toString(),
+      );
       _printMapAsTable(responseHeaders, header: 'Headers');
     }
 
@@ -204,7 +209,7 @@ class DioLogger extends Interceptor {
       if (logType == LogType.simple) {
         _logBlock(isBegin: true, type: ' Body ', pre: '\n');
 
-        String json = _encoder.convert(response.data);
+        final String json = _encoder.convert(response.data);
         dev.log('\n$json');
 
         _logBlock(isBegin: false, pre: '\n');
@@ -214,7 +219,7 @@ class DioLogger extends Interceptor {
 
         // This will print in different thread to avoid UI lagging
         if (!kIsWeb) {
-          final isolateParse = VoidIsolateParser(
+          final isolateParse = IsolateParser(
             run: () => _printResponse(response),
           );
           await isolateParse.parseInBackground();
@@ -262,13 +267,15 @@ class DioLogger extends Interceptor {
   void _printResponseHeader(Response response, {LogColor? color}) {
     final uri = response.requestOptions.uri;
     final method = response.requestOptions.method;
-    final diff = DateTime.now().millisecondsSinceEpoch -
-        response.requestOptions.extra[_startTimeKey];
+    final diff =
+        DateTime.now().millisecondsSinceEpoch -
+        (response.requestOptions.extra[_startTimeKey] as num);
 
     final time = showTimeInMs ? '$diff ms' : '${diff / 1000} s';
 
     _printBoxed(
-      header: 'Response ║ $method '
+      header:
+          'Response ║ $method '
           '║ Status: ${response.statusCode} ${response.statusMessage} ║ '
           'Time : $time',
       text: uri.toString(),
@@ -332,58 +339,53 @@ class DioLogger extends Interceptor {
 
     if (isRoot || isListItem) _logPrint('║$initialIndent{', color: color);
 
-    data.keys.toList().asMap().forEach(
-      (index, dynamic key) {
-        final isLast = index == data.length - 1;
-        dynamic value = data[key];
-        if (value is String) {
-          value = '"${value.toString().replaceAll(RegExp(r'([\r\n])+'), " ")}"';
+    data.keys.toList().asMap().forEach((index, key) {
+      final isLast = index == data.length - 1;
+      dynamic value = data[key];
+      if (value is String) {
+        value = '"${value.toString().replaceAll(RegExp(r'([\r\n])+'), " ")}"';
+      }
+      if (value is Map) {
+        if (compact && _canFlattenMap(value)) {
+          _logPrint(
+            '║${_indent(tabs)} $key: $value${!isLast ? ',' : ''}',
+            color: color,
+          );
+        } else {
+          _logPrint('║${_indent(tabs)} $key: {', color: color);
+          _printPrettyMap(value, initialTab: tabs, color: color);
         }
-        if (value is Map) {
-          if (compact && _canFlattenMap(value)) {
+      } else if (value is List) {
+        if (compact && _canFlattenList(value)) {
+          _logPrint(
+            '║${_indent(tabs)} $key: ${value.toString()}',
+            color: color,
+          );
+        } else {
+          _logPrint('║${_indent(tabs)} $key: [', color: color);
+          _printList(value, tabs: tabs, color: color);
+          _logPrint('║${_indent(tabs)} ]${isLast ? '' : ','}', color: color);
+        }
+      } else {
+        final msg = value.toString().replaceAll('\n', '');
+        final indent = _indent(tabs);
+        final linWidth = maxWidth - indent.length;
+        if (msg.length + indent.length > linWidth) {
+          final lines = (msg.length / linWidth).ceil();
+          for (var i = 0; i < lines; ++i) {
             _logPrint(
-              '║${_indent(tabs)} $key: $value${!isLast ? ',' : ''}',
+              '║${_indent(tabs)} ${msg.substring(i * linWidth, math.min<int>(i * linWidth + linWidth, msg.length))}',
               color: color,
             );
-          } else {
-            _logPrint('║${_indent(tabs)} $key: {', color: color);
-            _printPrettyMap(value, initialTab: tabs, color: color);
-          }
-        } else if (value is List) {
-          if (compact && _canFlattenList(value)) {
-            _logPrint(
-              '║${_indent(tabs)} $key: ${value.toString()}',
-              color: color,
-            );
-          } else {
-            _logPrint('║${_indent(tabs)} $key: [', color: color);
-            _printList(value, tabs: tabs, color: color);
-            _logPrint('║${_indent(tabs)} ]${isLast ? '' : ','}', color: color);
           }
         } else {
-          final msg = value.toString().replaceAll('\n', '');
-          final indent = _indent(tabs);
-          final linWidth = maxWidth - indent.length;
-          if (msg.length + indent.length > linWidth) {
-            final lines = (msg.length / linWidth).ceil();
-            for (var i = 0; i < lines; ++i) {
-              _logPrint(
-                '║${_indent(tabs)} ${msg.substring(
-                  i * linWidth,
-                  math.min<int>(i * linWidth + linWidth, msg.length),
-                )}',
-                color: color,
-              );
-            }
-          } else {
-            _logPrint(
-              '║${_indent(tabs)} $key: $msg${!isLast ? ',' : ''}',
-              color: color,
-            );
-          }
+          _logPrint(
+            '║${_indent(tabs)} $key: $msg${!isLast ? ',' : ''}',
+            color: color,
+          );
         }
-      },
-    );
+      }
+    });
 
     _logPrint(
       '║$initialIndent}${isListItem && !isLast ? ',' : ''}',
@@ -392,32 +394,24 @@ class DioLogger extends Interceptor {
   }
 
   void _printList(List list, {int tabs = kInitialTab, LogColor? color}) {
-    list.asMap().forEach(
-      (i, dynamic e) {
-        final isLast = i == list.length - 1;
-        if (e is Map) {
-          if (compact && _canFlattenMap(e)) {
-            _logPrint(
-              '║${_indent(tabs)}  $e${!isLast ? ',' : ''}',
-              color: color,
-            );
-          } else {
-            _printPrettyMap(
-              e,
-              initialTab: tabs + 1,
-              isListItem: true,
-              isLast: isLast,
-              color: color,
-            );
-          }
+    list.asMap().forEach((i, e) {
+      final isLast = i == list.length - 1;
+      if (e is Map) {
+        if (compact && _canFlattenMap(e)) {
+          _logPrint('║${_indent(tabs)}  $e${!isLast ? ',' : ''}', color: color);
         } else {
-          _logPrint(
-            '║${_indent(tabs + 2)} $e${isLast ? '' : ','}',
+          _printPrettyMap(
+            e,
+            initialTab: tabs + 1,
+            isListItem: true,
+            isLast: isLast,
             color: color,
           );
         }
-      },
-    );
+      } else {
+        _logPrint('║${_indent(tabs + 2)} $e${isLast ? '' : ','}', color: color);
+      }
+    });
   }
 
   void _printUint8List(
@@ -425,7 +419,7 @@ class DioLogger extends Interceptor {
     int tabs = kInitialTab,
     LogColor? color,
   }) {
-    var chunks = [];
+    final chunks = [];
     for (var i = 0; i < list.length; i += chunkSize) {
       chunks.add(
         list.sublist(
@@ -440,9 +434,7 @@ class DioLogger extends Interceptor {
   }
 
   bool _canFlattenMap(Map map) {
-    return map.values
-            .where((dynamic val) => val is Map || val is List)
-            .isEmpty &&
+    return map.values.where((val) => val is Map || val is List).isEmpty &&
         map.toString().length < maxWidth;
   }
 
@@ -453,17 +445,15 @@ class DioLogger extends Interceptor {
   void _printMapAsTable(Map? map, {String? header, LogColor? color}) {
     if (map == null || map.isEmpty) return;
     _logPrint('╔ $header ', color: color);
-    map.forEach(
-      (dynamic key, dynamic value) {
-        _printKV(key.toString(), value, color: color);
-      },
-    );
+    map.forEach((key, value) {
+      _printKV(key.toString(), value, color: color);
+    });
     _printLine('╚', '╝', color);
   }
 
-  Future<void> _logPrint(Object object, {LogColor? color}) async {
+  void _logPrint(Object object, {LogColor? color}) {
     /// log color code
-    String? logColor = switch (color ?? responseColor) {
+    final String logColor = switch (color ?? responseColor) {
       LogColor.black => '\x1B[30m',
       LogColor.red => '\x1B[31m',
       LogColor.green => '\x1B[32m',
@@ -475,6 +465,6 @@ class DioLogger extends Interceptor {
       LogColor.none || _ => '',
     };
 
-    logPrint('$logColor$object${(logColor).isEmpty ? '' : '\x1B[0m'}');
+    logPrint('$logColor$object${logColor.isEmpty ? '' : '\x1B[0m'}');
   }
 }

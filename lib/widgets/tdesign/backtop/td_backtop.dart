@@ -1,0 +1,176 @@
+import 'dart:async';
+import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
+
+import 'package:flutter/material.dart';
+
+import '../text/td_text.dart';
+
+enum TDBackTopTheme { light, dark }
+
+enum TDBackTopStyle { circle, halfCircle }
+
+class TDBackTop extends StatefulWidget {
+  const TDBackTop({
+    super.key,
+    this.controller,
+    this.theme = TDBackTopTheme.light,
+    this.style = TDBackTopStyle.circle,
+    this.showText = false,
+    this.onTap,
+  });
+
+  final ScrollController? controller;
+
+  final TDBackTopTheme theme;
+
+  final TDBackTopStyle style;
+
+  final bool showText;
+
+  final VoidCallback? onTap;
+
+  @override
+  State<TDBackTop> createState() => _TDBackTopState();
+}
+
+class _TDBackTopState extends State<TDBackTop> {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        if (widget.controller != null && widget.controller!.hasClients) {
+          unawaited(
+            widget.controller!.animateTo(
+              0,
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeIn,
+            ),
+          );
+        }
+
+        widget.onTap?.call();
+      },
+      child:
+          widget.style == TDBackTopStyle.circle
+              ? _buildCircleWidget(context)
+              : _buildHalfCircleWidget(context),
+    );
+  }
+
+  Widget _buildCircleWidget(BuildContext context) {
+    var color =
+        widget.theme == TDBackTopTheme.dark
+            ? Colors.white
+            : const Color.fromRGBO(0, 0, 0, 0.9);
+
+    return Container(
+      width: 48,
+      height: 48,
+      padding: EdgeInsets.symmetric(vertical: widget.showText ? 6 : 13),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(
+          color:
+              widget.theme == TDBackTopTheme.dark
+                  ? TDTheme.of(context).grayColor14
+                  : TDTheme.of(context).grayColor4,
+          width: 0.5,
+        ),
+        color:
+            widget.theme == TDBackTopTheme.light
+                ? Colors.white
+                : TDTheme.of(context).grayColor14,
+      ),
+      child: Center(
+        child: Column(
+          children: [
+            Icon(TDIcons.backtop, size: 20, color: color),
+            Visibility(
+              visible: widget.showText,
+              child: TDText(
+                context.resource.top,
+                maxLines: 1,
+                overflow: TextOverflow.visible,
+                style: TextStyle(
+                  fontSize: 10,
+                  color: color,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHalfCircleWidget(BuildContext context) {
+    var color =
+        widget.theme == TDBackTopTheme.dark
+            ? Colors.white
+            : const Color.fromRGBO(0, 0, 0, 0.9);
+
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minWidth: 38),
+      child: Container(
+        height: 40,
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        decoration: BoxDecoration(
+          color:
+              widget.theme == TDBackTopTheme.light
+                  ? Colors.white
+                  : TDTheme.of(context).grayColor14,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(999),
+            bottomLeft: Radius.circular(999),
+          ),
+          border: Border.all(
+            color:
+                widget.theme == TDBackTopTheme.dark
+                    ? Color.fromRGBO(94, 94, 94, 1)
+                    : Color.fromRGBO(220, 220, 220, 1),
+            width: 0.5,
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(TDIcons.backtop, size: 22, color: color),
+            const SizedBox(width: 2),
+            Visibility(
+              visible: widget.showText,
+              child: SizedBox(
+                height: 32,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TDText(
+                      context.resource.back,
+                      style: TextStyle(
+                        height: 1.2,
+                        fontSize: 10,
+                        color: color,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    TDText(
+                      context.resource.top,
+                      style: TextStyle(
+                        height: 1.2,
+                        fontSize: 10,
+                        color: color,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

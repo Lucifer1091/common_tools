@@ -67,4 +67,9 @@ class NumEditController<T extends num> extends TextEditingController {
     final parsed = num.tryParse(inputText);
     _value = parsed as T?;
   }
+
+  /// Select all the [text]
+  void selectAll() {
+    selection = TextSelection(baseOffset: 0, extentOffset: text.length);
+  }
 }

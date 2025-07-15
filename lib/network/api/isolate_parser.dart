@@ -1,11 +1,11 @@
 import 'dart:isolate';
 
-import 'package:back_office/exports/index.dart';
+import 'package:flutter/material.dart';
 
-class VoidIsolateParser<T> {
+class IsolateParser<T> {
+  IsolateParser({this.run});
+
   VoidCallback? run;
-
-  VoidIsolateParser({this.run});
 
   Future<T> parseInBackground() async {
     final port = ReceivePort();

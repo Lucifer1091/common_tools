@@ -21,6 +21,10 @@ extension ContextSizeExtension on BuildContext {
   /// throws an exception, if no such ancestor exists.
   EdgeInsets get padding => MediaQuery.paddingOf(this);
 
+  /// textScaleFactor is calculated using the following formula:
+  /// textScaleFactor = MediaQuery.textScalerOf(this).scale(fontSize) / fontSize
+  double get textScaleFactor => MediaQuery.textScalerOf(this).scale(1) / 1.0;
+
   /// Returns viewInsets for the nearest MediaQuery ancestor or
   /// throws an exception, if no such ancestor exists.
   ///

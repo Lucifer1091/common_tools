@@ -25,11 +25,13 @@ class DateFormats {
 
   static const defaultDateTime = 'yyyy-MM-dd HH:mm:ss';
   static const defaultDate = 'yyyy-MM-dd';
-  static const dateTime = 'MMM dd, yyyy h:mm a';
+  static const dateTime = 'MMM dd, yyyy hh:mm a';
   static const date = 'MMM dd, yyyy';
-  static const time = 'h:mm a';
+  static const time = 'hh:mm a';
+  static const time24 = 'HH:mm:ss';
   static const month = 'MMMM';
-  static const monthYear = 'MMMM yyyy';
+  static const year = 'yyyy';
+  static const monthYear = 'MMMM, yyyy';
   static const monthDay = 'MMM dd';
   static const day = 'dd';
   static const fullDay = 'EEEE';
@@ -44,8 +46,7 @@ extension DateConversions on DateTime {
   String format({
     String pattern = DateFormats.dateTime,
     String locale = 'en_US',
-  }) =>
-      DateFormat(pattern, locale).format(this);
+  }) => DateFormat(pattern, locale).format(this);
 
   /// Converts the month of the [DateTime] to a string representing the month's name.
   ///
@@ -388,8 +389,7 @@ extension ParseDateTime on String? {
   String? toUtcString({
     bool utc = true,
     String format = 'MMM dd, yyyy h:mm a',
-  }) =>
-      parse(this, format: format, utc: utc)?.toString().split('.')[0];
+  }) => parse(this, format: format, utc: utc)?.toString().split('.')[0];
 
   String? detectFormat() {
     if (isBlank) return null;
@@ -407,8 +407,10 @@ extension ParseDateTime on String? {
 
     if (patternsFound.isNotEmpty && patternsFound.length > 1) {
       for (final String pattern in patternsFound) {
-        final bool validatePattern =
-            validateDatePattern(expected: this!, pattern: pattern);
+        final bool validatePattern = validateDatePattern(
+          expected: this!,
+          pattern: pattern,
+        );
         if (validatePattern) {
           finalPattern = pattern;
           break;
@@ -443,9 +445,9 @@ extension ParseDateTime on String? {
       if (dt == '' || (dt?.isEmpty ?? true) || dt == null) return null;
 
       if (utc) {
-        return DateFormat(format ?? 'yyyy-MM-dd HH:mm:ss')
-            .parse(dt, true)
-            .toLocal();
+        return DateFormat(
+          format ?? 'yyyy-MM-dd HH:mm:ss',
+        ).parse(dt, true).toLocal();
       }
 
       if (format != null) {
@@ -525,7 +527,8 @@ extension DateTimeExtension on DateTime? {
   /// Returns the number of seconds between the current DateTime instance and [other].
   /// If [other] is not provided, the current system DateTime is used.
   int countSeconds(DateTime? other) {
-    final int difference = (other ?? DateTime.now()).millisecondsSinceEpoch -
+    final int difference =
+        (other ?? DateTime.now()).millisecondsSinceEpoch -
         (this ?? DateTime.now()).millisecondsSinceEpoch;
     final int count = (difference / 1000).truncate();
     return count;
@@ -536,7 +539,8 @@ extension DateTimeExtension on DateTime? {
   /// Returns the number of minutes between the current DateTime instance and [other].
   /// If [other] is not provided, the current system DateTime is used.
   int countMinutes(DateTime? other) {
-    final int difference = (other ?? DateTime.now()).millisecondsSinceEpoch -
+    final int difference =
+        (other ?? DateTime.now()).millisecondsSinceEpoch -
         (this ?? DateTime.now()).millisecondsSinceEpoch;
     final int count = (difference / 60000).truncate();
     return count;
@@ -557,7 +561,8 @@ extension DateTimeExtension on DateTime? {
   /// print('Difference in hours: $differenceInHours'); // Output: 24
   /// ```
   int countHours(DateTime? other) {
-    final int difference = (other ?? DateTime.now()).millisecondsSinceEpoch -
+    final int difference =
+        (other ?? DateTime.now()).millisecondsSinceEpoch -
         (this ?? DateTime.now()).millisecondsSinceEpoch;
     final int count = (difference / 3600000).truncate();
     return count;
@@ -569,7 +574,8 @@ extension DateTimeExtension on DateTime? {
   ///
   /// Returns the number of days as an integer value.
   int countDays(DateTime? other) {
-    final int difference = (other ?? DateTime.now()).millisecondsSinceEpoch -
+    final int difference =
+        (other ?? DateTime.now()).millisecondsSinceEpoch -
         (this ?? DateTime.now()).millisecondsSinceEpoch;
     final int count = (difference / 86400000).truncate();
     return count;
@@ -588,7 +594,8 @@ extension DateTimeExtension on DateTime? {
   /// print('Weeks difference: $weeksDifference'); // Output: Weeks difference: 41
   /// ```
   int countWeeks(DateTime? other) {
-    final int difference = (other ?? DateTime.now()).millisecondsSinceEpoch -
+    final int difference =
+        (other ?? DateTime.now()).millisecondsSinceEpoch -
         (this ?? DateTime.now()).millisecondsSinceEpoch;
     final int count = (difference / 604800000).truncate();
     return count;
@@ -608,7 +615,8 @@ extension DateTimeExtension on DateTime? {
   /// int monthsDifference = startDate.countMonths(endDate); // Output: 334
   /// ```
   int countMonths(DateTime? other) {
-    final int difference = (other ?? DateTime.now()).millisecondsSinceEpoch -
+    final int difference =
+        (other ?? DateTime.now()).millisecondsSinceEpoch -
         (this ?? DateTime.now()).millisecondsSinceEpoch;
     final int count = (difference / 2628003000).round();
     return count;
@@ -627,7 +635,8 @@ extension DateTimeExtension on DateTime? {
   /// print('Years Difference: $yearsDifference'); // Output: 27
   /// ```
   int countYears(DateTime? other) {
-    final int difference = (other ?? DateTime.now()).millisecondsSinceEpoch -
+    final int difference =
+        (other ?? DateTime.now()).millisecondsSinceEpoch -
         (this ?? DateTime.now()).millisecondsSinceEpoch;
     final int count = (difference / 31536000000).truncate();
     return count;
@@ -645,16 +654,17 @@ extension DateTimeExtension on DateTime? {
   /// DateTime? utcDateTime = dateTime.asUtc;
   /// print('UTC DateTime: $utcDateTime');
   /// ```
-  DateTime? get asUtc => isNull
-      ? null
-      : DateTime.utc(
-          this!.year,
-          this!.month,
-          this!.day,
-          this!.hour,
-          this!.minute,
-          this!.second,
-        );
+  DateTime? get asUtc =>
+      isNull
+          ? null
+          : DateTime.utc(
+            this!.year,
+            this!.month,
+            this!.day,
+            this!.hour,
+            this!.minute,
+            this!.second,
+          );
 
   /// Calculates the day of the year (1-based index) for the current date.
   ///
