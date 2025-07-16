@@ -25,9 +25,9 @@ class TDSwipeCellAction extends StatelessWidget {
     this.direction = Axis.horizontal,
     this.confirmIndex,
     this.builder,
-  })  : assert((flex ?? 1) > 0, 'flex must be greater than 0'),
-        assert(icon != null || label != null, 'icon or label must not be null'),
-        super(key: key);
+  }) : assert((flex ?? 1) > 0, 'flex must be greater than 0'),
+       assert(icon != null || label != null, 'icon or label must not be null'),
+       super(key: key);
 
   /// 宽度占比，默认为 1，[TDSwipeCellPanel.confirms]下无效（失踪占满整个[TDSwipeCellPanel]宽度）
   final int? flex;
@@ -71,7 +71,9 @@ class TDSwipeCellAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fontSize = TDTheme.of(context).fontMarkMedium ?? Font(size: 14, lineHeight: 22, fontWeight: FontWeight.w600);
+    final fontSize =
+        TDTheme.of(context).fontMarkMedium ??
+        Font(size: 14, lineHeight: 22, fontWeight: FontWeight.w600);
     final children = <Widget>[
       if (icon != null)
         Icon(
@@ -85,7 +87,7 @@ class TDSwipeCellAction extends StatelessWidget {
           child: TDText(
             label,
             forceVerticalCenter: true,
-            font: fontSize,
+            fontSize: fontSize,
             textColor: TDTheme.of(context).fontWhColor1,
             style: labelStyle,
             overflow: TextOverflow.ellipsis,
@@ -97,7 +99,8 @@ class TDSwipeCellAction extends StatelessWidget {
       onTap: () {
         _handleTap(context);
       },
-      child: builder?.call(context) ??
+      child:
+          builder?.call(context) ??
           Container(
             width: double.infinity,
             height: double.infinity,
@@ -111,10 +114,7 @@ class TDSwipeCellAction extends StatelessWidget {
     );
     return confirmIndex?.isNotEmpty == true
         ? child
-        : Expanded(
-            flex: flex ?? 1,
-            child: child,
-          );
+        : Expanded(flex: flex ?? 1, child: child);
   }
 
   void _handleTap(BuildContext context) {

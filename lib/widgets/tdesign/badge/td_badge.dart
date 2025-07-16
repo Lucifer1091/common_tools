@@ -141,7 +141,7 @@ class _TDBadgeState extends State<TDBadge> {
                       child: TDText(
                         widget.message ?? badgeNum,
                         forceVerticalCenter: true,
-                        font: getBadgeFont(context),
+                        fontSize: getBadgeFont(context),
                         fontWeight: FontWeight.w500,
                         textColor:
                             widget.textColor ?? TDTheme.of(context).whiteColor1,
@@ -160,7 +160,7 @@ class _TDBadgeState extends State<TDBadge> {
                       child: TDText(
                         widget.message ?? badgeNum,
                         forceVerticalCenter: true,
-                        font: getBadgeFont(context),
+                        fontSize: getBadgeFont(context),
                         fontWeight: FontWeight.w500,
                         textColor:
                             widget.textColor ?? TDTheme.of(context).whiteColor1,
@@ -184,7 +184,7 @@ class _TDBadgeState extends State<TDBadge> {
                     widget.padding ?? const EdgeInsets.only(left: 4, bottom: 8),
                 child: TDText(
                   widget.message ?? badgeNum,
-                  font: getBadgeFont(context),
+                  fontSize: getBadgeFont(context),
                   fontWeight: FontWeight.w500,
                   textColor:
                       widget.textColor ?? TDTheme.of(context).whiteColor1,
@@ -213,7 +213,7 @@ class _TDBadgeState extends State<TDBadge> {
               child: TDText(
                 widget.message ?? badgeNum,
                 forceVerticalCenter: true,
-                font: getBadgeFont(context),
+                fontSize: getBadgeFont(context),
                 fontWeight: FontWeight.w500,
                 textColor: widget.textColor ?? TDTheme.of(context).whiteColor1,
                 textAlign: TextAlign.center,
@@ -239,7 +239,7 @@ class _TDBadgeState extends State<TDBadge> {
                 child: TDText(
                   widget.message ?? badgeNum,
                   forceVerticalCenter: true,
-                  font: getBadgeFont(context),
+                  fontSize: getBadgeFont(context),
                   fontWeight: FontWeight.w500,
                   textColor:
                       widget.textColor ?? TDTheme.of(context).whiteColor1,

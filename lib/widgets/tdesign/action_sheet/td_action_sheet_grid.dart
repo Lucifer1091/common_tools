@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../common_tools.dart';
 import '../../../extensions/iterable/index.dart';
 import '../../layout/spaces.dart';
 import '../badge/td_badge.dart';
@@ -67,18 +68,14 @@ class _TDActionSheetGridState extends State<TDActionSheetGrid> {
         mainAxisSize: MainAxisSize.min,
         children: [
           const Space.h8(),
-          // 如果有描述，则显示描述
           if (widget.description != null) _buildDescription(context),
-          // 如果显示分页，则显示分页点
           if (widget.showPagination) ...[
             _buildPaginationGrid(context),
             _buildPaginationDots(context),
-            // 横向滚动
           ] else if (widget.scrollable)
             _buildScrollGrid(context)
           else
             _buildGrid(context),
-          // 如果显示取消按钮，则显示取消按钮
           if (widget.showCancel)
             buildCancelButton(
               context,
@@ -98,9 +95,9 @@ class _TDActionSheetGridState extends State<TDActionSheetGrid> {
         mainAxisAlignment: getMainAxisAlignment(widget.align),
         children: [
           TDText(
-            widget.description!,
-            font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor3,
+            widget.description,
+            fontSize: context.bodyMedium?.fontSize,
+            textColor: context.bodyMedium?.color ?? Colors.black,
           ),
         ],
       ),
@@ -174,12 +171,10 @@ class _TDActionSheetGridState extends State<TDActionSheetGrid> {
     List<ActionSheetItem>? items,
     int pageIndex = 0,
   }) {
-    // 计算每行的项目数
     final itemsPerRow = widget.count ~/ widget.rows;
-    // 获取屏幕宽度
     final screenWidth = MediaQuery.of(context).size.width;
-    // 计算子项的宽高比
     final childAspectRatio = screenWidth / itemsPerRow / widget.itemHeight;
+
     return _gridWrap(
       GridView.builder(
         physics: const NeverScrollableScrollPhysics(),
@@ -215,8 +210,8 @@ class _TDActionSheetGridState extends State<TDActionSheetGrid> {
             shape: BoxShape.circle,
             color:
                 currentPage == index
-                    ? TDTheme.of(context).brandColor7
-                    : TDTheme.of(context).grayColor4,
+                    ? context.primaryColor
+                    : ThemeColors.neutral.shade400,
           ),
         );
       }),

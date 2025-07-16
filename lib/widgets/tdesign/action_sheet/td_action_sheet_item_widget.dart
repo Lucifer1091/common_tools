@@ -69,7 +69,7 @@ class TDActionSheetItemWidget extends StatelessWidget {
           ],
           TDText(
             item!.label,
-            font: TDTheme.of(context).fontBodySmall,
+            fontSize: TDTheme.of(context).fontBodySmall,
             textColor: TDTheme.of(context).fontGyColor1,
             style: item!.textStyle,
           ),
@@ -137,7 +137,7 @@ Widget buildCancelButton(
         child: Center(
           child: TDText(
             cancelText,
-            font: TDTheme.of(context).fontBodyLarge,
+            fontSize: TDTheme.of(context).fontBodyLarge,
             textColor: TDTheme.of(context).fontGyColor1,
           ),
         ),

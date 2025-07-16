@@ -76,7 +76,7 @@ class TDActionSheetGroup extends StatelessWidget {
                     children: [
                       TDText(
                         k!,
-                        font: TDTheme.of(context).fontBodyMedium,
+                        fontSize: TDTheme.of(context).fontBodyMedium,
                         textColor: TDTheme.of(context).fontGyColor3,
                       ),
                     ],

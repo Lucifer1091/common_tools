@@ -76,7 +76,7 @@ class TDActionSheetList extends StatelessWidget {
         children: [
           TDText(
             description!,
-            font: TDTheme.of(context).fontBodyMedium,
+            fontSize: TDTheme.of(context).fontBodyMedium,
             textColor: TDTheme.of(context).fontGyColor3,
           ),
         ],
@@ -141,7 +141,7 @@ class TDActionSheetList extends StatelessWidget {
                   ],
                   TDText(
                     item.label,
-                    font: TDTheme.of(context).fontBodyLarge,
+                    fontSize: TDTheme.of(context).fontBodyLarge,
                     textColor:
                         item.disabled
                             ? TDTheme.of(context)
@@ -178,7 +178,7 @@ class TDActionSheetList extends StatelessWidget {
             child: Center(
               child: TDText(
                 cancelText,
-                font: TDTheme.of(context).fontBodyLarge,
+                fontSize: TDTheme.of(context).fontBodyLarge,
                 textColor: TDTheme.of(context).fontGyColor1,
               ),
             ),
