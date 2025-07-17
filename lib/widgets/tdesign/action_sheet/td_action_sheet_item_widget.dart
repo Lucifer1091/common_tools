@@ -1,17 +1,18 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import '../../theme/td_colors.dart';
-import '../../theme/td_fonts.dart';
-import '../../theme/td_spacers.dart';
-import '../../theme/td_theme.dart';
-import '../badge/td_badge.dart';
+
+import '../../../common_tools.dart';
+import '../../layout/no_widget.dart';
+import '../../layout/spaces.dart';
 import '../text/td_text.dart';
 import 'td_action_sheet.dart';
 
 class TDActionSheetItemWidget extends StatelessWidget {
   const TDActionSheetItemWidget({
+    required this.index,
     super.key,
     this.item,
-    required this.index,
     this.onSelected,
   });
 
@@ -21,22 +22,23 @@ class TDActionSheetItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (item == null) {
-      return const SizedBox.shrink();
-    }
-    late ValueNotifier<List<double>> _offsetValue;
-    late GlobalKey _offsetKey;
+    if (item == null) return const NoWidget();
+
+    late ValueNotifier<List<double>> offsetValue;
+    late GlobalKey offsetKey;
+
     if (item!.badge != null) {
-      _offsetValue = ValueNotifier(const [0.0, 0.0]);
-      _offsetKey = GlobalKey();
+      offsetValue = ValueNotifier(const [0.0, 0.0]);
+      offsetKey = GlobalKey();
     }
+
     return GestureDetector(
       onTap:
           item!.disabled
               ? null
               : () {
                 onSelected?.call(item!, index);
-                Navigator.maybePop(context);
+                unawaited(Navigator.maybePop(context));
               },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -48,29 +50,29 @@ class TDActionSheetItemWidget extends StatelessWidget {
                 SizedBox(
                   width: item!.iconSize ?? 40,
                   height: item!.iconSize ?? 40,
-                  child: FittedBox(fit: BoxFit.contain, child: item!.icon!),
+                  child: FittedBox(child: item!.icon),
                 ),
                 if (item!.badge != null)
                   ValueListenableBuilder(
-                    valueListenable: _offsetValue,
+                    valueListenable: offsetValue,
                     builder: (context, value, child) {
-                      _setOffsetValue(_offsetKey, _offsetValue);
+                      _setOffsetValue(offsetKey, offsetValue);
                       return Positioned(
-                        key: _offsetKey,
-                        child: item!.badge!,
+                        key: offsetKey,
                         right: value[0],
                         top: value[1],
+                        child: item!.badge!,
                       );
                     },
                   ),
               ],
             ),
-            SizedBox(height: TDTheme.of(context).spacer8),
+            const Space.h8(),
           ],
           TDText(
             item!.label,
-            fontSize: TDTheme.of(context).fontBodySmall,
-            textColor: TDTheme.of(context).fontGyColor1,
+            fontSize: context.bodySmall?.fontSize,
+            textColor: ThemeColors.neutral.shade900,
             style: item!.textStyle,
           ),
         ],
@@ -84,7 +86,7 @@ class TDActionSheetItemWidget extends StatelessWidget {
   ) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final renderBox =
-          offsetKey.currentContext?.findRenderObject() as RenderBox;
+          offsetKey.currentContext!.findRenderObject()! as RenderBox;
       final size = renderBox.size;
       final right = -size.width / 2;
       final top = -size.height / 2;
@@ -95,7 +97,6 @@ class TDActionSheetItemWidget extends StatelessWidget {
   }
 }
 
-/// 获取主轴对齐方式
 MainAxisAlignment getMainAxisAlignment(TDActionSheetAlign align) {
   switch (align) {
     case TDActionSheetAlign.left:
@@ -103,7 +104,6 @@ MainAxisAlignment getMainAxisAlignment(TDActionSheetAlign align) {
     case TDActionSheetAlign.right:
       return MainAxisAlignment.end;
     case TDActionSheetAlign.center:
-    default:
       return MainAxisAlignment.center;
   }
 }
@@ -115,30 +115,25 @@ Widget buildCancelButton(
   VoidCallback? onCancel,
 ) {
   return Padding(
-    padding: EdgeInsets.only(
-      top:
-          showPagination
-              ? TDTheme.of(context).spacer16
-              : TDTheme.of(context).spacer8,
-    ),
+    padding: EdgeInsets.only(top: showPagination ? 16 : 8),
     child: GestureDetector(
       onTap: () {
         onCancel?.call();
-        Navigator.maybePop(context);
+        unawaited(Navigator.maybePop(context));
       },
       child: Container(
         decoration: BoxDecoration(
-          color: TDTheme.of(context).fontWhColor1,
+          color: ThemeColors.neutral.shade200,
           border: Border(
-            top: BorderSide(color: TDTheme.of(context).grayColor3, width: 0.5),
+            top: BorderSide(color: ThemeColors.neutral.shade400, width: 0.5),
           ),
         ),
         height: 48,
         child: Center(
           child: TDText(
             cancelText,
-            fontSize: TDTheme.of(context).fontBodyLarge,
-            textColor: TDTheme.of(context).fontGyColor1,
+            fontSize: context.bodyLarge?.fontSize,
+            textColor: ThemeColors.neutral.shade900,
           ),
         ),
       ),

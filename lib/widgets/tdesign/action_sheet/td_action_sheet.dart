@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../popup/td_popup_route.dart';
@@ -15,18 +17,17 @@ enum TDActionSheetTheme { list, grid, group }
 
 enum TDActionSheetAlign { center, left, right }
 
-/// 动作面板
 class TDActionSheet {
   TDActionSheet(
     this.context, {
+    required this.items,
     this.align = TDActionSheetAlign.center,
-    this.cancelText = '取消',
+    this.cancelText = 'Cancel',
     this.count = 8,
     this.rows = 2,
     this.itemHeight = 96.0,
     this.itemMinWidth = 80.0,
     this.description,
-    required this.items,
     this.showCancel = true,
     this.showPagination = false,
     this.scrollable = false,
@@ -39,18 +40,13 @@ class TDActionSheet {
     this.closeOnOverlayClick = true,
     this.useSafeArea = true,
   }) {
-    if (visible) {
-      show();
-    }
+    if (visible) show();
   }
 
-  /// 上下文
   final BuildContext context;
 
-  /// 对齐方式
   final TDActionSheetAlign align;
 
-  /// 取消按钮的文本
   final String cancelText;
 
   /// 每页显示的项目数
@@ -74,22 +70,16 @@ class TDActionSheet {
   /// 当[theme]等于[TDActionSheetTheme.grid]或[theme]等于[TDActionSheetTheme.list]时有效
   final String? description;
 
-  /// ActionSheet的项目列表
   final List<ActionSheetItem> items;
 
-  /// 是否显示取消按钮
   final bool showCancel;
 
-  /// 是否显示遮罩层
   final bool showOverlay;
 
-  /// 点击蒙层时是否关闭
   final bool closeOnOverlayClick;
 
-  /// 主题样式
   final TDActionSheetTheme theme;
 
-  /// 是否立即显示
   final bool visible;
 
   /// 是否显示分页
@@ -100,26 +90,21 @@ class TDActionSheet {
   /// 当[theme]等于[TDActionSheetTheme.grid]且[showPagination]为false时有效
   final bool scrollable;
 
-  /// 取消按钮的回调函数
   final VoidCallback? onCancel;
 
-  /// 关闭时的回调函数
   final VoidCallback? onClose;
 
-  /// 选择项目时的回调函数
   final TDActionSheetItemCallback? onSelected;
 
-  /// 使用安全区域
   final bool useSafeArea;
 
-  static TDSlidePopupRoute? _actionSheetRoute;
+  static TDSlidePopupRoute<void>? _actionSheetRoute;
 
-  /// 显示列表类型面板
   static void showListActionSheet(
     BuildContext context, {
     required List<ActionSheetItem> items,
     TDActionSheetAlign align = TDActionSheetAlign.center,
-    String cancelText = '取消',
+    String cancelText = 'Cancel',
     bool showCancel = true,
     VoidCallback? onCancel,
     TDActionSheetItemCallback? onSelected,
@@ -144,12 +129,11 @@ class TDActionSheet {
     );
   }
 
-  /// 显示宫格类型面板
   static void showGridActionSheet(
     BuildContext context, {
     required List<ActionSheetItem> items,
     TDActionSheetAlign align = TDActionSheetAlign.center,
-    String cancelText = '取消',
+    String cancelText = 'Cancel',
     bool showCancel = true,
     TDActionSheetItemCallback? onSelected,
     bool showOverlay = true,
@@ -188,12 +172,11 @@ class TDActionSheet {
     );
   }
 
-  /// 显示分组类型面板
   static void showGroupActionSheet(
     BuildContext context, {
     required List<ActionSheetItem> items,
     TDActionSheetAlign align = TDActionSheetAlign.left,
-    String cancelText = '取消',
+    String cancelText = 'Cancel',
     bool showCancel = true,
     TDActionSheetItemCallback? onSelected,
     bool showOverlay = true,
@@ -222,7 +205,6 @@ class TDActionSheet {
     );
   }
 
-  /// 显示动作面板
   void show() {
     TDActionSheet._createRoute(
       context,
@@ -247,9 +229,7 @@ class TDActionSheet {
     );
   }
 
-  void open() {
-    show();
-  }
+  void open() => show();
 
   @mustCallSuper
   void close() {
@@ -258,13 +238,12 @@ class TDActionSheet {
     }
   }
 
-  /// 创建路由
   static void _createRoute(
     BuildContext context, {
     required TDActionSheetTheme theme,
     required List<ActionSheetItem> items,
     TDActionSheetAlign align = TDActionSheetAlign.center,
-    String cancelText = '取消',
+    String cancelText = 'Cancel',
     bool showCancel = true,
     TDActionSheetItemCallback? onSelected,
     bool showOverlay = true,
@@ -280,12 +259,10 @@ class TDActionSheet {
     VoidCallback? onClose,
     bool useSafeArea = true,
   }) {
-    if (_actionSheetRoute != null) {
-      return;
-    }
+    if (_actionSheetRoute != null) return;
+
     _actionSheetRoute = TDSlidePopupRoute(
-      slideTransitionFrom: SlideTransitionFrom.bottom,
-      isDismissible: showOverlay ? closeOnOverlayClick : false,
+      isDismissible: showOverlay && closeOnOverlayClick,
       modalBarrierColor: showOverlay ? null : Colors.transparent,
       builder: (context) {
         switch (theme) {
@@ -329,14 +306,14 @@ class TDActionSheet {
               itemMinWidth: itemMinWidth,
               useSafeArea: useSafeArea,
             );
-          default:
-            return const SizedBox.shrink();
         }
       },
     );
-    Navigator.of(context).push(_actionSheetRoute!).then((_) {
-      _actionSheetRoute = null;
-      onClose?.call();
-    });
+    unawaited(
+      Navigator.of(context).push(_actionSheetRoute!).then((_) {
+        _actionSheetRoute = null;
+        onClose?.call();
+      }),
+    );
   }
 }

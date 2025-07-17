@@ -1,17 +1,27 @@
-import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../theme/td_colors.dart';
-import '../../theme/td_fonts.dart';
-import '../../theme/td_radius.dart';
-import '../../theme/td_spacers.dart';
-import '../../theme/td_theme.dart';
-import '../../util/list_ext.dart';
+import '../../../common_tools.dart';
+import '../../../extensions/iterable/index.dart';
 import '../text/td_text.dart';
 import 'td_action_sheet.dart';
 import 'td_action_sheet_item_widget.dart';
 
 class TDActionSheetGroup extends StatelessWidget {
+  const TDActionSheetGroup({
+    required this.items,
+    super.key,
+    this.align = TDActionSheetAlign.left,
+    this.cancelText = 'Cancel',
+    this.showCancel = true,
+    this.onCancel,
+    this.onSelected,
+    this.itemHeight = 96.0,
+    this.itemMinWidth = 80.0,
+    this.radius = 32.0,
+    this.useSafeArea = true,
+  });
+
   final List<ActionSheetItem> items;
   final TDActionSheetAlign align;
   final String cancelText;
@@ -20,27 +30,17 @@ class TDActionSheetGroup extends StatelessWidget {
   final TDActionSheetItemCallback? onSelected;
   final double itemHeight;
   final double itemMinWidth;
+  final double radius;
   final bool useSafeArea;
-
-  const TDActionSheetGroup({
-    super.key,
-    required this.items,
-    this.align = TDActionSheetAlign.left,
-    this.cancelText = '取消',
-    this.showCancel = true,
-    this.onCancel,
-    this.onSelected,
-    this.itemHeight = 96.0,
-    this.itemMinWidth = 80.0,
-    this.useSafeArea = true,
-  });
 
   @override
   Widget build(BuildContext context) {
-    final borderRadius = Radius.circular(TDTheme.of(context).radiusExtraLarge);
-    final groupItems = items.groupBy((item) => item.group);
+    final borderRadius = Radius.circular(radius);
+    final groupItems = items.groupBy<String?, ActionSheetItem>(
+      (item) => item.group,
+    );
     final groupKeys = groupItems.keys.where(
-      (k) => k != null && groupItems[k]?.isNotEmpty == true,
+      (k) => k != null && (groupItems[k]?.isNotEmpty ?? false),
     );
 
     return Container(
@@ -49,7 +49,7 @@ class TDActionSheetGroup extends StatelessWidget {
           topLeft: borderRadius,
           topRight: borderRadius,
         ),
-        color: TDTheme.of(context).whiteColor1,
+        color: Colors.white,
       ),
       clipBehavior: Clip.antiAlias,
       padding:
@@ -65,19 +65,14 @@ class TDActionSheetGroup extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Padding(
-                  padding: EdgeInsets.fromLTRB(
-                    TDTheme.of(context).spacer16,
-                    TDTheme.of(context).spacer12,
-                    TDTheme.of(context).spacer16,
-                    0,
-                  ),
+                  padding: EdgeInsets.fromLTRB(16, 12, 16, 0),
                   child: Row(
                     mainAxisAlignment: getMainAxisAlignment(align),
                     children: [
                       TDText(
-                        k!,
-                        fontSize: TDTheme.of(context).fontBodyMedium,
-                        textColor: TDTheme.of(context).fontGyColor3,
+                        k,
+                        fontSize: context.bodyMedium?.fontSize,
+                        textColor: ThemeColors.neutral.shade300,
                       ),
                     ],
                   ),
@@ -103,10 +98,10 @@ class TDActionSheetGroup extends StatelessWidget {
                 if (i != groupKeys.length - 1)
                   Container(
                     decoration: BoxDecoration(
-                      color: TDTheme.of(context).fontWhColor1,
+                      color: ThemeColors.neutral.shade700,
                       border: Border(
                         top: BorderSide(
-                          color: TDTheme.of(context).grayColor3,
+                          color: ThemeColors.neutral.shade300,
                           width: 0.5,
                         ),
                       ),
