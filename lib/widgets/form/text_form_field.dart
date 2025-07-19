@@ -145,44 +145,44 @@ class CustomTextFormField extends StatelessWidget {
     this.enabled,
     this.showValidator = true,
     this.customBorderRadius,
-  })  : assert(
-          initialValue == null || controller == null,
-          'Use either initialValue or controller.',
-        ),
-        assert(
-          labelStyle == null || labelColor == null,
-          'Cannot provide both a labelStyle and a labelColor\n'
-          'To provide custom, use "labelStyle: TextStyle()".',
-        ),
-        assert(
-          textStyle == null || textColor == null,
-          'Cannot provide both a textStyle and a textColor\n'
-          'To provide custom, use "textStyle: TextStyle()".',
-        ),
-        assert(
-          prefixWidget == null || prefixIcon == null,
-          'Cannot provide both a prefixWidget and a prefixIconData\n'
-          'To provide custom, use "prefixWidget".',
-        ),
-        assert(
-          prefixWidget == null || prefixIconColor == null,
-          'Cannot provide both a prefixWidget and a prefixIconColor\n'
-          'To provide custom, use "prefixWidget".',
-        ),
-        assert(
-          suffixWidget == null || suffixIcon == null,
-          'Cannot provide both a suffixWidget and a suffixIconData\n'
-          'To provide custom, use "suffixWidget".',
-        ),
-        assert(
-          suffixWidget == null || suffixIconColor == null,
-          'Cannot provide both a suffixWidget and a suffixIconColor\n'
-          'To provide custom, use "suffixWidget".',
-        ),
-        assert(
-          !onTapSelectAll || onTap == null,
-          'Cannot provide onTap when onTapSelectAll is true.',
-        );
+  }) : assert(
+         initialValue == null || controller == null,
+         'Use either initialValue or controller.',
+       ),
+       assert(
+         labelStyle == null || labelColor == null,
+         'Cannot provide both a labelStyle and a labelColor\n'
+         'To provide custom, use "labelStyle: TextStyle()".',
+       ),
+       assert(
+         textStyle == null || textColor == null,
+         'Cannot provide both a textStyle and a textColor\n'
+         'To provide custom, use "textStyle: TextStyle()".',
+       ),
+       assert(
+         prefixWidget == null || prefixIcon == null,
+         'Cannot provide both a prefixWidget and a prefixIconData\n'
+         'To provide custom, use "prefixWidget".',
+       ),
+       assert(
+         prefixWidget == null || prefixIconColor == null,
+         'Cannot provide both a prefixWidget and a prefixIconColor\n'
+         'To provide custom, use "prefixWidget".',
+       ),
+       assert(
+         suffixWidget == null || suffixIcon == null,
+         'Cannot provide both a suffixWidget and a suffixIconData\n'
+         'To provide custom, use "suffixWidget".',
+       ),
+       assert(
+         suffixWidget == null || suffixIconColor == null,
+         'Cannot provide both a suffixWidget and a suffixIconColor\n'
+         'To provide custom, use "suffixWidget".',
+       ),
+       assert(
+         !onTapSelectAll || onTap == null,
+         'Cannot provide onTap when onTapSelectAll is true.',
+       );
 
   @override
   Widget build(BuildContext context) {
@@ -205,25 +205,22 @@ class CustomTextFormField extends StatelessWidget {
           // Necessary to Avoid Text Field break Focus on TextInputAction.next
           enabled: enabled ?? !_readOnly,
           initialValue: initialValue,
-          onTap: onTap ??
+          onTap:
+              onTap ??
               (onTapSelectAll
                   ? () {
-                      controller?.selection = TextSelection(
-                        baseOffset: 0,
-                        extentOffset: controller?.text.length ?? 0,
-                      );
-                    }
+                    controller?.selection = TextSelection(
+                      baseOffset: 0,
+                      extentOffset: controller?.text.length ?? 0,
+                    );
+                  }
                   : null),
           onSubmitted: onFieldSubmit,
           maxLines: maxLines ?? 1,
           maxLength: maxLength,
-          buildCounter: (
-            _, {
-            required currentLength,
-            maxLength,
-            required isFocused,
-          }) =>
-              null,
+          buildCounter:
+              (_, {required currentLength, maxLength, required isFocused}) =>
+                  null,
           scrollPadding: const EdgeInsets.all(8),
           textCapitalization: textCapitalization ?? TextCapitalization.words,
           onEditingComplete: onEditingComplete,
@@ -253,7 +250,8 @@ class CustomTextFormField extends StatelessWidget {
           keyboardType: keyboardType ?? TextInputType.text,
           onChanged: onChanged,
           obscureText: obscureText ?? false,
-          style: textStyle ??
+          style:
+              textStyle ??
               context.titleMedium?.copyWith(
                 color: textColor ?? Colors.black,
                 fontWeight: FontWeight.w400,
@@ -280,7 +278,8 @@ class CustomTextFormField extends StatelessWidget {
         overflow: TextOverflow.ellipsis,
         textAlign: TextAlign.center,
         text: TextSpan(
-          style: labelStyle ??
+          style:
+              labelStyle ??
               context.bodyLarge?.copyWith(
                 color: labelColor ?? (_readOnly ? Colors.black : Colors.black),
                 fontWeight: FontWeight.w400,
@@ -304,115 +303,136 @@ class CustomTextFormField extends StatelessWidget {
       hintText: hintText,
       hintStyle: hintStyle,
       prefixIconConstraints: prefixIconConstraints,
-      prefixIcon: prefixWidget ??
+      prefixIcon:
+          prefixWidget ??
           (prefixIcon != null
               ? Icon(
-                  prefixIcon,
-                  size: prefixIconSize ?? 22,
-                  color: prefixIconColor ?? Colors.grey,
-                )
+                prefixIcon,
+                size: prefixIconSize ?? 22,
+                color: prefixIconColor ?? Colors.grey,
+              )
               : null),
-      suffixIcon: suffixIcon != null
-          ? GestureDetector(
-              onTap: onSuffixTap,
-              child: Icon(
-                suffixIcon,
-                size: suffixIconSize ?? 22,
-                color: suffixIconColor ?? Colors.grey,
+      suffixIcon:
+          suffixIcon != null
+              ? GestureDetector(
+                onTap: onSuffixTap,
+                child: Icon(
+                  suffixIcon,
+                  size: suffixIconSize ?? 22,
+                  color: suffixIconColor ?? Colors.grey,
+                ),
+              ).mouseRegion
+              : suffixWidget,
+      enabledBorder:
+          borderRadius != null || customBorderRadius != null
+              ? OutlineInputBorder(
+                borderRadius:
+                    customBorderRadius ??
+                    BorderRadius.circular(borderRadius ?? 4),
+                borderSide: BorderSide(
+                  color:
+                      enableBorderColor ??
+                      context.enabledBorder.borderSide.color,
+                  width: context.enabledBorder.borderSide.width,
+                ),
+              )
+              : context.enabledBorder.copyWith(
+                borderSide: BorderSide(
+                  color:
+                      enableBorderColor ??
+                      context.enabledBorder.borderSide.color,
+                  width: context.enabledBorder.borderSide.width,
+                ),
               ),
-            ).mouseRegion
-          : suffixWidget,
-      enabledBorder: borderRadius != null || customBorderRadius != null
-          ? OutlineInputBorder(
-              borderRadius: customBorderRadius ??
-                  BorderRadius.circular(borderRadius ?? 4),
-              borderSide: BorderSide(
-                color:
-                    enableBorderColor ?? context.enabledBorder.borderSide.color,
-                width: context.enabledBorder.borderSide.width,
+      focusedBorder:
+          borderRadius != null || customBorderRadius != null
+              ? OutlineInputBorder(
+                borderRadius:
+                    customBorderRadius ??
+                    BorderRadius.circular(borderRadius ?? 4),
+                borderSide: BorderSide(
+                  color:
+                      _readOnly
+                          ? enableBorderColor ?? Colors.grey
+                          : focusBorderColor ??
+                              context.focusedBorder.borderSide.color,
+                  width: context.focusedBorder.borderSide.width,
+                ),
+              )
+              : context.focusedBorder.copyWith(
+                borderSide: BorderSide(
+                  color:
+                      _readOnly
+                          ? enableBorderColor ?? Colors.grey
+                          : focusBorderColor ??
+                              context.focusedBorder.borderSide.color,
+                  width: context.focusedBorder.borderSide.width,
+                ),
               ),
-            )
-          : context.enabledBorder.copyWith(
-              borderSide: BorderSide(
-                color:
-                    enableBorderColor ?? context.enabledBorder.borderSide.color,
-                width: context.enabledBorder.borderSide.width,
+      errorBorder:
+          borderRadius != null || customBorderRadius != null
+              ? OutlineInputBorder(
+                borderRadius:
+                    customBorderRadius ??
+                    BorderRadius.circular(borderRadius ?? 4),
+                borderSide: BorderSide(
+                  color:
+                      errorBorderColor ?? context.errorBorder.borderSide.color,
+                  width: context.errorBorder.borderSide.width,
+                ),
+              )
+              : context.errorBorder.copyWith(
+                borderSide: BorderSide(
+                  color:
+                      errorBorderColor ?? context.errorBorder.borderSide.color,
+                  width: context.errorBorder.borderSide.width,
+                ),
               ),
-            ),
-      focusedBorder: borderRadius != null || customBorderRadius != null
-          ? OutlineInputBorder(
-              borderRadius: customBorderRadius ??
-                  BorderRadius.circular(borderRadius ?? 4),
-              borderSide: BorderSide(
-                color: _readOnly
-                    ? enableBorderColor ?? Colors.grey
-                    : focusBorderColor ??
-                        context.focusedBorder.borderSide.color,
-                width: context.focusedBorder.borderSide.width,
+      focusedErrorBorder:
+          borderRadius != null
+              ? OutlineInputBorder(
+                borderRadius: BorderRadius.circular(borderRadius ?? 4),
+                borderSide: BorderSide(
+                  color:
+                      errorBorderColor ??
+                      context.focusedErrorBorder.borderSide.color,
+                  width: context.focusedErrorBorder.borderSide.width,
+                ),
+              )
+              : context.focusedErrorBorder.copyWith(
+                borderSide: BorderSide(
+                  color:
+                      errorBorderColor ??
+                      context.focusedErrorBorder.borderSide.color,
+                  width: context.focusedErrorBorder.borderSide.width,
+                ),
               ),
-            )
-          : context.focusedBorder.copyWith(
-              borderSide: BorderSide(
-                color: _readOnly
-                    ? enableBorderColor ?? Colors.grey
-                    : focusBorderColor ??
-                        context.focusedBorder.borderSide.color,
-                width: context.focusedBorder.borderSide.width,
+      disabledBorder:
+          borderRadius != null
+              ? OutlineInputBorder(
+                borderRadius: BorderRadius.circular(borderRadius ?? 4),
+                borderSide: BorderSide(
+                  color:
+                      disableBorderColor ??
+                      context.disableBorder.borderSide.color,
+                  width: context.disableBorder.borderSide.width,
+                ),
+              )
+              : context.disableBorder.copyWith(
+                borderSide: BorderSide(
+                  color:
+                      disableBorderColor ??
+                      context.disableBorder.borderSide.color,
+                  width: context.disableBorder.borderSide.width,
+                ),
               ),
-            ),
-      errorBorder: borderRadius != null || customBorderRadius != null
-          ? OutlineInputBorder(
-              borderRadius: customBorderRadius ??
-                  BorderRadius.circular(borderRadius ?? 4),
-              borderSide: BorderSide(
-                color: errorBorderColor ?? context.errorBorder.borderSide.color,
-                width: context.errorBorder.borderSide.width,
-              ),
-            )
-          : context.errorBorder.copyWith(
-              borderSide: BorderSide(
-                color: errorBorderColor ?? context.errorBorder.borderSide.color,
-                width: context.errorBorder.borderSide.width,
-              ),
-            ),
-      focusedErrorBorder: borderRadius != null
-          ? OutlineInputBorder(
-              borderRadius: BorderRadius.circular(borderRadius ?? 4),
-              borderSide: BorderSide(
-                color: errorBorderColor ??
-                    context.focusedErrorBorder.borderSide.color,
-                width: context.focusedErrorBorder.borderSide.width,
-              ),
-            )
-          : context.focusedErrorBorder.copyWith(
-              borderSide: BorderSide(
-                color: errorBorderColor ??
-                    context.focusedErrorBorder.borderSide.color,
-                width: context.focusedErrorBorder.borderSide.width,
-              ),
-            ),
-      disabledBorder: borderRadius != null
-          ? OutlineInputBorder(
-              borderRadius: BorderRadius.circular(borderRadius ?? 4),
-              borderSide: BorderSide(
-                color: disableBorderColor ??
-                    context.disableBorder.borderSide.color,
-                width: context.disableBorder.borderSide.width,
-              ),
-            )
-          : context.disableBorder.copyWith(
-              borderSide: BorderSide(
-                color: disableBorderColor ??
-                    context.disableBorder.borderSide.color,
-                width: context.disableBorder.borderSide.width,
-              ),
-            ),
-      fillColor: _readOnly && fillColor == null
-          ? const Color(0xfff5f5f5)
-          : fillColor ?? context.fillColor,
+      fillColor:
+          _readOnly && fillColor == null
+              ? const Color(0xfff5f5f5)
+              : fillColor ?? context.fillColor,
       filled: true,
       alignLabelWithHint: true,
-      focusColor: context.primaryColor,
+      focusColor: context.primary,
       errorStyle: context.bodySmall?.copyWith(
         fontSize: errorFontSize,
         color: errorColor ?? context.errorColor,
@@ -423,9 +443,8 @@ class CustomTextFormField extends StatelessWidget {
 }
 
 class KeyBoardType {
-  static TextInputType get number => PlatformChecker.isIOS
-      ? const TextInputType.numberWithOptions(
-          signed: true,
-        )
-      : TextInputType.number;
+  static TextInputType get number =>
+      PlatformChecker.isIOS
+          ? const TextInputType.numberWithOptions(signed: true)
+          : TextInputType.number;
 }

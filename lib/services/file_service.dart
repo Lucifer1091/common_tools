@@ -274,7 +274,7 @@ class FileService {
     bool isFilePicker = false,
   }) async => BottomSheets.show<XFile?>(
     context,
-    color: context.backgroundColor,
+    color: context.background,
     showDivider: false,
     maxHeight: 160,
     maxWidth: 500,
@@ -301,10 +301,7 @@ class FileService {
                 return value;
               });
             },
-            leading: Icon(
-              Icons.camera_alt_outlined,
-              color: context.primaryColor,
-            ),
+            leading: Icon(Icons.camera_alt_outlined, color: context.primary),
             title: Text('Capture from camera', style: context.bodyLarge),
           ),
           if (!isFilePicker) ...[
@@ -317,7 +314,7 @@ class FileService {
               },
               leading: Icon(
                 Icons.photo_size_select_actual_outlined,
-                color: context.primaryColor,
+                color: context.primary,
               ),
               title: Text('Upload from gallery', style: context.bodyLarge),
             ),
@@ -329,10 +326,7 @@ class FileService {
                   return value;
                 });
               },
-              leading: Icon(
-                Icons.upload_file_outlined,
-                color: context.primaryColor,
-              ),
+              leading: Icon(Icons.upload_file_outlined, color: context.primary),
               title: Text('Upload from storage', style: context.bodyLarge),
             ),
           ],

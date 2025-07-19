@@ -70,7 +70,7 @@ class CustomPinField extends StatelessWidget {
 
     final focusedPinTheme = defaultPinTheme.copyDecorationWith(
       color: context.backgroundColor,
-      border: Border.all(color: context.primaryColor, width: 2),
+      border: Border.all(color: context.primary, width: 2),
     );
 
     final submittedPinTheme = defaultPinTheme.copyWith(

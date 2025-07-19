@@ -1,14 +1,65 @@
 import 'dart:async';
-import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
 
 import 'package:flutter/material.dart';
 
+import '../../../constants/constants.dart';
 import '../text/td_text.dart';
 
 enum TDBackTopTheme { light, dark }
 
 enum TDBackTopStyle { circle, halfCircle }
 
+/// Example usage:
+///```dart
+/// class TDBackTopExample extends StatefulWidget {
+///   const TDBackTopExample({super.key});
+
+///   @override
+///   State<TDBackTopExample> createState() => _TDBackTopExampleState();
+/// }
+
+/// class _TDBackTopExampleState extends State<TDBackTopExample> {
+///   bool showBackTop = false;
+///   TDBackTopStyle style = TDBackTopStyle.circle;
+
+///   @override
+///   Widget build(BuildContext context) {
+///     return ScrollControllerBuilder(
+///       listener: (controller) {
+///         if (controller.offset >= 100) {
+///           if (!showBackTop) setState(() => showBackTop = true);
+///         } else {
+///           if (showBackTop) setState(() => showBackTop = false);
+///         }
+///       },
+///       builder: (BuildContext context, ScrollController controller) {
+///         return Visibility(
+///           visible: showBackTop,
+///           child:
+///               style == TDBackTopStyle.halfCircle
+///                   ? Positioned(
+///                     right: -16,
+///                     bottom: 10,
+///                     child: TDBackTop(
+///                       controller: controller,
+///                       theme: TDBackTopTheme.dark,
+///                       showText: true,
+///                       style: style,
+///                     ),
+///                   )
+///                   : TDBackTop(
+///                     controller: controller,
+///                     theme: TDBackTopTheme.dark,
+///                     showText: true,
+///                     style: style,
+///                   ),
+///         );
+///       },
+///     );
+///   }
+/// }
+/// ```
+///
 class TDBackTop extends StatefulWidget {
   const TDBackTop({
     super.key,
@@ -58,7 +109,7 @@ class _TDBackTopState extends State<TDBackTop> {
   }
 
   Widget _buildCircleWidget(BuildContext context) {
-    var color =
+    final color =
         widget.theme == TDBackTopTheme.dark
             ? Colors.white
             : const Color.fromRGBO(0, 0, 0, 0.9);
@@ -72,23 +123,23 @@ class _TDBackTopState extends State<TDBackTop> {
         border: Border.all(
           color:
               widget.theme == TDBackTopTheme.dark
-                  ? TDTheme.of(context).grayColor14
-                  : TDTheme.of(context).grayColor4,
+                  ? ThemeColors.neutral.shade900
+                  : ThemeColors.neutral.shade400,
           width: 0.5,
         ),
         color:
             widget.theme == TDBackTopTheme.light
                 ? Colors.white
-                : TDTheme.of(context).grayColor14,
+                : ThemeColors.neutral.shade900,
       ),
       child: Center(
         child: Column(
           children: [
-            Icon(TDIcons.backtop, size: 20, color: color),
+            Icon(Icons.arrow_drop_up_rounded, size: 20, color: color),
             Visibility(
               visible: widget.showText,
               child: TDText(
-                context.resource.top,
+                'Top',
                 maxLines: 1,
                 overflow: TextOverflow.visible,
                 style: TextStyle(
@@ -105,7 +156,7 @@ class _TDBackTopState extends State<TDBackTop> {
   }
 
   Widget _buildHalfCircleWidget(BuildContext context) {
-    var color =
+    final color =
         widget.theme == TDBackTopTheme.dark
             ? Colors.white
             : const Color.fromRGBO(0, 0, 0, 0.9);
@@ -119,7 +170,7 @@ class _TDBackTopState extends State<TDBackTop> {
           color:
               widget.theme == TDBackTopTheme.light
                   ? Colors.white
-                  : TDTheme.of(context).grayColor14,
+                  : ThemeColors.neutral.shade900,
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(999),
             bottomLeft: Radius.circular(999),
@@ -134,9 +185,8 @@ class _TDBackTopState extends State<TDBackTop> {
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(TDIcons.backtop, size: 22, color: color),
+            Icon(Icons.arrow_drop_up_rounded, size: 22, color: color),
             const SizedBox(width: 2),
             Visibility(
               visible: widget.showText,
@@ -147,7 +197,7 @@ class _TDBackTopState extends State<TDBackTop> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TDText(
-                      context.resource.back,
+                      'Back',
                       style: TextStyle(
                         height: 1.2,
                         fontSize: 10,
@@ -156,7 +206,7 @@ class _TDBackTopState extends State<TDBackTop> {
                       ),
                     ),
                     TDText(
-                      context.resource.top,
+                      'Top',
                       style: TextStyle(
                         height: 1.2,
                         fontSize: 10,

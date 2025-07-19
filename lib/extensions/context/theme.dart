@@ -19,48 +19,48 @@ extension ContextThemeExtension on BuildContext {
 
   /// colorscheme colors
   /// primary colors
-  Color get primaryColor => colorScheme.primary;
-  Color get onPrimaryColor => colorScheme.onPrimary;
-  Color get primaryContainerColor => colorScheme.primaryContainer;
-  Color get onPrimaryContainerColor => colorScheme.onPrimaryContainer;
+  Color get primary => colorScheme.primary;
+  Color get onPrimary => colorScheme.onPrimary;
+  Color get primaryContainer => colorScheme.primaryContainer;
+  Color get onPrimaryContainer => colorScheme.onPrimaryContainer;
 
   /// secondary colors
-  Color get secondaryColor => colorScheme.secondary;
-  Color get onSecondaryColor => colorScheme.onSecondary;
-  Color get secondaryContainerColor => colorScheme.secondaryContainer;
-  Color get onSecondaryContainerColor => colorScheme.onSecondaryContainer;
+  Color get secondary => colorScheme.secondary;
+  Color get onSecondary => colorScheme.onSecondary;
+  Color get secondaryContainer => colorScheme.secondaryContainer;
+  Color get onSecondaryContainer => colorScheme.onSecondaryContainer;
 
   /// tertiary color
-  Color get tertiaryColor => colorScheme.tertiary;
-  Color get onTertiaryColor => colorScheme.onTertiary;
-  Color get tertiaryContainerColor => colorScheme.tertiaryContainer;
-  Color get onTertiaryContainerColor => colorScheme.onTertiaryContainer;
+  Color get tertiary => colorScheme.tertiary;
+  Color get onTertiary => colorScheme.onTertiary;
+  Color get tertiaryContainer => colorScheme.tertiaryContainer;
+  Color get onTertiaryContainer => colorScheme.onTertiaryContainer;
 
   /// surface color
-  Color get surfaceColor => colorScheme.surface;
-  Color get onSurfaceColor => colorScheme.onSurface;
+  Color get surface => colorScheme.surface;
+  Color get onSurface => colorScheme.onSurface;
 
   /// surface variant color
-  Color get surfaceVariantColor => colorScheme.surfaceContainerHighest;
-  Color get onSurfaceVariantColor => colorScheme.onSurfaceVariant;
+  Color get surfaceVariant => colorScheme.surfaceContainerHighest;
+  Color get onSurfaceVariant => colorScheme.onSurfaceVariant;
 
   /// inverse colors
-  Color get inverseSurfaceColor => colorScheme.inverseSurface;
-  Color get onInverseSurfaceColor => colorScheme.onInverseSurface;
+  Color get inverseSurface => colorScheme.inverseSurface;
+  Color get onInverseSurface => colorScheme.onInverseSurface;
 
   /// background color
-  Color get backgroundColor => colorScheme.surface;
-  Color get onBackgroundContainerColor => colorScheme.onSurface;
+  Color get background => colorScheme.surface;
+  Color get onBackgroundContainer => colorScheme.onSurface;
 
   /// outline color
-  Color get outlineColor => colorScheme.outline;
-  Color get outlineVariantColor => colorScheme.outlineVariant;
+  Color get outline => colorScheme.outline;
+  Color get outlineVariant => colorScheme.outlineVariant;
 
   /// error colors
-  Color get errorColor => colorScheme.error;
-  Color get onErrorColor => colorScheme.onError;
-  Color get errorContainerColor => colorScheme.errorContainer;
-  Color get onErrorContainerColor => colorScheme.onErrorContainer;
+  Color get error => colorScheme.error;
+  Color get onError => colorScheme.onError;
+  Color get errorContainer => colorScheme.errorContainer;
+  Color get onErrorContainer => colorScheme.onErrorContainer;
 
   /// input decoration theme
   InputDecorationTheme get inputDecoration => theme.inputDecorationTheme;
@@ -72,5 +72,5 @@ extension ContextThemeExtension on BuildContext {
   InputBorder get disableBorder => inputDecoration.disabledBorder!;
 
   Color? get fillColor => inputDecoration.fillColor;
-  Color? get progressIndicatorColor => theme.progressIndicatorTheme.color;
+  Color? get progressIndicator => theme.progressIndicatorTheme.color;
 }

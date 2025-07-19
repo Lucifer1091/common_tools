@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../../common_tools.dart';
 import '../text/td_text.dart';
 
 enum TDBadgeType { redPoint, message, bubble, square, subscript }
@@ -11,26 +12,29 @@ enum TDBadgeBorder { large, small }
 
 enum TDBadgeSize { large, small }
 
-class TDBadge extends StatefulWidget {
+class TDBadge extends StatelessWidget {
   const TDBadge(
     this.type, {
     super.key,
     this.count,
-    this.maxCount = '99',
+    this.maxCount = 99,
+    this.message,
     this.border = TDBadgeBorder.large,
     this.size = TDBadgeSize.small,
     this.color,
     this.textColor,
-    this.message,
+    this.style,
     this.widthLarge = 32,
     this.widthSmall = 12,
     this.padding,
     this.showZero = true,
   });
 
-  final String? count;
+  final num? count;
 
-  final String? maxCount;
+  final num? maxCount;
+
+  final String? message;
 
   final TDBadgeType type;
 
@@ -42,7 +46,7 @@ class TDBadge extends StatefulWidget {
 
   final Color? textColor;
 
-  final String? message;
+  final TextStyle? style;
 
   final double widthLarge;
 
@@ -52,76 +56,60 @@ class TDBadge extends StatefulWidget {
 
   final bool showZero;
 
-  @override
-  State<StatefulWidget> createState() => _TDBadgeState();
-}
-
-class _TDBadgeState extends State<TDBadge> {
-  String badgeNum = '';
-
-  void updateBadgeNum(String? newCount) {
-    if (newCount == null) return;
-
-    setState(() {
-      // If newCount exceeds maxCount, display '${maxCount}+'
-      final countValue = int.tryParse(newCount) ?? 0;
-      final maxCountValue = int.tryParse(widget.maxCount ?? '') ?? 0;
-      if (maxCountValue > 0 && countValue > maxCountValue) {
-        badgeNum = '$maxCountValue+';
-      } else {
-        badgeNum = newCount;
-      }
-    });
-  }
+  Color get background => color ?? ThemeColors.error.shade500;
 
   double getBadgeSize() {
-    switch (widget.size) {
-      case TDBadgeSize.large:
-        return 20;
-      case TDBadgeSize.small:
-        return 16;
-    }
+    return switch (size) {
+      TDBadgeSize.large => 20,
+      TDBadgeSize.small => 16,
+    };
   }
 
-  Font? getBadgeFont(BuildContext context) {
-    switch (widget.size) {
-      case TDBadgeSize.large:
-        return TDTheme.of(context).fontMarkSmall;
-      case TDBadgeSize.small:
-        return TDTheme.of(context).fontMarkExtraSmall;
-    }
+  TextStyle? getBadgeFont(BuildContext context) {
+    return switch (size) {
+      TDBadgeSize.large => context.labelMedium,
+      TDBadgeSize.small => context.labelSmall,
+    }?.copyWith(color: textColor, fontWeight: FontWeight.w500);
   }
 
   bool isVisible() {
     final value = getValue();
     try {
-      return widget.showZero || double.parse(value) != 0;
+      return showZero || double.parse(value) != 0;
     } catch (e) {
       return true;
     }
   }
 
   String getValue() {
-    return ((widget.message ?? '').isNotEmpty
-            ? widget.message
-            : (widget.count ?? '').isNotEmpty
-            ? widget.count
-            : '0')
-        as String;
+    if (message.isNotBlank) return message!;
+
+    // If count exceeds maxCount, display '${maxCount}+ such as 99+'
+    if (maxCount.getOr() > 0 && count.getOr() > maxCount.getOr()) {
+      return '$maxCount+';
+    } else {
+      return '$count';
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    updateBadgeNum(widget.count);
+    final Center child = Center(
+      child: TDText(
+        getValue(),
+        style: getBadgeFont(context),
+        textAlign: TextAlign.center,
+      ),
+    );
 
-    switch (widget.type) {
+    switch (type) {
       case TDBadgeType.redPoint:
         return Container(
           alignment: Alignment.center,
           height: getBadgeSize() / 2,
           width: getBadgeSize() / 2,
           decoration: BoxDecoration(
-            color: widget.color ?? TDTheme.of(context).errorColor6,
+            color: background,
             borderRadius: BorderRadius.circular(getBadgeSize() / 4),
           ),
         );
@@ -129,67 +117,39 @@ class _TDBadgeState extends State<TDBadge> {
         return Visibility(
           visible: isVisible(),
           child:
-              badgeNum.length == 1
+              getValue().length == 1
                   ? Container(
                     height: getBadgeSize(),
                     width: getBadgeSize(),
                     decoration: BoxDecoration(
-                      color: widget.color ?? TDTheme.of(context).errorColor6,
+                      color: background,
                       borderRadius: BorderRadius.circular(getBadgeSize() / 2),
                     ),
-                    child: Center(
-                      child: TDText(
-                        widget.message ?? badgeNum,
-                        forceVerticalCenter: true,
-                        fontSize: getBadgeFont(context),
-                        fontWeight: FontWeight.w500,
-                        textColor:
-                            widget.textColor ?? TDTheme.of(context).whiteColor1,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
+                    child: child,
                   )
                   : Container(
                     height: getBadgeSize(),
                     padding: const EdgeInsets.only(left: 5, right: 5),
                     decoration: BoxDecoration(
-                      color: widget.color ?? TDTheme.of(context).errorColor6,
+                      color: background,
                       borderRadius: BorderRadius.circular(getBadgeSize() / 2),
                     ),
-                    child: Center(
-                      child: TDText(
-                        widget.message ?? badgeNum,
-                        forceVerticalCenter: true,
-                        fontSize: getBadgeFont(context),
-                        fontWeight: FontWeight.w500,
-                        textColor:
-                            widget.textColor ?? TDTheme.of(context).whiteColor1,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
+                    child: child,
                   ),
         );
       case TDBadgeType.subscript:
         return ClipPath(
-          clipper: TrapezoidPath(widget.widthLarge, widget.widthSmall),
+          clipper: TrapezoidPath(widthLarge, widthSmall),
           child: Container(
             alignment: Alignment.topRight,
-            color: widget.color ?? TDTheme.of(context).errorColor6,
+            color: background,
             height: 32,
             width: 32,
             child: Transform.rotate(
               angle: pi / 4,
               child: Padding(
-                padding:
-                    widget.padding ?? const EdgeInsets.only(left: 4, bottom: 8),
-                child: TDText(
-                  widget.message ?? badgeNum,
-                  fontSize: getBadgeFont(context),
-                  fontWeight: FontWeight.w500,
-                  textColor:
-                      widget.textColor ?? TDTheme.of(context).whiteColor1,
-                  textAlign: TextAlign.center,
-                ),
+                padding: padding ?? const EdgeInsets.only(left: 4, bottom: 8),
+                child: child,
               ),
             ),
           ),
@@ -201,7 +161,7 @@ class _TDBadgeState extends State<TDBadge> {
             height: 16,
             padding: const EdgeInsets.only(left: 4, right: 4),
             decoration: BoxDecoration(
-              color: widget.color ?? TDTheme.of(context).errorColor6,
+              color: background,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(10),
                 topRight: Radius.circular(10),
@@ -209,16 +169,7 @@ class _TDBadgeState extends State<TDBadge> {
                 bottomLeft: Radius.circular(1),
               ),
             ),
-            child: Center(
-              child: TDText(
-                widget.message ?? badgeNum,
-                forceVerticalCenter: true,
-                fontSize: getBadgeFont(context),
-                fontWeight: FontWeight.w500,
-                textColor: widget.textColor ?? TDTheme.of(context).whiteColor1,
-                textAlign: TextAlign.center,
-              ),
-            ),
+            child: child,
           ),
         );
       case TDBadgeType.square:
@@ -229,23 +180,13 @@ class _TDBadgeState extends State<TDBadge> {
               height: getBadgeSize(),
               padding: const EdgeInsets.only(left: 5, right: 5),
               decoration: BoxDecoration(
-                color: widget.color ?? TDTheme.of(context).errorColor6,
+                color: background,
                 borderRadius:
-                    widget.border == TDBadgeBorder.large
+                    border == TDBadgeBorder.large
                         ? BorderRadius.circular(8)
                         : BorderRadius.circular(2),
               ),
-              child: Center(
-                child: TDText(
-                  widget.message ?? badgeNum,
-                  forceVerticalCenter: true,
-                  fontSize: getBadgeFont(context),
-                  fontWeight: FontWeight.w500,
-                  textColor:
-                      widget.textColor ?? TDTheme.of(context).whiteColor1,
-                  textAlign: TextAlign.center,
-                ),
-              ),
+              child: child,
             ),
           ),
         );

@@ -19,7 +19,7 @@ typedef TDButtonEvent = void Function();
 /// TD常规按钮
 class TDButton extends StatefulWidget {
   const TDButton(
-      {Key? key,
+      {super.key,
       this.text,
       this.size = TDButtonSize.medium,
       this.type = TDButtonType.fill,
@@ -42,8 +42,7 @@ class TDButton extends StatefulWidget {
       this.onLongPress,
       this.margin,
       this.padding,
-      this.iconPosition = TDButtonIconPosition.left})
-      : super(key: key);
+      this.iconPosition = TDButtonIconPosition.left});
 
   /// 自控件
   final Widget? child;

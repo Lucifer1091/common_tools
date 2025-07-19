@@ -6,10 +6,16 @@ import 'package:flutter/material.dart';
 /// {@endtemplate}
 class ScrollControllerBuilder extends StatefulWidget {
   /// {@macro ScrollControllerBuilder}
-  const ScrollControllerBuilder({required this.builder, super.key});
+  const ScrollControllerBuilder({
+    required this.builder,
+    super.key,
+    this.listener,
+  });
 
   final Widget Function(BuildContext context, ScrollController controller)
   builder;
+
+  final void Function(ScrollController controller)? listener;
 
   @override
   State<ScrollControllerBuilder> createState() =>
@@ -23,10 +29,16 @@ class _ScrollControllerBuilderState extends State<ScrollControllerBuilder> {
   void initState() {
     super.initState();
     controller = ScrollController();
+    if (widget.listener != null) {
+      controller.addListener(() => widget.listener!(controller));
+    }
   }
 
   @override
   void dispose() {
+    if (widget.listener != null) {
+      controller.removeListener(() => widget.listener!(controller));
+    }
     controller.dispose();
     super.dispose();
   }
