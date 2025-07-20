@@ -1,10 +1,4 @@
-/*
- * Created by dorayhong@tencent.com on 6/8/23.
- */
 import 'package:flutter/cupertino.dart';
-
-import '../../../tdesign_flutter.dart';
-import '../../theme/td_theme.dart';
 
 class TDCollapseSaltedKey<S, V> extends LocalKey {
   const TDCollapseSaltedKey(this.salt, this.value);
@@ -13,10 +7,10 @@ class TDCollapseSaltedKey<S, V> extends LocalKey {
   final V value;
 
   @override
-  bool operator ==(dynamic other) {
-    if (other.runtimeType != runtimeType) return false;
-    final TDCollapseSaltedKey<S, V> typedOther = other;
-    return salt == typedOther.salt && value == typedOther.value;
+  bool operator ==(Object other) {
+    if (other is! TDCollapseSaltedKey<S, V>) return false;
+
+    return salt == other.salt && value == other.value;
   }
 
   @override
@@ -24,9 +18,8 @@ class TDCollapseSaltedKey<S, V> extends LocalKey {
 
   @override
   String toString() {
-
-    final saltString = S == String ? '<\'$salt\'>' : '<$salt>';
-    final valueString = V == String ? '<\'$value\'>' : '<$value>';
+    final saltString = S == String ? "<'$salt'>" : '<$salt>';
+    final valueString = V == String ? "<'$value'>" : '<$value>';
     return '[$saltString $valueString]';
   }
 }

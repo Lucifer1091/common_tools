@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../tdesign_flutter.dart';
-import '../../theme/td_spacers.dart';
-import '../../theme/td_theme.dart';
-import '../icon/td_icons.dart';
+import '../../../common_tools.dart';
 import '../swipe_cell/td_swipe_cell_inherited.dart';
 import '../text/td_text.dart';
 import 'td_cell_inherited.dart';
@@ -13,10 +10,9 @@ typedef TDCellClick = void Function(TDCell cell);
 
 enum TDCellAlign { top, middle, bottom }
 
-/// 单元格组件
 class TDCell extends StatefulWidget {
   const TDCell({
-    Key? key,
+    super.key,
     this.align = TDCellAlign.middle,
     this.arrow = false,
     this.bordered = true,
@@ -42,81 +38,56 @@ class TDCell extends StatefulWidget {
     this.imageCircle = 50,
     this.showBottomBorder = false,
     this.height,
-  }) : super(key: key);
+  });
 
-  /// 内容的对齐方式，默认居中对齐。可选项：top/middle/bottom
   final TDCellAlign? align;
 
-  /// 是否显示右侧箭头
   final bool? arrow;
 
-  /// 是否显示下边框，仅在TDCellGroup组件下起作用
   final bool? bordered;
 
-  /// 下方内容描述文字
   final String? description;
 
-  /// 下方内容描述组件
   final Widget? descriptionWidget;
 
-  /// 是否开启点击反馈
   final bool? hover;
 
-  /// 主图
   final ImageProvider? image;
 
-  /// 主图尺寸
   final double? imageSize;
 
-  /// 主图圆角，默认50（圆形）
   final double? imageCircle;
 
-  /// 主图组件
   final Widget? imageWidget;
 
-  /// 左侧图标，出现在单元格标题的左侧
   final IconData? leftIcon;
 
-  /// 左侧图标组件
   final Widget? leftIconWidget;
 
-  /// 和标题同行的说明文字
   final String? note;
 
-  /// 说明文字组件
   final Widget? noteWidget;
 
-  /// 是否显示表单必填星号
   final bool? required;
 
-  /// 最右侧图标
   final IconData? rightIcon;
 
-  /// 最右侧图标组件
   final Widget? rightIconWidget;
 
-  /// 标题
   final String? title;
 
-  /// 标题组件
   final Widget? titleWidget;
 
-  /// 点击事件
   final TDCellClick? onClick;
 
-  /// 长按事件
   final TDCellClick? onLongPress;
 
-  /// 自定义样式
   final TDCellStyle? style;
 
-  /// 禁用
   final bool? disabled;
 
-  /// 是否显示下边框（建议TDCellGroup组件下false，避免与bordered重叠）
   final bool? showBottomBorder;
 
-  /// 高度
   final double? height;
 
   @override
@@ -128,13 +99,25 @@ class _TDCellState extends State<TDCell> {
 
   @override
   Widget build(BuildContext context) {
-    var style = widget.style ?? TDCellInherited.of(context)?.style ?? TDCellStyle.cellStyle(context);
-    var crossAxisAlignment = _getAlign();
-    var color = _status == 'default' ? style.backgroundColor : style.clickBackgroundColor;
-    var border;
-    if(widget.showBottomBorder!) {
-      border = Border(bottom: BorderSide(width: 1, color: style.borderedColor ?? TDTheme.of(context).grayColor3));
+    final style =
+        widget.style ??
+        TDCellInherited.of(context)?.style ??
+        TDCellStyle.cellStyle(context);
+    final crossAxisAlignment = _getAlign();
+    final color =
+        _status == 'default'
+            ? style.backgroundColor
+            : style.clickBackgroundColor;
+
+    Border? border;
+    if (widget.showBottomBorder!) {
+      border = Border(
+        bottom: BorderSide(
+          color: style.borderedColor ?? ThemeColors.neutral.shade200,
+        ),
+      );
     }
+
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
@@ -143,11 +126,14 @@ class _TDCellState extends State<TDCell> {
         }
         TDSwipeCellInherited.of(context)?.cellClick();
       },
-      onLongPress: widget.onLongPress != null ? () {
-        if (!(widget.disabled ?? false)) {
-          widget.onLongPress!(widget);
-        }
-      } : null,
+      onLongPress:
+          widget.onLongPress != null
+              ? () {
+                if (!(widget.disabled ?? false)) {
+                  widget.onLongPress!(widget);
+                }
+              }
+              : null,
       onTapDown: (details) {
         _setStatus('active', 0);
       },
@@ -169,9 +155,15 @@ class _TDCellState extends State<TDCell> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (widget.leftIcon != null || widget.leftIconWidget != null) ...[
-                    widget.leftIconWidget ?? Icon(widget.leftIcon, size: 24, color: style.leftIconColor),
-                    SizedBox(width: TDTheme.of(context).spacer12),
+                  if (widget.leftIcon != null ||
+                      widget.leftIconWidget != null) ...[
+                    widget.leftIconWidget ??
+                        Icon(
+                          widget.leftIcon,
+                          size: 24,
+                          color: style.leftIconColor,
+                        ),
+                    SizedBox(width: 12),
                   ],
                   Expanded(
                     child: Column(
@@ -181,18 +173,29 @@ class _TDCellState extends State<TDCell> {
                           children: [
                             if (widget.titleWidget != null)
                               Flexible(child: widget.titleWidget!)
-                            else if (widget.title?.isNotEmpty == true)
-                              Flexible(child: TDText(widget.title!, style: style.titleStyle)),
-                            if (widget.required ?? false) TDText(' *', style: style.requiredStyle),
+                            else if (widget.title.isNotBlank)
+                              Flexible(
+                                child: TDText(
+                                  widget.title,
+                                  style: style.titleStyle,
+                                ),
+                              ),
+                            if (widget.required ?? false)
+                              TDText(' *', style: style.requiredStyle),
                           ],
                         ),
-                        if ((widget.titleWidget != null || widget.title != null) &&
-                            (widget.descriptionWidget != null || widget.description?.isNotEmpty == true))
-                          SizedBox(height: TDTheme.of(context).spacer4),
+                        if ((widget.titleWidget != null ||
+                                widget.title != null) &&
+                            (widget.descriptionWidget != null ||
+                                widget.description.isNotBlank))
+                          SizedBox(height: 4),
                         if (widget.descriptionWidget != null)
                           widget.descriptionWidget!
-                        else if (widget.description?.isNotEmpty == true)
-                          TDText(widget.description!, style: style.descriptionStyle),
+                        else if (widget.description.isNotBlank)
+                          TDText(
+                            widget.description!,
+                            style: style.descriptionStyle,
+                          ),
                       ],
                     ),
                   ),
@@ -200,18 +203,23 @@ class _TDCellState extends State<TDCell> {
               ),
             ),
             Wrap(
-              spacing: TDTheme.of(context).spacer4,
+              spacing: 4,
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 if (widget.noteWidget != null)
                   widget.noteWidget!
-                else if (widget.note?.isNotEmpty == true)
-                  TDText(widget.note!, style: style.noteStyle),
+                else if (widget.note.isNotBlank)
+                  TDText(widget.note, style: style.noteStyle),
                 if (widget.rightIconWidget != null)
                   widget.rightIconWidget!
                 else if (widget.rightIcon != null)
                   Icon(widget.rightIcon, size: 24, color: style.rightIconColor),
-                if (widget.arrow ?? false) Icon(TDIcons.chevron_right, size: 24, color: style.arrowColor),
+                if (widget.arrow ?? false)
+                  Icon(
+                    Icons.chevron_right_rounded,
+                    size: 24,
+                    color: style.arrowColor,
+                  ),
               ],
             ),
           ],
@@ -228,35 +236,31 @@ class _TDCellState extends State<TDCell> {
         return CrossAxisAlignment.center;
       case TDCellAlign.bottom:
         return CrossAxisAlignment.end;
-      default:
+      case null:
         return CrossAxisAlignment.center;
     }
   }
 
   void _setStatus(String status, int milliseconds) {
-    if ((widget.disabled ?? false) || !(widget.hover ?? true)) {
-      return;
-    }
+    if ((widget.disabled ?? false) || !(widget.hover ?? true)) return;
+
     if (milliseconds == 0) {
-      setState(() {
-        _status = status;
-      });
+      setState(() => _status = status);
       return;
     }
     Future.delayed(Duration(milliseconds: milliseconds), () {
-      setState(() {
-        _status = status;
-      });
+      setState(() => _status = status);
     });
   }
 
   List<Widget> _getImage() {
-    var imageSize = widget.imageSize ?? 48;
-    var list = <Widget>[];
+    final imageSize = widget.imageSize ?? 48;
+    final list = <Widget>[];
     if (widget.imageWidget != null) {
       list.add(widget.imageWidget!);
     } else if (widget.image != null) {
-        list.add(ClipRRect(
+      list.add(
+        ClipRRect(
           borderRadius: BorderRadius.circular(widget.imageCircle ?? 50),
           child: Image(
             image: widget.image!,
@@ -264,12 +268,13 @@ class _TDCellState extends State<TDCell> {
             height: imageSize,
             fit: BoxFit.cover,
           ),
-        ));
+        ),
+      );
     }
     if (list.isEmpty) {
       return list;
     }
-    list.add(SizedBox(width: TDTheme.of(context).spacer12));
+    list.add(SizedBox(width: 12));
     return list;
   }
 }

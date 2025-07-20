@@ -4,8 +4,8 @@ class TdNonAnimatedExpandIcon extends StatelessWidget {
   const TdNonAnimatedExpandIcon({
     required this.isExpanded,
     required this.padding,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final bool isExpanded;
   final EdgeInsets padding;
@@ -23,12 +23,13 @@ class TdNonAnimatedExpandIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       padding: padding,
-      iconSize: 24.0,
+      iconSize: 24,
       color: getIconColor(context),
       onPressed: null,
-      icon: isExpanded
-          ? const Icon(Icons.expand_less)
-          : const Icon(Icons.expand_more),
+      icon:
+          isExpanded
+              ? const Icon(Icons.expand_less)
+              : const Icon(Icons.expand_more),
     );
   }
 }

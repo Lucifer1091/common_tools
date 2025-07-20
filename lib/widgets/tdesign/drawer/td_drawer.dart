@@ -1,19 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
-import '../../theme/td_colors.dart';
-import '../../theme/td_spacers.dart';
-import '../../theme/td_theme.dart';
-import '../cell/td_cell.dart';
-import '../cell/td_cell_group.dart';
+import '../../../common_tools.dart';
 import '../cell/td_cell_style.dart';
-import '../icon/td_icons.dart';
 import '../popup/td_popup_route.dart';
 import 'td_drawer_widget.dart';
 
-/// 抽屉方向
 enum TDDrawerPlacement { left, right }
 
-/// 抽屉组件
 class TDDrawer {
   TDDrawer(
     this.context, {
@@ -36,9 +31,7 @@ class TDDrawer {
     this.isShowLastBordered = true,
     this.contentWidget,
   }) {
-    if (visible == true) {
-      show();
-    }
+    if (visible.getOr()) show();
   }
 
   /// 上下文
@@ -98,15 +91,18 @@ class TDDrawer {
   /// 是否显示最后一行分割线
   final bool? isShowLastBordered;
 
-  TDSlidePopupRoute? _drawerRoute;
+  TDSlidePopupRoute<void>? _drawerRoute;
 
   void show() {
-    if (_drawerRoute != null) {
-      return; // 如果抽屉已经显示了，就不要再显示
-    }
+    // If the drawer is already shown, don't show it again
+    if (_drawerRoute != null) return;
+
     _drawerRoute = TDSlidePopupRoute(
-      slideTransitionFrom: placement == TDDrawerPlacement.right ? SlideTransitionFrom.right : SlideTransitionFrom.left,
-      isDismissible: (showOverlay ?? true) ? (closeOnOverlayClick ?? true) : false,
+      slideTransitionFrom:
+          placement == TDDrawerPlacement.right
+              ? SlideTransitionFrom.right
+              : SlideTransitionFrom.left,
+      isDismissible: (showOverlay ?? true) && (closeOnOverlayClick ?? true),
       modalBarrierColor: (showOverlay ?? true) ? null : Colors.transparent,
       modalTop: drawerTop,
       builder: (context) {
@@ -126,15 +122,16 @@ class TDDrawer {
         );
       },
     );
-    Navigator.of(context).push(_drawerRoute!).then((_) {
-      // 当抽屉关闭时，将_drawerRoute置为null
-      _deleteRouter();
-    });
+
+    unawaited(
+      Navigator.of(context).push(_drawerRoute!).then((_) {
+        // When the drawer is closed, set _drawerRoute to null
+        _deleteRouter();
+      }),
+    );
   }
 
-  void open() {
-    show();
-  }
+  void open() => show();
 
   @mustCallSuper
   void close() {

@@ -2,38 +2,32 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/scheduler.dart';
 
-import '../../../tdesign_flutter.dart';
-import '../../util/iterable_ext.dart';
-import 'sticky_header/sticky_header_widget.dart';
-import 'td_indexes_anchor.dart';
+import '../../../common_tools.dart';
+import '../text/td_text.dart';
 
-/// 索引
 class TDIndexesList extends StatefulWidget {
   const TDIndexesList({
-    Key? key,
     required this.indexList,
-    this.indexListMaxHeight = 0.8,
     required this.activeIndex,
     required this.onSelect,
+    super.key,
+    this.indexListMaxHeight = 0.8,
     this.builderIndex,
-  }) : super(key: key);
+  });
 
-  /// 索引字符列表。不传默认 A-Z
+  /// Index character list. If not passed, the default is A-Z
   final List<String> indexList;
 
-  /// 索引列表最大高度（父容器高度的百分比，默认0.8）
+  /// Maximum height of the index list (percentage of parent container height, default 0.8)
   final double indexListMaxHeight;
 
-  /// 选中索引
   final ValueNotifier<String> activeIndex;
 
-  /// 点击侧边栏时触发事件
   final void Function(String newIndex, String oldIndex) onSelect;
 
-  /// 索引文本自定义构建，包括索引激活左侧提示
-  final Widget Function(BuildContext context, String index, bool isActive)? builderIndex;
+  final Widget Function(BuildContext context, String index, bool isActive)?
+  builderIndex;
 
   @override
   State<TDIndexesList> createState() => _TDIndexesListState();
@@ -48,14 +42,18 @@ class _TDIndexesListState extends State<TDIndexesList> {
   @override
   void initState() {
     super.initState();
-    _containerKeys = widget.indexList.asMap().map((index, e) => MapEntry(e, GlobalKey()));
+    _containerKeys = widget.indexList.asMap().map(
+      (index, e) => MapEntry(e, GlobalKey()),
+    );
   }
 
   @override
   void didUpdateWidget(TDIndexesList oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.indexList != oldWidget.indexList) {
-      _containerKeys = widget.indexList.asMap().map((index, e) => MapEntry(e, GlobalKey()));
+      _containerKeys = widget.indexList.asMap().map(
+        (index, e) => MapEntry(e, GlobalKey()),
+      );
     }
   }
 
@@ -68,7 +66,7 @@ class _TDIndexesListState extends State<TDIndexesList> {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      right: TDTheme.of(context).spacer8,
+      right: 8,
       top: 0,
       bottom: 0,
       child: Align(
@@ -92,64 +90,69 @@ class _TDIndexesListState extends State<TDIndexesList> {
                 builder: (context, value, child) {
                   return Column(
                     mainAxisSize: MainAxisSize.min,
-                    children: widget.indexList.map(
-                      (e) {
-                        final isActive = value == e;
-                        if (widget.builderIndex != null) {
-                          return widget.builderIndex!(context, e, isActive);
-                        }
-                        return Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            if (_showTip && value == e)
-                              Positioned(
-                                top: -TDTheme.of(context).spacer48 / 2 + _indexSize / 2,
-                                left: -TDTheme.of(context).spacer48,
-                                child: Container(
-                                  height: TDTheme.of(context).spacer48,
-                                  width: TDTheme.of(context).spacer48,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(TDTheme.of(context).radiusCircle),
-                                    color: TDTheme.of(context).brandColor1,
+                    children:
+                        widget.indexList.map((e) {
+                          final isActive = value == e;
+                          if (widget.builderIndex != null) {
+                            return widget.builderIndex!(context, e, isActive);
+                          }
+                          return Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              if (_showTip && value == e)
+                                Positioned(
+                                  top: -48 / 2 + _indexSize / 2,
+                                  left: -48,
+                                  child: Container(
+                                    height: 48,
+                                    width: 48,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(9999),
+                                      color: ThemeColors.blue.shade50,
+                                    ),
+                                    child: Center(
+                                      child: TDText(
+                                        e,
+                                        style: context.displaySmall,
+                                        textColor: ThemeColors.blue.shade600,
+                                      ),
+                                    ),
                                   ),
+                                ),
+                              Container(
+                                key: _containerKeys[e],
+                                padding: EdgeInsets.only(left: 8),
+                                color: Colors.transparent,
+                                child: Container(
+                                  width: _indexSize,
+                                  height: _indexSize,
+                                  decoration:
+                                      isActive
+                                          ? BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              9999,
+                                            ),
+                                            color: ThemeColors.blue.shade600,
+                                          )
+                                          : null,
                                   child: Center(
                                     child: TDText(
                                       e,
-                                      forceVerticalCenter: true,
-                                      font: TDTheme.of(context).fontTitleExtraLarge,
-                                      textColor: TDTheme.of(context).brandColor7,
+                                      style:
+                                          isActive
+                                              ? context.bodySmall
+                                              : context.labelSmall,
+                                      textColor:
+                                          isActive
+                                              ? Colors.white
+                                              : ThemeColors.neutral.shade900,
                                     ),
                                   ),
                                 ),
                               ),
-                            Container(
-                              key: _containerKeys[e],
-                              padding: EdgeInsets.only(left: TDTheme.of(context).spacer8),
-                              color: Colors.transparent,
-                              child: Container(
-                                width: _indexSize,
-                                height: _indexSize,
-                                decoration: isActive
-                                    ? BoxDecoration(
-                                        borderRadius: BorderRadius.circular(TDTheme.of(context).radiusCircle),
-                                        color: TDTheme.of(context).brandColor7,
-                                      )
-                                    : null,
-                                child: Center(
-                                  child: TDText(
-                                    e,
-                                    forceVerticalCenter: true,
-                                    font: isActive ?  TDTheme.of(context).fontMarkSmall : TDTheme.of(context).fontLinkSmall,
-                                    textColor:
-                                        isActive ? TDTheme.of(context).fontWhColor1 : TDTheme.of(context).fontGyColor1,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    ).toList(),
+                            ],
+                          );
+                        }).toList(),
                   );
                 },
               ),
@@ -171,11 +174,15 @@ class _TDIndexesListState extends State<TDIndexesList> {
   }
 
   String? _fingerInsideContainer(Offset globalPosition) {
-    for (var entry in _containerKeys.entries) {
-      final renderBox = entry.value.currentContext?.findRenderObject() as RenderBox?;
+    for (final entry in _containerKeys.entries) {
+      final renderBox =
+          entry.value.currentContext?.findRenderObject() as RenderBox?;
       if (renderBox != null) {
         final localPosition = renderBox.globalToLocal(globalPosition);
-        final isIn = renderBox.hitTest(BoxHitTestResult(), position: localPosition);
+        final isIn = renderBox.hitTest(
+          BoxHitTestResult(),
+          position: localPosition,
+        );
         if (isIn) {
           return entry.key;
         }
@@ -186,13 +193,10 @@ class _TDIndexesListState extends State<TDIndexesList> {
 
   void _hideTip() {
     _hideTipTimer?.cancel();
-    _hideTipTimer = Timer(
-      const Duration(seconds: 1),
-      () {
-        setState(() {
-          _showTip = false;
-        });
-      },
-    );
+    _hideTipTimer = Timer(const Duration(seconds: 1), () {
+      setState(() {
+        _showTip = false;
+      });
+    });
   }
 }

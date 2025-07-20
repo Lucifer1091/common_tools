@@ -1,38 +1,26 @@
-/*
- * Created by dorayhong@tencent.com on 6/4/23.
- */
 import 'package:flutter/material.dart';
 
-typedef TDCollapseIconTextBuilder = String Function(
-    BuildContext context, bool isExpanded);
+import 'td_collapse.dart';
 
-/// 折叠面板，需配合 [TDCollapse] 使用
+typedef TDCollapseIconTextBuilder =
+    String Function(BuildContext context, bool isExpanded);
+
+/// Folding panel, need to be used with [TDCollapse]
 class TDCollapsePanel extends ExpansionPanel {
   TDCollapsePanel({
-    /// 折叠面板的头部组件构造函数
-    required ExpansionPanelHeaderBuilder headerBuilder,
+    required super.headerBuilder,
 
-    /// 折叠面板的内容组件
-    required Widget body,
+    required super.body,
 
-    /// 折叠面板的展开状态
-    isExpanded = false,
+    super.isExpanded,
 
-    /// 折叠按钮操作说明文案的构造函数
     this.expandIconTextBuilder,
 
-    /// 折叠面板的值，当使用 [TDCollapse.accordion] 时，必须传入此值
+    /// The value of the folding panel. When using [TDCollapse.accordion], this value must be passed in
     this.value,
 
-    /// 折叠面板的背景色
-    backgroundColor,
-  }) : super(
-          headerBuilder: headerBuilder,
-          body: body,
-          isExpanded: isExpanded,
-          canTapOnHeader: true,
-          backgroundColor: backgroundColor,
-        );
+    super.backgroundColor,
+  }) : super(canTapOnHeader: true);
 
   final Object? value;
 

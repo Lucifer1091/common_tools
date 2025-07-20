@@ -75,7 +75,7 @@ class _AppButtonState extends State<AppButton>
 
   @override
   void initState() {
-    if (widget.enableScaleAnimation.getOrDefault(
+    if (widget.enableScaleAnimation.getOr(
       enableAppButtonScaleAnimationGlobal,
     )) {
       _controller = AnimationController(
@@ -104,7 +104,7 @@ class _AppButtonState extends State<AppButton>
       _scale = 1 - _controller!.value;
     }
 
-    if (widget.enableScaleAnimation.getOrDefault(
+    if (widget.enableScaleAnimation.getOr(
           enableAppButtonScaleAnimationGlobal,
         ) &&
         isElevationEnabled) {

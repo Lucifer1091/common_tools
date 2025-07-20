@@ -60,7 +60,7 @@ enum TDBackTopStyle { circle, halfCircle }
 /// }
 /// ```
 ///
-class TDBackTop extends StatefulWidget {
+class TDBackTop extends StatelessWidget {
   const TDBackTop({
     super.key,
     this.controller,
@@ -81,17 +81,12 @@ class TDBackTop extends StatefulWidget {
   final VoidCallback? onTap;
 
   @override
-  State<TDBackTop> createState() => _TDBackTopState();
-}
-
-class _TDBackTopState extends State<TDBackTop> {
-  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (widget.controller != null && widget.controller!.hasClients) {
+        if (controller != null && controller!.hasClients) {
           unawaited(
-            widget.controller!.animateTo(
+            controller!.animateTo(
               0,
               duration: const Duration(milliseconds: 500),
               curve: Curves.easeIn,
@@ -99,10 +94,10 @@ class _TDBackTopState extends State<TDBackTop> {
           );
         }
 
-        widget.onTap?.call();
+        onTap?.call();
       },
       child:
-          widget.style == TDBackTopStyle.circle
+          style == TDBackTopStyle.circle
               ? _buildCircleWidget(context)
               : _buildHalfCircleWidget(context),
     );
@@ -110,25 +105,25 @@ class _TDBackTopState extends State<TDBackTop> {
 
   Widget _buildCircleWidget(BuildContext context) {
     final color =
-        widget.theme == TDBackTopTheme.dark
+        theme == TDBackTopTheme.dark
             ? Colors.white
             : const Color.fromRGBO(0, 0, 0, 0.9);
 
     return Container(
       width: 48,
       height: 48,
-      padding: EdgeInsets.symmetric(vertical: widget.showText ? 6 : 13),
+      padding: EdgeInsets.symmetric(vertical: showText ? 6 : 13),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(999),
         border: Border.all(
           color:
-              widget.theme == TDBackTopTheme.dark
+              theme == TDBackTopTheme.dark
                   ? ThemeColors.neutral.shade900
                   : ThemeColors.neutral.shade400,
           width: 0.5,
         ),
         color:
-            widget.theme == TDBackTopTheme.light
+            theme == TDBackTopTheme.light
                 ? Colors.white
                 : ThemeColors.neutral.shade900,
       ),
@@ -137,7 +132,7 @@ class _TDBackTopState extends State<TDBackTop> {
           children: [
             Icon(Icons.arrow_drop_up_rounded, size: 20, color: color),
             Visibility(
-              visible: widget.showText,
+              visible: showText,
               child: TDText(
                 'Top',
                 maxLines: 1,
@@ -157,7 +152,7 @@ class _TDBackTopState extends State<TDBackTop> {
 
   Widget _buildHalfCircleWidget(BuildContext context) {
     final color =
-        widget.theme == TDBackTopTheme.dark
+        theme == TDBackTopTheme.dark
             ? Colors.white
             : const Color.fromRGBO(0, 0, 0, 0.9);
 
@@ -168,7 +163,7 @@ class _TDBackTopState extends State<TDBackTop> {
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         decoration: BoxDecoration(
           color:
-              widget.theme == TDBackTopTheme.light
+              theme == TDBackTopTheme.light
                   ? Colors.white
                   : ThemeColors.neutral.shade900,
           borderRadius: const BorderRadius.only(
@@ -177,7 +172,7 @@ class _TDBackTopState extends State<TDBackTop> {
           ),
           border: Border.all(
             color:
-                widget.theme == TDBackTopTheme.dark
+                theme == TDBackTopTheme.dark
                     ? Color.fromRGBO(94, 94, 94, 1)
                     : Color.fromRGBO(220, 220, 220, 1),
             width: 0.5,
@@ -189,7 +184,7 @@ class _TDBackTopState extends State<TDBackTop> {
             Icon(Icons.arrow_drop_up_rounded, size: 22, color: color),
             const SizedBox(width: 2),
             Visibility(
-              visible: widget.showText,
+              visible: showText,
               child: SizedBox(
                 height: 32,
                 child: Column(

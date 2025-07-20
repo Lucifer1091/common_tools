@@ -1,52 +1,47 @@
 import 'package:flutter/material.dart';
 
-import '../../../tdesign_flutter.dart';
+import '../../../common_tools.dart';
+import '../../layout/no_widget.dart';
+import '../text/td_text.dart';
+import 'td_cell.dart';
 import 'td_cell_inherited.dart';
+import 'td_cell_style.dart';
 
-typedef CellBuilder = Widget Function(BuildContext context, TDCell cell, int index);
+typedef CellBuilder =
+    Widget Function(BuildContext context, TDCell cell, int index);
 
 enum TDCellGroupTheme { defaultTheme, cardTheme }
 
-/// 单元格组组件
 class TDCellGroup extends StatefulWidget {
   const TDCellGroup({
-    Key? key,
+    required this.cells,
+    super.key,
     this.bordered = false,
     this.theme = TDCellGroupTheme.defaultTheme,
     this.title,
-    required this.cells,
     this.builder,
     this.style,
     this.titleWidget,
     this.scrollable = false,
     this.isShowLastBordered = false,
-  }) : super(key: key);
+  });
 
-  /// 是否显示组边框
   final bool? bordered;
 
-  /// 单元格组风格。可选项：default/card
   final TDCellGroupTheme? theme;
 
-  /// 单元格组标题
   final String? title;
 
-  /// 单元格组标题组件
   final Widget? titleWidget;
 
-  /// 单元格列表
   final List<TDCell> cells;
 
-  /// cell构建器，可自定义cell父组件，如Dismissible
   final CellBuilder? builder;
 
-  /// 自定义样式
   final TDCellStyle? style;
 
-  /// 可滚动
   final bool? scrollable;
 
-  /// 是否显示最后一个cell的下边框
   final bool? isShowLastBordered;
 
   @override
@@ -56,9 +51,10 @@ class TDCellGroup extends StatefulWidget {
 class _TDCellGroupState extends State<TDCellGroup> {
   @override
   Widget build(BuildContext context) {
-    var style = widget.style ?? TDCellStyle.cellStyle(context);
-    var itemCount = widget.cells.length;
-    var radius = _getBorderRadius(style);
+    final style = widget.style ?? TDCellStyle.cellStyle(context);
+    final itemCount = widget.cells.length;
+    final radius = _getBorderRadius(style);
+
     return TDCellInherited(
       style: style,
       child: Column(
@@ -70,32 +66,45 @@ class _TDCellGroupState extends State<TDCellGroup> {
               width: double.infinity,
               color: style.titleBackgroundColor,
               padding: style.titlePadding,
-              child: widget.titleWidget ?? TDText(widget.title!, style: style.groupTitleStyle),
+              child:
+                  widget.titleWidget ??
+                  TDText(widget.title, style: style.groupTitleStyle),
             ),
           Flexible(
             child: Container(
-              padding: widget.theme == TDCellGroupTheme.cardTheme
-                  ? style.cardPadding
-                  : EdgeInsets.zero,
-              decoration: BoxDecoration(border: _getBordered(style), borderRadius: radius),
+              padding:
+                  widget.theme == TDCellGroupTheme.cardTheme
+                      ? style.cardPadding
+                      : EdgeInsets.zero,
+              decoration: BoxDecoration(
+                border: _getBordered(style),
+                borderRadius: radius,
+              ),
               child: ClipRRect(
                 borderRadius: radius,
                 child: ListView.separated(
                   padding: EdgeInsets.zero,
-                  shrinkWrap: widget.scrollable == false, // 设置为true以避免无限制地增长
-                  physics: widget.scrollable == false ? const NeverScrollableScrollPhysics() : null, // 禁用ListView的滚动
+                  shrinkWrap: widget.scrollable == false,
+                  physics:
+                      widget.scrollable == false
+                          ? const NeverScrollableScrollPhysics()
+                          : null,
                   itemCount: itemCount,
                   itemBuilder: (context, index) {
                     final item = widget.cells[index];
-                    final cell = widget.builder == null ? item : widget.builder!(context, item, index);
-                    if (itemCount - 1 == index && (widget.isShowLastBordered ?? false)) {
+                    final cell =
+                        widget.builder == null
+                            ? item
+                            : widget.builder!(context, item, index);
+                    if (itemCount - 1 == index &&
+                        (widget.isShowLastBordered ?? false)) {
                       return Column(children: [cell, _borderWidget(style)]);
                     }
                     return cell;
                   },
                   separatorBuilder: (context, index) {
                     if (!(widget.cells[index].bordered ?? true)) {
-                      return const SizedBox.shrink();
+                      return const NoWidget();
                     }
                     return _borderWidget(style);
                   },
@@ -109,14 +118,10 @@ class _TDCellGroupState extends State<TDCellGroup> {
   }
 
   BoxBorder? _getBordered(TDCellStyle style) {
-    if (!(widget.bordered ?? false)) {
-      return null;
-    }
-    var color = style.groupBorderedColor ?? TDTheme.of(context).grayColor3;
-    return Border.all(
-      color: color,
-      width: 1,
-    );
+    if (!(widget.bordered ?? false)) return null;
+
+    final color = style.groupBorderedColor ?? ThemeColors.neutral.shade200;
+    return Border.all(color: color);
   }
 
   BorderRadiusGeometry _getBorderRadius(TDCellStyle style) {
@@ -129,9 +134,12 @@ class _TDCellGroupState extends State<TDCellGroup> {
   Widget _borderWidget(TDCellStyle style) {
     return Row(
       children: [
-        Container(height: 0.5, width: TDTheme.of(context).spacer16, color: style.backgroundColor),
+        Container(height: 0.5, width: 16, color: style.backgroundColor),
         Expanded(
-          child: Container(height: 0.5, color: style.borderedColor ?? TDTheme.of(context).grayColor3),
+          child: Container(
+            height: 0.5,
+            color: style.borderedColor ?? ThemeColors.neutral.shade200,
+          ),
         ),
       ],
     );

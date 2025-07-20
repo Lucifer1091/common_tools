@@ -1,6 +1,6 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+import '../../../common_tools.dart';
 import '../image/td_image.dart';
 import '../link/td_link.dart';
 
@@ -17,22 +17,16 @@ class TDFooter extends StatefulWidget {
     this.height,
   });
 
-  /// 品牌图片
   final String? logo;
 
-  /// 样式
   final TDFooterType type;
 
-  /// 文字
   final String text;
 
-  /// 自定义图片宽
   final double? width;
 
-  /// 自定义图片高
   final double? height;
 
-  /// 链接
   final List<TDLink> links;
 
   @override
@@ -107,7 +101,7 @@ class _TDFooterState extends State<TDFooter> {
                             ? BoxDecoration(
                               border: Border(
                                 right: BorderSide(
-                                  color: TDTheme.of(context).grayColor3,
+                                  color: ThemeColors.neutral.shade200,
                                 ),
                               ),
                             )
@@ -133,7 +127,7 @@ class _TDFooterState extends State<TDFooter> {
     return Text(
       widget.text,
       textAlign: TextAlign.center,
-      style: TextStyle(fontSize: 12, color: TDTheme.of(context).fontGyColor3),
+      style: TextStyle(fontSize: 12, color: ThemeColors.neutral.shade700),
     );
   }
 }

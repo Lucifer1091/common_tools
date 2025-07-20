@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../../common_tools.dart';
 import '../../../extensions/iterable/index.dart';
 import '../../custom/index.dart';
-import '../icon/td_icons.dart';
 import '../text/td_text.dart';
 
 enum TDAvatarSize { large, medium, small }
@@ -168,9 +167,9 @@ class TDAvatar extends StatelessWidget {
           ),
         );
       case TDAvatarType.display:
-        return buildDisplayAvatar(context);
+        return _buildDisplayAvatar(context);
       case TDAvatarType.operation:
-        return buildOperationAvatar(context);
+        return _buildOperationAvatar(context);
     }
   }
 
@@ -182,7 +181,7 @@ class TDAvatar extends StatelessWidget {
     };
   }
 
-  Widget buildOperationAvatar(BuildContext context) {
+  Widget _buildOperationAvatar(BuildContext context) {
     final list = <Widget>[];
 
     if (avatarDisplayList.isBlank && avatarDisplayListAsset.isBlank) {
@@ -334,7 +333,7 @@ class TDAvatar extends StatelessWidget {
     );
   }
 
-  Widget buildDisplayAvatar(BuildContext context) {
+  Widget _buildDisplayAvatar(BuildContext context) {
     final list = <Widget>[];
 
     if (avatarDisplayList.isBlank && avatarDisplayListAsset.isBlank) {

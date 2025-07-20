@@ -58,22 +58,22 @@ class TDBadge extends StatelessWidget {
 
   Color get background => color ?? ThemeColors.error.shade500;
 
-  double getBadgeSize() {
+  double _getBadgeSize() {
     return switch (size) {
       TDBadgeSize.large => 20,
       TDBadgeSize.small => 16,
     };
   }
 
-  TextStyle? getBadgeFont(BuildContext context) {
+  TextStyle? _getBadgeStyle(BuildContext context) {
     return switch (size) {
       TDBadgeSize.large => context.labelMedium,
       TDBadgeSize.small => context.labelSmall,
     }?.copyWith(color: textColor, fontWeight: FontWeight.w500);
   }
 
-  bool isVisible() {
-    final value = getValue();
+  bool _isVisible() {
+    final value = _getValue();
     try {
       return showZero || double.parse(value) != 0;
     } catch (e) {
@@ -81,7 +81,7 @@ class TDBadge extends StatelessWidget {
     }
   }
 
-  String getValue() {
+  String _getValue() {
     if (message.isNotBlank) return message!;
 
     // If count exceeds maxCount, display '${maxCount}+ such as 99+'
@@ -96,8 +96,8 @@ class TDBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final Center child = Center(
       child: TDText(
-        getValue(),
-        style: getBadgeFont(context),
+        _getValue(),
+        style: _getBadgeStyle(context),
         textAlign: TextAlign.center,
       ),
     );
@@ -106,40 +106,40 @@ class TDBadge extends StatelessWidget {
       case TDBadgeType.redPoint:
         return Container(
           alignment: Alignment.center,
-          height: getBadgeSize() / 2,
-          width: getBadgeSize() / 2,
+          height: _getBadgeSize() / 2,
+          width: _getBadgeSize() / 2,
           decoration: BoxDecoration(
             color: background,
-            borderRadius: BorderRadius.circular(getBadgeSize() / 4),
+            borderRadius: BorderRadius.circular(_getBadgeSize() / 4),
           ),
         );
       case TDBadgeType.message:
         return Visibility(
-          visible: isVisible(),
+          visible: _isVisible(),
           child:
-              getValue().length == 1
+              _getValue().length == 1
                   ? Container(
-                    height: getBadgeSize(),
-                    width: getBadgeSize(),
+                    height: _getBadgeSize(),
+                    width: _getBadgeSize(),
                     decoration: BoxDecoration(
                       color: background,
-                      borderRadius: BorderRadius.circular(getBadgeSize() / 2),
+                      borderRadius: BorderRadius.circular(_getBadgeSize() / 2),
                     ),
                     child: child,
                   )
                   : Container(
-                    height: getBadgeSize(),
+                    height: _getBadgeSize(),
                     padding: const EdgeInsets.only(left: 5, right: 5),
                     decoration: BoxDecoration(
                       color: background,
-                      borderRadius: BorderRadius.circular(getBadgeSize() / 2),
+                      borderRadius: BorderRadius.circular(_getBadgeSize() / 2),
                     ),
                     child: child,
                   ),
         );
       case TDBadgeType.subscript:
         return ClipPath(
-          clipper: TrapezoidPath(widthLarge, widthSmall),
+          clipper: _TrapezoidPath(widthLarge, widthSmall),
           child: Container(
             alignment: Alignment.topRight,
             color: background,
@@ -156,7 +156,7 @@ class TDBadge extends StatelessWidget {
         );
       case TDBadgeType.bubble:
         return Visibility(
-          visible: isVisible(),
+          visible: _isVisible(),
           child: Container(
             height: 16,
             padding: const EdgeInsets.only(left: 4, right: 4),
@@ -174,10 +174,10 @@ class TDBadge extends StatelessWidget {
         );
       case TDBadgeType.square:
         return Visibility(
-          visible: isVisible(),
+          visible: _isVisible(),
           child: IntrinsicWidth(
             child: Container(
-              height: getBadgeSize(),
+              height: _getBadgeSize(),
               padding: const EdgeInsets.only(left: 5, right: 5),
               decoration: BoxDecoration(
                 color: background,
@@ -194,8 +194,8 @@ class TDBadge extends StatelessWidget {
   }
 }
 
-class TrapezoidPath extends CustomClipper<Path> {
-  TrapezoidPath(this.widthLarge, this.widthSmall);
+class _TrapezoidPath extends CustomClipper<Path> {
+  _TrapezoidPath(this.widthLarge, this.widthSmall);
 
   final double widthLarge;
   final double widthSmall;

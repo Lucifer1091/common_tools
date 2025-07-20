@@ -2,17 +2,16 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-/// 虚线控件
 class DashedWidget extends StatelessWidget {
   const DashedWidget({
-    Key? key,
+    super.key,
     this.color = Colors.black,
     this.gap = 2,
     this.solidLength = 2,
     this.width,
     this.height,
     this.direction = Axis.horizontal,
-  }) : super(key: key);
+  });
 
   final Color color;
   final double gap;
@@ -29,9 +28,10 @@ class DashedWidget extends StatelessWidget {
         height: height,
         child: CustomPaint(
           painter: DashedPainter(
-              color: color,
-              strokeWidth: height ?? 1,
-              direction: direction),
+            color: color,
+            strokeWidth: height ?? 1,
+            direction: direction,
+          ),
         ),
       );
     } else {
@@ -40,21 +40,24 @@ class DashedWidget extends StatelessWidget {
         height: height ?? MediaQuery.of(context).size.height,
         child: CustomPaint(
           painter: DashedPainter(
-              color: color, strokeWidth: width ?? 1, direction: direction),
+            color: color,
+            strokeWidth: width ?? 1,
+            direction: direction,
+          ),
         ),
       );
     }
   }
 }
 
-/// 绘制虚线自定义控件
 class DashedPainter extends CustomPainter {
-  DashedPainter(
-      {this.color = Colors.black,
-      this.strokeWidth = 1,
-      this.gap = 2,
-      this.solidLength = 2,
-      this.direction = Axis.horizontal});
+  DashedPainter({
+    this.color = Colors.black,
+    this.strokeWidth = 1,
+    this.gap = 2,
+    this.solidLength = 2,
+    this.direction = Axis.horizontal,
+  });
 
   final Color color;
   final double strokeWidth;
@@ -64,11 +67,12 @@ class DashedPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    var paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth;
-    var start = const Offset(0, 0);
+    final paint =
+        Paint()
+          ..color = color
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = strokeWidth;
+    final start = Offset.zero;
     Offset end;
     if (direction == Axis.horizontal) {
       end = Offset(size.width, 0);
@@ -76,51 +80,50 @@ class DashedPainter extends CustomPainter {
       // 不能为0，防止除0错误
       end = Offset(0.00001, size.height);
     }
-    var path = getDashedPath(start, end);
+    final path = getDashedPath(start, end);
 
     canvas.drawPath(path, paint);
   }
 
   Path getDashedPath(Offset start, Offset end) {
-    var size = Size(end.dx - start.dx, end.dy - start.dy);
-    var path = Path();
-    path.moveTo(start.dx, start.dy);
+    final size = Size(end.dx - start.dx, end.dy - start.dy);
+    final path = Path()..moveTo(start.dx, start.dy);
     var shouldDraw = true;
     var currentOffset = Offset(start.dx, start.dy);
 
-    var radians = atan(size.height / size.width);
+    final radians = atan(size.height / size.width);
 
-    var gapDx =
+    final gapDx =
         cos(radians) * gap < 0 ? cos(radians) * gap * -1 : cos(radians) * gap;
 
-    var gapDy =
+    final gapDy =
         sin(radians) * gap < 0 ? sin(radians) * gap * -1 : sin(radians) * gap;
 
-    var solidDx = cos(radians) * solidLength < 0
-        ? cos(radians) * solidLength * -1
-        : cos(radians) * solidLength;
+    final solidDx =
+        cos(radians) * solidLength < 0
+            ? cos(radians) * solidLength * -1
+            : cos(radians) * solidLength;
 
-    var solidDy = sin(radians) * solidLength < 0
-        ? sin(radians) * solidLength * -1
-        : sin(radians) * solidLength;
+    final solidDy =
+        sin(radians) * solidLength < 0
+            ? sin(radians) * solidLength * -1
+            : sin(radians) * solidLength;
 
-    double _getDx() {
+    double getDx() {
       return shouldDraw ? solidDx : gapDx;
     }
 
-    double _getDy() {
+    double getDy() {
       return shouldDraw ? solidDy : gapDy;
     }
 
     while (currentOffset.dx <= end.dx && currentOffset.dy <= end.dy) {
       shouldDraw
-          ? path.lineTo(
-              currentOffset.dx.toDouble(), currentOffset.dy.toDouble())
-          : path.moveTo(
-              currentOffset.dx.toDouble(), currentOffset.dy.toDouble());
+          ? path.lineTo(currentOffset.dx, currentOffset.dy)
+          : path.moveTo(currentOffset.dx, currentOffset.dy);
       currentOffset = Offset(
-        currentOffset.dx + _getDx(),
-        currentOffset.dy + _getDy(),
+        currentOffset.dx + getDx(),
+        currentOffset.dy + getDy(),
       );
       shouldDraw = !shouldDraw;
     }

@@ -3,7 +3,7 @@ import 'dart:math';
 extension BooleanExtensions on bool? {
   /// getOrDefault
   /// returns default value if blank
-  bool getOrDefault([bool value = false]) => this ?? value;
+  bool getOr([bool value = false]) => this ?? value;
 
   /// Checks if the boolean value is true.
   bool get isTrue => this != null && this!;

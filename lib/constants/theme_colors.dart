@@ -178,6 +178,8 @@ class ThemeColors {
 
   static const success = green;
 
+  static const warning = orange;
+
   static const error = red;
 
   static const neutral = grey;

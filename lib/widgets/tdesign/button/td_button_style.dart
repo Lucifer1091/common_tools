@@ -1,142 +1,163 @@
 import 'package:flutter/material.dart';
 
-import '../../../tdesign_flutter.dart';
+import '../../../common_tools.dart';
+import 'td_button.dart';
 
-/// TDButton按钮样式
 class TDButtonStyle {
-  /// 背景颜色
-  Color? backgroundColor;
+  TDButtonStyle({
+    this.backgroundColor,
+    this.borderColor,
+    this.textColor,
+    this.borderWidth,
+    this.radius,
+  });
 
-  /// 边框颜色
-  Color? frameColor;
-
-  /// 文字颜色
-  Color? textColor;
-
-  /// 边框宽度
-  double? frameWidth;
-
-  /// 自定义圆角
-  BorderRadiusGeometry? radius;
-
-  TDButtonStyle({this.backgroundColor, this.frameColor, this.textColor, this.frameWidth, this.radius});
-
-  /// 生成不同主题的填充按钮样式
-  TDButtonStyle.generateFillStyleByTheme(BuildContext context, TDButtonTheme? theme, TDButtonStatus status) {
+  TDButtonStyle.fill(
+    BuildContext context,
+    TDButtonTheme? theme,
+    TDButtonStatus status,
+  ) {
     switch (theme) {
       case TDButtonTheme.primary:
-        textColor = TDTheme.of(context).fontWhColor1;
+        textColor = ThemeColors.neutral.shade900;
         backgroundColor = _getBrandColor(context, status);
-        break;
       case TDButtonTheme.danger:
-        textColor = TDTheme.of(context).fontWhColor1;
+        textColor = ThemeColors.neutral.shade900;
         backgroundColor = _getErrorColor(context, status);
-        break;
       case TDButtonTheme.light:
         textColor = _getBrandColor(context, status);
         backgroundColor = _getLightColor(context, status);
-        break;
       case TDButtonTheme.defaultTheme:
-      default:
+      case null:
         textColor = _getDefaultTextColor(context, status);
         backgroundColor = _getDefaultBgColor(context, status);
     }
-    frameColor = backgroundColor;
+    borderColor = backgroundColor;
   }
 
-  /// 生成不同主题的描边按钮样式
-  TDButtonStyle.generateOutlineStyleByTheme(BuildContext context, TDButtonTheme? theme, TDButtonStatus status) {
+  TDButtonStyle.outline(
+    BuildContext context,
+    TDButtonTheme? theme,
+    TDButtonStatus status,
+  ) {
     switch (theme) {
       case TDButtonTheme.primary:
         textColor = _getBrandColor(context, status);
         backgroundColor =
-            status == TDButtonStatus.active ? TDTheme.of(context).grayColor3 : TDTheme.of(context).whiteColor1;
-        frameColor = textColor;
-        break;
+            status == TDButtonStatus.active
+                ? ThemeColors.neutral.shade200
+                : Colors.white;
+        borderColor = textColor;
       case TDButtonTheme.danger:
         textColor = _getErrorColor(context, status);
         backgroundColor =
-            status == TDButtonStatus.active ? TDTheme.of(context).grayColor3 : TDTheme.of(context).whiteColor1;
-        frameColor = textColor;
-        break;
+            status == TDButtonStatus.active
+                ? ThemeColors.neutral.shade200
+                : Colors.white;
+        borderColor = textColor;
       case TDButtonTheme.light:
         textColor = _getBrandColor(context, status);
         backgroundColor = _getLightColor(context, status);
-        frameColor = textColor;
-        break;
+        borderColor = textColor;
       case TDButtonTheme.defaultTheme:
-      default:
+      case null:
         textColor = _getDefaultTextColor(context, status);
         backgroundColor = _getOutlineDefaultBgColor(context, status);
-        frameColor = TDTheme.of(context).grayColor4;
+        borderColor = ThemeColors.neutral.shade300;
     }
-    frameWidth = 1;
+    borderWidth = 1;
   }
 
-  /// 生成不同主题的文本按钮样式
-  TDButtonStyle.generateTextStyleByTheme(BuildContext context, TDButtonTheme? theme, TDButtonStatus status) {
+  TDButtonStyle.text(
+    BuildContext context,
+    TDButtonTheme? theme,
+    TDButtonStatus status,
+  ) {
     switch (theme) {
       case TDButtonTheme.primary:
         textColor = _getBrandColor(context, status);
-        backgroundColor = status == TDButtonStatus.active ? TDTheme.of(context).grayColor3 : Colors.transparent;
-        break;
+        backgroundColor =
+            status == TDButtonStatus.active
+                ? ThemeColors.neutral.shade200
+                : Colors.transparent;
       case TDButtonTheme.danger:
         textColor = _getErrorColor(context, status);
-        backgroundColor = status == TDButtonStatus.active ? TDTheme.of(context).grayColor3 : Colors.transparent;
-        break;
+        backgroundColor =
+            status == TDButtonStatus.active
+                ? ThemeColors.neutral.shade200
+                : Colors.transparent;
       case TDButtonTheme.light:
         textColor = _getBrandColor(context, status);
-        backgroundColor = status == TDButtonStatus.active ? TDTheme.of(context).grayColor3 : Colors.transparent;
-        break;
+        backgroundColor =
+            status == TDButtonStatus.active
+                ? ThemeColors.neutral.shade200
+                : Colors.transparent;
       case TDButtonTheme.defaultTheme:
-      default:
+      case null:
         textColor = _getDefaultTextColor(context, status);
-        backgroundColor = status == TDButtonStatus.active ? TDTheme.of(context).grayColor3 : Colors.transparent;
+        backgroundColor =
+            status == TDButtonStatus.active
+                ? ThemeColors.neutral.shade200
+                : Colors.transparent;
     }
-    frameColor = backgroundColor;
+    borderColor = backgroundColor;
   }
 
-  /// 生成不同主题的幽灵按钮样式
-  TDButtonStyle.generateGhostStyleByTheme(BuildContext context, TDButtonTheme? theme, TDButtonStatus status) {
+  TDButtonStyle.ghost(
+    BuildContext context,
+    TDButtonTheme? theme,
+    TDButtonStatus status,
+  ) {
     switch (theme) {
       case TDButtonTheme.primary:
         textColor =
-            status == TDButtonStatus.disable ? TDTheme.of(context).fontWhColor4 : _getBrandColor(context, status);
-        break;
+            status == TDButtonStatus.disable
+                ? ThemeColors.neutral.shade600
+                : _getBrandColor(context, status);
       case TDButtonTheme.danger:
         textColor =
-            status == TDButtonStatus.disable ? TDTheme.of(context).fontWhColor4 : _getErrorColor(context, status);
-        break;
+            status == TDButtonStatus.disable
+                ? ThemeColors.neutral.shade600
+                : _getErrorColor(context, status);
       case TDButtonTheme.light:
         textColor =
-            status == TDButtonStatus.disable ? TDTheme.of(context).fontWhColor4 : _getBrandColor(context, status);
-        break;
+            status == TDButtonStatus.disable
+                ? ThemeColors.neutral.shade600
+                : _getBrandColor(context, status);
       case TDButtonTheme.defaultTheme:
-      default:
+      case null:
         switch (status) {
           case TDButtonStatus.active:
-            textColor = TDTheme.of(context).fontWhColor2;
-            break;
+            textColor = ThemeColors.neutral.shade800;
           case TDButtonStatus.disable:
-            textColor = TDTheme.of(context).fontWhColor4;
-            break;
-          default:
-            textColor = TDTheme.of(context).fontWhColor1;
+            textColor = ThemeColors.neutral.shade600;
+          case TDButtonStatus.defaultState:
+            textColor = ThemeColors.neutral.shade900;
         }
     }
     backgroundColor = Colors.transparent;
-    frameColor = textColor;
-    frameWidth = 1;
+    borderColor = textColor;
+    borderWidth = 1;
   }
+
+  Color? backgroundColor;
+
+  Color? borderColor;
+
+  Color? textColor;
+
+  double? borderWidth;
+
+  BorderRadiusGeometry? radius;
 
   Color _getBrandColor(BuildContext context, TDButtonStatus status) {
     switch (status) {
       case TDButtonStatus.defaultState:
-        return TDTheme.of(context).brandNormalColor;
+        return ThemeColors.blue.shade600;
       case TDButtonStatus.active:
-        return TDTheme.of(context).brandClickColor;
+        return ThemeColors.blue.shade700;
       case TDButtonStatus.disable:
-        return TDTheme.of(context).brandDisabledColor;
+        return ThemeColors.blue.shade200;
     }
   }
 
@@ -144,31 +165,31 @@ class TDButtonStyle {
     switch (status) {
       case TDButtonStatus.defaultState:
       case TDButtonStatus.disable:
-        return TDTheme.of(context).brandLightColor;
+        return ThemeColors.blue.shade50;
       case TDButtonStatus.active:
-        return TDTheme.of(context).brandFocusColor;
+        return ThemeColors.blue.shade100;
     }
   }
 
   Color _getErrorColor(BuildContext context, TDButtonStatus status) {
     switch (status) {
       case TDButtonStatus.defaultState:
-        return TDTheme.of(context).errorNormalColor;
+        return ThemeColors.error.shade500;
       case TDButtonStatus.active:
-        return TDTheme.of(context).errorClickColor;
+        return ThemeColors.error.shade600;
       case TDButtonStatus.disable:
-        return TDTheme.of(context).errorDisabledColor;
+        return ThemeColors.error.shade200;
     }
   }
 
   Color _getDefaultBgColor(BuildContext context, TDButtonStatus status) {
     switch (status) {
       case TDButtonStatus.defaultState:
-        return TDTheme.of(context).grayColor3;
+        return ThemeColors.neutral.shade200;
       case TDButtonStatus.active:
-        return TDTheme.of(context).grayColor5;
+        return ThemeColors.neutral.shade400;
       case TDButtonStatus.disable:
-        return TDTheme.of(context).grayColor2;
+        return ThemeColors.neutral.shade100;
     }
   }
 
@@ -176,20 +197,20 @@ class TDButtonStyle {
     switch (status) {
       case TDButtonStatus.defaultState:
       case TDButtonStatus.active:
-        return TDTheme.of(context).fontGyColor1;
+        return ThemeColors.neutral.shade900;
       case TDButtonStatus.disable:
-        return TDTheme.of(context).fontGyColor4;
+        return ThemeColors.neutral.shade600;
     }
   }
 
   Color _getOutlineDefaultBgColor(BuildContext context, TDButtonStatus status) {
     switch (status) {
       case TDButtonStatus.defaultState:
-        return TDTheme.of(context).whiteColor1;
+        return Colors.white;
       case TDButtonStatus.active:
-        return TDTheme.of(context).grayColor3;
+        return ThemeColors.neutral.shade200;
       case TDButtonStatus.disable:
-        return TDTheme.of(context).grayColor2;
+        return ThemeColors.neutral.shade100;
     }
   }
 }

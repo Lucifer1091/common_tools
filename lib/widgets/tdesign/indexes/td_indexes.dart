@@ -1,18 +1,21 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import '../../../tdesign_flutter.dart';
-import '../../util/iterable_ext.dart';
+import '../../../extensions/iterable/index.dart';
+import 'sticky_header/sticky_header_widget.dart';
+import 'td_indexes_anchor.dart';
+import 'td_indexes_list.dart';
 
 export 'sticky_header/sticky_header_widget.dart';
 export 'td_indexes_anchor.dart';
 export 'td_indexes_list.dart';
 
-/// 索引
 class TDIndexes extends StatefulWidget {
   const TDIndexes({
-    Key? key,
+    required this.builderContent,
+    super.key,
     this.indexList,
     this.indexListMaxHeight = 0.8,
     this.sticky = true,
@@ -22,46 +25,41 @@ class TDIndexes extends StatefulWidget {
     this.scrollController,
     this.onChange,
     this.onSelect,
-    required this.builderContent,
     this.builderAnchor,
     this.builderIndex,
-  }) : super(key: key);
+  });
 
-  /// 索引字符列表。不传默认 A-Z
+  /// Index character list. If not passed, the default is A-Z
   final List<String>? indexList;
 
-  /// 索引列表最大高度（父容器高度的百分比，默认0.8）
+  /// Maximum height of the index list (percentage of parent container height, default 0.8)
   final double? indexListMaxHeight;
 
-  /// 锚点是否吸顶
   final bool? sticky;
 
-  /// 锚点吸顶时与顶部的距离
   final double? stickyOffset;
 
-  /// 锚点是否为胶囊式样式
   final bool? capsuleTheme;
 
-  /// 反方向滚动置顶
   final bool? reverse;
 
-  /// 滚动控制器
   final ScrollController? scrollController;
 
-  /// 索引发生变更时触发事件
   final void Function(String index)? onChange;
 
-  /// 点击侧边栏时触发事件
   final void Function(String index)? onSelect;
 
-  /// 内容自定义构建
   final Widget? Function(BuildContext context, String index) builderContent;
 
-  /// 锚点自定义构建
-  final Widget? Function(BuildContext context, String index, bool isPinnedToTop)? builderAnchor;
+  final Widget? Function(
+    BuildContext context,
+    String index,
+    bool isPinnedToTop,
+  )?
+  builderAnchor;
 
-  /// 索引文本自定义构建，包括索引激活左侧提示
-  final Widget Function(BuildContext context, String index, bool isActive)? builderIndex;
+  final Widget Function(BuildContext context, String index, bool isActive)?
+  builderIndex;
 
   @override
   _TDIndexesState createState() => _TDIndexesState();
@@ -104,8 +102,8 @@ class _TDIndexesState extends State<TDIndexes> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: TDTheme.of(context).whiteColor1,
+    return ColoredBox(
+      color: Colors.white,
       child: Stack(
         children: [
           CustomScrollView(
@@ -138,7 +136,7 @@ class _TDIndexesState extends State<TDIndexes> {
       final isPinnedOffset = capsuleTheme && _activeIndex.value == e;
       return SliverStickyHeader.builder(
         sticky: widget.sticky ?? true,
-        pinnedOffset: isPinnedOffset ? TDTheme.of(context).spacer8 + stickyOffset : stickyOffset,
+        pinnedOffset: isPinnedOffset ? 8 + stickyOffset : stickyOffset,
         builder: (context, state) {
           _anchorKeys[e] = context;
           if (state.isPinned && _activeIndex.value != e && !_isAnimating) {
@@ -160,7 +158,8 @@ class _TDIndexesState extends State<TDIndexes> {
             builder: (context) {
               _contentKeys[e] = context;
               return Padding(
-                padding: isPinnedOffset ? EdgeInsets.only(top: TDTheme.of(context).spacer8) : EdgeInsets.zero,
+                padding:
+                    isPinnedOffset ? EdgeInsets.only(top: 8) : EdgeInsets.zero,
                 child: widget.builderContent(context, e),
               );
             },
@@ -185,12 +184,15 @@ class _TDIndexesState extends State<TDIndexes> {
     final isUp = _indexList.indexOf(newIndex) > _indexList.indexOf(oldIndex);
     if (isUp) {
       var index = oldIndex;
-      final contentRenderBox = _contentKeys[index]?.findRenderObject() as RenderBox?;
+      final contentRenderBox =
+          _contentKeys[index]?.findRenderObject() as RenderBox?;
       if (contentRenderBox != null) {
         final contentHeight = contentRenderBox.size.height;
         final maxScrollExtent = _scrollController.position.maxScrollExtent;
-        final targetOffset =
-            contentRenderBox.localToGlobal(Offset(0, contentHeight), ancestor: context.findRenderObject());
+        final targetOffset = contentRenderBox.localToGlobal(
+          Offset(0, contentHeight),
+          ancestor: context.findRenderObject(),
+        );
         final scrollOffset = targetOffset.dy + _scrollController.offset;
         _scrollController.jumpTo(min(maxScrollExtent, scrollOffset));
       }
@@ -205,11 +207,13 @@ class _TDIndexesState extends State<TDIndexes> {
     } else {
       final anchorContext = _anchorKeys[newIndex];
       if (anchorContext != null) {
-        Scrollable.ensureVisible(anchorContext).then((value) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            _isAnimating = false;
-          });
-        });
+        unawaited(
+          Scrollable.ensureVisible(anchorContext).then((value) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              _isAnimating = false;
+            });
+          }),
+        );
       }
     }
   }

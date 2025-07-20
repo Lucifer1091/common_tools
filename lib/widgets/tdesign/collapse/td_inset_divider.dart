@@ -1,24 +1,21 @@
-/*
- * Created by dorayhong@tencent.com on 6/8/23.
- */
 import 'package:flutter/material.dart';
 
-import '../../../tdesign_flutter.dart';
-
+import '../../../constants/constants.dart';
 
 class TDInsetDivider extends StatelessWidget {
-  const TDInsetDivider({Key? key}) : super(key: key);
+  const TDInsetDivider({super.key});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
+      height: 1,
+      child: Divider(
+        color: ThemeColors.neutral.shade200,
+        indent: 16,
+        endIndent: 0,
         height: 1,
-        child: Divider(
-          color: TDTheme.of(context).grayColor3,
-          indent: TDTheme.of(context).spacer16,
-          endIndent: 0.0,
-          height: 1,
-          thickness: 0.5,
-        ));
+        thickness: 0.5,
+      ),
+    );
   }
 }

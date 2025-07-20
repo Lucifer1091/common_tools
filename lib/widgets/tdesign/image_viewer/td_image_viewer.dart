@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 
-import '../../theme/td_colors.dart';
-import '../../theme/td_theme.dart';
-import '../popup/td_popup_route.dart';
+import '../../../common_tools.dart';
 import 'td_image_viewer_widget.dart';
 
 /// 图片预览工具
 class TDImageViewer {
+  TDImageViewer._();
 
   /// 显示图片预览
-  static void showImageViewer({
+  static Future<void> showImageViewer<T>({
     required BuildContext context,
     required List<dynamic> images,
     List<String>? labels,
@@ -37,9 +36,9 @@ class TDImageViewer {
     OnLongPress? onLongPress,
     LeftItemBuilder? leftItemBuilder,
     RightItemBuilder? rightItemBuilder,
-  }) {
-    modalBarrierColor ??= TDTheme.of(context).fontGyColor1;
-    showDialog(
+  }) async {
+    modalBarrierColor ??= ThemeColors.neutral.shade900;
+    await showDialog<T>(
       context: context,
       barrierDismissible: barrierDismissible ?? false,
       barrierColor: modalBarrierColor,
