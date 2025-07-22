@@ -1,8 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import '../../../tdesign_flutter.dart';
-import '../../util/context_extension.dart';
 
 typedef PopupClick = Function();
 

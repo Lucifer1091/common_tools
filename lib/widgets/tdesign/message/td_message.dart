@@ -1,59 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/scheduler/binding.dart';
 
-import '../../../tdesign_flutter.dart';
+import '../../../common_tools.dart';
+import '../../../constants/shadows.dart';
+import '../../../extensions/generic/scope_functions.dart';
+import '../../layout/no_widget.dart';
+import '../link/td_link.dart';
 
-//链接设置
 class MessageLink {
-  MessageLink({
-    required this.name,
-    required this.uri,
-    this.color,
-  });
+  MessageLink({required this.name, required this.uri, this.color});
 
-  /// 名称
   final String name;
 
-  /// 资源链接
   final Uri? uri;
 
-  /// 颜色
   final Color? color;
 }
 
-// 跑马灯配置
 class MessageMarquee {
   MessageMarquee({this.speed, this.loop, this.delay});
 
-  /// 速度
   final int? speed;
 
-  /// 循环次数
   final int? loop;
 
-  /// 延迟时间(毫秒)
   final int? delay;
 }
 
-// 定义消息主题枚举
-enum MessageTheme {
-  /// 普通通知
-  info,
+enum MessageTheme { info, success, warning, error }
 
-  /// 成功通知
-  success,
-
-  /// 警示通知
-  warning,
-
-  /// 错误通知
-  error
-}
-
-// TDMessage 组件
 class TDMessage extends StatefulWidget {
   const TDMessage({
-    Key? key,
+    super.key,
     this.closeBtn,
     this.content,
     this.duration = 3000,
@@ -66,42 +43,30 @@ class TDMessage extends StatefulWidget {
     this.onCloseBtnClick,
     this.onDurationEnd,
     this.onLinkClick,
-  }) : super(key: key);
+  });
 
-  /// 通知内容
   final String? content;
 
-  /// 消息内置计时器
   final int? duration;
 
-  /// 是否显示
   final bool? visible;
 
-  /// 自定义消息前面的图标
-  final dynamic icon;
+  final Object? icon;
 
-  /// 链接名称
-  final dynamic link;
+  final Object? link;
 
-  /// 关闭按钮
-  final dynamic closeBtn;
+  final Object? closeBtn;
 
-  /// 跑马灯效果
   final MessageMarquee? marquee;
 
-  /// 相对于 placement 的偏移量
   final List<double>? offset;
 
-  /// 消息组件风格 info/success/warning/error
   final MessageTheme? theme;
 
-  /// 点击关闭按钮触发
   final VoidCallback? onCloseBtnClick;
 
-  /// 计时结束后触发
   final VoidCallback? onDurationEnd;
 
-  /// 点击链接文本时触发
   final VoidCallback? onLinkClick;
 
   @override
@@ -112,9 +77,9 @@ class TDMessage extends StatefulWidget {
     String? content,
     bool? visible,
     int? duration,
-    dynamic closeBtn,
-    dynamic icon,
-    dynamic link,
+    Object? closeBtn,
+    Object? icon,
+    Object? link,
     MessageMarquee? marquee,
     List<double>? offset,
     MessageTheme? theme,
@@ -124,25 +89,28 @@ class TDMessage extends StatefulWidget {
   }) {
     final overlay = Overlay.of(context);
     late OverlayEntry overlayEntry;
+
     overlayEntry = OverlayEntry(
-      builder: (context) => TDMessage(
-        content: content,
-        visible: visible,
-        duration: duration,
-        closeBtn: closeBtn,
-        icon: icon,
-        link: link,
-        marquee: marquee,
-        offset: offset,
-        theme: theme,
-        onDurationEnd: () {
-          onDurationEnd?.call();
-          overlayEntry.remove();
-        },
-        onCloseBtnClick: onCloseBtnClick,
-        onLinkClick: onLinkClick,
-      ),
+      builder:
+          (context) => TDMessage(
+            content: content,
+            visible: visible,
+            duration: duration,
+            closeBtn: closeBtn,
+            icon: icon,
+            link: link,
+            marquee: marquee,
+            offset: offset,
+            theme: theme,
+            onDurationEnd: () {
+              onDurationEnd?.call();
+              overlayEntry.remove();
+            },
+            onCloseBtnClick: onCloseBtnClick,
+            onLinkClick: onLinkClick,
+          ),
     );
+
     overlay.insert(overlayEntry);
   }
 }
@@ -159,9 +127,9 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _topOffset = (widget.offset?[1] ?? initTopOffset) - 30;
-    animationController = AnimationController(
-      vsync: this,
-    );
+    if (widget.marquee != null) {
+      animationController = AnimationController(vsync: this);
+    }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
@@ -176,6 +144,8 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
     }
 
     if (widget.marquee != null) {
+      animationController = AnimationController(vsync: this);
+
       animationController = AnimationController(
         vsync: this,
         duration: Duration(milliseconds: widget.marquee!.speed ?? 10000),
@@ -194,15 +164,15 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
   void _closeMessage() {
     if (mounted) {
       animationController?.stop();
+
       setState(() {
         _topOffset = (widget.offset?[1] ?? initTopOffset) - 30;
         _isAnimationRunning = false;
       });
+
       Future.delayed(const Duration(milliseconds: 300), () {
         if (mounted) {
-          setState(() {
-            _isVisible = false;
-          });
+          setState(() => _isVisible = false);
           widget.onDurationEnd?.call();
         }
       });
@@ -211,9 +181,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
 
   void startAnimation() {
     if (mounted && animationController != null && !_isAnimationRunning) {
-      setState(() {
-        _isAnimationRunning = true;
-      });
+      setState(() => _isAnimationRunning = true);
       if (widget.marquee!.loop == 0) {
         animationController!.forward();
       } else if (widget.marquee!.loop == 1) {
@@ -224,10 +192,10 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.visible == false) {
-      return const SizedBox.shrink();
-    }
-    var _leftOffset = widget.offset?[0] ??
+    if (widget.visible == false) return const NoWidget();
+
+    final leftOffset0 =
+        widget.offset?[0] ??
         (MediaQuery.of(context).size.width - totalWidth) / 2;
 
     Widget getText(BuildContext context) {
@@ -236,25 +204,24 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
           alignment: Alignment.centerLeft,
           child: Text(
             widget.content ?? '',
-            style: const TextStyle(color: Colors.black),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
         );
       } else {
         final textPainter = TextPainter(
-          text: TextSpan(
-              text: widget.content ?? '',
-              style: const TextStyle(color: Colors.black)),
+          text: TextSpan(text: widget.content ?? ''),
           maxLines: 1,
           textDirection: TextDirection.ltr,
-        )..layout(minWidth: 0, maxWidth: double.infinity);
+        )..layout();
+
         final textWidth = textPainter.width;
 
         final containerWidth = calculateTextWidth();
 
-        final animationDuration =
-            Duration(milliseconds: (widget.marquee!.speed ?? 10000));
+        final animationDuration = Duration(
+          milliseconds: widget.marquee!.speed ?? 10000,
+        );
         animationController!.duration = animationDuration;
 
         final tween = Tween<Offset>(
@@ -264,63 +231,58 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
 
         if (widget.marquee!.delay != null && widget.marquee!.delay! > 0) {
           Future.delayed(
-              Duration(milliseconds: widget.marquee!.delay!), startAnimation);
+            Duration(milliseconds: widget.marquee!.delay!),
+            startAnimation,
+          );
         } else {
           startAnimation();
         }
 
         return Align(
-            alignment: Alignment.center,
-            child: ClipRect(
-              child: SizedBox(
-                width: containerWidth,
-                child: AnimatedBuilder(
-                  animation:
-                      animationController ?? const AlwaysStoppedAnimation(0),
-                  builder: (context, child) {
-                    final offset = tween.evaluate(
-                        animationController ?? const AlwaysStoppedAnimation(0));
-                    return OverflowBox(
-                      minWidth: 0,
-                      maxWidth: double.infinity,
-                      alignment: Alignment.centerLeft,
-                      child: Transform.translate(
-                        offset: offset,
-                        child: SizedBox(
-                          child: Text(
-                            widget.content ?? '',
-                            style: const TextStyle(color: Colors.black),
-                            maxLines: 1,
-                          ),
-                        ),
+          child: ClipRect(
+            child: SizedBox(
+              width: containerWidth,
+              child: AnimatedBuilder(
+                animation:
+                    animationController ?? const AlwaysStoppedAnimation(0),
+                builder: (context, child) {
+                  final offset = tween.evaluate(
+                    animationController ?? const AlwaysStoppedAnimation(0),
+                  );
+                  return OverflowBox(
+                    minWidth: 0,
+                    maxWidth: double.infinity,
+                    alignment: Alignment.centerLeft,
+                    child: Transform.translate(
+                      offset: offset,
+                      child: SizedBox(
+                        child: Text(widget.content ?? '', maxLines: 1),
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
-            ));
+            ),
+          ),
+        );
       }
     }
 
     Widget getIcon(BuildContext context) {
-      if (widget.icon is Widget) {
-        return widget.icon;
+      if (widget.icon != null && widget.icon is Widget) {
+        return widget.icon! as Widget;
       } else {
         switch (widget.theme) {
           case MessageTheme.info:
-            return Icon(TDIcons.error_circle_filled,
-                color: TDTheme.of(context).brandColor7);
+            return Icon(Icons.info_rounded, color: ThemeColors.blue.shade600);
           case MessageTheme.success:
-            return Icon(TDIcons.check_circle_filled,
-                color: TDTheme.of(context).successColor5);
+            return Icon(Icons.check, color: ThemeColors.success.shade400);
           case MessageTheme.warning:
-            return Icon(TDIcons.error_circle_filled,
-                color: TDTheme.of(context).warningColor5);
+            return Icon(Icons.info_rounded, color: ThemeColors.orange.shade400);
           case MessageTheme.error:
-            return Icon(TDIcons.error_circle_filled,
-                color: TDTheme.of(context).errorColor6);
+            return Icon(Icons.info_rounded, color: ThemeColors.error.shade500);
           case null:
-            return const SizedBox.shrink();
+            return const NoWidget();
         }
       }
     }
@@ -334,23 +296,23 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
       if (widget.closeBtn is Widget) {
         return GestureDetector(
           onTap: clickCloseButton,
-          child: widget.closeBtn!,
+          child: widget.closeBtn! as Widget,
         );
       } else if (widget.closeBtn == true) {
         return GestureDetector(
           onTap: clickCloseButton,
           child: const Icon(
-            TDIcons.close,
+            Icons.close_rounded,
             color: Color.fromRGBO(0, 0, 0, 0.4),
           ),
         );
       } else if (widget.closeBtn is String) {
         return GestureDetector(
           onTap: clickCloseButton,
-          child: Text(widget.closeBtn),
+          child: Text(widget.closeBtn! as String),
         );
       } else {
-        return const SizedBox.shrink();
+        return const NoWidget();
       }
     }
 
@@ -361,33 +323,32 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
     Widget getLink(BuildContext context) {
       if (widget.link is MessageLink) {
         return Align(
-            alignment: Alignment.center,
-            child: TDLink(
-              label: widget.link.name,
-              style: TDLinkStyle.primary,
-              type: TDLinkType.basic,
-              uri: widget.link.uri ?? Uri.parse('https://example.com'),
-              size: TDLinkSize.medium,
-              color: widget.link.color ?? TDTheme.of(context).brandColor7,
-              linkClick: (link) => clickLink(),
-            ));
+          child: TDLink(
+            label: widget.link.cast<MessageLink>()!.name,
+            style: TDLinkStyle.primary,
+            uri:
+                widget.link.cast<MessageLink>()!.uri ??
+                Uri.parse('https://example.com'),
+            color:
+                widget.link.cast<MessageLink>()!.color ??
+                ThemeColors.blue.shade600,
+            linkClick: (link) => clickLink(),
+          ),
+        );
       } else if (widget.link is String) {
         return Align(
-            alignment: Alignment.center,
-            child: GestureDetector(
-              onTap: clickLink,
-              child: Text(
-                widget.link ?? '',
-                style: TextStyle(
-                  color: TDTheme.of(context).brandColor7,
-                  fontSize: 14,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ));
+          child: GestureDetector(
+            onTap: clickLink,
+            child: Text(
+              widget.link.cast<String>() ?? '',
+              style: TextStyle(color: ThemeColors.blue.shade600, fontSize: 14),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        );
       } else {
-        return const SizedBox.shrink();
+        return const NoWidget();
       }
     }
 
@@ -395,81 +356,75 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
       top: _topOffset,
-      left: _leftOffset,
-      child: _isVisible
-          ? Material(
-              color: Colors.transparent,
-              child: Container(
-                width: totalWidth,
-                height: 48,
-                padding: const EdgeInsets.fromLTRB(16, 13, 16, 13),
-                decoration: BoxDecoration(
+      left: leftOffset0,
+      child:
+          _isVisible
+              ? Material(
+                color: Colors.transparent,
+                child: Container(
+                  width: totalWidth,
+                  height: 48,
+                  padding: const EdgeInsets.fromLTRB(16, 13, 16, 13),
+                  decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(6),
-                    boxShadow: TDTheme.of(context).shadowsMiddle),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    if (widget.icon != false)
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: SizedBox(
-                            width: 20,
-                            height: 22,
-                            child: getIcon(context),
+                    boxShadow: BoxShadows.middle,
+                  ),
+                  child: Row(
+                    children: [
+                      if (widget.icon != false)
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: Align(
+                            child: SizedBox(
+                              width: 20,
+                              height: 22,
+                              child: getIcon(context),
+                            ),
                           ),
                         ),
-                      ),
-                    Expanded(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: getText(context),
-                            flex: 3,
-                          ),
-                          if (widget.link != null)
-                            Container(
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Expanded(flex: 3, child: getText(context)),
+                            if (widget.link != null)
+                              Container(
                                 margin: const EdgeInsets.only(left: 8),
                                 width: 40,
                                 height: 22,
-                                child: getLink(context)),
-                          if (widget.closeBtn != null)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 12),
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: SizedBox(
-                                  width: 22,
-                                  height: 22,
-                                  child: getCloseBtn(context),
+                                child: getLink(context),
+                              ),
+                            if (widget.closeBtn != null)
+                              Padding(
+                                padding: const EdgeInsets.only(left: 12),
+                                child: Align(
+                                  child: SizedBox(
+                                    width: 22,
+                                    height: 22,
+                                    child: getCloseBtn(context),
+                                  ),
                                 ),
                               ),
-                            ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            )
-          : const SizedBox.shrink(),
+              )
+              : const NoWidget(),
     );
   }
 
   double calculateTextWidth() {
     double width = totalWidth - 32;
-    if (widget.icon != null && widget.icon != false) {
-      width -= 30;
-    }
-    if (widget.link != null) {
-      width -= 36;
-    }
-    if (widget.closeBtn != null) {
-      width -= 34;
-    }
+
+    if (widget.icon != null && widget.icon != false) width -= 30;
+
+    if (widget.link != null) width -= 36;
+
+    if (widget.closeBtn != null) width -= 34;
+
     return width;
   }
 }

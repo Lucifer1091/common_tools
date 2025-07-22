@@ -84,7 +84,6 @@ class TDSlidePopupRoute<T> extends PopupRoute<T> {
 
   var _lastBottom = 0.0;
 
-  // 实现转场动画
   @override
   Widget buildTransitions(
     BuildContext context,

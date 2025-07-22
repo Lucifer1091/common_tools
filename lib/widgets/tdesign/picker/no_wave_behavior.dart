@@ -1,22 +1,24 @@
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import '../../util/platform_util.dart';
 
-/// 去掉ListView上下滑动的波纹
+import '../../../utilities/utilities.dart';
+
 class NoWaveBehavior extends ScrollBehavior {
   @override
   Widget buildOverscrollIndicator(
-      BuildContext context, Widget child, ScrollableDetails details) {
-    if (PlatformUtil.isAndroid || PlatformUtil.isFuchsia) {
+    BuildContext context,
+    Widget child,
+    ScrollableDetails details,
+  ) {
+    if (PlatformChecker.isAndroid || PlatformChecker.isFuchsia) {
       return child;
     } else {
       return super.buildOverscrollIndicator(context, child, details);
     }
   }
 
-  // 增加mouse拖拽
+  // Add mouse drag
   @override
   Set<PointerDeviceKind> get dragDevices => {
     PointerDeviceKind.touch,
@@ -28,5 +30,4 @@ class NoWaveBehavior extends ScrollBehavior {
     PointerDeviceKind.unknown,
     PointerDeviceKind.mouse,
   };
-
 }

@@ -2,9 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/widgets.dart';
 
-import '../../../tdesign_flutter.dart';
-
-const double _kDefaultIndicatorRadius = 10.0;
+const double _kDefaultIndicatorRadius = 10;
 
 /// An iOS-style activity indicator that spins clockwise.
 ///
@@ -16,14 +14,17 @@ const double _kDefaultIndicatorRadius = 10.0;
 class TDCupertinoActivityIndicator extends StatefulWidget {
   /// Creates an iOS-style activity indicator that spins clockwise.
   const TDCupertinoActivityIndicator({
-    Key? key,
+    super.key,
     this.animating = true,
     this.radius = _kDefaultIndicatorRadius,
     this.activeColor,
+    this.progress = 1,
     this.duration = 2000,
-  })  : assert(radius > 0.0),
-        progress = 1.0,
-        super(key: key);
+  }) : 
+       assert(
+         radius > 0.0,
+         'Ensures that the [radius] value is greater than zero.',
+       );
 
   /// Whether the activity indicator is running its animation.
   ///
@@ -73,7 +74,8 @@ class _TDCupertinoActivityIndicatorState
   @override
   void didUpdateWidget(TDCupertinoActivityIndicator oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.animating != oldWidget.animating || widget.duration != oldWidget.duration) {
+    if (widget.animating != oldWidget.animating ||
+        widget.duration != oldWidget.duration) {
       if (!widget.animating) {
         _controller.stop();
       } else {
@@ -134,15 +136,15 @@ class _CupertinoActivityIndicatorPainter extends CustomPainter {
     required this.activeColor,
     required this.radius,
     required this.progress,
-  })  : tickFundamentalRRect = RRect.fromLTRBXY(
-          -radius / _kDefaultIndicatorRadius,
-          -radius / 3.0,
-          radius / _kDefaultIndicatorRadius,
-          -radius,
-          radius / _kDefaultIndicatorRadius,
-          radius / _kDefaultIndicatorRadius,
-        ),
-        super(repaint: position);
+  }) : tickFundamentalRRect = RRect.fromLTRBXY(
+         -radius / _kDefaultIndicatorRadius,
+         -radius / 3.0,
+         radius / _kDefaultIndicatorRadius,
+         -radius,
+         radius / _kDefaultIndicatorRadius,
+         radius / _kDefaultIndicatorRadius,
+       ),
+       super(repaint: position);
 
   final Animation<double> position;
   final Color activeColor;
@@ -156,17 +158,20 @@ class _CupertinoActivityIndicatorPainter extends CustomPainter {
     final paint = Paint();
     final tickCount = _kAlphaValues.length;
 
-    canvas.save();
-    canvas.translate(size.width / 2.0, size.height / 2.0);
+    canvas
+      ..save()
+      ..translate(size.width / 2.0, size.height / 2.0);
 
     final activeTick = (tickCount * position.value).floor();
 
     for (var i = 0; i < tickCount * progress; ++i) {
       final t = (i - activeTick) % tickCount;
-      paint.color = activeColor
-          .withAlpha(progress < 1 ? _partiallyRevealedAlpha : _kAlphaValues[t]);
-      canvas.drawRRect(tickFundamentalRRect, paint);
-      canvas.rotate(_kTwoPI / tickCount);
+      paint.color = activeColor.withAlpha(
+        progress < 1 ? _partiallyRevealedAlpha : _kAlphaValues[t],
+      );
+      canvas
+        ..drawRRect(tickFundamentalRRect, paint)
+        ..rotate(_kTwoPI / tickCount);
     }
 
     canvas.restore();

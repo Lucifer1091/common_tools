@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../../tdesign_flutter.dart';
+import 'td_popover_widget.dart';
 
 class TDPopover {
+  const TDPopover._();
 
-  static Future showPopover({
+  static Future<void> showPopover({
     required BuildContext context,
     String? content,
     Widget? contentWidget,
@@ -18,29 +19,30 @@ class TDPopover {
     double? width,
     double? height,
     Color? overlayColor = Colors.transparent,
-    OnTap? onTap,
-    OnLongTap? onLongTap,
+    ValueChanged<String?>? onTap,
+    ValueChanged<String?>? onLongTap,
   }) {
     return showDialog(
       barrierDismissible: closeOnClickOutside,
       barrierColor: overlayColor,
       useSafeArea: false,
       context: context,
-      builder: (ctx) => TDPopoverWidget(
-        context: context,
-        content: content,
-        contentWidget: contentWidget,
-        offset: offset,
-        theme: theme,
-        placement: placement,
-        showArrow: showArrow,
-        arrowSize: arrowSize,
-        padding: padding,
-        width: width,
-        height: height,
-        onTap: onTap,
-        onLongTap: onLongTap,
-      ),
+      builder:
+          (ctx) => TDPopoverWidget(
+            context: context,
+            content: content,
+            contentWidget: contentWidget,
+            offset: offset,
+            theme: theme,
+            placement: placement,
+            showArrow: showArrow,
+            arrowSize: arrowSize,
+            padding: padding,
+            width: width,
+            height: height,
+            onTap: onTap,
+            onLongTap: onLongTap,
+          ),
     );
   }
 }

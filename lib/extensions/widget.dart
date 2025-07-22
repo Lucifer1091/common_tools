@@ -190,14 +190,16 @@ extension WidgetExtensions on Widget {
     Key? key,
     bool opaque = true,
   }) =>
-      GestureDetector(
-        key: key,
-        onTap: onTap,
-        onDoubleTap: onDoubleTap,
-        behavior:
-            opaque ? HitTestBehavior.opaque : HitTestBehavior.deferToChild,
-        child: this,
-      ).mouseRegion;
+      onTap != null || onDoubleTap != null
+          ? GestureDetector(
+            key: key,
+            onTap: onTap,
+            onDoubleTap: onDoubleTap,
+            behavior:
+                opaque ? HitTestBehavior.opaque : HitTestBehavior.deferToChild,
+            child: this,
+          ).mouseRegion
+          : this;
 
   Tooltip tooltip({
     required String msg,

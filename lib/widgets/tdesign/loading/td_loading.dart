@@ -1,33 +1,19 @@
-/*
- * Created by haozhicao@tencent.com on 6/29/22.
- * td_loading.dart
- * 
- */
-
 import 'package:flutter/material.dart';
 
-import '../../../tdesign_flutter.dart';
+import '../../../common_tools.dart';
+import '../text/td_text.dart';
 import 'td_activity_indicator.dart';
+import 'td_circle_indicator.dart';
 import 'td_point_indicator.dart';
 
-/// Loading 尺寸
-enum TDLoadingSize {
-  small,
-  medium,
-  large,
-}
+enum TDLoadingSize { small, medium, large }
 
-/// Loading的图标
-enum TDLoadingIcon {
-  circle,
-  point,
-  activity,
-}
+enum TDLoadingIcon { circle, point, activity }
 
 class TDLoading extends StatelessWidget {
   const TDLoading({
-    Key? key,
-    required this.size,
+    super.key,
+    this.size = TDLoadingSize.medium,
     this.icon = TDLoadingIcon.circle,
     this.iconColor,
     this.axis = Axis.vertical,
@@ -36,94 +22,86 @@ class TDLoading extends StatelessWidget {
     this.customIcon,
     this.textColor = Colors.black,
     this.duration = 2000,
-  }) : super(key: key);
+  });
 
-  /// 尺寸
   final TDLoadingSize size;
-  /// 图标，支持圆形、点状、菊花状
+
   final TDLoadingIcon? icon;
-  /// 图标颜色
+
   final Color? iconColor;
-  /// 文案
+
   final String? text;
-  /// 失败刷新组件
+
   final Widget? refreshWidget;
-  /// 文案颜色
+
   final Color textColor;
-  /// 文案和图标相对方向
+
   final Axis axis;
-  /// 自定义图标，优先级高于icon
+
   final Widget? customIcon;
-  /// 一次刷新的时间，控制动画速度
+
   final int duration;
 
   int get _innerDuration => duration > 0 ? duration : 1;
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      children: [_contentWidget()],
-    );
+    return Wrap(children: [_contentWidget(context)]);
   }
 
-  Widget _contentWidget() {
+  Widget _contentWidget(BuildContext context) {
     if (icon == null) {
-      return textWidget();
+      return textWidget(context);
     } else {
       Widget? indicator;
+
       if (customIcon != null) {
-        indicator = customIcon!;
+        indicator = customIcon;
       } else {
         switch (icon!) {
           case TDLoadingIcon.activity:
             indicator = TDCupertinoActivityIndicator(
               activeColor: iconColor,
-              radius: size == TDLoadingSize.small
-                  ? 10
-                  : (size == TDLoadingSize.medium ? 11 : 13),
+              radius:
+                  size == TDLoadingSize.small
+                      ? 10
+                      : (size == TDLoadingSize.medium ? 11 : 13),
               duration: _innerDuration,
             );
-            break;
           case TDLoadingIcon.circle:
             indicator = _getCircleIndicator();
-            break;
           case TDLoadingIcon.point:
             indicator = TDPointBounceIndicator(
               color: iconColor,
-              size: size == TDLoadingSize.small
-                  ? 12
-                  : (size == TDLoadingSize.medium ? 16 : 20),
+              size:
+                  size == TDLoadingSize.small
+                      ? 12
+                      : (size == TDLoadingSize.medium ? 16 : 20),
               duration: _innerDuration,
             );
-            break;
-          default:
-            indicator = _getCircleIndicator();
-            break;
         }
       }
 
       if (text == null) {
-        return indicator;
+        return indicator!;
       } else if (axis == Axis.vertical) {
         return Column(
           mainAxisSize: MainAxisSize.min,
-            children: [
-          indicator,
-          SizedBox(
-            height: _getPaddingWidth(),
-          ),
-          textWidget(),
-        ]);
+          children: [
+            indicator!,
+            SizedBox(height: _getPaddingWidth()),
+            textWidget(context),
+          ],
+        );
       } else {
         return Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-          indicator,
-          SizedBox(
-            width: _getPaddingWidth(),
-          ),
-          textWidget()
-        ]);
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            indicator!,
+            SizedBox(width: _getPaddingWidth()),
+            textWidget(context),
+          ],
+        );
       }
     }
   }
@@ -134,21 +112,20 @@ class TDLoading extends StatelessWidget {
         return TDCircleIndicator(
           color: iconColor,
           size: 24,
-          lineWidth: 3 * 4 / 3, // 根据small等等比缩放
+          lineWidth: 3 * 4 / 3,
           duration: _innerDuration,
         );
       case TDLoadingSize.medium:
         return TDCircleIndicator(
           color: iconColor,
           size: 21,
-          lineWidth: 3 * 7 / 6, // 根据small等等比缩放
+          lineWidth: 3 * 7 / 6,
           duration: _innerDuration,
         );
       case TDLoadingSize.small:
         return TDCircleIndicator(
           color: iconColor,
-          size: 18, // 设计稿框位24，图形宽位19.5,推导lineWidth为3时，size位18
-          lineWidth: 3,
+          size: 18,
           duration: _innerDuration,
         );
     }
@@ -165,35 +142,35 @@ class TDLoading extends StatelessWidget {
     }
   }
 
-  Font fitFont() {
-    switch (size) {
-      case TDLoadingSize.large:
-        return TDTheme.of().fontBodyLarge ?? Font(size: 16, lineHeight: 24);
-      case TDLoadingSize.medium:
-        return TDTheme.of().fontBodyMedium ?? Font(size: 14, lineHeight: 22);
-      case TDLoadingSize.small:
-        return TDTheme.of().fontBodySmall ?? Font(size: 12, lineHeight: 20);
-    }
+  TextStyle _getStlye(BuildContext context) {
+    return switch (size) {
+      TDLoadingSize.large =>
+        context.bodyLarge ?? TextStyle(fontSize: 16, height: 24),
+      TDLoadingSize.medium =>
+        context.bodyMedium ?? TextStyle(fontSize: 14, height: 22),
+      TDLoadingSize.small =>
+        context.bodySmall ?? TextStyle(fontSize: 12, height: 20),
+    };
   }
 
-  Widget textWidget() {
-    Widget result =  TDText(
+  Widget textWidget(BuildContext context) {
+    Widget result = TDText(
       text,
       textColor: textColor,
       fontWeight: FontWeight.w400,
-      font: fitFont(),
+      style: _getStlye(
+        context,
+      ).copyWith(color: textColor, fontWeight: FontWeight.w400),
       textAlign: TextAlign.center,
     );
-    if(refreshWidget != null){
+
+    if (refreshWidget != null) {
       result = Row(
         mainAxisSize: MainAxisSize.min,
-        children: [
-          result,
-          const SizedBox(width: 8,),
-          refreshWidget!,
-        ],
+        children: [result, const SizedBox(width: 8), refreshWidget!],
       );
     }
+
     return result;
   }
 }

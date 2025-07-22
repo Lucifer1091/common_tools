@@ -1,17 +1,18 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../../tdesign_flutter.dart';
+import '../../../extensions/extensions.dart';
+import '../../../extensions/generic/index.dart';
+import '../text/td_text.dart';
+import 'td_notice_bar_style.dart';
 
 class TDNoticeBar extends StatefulWidget {
   const TDNoticeBar({
     super.key,
-    this.context,
+    this.content,
     this.style,
     this.left,
     this.right,
@@ -23,50 +24,47 @@ class TDNoticeBar extends StatefulWidget {
     this.prefixIcon,
     this.suffixIcon,
     this.onTap,
+    this.onPrefixTap,
+    this.onSuffixTap,
     this.height = 22,
     this.maxLines = 1,
   });
 
-  /// 文本内容
-  final dynamic context;
+  final Object? content;
 
-  /// 公告栏样式
   final TDNoticeBarStyle? style;
 
-  /// 左侧内容（自定义左侧内容，优先级高于prefixIcon）
+  /// Left content (custom left content, higher priority than prefixIcon)
   final Widget? left;
 
-  /// 右侧内容（自定义右侧内容，优先级高于suffixIcon）
+  /// Right content (custom right content, higher priority than suffixIcon)
   final Widget? right;
 
-  /// 跑马灯效果
-  final bool? marquee;
+  final bool marquee;
 
-  /// 滚动速度
   final double? speed;
 
-  /// 步进滚动间隔时间（毫秒）
+  /// Step scrolling interval (milliseconds)
   final int? interval;
 
-  /// 滚动方向
   final Axis? direction;
 
-  /// 主题
   final TDNoticeBarTheme? theme;
 
-  /// 左侧图标
   final IconData? prefixIcon;
 
-  /// 右侧图标
   final IconData? suffixIcon;
 
-  /// 点击事件
-  final ValueChanged? onTap;
+  final VoidCallback? onTap;
 
-  /// 文字高度 (当使用prefixIcon或suffixIcon时，icon大小值等于该属性）
+  final VoidCallback? onPrefixTap;
+
+  final VoidCallback? onSuffixTap;
+
+  /// Text height (When using prefixIcon or suffixIcon, the icon size value
+  /// is equal to this attribute)
   final double height;
 
-  /// 文本行数（仅静态有效）
   final int? maxLines;
 
   @override
@@ -76,7 +74,7 @@ class TDNoticeBar extends StatefulWidget {
 class _TDNoticeBarState extends State<TDNoticeBar> {
   ScrollController? _scrollController;
   Timer? _timer;
-  Size? _size;
+  Size? size0;
   TDNoticeBarStyle? _style;
   Color? _backgroundColor;
   Widget? _left;
@@ -87,17 +85,22 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
   @override
   void initState() {
     super.initState();
+
     if (widget.speed! < 0) {
       throw Exception('speed must not be less than 0');
     }
+
     if (widget.interval! <= 0) {
       throw Exception('interval must not be less than 0');
     }
+
     _scrollController = ScrollController();
+
+    // Initialize the style and left and right widgets
+    _init();
+
     WidgetsBinding.instance.addPostFrameCallback((time) {
-      if (widget.marquee == true) {
-        _startTimer();
-      }
+      if (widget.marquee) _startTimer();
     });
   }
 
@@ -112,8 +115,9 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
     if (widget.style != null) {
       _style = widget.style;
     } else {
-      _style = TDNoticeBarStyle.generateTheme(context, theme: widget.theme);
+      _style = TDNoticeBarStyle.generateTheme(theme: widget.theme);
     }
+
     _backgroundColor = _style!.backgroundColor;
     _setLeftWidget();
     _setRightWidget();
@@ -128,35 +132,57 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
   }
 
   void _scroll() {
-    var scrollDistance =
-        _getContextWidth() + (_size!.width - _style!.getPadding.horizontal);
+    final scrollDistance =
+        _getContentWidth() + (size0!.width - _style!.getPadding.horizontal);
+
     var remainder = scrollDistance % widget.speed!;
     _scrollController!.jumpTo(0);
     var offset = 0.0 + widget.speed!;
-    _scrollController!.animateTo(offset,
-        duration: const Duration(seconds: 1), curve: Curves.linear);
+
+    unawaited(
+      _scrollController!.animateTo(
+        offset,
+        duration: const Duration(seconds: 1),
+        curve: Curves.linear,
+      ),
+    );
+
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
       if (offset < scrollDistance - remainder) {
         offset += widget.speed!;
-        await _scrollController!.animateTo(offset,
-            duration: const Duration(seconds: 1), curve: Curves.linear);
+        await _scrollController!.animateTo(
+          offset,
+          duration: const Duration(seconds: 1),
+          curve: Curves.linear,
+        );
       } else {
-        // 剩余距离小于50 先滚动这部分 然后滚动剩余部分
-        // 剩余距离滚动所需时间
-        var time = (remainder / widget.speed! * 1000).round();
-        // 滚动最后一部分（触底）
-        await _scrollController!.animateTo(scrollDistance,
-            duration: Duration(milliseconds: time), curve: Curves.linear);
-        // 回到顶部（衔接）
+        // If the remaining distance is less than 50, scroll this part first
+        // and then scroll the remaining part
+        // The time required to scroll the remaining distance
+        final time = (remainder / widget.speed! * 1000).round();
+
+        // Scroll the last part (bottom out)
+        await _scrollController!.animateTo(
+          scrollDistance,
+          duration: Duration(milliseconds: time),
+          curve: Curves.linear,
+        );
+
+        // Back to top (connection)
         _scrollController!.jumpTo(0);
-        // 修改起始位置
+
+        // Modify the starting position
         offset = widget.speed! - remainder;
-        // 计算新起点最后阶段滚动距离
+
+        // Calculate the final scrolling distance of the new starting point
         remainder = (scrollDistance - offset) % widget.speed!;
-        // 滚动至新起点（弥补触底speed滚动长度）
-        await _scrollController!.animateTo(offset,
-            duration: Duration(milliseconds: 1000 - time),
-            curve: Curves.linear);
+
+        // Scroll to the new starting point (to make up for the bottoming speed scrolling length)
+        await _scrollController!.animateTo(
+          offset,
+          duration: Duration(milliseconds: 1000 - time),
+          curve: Curves.linear,
+        );
       }
     });
   }
@@ -165,39 +191,42 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
     var step = 0;
     var offset = 0.0;
     _timer = Timer.periodic(Duration(milliseconds: widget.interval!), (timer) {
-      var time = (widget.height / widget.speed! * 1000).round();
-      if (step >= widget.context.length) {
+      final time = (widget.height / widget.speed! * 1000).round();
+      if (step >= (widget.content.cast<String>()?.length ?? 0)) {
         step = 0;
         offset = 0;
         _scrollController!.jumpTo(0);
       }
       step++;
-      // 固定滚动行高（22）
+      // Fixed scroll row height (22)
       offset += widget.height;
-      _scrollController!.animateTo(offset,
-          duration: Duration(milliseconds: time), curve: Curves.linear);
+      unawaited(
+        _scrollController!.animateTo(
+          offset,
+          duration: Duration(milliseconds: time),
+          curve: Curves.linear,
+        ),
+      );
     });
   }
 
-  /// 获取文本内容尺寸消息
   Size _getFontSize() {
-    var text = widget.context;
-    if (widget.context is List<String>) {
-      text = widget.context[0];
+    String text = widget.content.toString();
+
+    if (widget.content is List<String>) {
+      text = widget.content.cast<List<String>>()![0];
     }
+
     final textPainter = TextPainter(
-      text: TextSpan(
-        text: text,
-        style: _style!.getTextStyle,
-      ),
+      text: TextSpan(text: text, style: _style!.getTextStyle),
       locale: Localizations.localeOf(context),
       textDirection: TextDirection.ltr,
-      maxLines: widget.marquee! ? 1 : widget.maxLines,
-    )..layout(maxWidth: _size!.width);
+      maxLines: widget.marquee ? 1 : widget.maxLines,
+    )..layout(maxWidth: size0!.width);
+
     return textPainter.size;
   }
 
-  /// 设置左侧内容
   void _setLeftWidget() {
     if (widget.prefixIcon != null) {
       _left = Icon(
@@ -206,12 +235,10 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
         size: widget.height,
       );
     }
-    if (widget.left != null) {
-      _left = widget.left;
-    }
+
+    if (widget.left != null) _left = widget.left;
   }
 
-  /// 设置右侧内容
   void _setRightWidget() {
     if (widget.suffixIcon != null) {
       _right = Icon(
@@ -225,36 +252,33 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
     }
   }
 
-  /// 获取文本内容宽度
-  double _getContextWidth() {
-    var contextWidth =
+  double _getContentWidth() {
+    var contentWidth =
         _key.currentContext?.findRenderObject()?.paintBounds.size.width ?? 0;
-    if (contextWidth == 0) {
-      contextWidth = _getFontSize().width;
-    }
-    return contextWidth;
+
+    if (contentWidth == 0) contentWidth = _getFontSize().width;
+
+    return contentWidth;
   }
 
-  /// 获取滚动区域宽度
   double _getEmptyWidth() {
     return _contextKey.currentContext
             ?.findRenderObject()
             ?.paintBounds
             .size
             .width ??
-        (_size!.width - _style!.getPadding.horizontal);
+        (size0!.width - _style!.getPadding.horizontal);
   }
 
-  /// 获取文字高度
   double _getTextHeight() {
     return _getFontSize().height;
   }
 
-  /// 内容区域
-  Widget _contextWidget() {
+  Widget _contentWidget() {
     var valid = false;
     Widget? textWidget;
-    if (widget.context is String) {
+
+    if (widget.content is String) {
       valid = true;
       textWidget = SizedBox(
         height: _getTextHeight(),
@@ -263,16 +287,15 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
           child: SizedBox(
             height: _getTextHeight(),
             child: TDText(
-              widget.context,
+              widget.content.cast<String>(),
               style: _style?.getTextStyle,
-              maxLines: widget.marquee! ? 1 : widget.maxLines,
-              forceVerticalCenter: true,
+              maxLines: widget.marquee ? 1 : widget.maxLines,
             ),
           ),
         ),
       );
     }
-    if (widget.context is List<String>) {
+    if (widget.content is List<String>) {
       valid = true;
       textWidget = SizedBox(
         height: _getTextHeight(),
@@ -281,22 +304,21 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
           child: SizedBox(
             height: _getTextHeight(),
             child: TDText(
-              widget.context[0],
+              widget.content.cast<List<String>>()![0],
               style: _style?.getTextStyle,
               maxLines: 1,
-              forceVerticalCenter: true,
             ),
           ),
         ),
       );
     }
-    if (!valid) {
-      throw Exception('context must be String or List<String>');
-    }
-    if (widget.marquee == false) {
-      return textWidget!;
-    }
+
+    if (!valid) throw Exception('context must be String or List<String>');
+
+    if (!widget.marquee) return textWidget!;
+
     Widget? child;
+
     switch (widget.direction) {
       case Axis.horizontal:
         child = SingleChildScrollView(
@@ -305,115 +327,87 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
           physics: const NeverScrollableScrollPhysics(),
           child: Row(
             children: [
+              SizedBox(key: _key, height: _getTextHeight(), child: textWidget),
+              SizedBox(width: _getEmptyWidth()),
               SizedBox(
-                key: _key,
+                width:
+                    _getEmptyWidth() > _getContentWidth()
+                        ? _getEmptyWidth()
+                        : _getContentWidth(),
                 height: _getTextHeight(),
                 child: textWidget,
               ),
-              SizedBox(width: _getEmptyWidth()),
-              SizedBox(
-                width: _getEmptyWidth() > _getContextWidth()
-                    ? _getEmptyWidth()
-                    : _getContextWidth(),
-                height: _getTextHeight(),
-                child: textWidget,
-              )
             ],
           ),
         );
-        break;
       case Axis.vertical:
-        var contexts = widget.context as List<String>;
+        final contents = widget.content! as List<String>;
         child = SizedBox(
           height: widget.height,
           child: SingleChildScrollView(
             controller: _scrollController,
-            scrollDirection: Axis.vertical,
-            // physics: const NeverScrollableScrollPhysics(),
             child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  for (int i = 0; i < contexts.length; i++)
-                    SizedBox(
-                      height: widget.height,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: TDText(
-                          contexts[i],
-                          style: _style!.getTextStyle,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ),
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                for (int i = 0; i < contents.length; i++)
                   SizedBox(
-                    key: _key,
                     height: widget.height,
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: TDText(
-                        contexts[0],
-                        style: _style?.getTextStyle,
+                        contents[i],
+                        style: _style!.getTextStyle,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ),
-                ]),
+                SizedBox(
+                  key: _key,
+                  height: widget.height,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: TDText(
+                      contents[0],
+                      style: _style?.getTextStyle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
-        break;
-      default:
+      case null:
         child = textWidget;
-        break;
     }
     return child!;
   }
 
-  void _onTap(trigger) {
-    if (widget.onTap != null) {
-      widget.onTap!(trigger);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    // 初始化样式及左右widget
-    _init();
-    _size = MediaQuery.of(context).size;
+    size0 = MediaQuery.of(context).size;
     return Container(
       padding: _style!.getPadding,
-      decoration: BoxDecoration(
-        color: _backgroundColor,
-      ),
+      decoration: BoxDecoration(color: _backgroundColor),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Visibility(
             visible: _left != null,
-            child: GestureDetector(
-              onTap: () => _onTap('prefix-icon'),
-              child: Container(
-                margin: const EdgeInsets.only(right: 8),
-                child: _left,
-              ),
-            ),
+            child: Container(
+              margin: const EdgeInsets.only(right: 8),
+              child: _left,
+            ).clickable(onTap: widget.onTap),
           ),
           Expanded(
             key: _contextKey,
-            child: GestureDetector(
-              onTap: () => _onTap('context'),
-              child: _contextWidget(),
-            ),
+            child: _contentWidget().clickable(onTap: widget.onTap),
           ),
           Visibility(
             visible: _right != null,
-            child: GestureDetector(
-              onTap: () => _onTap('suffix-icon'),
-              child: _right,
-            ),
+            child: _right!.clickable(onTap: widget.onSuffixTap),
           ),
         ],
       ),
