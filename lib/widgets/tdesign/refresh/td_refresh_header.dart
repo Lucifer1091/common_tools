@@ -3,11 +3,13 @@ import 'dart:math';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 
-import '../../../tdesign_flutter.dart';
-import '../../util/context_extension.dart';
+import '../../../common_tools.dart';
+import '../loading/td_loading.dart';
+import '../text/td_text.dart';
 
-/// TDesign刷新头部
-/// 结合EasyRefresh类实现下拉刷新,继承自Header类，字段含义与父类一致
+/// TDesign refreshes the header
+/// Combines with the EasyRefresh class to implement pull-down refresh,
+/// inherited from the Header class, the field meaning is consistent with the parent class
 class TDRefreshHeader extends Header {
   TDRefreshHeader({
     this.key,
@@ -20,7 +22,7 @@ class TDRefreshHeader extends Header {
     this.completeDuration,
     bool? hapticFeedback,
     this.enableHapticFeedback = true,
-    this.infiniteOffset,
+    double? infiniteOffset,
     this.enableInfiniteRefresh = false,
     bool? infiniteHitOver,
     this.overScroll = true,
@@ -46,60 +48,63 @@ class TDRefreshHeader extends Header {
     super.triggerWhenRelease,
     super.triggerWhenReleaseNoWait,
     super.maxOverOffset,
-  })  : assert((triggerOffset ?? triggerDistance) > 0.0),
-        assert(extent != null && extent >= 0.0),
-        assert(
-            extent != null && ((clamping ?? float) || (triggerOffset ?? triggerDistance) >= extent),
-            'The refresh indicator cannot take more space in its final state '
-            'than the amount initially created by overscrolling.'),
-        super(
-          triggerOffset: triggerOffset ?? triggerDistance,
-          clamping: clamping ?? float,
-          processedDuration: processedDuration ?? completeDuration ?? const Duration(seconds: 1),
-          hapticFeedback: hapticFeedback ?? enableHapticFeedback,
-          infiniteOffset: enableInfiniteRefresh ? infiniteOffset : null,
-          infiniteHitOver: infiniteHitOver ?? overScroll,
-        );
+  }) : assert(
+         (triggerOffset ?? triggerDistance) > 0.0,
+         'triggerOffset or triggerDistance must be greater than 0.0',
+       ),
+       assert(
+         extent != null && extent >= 0.0,
+         'extent must not be null and must be >= 0.0',
+       ),
+       assert(
+         extent != null &&
+             ((clamping ?? float) ||
+                 (triggerOffset ?? triggerDistance) >= extent),
+         'The refresh indicator cannot take more space in its final state '
+         'than the amount initially created by overscrolling.',
+       ),
+       super(
+         triggerOffset: triggerOffset ?? triggerDistance,
+         clamping: clamping ?? float,
+         processedDuration:
+             processedDuration ??
+             completeDuration ??
+             const Duration(seconds: 1),
+         hapticFeedback: hapticFeedback ?? enableHapticFeedback,
+         infiniteOffset: enableInfiniteRefresh ? infiniteOffset : null,
+         infiniteHitOver: infiniteHitOver ?? overScroll,
+       );
 
-  /// Key
   final Key? key;
 
-  /// loading样式
   final TDLoadingIcon loadingIcon;
 
-  /// 背景颜色
   final Color? backgroundColor;
 
-  /// Header容器高度
+  /// Header container height
   final double? extent;
 
-  /// 触发刷新任务的偏移量，同[triggerOffset]
+  /// The offset that triggers the refresh task, same as [triggerOffset]
   final double triggerDistance;
 
-  /// 是否悬浮
   final bool float;
 
-  /// 完成延时
   final Duration? completeDuration;
 
-  /// 开启震动反馈
   final bool enableHapticFeedback;
 
-  /// 是否开启无限刷新
   final bool enableInfiniteRefresh;
 
-  /// 无限刷新偏移量
-  @override
-  final double? infiniteOffset;
-
-  /// 越界滚动([enableInfiniteRefresh]为true或[infiniteOffset]有值时生效)
+  /// Out-of-bounds scrolling (effective when [enableInfiniteRefresh] is
+  /// true or [infiniteOffset] has a value)
   final bool overScroll;
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
-    // 不能为水平方向
+    // Cannot be horizontal
     assert(
-      state.axisDirection == AxisDirection.down || state.axisDirection == AxisDirection.up,
+      state.axisDirection == AxisDirection.down ||
+          state.axisDirection == AxisDirection.up,
       'Widget cannot be horizontal',
     );
     return TGIconHeaderWidget(
@@ -112,27 +117,22 @@ class TDRefreshHeader extends Header {
   }
 }
 
-/// 刷新头部组件
 class TGIconHeaderWidget extends StatefulWidget {
-  /// loading样式
-  final TDLoadingIcon loadingIcon;
-
-  /// 背景颜色
-  final Color? backgroundColor;
-
-  /// Indicator properties and state.
-  final IndicatorState state;
-
-  /// header高度
-  final double refreshIndicatorExtent;
-
   const TGIconHeaderWidget({
-    Key? key,
-    this.backgroundColor,
     required this.state,
     required this.refreshIndicatorExtent,
     required this.loadingIcon,
-  }) : super(key: key);
+    super.key,
+    this.backgroundColor,
+  });
+
+  final TDLoadingIcon loadingIcon;
+
+  final Color? backgroundColor;
+
+  final IndicatorState state;
+
+  final double refreshIndicatorExtent;
 
   @override
   TGIconHeaderWidgetState createState() {
@@ -140,7 +140,8 @@ class TGIconHeaderWidget extends StatefulWidget {
   }
 }
 
-class TGIconHeaderWidgetState extends State<TGIconHeaderWidget> with TickerProviderStateMixin {
+class TGIconHeaderWidgetState extends State<TGIconHeaderWidget>
+    with TickerProviderStateMixin {
   IndicatorMode get _refreshState => widget.state.mode;
   double get _offset => widget.state.offset;
   double get _actualTriggerOffset => widget.state.actualTriggerOffset;
@@ -148,13 +149,12 @@ class TGIconHeaderWidgetState extends State<TGIconHeaderWidget> with TickerProvi
   double get _safeOffset => widget.state.safeOffset;
 
   Widget _buildLoading() => TDLoading(
-        size: TDLoadingSize.medium,
-        icon: widget.loadingIcon,
-        iconColor: TDTheme.of(context).brandNormalColor,
-        axis: Axis.horizontal,
-        text: context.resource.refreshing,
-        textColor: TDTheme.of(context).fontGyColor3,
-      );
+    icon: widget.loadingIcon,
+    iconColor: ThemeColors.blue.shade600,
+    axis: Axis.horizontal,
+    text: 'Refreshing',
+    textColor: ThemeColors.neutral.shade700,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -166,32 +166,43 @@ class TGIconHeaderWidgetState extends State<TGIconHeaderWidget> with TickerProvi
           Positioned(
             left: 0,
             right: 0,
-            top: _offset < _actualTriggerOffset
-                ? -(_actualTriggerOffset - _offset + (_reverse ? _safeOffset : -_safeOffset)) / 2
-                : (!_reverse ? _safeOffset : 0),
-            bottom: _offset < _actualTriggerOffset ? null : (_reverse ? _safeOffset : 0),
-            height: _offset < _actualTriggerOffset ? _actualTriggerOffset : null,
+            top:
+                _offset < _actualTriggerOffset
+                    ? -(_actualTriggerOffset -
+                            _offset +
+                            (_reverse ? _safeOffset : -_safeOffset)) /
+                        2
+                    : (!_reverse ? _safeOffset : 0),
+            bottom:
+                _offset < _actualTriggerOffset
+                    ? null
+                    : (_reverse ? _safeOffset : 0),
+            height:
+                _offset < _actualTriggerOffset ? _actualTriggerOffset : null,
             child: Container(
               alignment: Alignment.center,
               height: widget.refreshIndicatorExtent,
               color: widget.backgroundColor,
               child: Visibility(
-                child: Container(
-                  child: _buildLoading(),
-                ),
-                visible: _refreshState == IndicatorMode.processing || _refreshState == IndicatorMode.ready,
+                visible:
+                    _refreshState == IndicatorMode.processing ||
+                    _refreshState == IndicatorMode.ready,
                 replacement: Visibility(
                   visible: _refreshState != IndicatorMode.inactive,
                   child: TDText(
                     _refreshState == IndicatorMode.drag
-                        ? context.resource.pullToRefresh
-                        : _refreshState == IndicatorMode.processed || _refreshState == IndicatorMode.done
-                            ? context.resource.completeRefresh
-                            : context.resource.releaseRefresh,
-                    font: TDTheme.of(context).fontBodyMedium,
-                    textColor: TDTheme.of(context).fontGyColor3,
+                        ? 'Pull Down To Refresh'
+                        : _refreshState == IndicatorMode.processed ||
+                            _refreshState == IndicatorMode.done
+                        ? 'Refresh completed'
+                        : 'Release to refresh',
+                    textColor: ThemeColors.neutral.shade700,
+                    style: context.bodyMedium?.copyWith(
+                      color: ThemeColors.neutral.shade700,
+                    ),
                   ),
                 ),
+                child: Container(child: _buildLoading()),
               ),
             ),
           ),

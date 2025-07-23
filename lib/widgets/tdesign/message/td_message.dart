@@ -276,11 +276,20 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
           case MessageTheme.info:
             return Icon(Icons.info_rounded, color: ThemeColors.blue.shade600);
           case MessageTheme.success:
-            return Icon(Icons.check, color: ThemeColors.success.shade400);
+            return Icon(
+              Icons.check_circle_rounded,
+              color: ThemeColors.success.shade400,
+            );
           case MessageTheme.warning:
-            return Icon(Icons.info_rounded, color: ThemeColors.orange.shade400);
+            return Icon(
+              Icons.report_problem_rounded,
+              color: ThemeColors.orange.shade400,
+            );
           case MessageTheme.error:
-            return Icon(Icons.info_rounded, color: ThemeColors.error.shade500);
+            return Icon(
+              Icons.report_rounded,
+              color: ThemeColors.error.shade500,
+            );
           case null:
             return const NoWidget();
         }

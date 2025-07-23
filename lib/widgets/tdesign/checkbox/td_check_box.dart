@@ -55,9 +55,13 @@ class TDCheckbox extends StatefulWidget {
 
   final String? title;
 
+  final Color? titleColor;
+
   final TextStyle? titleStyle;
 
   final String? subTitle;
+
+  final Color? subTitleColor;
 
   final TextStyle? subTitleStyle;
 
@@ -95,10 +99,6 @@ class TDCheckbox extends StatefulWidget {
 
   final Color? disableColor;
 
-  final Color? titleColor;
-
-  final Color? subTitleColor;
-
   final double? checkBoxLeftSpace;
 
   @override
@@ -124,7 +124,7 @@ class TDCheckbox extends StatefulWidget {
       style == TDCheckboxStyle.circle
           ? isChecked
               ? Icons.check_circle
-              : Icons.circle
+              : Icons.circle_outlined
           : style == TDCheckboxStyle.square
           ? isChecked
               ? Icons.check_box_rounded

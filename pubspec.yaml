@@ -16,6 +16,7 @@ dependencies:
   cached_network_image: ^3.4.1
   cached_network_image_platform_interface: ^4.1.1
   flutter_svg: ^2.2.0
+  easy_refresh: ^3.4.0 
   
   #--- Form packages ---#
   form_field_validator: ^1.1.0
