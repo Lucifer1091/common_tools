@@ -1,12 +1,9 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 
-import '../../../tdesign_flutter.dart';
+import '../badge/td_badge.dart';
 
 class TDSideBarItem {
   const TDSideBarItem({
-    Key? key,
     this.badge,
     this.disabled = false,
     this.icon,
@@ -15,21 +12,15 @@ class TDSideBarItem {
     this.value = -1,
   });
 
-  /// 徽标
   final TDBadge? badge;
 
-  /// 是否禁用
   final bool disabled;
 
-  /// 图标
   final IconData? icon;
 
-  /// 标签
   final String label;
 
-  /// 标签样式
   final TextStyle? textStyle;
 
-  /// 值
   final int value;
 }

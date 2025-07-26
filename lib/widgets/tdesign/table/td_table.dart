@@ -1,18 +1,22 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
+import '../../../common_tools.dart';
+import '../checkbox/td_check_box.dart';
+import '../empty/td_empty.dart';
+import '../image/td_image.dart';
+import '../loading/td_loading.dart';
+import '../text/td_text.dart';
 
 enum TDTableColFixed { left, right, none }
 
 enum TDTableColAlign { left, center, right }
 
-typedef OnCellTap = void Function(int rowIndex, dynamic row, TDTableCol col);
+typedef OnCellTap = void Function(int rowIndex, Json? row, TDTableCol col);
 typedef OnScroll = void Function(ScrollController controller);
 typedef OnSelect = void Function(List<dynamic>? data);
 typedef OnRowSelect = void Function(int index, bool checked);
-typedef SelectableFunc = bool Function(int index, dynamic row);
+typedef SelectableFunc = bool Function(int index, Json? row);
 
-/// 表格列配置
 class TDTableCol {
   TDTableCol({
     this.title,
@@ -28,60 +32,46 @@ class TDTableCol {
     this.selectable,
   });
 
-  /// 行是否显示复选框，自定义列时无效
+  /// Whether to display a checkbox in the row, invalid when customizing columns
   bool? selection;
 
-  /// 表头标题
   String? title;
 
-  /// 列取值字段
   String? colKey;
 
-  /// 列宽
   double? width;
 
-  /// 固定列
   TDTableColFixed? fixed;
 
-  /// 列内容超出时是否省略
   bool? ellipsis;
 
-  /// 列标题超出时显示省略内容
   bool? ellipsisTitle;
 
-  /// 自定义列
   IndexedWidgetBuilder? cellBuilder;
 
-  /// 列内容横向对齐方式
   TDTableColAlign? align;
 
-  /// 是否可排序
   bool? sortable;
 
-  /// 当前行CheckBox是否可选，仅selection：true有效
+  /// Whether the CheckBox of the current row is selectable, only selection: true is valid
   SelectableFunc? selectable;
 
   double? get widthPx => width;
 }
 
 class TDTableEmpty {
-  TDTableEmpty({
-    this.assetUrl,
-    this.text,
-  });
+  TDTableEmpty({this.assetUrl, this.text});
 
-  /// 空状态图片
   String? assetUrl;
 
-  /// 空状态文字
   String? text;
 }
 
 class TDTable extends StatefulWidget {
   const TDTable({
+    required this.columns,
     super.key,
     this.bordered,
-    required this.columns,
     this.data,
     this.empty,
     this.height,
@@ -99,55 +89,38 @@ class TDTable extends StatefulWidget {
     this.onRowSelect,
   });
 
-  /// 是否显示表格边框
   final bool? bordered;
 
-  /// 列配置
   final List<TDTableCol> columns;
 
-  /// 数据源
-  final List<dynamic>? data;
+  final List<Json>? data;
 
-  /// 空表格呈现样式
   final TDTableEmpty? empty;
 
-  /// 表格高度，超出后会出现滚动条
   final double? height;
 
-  /// 行高
   final double? rowHeight;
 
-  /// 加载中状态
   final bool? loading;
 
-  /// 自定义加载中状态
   final Widget? loadingWidget;
 
-  /// 是否显示表头
   final bool? showHeader;
 
-  /// 斑马纹
   final bool? stripe;
 
-  /// 表格背景色
   final Color? backgroundColor;
 
-  /// 表格宽度
   final double? width;
 
-  /// 默认排序
   final String? defaultSort;
 
-  /// 单元格点击事件
   final OnCellTap? onCellTap;
 
-  /// 表格滚动事件
   final OnScroll? onScroll;
 
-  /// 选中行事件
   final OnSelect? onSelect;
 
-  /// 行选择事件
   final OnRowSelect? onRowSelect;
 
   @override
@@ -161,77 +134,71 @@ class TDTableState extends State<TDTable> {
   late List<bool> _checkedList;
   final _scrollController = ScrollController();
 
-  /// 获取单元格对齐方式
   Alignment _getVerticalAlign(TDTableColAlign x) {
     var xPos = 0.0;
     switch (x) {
       case TDTableColAlign.left:
         xPos = -1;
-        break;
       case TDTableColAlign.center:
         xPos = 0;
-        break;
       case TDTableColAlign.right:
         xPos = 1;
-        break;
     }
     return Alignment(xPos, 0);
   }
 
-  /// 过滤列配置
   List<TDTableCol> _getCol(TDTableColFixed fixed) {
     return widget.columns.where((col) => col.fixed == fixed).toList();
   }
 
-  /// 生成表头
   Widget _getTableHeader(BuildContext context) {
-    var fixedLeftCol = _getCol(TDTableColFixed.left);
-    var fixedNonCol = _getCol(TDTableColFixed.none);
-    var fixedRightCol = _getCol(TDTableColFixed.right);
+    final fixedLeftCol = _getCol(TDTableColFixed.left);
+    final fixedNonCol = _getCol(TDTableColFixed.none);
+    final fixedRightCol = _getCol(TDTableColFixed.right);
     var start = 0;
-    var fixedLeftCells = <Widget>[],
+    final fixedLeftCells = <Widget>[],
         cells = <Widget>[],
         fixedRightCells = <Widget>[];
     for (var i = 0; i < fixedLeftCol.length; i++) {
-      var cell = _getCell(fixedLeftCol[i], true, null, start, i == 0);
+      final cell = _getCell(fixedLeftCol[i], true, null, start, i == 0);
       if (fixedLeftCol[i].width != null) {
         fixedLeftCells.add(SizedBox(width: fixedLeftCol[i].width, child: cell));
       } else {
-        fixedLeftCells.add(Expanded(flex: 1, child: cell));
+        fixedLeftCells.add(Expanded(child: cell));
       }
       start++;
     }
     start = fixedLeftCol.length;
     for (var i = 0; i < fixedNonCol.length; i++) {
-      var cell = _getCell(fixedNonCol[i], true, null, start, i == 0);
+      final cell = _getCell(fixedNonCol[i], true, null, start, i == 0);
       if (fixedNonCol[i].width != null) {
         cells.add(SizedBox(width: fixedNonCol[i].width, child: cell));
       } else {
-        cells.add(Expanded(flex: 1, child: cell));
+        cells.add(Expanded(child: cell));
       }
       start++;
     }
     for (var i = 0; i < fixedRightCol.length; i++) {
-      var cell = _getCell(fixedRightCol[i], true, null, start, i == 0);
+      final cell = _getCell(fixedRightCol[i], true, null, start, i == 0);
       if (fixedRightCol[i].width != null) {
-        fixedRightCells
-            .add(SizedBox(width: fixedRightCol[i].width, child: cell));
+        fixedRightCells.add(
+          SizedBox(width: fixedRightCol[i].width, child: cell),
+        );
       } else {
-        fixedRightCells.add(Expanded(flex: 1, child: cell));
+        fixedRightCells.add(Expanded(child: cell));
       }
       start++;
     }
     return Row(children: [...fixedLeftCells, ...cells, ...fixedRightCells]);
   }
 
-  /// 生成表格内容
   Widget _getTableContent(BuildContext context) {
     if (widget.loading ?? false) {
-      return Align(
-        alignment: Alignment.center,
+      return Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 32),
-          child: widget.loadingWidget ??
+          child:
+              widget.loadingWidget ??
               const TDLoading(size: TDLoadingSize.large),
         ),
       );
@@ -239,16 +206,16 @@ class TDTableState extends State<TDTable> {
     if (widget.data == null || widget.data!.isEmpty) {
       return _getEmpty('暂无数据');
     }
-    var cells = <Widget>[];
-    var fixedLeftCol = _getCol(TDTableColFixed.left);
-    var fixedNonCol = _getCol(TDTableColFixed.none);
-    var fixedRightCol = _getCol(TDTableColFixed.right);
-    var headerCol = [...fixedLeftCol, ...fixedNonCol, ...fixedRightCol];
+    final cells = <Widget>[];
+    final fixedLeftCol = _getCol(TDTableColFixed.left);
+    final fixedNonCol = _getCol(TDTableColFixed.none);
+    final fixedRightCol = _getCol(TDTableColFixed.right);
+    final headerCol = [...fixedLeftCol, ...fixedNonCol, ...fixedRightCol];
     for (var i = 0; i < widget.data!.length; i++) {
-      var data = widget.data![i];
-      var row = <Widget>[];
+      final data = widget.data![i];
+      final row = <Widget>[];
       for (var j = 0; j < headerCol.length; j++) {
-        var cell = _getCell(
+        final cell = _getCell(
           headerCol[j],
           false,
           data,
@@ -259,35 +226,44 @@ class TDTableState extends State<TDTable> {
         if (headerCol[j].width != null) {
           row.add(SizedBox(width: headerCol[j].width, child: cell));
         } else {
-          row.add(Expanded(flex: 1, child: cell));
+          row.add(Expanded(child: cell));
         }
       }
-      cells.add(Container(
-        color: (widget.stripe ?? false) && i % 2 == 0
-            ? const Color(0xffF3F3F3)
-            : Colors.white,
-        child: Row(children: row),
-      ));
+      cells.add(
+        ColoredBox(
+          color:
+              (widget.stripe ?? false) && i.isEven
+                  ? const Color(0xffF3F3F3)
+                  : Colors.white,
+          child: Row(children: row),
+        ),
+      );
     }
-    return Column(
-      children: cells,
-    );
+    return Column(children: cells);
   }
 
-  /// 获取单元格
-  Widget _getCell(TDTableCol col, bool isHeader, dynamic data, int index,
-      bool fixedBorder) {
-    var title = isHeader ? (col.title ?? '') : (data[col.colKey] ?? '');
-    var ellipsis = (isHeader ? col.ellipsisTitle : col.ellipsis) ?? false;
-    var sortable = col.sortable ?? false;
+  Widget _getCell(
+    TDTableCol col,
+    bool isHeader,
+    data,
+    int index,
+    bool fixedBorder,
+  ) {
+    final String title =
+        isHeader
+            ? (col.title ?? '')
+            : ((data as Map?)?[col.colKey]?.toString() ?? '');
+    final ellipsis = (isHeader ? col.ellipsisTitle : col.ellipsis) ?? false;
+    final sortable = col.sortable ?? false;
 
-    // 单元格边框
-    var halfBorder = const BorderSide(width: 0.5, color: Color(0xffE7E7E7));
-    var doubleBorder = const BorderSide(width: 2, color: Color(0xffE7E7E7));
+    final halfBorder = const BorderSide(width: 0.5, color: Color(0xffE7E7E7));
+    final doubleBorder = const BorderSide(width: 2, color: Color(0xffE7E7E7));
+
     var topBorder = BorderSide.none,
         rightBorder = BorderSide.none,
         leftBorder = BorderSide.none;
-    var bottomBorder = halfBorder;
+
+    final bottomBorder = halfBorder;
     if (widget.bordered ?? false) {
       rightBorder = halfBorder;
     }
@@ -298,39 +274,46 @@ class TDTableState extends State<TDTable> {
       leftBorder = doubleBorder;
     }
 
-    // 单元格内容
-    var text = _getCellText(col, title, ellipsis, isHeader, sortable, index);
+    final text = _getCellText(col, title, ellipsis, isHeader, sortable, index);
     var content = text;
-    if((col.selection ?? false) && col.cellBuilder == null) {
-      var enable = col.selectable?.call(index, widget.data?[index]) ?? true;
-      // 行选择框
+
+    if ((col.selection ?? false) && col.cellBuilder == null) {
+      final enable = col.selectable?.call(index, widget.data?[index]) ?? true;
+
       var checkBox = TDCheckbox(
         id: 'index:$index',
         checked: _checkedList[index],
         enable: enable,
         customIconBuilder: (context, checked) {
-          if(checked) {
-            return Icon(TDIcons.check_rectangle_filled, size: 16,
-              color: TDTheme.of(context).brandNormalColor);
+          if (checked) {
+            return Icon(
+              Icons.check_box_rounded,
+              size: 16,
+              color: ThemeColors.blue.shade600,
+            );
           }
-          return Icon(TDIcons.rectangle, size: 16,
-            color: enable ?
-                  TDTheme.of(context).fontGyColor1 :
-                  TDTheme.of(context).fontGyColor3);
+          return Icon(
+            Icons.check_box_outline_blank_rounded,
+            size: 16,
+            color:
+                enable
+                    ? ThemeColors.neutral.shade900
+                    : ThemeColors.neutral.shade700,
+          );
         },
         onCheckBoxChanged: (checked) {
           setState(() {
             _checkedList[index] = checked;
-            if(checked) {
+            if (checked) {
               _hasChecked += 1;
             } else {
               _hasChecked -= 1;
             }
-            var selectList = [];
-            for(var i = 0; i < _checkedList.length; i++) {
-               if(_checkedList[i]) {
-                 selectList.add(widget.data![i]);
-               }
+            final selectList = <Json>[];
+            for (var i = 0; i < _checkedList.length; i++) {
+              if (_checkedList[i]) {
+                selectList.add(widget.data![i]);
+              }
             }
             widget.onSelect?.call(selectList);
             widget.onRowSelect?.call(index, checked);
@@ -338,23 +321,27 @@ class TDTableState extends State<TDTable> {
         },
       );
 
-      // 表头选择框
-      if(isHeader) {
+      if (isHeader) {
         checkBox = TDCheckbox(
           id: 'header',
           checked: _hasChecked == widget.data!.length,
           customIconBuilder: (context, checked) {
-            if(_hasChecked == 0) {
-              return Icon(TDIcons.rectangle, size: 16, color: TDTheme.of(context).fontGyColor3,);
+            if (_hasChecked == 0) {
+              return Icon(
+                Icons.check_box_outline_blank_rounded,
+                size: 16,
+                color: ThemeColors.neutral.shade700,
+              );
             }
-            var allCheck = _hasChecked >= widget.data!.length;
-            var halfSelected = _hasChecked > 0 && _hasChecked < widget.data!.length;
+            final allCheck = _hasChecked >= widget.data!.length;
+            final halfSelected =
+                _hasChecked > 0 && _hasChecked < widget.data!.length;
             return getAllIcon(allCheck, halfSelected);
           },
           onCheckBoxChanged: (checked) {
             setState(() {
               _hasChecked = checked ? widget.data!.length : 0;
-              for  (var i = 0; i < widget.data!.length; i++) {
+              for (var i = 0; i < widget.data!.length; i++) {
                 _checkedList[i] = checked;
               }
               widget.onSelect?.call(checked ? widget.data : []);
@@ -363,66 +350,65 @@ class TDTableState extends State<TDTable> {
         );
       }
 
-      content = Row(
-        children: [
-          checkBox,
-          text,
-        ],
-      );
+      content = Row(children: [checkBox, text]);
     }
 
-    // 单元格构建
-    var cell = GestureDetector(
+    final cell = GestureDetector(
       onTap: () {
-        if (isHeader == false) {
-          widget.onCellTap?.call(index, data, col);
-        }
+        if (!isHeader) widget.onCellTap?.call(index, data as Json, col);
       },
-      child: Container(
-          decoration: BoxDecoration(
-            border: Border(
-              top: topBorder,
-              right: rightBorder,
-              bottom: bottomBorder,
-              left: leftBorder,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          border: Border(
+            top: topBorder,
+            right: rightBorder,
+            bottom: bottomBorder,
+            left: leftBorder,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          child: SizedBox(
+            height: widget.rowHeight ?? 22,
+            child: Align(
+              alignment: _getVerticalAlign(col.align!),
+              child: content,
             ),
           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            child: SizedBox(
-              height: widget.rowHeight ?? 22,
-              child: Align(
-                alignment: _getVerticalAlign(col.align!),
-                child: content,
-              ),
-            ),
-          )),
+        ),
+      ),
     );
     return cell;
   }
 
-  /// 获取单元格内容
-  Widget _getCellText(TDTableCol col, String title, bool ellipsis,
-      bool isHeader, bool sortable, int index) {
-    var overflow = ellipsis ? TextOverflow.ellipsis : TextOverflow.visible;
-    var titleWidget = TDText(title,
-        maxLines: 1,
-        overflow: overflow,
-        style: TextStyle(
-          color: isHeader
-              ? TDTheme.of(context).fontGyColor3
-              : TDTheme.of(context).fontGyColor1,
-          fontSize: 14,
-          height: 1,
-          letterSpacing: 0,
-        ));
+  Widget _getCellText(
+    TDTableCol col,
+    String title,
+    bool ellipsis,
+    bool isHeader,
+    bool sortable,
+    int index,
+  ) {
+    final overflow = ellipsis ? TextOverflow.ellipsis : TextOverflow.visible;
+    final titleWidget = TDText(
+      title,
+      maxLines: 1,
+      overflow: overflow,
+      style: TextStyle(
+        color:
+            isHeader
+                ? ThemeColors.neutral.shade700
+                : ThemeColors.neutral.shade900,
+        fontSize: 14,
+        height: 1,
+        letterSpacing: 0,
+      ),
+    );
 
-    // 表头（需考虑排序模式）
     if (isHeader) {
-      var selectColor = TDTheme.of(context).brandNormalColor;
-      var unSelectColor = TDTheme.of(context).fontGyColor3;
+      final selectColor = ThemeColors.blue.shade600;
+      final unSelectColor = ThemeColors.neutral.shade700;
       return Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
           titleWidget,
@@ -444,44 +430,52 @@ class TDTableState extends State<TDTable> {
                     }
                     _sortKey = col.colKey;
                     widget.data?.sort((a, b) {
+                      final aValue = a[col.colKey];
+                      final bValue = b[col.colKey];
                       if (_sortable == false) {
-                        return b[col.colKey].compareTo(a[col.colKey]);
+                        if (bValue is Comparable && aValue is Comparable) {
+                          return bValue.compareTo(aValue);
+                        }
+                        return 0;
                       }
-                      return a[col.colKey].compareTo(b[col.colKey]);
+                      if (aValue is Comparable && bValue is Comparable) {
+                        return aValue.compareTo(bValue);
+                      }
+                      return 0;
                     });
                   });
                 },
-                // 绘制双向箭头
                 child: CustomPaint(
                   size: const Size(16, 16),
                   painter: ChevronPainter(
-                    upColor: (_sortable == true) && (_sortKey == col.colKey)
-                        ? selectColor
-                        : unSelectColor,
-                    downColor: (_sortable == false) && (_sortKey == col.colKey)
-                        ? selectColor
-                        : unSelectColor,
+                    upColor:
+                        (_sortable ?? false) && (_sortKey == col.colKey)
+                            ? selectColor
+                            : unSelectColor,
+                    downColor:
+                        (_sortable == false) && (_sortKey == col.colKey)
+                            ? selectColor
+                            : unSelectColor,
                   ),
                 ),
               ),
             ),
-          )
+          ),
         ],
       );
     }
-    // 自定义单元格内容
+
     if (col.cellBuilder != null) {
-      return Builder(builder: (_) => col.cellBuilder!(_, index));
+      return Builder(builder: (_) => col.cellBuilder!(context, index));
     }
     return titleWidget;
   }
 
-  /// 获取表格宽度
   double _getColsWidth() {
     var width = 0.0;
-    widget.columns.forEach((col) {
-      width += (col.width ?? 0);
-    });
+    for (final col in widget.columns) {
+      width += col.width ?? 0;
+    }
     return width;
   }
 
@@ -493,60 +487,62 @@ class TDTableState extends State<TDTable> {
     _scrollController.addListener(() {
       widget.onScroll?.call(_scrollController);
     });
-    _checkedList = List.generate((widget.data?.length ?? 0), (index) => false);
+    _checkedList = List.generate(widget.data?.length ?? 0, (index) => false);
   }
 
-  /// 生成固定列表格
   Widget _getFixedTable(BuildContext context) {
-    // 对列进行分类
-    var fixedLeftCol = _getCol(TDTableColFixed.left);
-    var fixedNonCol = _getCol(TDTableColFixed.none);
-    var fixedRightCol = _getCol(TDTableColFixed.right);
+    final fixedLeftCol = _getCol(TDTableColFixed.left);
+    final fixedNonCol = _getCol(TDTableColFixed.none);
+    final fixedRightCol = _getCol(TDTableColFixed.right);
 
-    // 获取竖向单元格内容
-    var fixedLeftTitle = _getCellsText(fixedLeftCol);
-    var fixedNonTitle = _getCellsText(fixedNonCol);
-    var fixedRightTitle = _getCellsText(fixedRightCol);
+    final fixedLeftTitle = _getCellsText(fixedLeftCol);
+    final fixedNonTitle = _getCellsText(fixedNonCol);
+    final fixedRightTitle = _getCellsText(fixedRightCol);
 
-    // 计算单元格宽度（单元格默认平分）
-    var width = widget.width ?? MediaQuery.of(context).size.width;
-    var cellWidth = width / widget.columns.length;
+    final width = widget.width ?? MediaQuery.of(context).size.width;
+    final cellWidth = width / widget.columns.length;
 
-    // 生成左侧固定列
-    var fixedLeftCols =
-        _getVerticalCell(fixedLeftCol, fixedLeftTitle, cellWidth);
-    // 生成非固定列
-    var fixedNonCols = _getVerticalCell(fixedNonCol, fixedNonTitle, cellWidth);
-    // 生成右侧固定列
-    var fixedRightCols =
-        _getVerticalCell(fixedRightCol, fixedRightTitle, cellWidth);
+    final fixedLeftCols = _getVerticalCell(
+      fixedLeftCol,
+      fixedLeftTitle,
+      cellWidth,
+    );
 
-    // 固定列宽度
+    final fixedNonCols = _getVerticalCell(
+      fixedNonCol,
+      fixedNonTitle,
+      cellWidth,
+    );
+
+    final fixedRightCols = _getVerticalCell(
+      fixedRightCol,
+      fixedRightTitle,
+      cellWidth,
+    );
+
     var fixedCellsWidth = 0.0;
-    for(var tableCol in widget.columns) {
-      if(tableCol.fixed == TDTableColFixed.left || tableCol.fixed == TDTableColFixed.right) {
-        fixedCellsWidth += (tableCol.width ?? cellWidth);
+    for (final tableCol in widget.columns) {
+      if (tableCol.fixed == TDTableColFixed.left ||
+          tableCol.fixed == TDTableColFixed.right) {
+        fixedCellsWidth += tableCol.width ?? cellWidth;
       }
     }
 
-    // 计算非固定列宽度
     var fixedNonCellsWidth = 0.0;
-    for (var col in fixedNonCol) {
-      // 存在用户自定义宽度  否则使用默认宽度
+    for (final col in fixedNonCol) {
       fixedNonCellsWidth += col.width ?? cellWidth;
     }
 
-    // 非固定列宽度超过剩余宽度 需要开启滚动
     if ((width - fixedCellsWidth) < fixedNonCellsWidth) {
       var content = [Row(children: fixedNonCols), _getEmpty('暂无数据')];
       if (widget.loading ?? false) {
         content = [
           Row(children: fixedNonCols),
           Align(
-            alignment: Alignment.center,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 32),
-              child: widget.loadingWidget ??
+              child:
+                  widget.loadingWidget ??
                   const TDLoading(size: TDLoadingSize.large),
             ),
           ),
@@ -554,9 +550,8 @@ class TDTableState extends State<TDTable> {
       }
       return Container(
         width: width,
-        color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
+        color: widget.backgroundColor ?? Colors.white,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Column(children: [...fixedLeftCols]),
@@ -570,45 +565,39 @@ class TDTableState extends State<TDTable> {
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [...fixedRightCols],
-            )
+            ),
           ],
         ),
       );
     }
-    var child = Container(
+    final child = Container(
       width: width,
-      color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
+      color: widget.backgroundColor ?? Colors.white,
       child: Row(
-        children: [
-          ...fixedLeftCols,
-          ...fixedNonCols,
-          ...fixedRightCols,
-        ],
+        children: [...fixedLeftCols, ...fixedNonCols, ...fixedRightCols],
       ),
     );
     var placeholder = _getEmpty('暂无数据');
     if (widget.loading ?? false) {
       placeholder = Align(
-        alignment: Alignment.center,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 32),
-          child: widget.loadingWidget ??
+          child:
+              widget.loadingWidget ??
               const TDLoading(size: TDLoadingSize.large),
         ),
       );
     }
-    return Container(
-      color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
+    return ColoredBox(
+      color: widget.backgroundColor ?? Colors.white,
       child: Column(children: [child, placeholder]),
     );
   }
 
-  /// 空数据内容
   Widget _getEmpty(String defaultText) {
     return Visibility(
       visible: widget.data == null || widget.data!.isEmpty,
-      child: Align(
-        alignment: Alignment.center,
+      child: Center(
         child: Padding(
           padding: const EdgeInsets.only(top: 16, bottom: 38),
           child: TDEmpty(
@@ -624,23 +613,30 @@ class TDTableState extends State<TDTable> {
   }
 
   TDImage _getEmptyImage() {
-    var url = widget.empty?.assetUrl ?? '';
+    final url = widget.empty?.assetUrl ?? '';
     if (url.startsWith('http')) {
       return TDImage(imgUrl: url);
     }
     return TDImage(assetUrl: url);
   }
 
-  /// 竖向生成单元格
   List<Widget> _getVerticalCell(
-      List<TDTableCol> cols, List<List<String>> titles, double cellWidth) {
-    var rows = <Widget>[];
+    List<TDTableCol> cols,
+    List<List<String>> titles,
+    double cellWidth,
+  ) {
+    final rows = <Widget>[];
     for (var i = 0; i < titles.length; i++) {
-      var cells = <Widget>[];
+      final cells = <Widget>[];
       for (var j = 0; j < titles[i].length; j++) {
-        var col = cols[i];
-        var cell = _getCell(col, j == 0, j == 0 ? '' : widget.data?[j - 1], i,
-            i == titles.length - 1);
+        final col = cols[i];
+        final cell = _getCell(
+          col,
+          j == 0,
+          j == 0 ? '' : widget.data?[j - 1],
+          i,
+          i == titles.length - 1,
+        );
         cells.add(SizedBox(width: col.width ?? cellWidth, child: cell));
       }
       rows.add(Column(children: cells));
@@ -648,63 +644,61 @@ class TDTableState extends State<TDTable> {
     return rows;
   }
 
-  /// 获取每列单元格内容
   List<List<String>> _getCellsText(List<TDTableCol> cols) {
-    var list = <List<String>>[];
-    for (var col in cols) {
-      var titles = <String>[];
-      titles.add(col.title ?? '');
+    final list = <List<String>>[];
+    for (final col in cols) {
+      final titles = <String>[col.title ?? ''];
       if (widget.loading == false) {
-        var dataList = <String>[];
+        final dataList = <String>[];
         for (var i = 0; i < (widget.data?.length ?? 0); i++) {
-          var data = widget.data![i];
-          dataList.add(data[col.colKey] ?? '');
+          final data = widget.data![i];
+          dataList.add((data as Map?)?[col.colKey]?.toString() ?? '');
         }
-        titles..addAll(dataList);
+        titles.addAll(dataList);
       }
       list.add(titles);
     }
     return list;
   }
 
-  /// 半选图标
   Widget getAllIcon(bool checked, bool halfSelected) {
     return Icon(
-        checked ? TDIcons.check_rectangle_filled : halfSelected ? TDIcons.minus_rectangle_filled : TDIcons.circle,
-        size: 16,
-        color: (checked || halfSelected) ? TDTheme.of(context).brandNormalColor : TDTheme.of(context).grayColor4
+      checked
+          ? Icons.check_box_rounded
+          : halfSelected
+          ? Icons.indeterminate_check_box_rounded
+          : Icons.circle,
+      size: 16,
+      color:
+          (checked || halfSelected)
+              ? ThemeColors.blue.shade600
+              : ThemeColors.neutral.shade300,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    // 固定列  按列生成
-    // 非固定列  按行生成
-
-    // 自定义表格宽度 默认屏幕宽度
-    var width = widget.width ?? MediaQuery.of(context).size.width;
-    var fixedCols = [
+    final width = widget.width ?? MediaQuery.of(context).size.width;
+    final fixedCols = [
       ..._getCol(TDTableColFixed.left),
-      ..._getCol(TDTableColFixed.right)
+      ..._getCol(TDTableColFixed.right),
     ];
 
-    // 存在固定列
     if (fixedCols.isNotEmpty) {
       return _getFixedTable(context);
     }
 
-    // 表格超宽
     if (width < _getColsWidth()) {
       return Container(
         width: width,
-        color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
+        color: widget.backgroundColor ?? Colors.white,
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           physics: const ClampingScrollPhysics(),
           child: Column(
             children: [
               Visibility(
-                visible: widget.showHeader == true,
+                visible: widget.showHeader.isTrue,
                 child: _getTableHeader(context),
               ),
               SizedBox(
@@ -714,7 +708,7 @@ class TDTableState extends State<TDTable> {
                   physics: const BouncingScrollPhysics(),
                   child: _getTableContent(context),
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -722,11 +716,11 @@ class TDTableState extends State<TDTable> {
     }
     return Container(
       width: width,
-      color: widget.backgroundColor ?? TDTheme.of(context).whiteColor1,
+      color: widget.backgroundColor ?? Colors.white,
       child: Column(
         children: [
           Visibility(
-            visible: widget.showHeader == true,
+            visible: widget.showHeader.isTrue,
             child: _getTableHeader(context),
           ),
           SizedBox(
@@ -736,7 +730,7 @@ class TDTableState extends State<TDTable> {
               physics: const BouncingScrollPhysics(),
               child: _getTableContent(context),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -744,53 +738,50 @@ class TDTableState extends State<TDTable> {
 }
 
 class ChevronPainter extends CustomPainter {
-  ChevronPainter({
-    required this.upColor,
-    required this.downColor,
-  });
+  ChevronPainter({required this.upColor, required this.downColor});
 
-  /// 线条颜色(向上)
   final Color upColor;
 
-  /// 线条颜色(向下)
   final Color downColor;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final upPaint = Paint()
-      ..color = upColor
-      ..strokeWidth = 1.4
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round;
+    final upPaint =
+        Paint()
+          ..color = upColor
+          ..strokeWidth = 1.4
+          ..style = PaintingStyle.stroke
+          ..strokeCap = StrokeCap.round;
 
     final clientX = size.width;
     final clientY = size.height;
     final centerX = clientX / 2;
     final centerY = clientY / 2;
 
-    // 向上箭头
-    final upPath = Path();
-    upPath.moveTo(3.6, centerY - 1.8);
-    upPath.lineTo(centerX, 2);
-    upPath.lineTo(clientX - 3.6, centerY - 1.8);
+    final upPath =
+        Path()
+          ..moveTo(3.6, centerY - 1.8)
+          ..lineTo(centerX, 2)
+          ..lineTo(clientX - 3.6, centerY - 1.8);
 
-    // 向下箭头
-    final downPaint = Paint()
-      ..color = downColor
-      ..strokeWidth = 1.5
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round;
-    final downPath = Path();
-    downPath.moveTo(3.6, centerY + 1.8);
-    downPath.lineTo(centerX, clientY - 2);
-    downPath.lineTo(clientX - 3.6, centerY + 1.8);
+    final downPaint =
+        Paint()
+          ..color = downColor
+          ..strokeWidth = 1.5
+          ..style = PaintingStyle.stroke
+          ..strokeCap = StrokeCap.round;
 
-    canvas.drawPath(upPath, upPaint);
-    canvas.drawPath(downPath, downPaint);
+    final downPath =
+        Path()
+          ..moveTo(3.6, centerY + 1.8)
+          ..lineTo(centerX, clientY - 2)
+          ..lineTo(clientX - 3.6, centerY + 1.8);
+
+    canvas
+      ..drawPath(upPath, upPaint)
+      ..drawPath(downPath, downPaint);
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
-  }
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }

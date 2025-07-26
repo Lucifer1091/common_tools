@@ -1,12 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
-import '../../../tdesign_flutter.dart';
-import '../../util/context_extension.dart';
+import '../../../common_tools.dart';
+import '../loading/td_circle_indicator.dart';
+import '../text/td_text.dart';
 import 'td_cupertino_switch.dart';
 
-/// 开关改变事件处理
 typedef OnSwitchChanged = bool Function(bool value);
 
 enum TDSwitchSize { large, medium, small }
@@ -15,7 +13,7 @@ enum TDSwitchType { fill, text, loading, icon }
 
 class TDSwitch extends StatefulWidget {
   const TDSwitch({
-    Key? key,
+    super.key,
     this.enable = true,
     this.isOn = false,
     this.size = TDSwitchSize.medium,
@@ -29,45 +27,32 @@ class TDSwitch extends StatefulWidget {
     this.onChanged,
     this.openText,
     this.closeText,
-  }) : super(key: key);
+  });
 
-  /// 是否可点击
   final bool enable;
 
-  /// 是否打开
   final bool isOn;
 
-  /// 开启时轨道颜色
   final Color? trackOnColor;
 
-  /// 关闭时轨道颜色
   final Color? trackOffColor;
 
-  /// 开启时ThumbView的颜色
   final Color? thumbContentOnColor;
 
-  /// 关闭时ThumbView的颜色
   final Color? thumbContentOffColor;
 
-  /// 开启时ThumbView的字体样式
   final TextStyle? thumbContentOnFont;
 
-  /// 关闭时ThumbView的字体样式
   final TextStyle? thumbContentOffFont;
 
-  /// 尺寸：大、中、小
   final TDSwitchSize? size;
 
-  /// 类型：填充、文本、加载
   final TDSwitchType? type;
 
-  /// 改变事件
   final OnSwitchChanged? onChanged;
 
-  /// 打开文案
   final String? openText;
 
-  /// 关闭文案
   final String? closeText;
 
   @override
@@ -93,45 +78,47 @@ class TDSwitchState extends State<TDSwitch> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = TDTheme.of(context);
     final switchEnable = widget.enable && widget.type != TDSwitchType.loading;
-    final trackOnColor = widget.trackOnColor ?? theme.brandColor7;
-    final trackOffColor = widget.trackOffColor ?? theme.grayColor4;
+    final trackOnColor = widget.trackOnColor ?? ThemeColors.blue.shade600;
+    final trackOffColor = widget.trackOffColor ?? ThemeColors.neutral.shade300;
     final thumbContentOnColor =
-        widget.thumbContentOnColor ?? theme.brandNormalColor;
+        widget.thumbContentOnColor ?? ThemeColors.blue.shade600;
     final thumbContentOffColor =
-        widget.thumbContentOffColor ?? theme.fontGyColor4;
-    final thumbContentOnFont = widget.thumbContentOnFont ?? const TextStyle(fontSize: 14);
-    final thumbContentOffFont = widget.thumbContentOffFont ?? const TextStyle(fontSize: 14);
+        widget.thumbContentOffColor ?? ThemeColors.neutral.shade600;
+    final thumbContentOnFont =
+        widget.thumbContentOnFont ?? const TextStyle(fontSize: 14);
+    final thumbContentOffFont =
+        widget.thumbContentOffFont ?? const TextStyle(fontSize: 14);
     Widget current = TDCupertinoSwitch(
       value: isOn,
       activeColor: trackOnColor,
       trackColor: trackOffColor,
       onChanged: (value) {
-        var process = widget.onChanged?.call(value) ?? false;
-        // 如果外部未处理,才需要自定刷新开关,如果已处理则不需要刷新
+        final process = widget.onChanged?.call(value) ?? false;
+        // If the external has not been processed, you need to customize the
+        // refresh switch. If it has been processed, no refresh is needed
         if (!process) {
           isOn = value;
           setState(() {});
         }
       },
-      thumbView: _getThumbView(thumbContentOnColor, thumbContentOffColor,thumbContentOnFont, thumbContentOffFont),
+      thumbView: _getThumbView(
+        thumbContentOnColor,
+        thumbContentOffColor,
+        thumbContentOnFont,
+        thumbContentOffFont,
+      ),
     );
     if (!switchEnable) {
       current = Opacity(
         opacity: 0.4,
-        child: IgnorePointer(
-          ignoring: !switchEnable,
-          child: current,
-        ),
+        child: IgnorePointer(ignoring: !switchEnable, child: current),
       );
     }
     return SizedBox(
       width: _getWidth(),
       height: _getHeight(),
-      child: FittedBox(
-        child: current,
-      ),
+      child: FittedBox(child: current),
     );
     // return ConstrainedBox( _getWidth(), height: _getHeight(), child: current);
   }
@@ -141,11 +128,10 @@ class TDSwitchState extends State<TDSwitch> {
       case TDSwitchSize.large:
         return 52;
       case TDSwitchSize.medium:
+      case null:
         return 45;
       case TDSwitchSize.small:
         return 39;
-      default:
-        return 45;
     }
   }
 
@@ -154,15 +140,19 @@ class TDSwitchState extends State<TDSwitch> {
       case TDSwitchSize.large:
         return 32;
       case TDSwitchSize.medium:
+      case null:
         return 28;
       case TDSwitchSize.small:
         return 24;
-      default:
-        return 28;
     }
   }
 
-  Widget? _getThumbView(Color thumbContentOnColor, Color thumbContentOffColor, TextStyle thumbContentOnFont, TextStyle thumbContentOffFont) {
+  Widget? _getThumbView(
+    Color thumbContentOnColor,
+    Color thumbContentOffColor,
+    TextStyle thumbContentOnFont,
+    TextStyle thumbContentOffFont,
+  ) {
     switch (widget.type) {
       case TDSwitchType.text:
         return Stack(
@@ -172,34 +162,31 @@ class TDSwitchState extends State<TDSwitch> {
               width: 16,
               child: TDText(
                 isOn
-                    ? (widget.openText ?? context.resource.open)
-                    : (widget.closeText ?? context.resource.close),
+                    ? (widget.openText ?? 'Open')
+                    : (widget.closeText ?? 'Close'),
                 textColor: isOn ? thumbContentOnColor : thumbContentOffColor,
-                forceVerticalCenter: true,
                 maxLines: 1,
                 style: isOn ? thumbContentOnFont : thumbContentOffFont,
               ),
-            )
+            ),
           ],
         );
       case TDSwitchType.loading:
         return Container(
           alignment: Alignment.centerLeft,
-          child: TDCircleIndicator(
-            color: thumbContentOnColor,
-            size: 16,
-            lineWidth: 3,
-          ),
+          child: TDCircleIndicator(color: thumbContentOnColor, size: 16),
         );
       case TDSwitchType.icon:
         return Container(
           alignment: Alignment.centerLeft,
-          child: Icon(isOn ? TDIcons.check : TDIcons.close,
-              size: 16,
-              color: isOn ? thumbContentOnColor : thumbContentOffColor),
+          child: Icon(
+            isOn ? Icons.check_rounded : Icons.close_rounded,
+            size: 16,
+            color: isOn ? thumbContentOnColor : thumbContentOffColor,
+          ),
         );
       case TDSwitchType.fill:
-      default:
+      case null:
         return null;
     }
   }

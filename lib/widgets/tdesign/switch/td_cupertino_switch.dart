@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'dart:async';
 import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/cupertino.dart';
@@ -61,15 +62,15 @@ class TDCupertinoSwitch extends StatefulWidget {
   /// The [value] parameter must not be null.
   /// The [dragStartBehavior] parameter defaults to [DragStartBehavior.start] and must not be null.
   const TDCupertinoSwitch({
-    Key? key,
     required this.value,
     required this.onChanged,
+    super.key,
     this.activeColor,
     this.trackColor,
     this.thumbColor,
     this.thumbView,
     this.dragStartBehavior = DragStartBehavior.start,
-  }) : super(key: key);
+  });
 
   /// Whether this switch is on or off.
   ///
@@ -147,11 +148,23 @@ class TDCupertinoSwitch extends StatefulWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(FlagProperty('value',
-        value: value, ifTrue: 'on', ifFalse: 'off', showName: true));
-    properties.add(ObjectFlagProperty<ValueChanged<bool>>(
-        'onChanged', onChanged,
-        ifNull: 'disabled'));
+    properties
+      ..add(
+        FlagProperty(
+          'value',
+          value: value,
+          ifTrue: 'on',
+          ifFalse: 'off',
+          showName: true,
+        ),
+      )
+      ..add(
+        ObjectFlagProperty<ValueChanged<bool>>(
+          'onChanged',
+          onChanged,
+          ifNull: 'disabled',
+        ),
+      );
   }
 }
 
@@ -176,16 +189,18 @@ class _TDCupertinoSwitchState extends State<TDCupertinoSwitch>
   void initState() {
     super.initState();
 
-    _tap = TapGestureRecognizer()
-      ..onTapDown = _handleTapDown
-      ..onTapUp = _handleTapUp
-      ..onTap = _handleTap
-      ..onTapCancel = _handleTapCancel;
-    _drag = HorizontalDragGestureRecognizer()
-      ..onStart = _handleDragStart
-      ..onUpdate = _handleDragUpdate
-      ..onEnd = _handleDragEnd
-      ..dragStartBehavior = widget.dragStartBehavior;
+    _tap =
+        TapGestureRecognizer()
+          ..onTapDown = _handleTapDown
+          ..onTapUp = _handleTapUp
+          ..onTap = _handleTap
+          ..onTapCancel = _handleTapCancel;
+    _drag =
+        HorizontalDragGestureRecognizer()
+          ..onStart = _handleDragStart
+          ..onUpdate = _handleDragUpdate
+          ..onEnd = _handleDragEnd
+          ..dragStartBehavior = widget.dragStartBehavior;
 
     _positionController = AnimationController(
       duration: _kToggleDuration,
@@ -278,10 +293,8 @@ class _TDCupertinoSwitchState extends State<TDCupertinoSwitch>
       switch (Directionality.of(context)) {
         case TextDirection.rtl:
           _positionController.value -= delta;
-          break;
         case TextDirection.ltr:
           _positionController.value += delta;
-          break;
       }
     }
   }
@@ -301,9 +314,12 @@ class _TDCupertinoSwitchState extends State<TDCupertinoSwitch>
   void _emitVibration() {
     switch (defaultTargetPlatform) {
       case TargetPlatform.iOS:
-        HapticFeedback.lightImpact();
-        break;
-      default:
+        unawaited(HapticFeedback.lightImpact());
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.macOS:
+      case TargetPlatform.windows:
         break;
     }
   }
@@ -314,9 +330,10 @@ class _TDCupertinoSwitchState extends State<TDCupertinoSwitch>
       _resumePositionAnimation();
     }
     return MouseRegion(
-      cursor: isInteractive && kIsWeb
-          ? SystemMouseCursors.click
-          : MouseCursor.defer,
+      cursor:
+          isInteractive && kIsWeb
+              ? SystemMouseCursors.click
+              : MouseCursor.defer,
       child: Opacity(
         opacity:
             widget.onChanged == null ? _kTDCupertinoSwitchDisabledOpacity : 1.0,
@@ -327,10 +344,13 @@ class _TDCupertinoSwitchState extends State<TDCupertinoSwitch>
             context,
           ),
           trackColor: CupertinoDynamicColor.resolve(
-              widget.trackColor ?? CupertinoColors.secondarySystemFill,
-              context),
+            widget.trackColor ?? CupertinoColors.secondarySystemFill,
+            context,
+          ),
           thumbColor: CupertinoDynamicColor.resolve(
-              widget.thumbColor ?? CupertinoColors.white, context),
+            widget.thumbColor ?? CupertinoColors.white,
+            context,
+          ),
           onChanged: widget.onChanged,
           textDirection: Directionality.of(context),
           state: this,
@@ -354,7 +374,7 @@ class _TDCupertinoSwitchState extends State<TDCupertinoSwitch>
 class _TDCupertinoSwitchRenderObjectWidget
     extends SingleChildRenderObjectWidget {
   const _TDCupertinoSwitchRenderObjectWidget({
-    required this.child,
+    required super.child,
     required this.value,
     required this.activeColor,
     required this.trackColor,
@@ -372,12 +392,6 @@ class _TDCupertinoSwitchRenderObjectWidget
   final _TDCupertinoSwitchState state;
   final TextDirection textDirection;
 
-  /// The widget below this widget in the tree.
-  ///
-  /// {@macro flutter.widgets.ProxyWidget.child}
-  @override
-  final Widget? child;
-
   @override
   _RenderTDCupertinoSwitch createRenderObject(BuildContext context) {
     return _RenderTDCupertinoSwitch(
@@ -393,7 +407,9 @@ class _TDCupertinoSwitchRenderObjectWidget
 
   @override
   void updateRenderObject(
-      BuildContext context, _RenderTDCupertinoSwitch renderObject) {
+    BuildContext context,
+    _RenderTDCupertinoSwitch renderObject,
+  ) {
     renderObject
       ..value = value
       ..activeColor = activeColor
@@ -404,22 +420,24 @@ class _TDCupertinoSwitchRenderObjectWidget
   }
 }
 
-const double _kTrackWidth = 45.0;
-const double _kTrackHeight = 28.0;
+const double _kTrackWidth = 45;
+const double _kTrackHeight = 28;
 const double _kTrackRadius = _kTrackHeight / 2.0;
 const double _kTrackInnerStart = _kTrackHeight / 2.0;
 const double _kTrackInnerEnd = _kTrackWidth - _kTrackInnerStart;
 const double _kTrackInnerLength = _kTrackInnerEnd - _kTrackInnerStart;
-const double _kSwitchWidth = 45.0;
-const double _kSwitchHeight = 28.0;
+const double _kSwitchWidth = 45;
+const double _kSwitchHeight = 28;
 // Opacity of a disabled switch, as eye-balled from iOS Simulator on Mac.
 const double _kTDCupertinoSwitchDisabledOpacity = 0.5;
 // In the normal switch case, the closed thumb is smaller than the open thumb.
 // Same size as if there is a child widget on thumb.
 const double _kSwitchOnThumbRadius = 11;
 const double _kSwitchOffThumbRadius = 8;
-const double _kSwitchOnThumbMargin = (_kTrackHeight - _kSwitchOnThumbRadius * 2) / 2;
-const double _kSwitchOffThumbMargin = (_kTrackHeight - _kSwitchOffThumbRadius * 2) / 2;
+const double _kSwitchOnThumbMargin =
+    (_kTrackHeight - _kSwitchOnThumbRadius * 2) / 2;
+const double _kSwitchOffThumbMargin =
+    (_kTrackHeight - _kSwitchOffThumbRadius * 2) / 2;
 
 const Duration _kReactionDuration = Duration(milliseconds: 300);
 const Duration _kToggleDuration = Duration(milliseconds: 200);
@@ -430,19 +448,22 @@ class _RenderTDCupertinoSwitch extends RenderConstrainedBox {
     required Color activeColor,
     required Color trackColor,
     required Color thumbColor,
-    ValueChanged<bool>? onChanged,
     required TextDirection textDirection,
     required _TDCupertinoSwitchState state,
-  })  : _value = value,
-        _activeColor = activeColor,
-        _trackColor = trackColor,
-        _thumbPainter = CupertinoThumbPainter.switchThumb(color: thumbColor),
-        _onChanged = onChanged,
-        _textDirection = textDirection,
-        _state = state,
-        super(
-            additionalConstraints: const BoxConstraints.tightFor(
-                width: _kSwitchWidth, height: _kSwitchHeight)) {
+    ValueChanged<bool>? onChanged,
+  }) : _value = value,
+       _activeColor = activeColor,
+       _trackColor = trackColor,
+       _thumbPainter = CupertinoThumbPainter.switchThumb(color: thumbColor),
+       _onChanged = onChanged,
+       _textDirection = textDirection,
+       _state = state,
+       super(
+         additionalConstraints: const BoxConstraints.tightFor(
+           width: _kSwitchWidth,
+           height: _kSwitchHeight,
+         ),
+       ) {
     state.position.addListener(markNeedsPaint);
     state._reaction.addListener(markNeedsPaint);
   }
@@ -524,7 +545,8 @@ class _RenderTDCupertinoSwitch extends RenderConstrainedBox {
   double get thumbRadius {
     if (child == null) {
       final value = _state.position.value;
-      return (_kSwitchOnThumbRadius - _kSwitchOffThumbRadius) * value + _kSwitchOffThumbRadius;
+      return (_kSwitchOnThumbRadius - _kSwitchOffThumbRadius) * value +
+          _kSwitchOffThumbRadius;
     }
     return _kSwitchOnThumbRadius;
   }
@@ -541,7 +563,7 @@ class _RenderTDCupertinoSwitch extends RenderConstrainedBox {
 
   @override
   void handleEvent(PointerEvent event, BoxHitTestEntry entry) {
-    assert(debugHandleEvent(event, entry));
+    assert(debugHandleEvent(event, entry), '');
     if (event is PointerDownEvent && isInteractive) {
       _state._drag.addPointer(event);
       _state._tap.addPointer(event);
@@ -556,8 +578,9 @@ class _RenderTDCupertinoSwitch extends RenderConstrainedBox {
       config.onTap = _state._handleTap;
     }
 
-    config.isEnabled = isInteractive;
-    config.isToggled = _value;
+    config
+      ..isEnabled = isInteractive
+      ..isToggled = _value;
   }
 
   @override
@@ -571,14 +594,12 @@ class _RenderTDCupertinoSwitch extends RenderConstrainedBox {
     switch (textDirection) {
       case TextDirection.rtl:
         visualPosition = 1.0 - currentValue;
-        break;
       case TextDirection.ltr:
         visualPosition = currentValue;
-        break;
     }
 
-    final paint = Paint()
-      ..color = Color.lerp(trackColor, activeColor, currentValue)!;
+    final paint =
+        Paint()..color = Color.lerp(trackColor, activeColor, currentValue)!;
 
     final trackRect = Rect.fromLTWH(
       offset.dx + (size.width - _kTrackWidth) / 2.0,
@@ -587,21 +608,31 @@ class _RenderTDCupertinoSwitch extends RenderConstrainedBox {
       _kTrackHeight,
     );
     final trackRRect = RRect.fromRectAndRadius(
-        trackRect, const Radius.circular(_kTrackRadius));
+      trackRect,
+      const Radius.circular(_kTrackRadius),
+    );
     canvas.drawRRect(trackRRect, paint);
 
     final currentThumbExtension =
         CupertinoThumbPainter.extension * currentReactionValue;
-    final thumbLeft = lerpDouble(
-      trackRect.left + _kTrackInnerStart - thumbRadius,
-      trackRect.left + _kTrackInnerEnd - thumbRadius - currentThumbExtension,
-      visualPosition,
-    )!;
-    final thumbRight = lerpDouble(
-      trackRect.left + _kTrackInnerStart + thumbRadius + currentThumbExtension,
-      trackRect.left + _kTrackInnerEnd + thumbRadius,
-      visualPosition,
-    )!;
+    final thumbLeft =
+        lerpDouble(
+          trackRect.left + _kTrackInnerStart - thumbRadius,
+          trackRect.left +
+              _kTrackInnerEnd -
+              thumbRadius -
+              currentThumbExtension,
+          visualPosition,
+        )!;
+    final thumbRight =
+        lerpDouble(
+          trackRect.left +
+              _kTrackInnerStart +
+              thumbRadius +
+              currentThumbExtension,
+          trackRect.left + _kTrackInnerEnd + thumbRadius,
+          visualPosition,
+        )!;
     final thumbCenterY = offset.dy + size.height / 2.0;
     final thumbBounds = Rect.fromLTRB(
       thumbLeft,
@@ -610,11 +641,16 @@ class _RenderTDCupertinoSwitch extends RenderConstrainedBox {
       thumbCenterY + thumbRadius,
     );
 
-    _clipRRectLayer.layer = context
-        .pushClipRRect(needsCompositing, Offset.zero, thumbBounds, trackRRect,
-            (PaintingContext innerContext, Offset offset) {
-      _thumbPainter.paint(innerContext.canvas, thumbBounds);
-    }, oldLayer: _clipRRectLayer.layer);
+    _clipRRectLayer.layer = context.pushClipRRect(
+      needsCompositing,
+      Offset.zero,
+      thumbBounds,
+      trackRRect,
+      (PaintingContext innerContext, Offset offset) {
+        _thumbPainter.paint(innerContext.canvas, thumbBounds);
+      },
+      oldLayer: _clipRRectLayer.layer,
+    );
     if (child != null) {
       context.paintChild(child!, Offset(thumbBounds.left + thumbMargin, 0));
     }
@@ -632,13 +668,25 @@ class _RenderTDCupertinoSwitch extends RenderConstrainedBox {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder description) {
     super.debugFillProperties(description);
-    description.add(FlagProperty('value',
-        value: value, ifTrue: 'checked', ifFalse: 'unchecked', showName: true));
-    description.add(FlagProperty('isInteractive',
-        value: isInteractive,
-        ifTrue: 'enabled',
-        ifFalse: 'disabled',
-        showName: true,
-        defaultValue: true));
+    description
+      ..add(
+        FlagProperty(
+          'value',
+          value: value,
+          ifTrue: 'checked',
+          ifFalse: 'unchecked',
+          showName: true,
+        ),
+      )
+      ..add(
+        FlagProperty(
+          'isInteractive',
+          value: isInteractive,
+          ifTrue: 'enabled',
+          ifFalse: 'disabled',
+          showName: true,
+          defaultValue: true,
+        ),
+      );
   }
 }

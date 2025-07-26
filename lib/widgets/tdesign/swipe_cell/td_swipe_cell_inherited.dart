@@ -5,13 +5,13 @@ import 'td_swipe_cell_action.dart';
 
 class TDSwipeCellInherited extends InheritedWidget {
   const TDSwipeCellInherited({
-    Key? key,
-    required Widget child,
+    required super.child,
     required this.cellClick,
     required this.actionClick,
     required this.duration,
     required this.controller,
-  }) : super(child: child, key: key);
+    super.key,
+  });
 
   final Duration duration;
   final void Function() cellClick;

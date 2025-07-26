@@ -3,23 +3,9 @@ import 'package:flutter/material.dart';
 import '../../../common_tools.dart';
 import 'td_skeleton_rowcol.dart';
 
-///
-/// 骨架图动画
-///
-enum TDSkeletonAnimation {
-  gradient, // 渐变
-  flashed, // 闪烁
-}
+enum TDSkeletonAnimation { gradient, flashed }
 
-///
-/// 骨架图风格
-///
-enum TDSkeletonTheme {
-  avatar, // 头像
-  image, // 图片
-  text, // 文本
-  paragraph, // 段落
-}
+enum TDSkeletonTheme { avatar, image, text, paragraph }
 
 class TDSkeleton extends StatefulWidget {
   factory TDSkeleton({
@@ -28,9 +14,8 @@ class TDSkeleton extends StatefulWidget {
     int delay = 0,
     TDSkeletonTheme theme = TDSkeletonTheme.text,
   }) {
-    assert(delay >= 0);
+    assert(delay >= 0, '');
 
-    // 根据风格创建骨架图
     switch (theme) {
       case TDSkeletonTheme.avatar:
         return TDSkeleton.fromRowCol(
@@ -88,20 +73,17 @@ class TDSkeleton extends StatefulWidget {
     }
   }
 
-  /// 从行列框架创建骨架屏
   const TDSkeleton.fromRowCol({
-    required this.rowCol, super.key,
+    required this.rowCol,
+    super.key,
     this.animation,
     this.delay = 0,
-  }) : assert(delay >= 0);
+  }) : assert(delay >= 0, '');
 
-  /// 动画效果
   final TDSkeletonAnimation? animation;
 
-  /// 延迟显示加载时间
   final int delay;
 
-  /// 自定义行列数量、宽度高度、间距等
   final TDSkeletonRowCol rowCol;
 
   @override
@@ -110,22 +92,16 @@ class TDSkeleton extends StatefulWidget {
 
 class _TDSkeletonState extends State<TDSkeleton>
     with SingleTickerProviderStateMixin {
-  /// 动画控制器
   late final AnimationController? _controller;
 
-  /// 动画效果
   late final Animation<double>? _animation;
 
-  /// 加载状态
   bool _isLoading = true;
 
-  /// 加载控件
   static final _loadingWidget = Container();
 
-  /// 闪烁透明度
   static const _animationFlashed = .3;
 
-  /// 静态渐变
   static LinearGradient _animationGradient(BuildContext context) =>
       LinearGradient(
         colors: [
@@ -142,7 +118,6 @@ class _TDSkeletonState extends State<TDSkeleton>
   void initState() {
     super.initState();
 
-    // 根据动画效果创建动画控制器
     switch (widget.animation) {
       case TDSkeletonAnimation.gradient:
         _controller = AnimationController(
@@ -165,7 +140,6 @@ class _TDSkeletonState extends State<TDSkeleton>
         _animation = null;
     }
 
-    // 延迟显示加载效果
     Future.delayed(
       Duration(milliseconds: widget.delay),
       () => setState(() => _isLoading = false),
@@ -175,7 +149,6 @@ class _TDSkeletonState extends State<TDSkeleton>
   Widget Function(TDSkeletonRowColObj) _buildObj(BuildContext context) => (
     TDSkeletonRowColObj obj,
   ) {
-    // 骨架图对象
     Widget skeletonObj = Container(
       width: obj.width,
       height: obj.height,
@@ -186,7 +159,6 @@ class _TDSkeletonState extends State<TDSkeleton>
       ),
     );
 
-    // 动画效果
     switch (widget.animation) {
       case TDSkeletonAnimation.gradient:
         skeletonObj = ShaderMask(
@@ -203,11 +175,10 @@ class _TDSkeletonState extends State<TDSkeleton>
           child: skeletonObj,
         );
       case TDSkeletonAnimation.flashed:
+      case null:
         skeletonObj = Opacity(opacity: _animation!.value, child: skeletonObj);
-      default:
     }
 
-    // 根据弹性因子创建弹性布局
     return obj.flex == null
         ? skeletonObj
         : Flexible(flex: obj.flex!, child: skeletonObj);
@@ -215,16 +186,13 @@ class _TDSkeletonState extends State<TDSkeleton>
 
   @override
   Widget build(BuildContext context) {
-    // 加载状态返回空容器
-    if (_isLoading) {
-      return _loadingWidget;
-    }
+    if (_isLoading) return _loadingWidget;
 
     if (widget.rowCol.objects.length == 1) {
       return widget.rowCol.objects.first.length == 1
-          // 单个对象
+          // Single object
           ? _buildObj(context)(widget.rowCol.objects.first.first)
-          // 单行多个对象
+          // Single row with multiple objects
           : Flexible(
             child: Row(
               children:
@@ -233,7 +201,7 @@ class _TDSkeletonState extends State<TDSkeleton>
           );
     }
 
-    // 多行多个对象
+    // Multiple lines, multiple objects
     List<Widget> skeletonRows =
         widget.rowCol.objects
             .map((row) => Row(children: row.map(_buildObj(context)).toList()))
@@ -249,18 +217,17 @@ class _TDSkeletonState extends State<TDSkeleton>
               )
               .toList()
             ..removeLast();
-    } // 添加行间距
-    var skeletonRowCol = Column(children: skeletonRows); // 行列布局
+    }
+    final skeletonRowCol = Column(children: skeletonRows); // 行列布局
 
     return widget.rowCol.objects.any(
           (row) => row.any((obj) => obj.flex != null),
         )
-        // 添加弹性布局
         ? Flexible(
           child: Container(
             constraints: BoxConstraints(
               maxHeight: widget.rowCol.visualHeight(context),
-            ), // 限制最大高度
+            ),
             child: skeletonRowCol,
           ),
         )

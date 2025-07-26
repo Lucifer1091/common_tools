@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../../tdesign_flutter.dart';
+import 'td_sidebar.dart';
 
 class TDSideBarController extends ChangeNotifier {
   int currentValue = 0;
   List<SideItemProps> children = [];
-  bool _loading = false;
+  bool loading = false;
 
   void selectTo(int value) {
     currentValue = value;
@@ -18,18 +18,11 @@ class TDSideBarController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void closeLoading(bool load, { bool needNotify = true }) {
-    _loading = load;
-    if(needNotify) {
-      notifyListeners();
-    }
-  }
+  void closeLoading(bool load, {bool needNotify = true}) {
+    loading = load;
 
-  set loading (bool load) {
-    _loading = load;
+    if (needNotify) notifyListeners();
   }
-
-  bool get loading => _loading;
 
   @override
   void dispose() {

@@ -1,59 +1,43 @@
-///
-///  Created by arvinwli@tencent.com on 4/24/23.
-///
 import 'package:flutter/material.dart';
+import '../../../extensions/index.dart';
 import 'td_slider_theme.dart';
 
-enum Position {
-  start,
-  end,
-}
+enum Position { start, end }
 
-/// 单滑动选择器
 class TDSlider extends StatefulWidget {
-  /// 默认值
+  const TDSlider({
+    required this.value,
+    super.key,
+    this.boxDecoration,
+    this.onChanged,
+    this.sliderThemeData,
+    this.leftLabel,
+    this.rightLabel,
+    this.onChangeStart,
+    this.onChangeEnd,
+    this.onTap,
+    this.onThumbTextTap,
+  });
+
   final double value;
 
-  /// 自定义盒子样式
   final Decoration? boxDecoration;
 
-  /// 左侧标签
   final String? leftLabel;
 
-  /// 右侧标签
   final String? rightLabel;
 
-  /// 滑动变化监听
   final ValueChanged<double>? onChanged;
 
-  /// 滑动开始监听
   final ValueChanged<double>? onChangeStart;
 
-  /// 滑动结束监听
   final ValueChanged<double>? onChangeEnd;
 
-  /// 样式
   final TDSliderThemeData? sliderThemeData;
 
-  ///  Thumb 点击事件 坐标、当前值
-  final Function(Offset offset, double value)? onTap;
+  final void Function(Offset offset, double value)? onTap;
 
-  ///  Thumb 点击浮标文字 坐标、当前值
-  final Function(Offset offset, double value)? onThumbTextTap;
-
-  const TDSlider(
-      {Key? key,
-      required this.value,
-      this.boxDecoration,
-      this.onChanged,
-      this.sliderThemeData,
-      this.leftLabel,
-      this.rightLabel,
-      this.onChangeStart,
-      this.onChangeEnd,
-      this.onTap,
-      this.onThumbTextTap})
-      : super(key: key);
+  final void Function(Offset offset, double value)? onThumbTextTap;
 
   @override
   State<StatefulWidget> createState() {
@@ -64,6 +48,7 @@ class TDSlider extends StatefulWidget {
 class TDSliderState extends State<TDSlider> {
   final GlobalKey _sliderKey = GlobalKey();
   double value = 0;
+
   @override
   void initState() {
     super.initState();
@@ -79,155 +64,147 @@ class TDSliderState extends State<TDSlider> {
   bool get enabled => widget.onChanged != null;
 
   TextStyle get labelTextStyle => TextStyle(
-      fontSize: 16,
-      color: enabled ? const Color(0xE6000000) : const Color(0x42000000));
+    fontSize: 16,
+    color: enabled ? const Color(0xE6000000) : const Color(0x42000000),
+  );
 
-  Widget get leftLabel => widget.leftLabel?.isNotEmpty == true
-      ? Padding(
-          padding: const EdgeInsets.only(left: 16),
-          child: Text(widget.leftLabel!, style: labelTextStyle),
-        )
-      : Container();
+  Widget get leftLabel =>
+      widget.leftLabel.isNotBlank
+          ? Padding(
+            padding: const EdgeInsets.only(left: 16),
+            child: Text(widget.leftLabel!, style: labelTextStyle),
+          )
+          : Container();
 
-  Widget get rightLabel => widget.rightLabel?.isNotEmpty == true
-      ? Padding(
-          padding: const EdgeInsets.only(right: 16),
-          child: Text(widget.rightLabel!, style: labelTextStyle),
-        )
-      : Container();
+  Widget get rightLabel =>
+      widget.rightLabel.isNotBlank
+          ? Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: Text(widget.rightLabel!, style: labelTextStyle),
+          )
+          : Container();
 
   @override
   Widget build(BuildContext context) {
-    var tdSliderThemeData = widget.sliderThemeData ?? TDSliderThemeData();
+    final tdSliderThemeData = widget.sliderThemeData ?? TDSliderThemeData();
     return Listener(
-        onPointerDown: (event) {
-          final sliderBox =
-              _sliderKey.currentContext?.findRenderObject() as RenderBox?;
-          if (sliderBox == null ||
-              widget.onThumbTextTap == null ||
-              !tdSliderThemeData.showThumbValue) {
-            return;
-          }
+      onPointerDown: (event) {
+        final sliderBox =
+            _sliderKey.currentContext?.findRenderObject() as RenderBox?;
+        if (sliderBox == null ||
+            widget.onThumbTextTap == null ||
+            !tdSliderThemeData.showThumbValue) {
+          return;
+        }
 
-          final localOffset = sliderBox.globalToLocal(event.position);
-          final themeData = widget.sliderThemeData ?? TDSliderThemeData();
-          final textRect = themeData.sliderMeasureData.thumbTextRect;
+        final localOffset = sliderBox.globalToLocal(event.position);
+        final themeData = widget.sliderThemeData ?? TDSliderThemeData();
+        final textRect = themeData.sliderMeasureData.thumbTextRect;
 
-          if (textRect != null && textRect.contains(localOffset)) {
-            widget.onThumbTextTap?.call(localOffset, value);
-          }
-        },
-        child: Container(
-          padding: EdgeInsets.only(
-            top: (tdSliderThemeData.showScaleValue ||
-                        tdSliderThemeData.showThumbValue
-                    ? 16
-                    : 0) +
-                8,
-            bottom: 8,
-          ),
-          decoration: widget.boxDecoration ??
-              const BoxDecoration(
-                color: Colors.white,
-              ),
-          child: Row(
-            children: [
-              leftLabel,
-              const SizedBox(width: 8),
-              Expanded(
-                child: Listener(
-                  onPointerDown: (event) {
-                    if (!enabled || widget.onTap == null) {
-                      return;
-                    }
+        if (textRect != null && textRect.contains(localOffset)) {
+          widget.onThumbTextTap?.call(localOffset, value);
+        }
+      },
+      child: Container(
+        padding: EdgeInsets.only(
+          top:
+              (tdSliderThemeData.showScaleValue ||
+                      tdSliderThemeData.showThumbValue
+                  ? 16
+                  : 0) +
+              8,
+          bottom: 8,
+        ),
+        decoration:
+            widget.boxDecoration ?? const BoxDecoration(color: Colors.white),
+        child: Row(
+          children: [
+            leftLabel,
+            const SizedBox(width: 8),
+            Expanded(
+              child: Listener(
+                onPointerDown: (event) {
+                  if (!enabled || widget.onTap == null) {
+                    return;
+                  }
 
-                    final sliderBox = _sliderKey.currentContext
-                        ?.findRenderObject() as RenderBox?;
-                    if (sliderBox == null) {
-                      return;
-                    }
+                  final sliderBox =
+                      _sliderKey.currentContext?.findRenderObject()
+                          as RenderBox?;
+                  if (sliderBox == null) {
+                    return;
+                  }
 
-                    final tapOffset = sliderBox.globalToLocal(event.position);
-                    widget.onTap?.call(tapOffset, value);
-                  },
-                  child: SliderTheme(
-                    data: tdSliderThemeData.sliderThemeData,
-                    child: Slider(
-                      key: _sliderKey,
-                      value: value,
-                      min: tdSliderThemeData.min,
-                      max: tdSliderThemeData.max,
-                      divisions: tdSliderThemeData.divisions,
-                      onChangeStart: widget.onChangeStart,
-                      onChangeEnd: widget.onChangeEnd,
-                      onChanged: enabled
-                          ? (slideValue) {
+                  final tapOffset = sliderBox.globalToLocal(event.position);
+                  widget.onTap?.call(tapOffset, value);
+                },
+                child: SliderTheme(
+                  data: tdSliderThemeData.sliderThemeData,
+                  child: Slider(
+                    key: _sliderKey,
+                    value: value,
+                    min: tdSliderThemeData.min,
+                    max: tdSliderThemeData.max,
+                    divisions: tdSliderThemeData.divisions,
+                    onChangeStart: widget.onChangeStart,
+                    onChangeEnd: widget.onChangeEnd,
+                    onChanged:
+                        enabled
+                            ? (slideValue) {
                               setState(() {
                                 value = slideValue;
                                 widget.onChanged?.call(slideValue);
                               });
                             }
-                          : null,
-                    ),
+                            : null,
                   ),
                 ),
               ),
-              const SizedBox(width: 8),
-              rightLabel
-            ],
-          ),
-        ));
+            ),
+            const SizedBox(width: 8),
+            rightLabel,
+          ],
+        ),
+      ),
+    );
   }
 }
 
-/// 范围滑动选择器
 class TDRangeSlider extends StatefulWidget {
-  /// 默认值
+  const TDRangeSlider({
+    required this.value,
+    super.key,
+    this.boxDecoration,
+    this.onChanged,
+    this.sliderThemeData,
+    this.leftLabel,
+    this.rightLabel,
+    this.onChangeStart,
+    this.onChangeEnd,
+    this.onTap,
+    this.onThumbTextTap,
+  });
+
   final RangeValues value;
 
-  /// 自定义盒子样式
   final Decoration? boxDecoration;
 
-  /// 左侧标签
   final String? leftLabel;
-
-  /// 右侧标签
 
   final String? rightLabel;
 
-  /// 滑动变化监听
   final ValueChanged<RangeValues>? onChanged;
-
-  /// 滑动开始监听
 
   final ValueChanged<RangeValues>? onChangeStart;
 
-  /// 滑动结束监听
   final ValueChanged<RangeValues>? onChangeEnd;
 
-  /// 样式
   final TDSliderThemeData? sliderThemeData;
 
-  //  Thumb 点击事件 位置、坐标、当前值
-  final Function(Position position, Offset offset, double value)? onTap;
+  final void Function(Position position, Offset offset, double value)? onTap;
 
-  ///  Thumb 点击浮标文字 位置、坐标、当前值
-  final Function(Position position, Offset offset, double value)?
-      onThumbTextTap;
-
-  const TDRangeSlider(
-      {Key? key,
-      required this.value,
-      this.boxDecoration,
-      this.onChanged,
-      this.sliderThemeData,
-      this.leftLabel,
-      this.rightLabel,
-      this.onChangeStart,
-      this.onChangeEnd,
-      this.onTap,
-      this.onThumbTextTap})
-      : super(key: key);
+  final void Function(Position position, Offset offset, double value)?
+  onThumbTextTap;
 
   @override
   State<StatefulWidget> createState() {
@@ -254,26 +231,29 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
   bool get enabled => widget.onChanged != null;
 
   TextStyle get labelTextStyle => TextStyle(
-      fontSize: 16,
-      color: enabled ? const Color(0xE6000000) : const Color(0x42000000));
+    fontSize: 16,
+    color: enabled ? const Color(0xE6000000) : const Color(0x42000000),
+  );
 
-  Widget get leftLabel => widget.leftLabel?.isNotEmpty == true
-      ? Padding(
-          padding: const EdgeInsets.only(left: 16),
-          child: Text(widget.leftLabel!, style: labelTextStyle),
-        )
-      : Container();
+  Widget get leftLabel =>
+      widget.leftLabel.isNotBlank
+          ? Padding(
+            padding: const EdgeInsets.only(left: 16),
+            child: Text(widget.leftLabel!, style: labelTextStyle),
+          )
+          : Container();
 
-  Widget get rightLabel => widget.rightLabel?.isNotEmpty == true
-      ? Padding(
-          padding: const EdgeInsets.only(right: 16),
-          child: Text(widget.rightLabel!, style: labelTextStyle),
-        )
-      : Container();
+  Widget get rightLabel =>
+      widget.rightLabel.isNotBlank
+          ? Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: Text(widget.rightLabel!, style: labelTextStyle),
+          )
+          : Container();
 
   @override
   Widget build(BuildContext context) {
-    var tdSliderThemeData = widget.sliderThemeData ?? TDSliderThemeData();
+    final tdSliderThemeData = widget.sliderThemeData ?? TDSliderThemeData();
 
     return Listener(
       onPointerDown: (event) {
@@ -294,25 +274,32 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
         final endTextRect = themeData.sliderMeasureData.endRangeThumbTextRect;
 
         if (startTextRect?.contains(localOffset) ?? false) {
-          widget.onThumbTextTap?.call(Position.start, localOffset, rangeValues.start);
+          widget.onThumbTextTap?.call(
+            Position.start,
+            localOffset,
+            rangeValues.start,
+          );
         }
         if (endTextRect?.contains(localOffset) ?? false) {
-          widget.onThumbTextTap?.call(Position.end, localOffset, rangeValues.end);
+          widget.onThumbTextTap?.call(
+            Position.end,
+            localOffset,
+            rangeValues.end,
+          );
         }
       },
       child: Container(
         padding: EdgeInsets.only(
-          top: (tdSliderThemeData.showScaleValue ||
+          top:
+              (tdSliderThemeData.showScaleValue ||
                       tdSliderThemeData.showThumbValue
                   ? 16
                   : 0) +
               8,
           bottom: 8,
         ),
-        decoration: widget.boxDecoration ??
-            const BoxDecoration(
-              color: Colors.white,
-            ),
+        decoration:
+            widget.boxDecoration ?? const BoxDecoration(color: Colors.white),
         child: Row(
           children: [
             leftLabel,
@@ -324,8 +311,9 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
                     return;
                   }
 
-                  final sliderBox = _sliderRangeKey.currentContext
-                      ?.findRenderObject() as RenderBox?;
+                  final sliderBox =
+                      _sliderRangeKey.currentContext?.findRenderObject()
+                          as RenderBox?;
                   if (sliderBox == null) {
                     return;
                   }
@@ -335,7 +323,8 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
 
                   final sliderTheme = SliderTheme.of(context);
                   final thumbShape = sliderTheme.rangeThumbShape;
-                  final thumbSize = thumbShape?.getPreferredSize(
+                  final thumbSize =
+                      thumbShape?.getPreferredSize(
                         enabled,
                         widget.sliderThemeData?.divisions != null,
                       ) ??
@@ -343,24 +332,21 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
 
                   final thumbRadius = thumbSize.width / 2;
 
-                  // 计算当前值对应的坐标比例
                   final min = widget.sliderThemeData?.min ?? 0;
                   final max = widget.sliderThemeData?.max ?? 100;
                   final startRatio = (rangeValues.start - min) / (max - min);
                   final endRatio = (rangeValues.end - min) / (max - min);
 
-                  // 计算Thumb中心坐标
                   final startCenterX = startRatio * sliderWidth;
                   final endCenterX = endRatio * sliderWidth;
                   final verticalCenter = sliderBox.size.height / 2;
 
-                  // 检测点击区域
                   final isStartTap =
                       (tapOffset.dx - startCenterX).abs() <= thumbRadius &&
-                          (tapOffset.dy - verticalCenter).abs() <= thumbRadius;
+                      (tapOffset.dy - verticalCenter).abs() <= thumbRadius;
                   final isEndTap =
                       (tapOffset.dx - endCenterX).abs() <= thumbRadius &&
-                          (tapOffset.dy - verticalCenter).abs() <= thumbRadius;
+                      (tapOffset.dy - verticalCenter).abs() <= thumbRadius;
 
                   Position position;
                   double tappedValue;
@@ -377,9 +363,10 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
                     final startDistance =
                         (tappedValue - rangeValues.start).abs();
                     final endDistance = (tappedValue - rangeValues.end).abs();
-                    position = startDistance < endDistance
-                        ? Position.start
-                        : Position.end;
+                    position =
+                        startDistance < endDistance
+                            ? Position.start
+                            : Position.end;
                   }
                   widget.onTap?.call(position, tapOffset, tappedValue);
                 },
@@ -391,14 +378,15 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
                     min: tdSliderThemeData.min,
                     max: tdSliderThemeData.max,
                     divisions: tdSliderThemeData.divisions,
-                    onChanged: widget.onChanged == null
-                        ? null
-                        : (slideValue) {
-                            setState(() {
-                              rangeValues = slideValue;
-                              widget.onChanged?.call(slideValue);
-                            });
-                          },
+                    onChanged:
+                        widget.onChanged == null
+                            ? null
+                            : (slideValue) {
+                              setState(() {
+                                rangeValues = slideValue;
+                                widget.onChanged?.call(slideValue);
+                              });
+                            },
                     onChangeStart: widget.onChangeStart,
                     onChangeEnd: widget.onChangeEnd,
                   ),

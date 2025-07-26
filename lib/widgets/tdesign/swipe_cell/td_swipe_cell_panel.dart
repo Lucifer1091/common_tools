@@ -3,23 +3,11 @@ import 'package:flutter/material.dart';
 import 'td_swipe_cell.dart';
 import 'td_swipe_cell_action.dart';
 
-enum SwipeMotion {
-  /// 滚动
-  scroll,
+enum SwipeMotion { scroll, behind, drawer, stretch }
 
-  /// 揭开
-  behind,
-
-  /// 抽屉
-  drawer,
-
-  /// 拉伸
-  stretch,
-}
-
-/// 滑动单元格操作面板组件
 class TDSwipeCellPanel {
   TDSwipeCellPanel({
+    required this.children,
     this.extentRatio = 0.3,
     this.openThreshold,
     this.closeThreshold,
@@ -31,59 +19,54 @@ class TDSwipeCellPanel {
     this.closeOnCancel = false,
     this.confirmDismiss,
     this.onDismissed,
-    required this.children,
     this.confirms,
   }) : assert(
-          confirms == null ||
-              confirms.every((item) =>
-                  item.confirmIndex != null &&
-                  item.confirmIndex!.every((index) => index >= 0 && index < children.length)),
-          'Confirms must have a confirmIndex, '
-          'and each confirmIndex in confirms must be within the range of children indices.',
-        );
+         confirms == null ||
+             confirms.every(
+               (item) =>
+                   item.confirmIndex != null &&
+                   item.confirmIndex!.every(
+                     (index) => index >= 0 && index < children.length,
+                   ),
+             ),
+         'Confirms must have a confirmIndex, '
+         'and each confirmIndex in confirms must be within the range of children indices.',
+       );
 
-  /// 宽度占比
   final double? extentRatio;
 
-  /// 拖动多少占比触发打开动作，默认 [extentRatio] 的一半
+  /// How much dragging ratio triggers the opening action, the default is half of [extentRatio]
   final double? openThreshold;
 
-  /// 拖动多少占比触发关闭动作，默认 [extentRatio] 的一半
+  /// How much dragging ratio triggers the close action, the default is half of [extentRatio]
   final double? closeThreshold;
 
-  /// 滑动动画展示方式
   final SwipeMotion? motionType;
 
-  /// 操作组件列表
   final List<TDSwipeCellAction> children;
 
-  /// 二次确认操作组件列表
   final List<TDSwipeCellAction>? confirms;
 
-  /// 是否可通过拖动操作来移除 [TDSwipeCell] 组件
+  /// Whether the [TDSwipeCell] component can be removed by dragging
   final bool? dragDismissible;
 
-  /// 滑动到多少比例时，触发移除。dragDismissible为true才有效
   final double? dismissThreshold;
 
-  /// 触发移除的滑动动画时长。dragDismissible为true才有效
   final Duration? dismissalDuration;
 
-  /// 移除动画（高度变为0）时长。dragDismissible为true才有效
   final Duration? resizeDuration;
 
-  /// 移除取消后，是否关闭滑动单元格。dragDismissible为true才有效
   final bool? closeOnCancel;
 
-  /// 移除前回调，可阻止移除。dragDismissible为true才有效
   final Future<bool> Function(BuildContext context)? confirmDismiss;
 
-  /// 移除后回调。dragDismissible为true才有效
   final void Function(BuildContext context)? onDismissed;
 
-  Duration get _dismissalDuration => dismissalDuration ?? const Duration(milliseconds: 300);
+  Duration get _dismissalDuration =>
+      dismissalDuration ?? const Duration(milliseconds: 300);
 
-  Duration get _resizeDuration => resizeDuration ?? const Duration(milliseconds: 300);
+  Duration get _resizeDuration =>
+      resizeDuration ?? const Duration(milliseconds: 300);
 
   bool get _dragDismissible => dragDismissible ?? false;
 
@@ -99,26 +82,24 @@ class TDSwipeCellPanel {
       motion: getMotionWidget(),
       openThreshold: _openThreshold,
       closeThreshold: _closeThreshold,
-      children: children,
       dragDismissible: _dragDismissible,
-      dismissible: _dragDismissible
-          ? DismissiblePane(
-              closeOnCancel: closeOnCancel ?? false,
-              dismissThreshold: dismissThreshold ?? 0.75,
-              dismissalDuration: _dismissalDuration,
-              resizeDuration: _resizeDuration,
-              confirmDismiss: () async {
-                if (confirmDismiss != null) {
-                  return confirmDismiss!(context);
-                }
-                return true;
-              },
-              onDismissed: () async {
-                await TDSwipeCell.of(context)?.close();
-                onDismissed?.call(context);
-              },
-            )
-          : null,
+      dismissible:
+          _dragDismissible
+              ? DismissiblePane(
+                closeOnCancel: closeOnCancel ?? false,
+                dismissThreshold: dismissThreshold ?? 0.75,
+                dismissalDuration: _dismissalDuration,
+                resizeDuration: _resizeDuration,
+                confirmDismiss: () async {
+                  return confirmDismiss?.call(context) ?? false;
+                },
+                onDismissed: () async {
+                  await TDSwipeCell.of(context)?.close();
+                  onDismissed?.call(context);
+                },
+              )
+              : null,
+      children: children,
     );
   }
 
@@ -132,7 +113,7 @@ class TDSwipeCellPanel {
         return const DrawerMotion();
       case SwipeMotion.stretch:
         return const StretchMotion();
-      default:
+      case null:
         return const ScrollMotion();
     }
   }

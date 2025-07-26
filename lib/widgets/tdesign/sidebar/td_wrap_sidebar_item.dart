@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 
-import '../../../tdesign_flutter.dart';
+import '../../../common_tools.dart';
+import '../badge/td_badge.dart';
+import '../text/td_text.dart';
+import 'td_sidebar.dart';
 
 class TDWrapSideBarItem extends StatelessWidget {
   const TDWrapSideBarItem({
-    Key? key,
-    this.badge,
     required this.disabled,
+    required this.style,
+    super.key,
+    this.badge,
     this.icon,
     this.label = '',
     this.contentPadding,
-    this.textStyle = const TextStyle(
-      fontSize: 16,
-      height: 1.5,
-    ),
+    this.textStyle = const TextStyle(fontSize: 16, height: 1.5),
     this.selectedTextStyle,
     this.value = -1,
     this.selected = false,
@@ -23,8 +24,7 @@ class TDWrapSideBarItem extends StatelessWidget {
     this.onTap,
     this.selectedBgColor,
     this.unSelectedBgColor,
-    required this.style,
-  }) : super(key: key);
+  });
 
   final TDBadge? badge;
   final bool disabled;
@@ -48,65 +48,72 @@ class TDWrapSideBarItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: style == TDSideBarStyle.normal ? renderNormalItem(context) : renderOutlineItem(context),
+      child:
+          style == TDSideBarStyle.normal
+              ? renderNormalItem(context)
+              : renderOutlineItem(context),
     );
   }
 
   Widget renderNormalItem(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: selectedBgColor ?? Colors.white,
-      ),
-      child: Container(
+    return DecoratedBox(
+      decoration: BoxDecoration(color: selectedBgColor ?? Colors.white),
+      child: DecoratedBox(
         decoration: BoxDecoration(
-            color: selected
-                ? (selectedBgColor ?? Colors.white)
-                : (unSelectedBgColor ?? const Color.fromRGBO(243, 243, 243, 1)),
-            borderRadius: bottomAdjacent || topAdjacent
-                ? bottomAdjacent
-                    ? const BorderRadius.only(bottomRight: Radius.circular(9))
-                    : const BorderRadius.only(topRight: Radius.circular(9))
-                : null),
+          color:
+              selected
+                  ? (selectedBgColor ?? Colors.white)
+                  : (unSelectedBgColor ??
+                      const Color.fromRGBO(243, 243, 243, 1)),
+          borderRadius:
+              bottomAdjacent || topAdjacent
+                  ? bottomAdjacent
+                      ? const BorderRadius.only(bottomRight: Radius.circular(9))
+                      : const BorderRadius.only(topRight: Radius.circular(9))
+                  : null,
+        ),
         child: Row(
           children: [
-              renderPreLine(context),
-              Expanded(
-                  child: Padding(
+            renderPreLine(context),
+            Expanded(
+              child: Padding(
                 padding: contentPadding ?? const EdgeInsets.all(16),
-                child:  renderMainContent(context)
-              ))
-            ],
-          ),
+                child: renderMainContent(context),
+              ),
+            ),
+          ],
         ),
+      ),
     );
   }
 
   Widget renderOutlineItem(BuildContext context) {
     return ConstrainedBox(
-        constraints: const BoxConstraints(minHeight: 56),
+      constraints: const BoxConstraints(minHeight: 56),
+      child: Container(
+        // height: 86,
+        decoration: const BoxDecoration(
+          color: Color.fromRGBO(246, 246, 246, 1),
+        ),
+        padding: const EdgeInsets.all(8),
         child: Container(
-          // height: 86,
-          decoration: const BoxDecoration(color: Color.fromRGBO(246, 246, 246, 1)),
-          padding: const EdgeInsets.all(8),
-          child: Container(
-            decoration: BoxDecoration(
-                color: selected && !disabled ? Colors.white : null, borderRadius: BorderRadius.circular(6)),
-            padding: const EdgeInsets.all(8),
-            child: renderMainContent(context),
+          decoration: BoxDecoration(
+            color: selected && !disabled ? Colors.white : null,
+            borderRadius: BorderRadius.circular(6),
           ),
-        ));
+          padding: const EdgeInsets.all(8),
+          child: renderMainContent(context),
+        ),
+      ),
+    );
   }
 
   Widget renderMainContent(BuildContext context) {
-
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         renderIcon(context),
-        Expanded(
-            child: renderLabel(context)),
-        if(label.length>4)
-        renderBadge(context),
+        Expanded(child: renderLabel(context)),
+        if (label.length > 4) renderBadge(context),
         // SizedBox(
         //   width: !disabled && selected ? 0 : preLineWidth,
         // )
@@ -117,9 +124,7 @@ class TDWrapSideBarItem extends StatelessWidget {
   Widget renderPreLine(BuildContext context) {
     return Visibility(
       visible: !disabled && selected,
-      replacement: const SizedBox(
-        width: preLineWidth,
-      ),
+      replacement: const SizedBox(width: preLineWidth),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -127,11 +132,13 @@ class TDWrapSideBarItem extends StatelessWidget {
             width: preLineWidth,
             height: 14,
             decoration: BoxDecoration(
-                color: selectedTextStyle != null
-                    ? selectedTextStyle?.color
-                    : (selectedColor ?? TDTheme.of(context).brandNormalColor),
-                borderRadius: BorderRadius.circular(4)),
-          )
+              color:
+                  selectedTextStyle != null
+                      ? selectedTextStyle?.color
+                      : (selectedColor ?? ThemeColors.blue.shade600),
+              borderRadius: BorderRadius.circular(4),
+            ),
+          ),
         ],
       ),
     );
@@ -139,49 +146,60 @@ class TDWrapSideBarItem extends StatelessWidget {
 
   Widget renderIcon(BuildContext context) {
     return Visibility(
-        visible: icon != null,
-        child: Padding(
-          padding: const EdgeInsets.only(right: 2),
-          child: Icon(
-            icon,
-            size: 20,
-            color: disabled
-                ? TDTheme.of(context).fontGyColor4
-                : selected
-                    ? selectedTextStyle != null
-                        ? selectedTextStyle?.color
-                        : (selectedColor ?? TDTheme.of(context).brandNormalColor)
-                    : Colors.black,
-          ),
-        ));
+      visible: icon != null,
+      child: Padding(
+        padding: const EdgeInsets.only(right: 2),
+        child: Icon(
+          icon,
+          size: 20,
+          color:
+              disabled
+                  ? ThemeColors.neutral.shade600
+                  : selected
+                  ? selectedTextStyle != null
+                      ? selectedTextStyle?.color
+                      : (selectedColor ?? ThemeColors.blue.shade600)
+                  : Colors.black,
+        ),
+      ),
+    );
   }
 
   Widget renderLabel(BuildContext context) {
-     return TDText.rich(
+    return TDText.rich(
       TextSpan(
         children: [
           WidgetSpan(
-              child: TDText(
-                label,
-                style: selected ? (selectedTextStyle ?? TextStyle(color: selectedColor)) : textStyle,
-                fontWeight: selected && !disabled ? FontWeight.w600 : FontWeight.w400,
-                textColor: disabled
-                    ? TDTheme.of(context).fontGyColor4
-                    : selected
-                    ? selectedColor ?? TDTheme.of(context).brandNormalColor
-                    : Colors.black,
-                // forceVerticalCenter: true,
-              )),
-          if(label.length<4)
-          WidgetSpan(
-              child: SizedBox(
-            width: 1,
-            height: 16,
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [badge != null ? Positioned(top: -6, child: badge!) : Container()],
+            child: TDText(
+              label,
+              style:
+                  selected
+                      ? (selectedTextStyle ?? TextStyle(color: selectedColor))
+                      : textStyle,
+              fontWeight:
+                  selected && !disabled ? FontWeight.w600 : FontWeight.w400,
+              textColor:
+                  disabled
+                      ? ThemeColors.neutral.shade600
+                      : selected
+                      ? selectedColor ?? ThemeColors.blue.shade600
+                      : Colors.black,
+              // forceVerticalCenter: true,
             ),
-          ))
+          ),
+          if (label.length < 4)
+            WidgetSpan(
+              child: SizedBox(
+                width: 1,
+                height: 16,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    if (badge != null) Positioned(top: -6, child: badge!),
+                  ],
+                ),
+              ),
+            ),
         ],
       ),
       softWrap: true,
@@ -192,10 +210,10 @@ class TDWrapSideBarItem extends StatelessWidget {
   Widget renderBadge(BuildContext context) {
     return SizedBox(
       width: 1,
-      height:40,
+      height: 40,
       child: Stack(
         clipBehavior: Clip.none,
-        children: [badge != null ? Positioned(top: -6, child: badge!) : Container()],
+        children: [if (badge != null) Positioned(top: -6, child: badge!)],
       ),
     );
   }

@@ -591,4 +591,39 @@ extension IterableSanitizers<T> on Iterable<T>? {
 
   /// Returns a new list with [hugger] at the beginning and at the end.
   Iterable<T> wrapBy(T hugger) => isBlank ? <T>[] : [hugger, ...this!, hugger];
+
+  /// Finds the first element in a list that satisfies a given condition,
+  /// optionally restricted to a given range of indices.
+  ///
+  /// This method walks the list starting at index `startIndex` and ending at `endIndex` (inclusive),
+  /// applying the `test` function to each element. When the `test` function
+  /// returns `true` for an element, that element is returned.
+  /// If no element satisfies the condition, `null` is returned.
+  ///
+  /// Parameters:
+  /// - [test]: Function used to test whether a list element satisfies the condition.
+  /// - [start]: Starting index to search, defaults to 0.
+  /// - [end]: Ending index to search, defaults to the length of the list
+  /// minus one, meaning the entire list is traversed by default.
+  ///
+  /// Example:
+  ///
+  /// ```dart
+  /// List<int> numbers = [1, 2, 3, 4, 5];
+  /// int? firstEven = numbers.find((element) => element % 2 == 0);
+  /// print(firstEven); // Output: 2
+  ///
+  /// int? inRangeEven = numbers.find((element) => element % 2 == 0, startIndex: 1, endIndex: 4);
+  /// print(inRangeEven); // Output: 2, because 2 is the first even number in the range from 1 to 4
+  /// ```
+  T? find(bool Function(T) test, {int start = 0, int? end}) {
+    if (isBlank) return null;
+
+    // If endIndex is not provided, it defaults to the length of the list
+    end ??= length;
+    for (var i = start; i < end && i < length; i++) {
+      if (test(asList()[i])) return asList()[i];
+    }
+    return null;
+  }
 }

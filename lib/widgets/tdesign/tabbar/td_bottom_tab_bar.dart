@@ -1,81 +1,76 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
-import '../../../tdesign_flutter.dart';
+import '../../../common_tools.dart';
+import '../../../constants/shadows.dart';
+import '../../layout/no_widget.dart';
+import '../badge/td_badge.dart';
+import '../text/td_text.dart';
 
-/// 展开项 向下箭头宽
+/// Expand Item Down Arrow Width
 const double _kArrowWidth = 13.5;
 
-/// 展开项  向下箭头高
+/// Expand Item Down Arrow Height
 const double _kArrowHeight = 8;
 
-/// 展开项选项弹窗 单个item最低高度
+/// Expand item options pop-up window Minimum height of a single item
 const double _kMenuItemMinHeight = 23;
 
-/// 展开项弹窗 单个item默认高度
+/// Expand item popup window Default height of a single item
 const double _kDefaultMenuItemHeight = 48;
 
-/// 展开项弹窗 单个item默认宽度为按钮宽度-20
+/// Expand item popup The default width of a single item is the button width minus 20
 const double _kDefaultMenuItemWidthShrink = 20;
 
-/// 导航栏默认高度
+/// Navigation bar default height
 const double _kDefaultTabBarHeight = 56;
 
-/// 展开项弹窗弹出动画时间
+/// Expand item pop-up window pop-up animation time
 const Duration _kPopupMenuDuration = Duration(milliseconds: 10);
 
 enum TDBottomTabBarBasicType {
-  /// 单层级纯文本标签栏
+  /// Single-level plain text tab bar
   text,
 
-  /// 文本加图标标签栏
+  /// Text plus icon label bar
   iconText,
 
-  /// 纯图标标签栏
+  /// Pure icon tab bar
   icon,
 
-  /// 双层级纯文本标签栏
+  /// Two-level plain text tab bar
   expansionPanel,
 }
 
 enum TDBottomTabBarComponentType {
-  /// 普通样式
+  /// Normal Stlye
   normal,
 
-  /// 带胶囊背景的item选中样式
-  label
+  /// Item selection style with capsule background
+  label,
 }
 
-enum TDBottomTabBarOutlineType {
-  /// 填充样式
-  filled,
+enum TDBottomTabBarOutlineType { filled, capsule }
 
-  /// 胶囊样式
-  capsule
-}
-
-/// 飘新配置
 class BadgeConfig {
   BadgeConfig({
     required this.showBadge,
-    TDBadge? tdBadge,
+    TDBadge? badge,
     this.badgeTopOffset,
     this.badgeRightOffset,
-  }) : tdBadge = tdBadge ?? const TDBadge(TDBadgeType.redPoint);
+  }) : badge = badge ?? const TDBadge(TDBadgeType.redPoint);
 
-  /// 是否展示消息
   final bool showBadge;
 
-  /// 消息样式(未设置但showBadge为true，则默认使用红点)
-  final TDBadge? tdBadge;
+  final TDBadge? badge;
 
-  /// 消息顶部偏移量
   final double? badgeTopOffset;
 
-  /// 消息右侧偏移量
   final double? badgeRightOffset;
 }
 
-/// 单个tab配置
+/// Single tab configuration
 class TDBottomTabBarTabConfig {
   TDBottomTabBarTabConfig({
     required this.onTap,
@@ -87,55 +82,47 @@ class TDBottomTabBarTabConfig {
     this.badgeConfig,
     this.popUpButtonConfig,
     this.onLongPress,
-    this.allowMultipleTaps = false
+    this.allowMultipleTaps = false,
   }) : assert(() {
-          if (badgeConfig?.showBadge ?? false) {
-            if (badgeConfig?.tdBadge == null) {
-              throw FlutterError('[NavigationTab] if set showBadge = true, '
-                  'you must set a tdBadge instance');
-            }
-          }
-          return true;
-        }());
+         if (badgeConfig?.showBadge ?? false) {
+           if (badgeConfig?.badge == null) {
+             throw FlutterError(
+               '[NavigationTab] if set showBadge = true, '
+               'you must set a tdBadge instance',
+             );
+           }
+         }
+         return true;
+       }(), '');
 
-  /// 选中时图标
   final Widget? selectedIcon;
 
-  /// 未选中时图标
   final Widget? unselectedIcon;
 
-  /// tab文本
   final String? tabText;
 
-  /// 文本已选择样式 basicType为text时必填
   final TextStyle? selectTabTextStyle;
 
-  /// 文本未选择样式 basicType为text时必填
   final TextStyle? unselectTabTextStyle;
 
-  /// tab点击事件
   final GestureTapCallback? onTap;
 
-  /// 消息配置
   final BadgeConfig? badgeConfig;
 
-  /// 弹窗配置
   final TDBottomTabBarPopUpBtnConfig? popUpButtonConfig;
 
-  /// onTap方法允许点击多次
   final bool allowMultipleTaps;
 
-  /// 长按事件
   final GestureLongPressCallback? onLongPress;
 }
 
 class TDBottomTabBar extends StatefulWidget {
   TDBottomTabBar(
     this.basicType, {
-    Key? key,
+    required this.navigationTabs,
+    super.key,
     this.componentType = TDBottomTabBarComponentType.label,
     this.outlineType = TDBottomTabBarOutlineType.filled,
-    required this.navigationTabs,
     this.barHeight = _kDefaultTabBarHeight,
     this.useVerticalDivider,
     this.dividerHeight,
@@ -150,99 +137,82 @@ class TDBottomTabBar extends StatefulWidget {
     this.centerDistance,
     this.currentIndex,
     this.needInkWell = false,
-  })  : assert(() {
-          if (navigationTabs.isEmpty) {
-            throw FlutterError('[TDBottomTabBar] please set at least one tab!');
-          }
-          if (basicType == TDBottomTabBarBasicType.text) {
-            for (final item in navigationTabs) {
-              if (item.tabText == null) {
-                throw FlutterError(
-                    '[TDBottomTabBar] type is TDBottomBarType.text, but not set tabText.');
-              }
-            }
-          }
-          if (basicType == TDBottomTabBarBasicType.icon) {
-            for (final item in navigationTabs) {
-              if (item.selectedIcon == null || item.unselectedIcon == null) {
-                throw FlutterError(
-                    '[TDBottomTabBar] type is TDBottomBarType.icon,'
-                    'but has no set icon.');
-              }
-            }
-          }
-          if (basicType == TDBottomTabBarBasicType.iconText) {
-            for (final item in navigationTabs) {
-              if (item.tabText == null ||
-                  item.selectedIcon == null ||
-                  item.unselectedIcon == null) {
-                throw FlutterError(
-                    '[TDBottomTabBar] type is TDBottomBarType.iconText,'
-                    'but not set tabText or icon.');
-              }
-            }
-          }
-          if (currentIndex != null &&
-              (currentIndex < 0 || currentIndex >= navigationTabs.length)) {
-            throw FlutterError(
-                '[TDBottomTabBar] currentIndex must in [0,navigationTabs.length)');
-          }
-          return true;
-        }()),
-        super(key: key);
+  }) : assert(() {
+         if (navigationTabs.isEmpty) {
+           throw FlutterError('[TDBottomTabBar] please set at least one tab!');
+         }
+         if (basicType == TDBottomTabBarBasicType.text) {
+           for (final item in navigationTabs) {
+             if (item.tabText == null) {
+               throw FlutterError(
+                 '[TDBottomTabBar] type is TDBottomBarType.text, but not set tabText.',
+               );
+             }
+           }
+         }
+         if (basicType == TDBottomTabBarBasicType.icon) {
+           for (final item in navigationTabs) {
+             if (item.selectedIcon == null || item.unselectedIcon == null) {
+               throw FlutterError(
+                 '[TDBottomTabBar] type is TDBottomBarType.icon, but has no set icon.',
+               );
+             }
+           }
+         }
+         if (basicType == TDBottomTabBarBasicType.iconText) {
+           for (final item in navigationTabs) {
+             if (item.tabText == null ||
+                 item.selectedIcon == null ||
+                 item.unselectedIcon == null) {
+               throw FlutterError(
+                 '[TDBottomTabBar] type is TDBottomBarType.iconText, but not set tabText or icon.',
+               );
+             }
+           }
+         }
+         if (currentIndex != null &&
+             (currentIndex < 0 || currentIndex >= navigationTabs.length)) {
+           throw FlutterError(
+             '[TDBottomTabBar] currentIndex must in [0,navigationTabs.length)',
+           );
+         }
+         return true;
+       }(), '');
 
-  /// 基本样式（纯文本、纯图标、图标+文本）
   final TDBottomTabBarBasicType basicType;
 
-  /// 选项样式 默认label
   final TDBottomTabBarComponentType? componentType;
 
-  /// 标签栏样式 默认filled
   final TDBottomTabBarOutlineType? outlineType;
 
-  /// tabs配置
   final List<TDBottomTabBarTabConfig> navigationTabs;
 
-  /// tab高度
   final double? barHeight;
 
-  /// 是否使用竖线分隔(如果选项样式为label则强制为false)
   final bool? useVerticalDivider;
 
-  /// 分割线高度（可选）
   final double? dividerHeight;
 
-  /// 分割线厚度（可选）
   final double? dividerThickness;
 
-  /// 分割线颜色（可选）
   final Color? dividerColor;
 
-  /// 是否展示bar上边线（设置为true 但是topBorder样式未设置，则使用默认值,非胶囊型才生效）
   final bool? showTopBorder;
 
-  /// 上边线样式
   final BorderSide? topBorder;
 
-  /// 使用安全区域
   final bool useSafeArea;
 
-  /// 选中时背景颜色
   final Color? selectedBgColor;
 
-  /// 未选中时背景颜色
   final Color? unselectedBgColor;
 
-  /// 背景颜色 （可选）
   final Color? backgroundColor;
 
-  /// icon与文本中间距离（可选）
   final double? centerDistance;
 
-  /// 选中的index（可选）
   final int? currentIndex;
 
-  /// 是否需要水波纹效果
   final bool needInkWell;
 
   @override
@@ -266,49 +236,56 @@ class _TDBottomTabBarState extends State<TDBottomTabBar> {
 
   @override
   Widget build(BuildContext context) {
-    var isCapsuleOutlineType =
+    final isCapsuleOutlineType =
         widget.outlineType == TDBottomTabBarOutlineType.capsule;
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        /// -2 是为了增加边框
+        /// -2 is to increase the border
         var maxWidth =
             double.parse(constraints.biggest.width.toStringAsFixed(1)) - 2;
 
-        /// 胶囊样式 比正常样式宽度要小32
-        if (isCapsuleOutlineType) {
-          maxWidth -= 32;
-        }
-        var itemWidth = maxWidth / widget.navigationTabs.length;
+        /// Capsule style is 32 widths smaller than normal style
+        if (isCapsuleOutlineType) maxWidth -= 32;
+
+        final itemWidth = maxWidth / widget.navigationTabs.length;
 
         Widget result = Container(
-            height: widget.barHeight ?? _kDefaultTabBarHeight,
-            alignment: Alignment.center,
-            margin: isCapsuleOutlineType
-                ? const EdgeInsets.symmetric(horizontal: 16)
-                : null,
-            decoration: BoxDecoration(
-                color: widget.backgroundColor ?? Colors.white,
-                borderRadius:
-                    isCapsuleOutlineType ? BorderRadius.circular(56) : null,
-                border: widget.showTopBorder! && !isCapsuleOutlineType
+          height: widget.barHeight ?? _kDefaultTabBarHeight,
+          alignment: Alignment.center,
+          margin:
+              isCapsuleOutlineType
+                  ? const EdgeInsets.symmetric(horizontal: 16)
+                  : null,
+          decoration: BoxDecoration(
+            color: widget.backgroundColor ?? Colors.white,
+            borderRadius:
+                isCapsuleOutlineType ? BorderRadius.circular(56) : null,
+            border:
+                widget.showTopBorder! && !isCapsuleOutlineType
                     ? Border(
-                        top: widget.topBorder ??
-                            BorderSide(
-                                color: TDTheme.of(context).grayColor3,
-                                width: 0.5))
+                      top:
+                          widget.topBorder ??
+                          BorderSide(
+                            color: ThemeColors.neutral.shade200,
+                            width: 0.5,
+                          ),
+                    )
                     : null,
-                boxShadow: isCapsuleOutlineType
-                    ? TDTheme.of(context).shadowsTop
-                    : null),
-            child: Stack(alignment: Alignment.center, children: [
+            boxShadow: isCapsuleOutlineType ? BoxShadows.top : null,
+          ),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
               Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children:
-                      List.generate(widget.navigationTabs.length, (index) {
-                    return _item(index, itemWidth);
-                  })),
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: List.generate(widget.navigationTabs.length, (index) {
+                  return _item(index, itemWidth);
+                }),
+              ),
               _verticalDivider(),
-            ]));
+            ],
+          ),
+        );
         if (widget.useSafeArea) {
           result = SafeArea(child: result);
         }
@@ -319,7 +296,8 @@ class _TDBottomTabBarState extends State<TDBottomTabBar> {
 
   void _onTap(int index) {
     setState(() {
-      if (_selectedIndex != index || widget.navigationTabs[index].allowMultipleTaps) {
+      if (_selectedIndex != index ||
+          widget.navigationTabs[index].allowMultipleTaps) {
         widget.navigationTabs[index].onTap?.call();
       }
       if (_selectedIndex != index) {
@@ -329,42 +307,44 @@ class _TDBottomTabBarState extends State<TDBottomTabBar> {
   }
 
   Widget _item(int index, double itemWidth) {
-    var tabItemConfig = widget.navigationTabs[index];
+    final tabItemConfig = widget.navigationTabs[index];
     return Container(
-        height: widget.barHeight ?? _kDefaultTabBarHeight,
-        width: itemWidth,
-        alignment: Alignment.center,
-        padding: EdgeInsets.only(
-            top: 7,
-            bottom:
-                widget.basicType == TDBottomTabBarBasicType.iconText ? 5 : 7),
-        child: TDBottomTabBarItemWithBadge(
-          basiceType: widget.basicType,
-          componentType:
-              widget.componentType ?? TDBottomTabBarComponentType.label,
-          outlineType: widget.outlineType ?? TDBottomTabBarOutlineType.filled,
-          itemConfig: tabItemConfig,
-          isSelected: index == _selectedIndex,
-          itemHeight: widget.barHeight ?? _kDefaultTabBarHeight,
-          itemWidth: itemWidth,
-          tabsLength: widget.navigationTabs.length,
-          selectedBgColor: widget.selectedBgColor,
-          unselectedBgColor: widget.unselectedBgColor,
-          centerDistance: widget.centerDistance ?? 0,
-          needInkWell: widget.needInkWell,
-          onTap: () {
-            _onTap(index);
-          },
-          onLongPress: () {
-            tabItemConfig.onLongPress?.call();
-          },
-        ));
+      height: widget.barHeight ?? _kDefaultTabBarHeight,
+      width: itemWidth,
+      alignment: Alignment.center,
+      padding: EdgeInsets.only(
+        top: 7,
+        bottom: widget.basicType == TDBottomTabBarBasicType.iconText ? 5 : 7,
+      ),
+      child: TDBottomTabBarItemWithBadge(
+        basiceType: widget.basicType,
+        componentType:
+            widget.componentType ?? TDBottomTabBarComponentType.label,
+        outlineType: widget.outlineType ?? TDBottomTabBarOutlineType.filled,
+        itemConfig: tabItemConfig,
+        isSelected: index == _selectedIndex,
+        itemHeight: widget.barHeight ?? _kDefaultTabBarHeight,
+        itemWidth: itemWidth,
+        tabsLength: widget.navigationTabs.length,
+        selectedBgColor: widget.selectedBgColor,
+        unselectedBgColor: widget.unselectedBgColor,
+        centerDistance: widget.centerDistance ?? 0,
+        needInkWell: widget.needInkWell,
+        onTap: () {
+          _onTap(index);
+        },
+        onLongPress: () {
+          tabItemConfig.onLongPress?.call();
+        },
+      ),
+    );
   }
 
   Widget _verticalDivider() {
     if (widget.componentType == TDBottomTabBarComponentType.label) {}
     return Visibility(
-      visible: widget.componentType != TDBottomTabBarComponentType.label &&
+      visible:
+          widget.componentType != TDBottomTabBarComponentType.label &&
           (widget.useVerticalDivider ?? false),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -373,7 +353,7 @@ class _TDBottomTabBarState extends State<TDBottomTabBar> {
             width: widget.dividerThickness ?? 0.5,
             height: widget.dividerHeight ?? 32,
             child: VerticalDivider(
-              color: widget.dividerColor ?? TDTheme.of(context).grayColor3,
+              color: widget.dividerColor ?? ThemeColors.neutral.shade200,
               thickness: widget.dividerThickness ?? 0.5,
             ),
           );
@@ -384,23 +364,23 @@ class _TDBottomTabBarState extends State<TDBottomTabBar> {
 }
 
 class TDBottomTabBarItemWithBadge extends StatelessWidget {
-  const TDBottomTabBarItemWithBadge(
-      {Key? key,
-      required this.basiceType,
-      required this.componentType,
-      required this.outlineType,
-      required this.itemConfig,
-      required this.isSelected,
-      required this.itemHeight,
-      required this.itemWidth,
-      required this.onTap,
-      required this.tabsLength,
-      required this.selectedBgColor,
-      required this.unselectedBgColor,
-      required this.centerDistance,
-      this.onLongPress,
-      this.needInkWell = false})
-      : super(key: key);
+  const TDBottomTabBarItemWithBadge({
+    required this.basiceType,
+    required this.componentType,
+    required this.outlineType,
+    required this.itemConfig,
+    required this.isSelected,
+    required this.itemHeight,
+    required this.itemWidth,
+    required this.onTap,
+    required this.tabsLength,
+    required this.selectedBgColor,
+    required this.unselectedBgColor,
+    required this.centerDistance,
+    super.key,
+    this.onLongPress,
+    this.needInkWell = false,
+  });
 
   /// tab基本类型
   final TDBottomTabBarBasicType basiceType;
@@ -446,10 +426,9 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: ()=>handleTap(context),
+      onTap: () => handleTap(context),
       onLongPress: () {
         onLongPress?.call();
       },
@@ -466,14 +445,17 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
                 child: Container(
                   /// 设计稿上 tab个数大于3时，左右边距为8，小于等于3时，左右边距为12
                   width: itemWidth - (tabsLength > 3 ? 16 : 24),
-                  height: basiceType == TDBottomTabBarBasicType.text ||
-                          basiceType == TDBottomTabBarBasicType.expansionPanel
-                      ? 32
-                      : null,
+                  height:
+                      basiceType == TDBottomTabBarBasicType.text ||
+                              basiceType ==
+                                  TDBottomTabBarBasicType.expansionPanel
+                          ? 32
+                          : null,
                   decoration: BoxDecoration(
-                    color: isSelected
-                        ? selectedBgColor ?? TDTheme.of(context).brandColor1
-                        : unselectedBgColor,
+                    color:
+                        isSelected
+                            ? selectedBgColor ?? ThemeColors.blue.shade50
+                            : unselectedBgColor,
                     borderRadius: const BorderRadius.all(Radius.circular(24)),
                   ),
                 ),
@@ -487,19 +469,21 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
 
   Widget _badge(BadgeConfig? badgeConfig) {
     if (badgeConfig?.showBadge ?? false) {
-      if (badgeConfig?.tdBadge != null) {
-        return badgeConfig!.tdBadge!;
+      if (badgeConfig?.badge != null) {
+        return badgeConfig!.badge!;
       }
     }
     return Container();
   }
 
   Widget _constructItem(
-      BuildContext context, BadgeConfig? badgeConfig, bool isInOrOutCapsule) {
-    Widget child = Container();
+    BuildContext context,
+    BadgeConfig? badgeConfig,
+    bool isInOrOutCapsule,
+  ) {
+    Widget child = const NoWidget();
     if (basiceType == TDBottomTabBarBasicType.text) {
-      child = _textItem(context, itemConfig, isSelected,
-          TDTheme.of(context).fontTitleMedium!);
+      child = _textItem(context, itemConfig, isSelected);
     }
     if (basiceType == TDBottomTabBarBasicType.expansionPanel) {
       if (itemConfig.popUpButtonConfig != null) {
@@ -507,91 +491,85 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
-              TDIcons.view_list,
-              size: 16.0,
-              color: isSelected
-                  ? TDTheme.of(context).brandNormalColor
-                  : TDTheme.of(context).fontGyColor1,
+              Icons.view_list_rounded,
+              size: 16,
+              color:
+                  isSelected
+                      ? ThemeColors.blue.shade600
+                      : ThemeColors.neutral.shade900,
             ),
             const SizedBox(width: 5),
-            _textItem(context, itemConfig, isSelected,
-                TDTheme.of(context).fontTitleMedium!)
+            _textItem(context, itemConfig, isSelected),
           ],
         );
       } else {
-        child = _textItem(context, itemConfig, isSelected,
-            TDTheme.of(context).fontTitleMedium!);
+        child = _textItem(context, itemConfig, isSelected);
       }
     }
     if (basiceType == TDBottomTabBarBasicType.icon) {
-      var selectedIcon = itemConfig.selectedIcon;
-      var unSelectedIcon = itemConfig.unselectedIcon;
+      final selectedIcon = itemConfig.selectedIcon;
+      final unSelectedIcon = itemConfig.unselectedIcon;
       child = isSelected ? selectedIcon! : unSelectedIcon!;
     }
 
     if (basiceType == TDBottomTabBarBasicType.iconText) {
-      var selectedIcon = itemConfig.selectedIcon;
-      var unSelectedIcon = itemConfig.unselectedIcon;
+      final selectedIcon = itemConfig.selectedIcon;
+      final unSelectedIcon = itemConfig.unselectedIcon;
       child = Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          isSelected ? selectedIcon! : unSelectedIcon!,
-          if (centerDistance > 0)
-            SizedBox(
-              height: centerDistance,
-            ),
-          itemConfig.tabText?.isNotEmpty ?? false ? _textItem(
-            context,
-            itemConfig,
-            isSelected,
-            TDTheme.of(context).fontBodyExtraSmall!,
-          ) : Container()
+          if (isSelected) selectedIcon! else unSelectedIcon!,
+          if (centerDistance > 0) SizedBox(height: centerDistance),
+          if (itemConfig.tabText?.isNotEmpty ?? false)
+            _textItem(context, itemConfig, isSelected),
         ],
       );
     }
 
-    var top = badgeConfig?.badgeTopOffset ?? -2;
-    var right = badgeConfig?.badgeRightOffset ?? -10;
+    final top = badgeConfig?.badgeTopOffset ?? -2;
+    final right = badgeConfig?.badgeRightOffset ?? -10;
+
     return Stack(
       clipBehavior: Clip.none,
       children: [
         child,
         Visibility(
-            visible: badgeConfig?.showBadge ?? false,
-            child:
-                Positioned(top: top, right: right, child: _badge(badgeConfig))),
+          visible: badgeConfig?.showBadge ?? false,
+          child: Positioned(top: top, right: right, child: _badge(badgeConfig)),
+        ),
       ],
     );
   }
 
-  Widget _textItem(BuildContext context, TDBottomTabBarTabConfig config,
-      bool isSelected, Font font) {
+  Widget _textItem(
+    BuildContext context,
+    TDBottomTabBarTabConfig config,
+    bool isSelected,
+  ) {
     return TDText(
       config.tabText,
-      font: font,
       fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
       style:
           isSelected ? config.selectTabTextStyle : config.unselectTabTextStyle,
-      textColor: isSelected
-          ? TDTheme.of(context).brandNormalColor
-          : TDTheme.of(context).fontGyColor1,
-      forceVerticalCenter: true,
+      textColor:
+          isSelected ? ThemeColors.blue.shade600 : ThemeColors.neutral.shade900,
     );
   }
 
-  _buildItem(BuildContext context) {
-    var badgeConfig = itemConfig.badgeConfig;
-    var isInOrOutCapsule = componentType == TDBottomTabBarComponentType.label ||
+  Widget _buildItem(BuildContext context) {
+    final badgeConfig = itemConfig.badgeConfig;
+    final isInOrOutCapsule =
+        componentType == TDBottomTabBarComponentType.label ||
         outlineType == TDBottomTabBarOutlineType.capsule;
 
-    var child = Container(
+    final child = Container(
       alignment: Alignment.center,
       padding: EdgeInsets.only(
         top: isInOrOutCapsule ? 3.0 : 2.0,
-        bottom: isInOrOutCapsule
-            ? (basiceType == TDBottomTabBarBasicType.iconText ? 0.0 : 1.0)
-            : 0.0,
+        bottom:
+            isInOrOutCapsule
+                ? (basiceType == TDBottomTabBarBasicType.iconText ? 0.0 : 1.0)
+                : 0.0,
       ),
       color: Colors.transparent,
       child: _constructItem(context, badgeConfig, isInOrOutCapsule),
@@ -606,8 +584,8 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
       child: InkWell(
         borderRadius: isInOrOutCapsule ? BorderRadius.circular(24) : null,
         splashFactory: InkRipple.splashFactory,
-        splashColor: selectedBgColor ?? TDTheme.of(context).brandColor1,
-        highlightColor: selectedBgColor ?? TDTheme.of(context).brandColor1,
+        splashColor: selectedBgColor ?? ThemeColors.blue.shade50,
+        highlightColor: selectedBgColor ?? ThemeColors.blue.shade50,
         onTap: () => handleTap(context),
         child: child,
       ),
@@ -617,9 +595,10 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
   void handleTap(BuildContext context) {
     onTap.call();
 
-    var popUpButtonConfig = itemConfig.popUpButtonConfig;
+    final popUpButtonConfig = itemConfig.popUpButtonConfig;
     if (popUpButtonConfig != null) {
-      Navigator.push(
+      unawaited(
+        Navigator.push(
           context,
           PopRoute(
             child: PopupDialog(
@@ -627,32 +606,34 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
               btnContext: context,
               config: popUpButtonConfig.popUpDialogConfig,
               items: popUpButtonConfig.items,
-              onClickMenu: (value) {
-                popUpButtonConfig.onChanged(value);
-              },
+              onClickMenu: popUpButtonConfig.onChanged,
             ),
-          ));
+          ),
+        ),
+      );
     }
   }
 }
 
-/// 展开项配置
 class TDBottomTabBarPopUpBtnConfig {
-  TDBottomTabBarPopUpBtnConfig(
-      {required this.items, required this.onChanged, this.popUpDialogConfig})
-      : assert(() {
-          if (popUpDialogConfig != null) {
-            if ((popUpDialogConfig.arrowHeight != null &&
-                    popUpDialogConfig.arrowHeight! <= 0.0) ||
-                (popUpDialogConfig.arrowWidth != null &&
-                    popUpDialogConfig.arrowWidth! <= 0.0)) {
-              throw FlutterError(
-                  '[TDBottomTabBarPopUpBtnConfig] arrowHeight or arrowHeight can '
-                  'not set less than or equal to zero');
-            }
-          }
-          return true;
-        }());
+  TDBottomTabBarPopUpBtnConfig({
+    required this.items,
+    required this.onChanged,
+    this.popUpDialogConfig,
+  }) : assert(() {
+         if (popUpDialogConfig != null) {
+           if ((popUpDialogConfig.arrowHeight != null &&
+                   popUpDialogConfig.arrowHeight! <= 0.0) ||
+               (popUpDialogConfig.arrowWidth != null &&
+                   popUpDialogConfig.arrowWidth! <= 0.0)) {
+             throw FlutterError(
+               '[TDBottomTabBarPopUpBtnConfig] arrowHeight or arrowHeight can '
+               'not set less than or equal to zero',
+             );
+           }
+         }
+         return true;
+       }(), '');
 
   /// 选项list
   final List<PopUpMenuItem> items;
@@ -666,13 +647,14 @@ class TDBottomTabBarPopUpBtnConfig {
 
 /// 弹窗UI配置
 class TDBottomTabBarPopUpShapeConfig {
-  TDBottomTabBarPopUpShapeConfig(
-      {this.popUpWidth,
-      this.popUpitemHeight = _kDefaultMenuItemHeight,
-      this.backgroundColor,
-      this.radius,
-      this.arrowWidth,
-      this.arrowHeight});
+  TDBottomTabBarPopUpShapeConfig({
+    this.popUpWidth,
+    this.popUpitemHeight = _kDefaultMenuItemHeight,
+    this.backgroundColor,
+    this.radius,
+    this.arrowWidth,
+    this.arrowHeight,
+  });
 
   /// 弹窗宽度（不设置，默认为按钮宽度 - 20）
   final double? popUpWidth;
@@ -696,11 +678,11 @@ class TDBottomTabBarPopUpShapeConfig {
 /// 弹窗菜单item
 class PopUpMenuItem extends StatelessWidget {
   const PopUpMenuItem({
-    Key? key,
-    this.itemWidget,
     required this.value,
+    super.key,
+    this.itemWidget,
     this.alignment = AlignmentDirectional.center,
-  }) : super(key: key);
+  });
 
   /// 选项widget
   final Widget? itemWidget;
@@ -716,7 +698,8 @@ class PopUpMenuItem extends StatelessWidget {
     return Container(
       constraints: const BoxConstraints(minHeight: _kMenuItemMinHeight),
       alignment: alignment,
-      child: itemWidget ??
+      child:
+          itemWidget ??
           TDText(
             value,
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
@@ -725,10 +708,10 @@ class PopUpMenuItem extends StatelessWidget {
   }
 }
 
-class PopRoute extends PopupRoute {
-  Widget child;
-
+class PopRoute extends PopupRoute<dynamic> {
   PopRoute({required this.child});
+
+  Widget child;
 
   @override
   Color? get barrierColor => Colors.transparent;
@@ -740,8 +723,11 @@ class PopRoute extends PopupRoute {
   String? get barrierLabel => 'popUpMenuBarrierLabel';
 
   @override
-  Widget buildPage(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation) {
+  Widget buildPage(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+  ) {
     return child;
   }
 
@@ -750,28 +736,24 @@ class PopRoute extends PopupRoute {
 }
 
 class PopupDialog extends StatefulWidget {
-  /// 按钮context
+  const PopupDialog(
+    this.defaultPopUpWidth, {
+    required this.btnContext,
+    required this.onClickMenu,
+    required this.items,
+    required this.config,
+    super.key,
+  });
+
   final BuildContext btnContext;
 
-  /// 点击事件
   final ValueChanged<String> onClickMenu;
 
-  /// 弹窗选项列表
   final List<PopUpMenuItem> items;
 
-  /// 弹窗配置
   final TDBottomTabBarPopUpShapeConfig? config;
 
-  /// 默认弹窗宽度
   final double defaultPopUpWidth;
-
-  const PopupDialog(this.defaultPopUpWidth,
-      {Key? key,
-      required this.btnContext,
-      required this.onClickMenu,
-      required this.items,
-      required this.config})
-      : super(key: key);
 
   @override
   PopupDialogState createState() => PopupDialogState();
@@ -786,10 +768,11 @@ class PopupDialogState extends State<PopupDialog> {
   @override
   void initState() {
     super.initState();
-    button = widget.btnContext.findRenderObject() as RenderBox;
+    button = widget.btnContext.findRenderObject()! as RenderBox;
     size = button!.size;
     overlay =
-        Overlay.of(widget.btnContext)?.context.findRenderObject() as RenderBox;
+        Overlay.of(widget.btnContext).context.findRenderObject()! as RenderBox;
+
     position = RelativeRect.fromRect(
       Rect.fromPoints(
         button!.localToGlobal(Offset.zero, ancestor: overlay),
@@ -801,21 +784,23 @@ class PopupDialogState extends State<PopupDialog> {
 
   @override
   Widget build(BuildContext context) {
-    var popUpitemHeight =
+    final popUpitemHeight =
         widget.config?.popUpitemHeight ?? _kDefaultMenuItemHeight;
-    var popUpItemWidth = widget.config?.popUpWidth ?? widget.defaultPopUpWidth;
-    var menuItems = widget.items
-        .map((e) => GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: () {
-              widget.onClickMenu(e.value);
-              Navigator.of(context).pop();
-            },
-            child: SizedBox(
-              height: popUpitemHeight,
-              child: e,
-            )))
-        .toList();
+    final popUpItemWidth =
+        widget.config?.popUpWidth ?? widget.defaultPopUpWidth;
+    final menuItems =
+        widget.items
+            .map(
+              (e) => GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  widget.onClickMenu(e.value);
+                  Navigator.of(context).pop();
+                },
+                child: SizedBox(height: popUpitemHeight, child: e),
+              ),
+            )
+            .toList();
 
     return Material(
       type: MaterialType.transparency,
@@ -829,52 +814,57 @@ class PopupDialogState extends State<PopupDialog> {
               color: Colors.transparent,
             ),
             Positioned(
-
-                /// 这里 -8 是因为widget.btnContext是TDBottomTabBarItemWithBadge的，它在父widget内有8dp的padding
-                /// -4 是设计稿上箭头和tab有4dp的距离
-                top: position!.top -
-                    (popUpitemHeight * widget.items.length +
-                        (widget.config?.arrowHeight ?? _kArrowHeight)) -
-                    8 -
-                    4,
-                right: position!.right - (popUpItemWidth + size!.width) / 2,
-                child: Container(
-                  width: popUpItemWidth,
-                  height: popUpitemHeight * widget.items.length +
-                      (widget.config?.arrowHeight ?? _kArrowHeight),
-                  decoration:
-                      BoxDecoration(boxShadow: TDTheme.of(context).shadowsTop),
-                  child: CustomPaint(
-                    painter: PanelWithDownArrow(config: widget.config),
+              /// Here -8 is because widget.btnContext is TDBottomTabBarItemWithBadge,
+              ///  which has 8dp padding in the parent widget -4 is because the
+              /// arrow and tab have a 4dp distance in the design
+              top:
+                  position!.top -
+                  (popUpitemHeight * widget.items.length +
+                      (widget.config?.arrowHeight ?? _kArrowHeight)) -
+                  8 -
+                  4,
+              right: position!.right - (popUpItemWidth + size!.width) / 2,
+              child: Container(
+                width: popUpItemWidth,
+                height:
+                    popUpitemHeight * widget.items.length +
+                    (widget.config?.arrowHeight ?? _kArrowHeight),
+                decoration: BoxDecoration(boxShadow: BoxShadows.top),
+                child: CustomPaint(
+                  painter: PanelWithDownArrow(config: widget.config),
+                  child: Container(
+                    alignment: Alignment.topCenter,
+                    height: popUpitemHeight * widget.items.length,
                     child: Container(
-                      alignment: Alignment.topCenter,
-                      height: popUpitemHeight * widget.items.length,
-                      child: Container(
-                        constraints: BoxConstraints(
-                            maxHeight: popUpitemHeight * widget.items.length),
-                        child: Stack(
-                          children: [
-                            Column(children: menuItems),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: List.generate(
-                                  widget.items.length - 1,
-                                  (index) => Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        child: Divider(
-                                          thickness: 0.5,
-                                          height: 0.5,
-                                          color: TDTheme.of(context).grayColor3,
-                                        ),
-                                      )),
-                            )
-                          ],
-                        ),
+                      constraints: BoxConstraints(
+                        maxHeight: popUpitemHeight * widget.items.length,
+                      ),
+                      child: Stack(
+                        children: [
+                          Column(children: menuItems),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: List.generate(
+                              widget.items.length - 1,
+                              (index) => Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                ),
+                                child: Divider(
+                                  thickness: 0.5,
+                                  height: 0.5,
+                                  color: ThemeColors.neutral.shade200,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                ))
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -882,30 +872,30 @@ class PopupDialogState extends State<PopupDialog> {
   }
 }
 
-/// 带下箭头的展开panel
 class PanelWithDownArrow extends CustomPainter {
-  TDBottomTabBarPopUpShapeConfig? config;
+  PanelWithDownArrow({this.config});
 
-  PanelWithDownArrow({
-    this.config,
-  });
+  TDBottomTabBarPopUpShapeConfig? config;
 
   @override
   void paint(Canvas canvas, Size size) {
-    var paint = Paint()
-      ..isAntiAlias = true
-      ..color = config?.backgroundColor ?? Colors.white
-      ..style = PaintingStyle.fill;
-    var path = Path();
-    var panelWidth = size.width;
-    var panelHeight = size.height - (config?.arrowHeight ?? _kArrowHeight);
+    final paint =
+        Paint()
+          ..isAntiAlias = true
+          ..color = config?.backgroundColor ?? Colors.white
+          ..style = PaintingStyle.fill;
+    final path = Path();
+    final panelWidth = size.width;
+    final panelHeight = size.height - (config?.arrowHeight ?? _kArrowHeight);
 
     canvas.drawRRect(
-        RRect.fromRectAndRadius(Rect.fromLTWH(0, 0, panelWidth, panelHeight),
-            Radius.circular(config?.radius ?? 0.0)),
-        paint);
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(0, 0, panelWidth, panelHeight),
+        Radius.circular(config?.radius ?? 0.0),
+      ),
+      paint,
+    );
 
-    /// 下方箭头
     if (config?.arrowWidth != 0.0 && config?.arrowHeight != 0.0) {
       var left = (panelWidth - _kArrowWidth) / 2;
       var right = (panelWidth + _kArrowWidth) / 2;
@@ -918,15 +908,14 @@ class PanelWithDownArrow extends CustomPainter {
         bottom = panelHeight + config!.arrowHeight!;
       }
 
-      path.moveTo(left, panelHeight);
-      path.lineTo(panelWidth / 2, bottom);
-      path.lineTo(right, panelHeight);
+      path
+        ..moveTo(left, panelHeight)
+        ..lineTo(panelWidth / 2, bottom)
+        ..lineTo(right, panelHeight);
       canvas.drawPath(path, paint);
     }
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
-  }
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

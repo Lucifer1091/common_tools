@@ -65,6 +65,7 @@ analyzer:
 
     # Ignore warnings in included files to avoid unnecessary noise in analysis.
     included_file_warning: ignore
+    avoid_returning_this: ignore
 
   exclude:
     # Exclude generated files from analysis to avoid unnecessary noise.
