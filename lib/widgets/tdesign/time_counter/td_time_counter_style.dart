@@ -1,39 +1,14 @@
 import 'package:flutter/material.dart';
-import '../../../tdesign_flutter.dart';
 
-/// 计时组件计时方向
-enum TDTimeCounterDirection {
-  /// 倒计时
-  down,
-  /// 正向计时
-  up
-}
+import '../../../common_tools.dart';
+import '../../../extensions/context/index.dart';
 
-/// 计时组件尺寸
-enum TDTimeCounterSize {
-  /// 小
-  small,
+enum TDTimeCounterDirection { down, up }
 
-  /// 中等
-  medium,
+enum TDTimeCounterSize { small, medium, large }
 
-  /// 大
-  large,
-}
+enum TDTimeCounterTheme { defaultTheme, round, square }
 
-/// 计时组件风格
-enum TDTimeCounterTheme {
-  /// 默认
-  defaultTheme,
-
-  /// 圆形
-  round,
-
-  /// 方形
-  square,
-}
-
-/// 计时组件样式
 class TDTimeCounterStyle {
   TDTimeCounterStyle({
     this.timeWidth,
@@ -41,7 +16,6 @@ class TDTimeCounterStyle {
     this.timePadding,
     this.timeMargin,
     this.timeBox,
-    this.timeFontFamily,
     this.timeFontSize,
     this.timeFontHeight,
     this.timeFontWeight,
@@ -53,131 +27,110 @@ class TDTimeCounterStyle {
     this.space,
   });
 
-  /// 时间容器宽度
-  double? timeWidth;
-
-  /// 时间容器高度
-  double? timeHeight;
-
-  /// 时间容器内边距
-  EdgeInsets? timePadding;
-
-  /// 时间容器外边距
-  EdgeInsets? timeMargin;
-
-  /// 时间容器装饰
-  BoxDecoration? timeBox;
-
-  /// 时间字体
-  FontFamily? timeFontFamily;
-
-  /// 时间字体尺寸
-  double? timeFontSize;
-
-  /// 时间字体行高
-  double? timeFontHeight;
-
-  /// 时间字体粗细
-  FontWeight? timeFontWeight;
-
-  /// 时间字体颜色
-  Color? timeColor;
-
-  /// 分隔符字体尺寸
-  double? splitFontSize;
-
-  /// 分隔符字体行高
-  double? splitFontHeight;
-
-  /// 分隔符字体粗细
-  FontWeight? splitFontWeight;
-
-  /// 分隔符字体颜色
-  Color? splitColor;
-
-  /// 时间与分隔符的间隔
-  double? space;
-
-  /// 生成默认样式
   TDTimeCounterStyle.generateStyle(
     BuildContext context, {
     TDTimeCounterSize? size,
     TDTimeCounterTheme? theme,
     bool? splitWithUnit,
   }) {
-    timeFontFamily = TDTheme.defaultData().numberFontFamily;
-    late Font? font;
+    late TextStyle? font;
     switch (size ?? TDTimeCounterSize.medium) {
       case TDTimeCounterSize.small:
         if (theme == TDTimeCounterTheme.defaultTheme) {
           timeWidth = timeHeight = null;
-          font = TDTheme.of(context).fontBodyMedium;
-          timeFontSize = splitFontSize = font?.size ?? 14;
-          timeFontHeight = splitFontHeight = font?.height ?? (22 / timeFontSize!);
+          font = context.bodyMedium;
+          timeFontSize = splitFontSize = font?.fontSize ?? 14;
+          timeFontHeight =
+              splitFontHeight = font?.height ?? (22 / timeFontSize!);
         } else {
           timeWidth = timeHeight = 20;
-          font = TDTheme.of(context).fontBodySmall;
-          timeFontSize = splitFontSize = font?.size ?? 12;
+          font = context.bodySmall;
+          timeFontSize = splitFontSize = font?.fontSize ?? 12;
           timeFontHeight = splitFontHeight = null;
         }
-        space = TDTheme.of(context).spacer4 / 2;
-        break;
+        space = 2;
       case TDTimeCounterSize.medium:
         if (theme == TDTimeCounterTheme.defaultTheme) {
           timeWidth = timeHeight = null;
-          font = TDTheme.of(context).fontBodyLarge;
-          timeFontSize = splitFontSize = font?.size ?? 16;
-          timeFontHeight = splitFontHeight = font?.height ?? (24 / timeFontSize!);
+          font = context.bodyLarge;
+          timeFontSize = splitFontSize = font?.fontSize ?? 16;
+          timeFontHeight =
+              splitFontHeight = font?.height ?? (24 / timeFontSize!);
         } else {
           timeWidth = timeHeight = 24;
-          font = TDTheme.of(context).fontBodyMedium;
-          timeFontSize = splitFontSize = font?.size ?? 14;
+          font = context.bodyMedium;
+          timeFontSize = splitFontSize = font?.fontSize ?? 14;
           timeFontHeight = splitFontHeight = null;
         }
-        space = TDTheme.of(context).spacer8 / 2;
-        break;
+        space = 4;
       case TDTimeCounterSize.large:
         if (theme == TDTimeCounterTheme.defaultTheme) {
           timeWidth = timeHeight = null;
-          font = TDTheme.of(context).fontBodyExtraLarge;
-          timeFontSize = splitFontSize = font?.size ?? 18;
-          timeFontHeight = splitFontHeight = font?.height ?? (26 / timeFontSize!);
+          font = context.titleSmall;
+          timeFontSize = splitFontSize = font?.fontSize ?? 18;
+          timeFontHeight =
+              splitFontHeight = font?.height ?? (26 / timeFontSize!);
         } else {
           timeWidth = timeHeight = 28;
-          font = TDTheme.of(context).fontBodyLarge;
-          timeFontSize = splitFontSize = font?.size ?? 16;
+          font = context.bodyLarge;
+          timeFontSize = splitFontSize = font?.fontSize ?? 16;
           timeFontHeight = splitFontHeight = null;
         }
-        space = TDTheme.of(context).spacer12 / 2;
+        space = 6;
     }
 
     switch (theme ?? TDTimeCounterTheme.defaultTheme) {
       case TDTimeCounterTheme.round:
         timeBox = BoxDecoration(
           shape: BoxShape.circle,
-          color: TDTheme.of(context).errorColor6,
+          color: ThemeColors.error.shade500,
         );
-        timeColor = TDTheme.of(context).fontWhColor1;
-        splitColor = TDTheme.of(context).errorColor6;
-        break;
+        timeColor = Colors.white;
+        splitColor = ThemeColors.error.shade500;
       case TDTimeCounterTheme.square:
         timeBox = BoxDecoration(
-          shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.circular(TDTheme.of(context).radiusSmall),
-          color: TDTheme.of(context).errorColor6,
+          borderRadius: BorderRadius.circular(3),
+          color: ThemeColors.error.shade500,
         );
-        timeColor = TDTheme.of(context).fontWhColor1;
-        splitColor = TDTheme.of(context).errorColor6;
-        break;
+        timeColor = Colors.white;
+        splitColor = ThemeColors.error.shade500;
       case TDTimeCounterTheme.defaultTheme:
         timeBox = null;
-        timeColor = splitColor = TDTheme.of(context).fontGyColor1;
+        timeColor = splitColor = Colors.white;
         timeWidth = null;
         timeHeight = null;
     }
 
     if (splitWithUnit ?? false) {
-      splitColor = TDTheme.of(context).fontGyColor1;
+      splitColor = ThemeColors.neutral.shade900;
     }
   }
+
+  double? timeWidth;
+
+  double? timeHeight;
+
+  EdgeInsets? timePadding;
+
+  EdgeInsets? timeMargin;
+
+  BoxDecoration? timeBox;
+
+  double? timeFontSize;
+
+  double? timeFontHeight;
+
+  FontWeight? timeFontWeight;
+
+  Color? timeColor;
+
+  double? splitFontSize;
+
+  double? splitFontHeight;
+
+  FontWeight? splitFontWeight;
+
+  Color? splitColor;
+
+  double? space;
 }
