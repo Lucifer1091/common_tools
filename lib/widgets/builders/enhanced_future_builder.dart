@@ -1,6 +1,70 @@
+import 'dart:async';
+import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
+
 import 'package:flutter/widgets.dart';
 
 import '../../common_tools.dart';
+
+class FutureOrBuilder<T> extends StatelessWidget {
+  const FutureOrBuilder({
+    required this.future,
+    required this.onSuccess,
+    required this.inProgress,
+    super.key,
+    this.rememberFutureResult = false,
+    this.initialData,
+    this.onLoading,
+    this.onError,
+  });
+
+  /// Future to resolve.
+  final FutureOr<T> future;
+
+  /// Whether or not the future result should be stored.
+  final bool rememberFutureResult;
+
+  /// Widget to display when connected to an asynchronous computation and awaiting interaction.
+  final Widget? onLoading;
+
+  /// Widget to display when the asynchronous computation is not done yet.
+  final Widget inProgress;
+
+  /// Function to call when the asynchronous computation is done.
+  final Widget Function(T snapshotData) onSuccess;
+
+  /// Function to call when the asynchronous computation is done with error.
+  /// If no function is passed, whenNotDone() will be used instead
+  final Widget Function(Object? error)? onError;
+
+  /// The data that will be used until a non-null [future] has completed.
+  ///
+  /// See [FutureBuilder] for more info
+  final T? initialData;
+
+  @override
+  Widget build(BuildContext context) {
+    if (future is Future<T>) {
+      return EnhancedFutureBuilder<T>(
+        future: future as Future<T>,
+        initialData: initialData,
+        onSuccess: onSuccess,
+        inProgress: inProgress,
+        onError: onError,
+        onLoading: onLoading,
+        rememberFutureResult: rememberFutureResult,
+      );
+    }
+
+    final T? data =
+        AsyncSnapshot.withData(ConnectionState.done, future as T).data;
+
+    if (data != null) {
+      return onSuccess(data);
+    } else {
+      return onError?.call(Exception('No Records Found.')) ?? inProgress.call();
+    }
+  }
+}
 
 class EnhancedFutureBuilder<T> extends StatefulWidget {
   const EnhancedFutureBuilder({

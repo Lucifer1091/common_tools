@@ -1,6 +1,30 @@
 import '../../common_tools.dart';
 
 extension DurationTimeExtension on Duration {
+  Duration operator +(Duration other) {
+    return Duration(microseconds: inMicroseconds + other.inMicroseconds);
+  }
+
+  Duration operator -(Duration other) {
+    return Duration(microseconds: inMicroseconds - other.inMicroseconds);
+  }
+
+  Duration operator *(Duration other) {
+    return Duration(microseconds: inMicroseconds * other.inMicroseconds);
+  }
+
+  Duration times(int by) {
+    return Duration(microseconds: inMicroseconds * by);
+  }
+
+  Duration operator /(Duration other) {
+    return Duration(microseconds: inMicroseconds ~/ other.inMicroseconds);
+  }
+
+  Duration divide(int by) {
+    return Duration(microseconds: inMicroseconds ~/ by);
+  }
+
   static const int daysPerWeek = 7;
 
   static const int nanosecondsPerMicrosecond = 1000;

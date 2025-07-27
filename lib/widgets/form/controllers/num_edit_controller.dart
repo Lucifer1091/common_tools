@@ -10,7 +10,7 @@ class NumEditController<T extends num> extends TextEditingController {
   }
 
   /// The actual numeric value
-  T? _value;
+  T? _value, previous;
 
   /// Number of decimal places to format when displaying
   final int dp;
@@ -20,7 +20,10 @@ class NumEditController<T extends num> extends TextEditingController {
 
   /// Set a new number and update the text accordingly
   void setValue(T? newValue) {
+    if (newValue == value) return;
+    previous = _value;
     _value = newValue;
+
     if (newValue == null) {
       text = '';
     } else {
