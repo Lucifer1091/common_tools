@@ -62,20 +62,20 @@ class CustomPinField extends StatelessWidget {
             fontWeight: FontWeight.w500,
           ),
       decoration: BoxDecoration(
-        color: context.backgroundColor,
+        color: context.background,
         border: Border.all(color: const Color(0xFFCECECE), width: 1.27),
         borderRadius: BorderRadius.circular(radius ?? 14),
       ),
     );
 
     final focusedPinTheme = defaultPinTheme.copyDecorationWith(
-      color: context.backgroundColor,
+      color: context.background,
       border: Border.all(color: context.primary, width: 2),
     );
 
     final submittedPinTheme = defaultPinTheme.copyWith(
       decoration: defaultPinTheme.decoration?.copyWith(
-        color: context.backgroundColor,
+        color: context.background,
         border: Border.all(color: const Color(0xFFCECECE), width: 1.27),
       ),
     );

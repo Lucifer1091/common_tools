@@ -435,7 +435,7 @@ class CustomTextFormField extends StatelessWidget {
       focusColor: context.primary,
       errorStyle: context.bodySmall?.copyWith(
         fontSize: errorFontSize,
-        color: errorColor ?? context.errorColor,
+        color: errorColor ?? context.error,
       ),
       errorMaxLines: 2,
     );

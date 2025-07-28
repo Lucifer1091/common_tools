@@ -1,23 +1,41 @@
 import 'package:flutter/material.dart';
-import '../../../tdesign_flutter.dart';
+import '../../../common_tools.dart';
+import '../text/td_text.dart';
 
-typedef ItemBuilderType = Widget? Function(
-  /// 上下文
-  BuildContext context,
-  /// 文字内容
-  String content,
-  /// 列号
-  int colIndex,
-  /// 行号
-  int index,
-  /// 根据距离计算字体颜色、透明度、粗细
-  ItemDistanceCalculator itemDistanceCalculator,
-  /// 子项此时离中心的距离
-  double distance,
-);
+typedef ItemBuilderType =
+    Widget? Function(
+      /// Context
+      BuildContext context,
 
-/// 所有选择器的子项组件
+      /// Text content
+      String content,
+
+      /// Column number
+      int colIndex,
+
+      /// Row number
+      int index,
+
+      /// Calculate font color, transparency, thickness based on distance
+      ItemDistanceCalculator itemDistanceCalculator,
+
+      /// The distance of the subitem from the center at this time
+      double distance,
+    );
+
+/// All selector subcomponents
 class TDItemWidget extends StatefulWidget {
+  const TDItemWidget({
+    required this.fixedExtentScrollController,
+    required this.colIndex,
+    required this.index,
+    required this.content,
+    required this.itemHeight,
+    this.itemDistanceCalculator,
+    this.itemBuilder,
+    super.key,
+  });
+
   final String content;
   final FixedExtentScrollController fixedExtentScrollController;
   final int colIndex;
@@ -26,23 +44,12 @@ class TDItemWidget extends StatefulWidget {
   final ItemDistanceCalculator? itemDistanceCalculator;
   final ItemBuilderType? itemBuilder;
 
-  const TDItemWidget(
-      {required this.fixedExtentScrollController,
-      required this.colIndex,
-      required this.index,
-      required this.content,
-      required this.itemHeight,
-      this.itemDistanceCalculator,
-      this.itemBuilder,
-      Key? key})
-      : super(key: key);
-
   @override
   _TDItemWidgetState createState() => _TDItemWidgetState();
 }
 
 class _TDItemWidgetState extends State<TDItemWidget> {
-  /// 子项监听滚动，从而刷新自身的颜色
+  /// The child item listens to scrolling to refresh its own color
   VoidCallback? listener;
   ItemDistanceCalculator? _itemDistanceCalculator;
 
@@ -52,17 +59,22 @@ class _TDItemWidgetState extends State<TDItemWidget> {
     listener = () => setState(() {});
     _itemDistanceCalculator = widget.itemDistanceCalculator;
 
-    /// 子项注册滚动监听
+    /// Sub-item registration scrolling monitor
     widget.fixedExtentScrollController.addListener(listener!);
   }
 
   @override
   Widget build(BuildContext context) {
-    /// 子项此时离中心的距离
-    /// 不要使用widget.fixedExtentScrollController.selectedItem
-    /// 其中selectedItem会报错，原因是一开始minScrollExtent为空
-    var distance = (widget.fixedExtentScrollController.offset / widget.itemHeight - widget.index).abs().toDouble();
+    /// The distance of the child item from the center at this time
+    /// Do not use widget.fixedExtentScrollController.selectedItem
+    /// The selectedItem will report an error because minScrollExtent is empty at the beginning
+    final distance =
+        (widget.fixedExtentScrollController.offset / widget.itemHeight -
+                widget.index)
+            .abs();
+
     _itemDistanceCalculator ??= ItemDistanceCalculator();
+
     return widget.itemBuilder?.call(
           context,
           widget.content,
@@ -76,7 +88,10 @@ class _TDItemWidgetState extends State<TDItemWidget> {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
-            fontWeight: _itemDistanceCalculator!.calculateFontWeight(context, distance),
+            fontWeight: _itemDistanceCalculator!.calculateFontWeight(
+              context,
+              distance,
+            ),
             fontSize: _itemDistanceCalculator!.calculateFont(context, distance),
             color: _itemDistanceCalculator!.calculateColor(context, distance),
           ),
@@ -85,22 +100,21 @@ class _TDItemWidgetState extends State<TDItemWidget> {
 
   @override
   void dispose() {
-    /// 在销毁前完成监听注销
+    /// Complete monitoring cancellation before destruction
     widget.fixedExtentScrollController.removeListener(listener!);
     super.dispose();
   }
 }
 
 class ItemDistanceCalculator {
-
   ItemDistanceCalculator();
 
   Color calculateColor(BuildContext context, double distance) {
-    /// 线性插值
+    /// Linear interpolation
     if (distance < 0.5) {
-      return TDTheme.of(context).fontGyColor1;
+      return ThemeColors.neutral.shade900;
     } else {
-      return TDTheme.of(context).fontGyColor4;
+      return ThemeColors.neutral.shade600;
     }
   }
 
@@ -113,6 +127,6 @@ class ItemDistanceCalculator {
   }
 
   double calculateFont(BuildContext context, double distance) {
-    return TDTheme.of(context).fontBodyLarge!.size;
+    return context.bodyLarge!.fontSize ?? 14;
   }
 }

@@ -325,7 +325,7 @@ Future<bool?> showConfirmDialogCustom(
         child: AlertDialog(
           shape: shape ?? dialogShape(),
           titlePadding: EdgeInsets.zero,
-          backgroundColor: context.secondaryColor,
+          backgroundColor: context.secondary,
           elevation: defaultElevation.toDouble(),
           title: ClipRRect(
             borderRadius: BorderRadius.only(
@@ -370,7 +370,7 @@ Future<bool?> showConfirmDialogCustom(
                         borderRadius: radius(defaultAppButtonRadius),
                         side: BorderSide(color: Color(0xFFEAEAEA)),
                       ),
-                      color: context.secondaryColor,
+                      color: context.secondary,
                       child:
                           Row(
                             mainAxisSize: MainAxisSize.min,
