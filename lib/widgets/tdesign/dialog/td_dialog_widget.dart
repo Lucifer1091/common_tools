@@ -1,135 +1,118 @@
-/*
- * Created by haozhicao@tencent.com on 6/20/22.
- * td_dialog_widget.dart
- * 
- */
-
 import 'package:flutter/material.dart';
 
-import '../../../tdesign_flutter.dart';
+import '../../../common_tools.dart';
+import '../button/td_button.dart';
+import '../button/td_button_style.dart';
+import '../divider/td_divider.dart';
+import '../text/td_text.dart';
+import 'td_dialog.dart';
 
-/// TDDialog手脚架
 class TDDialogScaffold extends StatelessWidget {
   const TDDialogScaffold({
-    Key? key,
     required this.body,
+    super.key,
     this.showCloseButton,
     this.backgroundColor = Colors.white,
     this.radius = 12.0,
-  }) : super(key: key);
+  });
 
-  /// Dialog主体
   final Widget body;
 
-  /// 显示右上角关闭按钮
   final bool? showCloseButton;
 
-  /// 背景色
   final Color backgroundColor;
 
-  /// 圆角
   final double radius;
 
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: Material(
-          type: MaterialType.transparency,
-          child: Container(
-            width: 311,
-            decoration: BoxDecoration(
-              color: backgroundColor, // 底色
-              borderRadius: BorderRadius.all(Radius.circular(radius)),
-            ),
-            child: Stack(
-              children: [
-                body,
-                showCloseButton ?? false
-                    ? Positioned(
-                    top: 0,
-                    right: 0,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: SizedBox(
-                        width: 38,
-                        height: 38,
-                        child: Center(
-                          child: Icon(
-                            TDIcons.close,
-                            size: 22,
-                            color: TDTheme.of(context).fontGyColor3,
-                          ),
+      child: Material(
+        type: MaterialType.transparency,
+        child: Container(
+          width: 311,
+          decoration: BoxDecoration(
+            color: backgroundColor,
+            borderRadius: BorderRadius.all(Radius.circular(radius)),
+          ),
+          child: Stack(
+            children: [
+              body,
+              if (showCloseButton ?? false)
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: SizedBox(
+                      width: 38,
+                      height: 38,
+                      child: Center(
+                        child: Icon(
+                          Icons.close_rounded,
+                          size: 22,
+                          color: ThemeColors.neutral.shade700,
                         ),
                       ),
-                    ))
-                    : Container(height: 0)
-              ],
-            ),
+                    ),
+                  ),
+                )
+              else
+                Container(height: 0),
+            ],
           ),
         ),
+      ),
     );
   }
 }
 
-/// 弹窗标题
 class TDDialogTitle extends StatelessWidget {
-  const TDDialogTitle({
-    Key? key,
-    this.title,
-    this.titleColor = Colors.black,
-  }) : super(key: key);
+  const TDDialogTitle({super.key, this.title, this.titleColor = Colors.black});
 
-  /// 标题颜色
   final Color titleColor;
 
-  /// 标题文字
   final String? title;
 
   @override
   Widget build(BuildContext context) {
-    // 标题和内容不能同时为空
     return TDText(
       title,
       textColor: titleColor,
       fontWeight: FontWeight.w600,
-      font: Font(size: 16, lineHeight: 24),
+      style: TextStyle(fontSize: 16, height: 24, color: titleColor),
       textAlign: TextAlign.center,
     );
   }
 }
 
-/// 弹窗内容
 class TDDialogContent extends StatelessWidget {
   const TDDialogContent({
-    Key? key,
+    super.key,
     this.content,
     this.contentColor = const Color(0x99000000),
-  }) : super(key: key);
+  });
 
-  /// 标题颜色
   final Color contentColor;
 
-  /// 标题文字
   final String? content;
 
   @override
   Widget build(BuildContext context) {
-    // 标题和内容不能同时为空
     return TDText(
       content,
       textColor: contentColor,
-      font: Font(size: 16, lineHeight: 24),
+      style: TextStyle(fontSize: 16, height: 24, color: contentColor),
       textAlign: TextAlign.center,
     );
   }
 }
 
-/// 弹窗信息
 class TDDialogInfoWidget extends StatelessWidget {
   const TDDialogInfoWidget({
-    Key? key,
+    super.key,
     this.title,
     this.titleColor = Colors.black,
     this.titleAlignment,
@@ -138,36 +121,27 @@ class TDDialogInfoWidget extends StatelessWidget {
     this.contentColor,
     this.contentMaxHeight = 0,
     this.padding = const EdgeInsets.fromLTRB(24, 32, 24, 0),
-  }) : super(key: key);
+  });
 
-  /// 标题
   final String? title;
 
-  /// 标题颜色
   final Color titleColor;
 
-  /// 标题对齐模式
   final AlignmentGeometry? titleAlignment;
 
-  /// 内容Widget
   final Widget? contentWidget;
 
-  /// 内容
   final String? content;
 
-  /// 内容颜色
   final Color? contentColor;
 
-  /// 内容的最大高度，默认为0，也就是不限制高度
   final double contentMaxHeight;
 
-  /// 内容的内边距
   final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context) {
-    // 标题和内容不能同时为空
-    assert((title != null || content != null || contentWidget != null));
+    assert((title != null || content != null || contentWidget != null), '');
     return Container(
       padding: padding,
       child: Column(
@@ -180,24 +154,28 @@ class TDDialogInfoWidget extends StatelessWidget {
                 title,
                 textColor: titleColor,
                 fontWeight: FontWeight.w600,
-                font: Font(size: 18, lineHeight: 26),
+                style: TextStyle(fontSize: 18, height: 26, color: titleColor),
                 textAlign: TextAlign.center,
               ),
             ),
           if (contentWidget != null || content != null)
             Container(
-              padding: EdgeInsets.fromLTRB(0, (title != null && content != null) ? 8.0 : 0, 0, 0),
-              constraints: contentMaxHeight > 0
-                  ? BoxConstraints(
-                      maxHeight: contentMaxHeight,
-                    )
-                  : null,
-              child: contentWidget ??
+              padding: EdgeInsets.fromLTRB(
+                0,
+                (title != null && content != null) ? 8.0 : 0,
+                0,
+                0,
+              ),
+              constraints:
+                  contentMaxHeight > 0
+                      ? BoxConstraints(maxHeight: contentMaxHeight)
+                      : null,
+              child:
+                  contentWidget ??
                   Scrollbar(
                     child: SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
                       child: TDDialogContent(
-                        content: content!,
+                        content: content,
                         contentColor: contentColor ?? const Color(0x99000000),
                       ),
                     ),
@@ -209,23 +187,19 @@ class TDDialogInfoWidget extends StatelessWidget {
   }
 }
 
-/// 横向排列的两个按钮
 class HorizontalNormalButtons extends StatelessWidget {
   const HorizontalNormalButtons({
-    Key? key,
     required this.leftBtn,
     required this.rightBtn,
-  }) : super(key: key);
+    super.key,
+  });
 
-  /// 左按钮
   final TDDialogButtonOptions leftBtn;
 
-  /// 右按钮
   final TDDialogButtonOptions rightBtn;
 
   @override
   Widget build(BuildContext context) {
-    // 标题和内容不能同时为空
     return Container(
       padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
       child: Row(
@@ -242,7 +216,7 @@ class HorizontalNormalButtons extends StatelessWidget {
               height: leftBtn.height,
               buttonTextFontWeight: leftBtn.fontWeight ?? FontWeight.w600,
               onPressed: () {
-                if(leftBtn.action != null){
+                if (leftBtn.action != null) {
                   leftBtn.action!();
                 } else {
                   Navigator.pop(context);
@@ -250,10 +224,7 @@ class HorizontalNormalButtons extends StatelessWidget {
               },
             ),
           ),
-          const TDDivider(
-            width: 12,
-            color: Colors.transparent,
-          ),
+          const TDDivider(width: 12, color: Colors.transparent),
           Expanded(
             child: TDDialogButton(
               buttonText: rightBtn.title,
@@ -265,7 +236,7 @@ class HorizontalNormalButtons extends StatelessWidget {
               height: rightBtn.height,
               buttonTextFontWeight: rightBtn.fontWeight ?? FontWeight.w600,
               onPressed: () {
-                if(rightBtn.action != null) {
+                if (rightBtn.action != null) {
                   rightBtn.action!();
                 } else {
                   Navigator.pop(context);
@@ -279,23 +250,19 @@ class HorizontalNormalButtons extends StatelessWidget {
   }
 }
 
-/// 左右横向文字按钮，顶部和中间有分割线
 class HorizontalTextButtons extends StatelessWidget {
   const HorizontalTextButtons({
-    Key? key,
     required this.leftBtn,
     required this.rightBtn,
-  }) : super(key: key);
+    super.key,
+  });
 
-  /// 左按钮
   final TDDialogButtonOptions leftBtn;
 
-  /// 右按钮
   final TDDialogButtonOptions rightBtn;
 
   @override
   Widget build(BuildContext context) {
-    // 标题和内容不能同时为空
     return Column(
       children: [
         const TDDivider(height: 1),
@@ -314,7 +281,7 @@ class HorizontalTextButtons extends StatelessWidget {
                 height: 56,
                 buttonTextFontWeight: leftBtn.fontWeight,
                 onPressed: () {
-                  if(leftBtn.action != null){
+                  if (leftBtn.action != null) {
                     leftBtn.action!();
                   } else {
                     Navigator.pop(context);
@@ -322,10 +289,7 @@ class HorizontalTextButtons extends StatelessWidget {
                 },
               ),
             ),
-            const TDDivider(
-              width: 1,
-              height: 56,
-            ),
+            const TDDivider(width: 1, height: 56),
             Expanded(
               child: TDDialogButton(
                 buttonText: rightBtn.title,
@@ -337,7 +301,7 @@ class HorizontalTextButtons extends StatelessWidget {
                 height: 56,
                 buttonTextFontWeight: rightBtn.fontWeight ?? FontWeight.w600,
                 onPressed: () {
-                  if(rightBtn.action != null){
+                  if (rightBtn.action != null) {
                     rightBtn.action!();
                   } else {
                     Navigator.pop(context);
@@ -346,16 +310,16 @@ class HorizontalTextButtons extends StatelessWidget {
               ),
             ),
           ],
-        )
+        ),
       ],
     );
   }
 }
 
-/// 弹窗标题
 class TDDialogButton extends StatelessWidget {
   const TDDialogButton({
-    Key? key,
+    required this.onPressed,
+    super.key,
     this.buttonText,
     this.buttonTextColor,
     this.buttonTextSize,
@@ -363,44 +327,32 @@ class TDDialogButton extends StatelessWidget {
     this.buttonStyle,
     this.buttonType,
     this.buttonTheme,
-    required this.onPressed,
     this.height = 40.0,
     this.width,
     this.isBlock = true,
-  }) : super(key: key);
+  });
 
-  /// 按钮文字
   final String? buttonText;
 
-  /// 按钮文字颜色
   final Color? buttonTextColor;
 
-  /// 按钮文字大小
   final double? buttonTextSize;
 
-  /// 按钮文字粗细
   final FontWeight? buttonTextFontWeight;
 
-  /// 按钮样式
   final TDButtonStyle? buttonStyle;
 
-  /// 按钮类型
   final TDButtonType? buttonType;
 
-  /// 按钮主题
   final TDButtonTheme? buttonTheme;
 
-  /// 按钮宽度
   final double? width;
 
-  /// 按钮高度
   final double? height;
 
-  /// 按钮高度
   final bool isBlock;
 
-  /// 点击
-  final Function() onPressed;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -410,7 +362,11 @@ class TDDialogButton extends StatelessWidget {
       type: buttonType ?? TDButtonType.fill,
       theme: buttonTheme,
       text: buttonText,
-      textStyle: TextStyle(fontWeight: buttonTextFontWeight,color:buttonTextColor,fontSize: buttonTextSize),
+      textStyle: TextStyle(
+        fontWeight: buttonTextFontWeight,
+        color: buttonTextColor,
+        fontSize: buttonTextSize,
+      ),
       width: width,
       height: height,
       isBlock: isBlock,

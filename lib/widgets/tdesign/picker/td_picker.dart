@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 
-import '../../../tdesign_flutter.dart';
+import '../../../common_tools.dart';
+import 'td_item_widget.dart';
+import 'td_multi_picker.dart';
 
 class TDPicker {
   TDPicker._();
 
-  /// 显示多级选择器
-  static void showMultiPicker(
-    context, {
-    String? title,
+  static Future<T?> showMultiPicker<T>(
+    BuildContext context, {
     required MultiPickerCallback? onConfirm,
-    MultiPickerCallback? onCancel,
     required List<List<String>> data,
+    String? title,
+    MultiPickerCallback? onCancel,
     List<int>? initialIndexes,
     Duration duration = const Duration(milliseconds: 100),
     Color? barrierColor,
@@ -27,11 +28,11 @@ class TDPicker {
     Widget? customSelectWidget,
     ItemBuilderType? itemBuilder,
   }) {
-    showModalBottomSheet(
+    return showModalBottomSheet<T>(
       context: context,
       backgroundColor: Colors.transparent,
       barrierColor:
-          barrierColor ?? TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          barrierColor ?? ThemeColors.neutral.shade800.withValues(alpha: 0.6),
       builder: (context) {
         return TDMultiPicker(
           title: title,
@@ -55,15 +56,14 @@ class TDPicker {
     );
   }
 
-  /// 显示多级联动选择器
-  static void showMultiLinkedPicker(
-    context, {
-    String? title,
+  static Future<void> showMultiLinkedPicker<T>(
+    BuildContext context, {
     required MultiPickerCallback? onConfirm,
-    MultiPickerCallback? onCancel,
     required Map data,
     required int columnNum,
     required List initialData,
+    String? title,
+    MultiPickerCallback? onCancel,
     Duration duration = const Duration(milliseconds: 100),
     Color? barrierColor,
     String? rightText,
@@ -77,11 +77,11 @@ class TDPicker {
     double? topPadding,
     int pickerItemCount = 5,
   }) {
-    showModalBottomSheet(
+    return showModalBottomSheet<T>(
       context: context,
       backgroundColor: Colors.transparent,
       barrierColor:
-          barrierColor ?? TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+          barrierColor ?? ThemeColors.neutral.shade800.withValues(alpha: 0.6),
       builder: (context) {
         return TDMultiLinkedPicker(
           title: title,

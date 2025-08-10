@@ -49,3 +49,46 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+
+fonts:
+  - family: Geist
+    fonts:
+      - asset: fonts/geist/Geist-Thin.otf
+        weight: 100
+      - asset: fonts/geist/Geist-UltraLight.otf
+        weight: 200
+      - asset: fonts/geist/Geist-Light.otf
+        weight: 300
+      - asset: fonts/geist/Geist-Regular.otf
+        weight: 400
+      - asset: fonts/geist/Geist-Medium.otf
+        weight: 500
+      - asset: fonts/geist/Geist-SemiBold.otf
+        weight: 600
+      - asset: fonts/geist/Geist-Bold.otf
+        weight: 700
+      - asset: fonts/geist/Geist-Black.otf
+        weight: 800
+      - asset: fonts/geist/Geist-UltraBlack.otf
+        weight: 900
+
+  - family: GeistMono
+    fonts:
+      - asset: fonts/geist_mono/GeistMono-Thin.otf
+        weight: 100
+      - asset: fonts/geist_mono/GeistMono-UltraLight.otf
+        weight: 200
+      - asset: fonts/geist_mono/GeistMono-Light.otf
+        weight: 300
+      - asset: fonts/geist_mono/GeistMono-Regular.otf
+        weight: 400
+      - asset: fonts/geist_mono/GeistMono-Medium.otf
+        weight: 500
+      - asset: fonts/geist_mono/GeistMono-SemiBold.otf
+        weight: 600
+      - asset: fonts/geist_mono/GeistMono-Bold.otf
+        weight: 700
+      - asset: fonts/geist_mono/GeistMono-Black.otf
+        weight: 800
+      - asset: fonts/geist_mono/GeistMono-UltraBlack.otf
+        weight: 900

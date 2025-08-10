@@ -1,25 +1,21 @@
-/*
- * Created by haozhicao@tencent.com on 6/20/22.
- * td_alert_dialog.dart
- * 
- */
-
 import 'package:flutter/material.dart';
 
-import '../../../tdesign_flutter.dart';
-import '../../util/context_extension.dart';
+import '../button/td_button.dart';
+import '../divider/td_divider.dart';
+import 'td_dialog.dart';
 import 'td_dialog_widget.dart';
 
-/// 弹窗控件
+/// Pop-up Control
 ///
-/// 支持横向或竖向摆放按钮
-/// 横向最多摆放两个按钮
+/// Supports horizontal or vertical button placement
+/// Maximum of two buttons can be placed horizontally
 class TDAlertDialog extends StatelessWidget {
-  /// 横向按钮排列的对话框
+  /// Dialog box with horizontal button arrangement
   ///
-  /// [leftBtn]和[rightBtn]不传style参数会应用默认样式，左侧弱按钮，右侧强按钮
+  /// If you don't pass a style parameter to [leftBtn] and [rightBtn], the default
+  ///  style will be applied: a weak button on the left and a strong button on the right.
   const TDAlertDialog({
-    Key? key,
+    super.key,
     this.backgroundColor = Colors.white,
     this.radius = 12.0,
     this.title,
@@ -37,18 +33,18 @@ class TDAlertDialog extends StatelessWidget {
     TDDialogButtonStyle buttonStyle = TDDialogButtonStyle.normal,
     this.padding = const EdgeInsets.fromLTRB(24, 32, 24, 0),
     this.buttonWidget,
-  })  : assert((title != null || content != null || contentWidget != null)),
-        _vertical = false,
-        _buttons = null,
-        _buttonStyle = buttonStyle,
-        super(key: key);
+  }) : assert((title != null || content != null || contentWidget != null), ''),
+       _vertical = false,
+       _buttons = null,
+       _buttonStyle = buttonStyle;
 
-  /// 纵向按钮排列的对话框
+  /// Dialog box with vertical button arrangement
   ///
-  /// [buttons]参数是必须的，纵向按钮默认样式都是[TDButtonTheme.primary]
+  /// The [buttons] parameter is required. The default style for vertical
+  /// buttons is [TDButtonTheme.primary].
   const TDAlertDialog.vertical({
-    Key? key,
     required List<TDDialogButtonOptions> buttons,
+    super.key,
     this.backgroundColor = Colors.white,
     this.radius = 12.0,
     this.title,
@@ -61,84 +57,71 @@ class TDAlertDialog extends StatelessWidget {
     this.showCloseButton,
     this.padding = const EdgeInsets.fromLTRB(24, 32, 24, 0),
     this.buttonWidget,
-  })  : _vertical = true,
-        leftBtn = null,
-        rightBtn = null,
-        _buttons = buttons,
-        _buttonStyle = TDDialogButtonStyle.normal,
-        leftBtnAction = null,
-        rightBtnAction = null,
-        super(key: key);
+  }) : _vertical = true,
+       leftBtn = null,
+       rightBtn = null,
+       _buttons = buttons,
+       _buttonStyle = TDDialogButtonStyle.normal,
+       leftBtnAction = null,
+       rightBtnAction = null;
 
-  /// 背景颜色
   final Color backgroundColor;
 
-  /// 圆角
   final double radius;
 
-  /// 标题
   final String? title;
 
-  /// 标题颜色
   final Color titleColor;
 
-  /// 标题对齐模式
   final AlignmentGeometry? titleAlignment;
 
-  /// 内容Widget
   final Widget? contentWidget;
 
-  /// 内容
   final String? content;
 
-  /// 内容颜色
   final Color? contentColor;
 
-  /// 内容的最大高度，默认为0，也就是不限制高度
+  /// The maximum height of the content, the default is 0, which means there is no height limit
   final double contentMaxHeight;
 
-  /// 左侧按钮配置
   final TDDialogButtonOptions? leftBtn;
 
-  /// 右侧按钮配置
   final TDDialogButtonOptions? rightBtn;
 
-  /// 左侧按钮默认点击
-  final Function()? leftBtnAction;
+  final VoidCallback? leftBtnAction;
 
-  /// 右侧按钮默认点击
-  final Function()? rightBtnAction;
+  final VoidCallback? rightBtnAction;
 
-  /// 显示右上角关闭按钮
+  /// Display the close button in the upper right corner
   final bool? showCloseButton;
 
-  /// 选项是否是垂直排布，默认是左右排布
+  /// Whether the option is arranged vertically, the default is left and right
   final bool _vertical;
 
-  /// 垂直排布的按钮列表
+  /// Vertically arranged button list
   final List<TDDialogButtonOptions>? _buttons;
 
-  /// 按钮样式
+  /// Button style
   ///
-  /// 支持普通类型和文字类型按钮
-  /// 文字类型仅支持横向排列
-  /// [leftBtn]和[rightBtn]中的style会覆盖此配置
+  /// Supports both standard and text buttons
+  /// Text buttons only support horizontal layout
+  /// The styles in [leftBtn] and [rightBtn] override this setting.
   final TDDialogButtonStyle _buttonStyle;
 
-  /// 内容内边距
   final EdgeInsets? padding;
 
-  /// 自定义按钮
   final Widget? buttonWidget;
 
   @override
   Widget build(BuildContext context) {
-    // 标题和内容不能同时为空
+    // Title and content cannot be empty at the same time
     return TDDialogScaffold(
-        showCloseButton: showCloseButton,
-        backgroundColor: backgroundColor,
-        radius: radius,
-        body: Column(mainAxisSize: MainAxisSize.min, children: [
+      showCloseButton: showCloseButton,
+      backgroundColor: backgroundColor,
+      radius: radius,
+      body: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
           TDDialogInfoWidget(
             title: title,
             titleColor: titleColor,
@@ -150,32 +133,43 @@ class TDAlertDialog extends StatelessWidget {
             padding: padding,
           ),
           const TDDivider(height: 24, color: Colors.transparent),
-          _vertical ? _verticalButtons(context) : _horizontalButtons(context),
-        ]));
+          if (_vertical)
+            _verticalButtons(context)
+          else
+            _horizontalButtons(context),
+        ],
+      ),
+    );
   }
 
   Widget _horizontalButtons(BuildContext context) {
-    if(buttonWidget != null) {
-      return buttonWidget!;
-    }
-    final left = leftBtn ??
+    if (buttonWidget != null) return buttonWidget!;
+
+    final left =
+        leftBtn ??
         TDDialogButtonOptions(
-            title: context.resource.cancel, theme: TDButtonTheme.light, action: leftBtnAction);
-    final right = rightBtn ??
+          title: 'Cancel',
+          theme: TDButtonTheme.light,
+          action: leftBtnAction,
+        );
+
+    final right =
+        rightBtn ??
         TDDialogButtonOptions(
-            title: context.resource.confirm, theme: TDButtonTheme.primary, action: rightBtnAction);
+          title: 'Confirm',
+          theme: TDButtonTheme.primary,
+          action: rightBtnAction,
+        );
     return _buttonStyle == TDDialogButtonStyle.text
         ? HorizontalTextButtons(leftBtn: left, rightBtn: right)
-        : HorizontalNormalButtons(
-            leftBtn: left,
-            rightBtn: right,
-          );
+        : HorizontalNormalButtons(leftBtn: left, rightBtn: right);
   }
 
   Widget _verticalButtons(BuildContext context) {
-    var widgets = <Widget>[];
+    final widgets = <Widget>[];
+
     _buttons!.asMap().forEach((index, value) {
-      Widget btn = TDDialogButton(
+      final Widget btn = TDDialogButton(
         buttonText: value.title,
         buttonTextColor: value.titleColor,
         buttonTextSize: value.titleSize,
@@ -185,25 +179,23 @@ class TDAlertDialog extends StatelessWidget {
         buttonTheme: value.theme,
         buttonType: value.type,
         onPressed: () {
-          if(value.action != null){
+          if (value.action != null) {
             value.action!();
           } else {
             Navigator.pop(context);
           }
         },
       );
+
       widgets.add(btn);
-      if (index < _buttons!.length - 1) {
+      if (index < _buttons.length - 1) {
         widgets.add(const TDDivider(height: 12, color: Colors.transparent));
       }
     });
 
     return Container(
-      padding:
-          const EdgeInsets.only(left: 24, right: 24, bottom: 24),
-      child: Column(
-        children: widgets,
-      ),
+      padding: const EdgeInsets.only(left: 24, right: 24, bottom: 24),
+      child: Column(children: widgets),
     );
   }
 }
