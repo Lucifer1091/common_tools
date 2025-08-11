@@ -44,6 +44,31 @@ class MyColors {
     rose,
   ];
 
+  Map<String, MaterialColor> names = {
+    'Slate': MyColors.slate,
+    'Gray': MyColors.gray,
+    'Zinc': MyColors.zinc,
+    'Neutral': MyColors.neutral,
+    'Stone': MyColors.stone,
+    'Red': MyColors.red,
+    'Orange': MyColors.orange,
+    'Amber': MyColors.amber,
+    'Yellow': MyColors.yellow,
+    'Lime': MyColors.lime,
+    'Green': MyColors.green,
+    'Emerald': MyColors.emerald,
+    'Teal': MyColors.teal,
+    'Cyan': MyColors.cyan,
+    'Sky': MyColors.sky,
+    'Blue': MyColors.blue,
+    'Indigo': MyColors.indigo,
+    'Violet': MyColors.violet,
+    'Purple': MyColors.purple,
+    'Fuchsia': MyColors.fuchsia,
+    'Pink': MyColors.pink,
+    'Rose': MyColors.rose,
+  };
+
   static MaterialColor random([math.Random? random, int? seed]) {
     return values.random(random, seed);
   }
