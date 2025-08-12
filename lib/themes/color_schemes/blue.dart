@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-
 import '../my_color_scheme.dart';
 
 @immutable
-class ShadBlueColorScheme extends ShadColorScheme {
-  const ShadBlueColorScheme({
+class MyBlueColorScheme extends MyColorScheme {
+  const MyBlueColorScheme({
     required super.brightness,
     required super.background,
     required super.foreground,
@@ -34,7 +32,8 @@ class ShadBlueColorScheme extends ShadColorScheme {
     required super.chart5,
   });
 
-  const ShadBlueColorScheme.light({
+  const MyBlueColorScheme.light({
+    super.brightness = Brightness.light,
     super.background = const Color(0xffffffff),
     super.foreground = const Color(0xff020817),
     super.card = const Color(0xffffffff),
@@ -55,9 +54,15 @@ class ShadBlueColorScheme extends ShadColorScheme {
     super.input = const Color(0xffe2e8f0),
     super.ring = const Color(0xff2563eb),
     super.selection = const Color(0xFFB4D7FF),
+    super.chart1 = const Color(0xFFE76E4F),
+    super.chart2 = const Color(0xFF299D8F),
+    super.chart3 = const Color(0xFF264753),
+    super.chart4 = const Color(0xFFE8C468),
+    super.chart5 = const Color(0xFFF4A361),
   });
 
-  const ShadBlueColorScheme.dark({
+  const MyBlueColorScheme.dark({
+    super.brightness = Brightness.dark,
     super.background = const Color(0xff020817),
     super.foreground = const Color(0xfff8fafc),
     super.card = const Color(0xff020817),
@@ -78,5 +83,10 @@ class ShadBlueColorScheme extends ShadColorScheme {
     super.input = const Color(0xff1e293b),
     super.ring = const Color(0xff1d4ed8),
     super.selection = const Color(0xFF355172),
+    super.chart1 = const Color(0xFF2661D8),
+    super.chart2 = const Color(0xFF2DB789),
+    super.chart3 = const Color(0xFFE88C30),
+    super.chart4 = const Color(0xFFAF56DB),
+    super.chart5 = const Color(0xFFE2366F),
   });
 }

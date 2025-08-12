@@ -15,8 +15,8 @@ import 'color_schemes/violet.dart';
 import 'color_schemes/yellow.dart';
 import 'color_schemes/zinc.dart';
 
-class ShadColorScheme {
-  const ShadColorScheme({
+class MyColorScheme {
+  const MyColorScheme({
     required this.brightness,
     required this.background,
     required this.foreground,
@@ -45,64 +45,65 @@ class ShadColorScheme {
     required this.chart5,
   });
 
-  // factory ShadColorScheme.fromName(
-  //   String name, {
-  //   Brightness brightness = Brightness.light,
-  // }) {
-  //   return switch (name.lowercase) {
-  //     'blue' =>
-  //       brightness == Brightness.light
-  //           ? const ShadBlueColorScheme.light()
-  //           : const ShadBlueColorScheme.dark(),
-  //     'gray' =>
-  //       brightness == Brightness.light
-  //           ? const ShadGrayColorScheme.light()
-  //           : const ShadGrayColorScheme.dark(),
-  //     'green' =>
-  //       brightness == Brightness.light
-  //           ? const ShadGreenColorScheme.light()
-  //           : const ShadGreenColorScheme.dark(),
-  //     'neutral' =>
-  //       brightness == Brightness.light
-  //           ? const ShadNeutralColorScheme.light()
-  //           : const ShadNeutralColorScheme.dark(),
-  //     'orange' =>
-  //       brightness == Brightness.light
-  //           ? const ShadOrangeColorScheme.light()
-  //           : const ShadOrangeColorScheme.dark(),
-  //     'red' =>
-  //       brightness == Brightness.light
-  //           ? const ShadRedColorScheme.light()
-  //           : const ShadRedColorScheme.dark(),
-  //     'rose' =>
-  //       brightness == Brightness.light
-  //           ? const ShadRoseColorScheme.light()
-  //           : const ShadRoseColorScheme.dark(),
-  //     'slate' =>
-  //       brightness == Brightness.light
-  //           ? const ShadSlateColorScheme.light()
-  //           : const ShadSlateColorScheme.dark(),
-  //     'stone' =>
-  //       brightness == Brightness.light
-  //           ? const ShadStoneColorScheme.light()
-  //           : const ShadStoneColorScheme.dark(),
-  //     'violet' =>
-  //       brightness == Brightness.light
-  //           ? const ShadVioletColorScheme.light()
-  //           : const ShadVioletColorScheme.dark(),
-  //     'yellow' =>
-  //       brightness == Brightness.light
-  //           ? const ShadYellowColorScheme.light()
-  //           : const ShadYellowColorScheme.dark(),
-  //     'zinc' =>
-  //       brightness == Brightness.light
-  //           ? const ShadZincColorScheme.light()
-  //           : const ShadZincColorScheme.dark(),
-  //     _ => throw Exception('Invalid color scheme name'),
-  //   };
-  // }
+  factory MyColorScheme.fromName(
+    String name, {
+    Brightness brightness = Brightness.light,
+  }) {
+    return switch (name.lowercase) {
+      'blue' =>
+        brightness == Brightness.light
+            ? const MyBlueColorScheme.light()
+            : const MyBlueColorScheme.dark(),
+      'gray' =>
+        brightness == Brightness.light
+            ? const MyGrayColorScheme.light()
+            : const MyGrayColorScheme.dark(),
+      'green' =>
+        brightness == Brightness.light
+            ? const MyGreenColorScheme.light()
+            : const MyGreenColorScheme.dark(),
+      'neutral' =>
+        brightness == Brightness.light
+            ? const MyNeutralColorScheme.light()
+            : const MyNeutralColorScheme.dark(),
+      'orange' =>
+        brightness == Brightness.light
+            ? const MyOrangeColorScheme.light()
+            : const MyOrangeColorScheme.dark(),
+      'red' =>
+        brightness == Brightness.light
+            ? const MyRedColorScheme.light()
+            : const MyRedColorScheme.dark(),
+      'rose' =>
+        brightness == Brightness.light
+            ? const MyRoseColorScheme.light()
+            : const MyRoseColorScheme.dark(),
+      'slate' =>
+        brightness == Brightness.light
+            ? const MySlateColorScheme.light()
+            : const MySlateColorScheme.dark(),
+      'stone' =>
+        brightness == Brightness.light
+            ? const MyStoneColorScheme.light()
+            : const MyStoneColorScheme.dark(),
+      'violet' =>
+        brightness == Brightness.light
+            ? const MyVioletColorScheme.light()
+            : const MyVioletColorScheme.dark(),
+      'yellow' =>
+        brightness == Brightness.light
+            ? const MyYellowColorScheme.light()
+            : const MyYellowColorScheme.dark(),
+      'zinc' =>
+        brightness == Brightness.light
+            ? const MyZincColorScheme.light()
+            : const MyZincColorScheme.dark(),
 
-  ShadColorScheme.fromJson(Map<String, dynamic> json)
+      _ => throw Exception('Invalid color scheme name'),
+    };
+  }
+
+  MyColorScheme.fromJson(Map<String, dynamic> json)
     : background = json._col('background'),
       foreground = json._col('foreground'),
       card = json._col('card'),
@@ -134,7 +135,7 @@ class ShadColorScheme {
               .firstOrNull ??
           Brightness.light;
 
-  ShadColorScheme.fromColors({
+  MyColorScheme.fromColors({
     required Map<String, Color> colors,
     required Brightness brightness,
   }) : this(
@@ -254,9 +255,9 @@ class ShadColorScheme {
     };
   }
 
-  /// Creates a copy of this [ShadColorScheme] but with the given fields
+  /// Creates a copy of this [MyColorScheme] but with the given fields
   /// replaced with the new values.
-  ShadColorScheme copyWith({
+  MyColorScheme copyWith({
     Brightness? brightness,
     Color? background,
     Color? foreground,
@@ -284,7 +285,7 @@ class ShadColorScheme {
     Color? chart4,
     Color? chart5,
   }) {
-    return ShadColorScheme(
+    return MyColorScheme(
       brightness: brightness ?? this.brightness,
       background: background ?? this.background,
       foreground: foreground ?? this.foreground,
@@ -315,8 +316,8 @@ class ShadColorScheme {
     );
   }
 
-  static ShadColorScheme lerp(ShadColorScheme a, ShadColorScheme b, double t) {
-    return ShadColorScheme(
+  static MyColorScheme lerp(MyColorScheme a, MyColorScheme b, double t) {
+    return MyColorScheme(
       brightness: t < 0.5 ? a.brightness : b.brightness,
       background: Color.lerp(a.background, b.background, t)!,
       foreground: Color.lerp(a.foreground, b.foreground, t)!,
@@ -354,7 +355,7 @@ class ShadColorScheme {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is ShadColorScheme &&
+    return other is MyColorScheme &&
         runtimeType == other.runtimeType &&
         brightness == other.brightness &&
         other.background == background &&

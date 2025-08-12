@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:shadcn_ui/src/theme/color_scheme/base.dart';
+import '../my_color_scheme.dart';
 
 @immutable
-class ShadOrangeColorScheme extends ShadColorScheme {
-  const ShadOrangeColorScheme({
+class MyOrangeColorScheme extends MyColorScheme {
+  const MyOrangeColorScheme({
+    required super.brightness,
     required super.background,
     required super.foreground,
     required super.card,
@@ -25,9 +25,15 @@ class ShadOrangeColorScheme extends ShadColorScheme {
     required super.input,
     required super.ring,
     required super.selection,
+    required super.chart1,
+    required super.chart2,
+    required super.chart3,
+    required super.chart4,
+    required super.chart5,
   });
 
-  const ShadOrangeColorScheme.light({
+  const MyOrangeColorScheme.light({
+    super.brightness = Brightness.light,
     super.background = const Color(0xffffffff),
     super.foreground = const Color(0xff0c0a09),
     super.card = const Color(0xffffffff),
@@ -48,9 +54,15 @@ class ShadOrangeColorScheme extends ShadColorScheme {
     super.input = const Color(0xffe7e5e4),
     super.ring = const Color(0xfff97316),
     super.selection = const Color(0xFFB4D7FF),
+    super.chart1 = const Color(0xFFE76E4F),
+    super.chart2 = const Color(0xFF299D8F),
+    super.chart3 = const Color(0xFF264753),
+    super.chart4 = const Color(0xFFE8C468),
+    super.chart5 = const Color(0xFFF4A361),
   });
 
-  const ShadOrangeColorScheme.dark({
+  const MyOrangeColorScheme.dark({
+    super.brightness = Brightness.dark,
     super.background = const Color(0xff0c0a09),
     super.foreground = const Color(0xfffafaf9),
     super.card = const Color(0xff0c0a09),
@@ -71,5 +83,10 @@ class ShadOrangeColorScheme extends ShadColorScheme {
     super.input = const Color(0xff292524),
     super.ring = const Color(0xffea580c),
     super.selection = const Color(0xFF355172),
+    super.chart1 = const Color(0xFF2661D8),
+    super.chart2 = const Color(0xFF2DB789),
+    super.chart3 = const Color(0xFFE88C30),
+    super.chart4 = const Color(0xFFAF56DB),
+    super.chart5 = const Color(0xFFE2366F),
   });
 }
