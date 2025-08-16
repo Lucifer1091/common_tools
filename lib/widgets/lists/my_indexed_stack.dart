@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../layout/no_widget.dart';
 
-/// A custom IndexedStack implementation with optional fade transition
-/// and page caching logic controlled by [MyIndexedStackController].
+/// A custom [IndexedStack] implementation with optional fade transition
+/// and page caching logic controlled by optional [MyIndexedStackController].
 ///
 /// Unlike a regular [IndexedStack], this widget:
 /// - Can animate between index changes using a fade effect.
@@ -16,12 +16,9 @@ import '../layout/no_widget.dart';
 /// This is useful for scenarios such as tab navigation with heavy
 /// child widgets that should not all be built at once.
 class MyIndexedStack extends StatefulWidget {
-  /// Creates a [MyIndexedStack].
-  ///
-  /// The [index], [controller], and [children] parameters are required.
   const MyIndexedStack({
-    required this.index,
     required this.children,
+    this.index,
     this.controller,
     super.key,
     this.animate = true,
@@ -30,57 +27,19 @@ class MyIndexedStack extends StatefulWidget {
     this.textDirection,
     this.clipBehavior = Clip.hardEdge,
     this.fit = StackFit.loose,
-  });
+  }) : assert(
+         index != null || controller != null,
+         'Either index or controller must be provided to switch between pages.',
+       );
 
-  /// An optional controller that manages the state and behavior of the [MyIndexedStack].
-  ///
-  /// If provided, this controller can be used to programmatically change the
-  /// currently displayed child or listen for index changes within the stack.
-  final MyIndexedStackController? controller;
-
-  /// How to align the non-positioned and partially-positioned children in the
-  /// stack.
-  ///
-  /// Defaults to [AlignmentDirectional.topStart].
-  ///
-  /// See [Stack.alignment] for more information.
-  final AlignmentGeometry alignment;
-
-  /// The text direction with which to resolve [alignment].
-  ///
-  /// Defaults to the ambient [Directionality].
-  final TextDirection? textDirection;
-
-  /// {@macro flutter.material.Material.clipBehavior}
-  ///
-  /// Defaults to [Clip.hardEdge].
-  final Clip clipBehavior;
-
-  /// How to size the non-positioned children in the stack.
-  ///
-  /// Defaults to [StackFit.loose].
-  ///
-  /// See [Stack.fit] for more information.
-  final StackFit fit;
-
-  /// The index of the child to show.
-  ///
-  /// If this is null, none of the children will be shown.
   final int? index;
-
-  /// The child widgets of the stack.
-  ///
-  /// Only the child at index [index] will be shown.
-  ///
-  /// See [Stack.children] for more information.
+  final MyIndexedStackController? controller;
   final List<Widget> children;
-
-  /// The duration for the fade animation.
-  ///
-  /// Defaults to 250 milliseconds.
+  final AlignmentGeometry alignment;
+  final TextDirection? textDirection;
+  final Clip clipBehavior;
+  final StackFit fit;
   final Duration duration;
-
-  /// Whether to animate index changes with a fade transition.
   final bool animate;
 
   @override
@@ -91,10 +50,17 @@ class _MyIndexedStackState extends State<MyIndexedStack>
     with SingleTickerProviderStateMixin {
   late final MyIndexedStackController _controller;
   late final AnimationController _animation;
+  late bool _internal;
 
   @override
   void initState() {
-    _controller = widget.controller ?? MyIndexedStackController();
+    _internal = widget.controller == null;
+    _controller =
+        widget.controller ??
+        MyIndexedStackController(
+          initialIndex: widget.index ?? 0,
+          totalPages: widget.children.length,
+        );
     _animation = AnimationController(vsync: this, duration: widget.duration);
     _animation.forward();
     super.initState();
@@ -102,24 +68,41 @@ class _MyIndexedStackState extends State<MyIndexedStack>
 
   @override
   void didUpdateWidget(MyIndexedStack oldWidget) {
-    if (widget.index != oldWidget.index) {
-      _animation.forward(from: 0);
-    }
     super.didUpdateWidget(oldWidget);
+
+    // If controller changed, update listener
+    if (widget.controller != oldWidget.controller) {
+      if (_internal) _controller.dispose();
+
+      _internal = widget.controller == null;
+      _controller =
+          widget.controller ??
+          MyIndexedStackController(
+            initialIndex: widget.index ?? 0,
+            totalPages: widget.children.length,
+          );
+    }
+
+    // Animate if index changes
+    if (widget.index != oldWidget.index && widget.animate) {
+      _animation.forward(from: 0);
+      if (widget.index != null) _controller.jumpTo(widget.index!);
+    } else if (widget.index != oldWidget.index && widget.index != null) {
+      _controller.jumpTo(widget.index!);
+    }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final currentIndex = _controller.currentIndex;
+  List<Widget> get children {
+    final currentIndex = widget.index ?? _controller.currentIndex;
     final loadedIndexes = _controller.loadedIndexes;
-    final visibleChildren = List<Widget>.filled(
+    final children = List<Widget>.filled(
       widget.children.length,
       const NoWidget(),
     );
 
     for (final i in loadedIndexes) {
-      if (i < widget.children.length) {
-        visibleChildren[i] = KeyedSubtree(
+      if (i >= 0 && i < widget.children.length) {
+        children[i] = KeyedSubtree(
           key: ValueKey('lc$i'),
           child: TickerMode(
             enabled: i == currentIndex,
@@ -129,13 +112,30 @@ class _MyIndexedStackState extends State<MyIndexedStack>
       }
     }
 
-    final stack = IndexedStack(
-      index: currentIndex,
-      alignment: widget.alignment,
-      clipBehavior: widget.clipBehavior,
-      textDirection: widget.textDirection,
-      sizing: widget.fit,
-      children: visibleChildren,
+    return children;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final stack = ListenableBuilder(
+      listenable: _controller,
+      builder: (context, _) {
+        // Safe Index Check
+        final currentIndex = widget.index ?? _controller.currentIndex;
+        final safeIndex =
+            (currentIndex >= 0 && currentIndex < widget.children.length)
+                ? currentIndex
+                : 0;
+
+        return IndexedStack(
+          index: safeIndex,
+          alignment: widget.alignment,
+          clipBehavior: widget.clipBehavior,
+          textDirection: widget.textDirection,
+          sizing: widget.fit,
+          children: children,
+        );
+      },
     );
 
     if (widget.animate) {
@@ -148,20 +148,34 @@ class _MyIndexedStackState extends State<MyIndexedStack>
   @override
   void dispose() {
     _animation.dispose();
-    _controller.dispose();
+    if (_internal) _controller.dispose();
     super.dispose();
   }
 }
 
-class MyIndexedStackController extends Listenable with WidgetsBindingObserver {
+class MyIndexedStackController extends ChangeNotifier
+    with WidgetsBindingObserver {
   MyIndexedStackController({
     int initialIndex = 0,
     this.preloadIndexes = const [],
     this.disposeUnused = false,
+    this.totalPages,
     this.maxCachedPages = 3,
     this.removableIndexes = const [],
     this.isListenMemoryPressure = false,
   }) : _currentIndex = initialIndex {
+    //
+    // Check for conflicting indexes
+    final conflictingIndexes = preloadIndexes.toSet().intersection(
+      removableIndexes.toSet(),
+    );
+    if (conflictingIndexes.isNotEmpty) {
+      debugPrint(
+        '[MyIndexedStack] Warning: The same index is in both preloadIndexes and removableIndexes. '
+        'It will be preloaded initially but disposed when not visible. Conflicting indexes: $conflictingIndexes',
+      );
+    }
+
     _markAsUsed(initialIndex);
 
     preloadIndexes.forEach(_markAsUsed);
@@ -171,9 +185,8 @@ class MyIndexedStackController extends Listenable with WidgetsBindingObserver {
     }
   }
 
-  final List<VoidCallback> _listeners = [];
-
   int _currentIndex;
+  final int? totalPages;
   final int maxCachedPages;
   final List<int> preloadIndexes;
   final bool disposeUnused;
@@ -182,29 +195,11 @@ class MyIndexedStackController extends Listenable with WidgetsBindingObserver {
 
   final LinkedHashMap<int, bool> _loadedPages = LinkedHashMap<int, bool>();
 
-  // Listenable implementation
-  @override
-  void addListener(VoidCallback listener) {
-    _listeners.add(listener);
-  }
-
-  @override
-  void removeListener(VoidCallback listener) {
-    _listeners.remove(listener);
-  }
-
-  void _notifyListeners() {
-    for (final listener in List<VoidCallback>.from(_listeners)) {
-      listener();
-    }
-  }
-
   Set<int> get loadedIndexes => _loadedPages.keys.toSet();
   int get currentIndex => _currentIndex;
   bool get canGoBack => _currentIndex > 0;
   bool isLoaded(int index) => _loadedPages.containsKey(index);
 
-  // Memory pressure handler
   @override
   void didHaveMemoryPressure() {
     _removeSpecifiedIndexes();
@@ -222,35 +217,34 @@ class MyIndexedStackController extends Listenable with WidgetsBindingObserver {
       }
     }
 
-    if (changed) {
-      _notifyListeners();
-    }
+    if (changed) notifyListeners();
   }
 
   void _markAsUsed(int index) {
+    if (index < 0) return;
+
     _loadedPages.remove(index);
     _loadedPages[index] = true;
 
-    if (_loadedPages.length > maxCachedPages) {
-      _enforceMaxSize();
-    }
+    if (_loadedPages.length > maxCachedPages) _enforceMaxSize();
   }
 
-  void switchTo(
-    int index,
-    int totalPages,
-    //{bool notify = true}
-  ) {
-    // if (index < 0 || index >= totalPages || index == _currentIndex) return;
+  /// Switch to a given index, only if it's valid.
+  void jumpTo(int index) {
+    if (index < 0 ||
+        (totalPages != null && index >= totalPages!) ||
+        index == _currentIndex) {
+      return;
+    }
 
     _currentIndex = index;
     _markAsUsed(index);
-    _notifyListeners();
+    notifyListeners();
 
     if (disposeUnused) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _enforceMaxSize();
-        _notifyListeners();
+        notifyListeners();
       });
     }
   }
@@ -277,7 +271,7 @@ class MyIndexedStackController extends Listenable with WidgetsBindingObserver {
     _loadedPages.clear();
     _markAsUsed(_currentIndex);
     preloadIndexes.forEach(_markAsUsed);
-    _notifyListeners();
+    notifyListeners();
   }
 
   void disposePage(int index) {
@@ -285,9 +279,7 @@ class MyIndexedStackController extends Listenable with WidgetsBindingObserver {
       return;
     }
 
-    if (_loadedPages.remove(index) != null) {
-      _notifyListeners();
-    }
+    if (_loadedPages.remove(index) != null) notifyListeners();
   }
 
   void disposePages(List<int> indexes) {
@@ -301,28 +293,33 @@ class MyIndexedStackController extends Listenable with WidgetsBindingObserver {
       }
     }
 
-    if (changed) {
-      _notifyListeners();
-    }
+    if (changed) notifyListeners();
   }
 
-  void preloadPage(int index, int totalPages) {
-    if (index < 0 || index >= totalPages || _loadedPages.containsKey(index)) {
+  void preloadPage(int index) {
+    if (index < 0 ||
+        (totalPages != null && index >= totalPages!) ||
+        _loadedPages.containsKey(index)) {
       return;
     }
 
     _markAsUsed(index);
-    _notifyListeners();
+    notifyListeners();
   }
 
-  void preloadAdjacentPages(int totalPages, [int range = 1]) {
+  void preloadAdjacentPages([int range = 1]) {
+    if (totalPages == null) {
+      debugPrint('Total pages are required to preload adjacent pages.');
+      return;
+    }
+
     bool changed = false;
 
     for (int i = 1; i <= range; i++) {
       final nextIndex = _currentIndex + i;
       final prevIndex = _currentIndex - i;
 
-      if (nextIndex < totalPages && !_loadedPages.containsKey(nextIndex)) {
+      if (nextIndex < totalPages! && !_loadedPages.containsKey(nextIndex)) {
         _markAsUsed(nextIndex);
         changed = true;
       }
@@ -333,16 +330,15 @@ class MyIndexedStackController extends Listenable with WidgetsBindingObserver {
       }
     }
 
-    if (changed) {
-      _notifyListeners();
-    }
+    if (changed) notifyListeners();
   }
 
+  @override
   void dispose() {
     _loadedPages.clear();
-    _listeners.clear();
     if (isListenMemoryPressure) {
       WidgetsBinding.instance.removeObserver(this);
     }
+    super.dispose();
   }
 }

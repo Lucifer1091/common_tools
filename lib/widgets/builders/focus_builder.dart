@@ -1,15 +1,12 @@
 import 'package:flutter/widgets.dart';
 
-typedef FocusWidgetBuilder = Widget Function(
-  BuildContext context,
-  bool focused,
-  Widget? child,
-);
+typedef FocusWidgetBuilder =
+    Widget Function(BuildContext context, bool focused, Widget? child);
 
 class FocusBuilder extends StatefulWidget {
   const FocusBuilder({
-    super.key,
     required this.builder,
+    super.key,
     this.focusNode,
     this.canRequestFocus = true,
     this.autofocus = false,
@@ -83,8 +80,8 @@ class _FocusBuilderState extends State<FocusBuilder> {
       debugLabel: widget.debugLabel,
       child: ValueListenableBuilder(
         valueListenable: isFocused,
-        builder: (context, value, child) =>
-            widget.builder(context, value, child),
+        builder:
+            (context, value, child) => widget.builder(context, value, child),
         child: widget.child,
       ),
     );

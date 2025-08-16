@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'adaptive_ui.dart';
 
-/// AdaptiveWidget : Widget that adapts to the screen size by creating multiple widgets for different screen sizes.
-/// It has breakpoints for small mobile, medium mobile, large mobile, small tablet and large tablet.
+/// AdaptiveWidget : Widget that adapts to the screen size by creating multiple
+/// widgets for different screen sizes.
+/// It has breakpoints for small mobile, medium mobile, large mobile, small
+/// tablet and large tablet.
 /// These breakpoints are based on the smallest width of the screen.
 abstract class AdaptiveWidget extends StatelessWidget {
   const AdaptiveWidget({super.key});
