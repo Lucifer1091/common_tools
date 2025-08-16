@@ -377,7 +377,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(6),
-                    boxShadow: BoxShadows.middle,
+                    boxShadow: MyBoxShadows.middle,
                   ),
                   child: Row(
                     children: [

@@ -271,7 +271,7 @@ class _TDBottomTabBarState extends State<TDBottomTabBar> {
                           ),
                     )
                     : null,
-            boxShadow: isCapsuleOutlineType ? BoxShadows.top : null,
+            boxShadow: isCapsuleOutlineType ? MyBoxShadows.top : null,
           ),
           child: Stack(
             alignment: Alignment.center,
@@ -829,7 +829,7 @@ class PopupDialogState extends State<PopupDialog> {
                 height:
                     popUpitemHeight * widget.items.length +
                     (widget.config?.arrowHeight ?? _kArrowHeight),
-                decoration: BoxDecoration(boxShadow: BoxShadows.top),
+                decoration: BoxDecoration(boxShadow: MyBoxShadows.top),
                 child: CustomPaint(
                   painter: PanelWithDownArrow(config: widget.config),
                   child: Container(

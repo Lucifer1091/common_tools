@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
+part of 'constants.dart';
 
-class BoxShadows {
-  const BoxShadows._();
+class MyBoxShadows {
+  const MyBoxShadows._();
 
-  static List<BoxShadow>? all = const [
+  static const all = [
     BoxShadow(
       color: Color(0x0d000000),
       blurRadius: 8,
@@ -24,7 +24,7 @@ class BoxShadows {
     ),
   ];
 
-  static List<BoxShadow>? base = const [
+  static const base = [
     BoxShadow(
       color: Color(0xff0D0000),
       blurRadius: 10,
@@ -45,7 +45,7 @@ class BoxShadows {
     ),
   ];
 
-  static List<BoxShadow>? middle = const [
+  static const middle = [
     BoxShadow(
       color: Color(0xff0d0000),
       blurRadius: 14,
@@ -61,7 +61,7 @@ class BoxShadows {
     BoxShadow(color: Color(0xff1a0000), blurRadius: 5, spreadRadius: -3),
   ];
 
-  static List<BoxShadow>? top = const [
+  static const top = [
     BoxShadow(
       color: Color(0xff0d0000),
       blurRadius: 30,

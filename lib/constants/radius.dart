@@ -1,7 +1,7 @@
-import 'package:flutter/widgets.dart';
+part of 'constants.dart';
 
-class TDRadius {
-  TDRadius._();
+class MyRadius {
+  MyRadius._();
 
   static const double small = 3;
 
@@ -14,16 +14,16 @@ class TDRadius {
   static const double round = 9999;
 }
 
-class TDBorderRadius {
-  TDBorderRadius._();
+class MyBorderRadius {
+  MyBorderRadius._();
 
-  static BorderRadius small = BorderRadius.circular(TDRadius.small);
+  static BorderRadius small = BorderRadius.circular(MyRadius.small);
 
-  static BorderRadius medium = BorderRadius.circular(TDRadius.medium);
+  static BorderRadius medium = BorderRadius.circular(MyRadius.medium);
 
-  static BorderRadius large = BorderRadius.circular(TDRadius.large);
+  static BorderRadius large = BorderRadius.circular(MyRadius.large);
 
-  static BorderRadius extraLarge = BorderRadius.circular(TDRadius.extraLarge);
+  static BorderRadius extraLarge = BorderRadius.circular(MyRadius.extraLarge);
 
-  static BorderRadius round = BorderRadius.circular(TDRadius.round);
+  static BorderRadius round = BorderRadius.circular(MyRadius.round);
 }

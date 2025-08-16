@@ -82,7 +82,7 @@ packages:
     source: hosted
     version: "1.19.1"
   common_tools:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       path: ".."
       relative: true

@@ -12,10 +12,10 @@ class MyUILayer extends StatelessWidget {
     super.key,
     this.child,
     this.builder,
-    this.enableScrollInterception = false,
     this.darkTheme,
     this.themeMode = ThemeMode.system,
     this.enableThemeAnimation = true,
+    this.enableScrollInterception = false,
     this.duration,
   });
 
@@ -31,7 +31,7 @@ class MyUILayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final platformBrightness = MediaQuery.platformBrightnessOf(context);
-    final scaledTheme =
+    final myTheme =
         themeMode == ThemeMode.dark ||
                 (themeMode == ThemeMode.system &&
                     platformBrightness == Brightness.dark)
@@ -41,7 +41,7 @@ class MyUILayer extends StatelessWidget {
     return MyAnimatedTheme(
       enableThemeAnimation: enableThemeAnimation,
       duration: duration ?? kDefaultDuration,
-      data: scaledTheme,
+      data: myTheme,
       child: Builder(
         builder: (context) {
           final theme = MyTheme.of(context);

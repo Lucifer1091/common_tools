@@ -115,27 +115,23 @@ class MyTypography {
 
   /// Custom font family constructor
   factory MyTypography.custom(String fontFamily) {
-    return MyTypography.geist().copyWithFontFamily(fontFamily);
-  }
-
-  /// Helper to replace font family on all text styles
-  MyTypography copyWithFontFamily(String fontFamily) {
-    return MyTypography(
-      displayLarge: displayLarge.copyWith(fontFamily: fontFamily),
-      displayMedium: displayMedium.copyWith(fontFamily: fontFamily),
-      displaySmall: displaySmall.copyWith(fontFamily: fontFamily),
-      headlineLarge: headlineLarge.copyWith(fontFamily: fontFamily),
-      headlineMedium: headlineMedium.copyWith(fontFamily: fontFamily),
-      headlineSmall: headlineSmall.copyWith(fontFamily: fontFamily),
-      titleLarge: titleLarge.copyWith(fontFamily: fontFamily),
-      titleMedium: titleMedium.copyWith(fontFamily: fontFamily),
-      titleSmall: titleSmall.copyWith(fontFamily: fontFamily),
-      bodyLarge: bodyLarge.copyWith(fontFamily: fontFamily),
-      bodyMedium: bodyMedium.copyWith(fontFamily: fontFamily),
-      bodySmall: bodySmall.copyWith(fontFamily: fontFamily),
-      labelLarge: labelLarge.copyWith(fontFamily: fontFamily),
-      labelMedium: labelMedium.copyWith(fontFamily: fontFamily),
-      labelSmall: labelSmall.copyWith(fontFamily: fontFamily),
+    final base = MyTypography.geist();
+    return base.copyWith(
+      displayLarge: base.displayLarge.copyWith(fontFamily: fontFamily),
+      displayMedium: base.displayMedium.copyWith(fontFamily: fontFamily),
+      displaySmall: base.displaySmall.copyWith(fontFamily: fontFamily),
+      headlineLarge: base.headlineLarge.copyWith(fontFamily: fontFamily),
+      headlineMedium: base.headlineMedium.copyWith(fontFamily: fontFamily),
+      headlineSmall: base.headlineSmall.copyWith(fontFamily: fontFamily),
+      titleLarge: base.titleLarge.copyWith(fontFamily: fontFamily),
+      titleMedium: base.titleMedium.copyWith(fontFamily: fontFamily),
+      titleSmall: base.titleSmall.copyWith(fontFamily: fontFamily),
+      bodyLarge: base.bodyLarge.copyWith(fontFamily: fontFamily),
+      bodyMedium: base.bodyMedium.copyWith(fontFamily: fontFamily),
+      bodySmall: base.bodySmall.copyWith(fontFamily: fontFamily),
+      labelLarge: base.labelLarge.copyWith(fontFamily: fontFamily),
+      labelMedium: base.labelMedium.copyWith(fontFamily: fontFamily),
+      labelSmall: base.labelSmall.copyWith(fontFamily: fontFamily),
     );
   }
 
@@ -157,6 +153,42 @@ class MyTypography {
       labelLarge: labelLarge.scale(factor),
       labelMedium: labelMedium.scale(factor),
       labelSmall: labelSmall.scale(factor),
+    );
+  }
+
+  MyTypography copyWith({
+    TextStyle? displayLarge,
+    TextStyle? displayMedium,
+    TextStyle? displaySmall,
+    TextStyle? headlineLarge,
+    TextStyle? headlineMedium,
+    TextStyle? headlineSmall,
+    TextStyle? titleLarge,
+    TextStyle? titleMedium,
+    TextStyle? titleSmall,
+    TextStyle? bodyLarge,
+    TextStyle? bodyMedium,
+    TextStyle? bodySmall,
+    TextStyle? labelLarge,
+    TextStyle? labelMedium,
+    TextStyle? labelSmall,
+  }) {
+    return MyTypography(
+      displayLarge: displayLarge ?? this.displayLarge,
+      displayMedium: displayMedium ?? this.displayMedium,
+      displaySmall: displaySmall ?? this.displaySmall,
+      headlineLarge: headlineLarge ?? this.headlineLarge,
+      headlineMedium: headlineMedium ?? this.headlineMedium,
+      headlineSmall: headlineSmall ?? this.headlineSmall,
+      titleLarge: titleLarge ?? this.titleLarge,
+      titleMedium: titleMedium ?? this.titleMedium,
+      titleSmall: titleSmall ?? this.titleSmall,
+      bodyLarge: bodyLarge ?? this.bodyLarge,
+      bodyMedium: bodyMedium ?? this.bodyMedium,
+      bodySmall: bodySmall ?? this.bodySmall,
+      labelLarge: labelLarge ?? this.labelLarge,
+      labelMedium: labelMedium ?? this.labelMedium,
+      labelSmall: labelSmall ?? this.labelSmall,
     );
   }
 

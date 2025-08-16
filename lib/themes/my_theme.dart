@@ -69,6 +69,7 @@ class MyTheme extends InheritedTheme {
   Widget wrap(BuildContext context, Widget child) {
     final MyTheme? ancestorTheme =
         context.findAncestorWidgetOfExactType<MyTheme>();
+
     return identical(this, ancestorTheme)
         ? child
         : MyTheme(data: data, child: child);
@@ -86,9 +87,8 @@ class MyThemeDataTween extends Tween<MyThemeData> {
 
   @override
   MyThemeData lerp(double t) {
-    if (end == null) {
-      return begin!;
-    }
+    if (end == null) return begin!;
+
     return MyThemeData.lerp(begin!, end!, t);
   }
 }
