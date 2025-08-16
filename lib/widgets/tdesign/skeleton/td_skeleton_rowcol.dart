@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../common_tools.dart';
+import '../../../index.dart';
 
 class TDSkeletonRowColStyle {
   const TDSkeletonRowColStyle({this.rowSpacing = _defaultRowSpacing});

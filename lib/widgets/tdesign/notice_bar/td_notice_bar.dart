@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../../extensions/extensions.dart';
 import '../../../extensions/generic/index.dart';
+import '../../../index.dart';
 import '../text/td_text.dart';
 import 'td_notice_bar_style.dart';
 

@@ -1,4 +1,4 @@
-part of 'utilities.dart';
+import 'dart:math';
 
 /// A utility class for generating random UUID and ULID strings.
 ///

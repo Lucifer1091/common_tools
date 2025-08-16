@@ -1,8 +1,6 @@
 import 'dart:collection';
 
-import '../../constants/constants.dart';
-import '../../data_types/stack.dart';
-import 'index.dart';
+import '../../index.dart';
 
 extension IterableSanitizers2<T> on Iterable<T> {
   Iterable<T> sortByAsc<E extends Comparable<E>>(E Function(T) selector) =>

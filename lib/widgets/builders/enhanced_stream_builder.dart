@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import '../../common_tools.dart';
+import '../../index.dart';
 
 class EnhancedStreamBuilder<T> extends StatelessWidget {
   const EnhancedStreamBuilder({

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../common_tools.dart';
+import '../../../index.dart';
 import '../text/td_text.dart';
 
 enum TDResultTheme { defaultTheme, success, warning, error }

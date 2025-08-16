@@ -2,7 +2,7 @@ import 'dart:ui' as ui show TextHeightBehavior;
 
 import 'package:flutter/material.dart';
 
-import '../../../common_tools.dart';
+import '../../../index.dart';
 
 class TDText extends StatelessWidget {
   const TDText(

@@ -1,4 +1,7 @@
-part of 'constants.dart';
+import 'package:flutter/material.dart';
+import 'package:form_field_validator/form_field_validator.dart';
+
+import '../index.dart';
 
 /// A utility class for validating common input fields such as email and password.
 ///
@@ -23,12 +26,10 @@ class Validators {
   ///   print(result); // Prints error message if invalid
   /// }
   /// ```
-  static final email = MultiValidator(
-    [
-      minMax(title: 'Email / User Name', min: 4, max: 100),
-      EmailValidator(errorText: 'Enter a valid email address.'),
-    ],
-  );
+  static final email = MultiValidator([
+    minMax(title: 'Email / User Name', min: 4),
+    EmailValidator(errorText: 'Enter a valid email address.'),
+  ]);
 
   /// Validates passwords.
   ///
@@ -45,15 +46,13 @@ class Validators {
   ///   print(result); // Prints error message if invalid
   /// }
   /// ```
-  static final password = MultiValidator(
-    [
-      minMax(title: 'Password', min: 8, max: 25),
-      PatternValidator(
-        r'(?=.*?[#?!@$%^&*-])',
-        errorText: 'Password must have at least one special character.',
-      )
-    ],
-  );
+  static final password = MultiValidator([
+    minMax(title: 'Password', min: 8, max: 25),
+    PatternValidator(
+      r'(?=.*?[#?!@$%^&*-])',
+      errorText: 'Password must have at least one special character.',
+    ),
+  ]);
 
   /// Validates that the input length is within the specified range.
   ///
@@ -74,12 +73,11 @@ class Validators {
     required String title,
     int min = 0,
     int max = 100,
-  }) =>
-      RangeValidator(
-        min: min,
-        max: max,
-        errorText: '$title must be between $min to $max.',
-      );
+  }) => RangeValidator(
+    min: min,
+    max: max,
+    errorText: '$title must be between $min to $max.',
+  );
 
   /// Validates that the input length is within the specified minimum and maximum.
   ///
@@ -100,11 +98,10 @@ class Validators {
     required String title,
     int min = 0,
     int max = 100,
-  }) =>
-      MultiValidator([
-        Validators.min(title: title, min: min),
-        Validators.max(title: title, max: max),
-      ]);
+  }) => MultiValidator([
+    Validators.min(title: title, min: min),
+    Validators.max(title: title, max: max),
+  ]);
 
   /// Validates that the input length does not exceed the specified maximum.
   ///
@@ -149,9 +146,8 @@ class Validators {
 
 /// A validator class for ensuring two values are not the same.
 class UnMatchValidator {
-  final String errorText;
-
   UnMatchValidator({required this.errorText});
+  final String errorText;
 
   /// Validates that two string values are not the same.
   ///
@@ -172,9 +168,8 @@ class UnMatchValidator {
 
 /// A validator class for validating dates and date ranges.
 class DateValidatorX {
-  final String errorText;
-
   DateValidatorX({required this.errorText});
+  final String errorText;
 
   /// Validates that the start date is after the end date.
   ///
@@ -198,7 +193,7 @@ class DateValidatorX {
     if (start.isAfter(end)) return errorText;
 
     if (checkEndDate && end.isBefore(DateTime.now())) {
-      return "Invalid date time because time is already passed";
+      return 'Invalid date time because time is already passed';
     }
 
     return null;
@@ -247,7 +242,7 @@ class DateValidatorX {
   }) {
     if (firstRange == null || endDate == null) return null;
 
-    DateTime? end = endDate.toDateTime(format: pattern);
+    final DateTime? end = endDate.toDateTime(format: pattern);
 
     if (end == null) return null;
 
@@ -256,8 +251,8 @@ class DateValidatorX {
     }
 
     if (checkDayCount) {
-      int firstDayCount = firstRange.duration.inDays;
-      int endDateCount = end.difference(firstRange.start).inDays;
+      final int firstDayCount = firstRange.duration.inDays;
+      final int endDateCount = end.difference(firstRange.start).inDays;
 
       if (firstDayCount != endDateCount) {
         return 'The day counts in the ranges must be the same.';
@@ -287,8 +282,8 @@ class DateValidatorX {
     if (firstRange == null || secondRange == null) return null;
 
     if (checkDayCount) {
-      int firstDayCount = firstRange.duration.inDays;
-      int secondDayCount = secondRange.duration.inDays;
+      final int firstDayCount = firstRange.duration.inDays;
+      final int secondDayCount = secondRange.duration.inDays;
 
       if (firstDayCount != secondDayCount) {
         return 'The day counts in the ranges must be the same.';
@@ -310,9 +305,8 @@ class DateValidatorX {
 
 /// A validator class for validating threshold values.
 class ThresholdValidator {
-  final String errorText;
-
   ThresholdValidator({required this.errorText});
+  final String errorText;
 
   /// Validates that the minimum threshold value is not greater than the maximum threshold value.
   ///
@@ -324,10 +318,7 @@ class ThresholdValidator {
   ///     .minValidator(min: "5", max: "3");
   /// print(result); // Prints: Threshold Min cannot be greater then Threshold Max.
   /// ```
-  String? minValidator({
-    String? min,
-    String? max,
-  }) {
+  String? minValidator({String? min, String? max}) {
     if (min == null || max == null) return null;
 
     if (num.parse(min) > num.parse(max)) {
@@ -347,10 +338,7 @@ class ThresholdValidator {
   ///     .maxValidator(min: "3", max: "5");
   /// print(result); // Prints: null (no error)
   /// ```
-  String? maxValidator({
-    String? min,
-    String? max,
-  }) {
+  String? maxValidator({String? min, String? max}) {
     if (min == null || max == null) return null;
 
     if (num.parse(min) > num.parse(max)) {

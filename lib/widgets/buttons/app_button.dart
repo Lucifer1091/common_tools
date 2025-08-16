@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../common_tools.dart';
+import '../../index.dart';
 
 Color appButtonBackgroundColorGlobal = Colors.white;
 Color defaultAppButtonTextColorGlobal = Colors.black;

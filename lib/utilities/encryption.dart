@@ -1,4 +1,4 @@
-part of 'utilities.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
 
 /// Utility class for encrypting and decrypting data using AES encryption.
 ///
@@ -15,11 +15,13 @@ class Encryptor {
     String? rawIv,
   }) {
     final key = encrypt.Key.fromUtf8(rawKey);
-    final iv = rawIv != null
-        ? encrypt.IV.fromBase64(rawIv)
-        : encrypt.IV.fromLength(16);
-    final encrypted =
-        encrypt.Encrypter(encrypt.AES(key)).encrypt(plainText, iv: iv);
+    final iv =
+        rawIv != null
+            ? encrypt.IV.fromBase64(rawIv)
+            : encrypt.IV.fromLength(16);
+    final encrypted = encrypt.Encrypter(
+      encrypt.AES(key),
+    ).encrypt(plainText, iv: iv);
     return encrypted;
   }
 
@@ -32,11 +34,13 @@ class Encryptor {
     String? rawIv,
   }) {
     final key = encrypt.Key.fromUtf8(rawKey);
-    final iv = rawIv != null
-        ? encrypt.IV.fromBase64(rawIv)
-        : encrypt.IV.fromLength(16);
-    final decrypted =
-        encrypt.Encrypter(encrypt.AES(key)).decrypt64(encoded, iv: iv);
+    final iv =
+        rawIv != null
+            ? encrypt.IV.fromBase64(rawIv)
+            : encrypt.IV.fromLength(16);
+    final decrypted = encrypt.Encrypter(
+      encrypt.AES(key),
+    ).decrypt64(encoded, iv: iv);
     return decrypted;
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../common_tools.dart';
+import '../../../index.dart';
 import '../sidebar/td_sidebar.dart';
 import '../sidebar/td_sidebar_item.dart';
 import '../text/td_text.dart';

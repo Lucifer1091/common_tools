@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../common_tools.dart';
+import '../../../index.dart';
 import 'td_progress_circular.dart';
 
 enum TDProgressType { linear, circular, micro, button }

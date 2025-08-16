@@ -1,4 +1,8 @@
-part of 'utilities.dart';
+import 'dart:math';
+
+import 'package:flutter/material.dart';
+
+import '../index.dart';
 
 enum ImageSet { any, set1, set2, set3, set4, set5 }
 

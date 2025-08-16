@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import '../../constants/constants.dart';
-import 'index.dart';
+import '../../index.dart';
 
 extension BigIntIterableExtension on Iterable<BigInt>? {
   /// Returns max value of values.

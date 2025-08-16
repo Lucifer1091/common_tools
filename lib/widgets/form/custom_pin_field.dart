@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pinput/pinput.dart';
 
-import '../../common_tools.dart';
+import '../../index.dart';
 import '../layout/spaces.dart';
 import 'text_form_field.dart';
 

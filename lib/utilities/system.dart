@@ -1,6 +1,11 @@
 // ignore_for_file: unnecessary_await_in_return, type_annotate_public_apis, inference_failure_on_instance_creation
 
-part of 'utilities.dart';
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import '../index.dart';
 
 /// Utility class for system-level operations in a Flutter application.
 ///
@@ -36,7 +41,8 @@ class System {
         statusBarColor: statusBarColor,
         systemNavigationBarColor: systemNavigationBarColor,
         statusBarBrightness: statusBarBrightness,
-        statusBarIconBrightness: statusBarIconBrightness ??
+        statusBarIconBrightness:
+            statusBarIconBrightness ??
             (statusBarColor.isDark ? Brightness.light : Brightness.dark),
       ),
     );

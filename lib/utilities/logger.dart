@@ -1,4 +1,4 @@
-part of 'utilities.dart';
+import 'package:logger/logger.dart' as logger;
 
 late logger.Logger _logger, _logger5, _logger10;
 
@@ -12,14 +12,8 @@ class Logger {
   Logger._();
 
   static void configure() {
-    _logger = logger.Logger(
-      printer: logger.PrettyPrinter(methodCount: 0),
-    );
-    _logger5 = logger.Logger(
-      printer: logger.PrettyPrinter(methodCount: 5),
-    );
-    _logger10 = logger.Logger(
-      printer: logger.PrettyPrinter(methodCount: 10),
-    );
+    _logger = logger.Logger(printer: logger.PrettyPrinter(methodCount: 0));
+    _logger5 = logger.Logger(printer: logger.PrettyPrinter(methodCount: 5));
+    _logger10 = logger.Logger(printer: logger.PrettyPrinter(methodCount: 10));
   }
 }

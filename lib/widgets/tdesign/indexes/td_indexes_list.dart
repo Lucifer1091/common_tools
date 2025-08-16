@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-import '../../../common_tools.dart';
+import '../../../index.dart';
 import '../text/td_text.dart';
 
 class TDIndexesList extends StatefulWidget {

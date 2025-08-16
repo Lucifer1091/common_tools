@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../common_tools.dart';
+import '../../index.dart';
 import '../layout/spaces.dart';
 
 /// Widget that draw a beautiful checkbox rounded. Provided with animation if wanted

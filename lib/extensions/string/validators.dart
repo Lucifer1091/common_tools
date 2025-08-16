@@ -1,7 +1,6 @@
 import 'dart:convert';
 
-import '../../constants/constants.dart';
-import 'index.dart';
+import '../../index.dart';
 
 extension StringValidators on String? {
   /// Checks whether the `String` is `null`.

@@ -1,4 +1,7 @@
-part of 'extensions.dart';
+import 'dart:ui' show ImageFilter;
+
+import 'package:flutter/material.dart';
+import '../../index.dart';
 
 extension WidgetExtensions on Widget {
   RepaintBoundary get repaintBoundary => RepaintBoundary(child: this);

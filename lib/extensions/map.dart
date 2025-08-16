@@ -1,4 +1,9 @@
-part of 'extensions.dart';
+import 'dart:collection';
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+
+import '../../index.dart';
 
 /// Supercharged extensions on [Map].
 extension MapSC<K, V> on Map<K, V> {

@@ -3,12 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
-import '../../../common_tools.dart';
-import '../../layout/responsive.dart';
-import '../../layout/spaces.dart';
-import 'components/scanner_buttons.dart';
-import 'components/scanner_error_widget.dart';
-import 'components/scanner_overlays.dart';
+import '../../../index.dart';
 
 class BarcodeAndQRScanner extends StatefulWidget {
   const BarcodeAndQRScanner({

@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import '../../common_tools.dart';
+import '../../index.dart';
 
 extension NumOperators on num? {
   /// Safely divides two numbers with custom handling for division by zero and zero values.

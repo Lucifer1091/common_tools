@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../common_tools.dart';
+import '../../../index.dart';
 import '../text/td_text.dart';
 
 enum TDBadgeType { redPoint, message, bubble, square, subscript }

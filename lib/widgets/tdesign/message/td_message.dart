@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../common_tools.dart';
+import '../../../index.dart';
 import '../../../constants/shadows.dart';
 import '../../../extensions/generic/scope_functions.dart';
 import '../../layout/no_widget.dart';

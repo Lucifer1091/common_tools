@@ -1,4 +1,4 @@
-import '../../common_tools.dart';
+import '../../index.dart';
 
 extension NumSanitizers on num? {
   /// Swap the sign of the number.

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../../../common_tools.dart';
+import '../../../index.dart';
 import '../../../extensions/iterable/index.dart';
 import '../text/td_text.dart';
 import 'td_swipe_cell_inherited.dart';

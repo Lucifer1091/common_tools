@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../common_tools.dart';
+import '../../../index.dart';
 import '../image/td_image.dart';
 import '../loading/td_loading.dart';
 import '../text/td_text.dart';

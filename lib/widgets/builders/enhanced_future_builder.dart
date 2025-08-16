@@ -3,7 +3,7 @@ import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
 
 import 'package:flutter/widgets.dart';
 
-import '../../common_tools.dart';
+import '../../index.dart';
 
 class FutureOrBuilder<T> extends StatelessWidget {
   const FutureOrBuilder({

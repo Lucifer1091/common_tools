@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../common_tools.dart';
+import '../../../index.dart';
 
 enum TDTagTheme { defaultTheme, primary, warning, danger, success }
 

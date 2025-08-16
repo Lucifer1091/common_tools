@@ -1,4 +1,4 @@
-import '../../common_tools.dart';
+import '../../index.dart';
 import 'index.dart';
 
 extension SanitizerExtensions on String? {
@@ -266,18 +266,20 @@ extension SanitizerExtensions on String? {
   }
 
   /// Trims characters from the left side of the string.
-  String? leftTrim([String? chars]) => isNotBlank
-      ? (chars != null)
-          ? this!.replaceAll(RegExp('^[$chars]+'), '')
-          : this!.replaceAll(RegExp(r'^\s+'), '')
-      : null;
+  String? leftTrim([String? chars]) =>
+      isNotBlank
+          ? (chars != null)
+              ? this!.replaceAll(RegExp('^[$chars]+'), '')
+              : this!.replaceAll(RegExp(r'^\s+'), '')
+          : null;
 
   /// Trims characters from the right side of the string.
-  String? rightTrim([String? chars]) => isNotBlank
-      ? (chars != null)
-          ? this!.replaceAll(RegExp('[$chars]+\$'), '')
-          : this!.replaceAll(RegExp(r'\s+$'), '')
-      : null;
+  String? rightTrim([String? chars]) =>
+      isNotBlank
+          ? (chars != null)
+              ? this!.replaceAll(RegExp('[$chars]+\$'), '')
+              : this!.replaceAll(RegExp(r'\s+$'), '')
+          : null;
 
   /// Removes characters that do not appear in the whitelist.
   String? whitelist(String chars) => this?.replaceAll(RegExp('[^$chars]+'), '');

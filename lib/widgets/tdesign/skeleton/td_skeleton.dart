@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../common_tools.dart';
+import '../../../index.dart';
 import 'td_skeleton_rowcol.dart';
 
 enum TDSkeletonAnimation { gradient, flashed }

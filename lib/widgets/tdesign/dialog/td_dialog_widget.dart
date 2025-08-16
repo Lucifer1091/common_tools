@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../common_tools.dart';
+import '../../../index.dart';
 import '../button/td_button.dart';
 import '../button/td_button_style.dart';
 import '../divider/td_divider.dart';

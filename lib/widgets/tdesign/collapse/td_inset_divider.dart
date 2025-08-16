@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../constants/constants.dart';
+import '../../../constants/theme_colors.dart';
 
 class TDInsetDivider extends StatelessWidget {
   const TDInsetDivider({super.key});

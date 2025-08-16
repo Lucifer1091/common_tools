@@ -1,8 +1,8 @@
-import 'package:common_tools/common_tools.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
+import '../../../../index.dart';
 import '../../../layout/spaces.dart';
 
 class ScannerButton extends StatelessWidget {
@@ -154,10 +154,7 @@ class SwitchCameraButton extends StatelessWidget {
         }
 
         return ScannerButton(
-          icon: Icon(
-            icon,
-            color: const Color(0xFF414249),
-          ),
+          icon: Icon(icon, color: const Color(0xFF414249)),
           buttonColor: const Color(0xFFF0F9FF),
           onPressed: () async => await controller.switchCamera(),
         );
@@ -210,10 +207,7 @@ class ToggleFlashlightButton extends StatelessWidget {
             );
           case TorchState.unavailable:
             return const ScannerButton(
-              icon: Icon(
-                Icons.no_flash_rounded,
-                color: Color(0xFF414249),
-              ),
+              icon: Icon(Icons.no_flash_rounded, color: Color(0xFF414249)),
               buttonColor: Color(0xFFF0F9FF),
             );
         }
@@ -244,10 +238,7 @@ class StartStopMobileScannerButton extends StatelessWidget {
         }
 
         return ScannerButton(
-          icon: const Icon(
-            Icons.stop_rounded,
-            color: Color(0xFF414249),
-          ),
+          icon: const Icon(Icons.stop_rounded, color: Color(0xFF414249)),
           buttonColor: const Color(0xFFF0F9FF),
           onPressed: () async => await controller.stop(),
         );

@@ -1,4 +1,4 @@
-import '../../common_tools.dart';
+import '../../index.dart';
 
 extension DurationTimeExtension on Duration {
   Duration operator +(Duration other) {

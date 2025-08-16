@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../../common_tools.dart';
+import '../../index.dart';
 
 // Use with PageView Widget
 class DotIndicator<T> extends StatefulWidget {

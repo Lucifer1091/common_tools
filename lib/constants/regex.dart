@@ -1,4 +1,4 @@
-part of 'constants.dart';
+import '../index.dart';
 
 class Regex {
   Regex._();

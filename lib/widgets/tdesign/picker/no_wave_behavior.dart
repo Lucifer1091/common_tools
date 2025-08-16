@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-import '../../../utilities/utilities.dart';
+import '../../../index.dart';
 
 class NoWaveBehavior extends ScrollBehavior {
   @override

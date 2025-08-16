@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
-import '../../common_tools.dart';
-import 'index.dart';
+import '../../index.dart';
 
 /// Utility extension methods for the native [Set] class.
 extension SetBasics<T> on Set<T>? {

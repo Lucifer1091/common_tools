@@ -3,7 +3,7 @@ import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../../common_tools.dart';
+import '../../../index.dart';
 
 enum TDStepperSize { small, medium, large }
 

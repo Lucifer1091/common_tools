@@ -1,6 +1,7 @@
-import 'package:common_tools/common_tools.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../../index.dart';
 
 class CustomSwitch extends StatelessWidget {
   final bool enabled;
@@ -36,10 +37,10 @@ class CustomSwitch extends StatelessWidget {
     this.showSpacer = false,
     this.showToggleAfterText = false,
   }) : assert(
-          titleStyle == null || titleColor == null,
-          'Cannot provide both a titleStyle and a titleColor\n'
-          'To provide custom, use "titleStyle: TextStyle()".',
-        );
+         titleStyle == null || titleColor == null,
+         'Cannot provide both a titleStyle and a titleColor\n'
+         'To provide custom, use "titleStyle: TextStyle()".',
+       );
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +64,8 @@ class CustomSwitch extends StatelessWidget {
   Text buildTitleText(BuildContext context) {
     return Text(
       title!,
-      style: titleStyle ??
+      style:
+          titleStyle ??
           context.bodyLarge?.copyWith(
             color: enabled ? titleColor ?? Colors.black : Colors.black,
             fontWeight: FontWeight.w400,
@@ -83,9 +85,6 @@ class CustomSwitch extends StatelessWidget {
     );
   }
 
-  Widget get spacer => showSpacer
-      ? const Spacer()
-      : SizedBox(
-          width: iconTitleSpacing ?? 12,
-        );
+  Widget get spacer =>
+      showSpacer ? const Spacer() : SizedBox(width: iconTitleSpacing ?? 12);
 }

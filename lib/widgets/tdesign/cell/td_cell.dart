@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../common_tools.dart';
+import '../../../index.dart';
 import '../swipe_cell/td_swipe_cell_inherited.dart';
 import '../text/td_text.dart';
 import 'td_cell_inherited.dart';

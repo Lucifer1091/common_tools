@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 
-import '../../../common_tools.dart';
+import '../../../index.dart';
 import '../loading/td_loading.dart';
 import '../text/td_text.dart';
 

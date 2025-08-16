@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
-import '../../common_tools.dart';
+import '../../index.dart';
 
 enum Abbreviation {
   /// Full form.

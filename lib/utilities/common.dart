@@ -1,4 +1,8 @@
-part of 'utilities.dart';
+import 'dart:async';
+import 'dart:math';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 class CommonUtils {
   CommonUtils._();

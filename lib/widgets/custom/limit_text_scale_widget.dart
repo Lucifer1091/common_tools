@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 
-import '../../common_tools.dart';
+import '../../index.dart';
 
 class LimitTextScaleWidget extends StatelessWidget {
   const LimitTextScaleWidget({

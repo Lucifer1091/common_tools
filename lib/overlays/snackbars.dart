@@ -1,4 +1,4 @@
-part of 'overlays.dart';
+import 'package:flutter/material.dart';
 
 /// Basic SnackBars called using [key]
 /// Need to assign the key in Material App
@@ -49,34 +49,40 @@ class SnackBars {
   static void success({required String title, Duration? duration}) async {
     closeAllSnackBars();
 
-    key.currentState?.showSnackBar(_snackBar(
-      title: title,
-      duration: duration,
-      color: Colors.green,
-      icon: Icons.check_circle_outline_rounded,
-    ));
+    key.currentState?.showSnackBar(
+      _snackBar(
+        title: title,
+        duration: duration,
+        color: Colors.green,
+        icon: Icons.check_circle_outline_rounded,
+      ),
+    );
   }
 
   static void error({required String title, Duration? duration}) async {
     closeAllSnackBars();
 
-    key.currentState?.showSnackBar(_snackBar(
-      title: title,
-      duration: duration,
-      color: Colors.red,
-      icon: Icons.warning_amber_rounded,
-    ));
+    key.currentState?.showSnackBar(
+      _snackBar(
+        title: title,
+        duration: duration,
+        color: Colors.red,
+        icon: Icons.warning_amber_rounded,
+      ),
+    );
   }
 
   static void info({required String title, Duration? duration}) async {
     closeAllSnackBars();
 
-    key.currentState?.showSnackBar(_snackBar(
-      title: title,
-      duration: duration,
-      color: Colors.blue,
-      icon: Icons.help_outline_outlined,
-    ));
+    key.currentState?.showSnackBar(
+      _snackBar(
+        title: title,
+        duration: duration,
+        color: Colors.blue,
+        icon: Icons.help_outline_outlined,
+      ),
+    );
   }
 
   static void closeAllSnackBars() {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../common_tools.dart';
+import '../../../index.dart';
 import '../cell/td_cell.dart';
 import '../cell/td_cell_group.dart';
 import '../cell/td_cell_style.dart';

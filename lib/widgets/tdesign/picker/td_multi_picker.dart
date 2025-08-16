@@ -3,7 +3,7 @@ import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
 
 import 'package:flutter/material.dart';
 
-import '../../../common_tools.dart';
+import '../../../index.dart';
 import '../../layout/no_widget.dart';
 import '../text/td_text.dart';
 import 'no_wave_behavior.dart';

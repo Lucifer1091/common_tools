@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import '../../../common_tools.dart';
+import '../../../index.dart';
 import '../../layout/no_widget.dart';
 
 ///封装图片加载控件，增加图片加载失败时加载默认图片

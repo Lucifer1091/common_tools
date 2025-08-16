@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../common_tools.dart';
+import '../../index.dart';
 
 //Widget that allows displaying a search bar with nice animation when expanded/ collapsed state.
 class AnimSearchBar extends StatefulWidget {

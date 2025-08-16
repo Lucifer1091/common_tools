@@ -1,6 +1,5 @@
-// ignore_for_file: discarded_futures
-
-part of 'utilities.dart';
+import 'dart:async';
+import 'dart:math';
 
 final _rnd = Random();
 
@@ -58,9 +57,10 @@ class CancelableRetry<T> {
       if (!_canceled && attempts < maxAttempts && await retryIf(res)) {
         attempts++;
 
-        final delay = _delay = CancelableOperation<void>.fromFuture(
-          Future<void>.delayed(_getDelay(attempts)),
-        );
+        final delay =
+            _delay = CancelableOperation<void>.fromFuture(
+              Future<void>.delayed(_getDelay(attempts)),
+            );
         await delay.valueOrCancellation();
         _delay = null;
         if (delay.isCanceled) break;
@@ -221,8 +221,10 @@ class CancelableOperation<T> {
   /// This is like `value.asStream()`, but if a subscription to the stream is
   /// canceled, this operation is as well.
   Stream<T> asStream() {
-    var controller =
-        StreamController<T>(sync: true, onCancel: _completer._cancel);
+    var controller = StreamController<T>(
+      sync: true,
+      onCancel: _completer._cancel,
+    );
 
     _completer._inner?.future.then(
       (value) {
@@ -249,12 +251,9 @@ class CancelableOperation<T> {
     var completer = Completer<T?>.sync();
     value.then(completer.complete, onError: completer.completeError);
 
-    _completer._cancelCompleter?.future.then(
-      (_) {
-        completer.complete(cancellationValue);
-      },
-      onError: completer.completeError,
-    );
+    _completer._cancelCompleter?.future.then((_) {
+      completer.complete(cancellationValue);
+    }, onError: completer.completeError);
 
     return completer.future;
   }
@@ -292,23 +291,24 @@ class CancelableOperation<T> {
     FutureOr<R> Function(Object, StackTrace)? onError,
     FutureOr<R> Function()? onCancel,
     bool propagateCancel = true,
-  }) =>
-      thenOperation<R>(
-        (value, completer) {
-          completer.complete(onValue(value));
-        },
-        onError: onError == null
+  }) => thenOperation<R>(
+    (value, completer) {
+      completer.complete(onValue(value));
+    },
+    onError:
+        onError == null
             ? null
             : (error, stackTrace, completer) {
-                completer.complete(onError(error, stackTrace));
-              },
-        onCancel: onCancel == null
+              completer.complete(onError(error, stackTrace));
+            },
+    onCancel:
+        onCancel == null
             ? null
             : (completer) {
-                completer.complete(onCancel());
-              },
-        propagateCancel: propagateCancel,
-      );
+              completer.complete(onCancel());
+            },
+    propagateCancel: propagateCancel,
+  );
 
   /// Creates a new cancelable operation to be completed when this operation
   /// completes normally or as an error, or is cancelled.
@@ -343,7 +343,7 @@ class CancelableOperation<T> {
   CancelableOperation<R> thenOperation<R>(
     FutureOr<void> Function(T, CancelableCompleter<R>) onValue, {
     FutureOr<void> Function(Object, StackTrace, CancelableCompleter<R>)?
-        onError,
+    onError,
     FutureOr<void> Function(CancelableCompleter<R>)? onCancel,
     bool propagateCancel = true,
   }) {
@@ -376,19 +376,21 @@ class CancelableOperation<T> {
           completer.completeError(error, stack);
         }
       },
-      onError: onError == null
-          ? completer.completeError // Is ignored if already cancelled.
-          : (Object error, StackTrace stack) async {
-              if (completer.isCanceled) return;
-              try {
-                await onError(error, stack, completer);
-              } catch (error2, stack2) {
-                completer.completeErrorIfPending(
-                  error2,
-                  identical(error, error2) ? stack : stack2,
-                );
-              }
-            },
+      onError:
+          onError == null
+              ? completer
+                  .completeError // Is ignored if already cancelled.
+              : (Object error, StackTrace stack) async {
+                if (completer.isCanceled) return;
+                try {
+                  await onError(error, stack, completer);
+                } catch (error2, stack2) {
+                  completer.completeErrorIfPending(
+                    error2,
+                    identical(error, error2) ? stack : stack2,
+                  );
+                }
+              },
     );
     final cancelForwarder = _CancelForwarder<R>(completer, onCancel);
     if (_completer.isCanceled) {
@@ -433,7 +435,7 @@ class CancelableCompleter<T> {
   ///
   /// The [onCancel] function will be called at most once.
   CancelableCompleter({FutureOr<void> Function()? onCancel})
-      : _onCancel = onCancel;
+    : _onCancel = onCancel;
   // The cancelable completer is in one of the following states:
   // * Initial:
   //      _inner != null
@@ -656,9 +658,10 @@ class CancelableCompleter<T> {
       if (isFuture) toReturn,
       ...?_cancelForwarders?.map(_forward).nonNulls,
     ];
-    final results = (isFuture && cancelFutures.length == 1)
-        ? [await toReturn]
-        : cancelFutures.isNotEmpty
+    final results =
+        (isFuture && cancelFutures.length == 1)
+            ? [await toReturn]
+            : cancelFutures.isNotEmpty
             ? await Future.wait(cancelFutures)
             : List<FutureOr<Object?>>.empty();
     return isFuture ? results.first : toReturn;

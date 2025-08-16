@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as p;
 
-import '../common_tools.dart';
+import '../index.dart';
 
 class FileService {
   FileService._();

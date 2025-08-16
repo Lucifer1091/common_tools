@@ -2,8 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import '../common_tools.dart';
-import '../extensions/iterable/converters.dart';
+import '../index.dart';
 
 class MyColors {
   MyColors._();

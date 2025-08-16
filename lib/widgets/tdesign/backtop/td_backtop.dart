@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../../../constants/constants.dart';
+import '../../../index.dart';
 import '../text/td_text.dart';
 
 enum TDBackTopTheme { light, dark }

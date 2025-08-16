@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../common_tools.dart';
+import '../../index.dart';
 import '../layout/spaces.dart';
 
 class NoteWidget extends StatelessWidget {

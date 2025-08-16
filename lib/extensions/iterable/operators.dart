@@ -2,8 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 
-import '../../common_tools.dart';
-import 'index.dart';
+import '../../index.dart';
 
 extension GenericListExtensions<T> on Iterable<T> {
   /// Returns a new list that contains this list repeated [data] times.

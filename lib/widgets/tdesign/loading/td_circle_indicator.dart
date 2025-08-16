@@ -3,7 +3,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
-import '../../../common_tools.dart';
+import '../../../index.dart';
 
 class TDCircleIndicator extends StatefulWidget {
   const TDCircleIndicator({

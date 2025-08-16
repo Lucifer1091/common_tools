@@ -1,4 +1,4 @@
-import '../../common_tools.dart';
+import '../../index.dart';
 
 /// Common Operations for Iterables with nullable items.
 extension IterableValidators<T> on Iterable<T>? {

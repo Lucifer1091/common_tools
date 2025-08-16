@@ -1,4 +1,6 @@
-part of 'constants.dart';
+import 'dart:math' as math;
+
+import 'package:flutter/services.dart';
 
 typedef Formatters = List<TextInputFormatter>;
 

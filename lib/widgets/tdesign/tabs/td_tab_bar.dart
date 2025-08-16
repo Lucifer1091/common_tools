@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../common_tools.dart';
+import '../../../index.dart';
 import 'td_horizontal_tab_bar.dart';
 import 'td_tab.dart';
 

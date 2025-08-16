@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../../../common_tools.dart';
+import '../../../index.dart';
 import 'flutter_swiper/flutter_swiper.dart';
 
 const _kAminatedDuration = 100;

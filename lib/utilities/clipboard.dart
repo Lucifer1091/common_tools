@@ -1,4 +1,5 @@
-part of 'utilities.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' as service;
 
 /// A utility class for handling clipboard operations.
 ///

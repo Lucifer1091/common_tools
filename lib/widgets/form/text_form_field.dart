@@ -1,8 +1,8 @@
-import 'package:common_tools/common_tools.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
+import '../../index.dart';
 import '../layout/spaces.dart';
 
 class CustomTextFormField extends StatelessWidget {
@@ -196,7 +196,6 @@ class CustomTextFormField extends StatelessWidget {
           controller: controller,
           cursorColor: cursorColor ?? Colors.blue,
           cursorRadius: const Radius.circular(32),
-          cursorWidth: 2,
           decoration: inputDecoration ?? buildInputDecoration(context),
           maxLengthEnforcement: MaxLengthEnforcement.enforced,
           autofocus: autofocus ?? false,
@@ -219,20 +218,18 @@ class CustomTextFormField extends StatelessWidget {
           maxLines: maxLines ?? 1,
           maxLength: maxLength,
           buildCounter:
-              (_, {required currentLength, maxLength, required isFocused}) =>
+              (_, {required currentLength, required isFocused, maxLength}) =>
                   null,
           scrollPadding: const EdgeInsets.all(8),
           textCapitalization: textCapitalization ?? TextCapitalization.words,
           onEditingComplete: onEditingComplete,
           textInputAction: textInputAction,
           inputFormatters: inputFormatters,
-          autovalidateMode: AutovalidateMode.disabled,
-          enableSuggestions: true,
           onSaved: onSave,
           validator: (value) {
             if (isRequired && showValidator) {
               if (value?.trim().isEmpty ?? true) {
-                return '${(requiredErrorMessage ?? labelText)} is required.';
+                return '${requiredErrorMessage ?? labelText} is required.';
               }
 
               if (validator != null) return validator!(value?.trim());

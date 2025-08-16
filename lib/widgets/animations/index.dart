@@ -1,0 +1,12 @@
+export 'anim_search_bar.dart';
+export 'animated_fade_scale.dart';
+export 'animated_text.dart';
+export 'animated_visibility.dart';
+export 'animation_builder.dart';
+export 'api_animator.dart';
+export 'bounce_animation.dart';
+export 'click_translate.dart';
+export 'fade_slide_transition.dart';
+export 'page_route_animation.dart';
+export 'react_on_tap.dart';
+export 'type_writer_animation.dart';

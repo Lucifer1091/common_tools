@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../common_tools.dart';
+import '../../index.dart';
 
 /// Enum for page route
 enum PageRouteAnimation { Fade, Scale, Rotate, Slide, SlideBottomTop }

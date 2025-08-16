@@ -1,4 +1,4 @@
-part of 'utilities.dart';
+import 'package:flutter/services.dart';
 
 /// A utility class for triggering haptic feedback.
 ///

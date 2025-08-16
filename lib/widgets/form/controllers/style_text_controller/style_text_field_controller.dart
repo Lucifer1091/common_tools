@@ -1,4 +1,4 @@
-library style_text_field_controller;
+library;
 
 import 'package:flutter/material.dart';
 

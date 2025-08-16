@@ -1,4 +1,6 @@
-part of 'overlays.dart';
+import 'package:flutter/material.dart';
+
+import '../../index.dart';
 
 /// Enum representing types of bottom sheet dialogs.
 enum BottomSheetDialog { dialog, bottomSheet }

@@ -1,4 +1,6 @@
-part of 'overlays.dart';
+import 'package:flutter/material.dart';
+
+import '../../index.dart';
 
 /// Enum for Dialog Type
 enum DialogType { confirmation, accept, delete, update, add, retry }
@@ -11,16 +13,13 @@ enum DialogAnimation {
   slideBottomTop,
   slideLeftRight,
   slideRightLeft,
-  scale
+  scale,
 }
 
 class Dialogs {
   Dialogs._();
 
-  static Future<T?> show<T>(
-    BuildContext context, {
-    required Widget content,
-  }) =>
+  static Future<T?> show<T>(BuildContext context, {required Widget content}) =>
       showDialog<T>(
         context: context,
         barrierDismissible: false,
@@ -34,11 +33,11 @@ class Dialogs {
     VoidCallback? onConfirm,
     VoidCallback? onCancel,
     bool showCloseButton = false,
-  }) =>
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) => AlertDialog(
+  }) => showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder:
+        (BuildContext context) => AlertDialog(
           title: Text(title ?? 'Failed'),
           content: Text(msg ?? 'Something went wrong. Please try again later.'),
           actions: [
@@ -54,7 +53,7 @@ class Dialogs {
               ),
           ],
         ),
-      );
+  );
 
   /// dialog primary color
   Color getDialogPrimaryColor(
@@ -157,8 +156,11 @@ class Dialogs {
       case DialogType.confirmation:
         widget = Container(
           decoration: BoxDecoration(
-            color: getDialogPrimaryColor(context, dialogType, primaryColor)
-                .withOpacity(0.2),
+            color: getDialogPrimaryColor(
+              context,
+              dialogType,
+              primaryColor,
+            ).withOpacity(0.2),
             shape: BoxShape.circle,
           ),
           padding: const EdgeInsets.all(16),
@@ -171,8 +173,11 @@ class Dialogs {
       case DialogType.delete:
         widget = Container(
           decoration: BoxDecoration(
-            color: getDialogPrimaryColor(context, dialogType, primaryColor)
-                .withOpacity(0.2),
+            color: getDialogPrimaryColor(
+              context,
+              dialogType,
+              primaryColor,
+            ).withOpacity(0.2),
             shape: BoxShape.circle,
           ),
           padding: const EdgeInsets.all(16),
@@ -185,8 +190,11 @@ class Dialogs {
       case DialogType.update:
         widget = Container(
           decoration: BoxDecoration(
-            color: getDialogPrimaryColor(context, dialogType, primaryColor)
-                .withOpacity(0.2),
+            color: getDialogPrimaryColor(
+              context,
+              dialogType,
+              primaryColor,
+            ).withOpacity(0.2),
             shape: BoxShape.circle,
           ),
           padding: const EdgeInsets.all(16),
@@ -200,8 +208,11 @@ class Dialogs {
       case DialogType.accept:
         widget = Container(
           decoration: BoxDecoration(
-            color: getDialogPrimaryColor(context, dialogType, primaryColor)
-                .withOpacity(0.2),
+            color: getDialogPrimaryColor(
+              context,
+              dialogType,
+              primaryColor,
+            ).withOpacity(0.2),
             shape: BoxShape.circle,
           ),
           padding: const EdgeInsets.all(16),
@@ -224,11 +235,7 @@ class Dialogs {
           padding: const EdgeInsets.all(16),
           child: Icon(
             Icons.refresh_rounded,
-            color: getDialogPrimaryColor(
-              context,
-              dialogType,
-              primaryColor,
-            ),
+            color: getDialogPrimaryColor(context, dialogType, primaryColor),
             size: 40,
           ),
         );
@@ -245,17 +252,19 @@ class Dialogs {
     Color? primaryColor, {
     Widget? child,
     ShapeBorder? shape,
-  }) =>
-      Container(
-        height: height,
-        width: width,
-        decoration: BoxDecoration(
-          color: getDialogPrimaryColor(context, dialogType, primaryColor)
-              .withOpacity(0.2),
-        ),
-        alignment: Alignment.center,
-        child: child ?? getCenteredImage(context, dialogType, primaryColor),
-      );
+  }) => Container(
+    height: height,
+    width: width,
+    decoration: BoxDecoration(
+      color: getDialogPrimaryColor(
+        context,
+        dialogType,
+        primaryColor,
+      ).withOpacity(0.2),
+    ),
+    alignment: Alignment.center,
+    child: child ?? getCenteredImage(context, dialogType, primaryColor),
+  );
 
   /// title for dialog
   Widget buildTitleWidget(
@@ -280,14 +289,15 @@ class Dialogs {
           height: height,
           width: width,
           fit: BoxFit.cover,
-          errorBuilder: (_, object, stack) => defaultPlaceHolder(
-            context,
-            dialogType,
-            height,
-            width,
-            primaryColor,
-            shape: shape,
-          ),
+          errorBuilder:
+              (_, object, stack) => defaultPlaceHolder(
+                context,
+                dialogType,
+                height,
+                width,
+                primaryColor,
+                shape: shape,
+              ),
           loadingBuilder: (_, child, loadingProgress) {
             if (loadingProgress == null) {
               return child;
@@ -361,9 +371,10 @@ class Dialogs {
       // Animation for sliding the dialog from bottom to top.
       case DialogAnimation.slideBottomTop:
         return SlideTransition(
-          position: Tween(begin: const Offset(0, 1), end: Offset.zero)
-              .chain(CurveTween(curve: curve))
-              .animate(animation),
+          position: Tween(
+            begin: const Offset(0, 1),
+            end: Offset.zero,
+          ).chain(CurveTween(curve: curve)).animate(animation),
           child: Opacity(
             opacity: animation.value,
             child: FadeTransition(opacity: animation, child: child),
@@ -373,9 +384,10 @@ class Dialogs {
       // Animation for sliding the dialog from left to right.
       case DialogAnimation.slideLeftRight:
         return SlideTransition(
-          position: Tween(begin: const Offset(1, 0), end: Offset.zero)
-              .chain(CurveTween(curve: curve))
-              .animate(animation),
+          position: Tween(
+            begin: const Offset(1, 0),
+            end: Offset.zero,
+          ).chain(CurveTween(curve: curve)).animate(animation),
           child: Opacity(
             opacity: animation.value,
             child: FadeTransition(opacity: animation, child: child),
@@ -385,9 +397,10 @@ class Dialogs {
       // Animation for sliding the dialog from right to left.
       case DialogAnimation.slideRightLeft:
         return SlideTransition(
-          position: Tween(begin: const Offset(-1, 0), end: Offset.zero)
-              .chain(CurveTween(curve: curve))
-              .animate(animation),
+          position: Tween(
+            begin: const Offset(-1, 0),
+            end: Offset.zero,
+          ).chain(CurveTween(curve: curve)).animate(animation),
           child: Opacity(
             opacity: animation.value,
             child: FadeTransition(opacity: animation, child: child),
@@ -434,113 +447,118 @@ class Dialogs {
       barrierDismissible: barrierDismissible,
       barrierLabel: '',
       transitionDuration: transitionDuration ?? 400.milliseconds,
-      transitionBuilder: (_, animation, secondaryAnimation, child) =>
-          dialogAnimatedWrapperWidget(
-        animation: animation,
-        dialogAnimation: dialogAnimation,
-        curve: curve,
-        child: child,
-        // child: AlertDialog(
-        //   shape: shape ?? dialogShape(),
-        //   titlePadding: EdgeInsets.zero,
-        //   backgroundColor: _.cardColor,
-        //   elevation: defaultElevation.toDouble(),
-        //   title: buildTitleWidget(
-        //     _,
-        //     dialogType,
-        //     primaryColor,
-        //     customCenterWidget,
-        //     height ?? customDialogHeight,
-        //     width ?? customDialogWidth,
-        //     centerImage,
-        //     shape,
-        //   ).cornerRadiusWithClipRRectOnly(
-        //       topLeft: defaultRadius.toInt(),
-        //       topRight: defaultRadius.toInt()),
-        //   content: Container(
-        //     width: width ?? customDialogWidth,
-        //     color: Colors.transparent,
-        //     child: Column(
-        //       crossAxisAlignment: CrossAxisAlignment.center,
-        //       mainAxisSize: MainAxisSize.min,
-        //       children: [
-        //         Text(
-        //           title ?? getTitle(dialogType),
-        //           style: boldTextStyle(size: 16),
-        //           textAlign: TextAlign.center,
-        //         ),
-        //         8.height.visible(subTitle.validate().isNotEmpty),
-        //         Text(
-        //           subTitle.validate(),
-        //           style: secondaryTextStyle(size: 16),
-        //           textAlign: TextAlign.center,
-        //         ).visible(subTitle.validate().isNotEmpty),
-        //         16.height,
-        //         Row(
-        //           children: [
-        //             AppButton(
-        //               elevation: 0,
-        //               shapeBorder: RoundedRectangleBorder(
-        //                 borderRadius: radius(defaultAppButtonRadius),
-        //                 side: BorderSide(color: viewLineColor),
-        //               ),
-        //               color: _.cardColor,
-        //               child: Row(
-        //                 mainAxisSize: MainAxisSize.min,
-        //                 children: [
-        //                   Icon(
-        //                     Icons.close,
-        //                     color: textPrimaryColorGlobal,
-        //                     size: 20,
-        //                   ),
-        //                   6.width,
-        //                   Text(
-        //                     negativeText ?? 'Cancel',
-        //                     style: boldTextStyle(
-        //                         color: negativeTextColor ??
-        //                             textPrimaryColorGlobal),
-        //                   ),
-        //                 ],
-        //               ).fit(),
-        //               onTap: () {
-        //                 if (cancelable) finish(_, false);
-        //
-        //                 onCancel?.call(_);
-        //               },
-        //             ).expand(),
-        //             16.width,
-        //             AppButton(
-        //               elevation: 0,
-        //               color:
-        //                   getDialogPrimaryColor(_, dialogType, primaryColor),
-        //               shapeBorder: RoundedRectangleBorder(
-        //                 borderRadius: radius(defaultAppButtonRadius),
-        //               ),
-        //               child: Row(
-        //                 mainAxisSize: MainAxisSize.min,
-        //                 children: [
-        //                   getIcon(dialogType),
-        //                   6.width,
-        //                   Text(
-        //                     positiveText ?? getPositiveText(dialogType),
-        //                     style: boldTextStyle(
-        //                         color: positiveTextColor ?? Colors.white),
-        //                   ),
-        //                 ],
-        //               ).fit(),
-        //               onTap: () {
-        //                 onAccept.call(_);
-        //
-        //                 if (cancelable) finish(_, true);
-        //               },
-        //             ).expand(),
-        //           ],
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        // ),
-      ),
+      transitionBuilder:
+          (
+            _,
+            animation,
+            secondaryAnimation,
+            child,
+          ) => dialogAnimatedWrapperWidget(
+            animation: animation,
+            dialogAnimation: dialogAnimation,
+            curve: curve,
+            child: child,
+            // child: AlertDialog(
+            //   shape: shape ?? dialogShape(),
+            //   titlePadding: EdgeInsets.zero,
+            //   backgroundColor: _.cardColor,
+            //   elevation: defaultElevation.toDouble(),
+            //   title: buildTitleWidget(
+            //     _,
+            //     dialogType,
+            //     primaryColor,
+            //     customCenterWidget,
+            //     height ?? customDialogHeight,
+            //     width ?? customDialogWidth,
+            //     centerImage,
+            //     shape,
+            //   ).cornerRadiusWithClipRRectOnly(
+            //       topLeft: defaultRadius.toInt(),
+            //       topRight: defaultRadius.toInt()),
+            //   content: Container(
+            //     width: width ?? customDialogWidth,
+            //     color: Colors.transparent,
+            //     child: Column(
+            //       crossAxisAlignment: CrossAxisAlignment.center,
+            //       mainAxisSize: MainAxisSize.min,
+            //       children: [
+            //         Text(
+            //           title ?? getTitle(dialogType),
+            //           style: boldTextStyle(size: 16),
+            //           textAlign: TextAlign.center,
+            //         ),
+            //         8.height.visible(subTitle.validate().isNotEmpty),
+            //         Text(
+            //           subTitle.validate(),
+            //           style: secondaryTextStyle(size: 16),
+            //           textAlign: TextAlign.center,
+            //         ).visible(subTitle.validate().isNotEmpty),
+            //         16.height,
+            //         Row(
+            //           children: [
+            //             AppButton(
+            //               elevation: 0,
+            //               shapeBorder: RoundedRectangleBorder(
+            //                 borderRadius: radius(defaultAppButtonRadius),
+            //                 side: BorderSide(color: viewLineColor),
+            //               ),
+            //               color: _.cardColor,
+            //               child: Row(
+            //                 mainAxisSize: MainAxisSize.min,
+            //                 children: [
+            //                   Icon(
+            //                     Icons.close,
+            //                     color: textPrimaryColorGlobal,
+            //                     size: 20,
+            //                   ),
+            //                   6.width,
+            //                   Text(
+            //                     negativeText ?? 'Cancel',
+            //                     style: boldTextStyle(
+            //                         color: negativeTextColor ??
+            //                             textPrimaryColorGlobal),
+            //                   ),
+            //                 ],
+            //               ).fit(),
+            //               onTap: () {
+            //                 if (cancelable) finish(_, false);
+            //
+            //                 onCancel?.call(_);
+            //               },
+            //             ).expand(),
+            //             16.width,
+            //             AppButton(
+            //               elevation: 0,
+            //               color:
+            //                   getDialogPrimaryColor(_, dialogType, primaryColor),
+            //               shapeBorder: RoundedRectangleBorder(
+            //                 borderRadius: radius(defaultAppButtonRadius),
+            //               ),
+            //               child: Row(
+            //                 mainAxisSize: MainAxisSize.min,
+            //                 children: [
+            //                   getIcon(dialogType),
+            //                   6.width,
+            //                   Text(
+            //                     positiveText ?? getPositiveText(dialogType),
+            //                     style: boldTextStyle(
+            //                         color: positiveTextColor ?? Colors.white),
+            //                   ),
+            //                 ],
+            //               ).fit(),
+            //               onTap: () {
+            //                 onAccept.call(_);
+            //
+            //                 if (cancelable) finish(_, true);
+            //               },
+            //             ).expand(),
+            //           ],
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
+          ),
     );
   }
 }

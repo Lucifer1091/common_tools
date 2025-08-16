@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../index.dart';
 import '../custom/index.dart';
 
 /// Widget that shows an icon from icon data, svg, image or text.

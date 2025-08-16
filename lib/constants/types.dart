@@ -1,4 +1,6 @@
-part of 'constants.dart';
+import 'dart:async';
+
+import 'package:flutter/material.dart';
 
 typedef StringMap = Map<String, String>;
 typedef Json = Map<String, dynamic>;

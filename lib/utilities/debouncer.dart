@@ -1,4 +1,6 @@
-part of 'utilities.dart';
+import 'dart:async';
+
+import '../index.dart';
 
 /// de-bounces [run] method calls and runs it only once in given [duration].
 /// It will ignore any calls to [run] until [duration] has passed since the

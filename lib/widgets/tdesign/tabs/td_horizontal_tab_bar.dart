@@ -7,9 +7,7 @@ import 'package:flutter/gestures.dart' show DragStartBehavior;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-import '../../../common_tools.dart';
-import 'td_tab.dart';
-import 'td_tab_bar.dart';
+import '../../../index.dart' hide PageScrollPhysics;
 
 const double _kTabHeight = 46;
 const double _kTextAndIconTabHeight = 72;
