@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:common_tools/index.dart';
 
 import '../../base/example_widget.dart';
-import '../annotation/demo.dart';
+
 import 'dart:io';
 
 class TDImagePage extends StatefulWidget {
@@ -20,8 +20,10 @@ class TDImageState extends State<TDImagePage>
   @override
   void initState() {
     super.initState();
-    animationController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 4));
+    animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 4),
+    );
     animation = Tween(begin: 0.0, end: 4.0).animate(animationController);
     animationController.repeat();
   }
@@ -43,170 +45,152 @@ class TDImageState extends State<TDImagePage>
           title: '组件类型',
           children: [
             ExampleItem(
-                ignoreCode: true,
-                desc: '',
-                builder: (context) {
-                  return Container(
-                    alignment: Alignment.topLeft,
-                    padding: const EdgeInsets.only(left: 8),
-                    child: Wrap(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(
-                            builder: _imageClip,
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(
-                            builder: _imageStretch,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }),
+              ignoreCode: true,
+              desc: '',
+              builder: (context) {
+                return Container(
+                  alignment: Alignment.topLeft,
+                  padding: const EdgeInsets.only(left: 8),
+                  child: Wrap(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.all(8),
+                        child: _imageClip(context),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.all(8),
+                        child: _imageStretch(context),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
             ExampleItem(
-                ignoreCode: true,
-                desc: '',
-                builder: (context) {
-                  return Container(
-                    alignment: Alignment.topLeft,
-                    padding: const EdgeInsets.only(left: 8),
-                    child: Wrap(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(
-                            builder: _imageFitHeight,
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(8), // 适应宽
-                          child: CodeWrapper(
-                            builder: _imageFitWidth,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }),
+              ignoreCode: true,
+              desc: '',
+              builder: (context) {
+                return Container(
+                  alignment: Alignment.topLeft,
+                  padding: const EdgeInsets.only(left: 8),
+                  child: Wrap(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.all(8),
+                        child: _imageFitHeight(context),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.all(8), // 适应宽
+                        child: _imageFitWidth(context),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
             ExampleItem(
-                ignoreCode: true,
-                desc: '',
-                builder: (context) {
-                  return Container(
-                    alignment: Alignment.topLeft,
-                    padding: const EdgeInsets.only(left: 8),
-                    child: Wrap(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(
-                            builder: _imageSquare,
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(
-                            builder: _imageRoundedSquare,
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(
-                            builder: _imageCircle,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                })
+              ignoreCode: true,
+              desc: '',
+              builder: (context) {
+                return Container(
+                  alignment: Alignment.topLeft,
+                  padding: const EdgeInsets.only(left: 8),
+                  child: Wrap(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.all(8),
+                        child: _imageSquare(context),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.all(8),
+                        child: _imageRoundedSquare(context),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.all(8),
+                        child: _imageCircle(context),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
           ],
         ),
         ExampleModule(
           title: '组件状态',
           children: [
             ExampleItem(
-                ignoreCode: true,
-                desc: '',
-                builder: (context) {
-                  return Container(
-                    alignment: Alignment.topLeft,
-                    padding: const EdgeInsets.only(left: 8),
-                    child: Wrap(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(
-                            builder: _loadingDefault,
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(
-                            builder: _loadingCustom,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }),
+              ignoreCode: true,
+              desc: '',
+              builder: (context) {
+                return Container(
+                  alignment: Alignment.topLeft,
+                  padding: const EdgeInsets.only(left: 8),
+                  child: Wrap(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.all(8),
+                        child: _loadingDefault(context),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.all(8),
+                        child: _loadingCustom(context),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
             ExampleItem(
-                ignoreCode: true,
-                desc: '',
-                builder: (context) {
-                  return Container(
-                    alignment: Alignment.topLeft,
-                    padding: const EdgeInsets.only(left: 8),
-                    child: Wrap(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(
-                            builder: _failDefault,
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: CodeWrapper(
-                            builder: _failCustom,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }),
+              ignoreCode: true,
+              desc: '',
+              builder: (context) {
+                return Container(
+                  alignment: Alignment.topLeft,
+                  padding: const EdgeInsets.only(left: 8),
+                  child: Wrap(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.all(8),
+                        child: _failDefault(context),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.all(8),
+                        child: _failCustom(context),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
           ],
-        )
+        ),
       ],
       test: [
         ExampleItem(
-            ignoreCode: true,
-            desc: '',
-            builder: (context) {
-              return Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.only(left: 8),
-                child: Wrap(
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.all(8),
-                      child: CodeWrapper(
-                        builder: _imageFile,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }),
+          ignoreCode: true,
+          desc: '',
+          builder: (context) {
+            return Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.only(left: 8),
+              child: Wrap(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.all(8),
+                    child: _imageFile(context),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ],
     );
   }
 
-/* 图片裁剪 */
-  @Demo(group: 'image')
+  /* 图片裁剪 */
+
   Widget _imageClip(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -215,20 +199,17 @@ class TDImageState extends State<TDImagePage>
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '裁剪',
-            font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+            fontSize: context.textTheme.bodyMedium.fontSize,
+            textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
           ),
         ),
-        const TDImage(
-          assetUrl: 'assets/img/image.png',
-          type: TDImageType.clip,
-        ),
+        const TDImage(assetUrl: 'assets/img/image.png', type: TDImageType.clip),
       ],
     );
   }
 
-/* 图片拉伸 */
-  @Demo(group: 'image')
+  /* 图片拉伸 */
+
   Widget _imageStretch(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -237,8 +218,8 @@ class TDImageState extends State<TDImagePage>
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '拉伸',
-            font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+            fontSize: context.textTheme.bodyMedium.fontSize,
+            textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
           ),
         ),
         Container(
@@ -261,8 +242,8 @@ class TDImageState extends State<TDImagePage>
     );
   }
 
-/* 图片适应高 */
-  @Demo(group: 'image')
+  /* 图片适应高 */
+
   Widget _imageFitHeight(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -271,8 +252,8 @@ class TDImageState extends State<TDImagePage>
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '适应高',
-            font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+            fontSize: context.textTheme.bodyMedium.fontSize,
+            textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
           ),
         ),
         Container(
@@ -289,7 +270,7 @@ class TDImageState extends State<TDImagePage>
   }
 
   /* 图片适应宽 */
-  @Demo(group: 'image')
+
   Widget _imageFitWidth(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -298,8 +279,8 @@ class TDImageState extends State<TDImagePage>
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '适应宽',
-            font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+            fontSize: context.textTheme.bodyMedium.fontSize,
+            textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
           ),
         ),
         Container(
@@ -315,8 +296,8 @@ class TDImageState extends State<TDImagePage>
     );
   }
 
-/* 方形 */
-  @Demo(group: 'image')
+  /* 方形 */
+
   Widget _imageSquare(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -325,8 +306,8 @@ class TDImageState extends State<TDImagePage>
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '方形',
-            font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+            fontSize: context.textTheme.bodyMedium.fontSize,
+            textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
           ),
         ),
         const TDImage(
@@ -337,8 +318,8 @@ class TDImageState extends State<TDImagePage>
     );
   }
 
-/* 圆角方形 */
-  @Demo(group: 'image')
+  /* 圆角方形 */
+
   Widget _imageRoundedSquare(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -347,8 +328,8 @@ class TDImageState extends State<TDImagePage>
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '圆角方形',
-            font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+            fontSize: context.textTheme.bodyMedium.fontSize,
+            textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
           ),
         ),
         const TDImage(
@@ -361,8 +342,8 @@ class TDImageState extends State<TDImagePage>
     );
   }
 
-/* 圆形 */
-  @Demo(group: 'image')
+  /* 圆形 */
+
   Widget _imageCircle(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -371,8 +352,8 @@ class TDImageState extends State<TDImagePage>
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '圆形',
-            font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+            fontSize: context.textTheme.bodyMedium.fontSize,
+            textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
           ),
         ),
         const TDImage(
@@ -385,8 +366,8 @@ class TDImageState extends State<TDImagePage>
     );
   }
 
-/* 加载默认提示 */
-  @Demo(group: 'image')
+  /* 加载默认提示 */
+
   Widget _loadingDefault(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -395,25 +376,27 @@ class TDImageState extends State<TDImagePage>
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '加载默认提示',
-            font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+            fontSize: context.textTheme.bodyMedium.fontSize,
+            textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
           ),
         ),
         Container(
-            height: 72,
-            width: 72,
-            clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(
-                borderRadius:
-                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
-            child: Container(
-                alignment: Alignment.center,
-                color: TDTheme.of(context).grayColor2,
-                child: Icon(
-                  TDIcons.ellipsis,
-                  size: 22,
-                  color: TDTheme.of(context).fontGyColor3,
-                ))),
+          height: 72,
+          width: 72,
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(MyRadius.medium),
+          ),
+          child: Container(
+            alignment: Alignment.center,
+            color: ThemeColors.neutral.shade100,
+            child: Icon(
+              Icons.more_horiz_rounded,
+              size: 22,
+              color: ThemeColors.neutral.shade700,
+            ),
+          ),
+        ),
         // 实际组件写法如下：上面仅为加载展示
         // const TDImage(
         //   imgUrl:
@@ -424,8 +407,8 @@ class TDImageState extends State<TDImagePage>
     );
   }
 
-/* 加载自定义提示 */
-  @Demo(group: 'image')
+  /* 加载自定义提示 */
+
   Widget _loadingCustom(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -434,28 +417,31 @@ class TDImageState extends State<TDImagePage>
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '加载自定义提示',
-            font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+            fontSize: context.textTheme.bodyMedium.fontSize,
+            textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
           ),
         ),
         Container(
-            height: 72,
-            width: 72,
-            clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(
-                borderRadius:
-                    BorderRadius.circular(TDTheme.of(context).radiusDefault)),
-            child: Container(
-                alignment: Alignment.center,
-                color: TDTheme.of(context).grayColor2,
-                child: RotationTransition(
-                    turns: animation,
-                    alignment: Alignment.center,
-                    child: TDCircleIndicator(
-                      color: TDTheme.of(context).brandNormalColor,
-                      size: 18,
-                      lineWidth: 3,
-                    )))),
+          height: 72,
+          width: 72,
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(MyRadius.medium),
+          ),
+          child: Container(
+            alignment: Alignment.center,
+            color: ThemeColors.neutral.shade100,
+            child: RotationTransition(
+              turns: animation,
+              alignment: Alignment.center,
+              child: TDCircleIndicator(
+                color: context.colorScheme.primary,
+                size: 18,
+                lineWidth: 3,
+              ),
+            ),
+          ),
+        ),
         // 实际组件写法如下：上面仅为加载展示
         // TDImage(
         //   imgUrl:
@@ -464,7 +450,7 @@ class TDImageState extends State<TDImagePage>
         //       turns: animation,
         //       alignment: Alignment.center,
         //       child: TDCircleIndicator(
-        //         color: TDTheme.of(context).brandNormalColor,
+        //         color: context.colorScheme.primary,
         //         size: 18,
         //         lineWidth: 3,
         //       )),
@@ -474,8 +460,8 @@ class TDImageState extends State<TDImagePage>
     );
   }
 
-/* 失败默认提示 */
-  @Demo(group: 'image')
+  /* 失败默认提示 */
+
   Widget _failDefault(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -484,20 +470,17 @@ class TDImageState extends State<TDImagePage>
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '失败默认提示',
-            font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+            fontSize: context.textTheme.bodyMedium.fontSize,
+            textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
           ),
         ),
-        const TDImage(
-          imgUrl: 'error',
-          type: TDImageType.roundedSquare,
-        ),
+        const TDImage(imgUrl: 'error', type: TDImageType.roundedSquare),
       ],
     );
   }
 
-/* 失败自定义提示 */
-  @Demo(group: 'image')
+  /* 失败自定义提示 */
+
   Widget _failCustom(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -506,18 +489,16 @@ class TDImageState extends State<TDImagePage>
           padding: const EdgeInsets.only(bottom: 16),
           child: TDText(
             '失败自定义提示',
-            font: TDTheme.of(context).fontBodyMedium,
-            textColor: TDTheme.of(context).fontGyColor2.withOpacity(0.6),
+            fontSize: context.textTheme.bodyMedium.fontSize,
+            textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
           ),
         ),
         TDImage(
           imgUrl: 'error',
           errorWidget: TDText(
             '加载失败',
-            forceVerticalCenter: true,
-            font: TDTheme.of(context).fontBodyExtraSmall,
             fontWeight: FontWeight.w500,
-            textColor: TDTheme.of(context).fontGyColor3,
+            textColor: ThemeColors.neutral.shade700,
           ),
           type: TDImageType.roundedSquare,
         ),
@@ -525,7 +506,6 @@ class TDImageState extends State<TDImagePage>
     );
   }
 
-  @Demo(group: 'image')
   Widget _imageFile(BuildContext context) {
     return Container(
       width: 72,

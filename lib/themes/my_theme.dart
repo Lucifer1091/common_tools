@@ -1,14 +1,17 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'my_color_scheme.dart';
-import 'my_typography.dart';
+import '../index.dart';
 
 class MyThemeData {
   MyThemeData({
     required this.colorScheme,
     this.typography = const MyTypography.geist(),
   });
+
+  MyThemeData.defaults()
+    : colorScheme = MyBlueColorScheme.light(),
+      typography = MyTypography.geist();
 
   final MyColorScheme colorScheme;
   final MyTypography typography;

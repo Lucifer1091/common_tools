@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:common_tools/index.dart';
 
-import '../../annotation/demo.dart';
 import '../../base/example_widget.dart';
 
 ///
@@ -67,16 +66,11 @@ class TDSideBarPageState extends State<TDSideBarPage> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
-          CodeWrapper(
-            builder: (_) => getCustomButton(context, '锚点用法', 'SideBarAnchor'),
-            methodName: '_buildAnchorSideBar',
-          ),
+          getCustomButton(context, '锚点用法', 'SideBarAnchor'),
+
           const SizedBox(height: 16),
-          CodeWrapper(
-            builder: (_) =>
-                getCustomButton(context, '切页用法', 'SideBarPagination'),
-            methodName: '_buildPaginationSideBar',
-          ),
+
+          getCustomButton(context, '切页用法', 'SideBarPagination'),
         ],
       ),
     );
@@ -96,16 +90,10 @@ class TDSideBarPageState extends State<TDSideBarPage> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
-          CodeWrapper(
-            builder: (_) =>
-                getCustomButton(context, '非通栏选项样式', 'SideBarOutline'),
-            methodName: '_buildOutlineSideBar',
-          ),
+          getCustomButton(context, '非通栏选项样式', 'SideBarOutline'),
+
           const SizedBox(height: 16),
-          CodeWrapper(
-            builder: (_) => getCustomButton(context, '自定义样式', 'SideBarCustom'),
-            methodName: '_buildCustomSideBar',
-          ),
+          getCustomButton(context, '自定义样式', 'SideBarCustom'),
         ],
       ),
     );
@@ -115,12 +103,7 @@ class TDSideBarPageState extends State<TDSideBarPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
-        children: [
-          CodeWrapper(
-            builder: (_) => getCustomButton(context, '延迟加载', 'SideBarLoading'),
-            methodName: '_buildLoadingSideBar',
-          ),
-        ],
+        children: [getCustomButton(context, '延迟加载', 'SideBarLoading')],
       ),
     );
   }

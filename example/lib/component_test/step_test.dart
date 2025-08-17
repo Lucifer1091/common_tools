@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:common_tools/index.dart';
 
 void main() async {
   runApp(StepTestApp());
@@ -10,9 +10,7 @@ class StepTestApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Step Test',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue),
       home: TestPage(),
     );
   }
@@ -42,7 +40,7 @@ class TestPage extends StatelessWidget {
               '今天是星期六，下面是拍摄的照片',
               style: TextStyle(
                 fontWeight: FontWeight.w400,
-                color: TDTheme.of(context).fontGyColor3,
+                color: ThemeColors.neutral.shade700,
                 fontSize: 12,
               ),
             ),
@@ -55,9 +53,7 @@ class TestPage extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: TDText('TDSteps Test Page'),
-      ),
+      appBar: AppBar(title: TDText('TDSteps Test Page')),
       body: Form(
         key: _formKey,
         child: Column(

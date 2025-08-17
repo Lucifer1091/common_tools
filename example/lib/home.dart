@@ -1,23 +1,24 @@
+import 'package:common_tools/index.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
-import 'base/example_base.dart';
 import 'base/example_route.dart';
-import 'base/web_md_tool.dart';
 import 'config.dart';
 import 'localizations/app_localizations.dart';
 
 var _kShowTodoComponent = false;
 
-/// 切换主题的回调
-typedef OnThemeChange = Function(TDThemeData themeData);
+typedef OnThemeChange = Function(MyThemeData themeData);
 
-/// 切换语言的回调
 typedef OnLocaleChange = Function(Locale locale);
 
-/// 示例首页
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title, this.onThemeChange, this.locale, this.onLocaleChange,}) : super(key: key);
+  const MyHomePage({
+    super.key,
+    required this.title,
+    this.onThemeChange,
+    this.locale,
+    this.onLocaleChange,
+  });
 
   final String title;
 
@@ -28,7 +29,7 @@ class MyHomePage extends StatefulWidget {
   final Locale? locale;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -45,37 +46,24 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-
     return Scaffold(
+      backgroundColor: context.colorScheme.background,
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        backgroundColor: TDTheme.of(context).brandNormalColor,
-        titleTextStyle: TextStyle(color:TDTheme.of(context).whiteColor1, fontSize: TDTheme.of(context).fontTitleLarge?.size),
+        backgroundColor: context.colorScheme.primary,
+        titleTextStyle: context.textTheme.titleLarge,
         title: Text(widget.title),
-        actions: ScreenUtil.isWebLargeScreen(context)
-            ? null
-            : [
-
+        actions: [
           GestureDetector(
             child: Container(
               alignment: Alignment.centerRight,
-              padding: const EdgeInsets.only(
-                right: 16,
-              ),
+              padding: const EdgeInsets.only(right: 16),
               child: TDText(
                 widget.locale?.languageCode == 'en' ? '中文' : 'English',
-                textColor: TDTheme.of(context).whiteColor1,
+                textColor: context.colorScheme.primaryForeground,
               ),
             ),
             onTap: () {
-              if(widget.locale?.languageCode == 'en') {
+              if (widget.locale?.languageCode == 'en') {
                 widget.onLocaleChange?.call(const Locale('zh'));
               } else {
                 widget.onLocaleChange?.call(const Locale('en'));
@@ -85,19 +73,17 @@ class _MyHomePageState extends State<MyHomePage> {
           GestureDetector(
             child: Container(
               alignment: Alignment.centerRight,
-              padding: const EdgeInsets.only(
-                right: 16,
-              ),
+              padding: const EdgeInsets.only(right: 16),
               child: TDText(
                 AppLocalizations.of(context)?.about,
-                textColor: TDTheme.of(context).whiteColor1,
+                textColor: context.colorScheme.primaryForeground,
               ),
             ),
             onTap: () {
               focusNode.unfocus();
               Navigator.pushNamed(context, TDExampleRoute.aboutPath);
             },
-          )
+          ),
         ],
       ),
       body: _buildBody(context),
@@ -106,103 +92,138 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _buildBody(BuildContext context) {
     return SafeArea(
-        child: Align(
-          alignment: Alignment.topCenter,
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: _buildChildren(context),
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: _buildChildren(context),
+          ),
         ),
       ),
-    ));
+    );
   }
 
   List<Widget> _buildChildren(BuildContext context) {
     var children = <Widget>[];
 
-    // 添加切换主题的按钮
-    children.add(Padding(
-      padding: const EdgeInsets.only(top: 16),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Container(
-          constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Padding(padding: const EdgeInsets.only(left: 8, right: 4),child: TDTheme(
-                  data: TDThemeData.defaultData(),
-                  child: TDButton(
-                    text: AppLocalizations.of(context)?.defaultTheme,
-                    theme: TDButtonTheme.primary,
-                    onTap: () {
-                      widget.onThemeChange?.call(TDTheme.defaultData());
-                    },
-                  )),),
-        Padding(padding: const EdgeInsets.only(left: 4, right: 4),child: TDTheme(
-                  data: TDThemeData.fromJson('green', greenThemeConfig) ?? TDThemeData.defaultData(),
-                  child: TDButton(
+    children.add(
+      Padding(
+        padding: const EdgeInsets.only(top: 16),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Container(
+            constraints: BoxConstraints(
+              minWidth: MediaQuery.of(context).size.width,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 8, right: 4),
+                  child: MyTheme(
+                    data: MyThemeData.defaults(),
+                    child: TDButton(
+                      text: AppLocalizations.of(context)?.defaultTheme,
+                      theme: TDButtonTheme.primary,
+                      onTap: () {
+                        widget.onThemeChange?.call(MyThemeData.defaults());
+                      },
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 4, right: 4),
+                  child: MyTheme(
+                    data: MyThemeData(colorScheme: MyGreenColorScheme.light()),
+                    child: TDButton(
                       text: AppLocalizations.of(context)?.greenTheme,
                       theme: TDButtonTheme.primary,
                       onTap: () async {
-                        var jsonString = await rootBundle.loadString('assets/theme.json');
-                        var newData = TDThemeData.fromJson('green', jsonString);
-                        widget.onThemeChange?.call(newData ?? TDTheme.defaultData());
-                      }))),
-        Padding(padding: const EdgeInsets.only(left: 4, right: 8),child: TDTheme(
-                  data: TDThemeData.fromJson('red', greenThemeConfig) ?? TDThemeData.defaultData(),
-                  child: TDButton(
+                        var newData = MyThemeData(
+                          colorScheme: MyGreenColorScheme.light(),
+                        );
+                        widget.onThemeChange?.call(newData);
+                      },
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 4, right: 8),
+                  child: MyTheme(
+                    data: MyThemeData(colorScheme: MyRedColorScheme.light()),
+                    child: TDButton(
                       text: AppLocalizations.of(context)?.redTheme,
                       theme: TDButtonTheme.danger,
                       onTap: () async {
-                        var jsonString = await rootBundle.loadString('assets/theme.json');
-                        var newData = TDThemeData.fromJson('red', jsonString);
-                        widget.onThemeChange?.call(newData ?? TDTheme.defaultData());
-                      }))),
-            ],
+                        var newData = MyThemeData(
+                          colorScheme: MyRedColorScheme.light(),
+                        );
+                        widget.onThemeChange?.call(newData);
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
-    ));
+    );
 
-    children.add(TDSearchBar(
-      placeHolder: '请输入组件名称',
-      focusNode: focusNode,
-      onTextChanged: (value){
-        setState(() {
-          searchText = value;
-        });
-      },
-    ));
+    // children.add(
+    //   TDSearchBar(
+    //     placeHolder: '请输入组件名称',
+    //     focusNode: focusNode,
+    //     onTextChanged: (value) {
+    //       setState(() {
+    //         searchText = value;
+    //       });
+    //     },
+    //   ),
+    // );
 
     exampleMap.forEach((key, value) {
       var subList = <Widget>[];
-      value.forEach((model) {
-        if(searchText.isNotEmpty && !model.text.toLowerCase().contains(searchText.toLowerCase())){
-          // 如果有搜索文案,不再搜索中的组件不展示
-          return;
+      for (var model in value) {
+        if (searchText.isNotEmpty &&
+            !model.text.toLowerCase().contains(searchText.toLowerCase())) {
+          continue;
         }
-        model.spline = WebMdTool.getSpline(key);
         if (model.isTodo) {
           if (_kShowTodoComponent) {
-            children.add(Padding(
-              padding: const EdgeInsets.only(left: 40, right: 40, top: 8, bottom: 8),
-              child: TDButton(
+            children.add(
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 40,
+                  right: 40,
+                  top: 8,
+                  bottom: 8,
+                ),
+                child: TDButton(
                   size: TDButtonSize.medium,
                   type: TDButtonType.outline,
                   shape: TDButtonShape.filled,
-                  theme: TDButtonTheme.defaultTheme,
-                  textStyle: TextStyle(color: TDTheme.of(context).fontGyColor4),
+                  theme: TDButtonTheme.defaults,
+                  textStyle: TextStyle(color: ThemeColors.neutral.shade400),
                   onTap: () {
                     Navigator.pushNamed(context, '${model.name}?showAction=1');
                   },
-                  text: model.text),
-            ));
+                  text: model.text,
+                ),
+              ),
+            );
           }
         } else {
-          subList.add(Padding(
-            padding: const EdgeInsets.only(left: 40, right: 40, top: 8, bottom: 8),
-            child: TDButton(
+          subList.add(
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 40,
+                right: 40,
+                top: 8,
+                bottom: 8,
+              ),
+              child: TDButton(
                 size: TDButtonSize.medium,
                 type: TDButtonType.outline,
                 shape: TDButtonShape.filled,
@@ -211,40 +232,31 @@ class _MyHomePageState extends State<MyHomePage> {
                   focusNode.unfocus();
                   Navigator.pushNamed(context, '${model.name}?showAction=1');
                 },
-                text: model.text),
-          ));
+                text: model.text,
+              ),
+            ),
+          );
         }
-      });
-      children.add(Container(
-        alignment: Alignment.topLeft,
-        margin: const EdgeInsets.only(left: 16, right: 16, top: 16),
-        padding: const EdgeInsets.only(left: 12),
-        decoration: BoxDecoration(
-            color: TDTheme.of(context).brandHoverColor,
-            borderRadius: BorderRadius.only(topRight: Radius.circular(TDTheme.of(context).radiusLarge))),
-        child: TDText(
-          '$key(${subList.length})',
-          textColor: TDTheme.of(context).whiteColor1,
+      }
+      children.add(
+        Container(
+          alignment: Alignment.topLeft,
+          margin: const EdgeInsets.only(left: 16, right: 16, top: 16),
+          padding: const EdgeInsets.only(left: 12),
+          decoration: BoxDecoration(
+            color: context.colorScheme.secondary,
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(MyRadius.large),
+            ),
+          ),
+          child: TDText(
+            '$key(${subList.length})',
+            textColor: context.colorScheme.primaryForeground,
+          ),
         ),
-      ));
+      );
       children.addAll(subList);
     });
     return children;
   }
 }
-
-
-String greenThemeConfig = '''
-  {
-    "green": {
-        "color": {
-            "brandNormalColor": "#45c58b"
-        }
-    },
-    "red": {
-        "color": {
-            "brandNormalColor": "#ff0000"
-        }
-    }
-}
-  ''';

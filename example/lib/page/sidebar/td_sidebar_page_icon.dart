@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:common_tools/index.dart';
 
-import '../../annotation/demo.dart';
 import '../../base/example_widget.dart';
 
 ///
@@ -51,8 +50,11 @@ class TDSideBarIconPageState extends State<TDSideBarIconPage> {
       });
 
       lock = true;
-      await _demoScroller.animateTo(value.toDouble() * itemHeight,
-          duration: const Duration(milliseconds: 500), curve: Curves.easeIn);
+      await _demoScroller.animateTo(
+        value.toDouble() * itemHeight,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeIn,
+      );
       lock = false;
     }
   }
@@ -71,36 +73,38 @@ class TDSideBarIconPageState extends State<TDSideBarIconPage> {
 
   Widget buildWidget(BuildContext context) {
     return ExamplePage(
-        title: 'SideBar 带图标侧边栏',
-        exampleCodeGroup: 'sideBar',
-        showSingleChild: true,
-        singleChild: CodeWrapper(
-          isCenter: false,
-          builder: _buildIconSideBar,
-        ));
+      title: 'SideBar 带图标侧边栏',
+      exampleCodeGroup: 'sideBar',
+      showSingleChild: true,
+      singleChild: _buildIconSideBar,
+    );
   }
 
-  @Demo(group: 'sideBar')
   Widget _buildIconSideBar(BuildContext context) {
     final list = <SideItemProps>[];
     final pages = <Widget>[];
 
     for (var i = 0; i < 20; i++) {
       list.add(
-          SideItemProps(index: i, label: '选项', value: i, icon: TDIcons.app));
+        SideItemProps(
+          index: i,
+          label: '选项',
+          value: i,
+          icon: Icons.app_blocking,
+        ),
+      );
       pages.add(getAnchorDemo(i));
     }
 
-    pages.add(Container(
-      height: MediaQuery.of(context).size.height - itemHeight,
-      decoration: const BoxDecoration(color: Colors.white),
-    ));
+    pages.add(
+      Container(
+        height: MediaQuery.of(context).size.height - itemHeight,
+        decoration: const BoxDecoration(color: Colors.white),
+      ),
+    );
 
     list[1].badge = const TDBadge(TDBadgeType.redPoint);
-    list[2].badge = const TDBadge(
-      TDBadgeType.message,
-      count: '8',
-    );
+    list[2].badge = const TDBadge(TDBadgeType.message, count: 8);
 
     var demoHeight = MediaQuery.of(context).size.height;
 
@@ -114,26 +118,28 @@ class TDSideBarIconPageState extends State<TDSideBarIconPage> {
             value: currentValue,
             controller: _sideBarController,
             children: list
-                .map((ele) => TDSideBarItem(
+                .map(
+                  (ele) => TDSideBarItem(
                     label: ele.label ?? '',
                     badge: ele.badge,
                     value: ele.value,
-                    icon: ele.icon))
+                    icon: ele.icon,
+                  ),
+                )
                 .toList(),
             onChanged: onChanged,
             onSelected: onSelected,
           ),
         ),
         Expanded(
-            child: SizedBox(
-          height: demoHeight,
-          child: SingleChildScrollView(
-            controller: _demoScroller,
-            child: Column(
-              children: pages,
+          child: SizedBox(
+            height: demoHeight,
+            child: SingleChildScrollView(
+              controller: _demoScroller,
+              child: Column(children: pages),
             ),
           ),
-        ))
+        ),
       ],
     );
   }
@@ -146,10 +152,7 @@ class TDSideBarIconPageState extends State<TDSideBarIconPage> {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 15, right: 9),
-            child: TDText('标题$index',
-                style: const TextStyle(
-                  fontSize: 14,
-                )),
+            child: TDText('标题$index', style: const TextStyle(fontSize: 14)),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 20),
@@ -185,15 +188,8 @@ class TDSideBarIconPageState extends State<TDSideBarIconPage> {
             width: 48,
             height: 48,
           ),
-          SizedBox(
-            width: 16,
-          ),
-          TDText(
-            '标题',
-            style: TextStyle(
-              fontSize: 16,
-            ),
-          )
+          SizedBox(width: 16),
+          TDText('标题', style: TextStyle(fontSize: 16)),
         ],
       ),
     );

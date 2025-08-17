@@ -32,13 +32,10 @@ class BlurCutout extends CustomPainter {
       filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
       child: Container(
         alignment: Alignment.center,
-        // Choose Colors.black.withOpacity(0.3) here if you want a shadow effect in addition to blurring.
+        // Choose Colors.black.withValues(alpha: 0.3) here if you want a shadow effect in addition to blurring.
         color: Colors.transparent,
         // This part is new, creating the cutout.
-        child: CustomPaint(
-          size: Size(width, height),
-          painter: BlurCutout(),
-        ),
+        child: CustomPaint(size: Size(width, height), painter: BlurCutout()),
       ),
     );
   }
@@ -64,9 +61,9 @@ class ScanAreaShape extends ShapeBorder {
     double? cutOutWidth,
     double? cutOutHeight,
     double cutOutBottomOffset = 0,
-  })  : _cutOutBottomOffset = cutOutBottomOffset,
-        cutOutWidth = cutOutWidth ?? cutOutSize ?? 250,
-        cutOutHeight = cutOutHeight ?? cutOutSize ?? 250 {
+  }) : _cutOutBottomOffset = cutOutBottomOffset,
+       cutOutWidth = cutOutWidth ?? cutOutSize ?? 250,
+       cutOutHeight = cutOutHeight ?? cutOutSize ?? 250 {
     assert(
       borderLength <=
           min(this.cutOutWidth, this.cutOutHeight) / 2 + borderWidth * 2,
@@ -99,18 +96,9 @@ class ScanAreaShape extends ShapeBorder {
     }
 
     return getLeftTopPath(rect)
-      ..lineTo(
-        rect.right,
-        rect.bottom,
-      )
-      ..lineTo(
-        rect.left,
-        rect.bottom,
-      )
-      ..lineTo(
-        rect.left,
-        rect.top,
-      );
+      ..lineTo(rect.right, rect.bottom)
+      ..lineTo(rect.left, rect.bottom)
+      ..lineTo(rect.left, rect.top);
   }
 
   @override
@@ -119,28 +107,32 @@ class ScanAreaShape extends ShapeBorder {
     final borderWidthSize = width / 2;
     final height = rect.height;
     final borderOffset = borderWidth / 2;
-    final borderLength = this.borderLength >
-            min(this.cutOutHeight, this.cutOutHeight) / 2 + borderWidth * 2
-        ? borderWidthSize / 2
-        : this.borderLength;
+    final borderLength =
+        this.borderLength >
+                min(this.cutOutHeight, this.cutOutHeight) / 2 + borderWidth * 2
+            ? borderWidthSize / 2
+            : this.borderLength;
     final cutOutWidth =
         this.cutOutWidth < width ? this.cutOutWidth : width - borderOffset;
     final cutOutHeight =
         this.cutOutHeight < height ? this.cutOutHeight : height - borderOffset;
 
-    final backgroundPaint = Paint()
-      ..color = overlayColor
-      ..style = PaintingStyle.fill;
+    final backgroundPaint =
+        Paint()
+          ..color = overlayColor
+          ..style = PaintingStyle.fill;
 
-    final borderPaint = Paint()
-      ..color = borderColor
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = borderWidth;
+    final borderPaint =
+        Paint()
+          ..color = borderColor
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = borderWidth;
 
-    final boxPaint = Paint()
-      ..color = borderColor
-      ..style = PaintingStyle.fill
-      ..blendMode = BlendMode.dstOut;
+    final boxPaint =
+        Paint()
+          ..color = borderColor
+          ..style = PaintingStyle.fill
+          ..blendMode = BlendMode.dstOut;
 
     final cutOutRect = Rect.fromLTWH(
       rect.left + width / 2 - cutOutWidth / 2 + borderOffset,
@@ -154,14 +146,8 @@ class ScanAreaShape extends ShapeBorder {
     );
 
     canvas
-      ..saveLayer(
-        rect,
-        backgroundPaint,
-      )
-      ..drawRect(
-        rect,
-        backgroundPaint,
-      )
+      ..saveLayer(rect, backgroundPaint)
+      ..drawRect(rect, backgroundPaint)
       // Draw top right corner
       ..drawRRect(
         RRect.fromLTRBAndCorners(
@@ -207,10 +193,7 @@ class ScanAreaShape extends ShapeBorder {
         borderPaint,
       )
       ..drawRRect(
-        RRect.fromRectAndRadius(
-          cutOutRect,
-          Radius.circular(borderRadius),
-        ),
+        RRect.fromRectAndRadius(cutOutRect, Radius.circular(borderRadius)),
         boxPaint,
       )
       ..restore();
@@ -231,7 +214,7 @@ class ScanAreaShape extends ShapeBorder {
         decoration: ShapeDecoration(
           shape: ScanAreaShape(
             borderColor: Colors.red,
-            overlayColor: const Color(0xFF040404).withOpacity(0.58),
+            overlayColor: const Color(0xFF040404).withValues(alpha: 0.58),
             borderRadius: 14,
             borderLength: 30,
             borderWidth: 16,
@@ -262,12 +245,12 @@ class ScannerAnimation extends AnimatedWidget {
     final Animation<double> animation = listenable as Animation<double>;
     final scorePosition = (animation.value * height * 0.28) + 16;
 
-    Color color1 = const Color(0xffE86A6D).withOpacity(0.3);
-    Color color2 = const Color(0xffE86A6D).withOpacity(0.1);
+    Color color1 = const Color(0xffE86A6D).withValues(alpha: 0.3);
+    Color color2 = const Color(0xffE86A6D).withValues(alpha: 0.1);
 
     if (animation.status == AnimationStatus.reverse) {
-      color1 = const Color(0xffE86A6D).withOpacity(0.1);
-      color2 = const Color(0xffE86A6D).withOpacity(0.3);
+      color1 = const Color(0xffE86A6D).withValues(alpha: 0.1);
+      color2 = const Color(0xffE86A6D).withValues(alpha: 0.3);
     }
     return Positioned(
       bottom: scorePosition,
@@ -313,9 +296,7 @@ class ScannerAnimation extends AnimatedWidget {
         Container(
           height: 2,
           width: width - 2,
-          decoration: const BoxDecoration(
-            color: Color(0xffD43034),
-          ),
+          decoration: const BoxDecoration(color: Color(0xffD43034)),
         ),
         Container(
           height: 5,

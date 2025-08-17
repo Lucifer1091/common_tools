@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:common_tools/index.dart';
 
 class AboutPage extends StatefulWidget {
   const AboutPage({Key? key}) : super(key: key);
@@ -10,7 +10,6 @@ class AboutPage extends StatefulWidget {
 }
 
 class _AboutPageState extends State<AboutPage> {
-
   String? version;
 
   String? publishTime;
@@ -26,25 +25,28 @@ class _AboutPageState extends State<AboutPage> {
     version = await rootBundle.loadString('assets/version');
     setState(() {});
   }
-  
+
   Future<void> _getPublishTime() async {
     var timeStamp = await rootBundle.loadString('assets/publish_time');
-    var exactTime = DateTime.fromMillisecondsSinceEpoch(int.parse(timeStamp.trim()));
+    var exactTime = DateTime.fromMillisecondsSinceEpoch(
+      int.parse(timeStamp.trim()),
+    );
     publishTime = '${exactTime.year}-${exactTime.month}-${exactTime.day}';
     setState(() {});
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: TDTheme.of(context).grayColor1,
-      appBar: AppBar(title: TDText('关于我们', textColor: TDTheme.of(context).whiteColor1,),),
+      backgroundColor: ThemeColors.neutral.shade50,
+      appBar: AppBar(
+        title: TDText('关于我们', textColor: context.colorScheme.primaryForeground),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            demoRow(context, '版本号：',desc: version),
-            demoRow(context, '发版日期：', desc: publishTime)
+            demoRow(context, '版本号：', desc: version),
+            demoRow(context, '发版日期：', desc: publishTime),
           ],
         ),
       ),
@@ -52,34 +54,25 @@ class _AboutPageState extends State<AboutPage> {
   }
 
   Widget demoRow(
-      BuildContext context,
-      String? title, {
-        String? desc,
-        bool on = true,
-        bool enable = true,
-        Color? onColor,
-        Color? offColor,
-      }) {
-    final theme = TDTheme.of(context);
+    BuildContext context,
+    String? title, {
+    String? desc,
+    bool on = true,
+    bool enable = true,
+    Color? onColor,
+    Color? offColor,
+  }) {
     Widget current = Row(
       children: [
-        Expanded(
-            child: TDText(
-              title,
-              textColor: theme.fontGyColor1,
-            )),
-        TDText(
-          desc ?? '',
-          textColor: theme.grayColor6,
-          forceVerticalCenter: true,
-        ),
+        Expanded(child: TDText(title, textColor: ThemeColors.neutral.shade900)),
+        TDText(desc ?? '', textColor: ThemeColors.neutral.shade500),
       ],
     );
     current = Container(
-      color: TDTheme.of(context).whiteColor1,
+      color: context.colorScheme.primaryForeground,
       padding: const EdgeInsets.only(left: 16, right: 16, bottom: 1, top: 1),
-      child: current,
       height: 44,
+      child: current,
     );
     return current;
   }

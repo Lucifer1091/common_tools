@@ -320,120 +320,120 @@ class CustomTextFormField extends StatelessWidget {
                 ),
               ).mouseRegion
               : suffixWidget,
-      enabledBorder:
-          borderRadius != null || customBorderRadius != null
-              ? OutlineInputBorder(
-                borderRadius:
-                    customBorderRadius ??
-                    BorderRadius.circular(borderRadius ?? 4),
-                borderSide: BorderSide(
-                  color:
-                      enableBorderColor ??
-                      context.enabledBorder.borderSide.color,
-                  width: context.enabledBorder.borderSide.width,
-                ),
-              )
-              : context.enabledBorder.copyWith(
-                borderSide: BorderSide(
-                  color:
-                      enableBorderColor ??
-                      context.enabledBorder.borderSide.color,
-                  width: context.enabledBorder.borderSide.width,
-                ),
-              ),
-      focusedBorder:
-          borderRadius != null || customBorderRadius != null
-              ? OutlineInputBorder(
-                borderRadius:
-                    customBorderRadius ??
-                    BorderRadius.circular(borderRadius ?? 4),
-                borderSide: BorderSide(
-                  color:
-                      _readOnly
-                          ? enableBorderColor ?? Colors.grey
-                          : focusBorderColor ??
-                              context.focusedBorder.borderSide.color,
-                  width: context.focusedBorder.borderSide.width,
-                ),
-              )
-              : context.focusedBorder.copyWith(
-                borderSide: BorderSide(
-                  color:
-                      _readOnly
-                          ? enableBorderColor ?? Colors.grey
-                          : focusBorderColor ??
-                              context.focusedBorder.borderSide.color,
-                  width: context.focusedBorder.borderSide.width,
-                ),
-              ),
-      errorBorder:
-          borderRadius != null || customBorderRadius != null
-              ? OutlineInputBorder(
-                borderRadius:
-                    customBorderRadius ??
-                    BorderRadius.circular(borderRadius ?? 4),
-                borderSide: BorderSide(
-                  color:
-                      errorBorderColor ?? context.errorBorder.borderSide.color,
-                  width: context.errorBorder.borderSide.width,
-                ),
-              )
-              : context.errorBorder.copyWith(
-                borderSide: BorderSide(
-                  color:
-                      errorBorderColor ?? context.errorBorder.borderSide.color,
-                  width: context.errorBorder.borderSide.width,
-                ),
-              ),
-      focusedErrorBorder:
-          borderRadius != null
-              ? OutlineInputBorder(
-                borderRadius: BorderRadius.circular(borderRadius ?? 4),
-                borderSide: BorderSide(
-                  color:
-                      errorBorderColor ??
-                      context.focusedErrorBorder.borderSide.color,
-                  width: context.focusedErrorBorder.borderSide.width,
-                ),
-              )
-              : context.focusedErrorBorder.copyWith(
-                borderSide: BorderSide(
-                  color:
-                      errorBorderColor ??
-                      context.focusedErrorBorder.borderSide.color,
-                  width: context.focusedErrorBorder.borderSide.width,
-                ),
-              ),
-      disabledBorder:
-          borderRadius != null
-              ? OutlineInputBorder(
-                borderRadius: BorderRadius.circular(borderRadius ?? 4),
-                borderSide: BorderSide(
-                  color:
-                      disableBorderColor ??
-                      context.disableBorder.borderSide.color,
-                  width: context.disableBorder.borderSide.width,
-                ),
-              )
-              : context.disableBorder.copyWith(
-                borderSide: BorderSide(
-                  color:
-                      disableBorderColor ??
-                      context.disableBorder.borderSide.color,
-                  width: context.disableBorder.borderSide.width,
-                ),
-              ),
-      fillColor:
-          _readOnly && fillColor == null
-              ? const Color(0xfff5f5f5)
-              : fillColor ?? context.fillColor,
-      filled: true,
-      alignLabelWithHint: true,
-      focusColor: context.primary,
-      errorStyle: context.bodySmall?.copyWith(
-        fontSize: errorFontSize,
-        color: errorColor ?? context.error,
-      ),
+      // enabledBorder:
+      //     borderRadius != null || customBorderRadius != null
+      //         ? OutlineInputBorder(
+      //           borderRadius:
+      //               customBorderRadius ??
+      //               BorderRadius.circular(borderRadius ?? 4),
+      //           borderSide: BorderSide(
+      //             color:
+      //                 enableBorderColor ??
+      //                 context.enabledBorder.borderSide.color,
+      //             width: context.enabledBorder.borderSide.width,
+      //           ),
+      //         )
+      //         : context.enabledBorder.copyWith(
+      //           borderSide: BorderSide(
+      //             color:
+      //                 enableBorderColor ??
+      //                 context.enabledBorder.borderSide.color,
+      //             width: context.enabledBorder.borderSide.width,
+      //           ),
+      //         ),
+      // focusedBorder:
+      //     borderRadius != null || customBorderRadius != null
+      //         ? OutlineInputBorder(
+      //           borderRadius:
+      //               customBorderRadius ??
+      //               BorderRadius.circular(borderRadius ?? 4),
+      //           borderSide: BorderSide(
+      //             color:
+      //                 _readOnly
+      //                     ? enableBorderColor ?? Colors.grey
+      //                     : focusBorderColor ??
+      //                         context.focusedBorder.borderSide.color,
+      //             width: context.focusedBorder.borderSide.width,
+      //           ),
+      //         )
+      //         : context.focusedBorder.copyWith(
+      //           borderSide: BorderSide(
+      //             color:
+      //                 _readOnly
+      //                     ? enableBorderColor ?? Colors.grey
+      //                     : focusBorderColor ??
+      //                         context.focusedBorder.borderSide.color,
+      //             width: context.focusedBorder.borderSide.width,
+      //           ),
+      //         ),
+      // errorBorder:
+      //     borderRadius != null || customBorderRadius != null
+      //         ? OutlineInputBorder(
+      //           borderRadius:
+      //               customBorderRadius ??
+      //               BorderRadius.circular(borderRadius ?? 4),
+      //           borderSide: BorderSide(
+      //             color:
+      //                 errorBorderColor ?? context.errorBorder.borderSide.color,
+      //             width: context.errorBorder.borderSide.width,
+      //           ),
+      //         )
+      //         : context.errorBorder.copyWith(
+      //           borderSide: BorderSide(
+      //             color:
+      //                 errorBorderColor ?? context.errorBorder.borderSide.color,
+      //             width: context.errorBorder.borderSide.width,
+      //           ),
+      //         ),
+      // focusedErrorBorder:
+      //     borderRadius != null
+      //         ? OutlineInputBorder(
+      //           borderRadius: BorderRadius.circular(borderRadius ?? 4),
+      //           borderSide: BorderSide(
+      //             color:
+      //                 errorBorderColor ??
+      //                 context.focusedErrorBorder.borderSide.color,
+      //             width: context.focusedErrorBorder.borderSide.width,
+      //           ),
+      //         )
+      //         : context.focusedErrorBorder.copyWith(
+      //           borderSide: BorderSide(
+      //             color:
+      //                 errorBorderColor ??
+      //                 context.focusedErrorBorder.borderSide.color,
+      //             width: context.focusedErrorBorder.borderSide.width,
+      //           ),
+      //         ),
+      // disabledBorder:
+      //     borderRadius != null
+      //         ? OutlineInputBorder(
+      //           borderRadius: BorderRadius.circular(borderRadius ?? 4),
+      //           borderSide: BorderSide(
+      //             color:
+      //                 disableBorderColor ??
+      //                 context.disableBorder.borderSide.color,
+      //             width: context.disableBorder.borderSide.width,
+      //           ),
+      //         )
+      //         : context.disableBorder.copyWith(
+      //           borderSide: BorderSide(
+      //             color:
+      //                 disableBorderColor ??
+      //                 context.disableBorder.borderSide.color,
+      //             width: context.disableBorder.borderSide.width,
+      //           ),
+      //         ),
+      // fillColor:
+      //     _readOnly && fillColor == null
+      //         ? const Color(0xfff5f5f5)
+      //         : fillColor ?? context.fillColor,
+      // filled: true,
+      // alignLabelWithHint: true,
+      // focusColor: context.colorScheme.primary,
+      // errorStyle: context.bodySmall?.copyWith(
+      //   fontSize: errorFontSize,
+      //   color: errorColor ?? context.error,
+      // ),
       errorMaxLines: 2,
     );
   }

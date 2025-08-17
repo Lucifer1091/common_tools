@@ -53,8 +53,8 @@ class GalleryImage extends StatefulWidget {
     this.showAppBar = true,
     this.closeWhenSwipeUp = false,
     this.closeWhenSwipeDown = false,
-  })  : assert(numOfShowImages <= imageUrls.length),
-        super(key: key);
+  }) : assert(numOfShowImages <= imageUrls.length),
+       super(key: key);
   @override
   State<GalleryImage> createState() => _GalleryImageState();
 }
@@ -72,34 +72,36 @@ class _GalleryImageState extends State<GalleryImage> {
     return galleryItems.isEmpty
         ? const EmptyWidget()
         : GridView.builder(
-            primary: false,
-            itemCount: galleryItems.length > 3
-                ? widget.numOfShowImages
-                : galleryItems.length,
-            padding: widget.padding,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              childAspectRatio: widget.childAspectRatio,
-              crossAxisCount: widget.crossAxisCount,
-              mainAxisSpacing: widget.mainAxisSpacing,
-              crossAxisSpacing: widget.crossAxisSpacing,
-            ),
-            shrinkWrap: true,
-            itemBuilder: (BuildContext context, int index) {
-              return _isLastItem(index)
-                  ? _buildImageNumbers(index)
-                  : GalleryItemThumbnail(
-                      galleryItem: galleryItems[index],
-                      onTap: () {
-                        _openImageFullScreen(index);
-                      },
-                      loadingWidget: widget.loadingWidget,
-                      errorWidget: widget.errorWidget,
-                      radius: widget.imageRadius,
-                    );
-            });
+          primary: false,
+          itemCount:
+              galleryItems.length > 3
+                  ? widget.numOfShowImages
+                  : galleryItems.length,
+          padding: widget.padding,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            childAspectRatio: widget.childAspectRatio,
+            crossAxisCount: widget.crossAxisCount,
+            mainAxisSpacing: widget.mainAxisSpacing,
+            crossAxisSpacing: widget.crossAxisSpacing,
+          ),
+          shrinkWrap: true,
+          itemBuilder: (BuildContext context, int index) {
+            return _isLastItem(index)
+                ? _buildImageNumbers(index)
+                : GalleryItemThumbnail(
+                  galleryItem: galleryItems[index],
+                  onTap: () {
+                    _openImageFullScreen(index);
+                  },
+                  loadingWidget: widget.loadingWidget,
+                  errorWidget: widget.errorWidget,
+                  radius: widget.imageRadius,
+                );
+          },
+        );
   }
 
-// build image with number for other images
+  // build image with number for other images
   Widget _buildImageNumbers(int index) {
     return GestureDetector(
       onTap: () {
@@ -119,11 +121,14 @@ class _GalleryImageState extends State<GalleryImage> {
           ClipRRect(
             borderRadius: BorderRadius.all(Radius.circular(widget.imageRadius)),
             child: ColoredBox(
-              color: widget.colorOfNumberWidget ?? Colors.black.withOpacity(.7),
+              color:
+                  widget.colorOfNumberWidget ??
+                  Colors.black.withValues(alpha: .7),
               child: Center(
                 child: Text(
                   "+${galleryItems.length - index}",
-                  style: widget.textStyleOfNumberWidget ??
+                  style:
+                      widget.textStyleOfNumberWidget ??
                       const TextStyle(color: Colors.white, fontSize: 40),
                 ),
               ),
@@ -134,38 +139,39 @@ class _GalleryImageState extends State<GalleryImage> {
     );
   }
 
-// Check if item is last image in grid to view image or number
+  // Check if item is last image in grid to view image or number
   bool _isLastItem(int index) {
     return index < galleryItems.length - 1 &&
         index == widget.numOfShowImages - 1;
   }
 
-// to open gallery image in full screen
+  // to open gallery image in full screen
   Future<void> _openImageFullScreen(int indexOfImage) async {
     await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => GalleryImageViewWrapper(
-          titleGallery: widget.titleGallery,
-          galleryItems: galleryItems,
-          backgroundColor: widget.galleryBackgroundColor,
-          initialIndex: indexOfImage,
-          loadingWidget: widget.loadingWidget,
-          errorWidget: widget.errorWidget,
-          maxScale: widget.maxScale,
-          minScale: widget.minScale,
-          reverse: widget.reverse,
-          showListInGalley: widget.showListInGalley,
-          showAppBar: widget.showAppBar,
-          closeWhenSwipeUp: widget.closeWhenSwipeUp,
-          closeWhenSwipeDown: widget.closeWhenSwipeDown,
-          radius: widget.imageRadius,
-        ),
+        builder:
+            (context) => GalleryImageViewWrapper(
+              titleGallery: widget.titleGallery,
+              galleryItems: galleryItems,
+              backgroundColor: widget.galleryBackgroundColor,
+              initialIndex: indexOfImage,
+              loadingWidget: widget.loadingWidget,
+              errorWidget: widget.errorWidget,
+              maxScale: widget.maxScale,
+              minScale: widget.minScale,
+              reverse: widget.reverse,
+              showListInGalley: widget.showListInGalley,
+              showAppBar: widget.showAppBar,
+              closeWhenSwipeUp: widget.closeWhenSwipeUp,
+              closeWhenSwipeDown: widget.closeWhenSwipeDown,
+              radius: widget.imageRadius,
+            ),
       ),
     );
   }
 
-// clear and build list
+  // clear and build list
   void _buildItemsList(List<String> items) {
     galleryItems.clear();
     for (var item in items) {

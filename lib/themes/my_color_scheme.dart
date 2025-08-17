@@ -1,19 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
-import '../extensions/string/converters.dart';
-import 'color_schemes/blue.dart';
-import 'color_schemes/gray.dart';
-import 'color_schemes/green.dart';
-import 'color_schemes/neutral.dart';
-import 'color_schemes/orange.dart';
-import 'color_schemes/red.dart';
-import 'color_schemes/rose.dart';
-import 'color_schemes/slate.dart';
-import 'color_schemes/stone.dart';
-import 'color_schemes/violet.dart';
-import 'color_schemes/yellow.dart';
-import 'color_schemes/zinc.dart';
+import '../index.dart';
 
 class MyColorScheme {
   const MyColorScheme({

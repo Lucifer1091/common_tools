@@ -129,7 +129,7 @@
 //
 //   DropdownButtonProps dropdownButtonProps(BuildContext context) {
 //     return DropdownButtonProps(
-//       color: context.primaryColor,
+//       color: context.colorScheme.primaryColor,
 //       padding: EdgeInsets.zero,
 //       style: ButtonStyle(
 //         shape: WidgetStateProperty.all(
@@ -462,7 +462,7 @@
 //         onSuffixTap: searchController.clear,
 //         fillColor: AppColors.blueShade3,
 //       ).buildInputDecoration(context),
-//       cursorColor: context.primaryColor,
+//       cursorColor: context.colorScheme.primaryColor,
 //       keyboardType: TextInputType.text,
 //     );
 //   }
@@ -523,7 +523,7 @@
 //                     size: 22,
 //                     color: disabled
 //                         ? AppColors.greyShade1
-//                         : context.primaryColor,
+//                         : context.colorScheme.primaryColor,
 //                   )
 //                 : Icon(
 //                     Icons.check_box_outline_blank_rounded,
@@ -537,7 +537,7 @@
 //             color: disabled
 //                 ? AppColors.greyShade1
 //                 : selected
-//                     ? context.primaryColor
+//                     ? context.colorScheme.primaryColor
 //                     : context.bodyLarge.color,
 //             fontWeight: FontWeight.w400,
 //           ),
@@ -550,7 +550,7 @@
 //
 //   Container _buildDefaultDialogStyle(Widget child) {
 //     return Container(
-//       color:  context.primaryColor,
+//       color:  context.colorScheme.primaryColor,
 //       child: ClipRRect(
 //         borderRadius: BorderRadius.circular(12),
 //         child: Padding(

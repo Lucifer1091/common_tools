@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:common_tools/index.dart';
 
-import '../annotation/demo.dart';
 import '../base/example_widget.dart';
 
 ///
@@ -33,17 +32,23 @@ class TDSwitchPageState extends State<TDSwitchPage> {
             ExampleItem(desc: '自定义颜色开关', builder: _buildSwitchWithColor),
           ],
         ),
-        ExampleModule(title: '组件状态', children: [
-          ExampleItem(desc: '加载状态', builder: _buildSwitchWithLoadingOff),
-          ExampleItem(builder: _buildSwitchWithLoadingOn),
-          ExampleItem(desc: '禁用状态', builder: _buildSwitchWithDisableOff),
-          ExampleItem(builder: _buildSwitchWithDisableOn),
-        ]),
-        ExampleModule(title: '组件样式', children: [
-          ExampleItem(desc: '开关尺寸', builder: _buildSwitchWithSizeLarge),
-          ExampleItem(builder: _buildSwitchWithSizeMed),
-          ExampleItem(builder: _buildSwitchWithSizeSmall),
-        ]),
+        ExampleModule(
+          title: '组件状态',
+          children: [
+            ExampleItem(desc: '加载状态', builder: _buildSwitchWithLoadingOff),
+            ExampleItem(builder: _buildSwitchWithLoadingOn),
+            ExampleItem(desc: '禁用状态', builder: _buildSwitchWithDisableOff),
+            ExampleItem(builder: _buildSwitchWithDisableOn),
+          ],
+        ),
+        ExampleModule(
+          title: '组件样式',
+          children: [
+            ExampleItem(desc: '开关尺寸', builder: _buildSwitchWithSizeLarge),
+            ExampleItem(builder: _buildSwitchWithSizeMed),
+            ExampleItem(builder: _buildSwitchWithSizeSmall),
+          ],
+        ),
       ],
       test: [
         ExampleItem(desc: '自定义开关文案-通常只支持一个字符,超出部分无法展示', builder: _customText),
@@ -66,92 +71,77 @@ class TDSwitchPageState extends State<TDSwitchPage> {
     TDSwitchSize? size,
     TDSwitchType? type,
   }) {
-    final theme = TDTheme.of(context);
     Widget current = Row(
       children: [
-        Expanded(
-            child: TDText(
-          title,
-          textColor: theme.fontGyColor1,
-        )),
-        TDText(
-          desc ?? '',
-          textColor: theme.grayColor6,
-        ),
+        Expanded(child: TDText(title, textColor: ThemeColors.neutral.shade900)),
+        TDText(desc ?? '', textColor: ThemeColors.neutral.shade500),
         SizedBox(
           child: _buildSwitch(
-              on: on,
-              enable: enable,
-              trackOnColor: trackOnColor,
-              trackOffColor: trackOffColor,
-              thumbContentOnColor: thumbContentOnColor,
-              thumbContentOffColor: thumbContentOffColor,
-              size: size,
-              type: type),
-        )
+            on: on,
+            enable: enable,
+            trackOnColor: trackOnColor,
+            trackOffColor: trackOffColor,
+            thumbContentOnColor: thumbContentOnColor,
+            thumbContentOffColor: thumbContentOffColor,
+            size: size,
+            type: type,
+          ),
+        ),
       ],
     );
     current = Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: SizedBox(
+        height: 56,
         child: Container(
+          color: Colors.white,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: current,
           ),
-          color: Colors.white,
         ),
-        height: 56,
       ),
     );
     return current;
   }
 
   /// 每一项的封装
-  @Demo(group: 'switch')
-  Widget _buildItem(BuildContext context, Widget switchItem,
-      {String? title, String? desc}) {
-    final theme = TDTheme.of(context);
+
+  Widget _buildItem(
+    BuildContext context,
+    Widget switchItem, {
+    String? title,
+    String? desc,
+  }) {
     Widget current = Row(
       children: [
         Expanded(
-            child: TDText(
-          title ?? '',
-          textColor: theme.fontGyColor1,
-        )),
-        TDText(
-          desc ?? '',
-          textColor: theme.grayColor6,
+          child: TDText(title ?? '', textColor: ThemeColors.neutral.shade900),
         ),
-        SizedBox(child: switchItem)
+        TDText(desc ?? '', textColor: ThemeColors.neutral.shade500),
+        SizedBox(child: switchItem),
       ],
     );
     current = Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: SizedBox(
+        height: 56,
         child: Container(
+          color: Colors.white,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: current,
           ),
-          color: Colors.white,
         ),
-        height: 56,
       ),
     );
     return Column(mainAxisSize: MainAxisSize.min, children: [current]);
   }
 
-  @Demo(group: 'switch')
   Widget _buildSwitchWithBase(BuildContext context) {
-    return _buildItem(
-      context,
-      const TDSwitch(),
-      title: '基础开关',
-    );
+    return _buildItem(context, const TDSwitch(), title: '基础开关');
   }
 
-  @Demo(group: 'switch')
   Widget _buildSwitchWithText(BuildContext context) {
     return _buildItem(
       context,
@@ -160,7 +150,6 @@ class TDSwitchPageState extends State<TDSwitchPage> {
     );
   }
 
-  @Demo(group: 'switch')
   Widget _buildSwitchWithIcon(BuildContext context) {
     return _buildItem(
       context,
@@ -169,7 +158,6 @@ class TDSwitchPageState extends State<TDSwitchPage> {
     );
   }
 
-  @Demo(group: 'switch')
   Widget _buildSwitchWithColor(BuildContext context) {
     return _buildItem(
       context,
@@ -178,91 +166,62 @@ class TDSwitchPageState extends State<TDSwitchPage> {
     );
   }
 
-  @Demo(group: 'switch')
   Widget _buildSwitchWithLoadingOff(BuildContext context) {
     return _buildItem(
       context,
-      const TDSwitch(
-        isOn: false,
-        type: TDSwitchType.loading,
-      ),
+      const TDSwitch(isOn: false, type: TDSwitchType.loading),
       title: '加载状态',
     );
   }
 
-  @Demo(group: 'switch')
   Widget _buildSwitchWithLoadingOn(BuildContext context) {
     return _buildItem(
       context,
-      const TDSwitch(
-        isOn: true,
-        type: TDSwitchType.loading,
-      ),
+      const TDSwitch(isOn: true, type: TDSwitchType.loading),
       title: '加载状态',
     );
   }
 
-  @Demo(group: 'switch')
   Widget _buildSwitchWithDisableOff(BuildContext context) {
     return _buildItem(
       context,
-      const TDSwitch(
-        enable: false,
-        isOn: false,
-      ),
+      const TDSwitch(enable: false, isOn: false),
       title: '禁用状态',
     );
   }
 
-  @Demo(group: 'switch')
   Widget _buildSwitchWithDisableOn(BuildContext context) {
     return _buildItem(
       context,
-      const TDSwitch(
-        enable: false,
-        isOn: true,
-      ),
+      const TDSwitch(enable: false, isOn: true),
       title: '禁用状态',
     );
   }
 
-  @Demo(group: 'switch')
   Widget _buildSwitchWithSizeLarge(BuildContext context) {
     return _buildItem(
       context,
-      const TDSwitch(
-        isOn: true,
-        size: TDSwitchSize.large,
-      ),
+      const TDSwitch(isOn: true, size: TDSwitchSize.large),
       title: '大尺寸32',
     );
   }
 
-  @Demo(group: 'switch')
   Widget _buildSwitchWithSizeMed(BuildContext context) {
     return _buildItem(
       context,
-      const TDSwitch(
-        isOn: true,
-        size: TDSwitchSize.medium,
-      ),
+      const TDSwitch(isOn: true, size: TDSwitchSize.medium),
       title: '中尺寸28',
     );
   }
 
-  @Demo(group: 'switch')
   Widget _buildSwitchWithSizeSmall(BuildContext context) {
     return _buildItem(
       context,
-      const TDSwitch(
-        isOn: true,
-        size: TDSwitchSize.small,
-      ),
+      const TDSwitch(isOn: true, size: TDSwitchSize.small),
       title: '小尺寸24',
     );
   }
 
-  @Demo(group: 'switch')
   Widget _buildSwitch({
     bool on = true,
     bool enable = true,
@@ -285,20 +244,14 @@ class TDSwitchPageState extends State<TDSwitchPage> {
     );
   }
 
-  @Demo(group: 'switch')
   Widget _customText(BuildContext context) {
     return _buildItem(
       context,
-      const TDSwitch(
-        type: TDSwitchType.text,
-        openText: '1111',
-        closeText: '—',
-      ),
+      const TDSwitch(type: TDSwitchType.text, openText: '1111', closeText: '—'),
       title: '基础开关',
     );
   }
 
-  @Demo(group: 'switch')
   Widget _customTextFont(BuildContext context) {
     return _buildItem(
       context,

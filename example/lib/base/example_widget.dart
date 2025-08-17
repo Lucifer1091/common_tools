@@ -1,25 +1,14 @@
-import 'dart:math';
-
+import 'package:common_tools/index.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:markdown/markdown.dart' as md;
-import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../page/td_theme_page.dart';
-import 'syntax_highlighter.dart';
-import 'api_widget.dart';
 import 'example_base.dart';
-import 'example_route.dart';
-import 'notification_center.dart';
-import 'web_md_tool.dart';
 
 var navBarkey = GlobalKey();
 
 /// 示例页面控件，建议每个页面返回一个ExampleWidget即可，不用独自封装
 class ExamplePage extends StatefulWidget {
   const ExamplePage({
-    Key? key,
+    super.key,
     this.navBarKey,
     required this.title,
     this.desc = '',
@@ -35,8 +24,7 @@ class ExamplePage extends StatefulWidget {
   }) : assert(
          children.length > 0 || (showSingleChild && singleChild != null),
          'children or singleChild must have at least one',
-       ),
-       super(key: key);
+       );
 
   /// 标题
   final String title;
@@ -45,7 +33,7 @@ class ExamplePage extends StatefulWidget {
   final bool showSingleChild;
 
   /// 自定义的自控件，只有showSingleChild为true才会展示。CodeWrapper的builder构建真正的试图
-  final CodeWrapper? singleChild;
+  final WidgetBuilder? singleChild;
 
   /// 示例组件模块列表
   final List<ExampleModule> children;
@@ -103,7 +91,7 @@ class _ExamplePageState extends State<ExamplePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: widget.floatingActionButton,
-      backgroundColor: widget.backgroundColor ?? TDTheme.of(context).grayColor1,
+      backgroundColor: widget.backgroundColor ?? ThemeColors.neutral.shade50,
       body: ScrollbarTheme(
         data: ScrollbarThemeData(
           trackVisibility: MaterialStateProperty.all(true),
@@ -111,7 +99,6 @@ class _ExamplePageState extends State<ExamplePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildNavBar(),
             Expanded(
               child: widget.showSingleChild && widget.singleChild != null
                   ? _singleChild()
@@ -131,36 +118,7 @@ class _ExamplePageState extends State<ExamplePage> {
                             return _buildHeader(context);
                           }
                           if (index == widget.children.length + 2) {
-                            return WebMdTool.needGenerateWebMd
-                                ? Container(
-                                    margin: const EdgeInsets.only(top: 24),
-                                    child: Column(
-                                      children: [
-                                        TDButton(
-                                          text: '生成Web使用md',
-                                          type: TDButtonType.fill,
-                                          onTap: () => WebMdTool.generateWebMd(
-                                            model: model,
-                                            description: widget.desc,
-                                            exampleCodeGroup:
-                                                widget.exampleCodeGroup,
-                                            exampleModuleList: widget.children,
-                                            testList: widget.test,
-                                            singleChild: widget.showSingleChild
-                                                ? widget.singleChild
-                                                : null,
-                                          ),
-                                        ),
-                                        TDButton(
-                                          text: '返回首页',
-                                          type: TDButtonType.fill,
-                                          onTap: () =>
-                                              Navigator.of(context).maybePop(),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                : Container();
+                            return Container();
                           }
                           ExampleModule data;
                           if (index <= widget.children.length) {
@@ -186,33 +144,17 @@ class _ExamplePageState extends State<ExamplePage> {
   }
 
   Widget _singleChild() {
-    if (!WebMdTool.needGenerateWebMd) {
-      return widget.singleChild!;
-    }
     return ExampleItemInherited(
+      path: widget.exampleCodeGroup,
       child: Stack(
         children: [
-          widget.singleChild!,
+          widget.singleChild!.call(context),
           Positioned(
             left: 16,
             right: 16,
             bottom: 0,
             child: Column(
               children: [
-                TDButton(
-                  text: '生成Web使用md',
-                  type: TDButtonType.fill,
-                  onTap: () => WebMdTool.generateWebMd(
-                    model: model,
-                    description: widget.desc,
-                    exampleCodeGroup: widget.exampleCodeGroup,
-                    exampleModuleList: widget.children,
-                    testList: widget.test,
-                    singleChild: widget.showSingleChild
-                        ? widget.singleChild
-                        : null,
-                  ),
-                ),
                 TDButton(
                   text: '返回首页',
                   type: TDButtonType.fill,
@@ -223,7 +165,6 @@ class _ExamplePageState extends State<ExamplePage> {
           ),
         ],
       ),
-      path: widget.exampleCodeGroup,
     );
   }
 
@@ -233,48 +174,6 @@ class _ExamplePageState extends State<ExamplePage> {
   2.参数为枚举，需测试所有枚举组合（示例已有的可不写）''',
     builder: (_) => const TDDivider(),
   );
-
-  Widget _buildNavBar() {
-    var rightBarItems = <TDNavBarItem>[];
-
-    // web端示例页不展示标题栏
-    if (PlatformChecker.isWeb && !Navigator.canPop(context)) {
-      return Container();
-    }
-    if (showAction && !PlatformChecker.isWeb) {
-      rightBarItems.add(
-        TDNavBarItem(
-          icon: TDIcons.info_circle,
-          action: () {
-            Navigator.pushNamed(context, TDExampleRoute.getApiPath(model));
-          },
-        ),
-      );
-      if (!PlatformChecker.isWeb) {
-        rightBarItems.add(
-          TDNavBarItem(
-            icon: TDIcons.code,
-            action: () {
-              setState(() {
-                apiVisible = !apiVisible;
-                if (model != null) {
-                  model!.apiVisible = apiVisible;
-                }
-              });
-              TNotification.postNotification('onApiVisibleChange', {
-                'apiVisible': apiVisible,
-              });
-            },
-          ),
-        );
-      }
-    }
-    return TDNavBar(
-      key: widget.navBarKey,
-      title: widget.title,
-      rightBarItems: rightBarItems,
-    );
-  }
 
   Widget _buildHeader(BuildContext context) {
     if (widget.showSingleChild) {
@@ -286,19 +185,10 @@ class _ExamplePageState extends State<ExamplePage> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (WebMdTool.needGenerateWebMd) const TDText('WebGenTag'),
-          TDText(
-            widget.title,
-            font: TDTheme.of(context).fontHeadlineSmall,
-            textColor: TDTheme.of(context).fontGyColor1,
-          ),
+          TDText(widget.title),
           Container(
             margin: const EdgeInsets.only(top: 4),
-            child: TDText(
-              widget.desc,
-              font: TDTheme.of(context).fontBodyMedium,
-              textColor: TDTheme.of(context).fontGyColor2,
-            ),
+            child: TDText(widget.desc),
           ),
           // Expanded(child: ),
         ],
@@ -315,8 +205,6 @@ class _ExamplePageState extends State<ExamplePage> {
           margin: const EdgeInsets.only(left: 16, right: 16, top: 32),
           child: TDText(
             '${index < 10 ? "0$index" : index} ${data.title}',
-            font: TDTheme.of(context).fontTitleLarge,
-            textColor: TDTheme.of(context).fontGyColor1,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -418,12 +306,7 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
         child = Center(child: widget.data.builder(context));
       }
     } else {
-      child = CodeWrapper(
-        builder: widget.data.builder,
-        methodName: widget.data.methodName,
-        isCenter: widget.data.center,
-        isFromItem: true,
-      );
+      child = Placeholder();
     }
     if (widget.data.padding != null) {
       child = Padding(padding: widget.data.padding!, child: child);
@@ -444,218 +327,12 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
                   top: widget.index == 0 ? 8 : 24,
                   bottom: 16,
                 ),
-                child: TDText(
-                  widget.data.desc,
-                  font: TDTheme.of(context).fontBodyMedium,
-                  textColor: TDTheme.of(context).fontGyColor2,
-                ),
+                child: TDText(widget.data.desc),
               ),
         child,
       ],
     );
-    return ExampleItemInherited(
-      child: child,
-      path: WebMdTool.getItemKey(
-        widget.exampleCodeGroup,
-        widget.moduleTitle,
-        widget.data.desc,
-      ),
-    );
-  }
-}
-
-class CodeWrapper extends StatefulWidget {
-  const CodeWrapper({
-    Key? key,
-    required this.builder,
-    this.methodName,
-    this.isCenter = false,
-    this.isFromItem = false,
-  }) : super(key: key);
-
-  final WidgetBuilder builder;
-
-  final bool isCenter;
-
-  final bool isFromItem;
-
-  final String? methodName;
-
-  @override
-  State<CodeWrapper> createState() => _CodeWrapperState();
-}
-
-class _CodeWrapperState extends State<CodeWrapper> {
-  bool apiVisible = false;
-
-  String exampleCodeGroup = '';
-
-  String? codeString;
-
-  @override
-  void initState() {
-    super.initState();
-    TNotification.addObserver('onApiVisibleChange', (arguments) {
-      if (arguments is Map) {
-        setState(() {
-          apiVisible = arguments['apiVisible'] ?? false;
-        });
-      }
-    });
-
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      setState(() {
-        var modelTheme = context
-            .dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
-        exampleCodeGroup = modelTheme?.model.codePath ?? '';
-        apiVisible = modelTheme?.model.apiVisible ?? false;
-      });
-
-      if (WebMdTool.needGenerateWebMd && !widget.isFromItem) {
-        loadManualCode();
-      }
-    });
-  }
-
-  void loadManualCode() async {
-    var modelTheme = context
-        .dependOnInheritedWidgetOfExactType<ExampleItemInherited>();
-    if (modelTheme?.path != null) {
-      codeString ??= await loadCodeString();
-      var list = WebMdTool.manualExampleCode[modelTheme!.path] ?? [];
-      list.add(codeString!);
-      WebMdTool.manualExampleCode[modelTheme.path] = list;
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    var child = widget.builder(context);
-    if (widget.isCenter) {
-      child = Center(child: widget.builder(context));
-    }
-    if (apiVisible) {
-      child = Stack(
-        children: [
-          child,
-          Positioned(
-            top: 0,
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: GestureDetector(
-              onTap: _showCodePanel,
-              child: Container(
-                color: Colors.black.withOpacity(0.4),
-                alignment: Alignment.center,
-                child: TDText(
-                  'code',
-                  textColor: TDTheme.of(context).whiteColor1,
-                ),
-              ),
-            ),
-          ),
-        ],
-      );
-    }
     return child;
-  }
-
-  String _getCodeAssetsPath() {
-    var methodName = widget.methodName ?? '';
-
-    var builderString = widget.builder.toString();
-    if (methodName.isEmpty) {
-      if (builderString.contains('\'')) {
-        var strings = builderString.split('\'');
-        if (strings.length > 1) {
-          methodName = strings[1];
-          if (methodName.isNotEmpty && methodName.contains('@')) {
-            methodName = methodName.split('@')[0];
-          }
-        }
-      }
-    }
-    if (methodName.isNotEmpty && exampleCodeGroup.isNotEmpty) {
-      print('example code methodName: $methodName');
-      return 'assets/code/${exampleCodeGroup}.$methodName.txt';
-    }
-    return '';
-  }
-
-  void _showCodePanel() async {
-    codeString ??= await loadCodeString();
-    await showModalBottomSheet(
-      isScrollControlled: true,
-      barrierColor: Colors.black.withOpacity(0.5),
-      backgroundColor: Colors.transparent,
-      context: context,
-      builder: (_) {
-        if (codeString!.isEmpty) {
-          return Container(
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: TDTheme.of(context).grayColor1,
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(TDTheme.of(context).radiusDefault),
-              ),
-            ),
-            height: 500,
-            child: TDText(
-              PlatformChecker.isWeb ? 'web不支持演示代码，请在移动端查看' : '暂无演示代码',
-            ),
-          );
-        }
-
-        var lines = codeString!.split('\n');
-        print('lines: ${lines.length}');
-        double height = min(
-          max(300, lines.length * 17 + 32),
-          MediaQuery.of(context).size.height - 150,
-        );
-        var mdText =
-            '''
-```dart
-${codeString}
-```
-                  ''';
-        return Container(
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: TDTheme.of(context).grayColor1,
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(TDTheme.of(context).radiusDefault),
-            ),
-          ),
-          height: height,
-          child: Markdown(
-            physics: const BouncingScrollPhysics(),
-            padding: EdgeInsets.zero,
-            selectable: false,
-            shrinkWrap: true,
-            syntaxHighlighter: DartSyntaxHighlighter(),
-            data: mdText,
-            extensionSet: md.ExtensionSet(
-              md.ExtensionSet.gitHubWeb.blockSyntaxes,
-              [md.EmojiSyntax(), ...md.ExtensionSet.gitHubWeb.inlineSyntaxes],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Future<String> loadCodeString() async {
-    var codeString;
-    var assetsPath = _getCodeAssetsPath();
-    if (assetsPath.isNotEmpty) {
-      try {
-        codeString = await rootBundle.loadString(assetsPath);
-      } catch (e) {
-        print(e);
-      }
-    }
-    return codeString;
   }
 }
 

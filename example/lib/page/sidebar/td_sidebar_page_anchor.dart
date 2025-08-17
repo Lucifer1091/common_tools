@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:common_tools/index.dart';
 
-import '../../annotation/demo.dart';
 import '../../base/example_widget.dart';
 
 ///
@@ -51,14 +50,17 @@ class TDSideBarAnchorPageState extends State<TDSideBarAnchorPage> {
       });
 
       lock = true;
-      await _demoScroller.animateTo(value.toDouble() * itemHeight,
-          duration: const Duration(milliseconds: 500), curve: Curves.easeIn);
+      await _demoScroller.animateTo(
+        value.toDouble() * itemHeight,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeIn,
+      );
       lock = false;
     }
   }
 
   void onChanged(int value) {
-    if(mounted){
+    if (mounted) {
       setState(() {
         currentValue = value;
       });
@@ -73,40 +75,32 @@ class TDSideBarAnchorPageState extends State<TDSideBarAnchorPage> {
 
   Widget buildWidget(BuildContext context) {
     return ExamplePage(
-        title: 'SideBar 锚点用法',
-        exampleCodeGroup: 'sideBar',
-        showSingleChild: true,
-        singleChild: CodeWrapper(
-          isCenter: false,
-          builder: _buildAnchorSideBar,
-        ));
+      title: 'SideBar 锚点用法',
+      exampleCodeGroup: 'sideBar',
+      showSingleChild: true,
+      singleChild: _buildAnchorSideBar,
+    );
   }
 
-  @Demo(group: 'sideBar')
   Widget _buildAnchorSideBar(BuildContext context) {
     // 锚点用法
     final list = <SideItemProps>[];
     final pages = <Widget>[];
 
     for (var i = 0; i < 20; i++) {
-      list.add(SideItemProps(
-        index: i,
-        label: '选项',
-        value: i,
-      ));
+      list.add(SideItemProps(index: i, label: '选项', value: i));
       pages.add(getAnchorDemo(i));
     }
 
-    pages.add(Container(
-      height: MediaQuery.of(context).size.height - itemHeight,
-      decoration: const BoxDecoration(color: Colors.white),
-    ));
+    pages.add(
+      Container(
+        height: MediaQuery.of(context).size.height - itemHeight,
+        decoration: const BoxDecoration(color: Colors.white),
+      ),
+    );
 
     list[1].badge = const TDBadge(TDBadgeType.redPoint);
-    list[2].badge = const TDBadge(
-      TDBadgeType.message,
-      count: '8',
-    );
+    list[2].badge = const TDBadge(TDBadgeType.message, count: 8);
 
     var demoHeight = MediaQuery.of(context).size.height;
     _sideBarController.init(list);
@@ -121,26 +115,28 @@ class TDSideBarAnchorPageState extends State<TDSideBarAnchorPage> {
             value: currentValue,
             controller: _sideBarController,
             children: list
-                .map((ele) => TDSideBarItem(
+                .map(
+                  (ele) => TDSideBarItem(
                     label: ele.label ?? '',
                     badge: ele.badge,
                     value: ele.value,
-                    icon: ele.icon))
+                    icon: ele.icon,
+                  ),
+                )
                 .toList(),
             onChanged: onChanged,
             onSelected: onSelected,
           ),
         ),
         Expanded(
-            child: SizedBox(
-          height: demoHeight,
-          child: SingleChildScrollView(
-            controller: _demoScroller,
-            child: Column(
-              children: pages,
+          child: SizedBox(
+            height: demoHeight,
+            child: SingleChildScrollView(
+              controller: _demoScroller,
+              child: Column(children: pages),
             ),
           ),
-        ))
+        ),
       ],
     );
   }
@@ -153,10 +149,7 @@ class TDSideBarAnchorPageState extends State<TDSideBarAnchorPage> {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 15, right: 9),
-            child: TDText('标题$index',
-                style: const TextStyle(
-                  fontSize: 14,
-                )),
+            child: TDText('标题$index', style: const TextStyle(fontSize: 14)),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 20),
@@ -192,15 +185,8 @@ class TDSideBarAnchorPageState extends State<TDSideBarAnchorPage> {
             width: 48,
             height: 48,
           ),
-          SizedBox(
-            width: 16,
-          ),
-          TDText(
-            '标题',
-            style: TextStyle(
-              fontSize: 16,
-            ),
-          )
+          SizedBox(width: 16),
+          TDText('标题', style: TextStyle(fontSize: 16)),
         ],
       ),
     );

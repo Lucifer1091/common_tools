@@ -122,8 +122,8 @@
 //         child: Theme(
 //           data: Theme.of(context).copyWith(
 //             colorScheme: ColorScheme.light(
-//               primary: context.primaryColor,
-//               onSurface: context.primaryColor,
+//               primary: context.colorScheme.primaryColor,
+//               onSurface: context.colorScheme.primaryColor,
 //             ),
 //             // dialogTheme: DialogTheme(
 //             //   shape: RoundedRectangleBorder(
@@ -135,12 +135,12 @@
 //                 borderRadius: BorderRadius.circular(12),
 //               ),
 //               helpTextStyle: context.bodyMedium?.copyWith(
-//                 color: context.primaryColor,
+//                 color: context.colorScheme.primaryColor,
 //               ),
 //             ),
 //             textButtonTheme: TextButtonThemeData(
 //               style: TextButton.styleFrom(
-//                 foregroundColor: context.primaryColor,
+//                 foregroundColor: context.colorScheme.primaryColor,
 //               ),
 //             ),
 //           ),
@@ -308,7 +308,7 @@
 //       fillColor: fillColor ?? context.fillColor,
 //       filled: true,
 //       alignLabelWithHint: true,
-//       focusColor: context.primaryColor,
+//       focusColor: context.colorScheme.primaryColor,
 //       errorStyle: context.bodySmall?.copyWith(
 //         color: errorColor ?? context.errorColor,
 //       ),

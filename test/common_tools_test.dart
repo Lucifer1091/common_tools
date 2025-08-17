@@ -1,10 +1,6 @@
 import 'dart:async';
 
-import 'package:common_tools/common_tools.dart';
-import 'package:common_tools/extensions/iterable/converters.dart';
-import 'package:common_tools/extensions/num/converters.dart';
-import 'package:common_tools/extensions/num/validators.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:common_tools/index.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Future<void> main() async {

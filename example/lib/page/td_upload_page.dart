@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:common_tools/index.dart';
 
-import '../annotation/demo.dart';
 import '../base/example_widget.dart';
 
 class TDUploadPage extends StatefulWidget {
@@ -152,7 +151,6 @@ class TDUploadState extends State<TDUploadPage> {
     );
   }
 
-  @Demo(group: 'upload')
   Widget _uploadSingle(BuildContext context) {
     return wrapDemoContainer(
       '单选上传',
@@ -167,7 +165,6 @@ class TDUploadState extends State<TDUploadPage> {
     );
   }
 
-  @Demo(group: 'upload')
   Widget _uploadSingleWithReplace(BuildContext context) {
     return wrapDemoContainer(
       '单选上传(替换)',
@@ -186,7 +183,6 @@ class TDUploadState extends State<TDUploadPage> {
     );
   }
 
-  @Demo(group: 'upload')
   Widget _uploadMultiple(BuildContext context) {
     return wrapDemoContainer(
       '多选上传',
@@ -203,7 +199,6 @@ class TDUploadState extends State<TDUploadPage> {
     );
   }
 
-  @Demo(group: 'upload')
   Widget _uploadLoading(BuildContext context) {
     return wrapDemoContainer(
       '上传图片',
@@ -220,7 +215,6 @@ class TDUploadState extends State<TDUploadPage> {
     );
   }
 
-  @Demo(group: 'upload')
   Widget _uploadRetry(BuildContext context) {
     return wrapDemoContainer(
       '上传图片',
@@ -237,7 +231,6 @@ class TDUploadState extends State<TDUploadPage> {
     );
   }
 
-  @Demo(group: 'upload')
   Widget _uploadError(BuildContext context) {
     return wrapDemoContainer(
       '上传图片',
@@ -254,7 +247,6 @@ class TDUploadState extends State<TDUploadPage> {
     );
   }
 
-  @Demo(group: 'upload')
   Widget _uploadSizeLimit(BuildContext context) {
     return wrapDemoContainer(
       '限制10KB',

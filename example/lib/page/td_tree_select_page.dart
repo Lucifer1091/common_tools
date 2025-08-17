@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:common_tools/index.dart';
 
-import '../annotation/demo.dart';
 import '../base/example_widget.dart';
 
 class TDTreeSelectPage extends StatefulWidget {
@@ -13,10 +12,7 @@ class TDTreeSelectPage extends StatefulWidget {
 
 class _TDTreeSelectPageState extends State<TDTreeSelectPage> {
   String? inputText;
-  List<dynamic> values1 = [
-    1,
-    11,
-  ];
+  List<dynamic> values1 = [1, 11];
   List<dynamic> values2 = [
     1,
     [11, 12, 13],
@@ -29,7 +25,7 @@ class _TDTreeSelectPageState extends State<TDTreeSelectPage> {
       title: tdTitle(),
       desc: '适用于选择树形的数据结构',
       exampleCodeGroup: 'tree',
-      backgroundColor: TDTheme.of(context).grayColor2,
+      backgroundColor: ThemeColors.neutral.shade100,
       children: [
         ExampleModule(
           title: '组件类型',
@@ -45,13 +41,10 @@ class _TDTreeSelectPageState extends State<TDTreeSelectPage> {
           ],
         ),
       ],
-      test: [
-        ExampleItem(desc: '局部多选', builder: _buildPartMultipleTreeSelect),
-      ],
+      test: [ExampleItem(desc: '局部多选', builder: _buildPartMultipleTreeSelect)],
     );
   }
 
-  @Demo(group: 'tree')
   Widget _buildDefaultTreeSelect(BuildContext context) {
     var options = <TDSelectOption>[];
 
@@ -59,11 +52,9 @@ class _TDTreeSelectPageState extends State<TDTreeSelectPage> {
       options.add(TDSelectOption(label: '选项$i', value: i, children: []));
 
       for (var j = 1; j <= 10; j++) {
-        options[i - 1].children.add(TDSelectOption(
-              label: '选项$i.$j',
-              value: i * 10 + j,
-              children: [],
-            ));
+        options[i - 1].children.add(
+          TDSelectOption(label: '选项$i.$j', value: i * 10 + j, children: []),
+        );
       }
     }
 
@@ -76,7 +67,6 @@ class _TDTreeSelectPageState extends State<TDTreeSelectPage> {
     );
   }
 
-  @Demo(group: 'tree')
   Widget _buildMultipleTreeSelect(BuildContext context) {
     var options = <TDSelectOption>[];
 
@@ -85,7 +75,8 @@ class _TDTreeSelectPageState extends State<TDTreeSelectPage> {
 
       for (var j = 1; j <= 10; j++) {
         options[i - 1].children.add(
-            TDSelectOption(label: '选项$i.$j', value: i * 10 + j, children: []));
+          TDSelectOption(label: '选项$i.$j', value: i * 10 + j, children: []),
+        );
       }
     }
 
@@ -99,7 +90,6 @@ class _TDTreeSelectPageState extends State<TDTreeSelectPage> {
     );
   }
 
-  @Demo(group: 'tree')
   Widget _buildThirdTreeSelect(BuildContext context) {
     var options = <TDSelectOption>[];
 
@@ -108,11 +98,13 @@ class _TDTreeSelectPageState extends State<TDTreeSelectPage> {
 
       for (var j = 1; j <= 10; j++) {
         options[i - 1].children.add(
-            TDSelectOption(label: '选项$i.$j', value: i * 10 + j, children: []));
+          TDSelectOption(label: '选项$i.$j', value: i * 10 + j, children: []),
+        );
 
         for (var k = 1; k <= 10; k++) {
           options[i - 1].children[j - 1].children.add(
-              TDSelectOption(label: '选项$i.$j.$k', value: i * 100 + j * 10 + k));
+            TDSelectOption(label: '选项$i.$j.$k', value: i * 100 + j * 10 + k),
+          );
         }
       }
     }
@@ -126,20 +118,27 @@ class _TDTreeSelectPageState extends State<TDTreeSelectPage> {
     );
   }
 
-  @Demo(group: 'tree')
   Widget _buildPartMultipleTreeSelect(BuildContext context) {
     var options = <TDSelectOption>[];
 
     for (var i = 1; i <= 2; i++) {
-      options.add(TDSelectOption(
-          label: '${i == 1 ? '单选' : '多选'}', value: i, children: []));
+      options.add(
+        TDSelectOption(
+          label: '${i == 1 ? '单选' : '多选'}',
+          value: i,
+          children: [],
+        ),
+      );
 
       for (var j = 1; j <= 10; j++) {
-        options[i - 1].children.add(TDSelectOption(
+        options[i - 1].children.add(
+          TDSelectOption(
             label: '选项$i.$j',
             value: i * 10 + j,
             children: [],
-            multiple: i == 2));
+            multiple: i == 2,
+          ),
+        );
       }
     }
 

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:common_tools/index.dart';
 
 import '../../base/example_widget.dart';
-import '../annotation/demo.dart';
 
 class TDStepsPage extends StatefulWidget {
   const TDStepsPage({Key? key}) : super(key: key);
@@ -15,52 +14,79 @@ class _TDStepsPageState extends State<TDStepsPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      backgroundColor: TDTheme.of(context).whiteColor1,
+      backgroundColor: context.colorScheme.primaryForeground,
       title: tdTitle(),
       exampleCodeGroup: 'steps',
       desc: 'Steps步骤条',
       children: [
-        ExampleModule(title: '水平默认步骤条', children: [
-          ExampleItem(desc: '水平默认步骤条1', builder: _buildBasicHSteps1),
-          ExampleItem(desc: '水平默认步骤条2', builder: _buildBasicHSteps2),
-          ExampleItem(desc: '水平默认步骤条3', builder: _buildBasicHSteps3),
-        ]),
-        ExampleModule(title: '水平图标步骤条', children: [
-          ExampleItem(desc: '水平图标步骤条1', builder: _buildHIconSteps1),
-          ExampleItem(desc: '水平图标步骤条2', builder: _buildHIconSteps2),
-          ExampleItem(desc: '水平图标步骤条3', builder: _buildHIconSteps3),
-        ]),
-        ExampleModule(title: '水平简略步骤条', children: [
-          ExampleItem(desc: '水平简略步骤条1', builder: _buildSimpleHSteps1),
-          ExampleItem(desc: '水平简略步骤条2', builder: _buildSimpleHSteps2),
-          ExampleItem(desc: '水平简略步骤条3', builder: _buildSimpleHSteps3),
-        ]),
-        ExampleModule(title: '水平错误状态步骤条', children: [
-          ExampleItem(desc: '水平错误状态基本步骤条', builder: _buildHErrorSteps1),
-          ExampleItem(desc: '水平错误状态图标步骤条', builder: _buildHErrorSteps2),
-          ExampleItem(desc: '水平错误状态简略步骤条', builder: _buildHErrorSteps3),
-        ]),
-        ExampleModule(title: '垂直步骤条', children: [
-          ExampleItem(desc: '垂直默认步骤条', builder: _buildVBasicSteps),
-          ExampleItem(desc: '垂直图标步骤条', builder: _buildVIconSteps),
-          ExampleItem(desc: '垂直简略步骤条', builder: _buildVSimpleSteps),
-          ExampleItem(desc: '垂直错误状态基本步骤条', builder: _buildVErrorBasicSteps),
-          ExampleItem(desc: '垂直错误状态图标步骤条', builder: _buildVErrorIconSteps),
-          ExampleItem(desc: '垂直错误状态简略步骤条', builder: _buildVErrorSimpleSteps),
-          ExampleItem(
-              desc: '垂直自定义标题基本步骤条', builder: _buildVCustomTitleBaseSteps),
-          ExampleItem(
-              desc: '垂直自定义内容基本步骤条', builder: _buildVCustomContentBaseSteps),
-        ]),
-        ExampleModule(title: 'Extension步骤条', children: [
-          ExampleItem(
-              desc: 'Read-only Steps 纯展示水平步骤条', builder: _buildHReadOnlySteps),
-          ExampleItem(
-              desc: 'Read-only Steps 纯展示垂直步骤条', builder: _buildVReadOnlySteps),
-          ExampleItem(
+        ExampleModule(
+          title: '水平默认步骤条',
+          children: [
+            ExampleItem(desc: '水平默认步骤条1', builder: _buildBasicHSteps1),
+            ExampleItem(desc: '水平默认步骤条2', builder: _buildBasicHSteps2),
+            ExampleItem(desc: '水平默认步骤条3', builder: _buildBasicHSteps3),
+          ],
+        ),
+        ExampleModule(
+          title: '水平图标步骤条',
+          children: [
+            ExampleItem(desc: '水平图标步骤条1', builder: _buildHIconSteps1),
+            ExampleItem(desc: '水平图标步骤条2', builder: _buildHIconSteps2),
+            ExampleItem(desc: '水平图标步骤条3', builder: _buildHIconSteps3),
+          ],
+        ),
+        ExampleModule(
+          title: '水平简略步骤条',
+          children: [
+            ExampleItem(desc: '水平简略步骤条1', builder: _buildSimpleHSteps1),
+            ExampleItem(desc: '水平简略步骤条2', builder: _buildSimpleHSteps2),
+            ExampleItem(desc: '水平简略步骤条3', builder: _buildSimpleHSteps3),
+          ],
+        ),
+        ExampleModule(
+          title: '水平错误状态步骤条',
+          children: [
+            ExampleItem(desc: '水平错误状态基本步骤条', builder: _buildHErrorSteps1),
+            ExampleItem(desc: '水平错误状态图标步骤条', builder: _buildHErrorSteps2),
+            ExampleItem(desc: '水平错误状态简略步骤条', builder: _buildHErrorSteps3),
+          ],
+        ),
+        ExampleModule(
+          title: '垂直步骤条',
+          children: [
+            ExampleItem(desc: '垂直默认步骤条', builder: _buildVBasicSteps),
+            ExampleItem(desc: '垂直图标步骤条', builder: _buildVIconSteps),
+            ExampleItem(desc: '垂直简略步骤条', builder: _buildVSimpleSteps),
+            ExampleItem(desc: '垂直错误状态基本步骤条', builder: _buildVErrorBasicSteps),
+            ExampleItem(desc: '垂直错误状态图标步骤条', builder: _buildVErrorIconSteps),
+            ExampleItem(desc: '垂直错误状态简略步骤条', builder: _buildVErrorSimpleSteps),
+            ExampleItem(
+              desc: '垂直自定义标题基本步骤条',
+              builder: _buildVCustomTitleBaseSteps,
+            ),
+            ExampleItem(
+              desc: '垂直自定义内容基本步骤条',
+              builder: _buildVCustomContentBaseSteps,
+            ),
+          ],
+        ),
+        ExampleModule(
+          title: 'Extension步骤条',
+          children: [
+            ExampleItem(
+              desc: 'Read-only Steps 纯展示水平步骤条',
+              builder: _buildHReadOnlySteps,
+            ),
+            ExampleItem(
+              desc: 'Read-only Steps 纯展示垂直步骤条',
+              builder: _buildVReadOnlySteps,
+            ),
+            ExampleItem(
               desc: 'Vertical Customize Steps 垂直自定义步骤条',
-              builder: _buildVCustomizeSteps),
-        ]),
+              builder: _buildVCustomizeSteps,
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -71,18 +97,13 @@ class _TDStepsPageState extends State<TDStepsPage> {
   ];
 
   /// 基本步骤1
-  @Demo(group: 'steps')
+
   Widget _buildBasicHSteps1(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
       child: Row(
         children: [
-          Expanded(
-            flex: 1,
-            child: TDSteps(
-              steps: basicHStepsListData1,
-            ),
-          )
+          Expanded(flex: 1, child: TDSteps(steps: basicHStepsListData1)),
         ],
       ),
     );
@@ -95,7 +116,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
   ];
 
   /// 基本步骤2
-  @Demo(group: 'steps')
+
   Widget _buildBasicHSteps2(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -108,7 +129,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
               direction: TDStepsDirection.horizontal,
               activeIndex: 1,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -122,16 +143,25 @@ class _TDStepsPageState extends State<TDStepsPage> {
   ];
   List<TDStepsItemData> basicStepsListData4 = [
     TDStepsItemData(
-        title: 'Steps1', content: 'Content1', successIcon: TDIcons.call),
+      title: 'Steps1',
+      content: 'Content1',
+      successIcon: Icons.call,
+    ),
     TDStepsItemData(title: 'Steps2', content: 'Content2'),
     TDStepsItemData(
-        title: 'Steps3', content: 'Content3', successIcon: TDIcons.call),
+      title: 'Steps3',
+      content: 'Content3',
+      successIcon: Icons.call,
+    ),
     TDStepsItemData(
-        title: 'Steps4', content: 'Content4', successIcon: TDIcons.call),
+      title: 'Steps4',
+      content: 'Content4',
+      successIcon: Icons.call,
+    ),
   ];
 
   /// 基本步骤3
-  @Demo(group: 'steps')
+
   Widget _buildBasicHSteps3(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -144,7 +174,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
               direction: TDStepsDirection.horizontal,
               activeIndex: 1,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -152,13 +182,19 @@ class _TDStepsPageState extends State<TDStepsPage> {
 
   List<TDStepsItemData> hIconStepsListData1 = [
     TDStepsItemData(
-        title: 'Steps1', content: 'Content1', successIcon: TDIcons.call),
+      title: 'Steps1',
+      content: 'Content1',
+      successIcon: Icons.call,
+    ),
     TDStepsItemData(
-        title: 'Steps2', content: 'Content2', successIcon: TDIcons.call),
+      title: 'Steps2',
+      content: 'Content2',
+      successIcon: Icons.call,
+    ),
   ];
 
   /// 水平图标步骤条1
-  @Demo(group: 'steps')
+
   Widget _buildHIconSteps1(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -171,7 +207,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
               direction: TDStepsDirection.horizontal,
               activeIndex: 0,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -179,15 +215,24 @@ class _TDStepsPageState extends State<TDStepsPage> {
 
   List<TDStepsItemData> hIconStepsListData2 = [
     TDStepsItemData(
-        title: 'Steps1', content: 'Content1', successIcon: TDIcons.call),
+      title: 'Steps1',
+      content: 'Content1',
+      successIcon: Icons.call,
+    ),
     TDStepsItemData(
-        title: 'Steps2', content: 'Content2', successIcon: TDIcons.call),
+      title: 'Steps2',
+      content: 'Content2',
+      successIcon: Icons.call,
+    ),
     TDStepsItemData(
-        title: 'Steps3', content: 'Content3', successIcon: TDIcons.call),
+      title: 'Steps3',
+      content: 'Content3',
+      successIcon: Icons.call,
+    ),
   ];
 
   /// 水平图标步骤条1
-  @Demo(group: 'steps')
+
   Widget _buildHIconSteps2(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -200,7 +245,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
               direction: TDStepsDirection.horizontal,
               activeIndex: 1,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -208,17 +253,29 @@ class _TDStepsPageState extends State<TDStepsPage> {
 
   List<TDStepsItemData> hIconStepsListData3 = [
     TDStepsItemData(
-        title: 'Steps1', content: 'Content1', successIcon: TDIcons.call),
+      title: 'Steps1',
+      content: 'Content1',
+      successIcon: Icons.call,
+    ),
     TDStepsItemData(
-        title: 'Steps2', content: 'Content2', successIcon: TDIcons.call),
+      title: 'Steps2',
+      content: 'Content2',
+      successIcon: Icons.call,
+    ),
     TDStepsItemData(
-        title: 'Steps3', content: 'Content3', successIcon: TDIcons.call),
+      title: 'Steps3',
+      content: 'Content3',
+      successIcon: Icons.call,
+    ),
     TDStepsItemData(
-        title: 'Steps4', content: 'Content4', successIcon: TDIcons.call),
+      title: 'Steps4',
+      content: 'Content4',
+      successIcon: Icons.call,
+    ),
   ];
 
   /// 水平图标步骤条1
-  @Demo(group: 'steps')
+
   Widget _buildHIconSteps3(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -231,7 +288,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
               direction: TDStepsDirection.horizontal,
               activeIndex: 1,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -243,7 +300,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
   ];
 
   /// 水平简略步骤条1
-  @Demo(group: 'steps')
+
   Widget _buildSimpleHSteps1(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -257,7 +314,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
               activeIndex: 0,
               simple: true,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -270,7 +327,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
   ];
 
   /// 水平简略步骤条2
-  @Demo(group: 'steps')
+
   Widget _buildSimpleHSteps2(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -284,7 +341,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
               activeIndex: 1,
               simple: true,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -298,7 +355,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
   ];
 
   /// 水平简略步骤条3
-  @Demo(group: 'steps')
+
   Widget _buildSimpleHSteps3(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -312,7 +369,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
               activeIndex: 1,
               simple: true,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -326,7 +383,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
   ];
 
   /// 水平简略步骤条3
-  @Demo(group: 'steps')
+
   Widget _buildHErrorSteps1(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -340,7 +397,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
               activeIndex: 1,
               status: TDStepsStatus.error,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -348,20 +405,30 @@ class _TDStepsPageState extends State<TDStepsPage> {
 
   List<TDStepsItemData> hErrorStepsListData2 = [
     TDStepsItemData(
-        title: 'Steps1', content: 'Content1', successIcon: TDIcons.call),
+      title: 'Steps1',
+      content: 'Content1',
+      successIcon: Icons.call,
+    ),
     TDStepsItemData(
-        title: 'Error',
-        content: 'Content2',
-        successIcon: TDIcons.call,
-        errorIcon: TDIcons.close_circle),
+      title: 'Error',
+      content: 'Content2',
+      successIcon: Icons.call,
+      errorIcon: Icons.cancel_outlined,
+    ),
     TDStepsItemData(
-        title: 'Steps3', content: 'Content3', successIcon: TDIcons.call),
+      title: 'Steps3',
+      content: 'Content3',
+      successIcon: Icons.call,
+    ),
     TDStepsItemData(
-        title: 'Steps4', content: 'Content4', successIcon: TDIcons.call),
+      title: 'Steps4',
+      content: 'Content4',
+      successIcon: Icons.call,
+    ),
   ];
 
   /// 水平简略步骤条3
-  @Demo(group: 'steps')
+
   Widget _buildHErrorSteps2(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -375,7 +442,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
               activeIndex: 1,
               status: TDStepsStatus.error,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -383,20 +450,30 @@ class _TDStepsPageState extends State<TDStepsPage> {
 
   List<TDStepsItemData> hErrorStepsListData3 = [
     TDStepsItemData(
-        title: 'Steps1', content: 'Content1', successIcon: TDIcons.call),
+      title: 'Steps1',
+      content: 'Content1',
+      successIcon: Icons.call,
+    ),
     TDStepsItemData(
-        title: 'Error',
-        content: 'Content2',
-        successIcon: TDIcons.call,
-        errorIcon: TDIcons.close_circle),
+      title: 'Error',
+      content: 'Content2',
+      successIcon: Icons.call,
+      errorIcon: Icons.cancel_outlined,
+    ),
     TDStepsItemData(
-        title: 'Steps3', content: 'Content3', successIcon: TDIcons.call),
+      title: 'Steps3',
+      content: 'Content3',
+      successIcon: Icons.call,
+    ),
     TDStepsItemData(
-        title: 'Steps4', content: 'Content4', successIcon: TDIcons.call),
+      title: 'Steps4',
+      content: 'Content4',
+      successIcon: Icons.call,
+    ),
   ];
 
   /// 水平简略步骤条3
-  @Demo(group: 'steps')
+
   Widget _buildHErrorSteps3(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -411,7 +488,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
               status: TDStepsStatus.error,
               simple: true,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -425,7 +502,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
   ];
 
   /// 垂直默认步骤条
-  @Demo(group: 'steps')
+
   Widget _buildVBasicSteps(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -438,7 +515,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
               direction: TDStepsDirection.vertical,
               activeIndex: 1,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -446,25 +523,29 @@ class _TDStepsPageState extends State<TDStepsPage> {
 
   List<TDStepsItemData> vIconStepsListData = [
     TDStepsItemData(
-        title: 'Filish',
-        content: 'Customize content',
-        successIcon: TDIcons.cart),
+      title: 'Filish',
+      content: 'Customize content',
+      successIcon: Icons.shopping_cart,
+    ),
     TDStepsItemData(
-        title: 'Process',
-        content: 'Customize content',
-        successIcon: TDIcons.cart),
+      title: 'Process',
+      content: 'Customize content',
+      successIcon: Icons.shopping_cart,
+    ),
     TDStepsItemData(
-        title: 'Default',
-        content: 'Customize content',
-        successIcon: TDIcons.cart),
+      title: 'Default',
+      content: 'Customize content',
+      successIcon: Icons.shopping_cart,
+    ),
     TDStepsItemData(
-        title: 'Default',
-        content: 'Customize content',
-        successIcon: TDIcons.cart),
+      title: 'Default',
+      content: 'Customize content',
+      successIcon: Icons.shopping_cart,
+    ),
   ];
 
   /// 垂直图标步骤条
-  @Demo(group: 'steps')
+
   Widget _buildVIconSteps(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -477,7 +558,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
               direction: TDStepsDirection.vertical,
               activeIndex: 1,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -485,25 +566,29 @@ class _TDStepsPageState extends State<TDStepsPage> {
 
   List<TDStepsItemData> vSimpleStepsListData = [
     TDStepsItemData(
-        title: 'Filish',
-        content: 'Customize content',
-        successIcon: TDIcons.cart),
+      title: 'Filish',
+      content: 'Customize content',
+      successIcon: Icons.shopping_cart,
+    ),
     TDStepsItemData(
-        title: 'Process',
-        content: 'Customize content',
-        successIcon: TDIcons.cart),
+      title: 'Process',
+      content: 'Customize content',
+      successIcon: Icons.shopping_cart,
+    ),
     TDStepsItemData(
-        title: 'Default',
-        content: 'Customize content',
-        successIcon: TDIcons.cart),
+      title: 'Default',
+      content: 'Customize content',
+      successIcon: Icons.shopping_cart,
+    ),
     TDStepsItemData(
-        title: 'Default',
-        content: 'Customize content',
-        successIcon: TDIcons.cart),
+      title: 'Default',
+      content: 'Customize content',
+      successIcon: Icons.shopping_cart,
+    ),
   ];
 
   /// 垂直简略步骤条
-  @Demo(group: 'steps')
+
   Widget _buildVSimpleSteps(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -517,7 +602,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
               activeIndex: 1,
               simple: true,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -531,7 +616,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
   ];
 
   /// 垂直错误状态基本步骤条
-  @Demo(group: 'steps')
+
   Widget _buildVErrorBasicSteps(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -545,7 +630,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
               activeIndex: 1,
               status: TDStepsStatus.error,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -553,26 +638,30 @@ class _TDStepsPageState extends State<TDStepsPage> {
 
   List<TDStepsItemData> vErrorIconStepsListData = [
     TDStepsItemData(
-        title: 'Filish',
-        content: 'Customize content',
-        successIcon: TDIcons.cart),
+      title: 'Filish',
+      content: 'Customize content',
+      successIcon: Icons.shopping_cart,
+    ),
     TDStepsItemData(
-        title: 'Process',
-        content: 'Customize content',
-        successIcon: TDIcons.cart,
-        errorIcon: TDIcons.close_circle),
+      title: 'Process',
+      content: 'Customize content',
+      successIcon: Icons.shopping_cart,
+      errorIcon: Icons.cancel_outlined,
+    ),
     TDStepsItemData(
-        title: 'Default',
-        content: 'Customize content',
-        successIcon: TDIcons.cart),
+      title: 'Default',
+      content: 'Customize content',
+      successIcon: Icons.shopping_cart,
+    ),
     TDStepsItemData(
-        title: 'Default',
-        content: 'Customize content',
-        successIcon: TDIcons.cart),
+      title: 'Default',
+      content: 'Customize content',
+      successIcon: Icons.shopping_cart,
+    ),
   ];
 
   /// 垂直错误状态图标步骤条
-  @Demo(group: 'steps')
+
   Widget _buildVErrorIconSteps(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -586,7 +675,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
               activeIndex: 1,
               status: TDStepsStatus.error,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -594,25 +683,29 @@ class _TDStepsPageState extends State<TDStepsPage> {
 
   List<TDStepsItemData> vErrorSimpleStepsListData = [
     TDStepsItemData(
-        title: 'Filish',
-        content: 'Customize content',
-        successIcon: TDIcons.cart),
+      title: 'Filish',
+      content: 'Customize content',
+      successIcon: Icons.shopping_cart,
+    ),
     TDStepsItemData(
-        title: 'Process',
-        content: 'Customize content',
-        successIcon: TDIcons.cart),
+      title: 'Process',
+      content: 'Customize content',
+      successIcon: Icons.shopping_cart,
+    ),
     TDStepsItemData(
-        title: 'Default',
-        content: 'Customize content',
-        successIcon: TDIcons.cart),
+      title: 'Default',
+      content: 'Customize content',
+      successIcon: Icons.shopping_cart,
+    ),
     TDStepsItemData(
-        title: 'Default',
-        content: 'Customize content',
-        successIcon: TDIcons.cart),
+      title: 'Default',
+      content: 'Customize content',
+      successIcon: Icons.shopping_cart,
+    ),
   ];
 
   /// 垂直错误状态图标步骤条
-  @Demo(group: 'steps')
+
   Widget _buildVErrorSimpleSteps(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -627,7 +720,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
               simple: true,
               status: TDStepsStatus.error,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -636,17 +729,18 @@ class _TDStepsPageState extends State<TDStepsPage> {
   List<TDStepsItemData> vCustomTitleBasicStepsListData = [
     TDStepsItemData(title: 'Filish', content: 'Customize content'),
     TDStepsItemData(
-        title: 'Process',
-        content: 'Customize content',
-        customTitle: Container(
-          margin: const EdgeInsets.only(bottom: 16, top: 4),
-          child: const Text(
-            '这是一个很长很长的自定义标题，可以自动换行的一个标题内容',
-            softWrap: true,
-            maxLines: 2,
-            overflow: TextOverflow.visible,
-          ),
-        )),
+      title: 'Process',
+      content: 'Customize content',
+      customTitle: Container(
+        margin: const EdgeInsets.only(bottom: 16, top: 4),
+        child: const Text(
+          '这是一个很长很长的自定义标题，可以自动换行的一个标题内容',
+          softWrap: true,
+          maxLines: 2,
+          overflow: TextOverflow.visible,
+        ),
+      ),
+    ),
     TDStepsItemData(title: 'Default', content: 'Customize content'),
     TDStepsItemData(title: 'Default', content: 'Customize content'),
   ];
@@ -654,24 +748,25 @@ class _TDStepsPageState extends State<TDStepsPage> {
   List<TDStepsItemData> vCustomContentBasicStepsListData = [
     TDStepsItemData(title: 'Filish', content: 'Customize content'),
     TDStepsItemData(
-        title: '这是一个很长很长很长很长的文字，他是用来展示这个步骤的标题',
-        content: 'Customize content',
-        customContent: Container(
-          margin: const EdgeInsets.only(bottom: 16, top: 4),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(6),
-            child: const TDImage(
-              assetUrl: 'assets/img/image.png',
-              type: TDImageType.square,
-            ),
+      title: '这是一个很长很长很长很长的文字，他是用来展示这个步骤的标题',
+      content: 'Customize content',
+      customContent: Container(
+        margin: const EdgeInsets.only(bottom: 16, top: 4),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(6),
+          child: const TDImage(
+            assetUrl: 'assets/img/image.png',
+            type: TDImageType.square,
           ),
-        )),
+        ),
+      ),
+    ),
     TDStepsItemData(title: 'Default', content: 'Customize content'),
     TDStepsItemData(title: 'Default', content: 'Customize content'),
   ];
 
   /// 垂直自定义标题基本步骤条
-  @Demo(group: 'steps')
+
   Widget _buildVCustomTitleBaseSteps(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -684,14 +779,14 @@ class _TDStepsPageState extends State<TDStepsPage> {
               direction: TDStepsDirection.vertical,
               activeIndex: 1,
             ),
-          )
+          ),
         ],
       ),
     );
   }
 
   /// 垂直自定义内容基本步骤条
-  @Demo(group: 'steps')
+
   Widget _buildVCustomContentBaseSteps(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -704,7 +799,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
               direction: TDStepsDirection.vertical,
               activeIndex: 1,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -718,7 +813,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
   ];
 
   /// 水平自定义内容基本步骤条
-  @Demo(group: 'steps')
+
   Widget _buildHReadOnlySteps(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -726,11 +821,8 @@ class _TDStepsPageState extends State<TDStepsPage> {
         children: [
           Expanded(
             flex: 1,
-            child: TDSteps(
-              steps: hReadOnlyStepsListData,
-              readOnly: true,
-            ),
-          )
+            child: TDSteps(steps: hReadOnlyStepsListData, readOnly: true),
+          ),
         ],
       ),
     );
@@ -744,7 +836,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
   ];
 
   /// 垂直自定义内容基本步骤条
-  @Demo(group: 'steps')
+
   Widget _buildVReadOnlySteps(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -758,7 +850,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
               activeIndex: 0,
               readOnly: true,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -772,7 +864,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
   ];
 
   /// Vertical Customize Steps 垂直自定义步骤条
-  @Demo(group: 'steps')
+
   Widget _buildVCustomizeSteps(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -787,7 +879,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
               activeIndex: 3,
               verticalSelect: true,
             ),
-          )
+          ),
         ],
       ),
     );

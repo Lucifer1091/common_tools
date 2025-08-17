@@ -204,7 +204,7 @@ class _TDActionSheetGridState extends State<TDActionSheetGrid> {
             shape: BoxShape.circle,
             color:
                 currentPage == index
-                    ? context.primary
+                    ? context.colorScheme.primary
                     : ThemeColors.neutral.shade400,
           ),
         );

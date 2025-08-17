@@ -29,7 +29,7 @@ class ScannerErrorWidget extends StatelessWidget {
     }
 
     return ColoredBox(
-      color: Colors.red.withOpacity(0.5),
+      color: Colors.red.withValues(alpha: 0.5),
       child: Center(
         child: RotatedBox(
           quarterTurns: isRotated ? 1 : 0,

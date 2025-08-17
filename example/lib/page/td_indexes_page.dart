@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:common_tools/index.dart';
 import '../../base/example_widget.dart';
-import '../annotation/demo.dart';
 
 const _list = [
   {
@@ -83,7 +82,19 @@ const _list = [
   },
   {
     'index': 'J',
-    'children': ['揭阳', '吉林', '晋江', '吉安', '胶州', '嘉兴', '济南', '鸡西', '荆州', '江门', '基隆'],
+    'children': [
+      '揭阳',
+      '吉林',
+      '晋江',
+      '吉安',
+      '胶州',
+      '嘉兴',
+      '济南',
+      '鸡西',
+      '荆州',
+      '江门',
+      '基隆',
+    ],
   },
   {
     'index': 'K',
@@ -97,38 +108,44 @@ class TDIndexesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: TDTheme.of(context).grayColor2,
-        child: ExamplePage(
-          title: tdTitle(context),
-          desc: '用于页面中信息快速检索，可以根据目录中的页码快速找到所需的内容。',
-          exampleCodeGroup: 'indexes',
-          navBarKey: navBarkey,
-          children: [
-            ExampleModule(title: '组件类型', children: [
+      color: ThemeColors.neutral.shade100,
+      child: ExamplePage(
+        title: tdTitle(context),
+        desc: '用于页面中信息快速检索，可以根据目录中的页码快速找到所需的内容。',
+        exampleCodeGroup: 'indexes',
+        navBarKey: navBarkey,
+        children: [
+          ExampleModule(
+            title: '组件类型',
+            children: [
               ExampleItem(
                 ignoreCode: true,
                 desc: '基础索引类型',
                 builder: (BuildContext context) {
-                  return const CodeWrapper(builder: _buildSimple);
+                  return _buildSimple(context);
                 },
               ),
-            ]),
-            ExampleModule(title: '组件样式', children: [
+            ],
+          ),
+          ExampleModule(
+            title: '组件样式',
+            children: [
               ExampleItem(
                 ignoreCode: true,
                 desc: '其他索引类型',
                 builder: (BuildContext context) {
-                  return const CodeWrapper(builder: _buildOther);
+                  return _buildOther(context);
                 },
               ),
-            ]),
-          ],
-          test: const [],
-        ));
+            ],
+          ),
+        ],
+        test: const [],
+      ),
+    );
   }
 }
 
-@Demo(group: 'indexes')
 Widget _buildSimple(BuildContext context) {
   final renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
   final indexList = _list.map((item) => item['index'] as String).toList();
@@ -149,13 +166,13 @@ Widget _buildSimple(BuildContext context) {
               child: TDIndexes(
                 indexList: indexList,
                 builderContent: (context, index) {
-                  final list = _list.firstWhere((element) => element['index'] == index)['children'] as List<String>;
+                  final list =
+                      _list.firstWhere(
+                            (element) => element['index'] == index,
+                          )['children']
+                          as List<String>;
                   return TDCellGroup(
-                    cells: list
-                        .map((e) => TDCell(
-                              title: e,
-                            ))
-                        .toList(),
+                    cells: list.map((e) => TDCell(title: e)).toList(),
                   );
                 },
               ),
@@ -167,7 +184,6 @@ Widget _buildSimple(BuildContext context) {
   );
 }
 
-@Demo(group: 'indexes')
 Widget _buildOther(BuildContext context) {
   final renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
   final indexList = _list.map((item) => item['index'] as String).toList();
@@ -189,13 +205,13 @@ Widget _buildOther(BuildContext context) {
                 indexList: indexList,
                 capsuleTheme: true,
                 builderContent: (context, index) {
-                  final list = _list.firstWhere((element) => element['index'] == index)['children'] as List<String>;
+                  final list =
+                      _list.firstWhere(
+                            (element) => element['index'] == index,
+                          )['children']
+                          as List<String>;
                   return TDCellGroup(
-                    cells: list
-                        .map((e) => TDCell(
-                              title: e,
-                            ))
-                        .toList(),
+                    cells: list.map((e) => TDCell(title: e)).toList(),
                   );
                 },
               ),

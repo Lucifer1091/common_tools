@@ -3,9 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../../layout/no_widget.dart';
-import '../text/td_text.dart';
-import 'td_button_style.dart';
 
 enum TDButtonSize { large, medium, small, extraSmall }
 
@@ -13,9 +10,9 @@ enum TDButtonType { fill, outline, text, ghost }
 
 enum TDButtonShape { rectangle, round, square, circle, filled }
 
-enum TDButtonTheme { defaultTheme, primary, danger, light }
+enum TDButtonTheme { defaults, primary, danger, light }
 
-enum TDButtonStatus { defaultState, active, disable }
+enum TDButtonStatus { defaults, active, disable }
 
 enum TDButtonIconPosition { left, right }
 
@@ -98,7 +95,7 @@ class TDButton extends StatefulWidget {
 }
 
 class _TDButtonState extends State<TDButton> {
-  TDButtonStatus _buttonStatus = TDButtonStatus.defaultState;
+  TDButtonStatus _buttonStatus = TDButtonStatus.defaults;
   TDButtonStyle? _innerDefaultStyle;
   TDButtonStyle? _innerActiveStyle;
   TDButtonStyle? _innerDisableStyle;
@@ -111,7 +108,7 @@ class _TDButtonState extends State<TDButton> {
 
   Future<void> _updateParams() async {
     _buttonStatus =
-        widget.disabled ? TDButtonStatus.disable : TDButtonStatus.defaultState;
+        widget.disabled ? TDButtonStatus.disable : TDButtonStatus.defaults;
     _innerDefaultStyle = widget.style;
     _innerActiveStyle = widget.activeStyle;
     _innerDisableStyle = widget.disableStyle;
@@ -132,7 +129,7 @@ class _TDButtonState extends State<TDButton> {
 
   TDButtonStyle get style {
     return switch (_buttonStatus) {
-      TDButtonStatus.defaultState => _defaultStyle,
+      TDButtonStatus.defaults => _defaultStyle,
       TDButtonStatus.active => _activeStyle,
       TDButtonStatus.disable => _disableStyle,
     };
@@ -175,14 +172,14 @@ class _TDButtonState extends State<TDButton> {
       onTapUp: (TapUpDetails details) {
         Future.delayed(const Duration(milliseconds: 100), () {
           if (mounted && !widget.disabled) {
-            setState(() => _buttonStatus = TDButtonStatus.defaultState);
+            setState(() => _buttonStatus = TDButtonStatus.defaults);
           }
         });
       },
       onTapCancel: () {
         if (widget.disabled) return;
 
-        setState(() => _buttonStatus = TDButtonStatus.defaultState);
+        setState(() => _buttonStatus = TDButtonStatus.defaults);
       },
       child: display,
     );

@@ -1,54 +1,39 @@
 import 'package:flutter/material.dart';
 
+import '../../index.dart';
+
 extension ContextTextThemeExtension on BuildContext {
-  /// Returns DefaultTextStyle.of(context)
   DefaultTextStyle get defaultTextStyle => DefaultTextStyle.of(this);
 
-  /// get textTheme
-  TextTheme get textTheme => Theme.of(this).textTheme;
+  MyTypography get textTheme => MyTheme.of(this).typography;
 
-  /// display large style
-  TextStyle? get displayLarge => textTheme.displayLarge;
+  TextStyle get displayLarge => textTheme.displayLarge;
 
-  /// display medium style
-  TextStyle? get displayMedium => textTheme.displayMedium;
+  TextStyle get displayMedium => textTheme.displayMedium;
 
-  /// display small style
-  TextStyle? get displaySmall => textTheme.displaySmall;
+  TextStyle get displaySmall => textTheme.displaySmall;
 
-  /// headline large style
-  TextStyle? get headlineLarge => textTheme.headlineLarge;
+  TextStyle get headlineLarge => textTheme.headlineLarge;
 
-  /// headline medium style
-  TextStyle? get headlineMedium => textTheme.headlineMedium;
+  TextStyle get headlineMedium => textTheme.headlineMedium;
 
-  /// headline small style
-  TextStyle? get headlineSmall => textTheme.headlineSmall;
+  TextStyle get headlineSmall => textTheme.headlineSmall;
 
-  /// title large style
-  TextStyle? get titleLarge => textTheme.titleLarge;
+  TextStyle get titleLarge => textTheme.titleLarge;
 
-  /// title medium style
-  TextStyle? get titleMedium => textTheme.titleMedium;
+  TextStyle get titleMedium => textTheme.titleMedium;
 
-  /// title small style
-  TextStyle? get titleSmall => textTheme.titleSmall;
+  TextStyle get titleSmall => textTheme.titleSmall;
 
-  /// label large style
-  TextStyle? get labelLarge => textTheme.labelLarge;
+  TextStyle get bodyLarge => textTheme.bodyLarge;
 
-  /// label medium style
-  TextStyle? get labelMedium => textTheme.labelMedium;
+  TextStyle get bodyMedium => textTheme.bodyMedium;
 
-  /// label small style
-  TextStyle? get labelSmall => textTheme.labelSmall;
+  TextStyle get bodySmall => textTheme.bodySmall;
 
-  /// body large style
-  TextStyle? get bodyLarge => textTheme.bodyLarge;
+  TextStyle get labelLarge => textTheme.labelLarge;
 
-  /// body medium style
-  TextStyle? get bodyMedium => textTheme.bodyMedium;
+  TextStyle get labelMedium => textTheme.labelMedium;
 
-  /// body small style
-  TextStyle? get bodySmall => textTheme.bodySmall;
+  TextStyle get labelSmall => textTheme.labelSmall;
 }

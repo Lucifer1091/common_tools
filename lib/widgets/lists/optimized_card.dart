@@ -128,7 +128,7 @@ class OptimizedCard extends StatefulWidget {
   final bool semanticContainer;
 
   /// The color of custom shadow that is around the card.
-  /// If null then the Colors.grey.withOpacity(.25) shadowColor is used.
+  /// If null then the Colors.grey.withValues(alpha: .25) shadowColor is used.
   final Color? customShadowColor;
 
   /// Blur radius of the custom shadow.

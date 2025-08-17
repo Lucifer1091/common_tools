@@ -1,18 +1,23 @@
-import 'dart:io' if (dart.library.html) 'dart:html' show File;
-
+import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart' as p;
 import '../../index.dart';
 
-extension FileExtensionX on File {
-  /// get fileName from file
+extension FileExtensionX on XFile {
+  /// Get file name
   String get fileName => p.basename(path);
 
-  /// get extension of file
+  /// Get file extension
   String get extension => p.extension(path);
 
-  /// get mime type of file
-  String? get mimeType => lookupMimeType(path);
+  /// Get mime type
+  String? get mimeType {
+    // On web, path may not exist → fallback to mime lookup from bytes
+    final fromPath = lookupMimeType(path);
+    if (fromPath != null) return fromPath;
+
+    return this.mimeType;
+  }
 
   /// check weather file is image
   bool get isImage =>
@@ -83,8 +88,8 @@ extension FileExtensionX on File {
       isJson;
 
   /// get file size in mb
-  double get sizeInMb {
-    final sizeInBytes = lengthSync();
+  Future<double> get sizeInMb async {
+    final sizeInBytes = await length();
     return sizeInBytes / (1024 * 1024);
   }
 }

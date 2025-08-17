@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import '../about.dart';
 import '../config.dart';
-import '../home.dart';
-import 'api_widget.dart';
 import 'example_base.dart';
-import 'example_widget.dart';
 
 class TDExampleRoute {
   static final Map<String, ExamplePageModel> pageModelList = {};
@@ -23,9 +20,10 @@ class TDExampleRoute {
     });
     // 添加关于页路由
     pageModelList[aboutPath] = ExamplePageModel(
-        text: '关于',
-        name: 'AboutPage',
-        pageBuilder: (context, model) => const AboutPage());
+      text: '关于',
+      name: 'AboutPage',
+      pageBuilder: (context, model) => const AboutPage(),
+    );
   }
 
   static void add(ExamplePageModel model) {
@@ -55,26 +53,25 @@ class TDExampleRoute {
         model.showAction = true;
       }
       final Route route = MaterialPageRoute(
-          settings: settings,
-          builder: (context) => model.pageBuilder(context, model));
+        settings: settings,
+        builder: (context) => model.pageBuilder(context, model),
+      );
       return route;
     } else {
       if (name.startsWith(apiPath)) {
         if (strings.length > 1) {
           var component = strings[1];
           final Route route = MaterialPageRoute(
-              settings: settings,
-              builder: (context) => ApiPage(
-                    model: pageModelList[component],
-                  ));
+            settings: settings,
+            builder: (context) => Placeholder(),
+          );
           return route;
         }
       }
       return MaterialPageRoute(
-          settings: settings,
-          builder: (context) => Center(
-                child: Text('error, url:${url}'),
-              ));
+        settings: settings,
+        builder: (context) => Center(child: Text('error, url:${url}')),
+      );
     }
   }
 }

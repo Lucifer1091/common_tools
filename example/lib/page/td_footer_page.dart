@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:common_tools/index.dart';
 import '../../base/example_widget.dart';
-import '../annotation/demo.dart';
 
 class TDFooterPage extends StatefulWidget {
   const TDFooterPage({Key? key}) : super(key: key);
@@ -16,7 +15,7 @@ class _TDFooterPageState extends State<TDFooterPage> {
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tdTitle(),
-      backgroundColor: TDTheme.of(context).whiteColor1,
+      backgroundColor: context.colorScheme.primaryForeground,
       desc: '用于展示App的版权声明、联系信息、重要页面链接和其他相关内容等信息。',
       exampleCodeGroup: 'footer',
       children: [
@@ -33,7 +32,6 @@ class _TDFooterPageState extends State<TDFooterPage> {
     );
   }
 
-  @Demo(group: 'footer')
   Widget _buildFooter(BuildContext context) {
     return const TDFooter(
       TDFooterType.text,
@@ -41,7 +39,6 @@ class _TDFooterPageState extends State<TDFooterPage> {
     );
   }
 
-  @Demo(group: 'footer')
   Widget _buildSingleLinkFooter(BuildContext context) {
     // 示例链接列表
     final singleLink = <TDLink>[
@@ -63,7 +60,6 @@ class _TDFooterPageState extends State<TDFooterPage> {
     );
   }
 
-  @Demo(group: 'footer')
   Widget _buildLinksFooter(BuildContext context) {
     final links = <TDLink>[
       TDLink(
@@ -90,12 +86,11 @@ class _TDFooterPageState extends State<TDFooterPage> {
           TDFooterType.link,
           links: links,
           text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
-        )
+        ),
       ],
     );
   }
 
-  @Demo(group: 'footer')
   Widget _buildBrandFooter(BuildContext context) {
     return TDFooter(
       TDFooterType.brand,

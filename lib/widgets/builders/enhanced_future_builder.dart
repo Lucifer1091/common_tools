@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
 
 import 'package:flutter/widgets.dart';
 
@@ -61,7 +60,7 @@ class FutureOrBuilder<T> extends StatelessWidget {
     if (data != null) {
       return onSuccess(data);
     } else {
-      return onError?.call(Exception('No Records Found.')) ?? inProgress.call();
+      return onError?.call(Exception('No Records Found.')) ?? inProgress;
     }
   }
 }

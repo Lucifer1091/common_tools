@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:common_tools/index.dart';
 import '../../base/example_widget.dart';
-import '../annotation/demo.dart';
 
 class TDResultPage extends StatefulWidget {
   const TDResultPage({Key? key}) : super(key: key);
@@ -18,18 +17,31 @@ class _TDResultPageState extends State<TDResultPage> {
       desc: '反馈结果状态。',
       exampleCodeGroup: 'result',
       children: [
-        ExampleModule(title: '组件类型', children: [
-          ExampleItem(
-              desc: '基础结果', ignoreCode: true, builder: _buildBasicResult),
-          ExampleItem(
+        ExampleModule(
+          title: '组件类型',
+          children: [
+            ExampleItem(
+              desc: '基础结果',
+              ignoreCode: true,
+              builder: _buildBasicResult,
+            ),
+            ExampleItem(
               desc: '带描述的结果',
               ignoreCode: true,
-              builder: _buildResultWithDescription),
-          ExampleItem(
-              desc: '自定义结果', ignoreCode: true, builder: _buildCustomResult),
-          ExampleItem(
-              desc: '页面示例', ignoreCode: true, builder: _buildPageExample),
-        ]),
+              builder: _buildResultWithDescription,
+            ),
+            ExampleItem(
+              desc: '自定义结果',
+              ignoreCode: true,
+              builder: _buildCustomResult,
+            ),
+            ExampleItem(
+              desc: '页面示例',
+              ignoreCode: true,
+              builder: _buildPageExample,
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -37,21 +49,13 @@ class _TDResultPageState extends State<TDResultPage> {
   Widget _buildBasicResult(BuildContext context) {
     return Column(
       children: [
-        CodeWrapper(
-          builder: _buildBasicResultSuccess,
-        ),
+        _buildBasicResultSuccess(context),
         const SizedBox(height: 48),
-        CodeWrapper(
-          builder: _buildBasicResultError,
-        ),
+        _buildBasicResultError(context),
         const SizedBox(height: 48),
-        CodeWrapper(
-          builder: _buildBasicResultWarning,
-        ),
+        _buildBasicResultWarning(context),
         const SizedBox(height: 48),
-        CodeWrapper(
-          builder: _buildBasicResultDefault,
-        ),
+        _buildBasicResultDefault(context),
       ],
     );
   }
@@ -59,29 +63,19 @@ class _TDResultPageState extends State<TDResultPage> {
   Widget _buildResultWithDescription(BuildContext context) {
     return Column(
       children: [
-        CodeWrapper(
-          builder: _buildResultWithDescriptionSuccess,
-        ),
+        _buildResultWithDescriptionSuccess(context),
         const SizedBox(height: 48),
-        CodeWrapper(
-          builder: _buildResultWithDescriptionError,
-        ),
+        _buildResultWithDescriptionError(context),
         const SizedBox(height: 48),
-        CodeWrapper(
-          builder: _buildResultWithDescriptionWarning,
-        ),
+        _buildResultWithDescriptionWarning(context),
         const SizedBox(height: 48),
-        CodeWrapper(
-          builder: _buildResultWithDescriptionDefault,
-        ),
+        _buildResultWithDescriptionDefault(context),
       ],
     );
   }
 
   Widget _buildCustomResult(BuildContext context) {
-    return CodeWrapper(
-      builder: _buildCustomResultContent,
-    );
+    return _buildCustomResultContent(context);
   }
 
   Widget _buildPageExample(BuildContext context) {
@@ -96,9 +90,7 @@ class _TDResultPageState extends State<TDResultPage> {
           context,
           MaterialPageRoute(
             builder: (context) => Scaffold(
-              appBar: AppBar(
-                title: const Text('Result 结果'),
-              ),
+              appBar: AppBar(title: const Text('Result 结果')),
               body: Column(
                 children: [
                   const SizedBox(height: 48),
@@ -127,39 +119,22 @@ class _TDResultPageState extends State<TDResultPage> {
     );
   }
 
-  @Demo(group: 'result')
   TDResult _buildBasicResultSuccess(BuildContext context) {
-    return const TDResult(
-      title: '成功状态',
-      theme: TDResultTheme.success,
-    );
+    return const TDResult(title: '成功状态', theme: TDResultTheme.success);
   }
 
-  @Demo(group: 'result')
   TDResult _buildBasicResultError(BuildContext context) {
-    return const TDResult(
-      title: '失败状态',
-      theme: TDResultTheme.error,
-    );
+    return const TDResult(title: '失败状态', theme: TDResultTheme.error);
   }
 
-  @Demo(group: 'result')
   TDResult _buildBasicResultWarning(BuildContext context) {
-    return const TDResult(
-      title: '警示状态',
-      theme: TDResultTheme.warning,
-    );
+    return const TDResult(title: '警示状态', theme: TDResultTheme.warning);
   }
 
-  @Demo(group: 'result')
   TDResult _buildBasicResultDefault(BuildContext context) {
-    return const TDResult(
-      title: '默认状态',
-      theme: TDResultTheme.defaultTheme,
-    );
+    return const TDResult(title: '默认状态', theme: TDResultTheme.defaultTheme);
   }
 
-  @Demo(group: 'result')
   TDResult _buildResultWithDescriptionSuccess(BuildContext context) {
     return const TDResult(
       title: '成功状态',
@@ -168,7 +143,6 @@ class _TDResultPageState extends State<TDResultPage> {
     );
   }
 
-  @Demo(group: 'result')
   TDResult _buildResultWithDescriptionError(BuildContext context) {
     return const TDResult(
       title: '失败状态',
@@ -177,7 +151,6 @@ class _TDResultPageState extends State<TDResultPage> {
     );
   }
 
-  @Demo(group: 'result')
   TDResult _buildResultWithDescriptionWarning(BuildContext context) {
     return const TDResult(
       title: '警示状态',
@@ -186,7 +159,6 @@ class _TDResultPageState extends State<TDResultPage> {
     );
   }
 
-  @Demo(group: 'result')
   TDResult _buildResultWithDescriptionDefault(BuildContext context) {
     return const TDResult(
       title: '默认状态',
@@ -195,7 +167,6 @@ class _TDResultPageState extends State<TDResultPage> {
     );
   }
 
-  @Demo(group: 'result')
   TDResult _buildCustomResultContent(BuildContext context) {
     return TDResult(
       title: '自定义结果',

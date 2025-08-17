@@ -117,14 +117,14 @@ class TDAvatar extends StatelessWidget {
             width: _getAvatarWidth(),
             height: _getAvatarWidth(),
             decoration: BoxDecoration(
-              color: backgroundColor ?? context.onPrimary,
+              color: backgroundColor ?? context.colorScheme.background,
               borderRadius: BorderRadius.circular(_getAvatarRadius(context)),
             ),
             child: Center(
               child: Icon(
                 icon ?? Icons.person_outline_rounded,
                 size: _getIconWidth(),
-                color: context.primary,
+                color: context.colorScheme.primary,
               ),
             ),
           ),
@@ -136,7 +136,7 @@ class TDAvatar extends StatelessWidget {
             width: _getAvatarWidth(),
             height: _getAvatarWidth(),
             decoration: BoxDecoration(
-              color: backgroundColor ?? context.onPrimary,
+              color: backgroundColor ?? context.colorScheme.background,
               borderRadius: BorderRadius.circular(_getAvatarRadius(context)),
               image:
                   avatarUrl != null
@@ -154,7 +154,7 @@ class TDAvatar extends StatelessWidget {
             width: _getAvatarWidth(),
             height: _getAvatarWidth(),
             decoration: BoxDecoration(
-              color: backgroundColor ?? context.primary,
+              color: backgroundColor ?? context.colorScheme.primary,
               borderRadius: BorderRadius.circular(_getAvatarRadius(context)),
             ),
             child: Center(
@@ -205,7 +205,7 @@ class TDAvatar extends StatelessWidget {
                   height: _getAvatarWidth(),
                   clipBehavior: Clip.hardEdge,
                   decoration: ShapeDecoration(
-                    color: context.onPrimary,
+                    color: context.colorScheme.background,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(
                         _getAvatarWidth() - _getDisplayPadding(),
@@ -220,7 +220,7 @@ class TDAvatar extends StatelessWidget {
                     child: Icon(
                       icon ?? Icons.person_add_alt,
                       size: _getIconWidth(),
-                      color: context.primary,
+                      color: context.colorScheme.primary,
                     ),
                   ),
                 ),
@@ -272,7 +272,7 @@ class TDAvatar extends StatelessWidget {
                   height: _getAvatarWidth(),
                   clipBehavior: Clip.hardEdge,
                   decoration: ShapeDecoration(
-                    color: context.onPrimary,
+                    color: context.colorScheme.background,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(
                         _getAvatarWidth() - _getDisplayPadding(),
@@ -289,7 +289,7 @@ class TDAvatar extends StatelessWidget {
                         Icon(
                           icon ?? Icons.person_add_alt,
                           size: _getIconWidth(),
-                          color: context.primary,
+                          color: context.colorScheme.primary,
                         ),
                   ),
                 ),
@@ -357,7 +357,7 @@ class TDAvatar extends StatelessWidget {
                 height: _getAvatarWidth(),
                 clipBehavior: Clip.hardEdge,
                 decoration: ShapeDecoration(
-                  color: context.onPrimary,
+                  color: context.colorScheme.background,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(
                       _getAvatarWidth() - _getDisplayPadding(),
@@ -423,7 +423,7 @@ class TDAvatar extends StatelessWidget {
                 height: _getAvatarWidth(),
                 clipBehavior: Clip.hardEdge,
                 decoration: ShapeDecoration(
-                  color: context.onPrimary,
+                  color: context.colorScheme.background,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(
                       _getAvatarWidth() - _getDisplayPadding(),

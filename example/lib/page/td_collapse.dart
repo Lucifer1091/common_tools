@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:common_tools/index.dart';
 
-import '../annotation/demo.dart';
 import '../base/example_widget.dart';
 
 class TDCollapsePage extends StatefulWidget {
@@ -24,15 +23,14 @@ class TDCollapsePageState extends State<TDCollapsePage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-        title: tdTitle(),
-        exampleCodeGroup: 'collapse',
-        desc: '可以折叠/展开的内容区域。',
-        children: [
-          ExampleModule(title: 'Type 组件类型', children: [
-            ExampleItem(
-              desc: 'Basic 基础折叠面板',
-              builder: _buildBasicCollapse,
-            ),
+      title: tdTitle(),
+      exampleCodeGroup: 'collapse',
+      desc: '可以折叠/展开的内容区域。',
+      children: [
+        ExampleModule(
+          title: 'Type 组件类型',
+          children: [
+            ExampleItem(desc: 'Basic 基础折叠面板', builder: _buildBasicCollapse),
             ExampleItem(
               desc: 'with Operation Instructions 带操作说明',
               builder: _buildCollapseWithOperationText,
@@ -41,21 +39,22 @@ class TDCollapsePageState extends State<TDCollapsePage> {
               desc: 'Accordion 手风琴式',
               builder: _buildAccordionCollapse,
             ),
-          ]),
-          ExampleModule(title: 'Style 组件样式', children: [
+          ],
+        ),
+        ExampleModule(
+          title: 'Style 组件样式',
+          children: [
             ExampleItem(
               desc: 'Block Style 通栏样式',
               builder: _buildBlockStyleCollapse,
             ),
-            ExampleItem(
-              desc: 'Card Style 卡片样式',
-              builder: _buildCardCollapse,
-            ),
-          ]),
-        ]);
+            ExampleItem(desc: 'Card Style 卡片样式', builder: _buildCardCollapse),
+          ],
+        ),
+      ],
+    );
   }
 
-  @Demo(group: 'collapse')
   Widget _buildBasicCollapse(BuildContext context) {
     return TDCollapse(
       style: TDCollapseStyle.block,
@@ -76,7 +75,6 @@ class TDCollapsePageState extends State<TDCollapsePage> {
     );
   }
 
-  @Demo(group: 'collapse')
   Widget _buildBlockStyleCollapse(BuildContext context) {
     return TDCollapse(
       style: TDCollapseStyle.block,
@@ -97,7 +95,6 @@ class TDCollapsePageState extends State<TDCollapsePage> {
     );
   }
 
-  @Demo(group: 'collapse')
   Widget _buildCardCollapse(BuildContext context) {
     return TDCollapse(
       style: TDCollapseStyle.card,
@@ -118,7 +115,6 @@ class TDCollapsePageState extends State<TDCollapsePage> {
     );
   }
 
-  @Demo(group: 'collapse')
   Widget _buildCollapseWithOperationText(BuildContext context) {
     return TDCollapse(
       style: TDCollapseStyle.block,
@@ -142,7 +138,6 @@ class TDCollapsePageState extends State<TDCollapsePage> {
     );
   }
 
-  @Demo(group: 'collapse')
   Widget _buildAccordionCollapse(BuildContext context) {
     return TDCollapse.accordion(
       style: TDCollapseStyle.block,
@@ -166,10 +161,11 @@ class TDCollapsePageState extends State<TDCollapsePage> {
 }
 
 class CollapseDataItem {
-  CollapseDataItem(
-      {required this.expandedValue,
-      required this.headerValue,
-      this.isExpanded = false});
+  CollapseDataItem({
+    required this.expandedValue,
+    required this.headerValue,
+    this.isExpanded = false,
+  });
 
   final String expandedValue;
   final String headerValue;
@@ -178,9 +174,6 @@ class CollapseDataItem {
 
 List<CollapseDataItem> generateItems(int numOfItems) {
   return List.generate(numOfItems, (index) {
-    return CollapseDataItem(
-      headerValue: '标题 $index',
-      expandedValue: '$index',
-    );
+    return CollapseDataItem(headerValue: '标题 $index', expandedValue: '$index');
   });
 }

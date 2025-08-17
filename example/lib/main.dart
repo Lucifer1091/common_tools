@@ -1,17 +1,11 @@
-import 'package:common_tools/themes/color_schemes/blue.dart';
-import 'package:common_tools/themes/my_color_scheme.dart';
-import 'package:common_tools/themes/my_theme.dart';
-import 'package:common_tools/themes/my_typography.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'base/example_route.dart';
-import 'base/intl_resource_delegate.dart';
 import 'config.dart';
 import 'home.dart';
 import 'localizations/app_localizations.dart';
-import 'package:common_tools/common_tools.dart';
+import 'package:common_tools/index.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -46,47 +40,47 @@ class _MyAppState extends State<MyApp> {
     //   }
     // }
 
-    _themeData = MyThemeData(
-      colorScheme: MyBlueColorScheme.light(),
-      typography: const MyTypography.geist(),
-    );
+    _themeData = MyThemeData.defaults();
   }
 
   @override
   Widget build(BuildContext context) {
     // var delegate = IntlResourceDelegate(context);
 
-    return MaterialApp(
-      title: 'TDesign Flutter Example',
-      home: PlatformChecker.isWeb
-          ? null
-          : Builder(
-              builder: (context) {
-                // TDTheme.setResourceBuilder(
-                //   (context) => delegate..updateContext(context),
-                //   needAlwaysBuild: true,
-                // );
-                return MyHomePage(
-                  title: AppLocalizations.of(context)?.components ?? '',
-                  // locale: locale,
-                  // onLocaleChange: (locale) {
-                  //   setState(() {
-                  //     this.locale = locale;
-                  //   });
-                  // },
-                  onThemeChange: (themeData) {
-                    setState(() {
-                      _themeData = themeData;
-                    });
-                  },
-                );
-              },
-            ),
-      // locale: locale,
-      supportedLocales: AppLocalizations.supportedLocales,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      onGenerateRoute: TDExampleRoute.onGenerateRoute,
-      routes: _getRoutes(),
+    return MyUILayer(
+      theme: _themeData,
+      child: MaterialApp(
+        title: 'TDesign Flutter Example',
+        home: PlatformChecker.isWeb
+            ? null
+            : Builder(
+                builder: (context) {
+                  // TDTheme.setResourceBuilder(
+                  //   (context) => delegate..updateContext(context),
+                  //   needAlwaysBuild: true,
+                  // );
+                  return MyHomePage(
+                    title: AppLocalizations.of(context)?.components ?? '',
+                    // locale: locale,
+                    // onLocaleChange: (locale) {
+                    //   setState(() {
+                    //     this.locale = locale;
+                    //   });
+                    // },
+                    onThemeChange: (themeData) {
+                      setState(() {
+                        _themeData = themeData;
+                      });
+                    },
+                  );
+                },
+              ),
+        // locale: locale,
+        supportedLocales: AppLocalizations.supportedLocales,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        onGenerateRoute: TDExampleRoute.onGenerateRoute,
+        routes: _getRoutes(),
+      ),
     );
   }
 

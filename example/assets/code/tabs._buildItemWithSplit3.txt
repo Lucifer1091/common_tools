@@ -1,9 +1,0 @@
-
-  Widget _buildItemWithSplit3(BuildContext context) {
-    return TDTabBar(
-      tabs: subList(4),
-      controller: _tabController3,
-      backgroundColor: Colors.white,
-      showIndicator: true,
-    );
-  }

@@ -443,7 +443,7 @@
 //       fillColor: fillColor ?? context.fillColor,
 //       filled: true,
 //       alignLabelWithHint: true,
-//       focusColor: context.primaryColor,
+//       focusColor: context.colorScheme.primaryColor,
 //       errorStyle: context.bodySmall.copyWith(
 //         color: errorColor ?? context.errorColor,
 //       ),
@@ -481,9 +481,9 @@
 //       data: Theme.of(context).copyWith(
 //         useMaterial3: false,
 //         colorScheme: const ColorScheme.light(
-//           primary:  context.primaryColor,
-//           onSurface:  context.primaryColor,
-//           onBackground:  context.primaryColor,
+//           primary:  context.colorScheme.primaryColor,
+//           onSurface:  context.colorScheme.primaryColor,
+//           onBackground:  context.colorScheme.primaryColor,
 //         ),
 //         dialogTheme: DialogTheme(
 //           shape: RoundedRectangleBorder(
@@ -494,11 +494,11 @@
 //           shape: RoundedRectangleBorder(
 //             borderRadius: BorderRadius.circular(12),
 //           ),
-//           helpTextStyle: context.bodyMedium.copyWith(color:  context.primaryColor),
+//           helpTextStyle: context.bodyMedium.copyWith(color:  context.colorScheme.primaryColor),
 //         ),
 //         textButtonTheme: TextButtonThemeData(
 //           style: TextButton.styleFrom(
-//             foregroundColor:  context.primaryColor,
+//             foregroundColor:  context.colorScheme.primaryColor,
 //           ),
 //         ),
 //       ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import 'td_button.dart';
 
 class TDButtonStyle {
   TDButtonStyle({
@@ -27,7 +26,7 @@ class TDButtonStyle {
       case TDButtonTheme.light:
         textColor = _getBrandColor(context, status);
         backgroundColor = _getLightColor(context, status);
-      case TDButtonTheme.defaultTheme:
+      case TDButtonTheme.defaults:
       case null:
         textColor = _getDefaultTextColor(context, status);
         backgroundColor = _getDefaultBgColor(context, status);
@@ -59,7 +58,7 @@ class TDButtonStyle {
         textColor = _getBrandColor(context, status);
         backgroundColor = _getLightColor(context, status);
         borderColor = textColor;
-      case TDButtonTheme.defaultTheme:
+      case TDButtonTheme.defaults:
       case null:
         textColor = _getDefaultTextColor(context, status);
         backgroundColor = _getOutlineDefaultBgColor(context, status);
@@ -92,7 +91,7 @@ class TDButtonStyle {
             status == TDButtonStatus.active
                 ? ThemeColors.neutral.shade200
                 : Colors.transparent;
-      case TDButtonTheme.defaultTheme:
+      case TDButtonTheme.defaults:
       case null:
         textColor = _getDefaultTextColor(context, status);
         backgroundColor =
@@ -124,14 +123,14 @@ class TDButtonStyle {
             status == TDButtonStatus.disable
                 ? ThemeColors.neutral.shade600
                 : _getBrandColor(context, status);
-      case TDButtonTheme.defaultTheme:
+      case TDButtonTheme.defaults:
       case null:
         switch (status) {
           case TDButtonStatus.active:
             textColor = ThemeColors.neutral.shade800;
           case TDButtonStatus.disable:
             textColor = ThemeColors.neutral.shade600;
-          case TDButtonStatus.defaultState:
+          case TDButtonStatus.defaults:
             textColor = ThemeColors.neutral.shade900;
         }
     }
@@ -152,7 +151,7 @@ class TDButtonStyle {
 
   Color _getBrandColor(BuildContext context, TDButtonStatus status) {
     switch (status) {
-      case TDButtonStatus.defaultState:
+      case TDButtonStatus.defaults:
         return ThemeColors.blue.shade600;
       case TDButtonStatus.active:
         return ThemeColors.blue.shade700;
@@ -163,7 +162,7 @@ class TDButtonStyle {
 
   Color _getLightColor(BuildContext context, TDButtonStatus status) {
     switch (status) {
-      case TDButtonStatus.defaultState:
+      case TDButtonStatus.defaults:
       case TDButtonStatus.disable:
         return ThemeColors.blue.shade50;
       case TDButtonStatus.active:
@@ -173,7 +172,7 @@ class TDButtonStyle {
 
   Color _getErrorColor(BuildContext context, TDButtonStatus status) {
     switch (status) {
-      case TDButtonStatus.defaultState:
+      case TDButtonStatus.defaults:
         return ThemeColors.error.shade500;
       case TDButtonStatus.active:
         return ThemeColors.error.shade600;
@@ -184,7 +183,7 @@ class TDButtonStyle {
 
   Color _getDefaultBgColor(BuildContext context, TDButtonStatus status) {
     switch (status) {
-      case TDButtonStatus.defaultState:
+      case TDButtonStatus.defaults:
         return ThemeColors.neutral.shade200;
       case TDButtonStatus.active:
         return ThemeColors.neutral.shade400;
@@ -195,7 +194,7 @@ class TDButtonStyle {
 
   Color _getDefaultTextColor(BuildContext context, TDButtonStatus status) {
     switch (status) {
-      case TDButtonStatus.defaultState:
+      case TDButtonStatus.defaults:
       case TDButtonStatus.active:
         return ThemeColors.neutral.shade900;
       case TDButtonStatus.disable:
@@ -205,7 +204,7 @@ class TDButtonStyle {
 
   Color _getOutlineDefaultBgColor(BuildContext context, TDButtonStatus status) {
     switch (status) {
-      case TDButtonStatus.defaultState:
+      case TDButtonStatus.defaults:
         return Colors.white;
       case TDButtonStatus.active:
         return ThemeColors.neutral.shade200;

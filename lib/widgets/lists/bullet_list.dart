@@ -62,14 +62,14 @@ class BulletList extends StatelessWidget {
       return Text(
         '•',
         style: context.bodyMedium?.copyWith(
-          color: symbolColor ?? context.primary,
+          color: symbolColor ?? context.colorScheme.primary,
         ),
       );
     } else if (symbolType == SymbolType.Numbered) {
       return Text(
         '$prefixText ${index + 1}.',
         style: context.bodyMedium?.copyWith(
-          color: symbolColor ?? context.primary,
+          color: symbolColor ?? context.colorScheme.primary,
         ),
       );
     }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:common_tools/index.dart';
 
-import '../../annotation/demo.dart';
 import '../../base/example_widget.dart';
 
 ///
@@ -29,35 +28,25 @@ class TDSideBarPaginationPageState extends State<TDSideBarPaginationPage> {
 
   Widget buildWidget(BuildContext context) {
     return ExamplePage(
-        title: 'SideBar 切页用法',
-        exampleCodeGroup: 'sideBar',
-        showSingleChild: true,
-        singleChild: CodeWrapper(
-          isCenter: false,
-          builder: _buildPaginationSideBar,
-        ));
+      title: 'SideBar 切页用法',
+      exampleCodeGroup: 'sideBar',
+      showSingleChild: true,
+      singleChild: _buildPaginationSideBar,
+    );
   }
 
-  @Demo(group: 'sideBar')
   Widget _buildPaginationSideBar(BuildContext context) {
     // 切页用法
     final list = <SideItemProps>[];
     final pages = <Widget>[];
 
     for (var i = 0; i < 100; i++) {
-      list.add(SideItemProps(
-        index: i,
-        label: '选项',
-        value: i,
-      ));
+      list.add(SideItemProps(index: i, label: '选项', value: i));
       pages.add(getPageDemo(i));
     }
 
     list[1].badge = const TDBadge(TDBadgeType.redPoint);
-    list[2].badge = const TDBadge(
-      TDBadgeType.message,
-      count: '8',
-    );
+    list[2].badge = const TDBadge(TDBadgeType.message, count: 8);
 
     void setCurrentValue(int value) {
       _pageController.jumpToPage(value);
@@ -78,25 +67,29 @@ class TDSideBarPaginationPageState extends State<TDSideBarPaginationPage> {
             value: currentValue,
             controller: _sideBarController,
             children: list
-                .map((ele) => TDSideBarItem(
+                .map(
+                  (ele) => TDSideBarItem(
                     label: ele.label ?? '',
                     badge: ele.badge,
                     value: ele.value,
-                    icon: ele.icon))
+                    icon: ele.icon,
+                  ),
+                )
                 .toList(),
             onSelected: setCurrentValue,
           ),
         ),
         Expanded(
-            child: SizedBox(
-          height: demoHeight,
-          child: PageView(
-            controller: _pageController,
-            scrollDirection: Axis.vertical,
-            children: pages,
-            physics: const NeverScrollableScrollPhysics(),
+          child: SizedBox(
+            height: demoHeight,
+            child: PageView(
+              controller: _pageController,
+              scrollDirection: Axis.vertical,
+              children: pages,
+              physics: const NeverScrollableScrollPhysics(),
+            ),
           ),
-        ))
+        ),
       ],
     );
   }
@@ -109,13 +102,10 @@ class TDSideBarPaginationPageState extends State<TDSideBarPaginationPage> {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 2, right: 9),
-            child: TDText('标题$index',
-                style: const TextStyle(
-                  fontSize: 14,
-                )),
+            child: TDText('标题$index', style: const TextStyle(fontSize: 14)),
           ),
           const SizedBox(height: 16),
-          displayImageList()
+          displayImageList(),
         ],
       ),
     );
@@ -129,13 +119,10 @@ class TDSideBarPaginationPageState extends State<TDSideBarPaginationPage> {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 2, right: 9),
-            child: TDText('标题$index',
-                style: const TextStyle(
-                  fontSize: 14,
-                )),
+            child: TDText('标题$index', style: const TextStyle(fontSize: 14)),
           ),
           const SizedBox(height: 16),
-          displayImageList()
+          displayImageList(),
         ],
       ),
     );
@@ -144,11 +131,14 @@ class TDSideBarPaginationPageState extends State<TDSideBarPaginationPage> {
   Widget displayImageList() {
     return Column(
       children: [
-        Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          displayImageItem('标题文字'),
-          displayImageItem('标题文字'),
-          displayImageItem('最多六个文字'),
-        ]),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            displayImageItem('标题文字'),
+            displayImageItem('标题文字'),
+            displayImageItem('最多六个文字'),
+          ],
+        ),
         const SizedBox(height: 18),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -166,28 +156,26 @@ class TDSideBarPaginationPageState extends State<TDSideBarPaginationPage> {
             displayImageItem('标题文字'),
             displayImageItem('最多六个文字'),
           ],
-        )
+        ),
       ],
     );
   }
 
   Widget displayImageItem(String title) {
     return Expanded(
-        child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const TDImage(
-          assetUrl: 'assets/img/empty.png',
-          type: TDImageType.roundedSquare,
-          width: 48,
-          height: 48,
-        ),
-        const SizedBox(height: 8),
-        TDText(
-          '$title',
-          style: const TextStyle(fontSize: 12),
-        )
-      ],
-    ));
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const TDImage(
+            assetUrl: 'assets/img/empty.png',
+            type: TDImageType.roundedSquare,
+            width: 48,
+            height: 48,
+          ),
+          const SizedBox(height: 8),
+          TDText('$title', style: const TextStyle(fontSize: 12)),
+        ],
+      ),
+    );
   }
 }

@@ -172,12 +172,12 @@
 //             loadingWidget: Container(
 //               width: size.width,
 //               height: size.height,
-//               color: TDTheme.of(context).fontGyColor1,
+//               color: ThemeColors.neutral.shade900,
 //               child: Center(
 //                 child: TDLoading(
 //                   icon: TDLoadingIcon.circle,
 //                   size: TDLoadingSize.large,
-//                   iconColor: TDTheme.of(context).brandNormalColor,
+//                   iconColor: context.colorScheme.primary,
 //                 ),
 //               ),
 //             ),
@@ -205,14 +205,14 @@
 //             visible: (widget.labels![_index - 1]) != '',
 //             child: Text(widget.labels![_index - 1],
 //               textAlign: TextAlign.center,
-//               style: widget.labelStyle ?? TextStyle(color: TDTheme.of(context).whiteColor1),
+//               style: widget.labelStyle ?? TextStyle(color: Colors.white),
 //             ),
 //           ),
 //           Visibility(
 //             visible: widget.showIndex ?? false,
 //             child: Text('$_index / ${widget.images.length}',
 //               textAlign: TextAlign.center,
-//               style: widget.indexStyle ?? TextStyle(color: TDTheme.of(context).brandClickColor, fontSize: 10),
+//               style: widget.indexStyle ?? TextStyle(color: ThemeColors.blue.shade700, fontSize: 10),
 //             ),
 //           )
 //         ],
@@ -223,7 +223,7 @@
 //           ? '$_index / ${widget.images.length}'
 //           : '',
 //       textAlign: TextAlign.center,
-//       style: widget.indexStyle ?? TextStyle(color: TDTheme.of(context).whiteColor1),
+//       style: widget.indexStyle ?? TextStyle(color: Colors.white),
 //     );
 //   }
 
@@ -240,8 +240,8 @@
 //         }
 //       },
 //       child: Icon(
-//         TDIcons.close,
-//         color: widget.iconColor ?? TDTheme.of(context).whiteColor1,
+//         Icons.close,
+//         color: widget.iconColor ?? context.colorScheme.primaryForeground,
 //       ),
 //     );
 //   }
@@ -266,8 +266,8 @@
 //           });
 //         },
 //         child: Icon(
-//           TDIcons.delete,
-//           color: widget.iconColor ?? TDTheme.of(context).whiteColor1,
+//           Icons.delete,
+//           color: widget.iconColor ?? context.colorScheme.primaryForeground,
 //         ),
 //       ),
 //     );
@@ -285,7 +285,7 @@
 //           left: 0,
 //           right: 0,
 //           child: Container(
-//             color: widget.bgColor ?? TDTheme.of(context).fontGyColor1,
+//             color: widget.bgColor ?? ThemeColors.neutral.shade900,
 //           ),
 //         ),
 //         Positioned(

@@ -1,9 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:common_tools/index.dart';
 
-import '../../annotation/demo.dart';
 import '../../base/example_widget.dart';
 
 ///
@@ -53,8 +52,11 @@ class TDSideBarLoadingPageState extends State<TDSideBarLoadingPage> {
       });
 
       lock = true;
-      await _demoScroller.animateTo(value.toDouble() * itemHeight,
-          duration: const Duration(milliseconds: 500), curve: Curves.easeIn);
+      await _demoScroller.animateTo(
+        value.toDouble() * itemHeight,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeIn,
+      );
       lock = false;
     }
   }
@@ -73,13 +75,11 @@ class TDSideBarLoadingPageState extends State<TDSideBarLoadingPage> {
 
   Widget buildWidget(BuildContext context) {
     return ExamplePage(
-        title: 'SideBar 延迟加载',
-        exampleCodeGroup: 'sideBar',
-        showSingleChild: true,
-        singleChild: CodeWrapper(
-          isCenter: false,
-          builder: _buildLoadingSideBar,
-        ));
+      title: 'SideBar 延迟加载',
+      exampleCodeGroup: 'sideBar',
+      showSingleChild: true,
+      singleChild: _buildLoadingSideBar,
+    );
   }
 
   List<SideItemProps> list = <SideItemProps>[];
@@ -89,34 +89,31 @@ class TDSideBarLoadingPageState extends State<TDSideBarLoadingPage> {
     list = [];
     pages = [];
     for (var i = 0; i < 20; i++) {
-      list.add(SideItemProps(
-        index: i,
-        label: '选项',
-        value: i,
-      ));
+      list.add(SideItemProps(index: i, label: '选项', value: i));
       pages.add(getLoadingDemo(i));
     }
 
-    pages.add(Container(
-      height: MediaQuery.of(context).size.height - itemHeight,
-      decoration: const BoxDecoration(color: Colors.white),
-    ));
+    pages.add(
+      Container(
+        height: MediaQuery.of(context).size.height - itemHeight,
+        decoration: const BoxDecoration(color: Colors.white),
+      ),
+    );
 
     list[1].badge = const TDBadge(TDBadgeType.redPoint);
-    list[2].badge = const TDBadge(
-      TDBadgeType.message,
-      count: '8',
-    );
-    if(_sideBarController.loading) {
+    list[2].badge = const TDBadge(TDBadgeType.message, count: 8);
+    if (_sideBarController.loading) {
       _sideBarController.init(list);
       _sideBarController.selectTo(currentValue);
       // 初始化时避免右侧内容与左侧item不匹配
-      _demoScroller.animateTo(currentValue.toDouble() * itemHeight,
-          duration: const Duration(milliseconds: 1), curve: Curves.easeIn);
+      _demoScroller.animateTo(
+        currentValue.toDouble() * itemHeight,
+        duration: const Duration(milliseconds: 1),
+        curve: Curves.easeIn,
+      );
     }
   }
 
-  @Demo(group: 'sideBar')
   Widget _buildLoadingSideBar(BuildContext context) {
     // 延迟加载
     Future.delayed(const Duration(seconds: 3), _initData);
@@ -134,26 +131,28 @@ class TDSideBarLoadingPageState extends State<TDSideBarLoadingPage> {
             controller: _sideBarController,
             loading: true,
             children: list
-                .map((ele) => TDSideBarItem(
+                .map(
+                  (ele) => TDSideBarItem(
                     label: ele.label ?? '',
                     badge: ele.badge,
                     value: ele.value,
-                    icon: ele.icon))
+                    icon: ele.icon,
+                  ),
+                )
                 .toList(),
             onChanged: onChanged,
             onSelected: onSelected,
           ),
         ),
         Expanded(
-            child: SizedBox(
-          height: demoHeight,
-          child: SingleChildScrollView(
-            controller: _demoScroller,
-            child: Column(
-              children: pages,
+          child: SizedBox(
+            height: demoHeight,
+            child: SingleChildScrollView(
+              controller: _demoScroller,
+              child: Column(children: pages),
             ),
           ),
-        ))
+        ),
       ],
     );
   }
@@ -166,10 +165,7 @@ class TDSideBarLoadingPageState extends State<TDSideBarLoadingPage> {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 15, right: 9),
-            child: TDText('标题$index',
-                style: const TextStyle(
-                  fontSize: 14,
-                )),
+            child: TDText('标题$index', style: const TextStyle(fontSize: 14)),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 20),
@@ -205,15 +201,8 @@ class TDSideBarLoadingPageState extends State<TDSideBarLoadingPage> {
             width: 48,
             height: 48,
           ),
-          SizedBox(
-            width: 16,
-          ),
-          TDText(
-            '标题',
-            style: TextStyle(
-              fontSize: 16,
-            ),
-          )
+          SizedBox(width: 16),
+          TDText('标题', style: TextStyle(fontSize: 16)),
         ],
       ),
     );

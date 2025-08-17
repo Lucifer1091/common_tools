@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../badge/td_badge.dart';
-import '../text/td_text.dart';
-import 'td_sidebar.dart';
 
 class TDWrapSideBarItem extends StatelessWidget {
   const TDWrapSideBarItem({
@@ -167,7 +164,7 @@ class TDWrapSideBarItem extends StatelessWidget {
 
   Widget renderLabel(BuildContext context) {
     return TDText.rich(
-      TextSpan(
+      TDTextSpan(
         children: [
           WidgetSpan(
             child: TDText(
@@ -184,7 +181,7 @@ class TDWrapSideBarItem extends StatelessWidget {
                       : selected
                       ? selectedColor ?? ThemeColors.blue.shade600
                       : Colors.black,
-              // forceVerticalCenter: true,
+              //
             ),
           ),
           if (label.length < 4)
