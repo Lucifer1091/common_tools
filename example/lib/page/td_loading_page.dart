@@ -148,17 +148,17 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
           ignoreCode: true,
           builder: (_) {
             var list = [
-              TDButton(
+              MyButton(
                 text: '展示Loading',
-                theme: TDButtonTheme.primary,
+                theme: MyButtonTheme.primary,
                 onTap: () {
                   TDLoadingController.show(context);
                 },
               ),
               const SizedBox(width: 24),
-              const TDButton(
+              const MyButton(
                 text: '隐藏Loading',
-                theme: TDButtonTheme.primary,
+                theme: MyButtonTheme.primary,
                 onTap: TDLoadingController.dismiss,
               ),
             ];

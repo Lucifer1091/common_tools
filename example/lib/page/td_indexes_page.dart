@@ -149,12 +149,12 @@ class TDIndexesPage extends StatelessWidget {
 Widget _buildSimple(BuildContext context) {
   final renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
   final indexList = _list.map((item) => item['index'] as String).toList();
-  return TDButton(
+  return MyButton(
     text: '基础用法',
     isBlock: true,
-    size: TDButtonSize.large,
-    theme: TDButtonTheme.primary,
-    type: TDButtonType.outline,
+    size: MyButtonSize.large,
+    theme: MyButtonTheme.primary,
+    type: MyButtonType.outline,
     onTap: () {
       Navigator.of(context).push(
         TDSlidePopupRoute(
@@ -187,12 +187,12 @@ Widget _buildSimple(BuildContext context) {
 Widget _buildOther(BuildContext context) {
   final renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
   final indexList = _list.map((item) => item['index'] as String).toList();
-  return TDButton(
+  return MyButton(
     text: '胶囊索引',
     isBlock: true,
-    size: TDButtonSize.large,
-    theme: TDButtonTheme.primary,
-    type: TDButtonType.outline,
+    size: MyButtonSize.large,
+    theme: MyButtonTheme.primary,
+    type: MyButtonType.outline,
     onTap: () {
       Navigator.of(context).push(
         TDSlidePopupRoute(

@@ -123,13 +123,13 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
   ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: TDButton(
+      child: MyButton(
         text: text,
         width: MediaQuery.of(context).size.width - 16 * 2,
-        size: TDButtonSize.large,
-        type: TDButtonType.outline,
-        shape: TDButtonShape.rectangle,
-        theme: TDButtonTheme.primary,
+        size: MyButtonSize.large,
+        type: MyButtonType.outline,
+        shape: MyButtonShape.rectangle,
+        theme: MyButtonTheme.primary,
         onTap: onTap,
       ),
     );

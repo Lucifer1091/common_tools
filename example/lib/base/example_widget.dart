@@ -155,9 +155,9 @@ class _ExamplePageState extends State<ExamplePage> {
             bottom: 0,
             child: Column(
               children: [
-                TDButton(
+                MyButton(
                   text: '返回首页',
-                  type: TDButtonType.fill,
+                  type: MyButtonType.fill,
                   onTap: () => Navigator.of(context).maybePop(),
                 ),
               ],

@@ -464,42 +464,42 @@ Widget _buildControl(BuildContext context) {
       Wrap(
         spacing: 8,
         children: [
-          TDButton(
+          MyButton(
             text: '开始',
-            size: TDButtonSize.extraSmall,
-            theme: TDButtonTheme.primary,
+            size: MyButtonSize.extraSmall,
+            theme: MyButtonTheme.primary,
             onTap: () {
               controller.start();
             },
           ),
-          TDButton(
+          MyButton(
             text: '结束',
-            size: TDButtonSize.extraSmall,
-            theme: TDButtonTheme.primary,
+            size: MyButtonSize.extraSmall,
+            theme: MyButtonTheme.primary,
             onTap: () {
               controller.reset(0);
             },
           ),
-          TDButton(
+          MyButton(
             text: '重置',
-            size: TDButtonSize.extraSmall,
-            theme: TDButtonTheme.primary,
+            size: MyButtonSize.extraSmall,
+            theme: MyButtonTheme.primary,
             onTap: () {
               controller.reset();
             },
           ),
-          TDButton(
+          MyButton(
             text: '暂停',
-            size: TDButtonSize.extraSmall,
-            theme: TDButtonTheme.primary,
+            size: MyButtonSize.extraSmall,
+            theme: MyButtonTheme.primary,
             onTap: () {
               controller.pause();
             },
           ),
-          TDButton(
+          MyButton(
             text: '继续',
-            size: TDButtonSize.extraSmall,
-            theme: TDButtonTheme.primary,
+            size: MyButtonSize.extraSmall,
+            theme: MyButtonTheme.primary,
             onTap: () {
               controller.resume();
             },

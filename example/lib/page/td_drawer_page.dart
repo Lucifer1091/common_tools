@@ -105,12 +105,12 @@ class TDDrawerPage extends StatelessWidget {
 Widget _buildBaseSimple(BuildContext context) {
   /// 获取navBar尺寸
   var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
-  return TDButton(
+  return MyButton(
     text: '基础抽屉',
     isBlock: true,
-    type: TDButtonType.outline,
-    theme: TDButtonTheme.primary,
-    size: TDButtonSize.large,
+    type: MyButtonType.outline,
+    theme: MyButtonTheme.primary,
+    size: MyButtonSize.large,
     onTap: () {
       TDDrawer(
         context,
@@ -131,12 +131,12 @@ Widget _buildBaseSimple(BuildContext context) {
 Widget _buildIconSimple(BuildContext context) {
   /// 获取navBar尺寸
   var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
-  return TDButton(
+  return MyButton(
     text: '带图标抽屉',
     isBlock: true,
-    type: TDButtonType.outline,
-    theme: TDButtonTheme.primary,
-    size: TDButtonSize.large,
+    type: MyButtonType.outline,
+    theme: MyButtonTheme.primary,
+    size: MyButtonSize.large,
     onTap: () {
       TDDrawer(
         context,
@@ -157,12 +157,12 @@ Widget _buildIconSimple(BuildContext context) {
 Widget _buildTitleSimple(BuildContext context) {
   /// 获取navBar尺寸
   var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
-  return TDButton(
+  return MyButton(
     text: '带图标抽屉',
     isBlock: true,
-    type: TDButtonType.outline,
-    theme: TDButtonTheme.primary,
-    size: TDButtonSize.large,
+    type: MyButtonType.outline,
+    theme: MyButtonTheme.primary,
+    size: MyButtonSize.large,
     onTap: () {
       TDDrawer(
         context,
@@ -182,12 +182,12 @@ Widget _buildTitleSimple(BuildContext context) {
 Widget _buildBottomSimple(BuildContext context) {
   /// 获取navBar尺寸
   var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
-  return TDButton(
+  return MyButton(
     text: '带底部插槽样式',
     isBlock: true,
-    type: TDButtonType.outline,
-    theme: TDButtonTheme.primary,
-    size: TDButtonSize.large,
+    type: MyButtonType.outline,
+    theme: MyButtonTheme.primary,
+    size: MyButtonSize.large,
     onTap: () {
       TDDrawer(
         context,
@@ -199,11 +199,11 @@ Widget _buildBottomSimple(BuildContext context) {
           10,
           (index) => TDDrawerItem(title: '菜单${_nums[index]}'),
         ).toList(),
-        footer: const TDButton(
+        footer: const MyButton(
           text: '操作',
-          type: TDButtonType.outline,
+          type: MyButtonType.outline,
           width: double.infinity,
-          size: TDButtonSize.large,
+          size: MyButtonSize.large,
         ),
       );
     },
@@ -212,12 +212,12 @@ Widget _buildBottomSimple(BuildContext context) {
 
 Widget _buildColorSimple(BuildContext context) {
   var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
-  return TDButton(
+  return MyButton(
     text: '自定义背景色',
     isBlock: true,
-    type: TDButtonType.outline,
-    theme: TDButtonTheme.primary,
-    size: TDButtonSize.large,
+    type: MyButtonType.outline,
+    theme: MyButtonTheme.primary,
+    size: MyButtonSize.large,
     onTap: () {
       TDDrawer(
         context,

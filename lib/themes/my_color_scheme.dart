@@ -407,6 +407,21 @@ class MyColorScheme {
   String toString() {
     return 'ColorScheme{brightness: $brightness, background: $background, foreground: $foreground, card: $card, cardForeground: $cardForeground, popover: $popover, popoverForeground: $popoverForeground, primary: $primary, primaryForeground: $primaryForeground, secondary: $secondary, secondaryForeground: $secondaryForeground, muted: $muted, mutedForeground: $mutedForeground, accent: $accent, accentForeground: $accentForeground, destructive: $destructive, destructiveForeground: $destructiveForeground, border: $border, input: $input, ring: $ring, selection: $selection, chart1: $chart1, chart2: $chart2, chart3: $chart3, chart4: $chart4, chart5: $chart5}';
   }
+
+  static const List<String> schemes = <String>[
+    'blue',
+    'gray',
+    'green',
+    'neutral',
+    'orange',
+    'red',
+    'rose',
+    'slate',
+    'stone',
+    'violet',
+    'yellow',
+    'zinc',
+  ];
 }
 
 String _hexFromColor(Color color) {

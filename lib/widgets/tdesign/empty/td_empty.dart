@@ -34,7 +34,7 @@ class TDEmpty extends StatelessWidget {
 
   final String? operationText;
 
-  final TDButtonTheme? operationTheme;
+  final MyButtonTheme? operationTheme;
 
   final TDEmptyType type;
 
@@ -72,10 +72,10 @@ class TDEmpty extends StatelessWidget {
             customOperationWidget ??
                 Padding(
                   padding: const EdgeInsets.only(top: 32),
-                  child: TDButton(
+                  child: MyButton(
                     text: operationText ?? '',
-                    size: TDButtonSize.large,
-                    theme: operationTheme ?? TDButtonTheme.primary,
+                    size: MyButtonSize.large,
+                    theme: operationTheme ?? MyButtonTheme.primary,
                     width: 179,
                     onTap: onTapEvent,
                   ),

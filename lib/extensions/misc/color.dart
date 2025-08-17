@@ -11,6 +11,10 @@ extension StringToColor on String {
 }
 
 extension HexColor on Color {
+  Color scaleAlpha(double factor) {
+    return withValues(alpha: a * factor);
+  }
+
   /// Prefixes a hash sign if [leadingHashSign] is set to `true` (default is `true`).
   String toHex({bool leadingHashSign = true}) =>
       '${leadingHashSign ? '#' : ''}'

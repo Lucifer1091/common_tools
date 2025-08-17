@@ -108,18 +108,18 @@ class TDSideBarPageState extends State<TDSideBarPage> {
     );
   }
 
-  TDButton getCustomButton(
+  MyButton getCustomButton(
     BuildContext context,
     String text,
     String routeName,
   ) {
-    return TDButton(
+    return MyButton(
       text: text,
       width: MediaQuery.of(context).size.width - 16 * 2,
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
-      shape: TDButtonShape.rectangle,
-      theme: TDButtonTheme.primary,
+      size: MyButtonSize.large,
+      type: MyButtonType.outline,
+      shape: MyButtonShape.rectangle,
+      theme: MyButtonTheme.primary,
       onTap: () {
         Navigator.pushNamed(
           context,

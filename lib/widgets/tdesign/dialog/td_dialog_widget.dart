@@ -275,7 +275,7 @@ class HorizontalTextButtons extends StatelessWidget {
                 buttonTextColor: leftBtn.titleColor,
                 buttonTextSize: leftBtn.titleSize,
                 buttonStyle: leftBtn.style,
-                buttonType: leftBtn.type ?? TDButtonType.text,
+                buttonType: leftBtn.type ?? MyButtonType.text,
                 buttonTheme: leftBtn.theme,
                 // fix： The button height does not fill the container.
                 height: 56,
@@ -296,8 +296,8 @@ class HorizontalTextButtons extends StatelessWidget {
                 buttonTextColor: rightBtn.titleColor,
                 buttonTextSize: rightBtn.titleSize,
                 buttonStyle: rightBtn.style,
-                buttonType: rightBtn.type ?? TDButtonType.text,
-                buttonTheme: rightBtn.theme ?? TDButtonTheme.primary,
+                buttonType: rightBtn.type ?? MyButtonType.text,
+                buttonTheme: rightBtn.theme ?? MyButtonTheme.primary,
                 height: 56,
                 buttonTextFontWeight: rightBtn.fontWeight ?? FontWeight.w600,
                 onPressed: () {
@@ -340,11 +340,11 @@ class TDDialogButton extends StatelessWidget {
 
   final FontWeight? buttonTextFontWeight;
 
-  final TDButtonStyle? buttonStyle;
+  final MyButtonStyle? buttonStyle;
 
-  final TDButtonType? buttonType;
+  final MyButtonType? buttonType;
 
-  final TDButtonTheme? buttonTheme;
+  final MyButtonTheme? buttonTheme;
 
   final double? width;
 
@@ -356,10 +356,10 @@ class TDDialogButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TDButton(
+    return MyButton(
       onTap: onPressed,
       style: buttonStyle,
-      type: buttonType ?? TDButtonType.fill,
+      type: buttonType ?? MyButtonType.fill,
       theme: buttonTheme,
       text: buttonText,
       textStyle: TextStyle(

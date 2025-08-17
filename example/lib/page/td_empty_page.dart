@@ -66,10 +66,10 @@ class _TDEmptyPageState extends State<TDEmptyPage> {
       emptyText: '描述文字',
       customOperationWidget: Padding(
         padding: const EdgeInsets.only(top: 32),
-        child: TDButton(
+        child: MyButton(
           text: '自定义操作按钮',
-          size: TDButtonSize.medium,
-          theme: TDButtonTheme.danger,
+          size: MyButtonSize.medium,
+          theme: MyButtonTheme.danger,
           width: 160,
           onTap: () {},
         ),

@@ -156,12 +156,12 @@ class _TDBadgePageState extends State<TDBadgePage> {
         child: Stack(
           alignment: Alignment.bottomLeft,
           children: [
-            TDButton(
+            MyButton(
               width: 80,
               height: 48,
               text: '按钮',
-              size: TDButtonSize.large,
-              type: TDButtonType.fill,
+              size: MyButtonSize.large,
+              type: MyButtonType.fill,
             ),
             Positioned(right: 0, top: 0, child: TDBadge(TDBadgeType.redPoint)),
           ],
@@ -224,11 +224,11 @@ class _TDBadgePageState extends State<TDBadgePage> {
         child: Stack(
           alignment: Alignment.bottomLeft,
           children: [
-            TDButton(
+            MyButton(
               width: 80,
               height: 48,
               text: '按钮',
-              size: TDButtonSize.large,
+              size: MyButtonSize.large,
             ),
             Positioned(
               right: 0,

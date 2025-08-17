@@ -99,11 +99,11 @@ Widget _entranceNoticeBar1(BuildContext context) {
   return const TDNoticeBar(
     content: '这是一条普通的通知信息',
     prefixIcon: Icons.cancel_rounded,
-    right: TDButton(
+    right: MyButton(
       text: '文字按钮',
-      type: TDButtonType.text,
-      theme: TDButtonTheme.primary,
-      size: TDButtonSize.extraSmall,
+      type: MyButtonType.text,
+      theme: MyButtonTheme.primary,
+      size: MyButtonSize.extraSmall,
       height: 22,
       padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
     ),
@@ -231,11 +231,11 @@ Widget _leftNoticeBar(BuildContext context) {
   return const TDNoticeBar(
     content: '这是一条普通的通知信息',
     suffixIcon: Icons.chevron_right,
-    left: TDButton(
+    left: MyButton(
       text: '文本',
-      type: TDButtonType.text,
-      theme: TDButtonTheme.primary,
-      size: TDButtonSize.extraSmall,
+      type: MyButtonType.text,
+      theme: MyButtonTheme.primary,
+      size: MyButtonSize.extraSmall,
       height: 22,
       padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
     ),

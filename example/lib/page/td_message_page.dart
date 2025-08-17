@@ -45,13 +45,13 @@ class _TDMessagePageState extends State<TDMessagePage> {
   }
 
   Widget _buildPlainTextMessage(BuildContext context) {
-    return TDButton(
+    return MyButton(
       isBlock: true,
       text: '纯文字的通知',
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
+      size: MyButtonSize.large,
+      type: MyButtonType.outline,
       width: 450,
-      theme: TDButtonTheme.primary,
+      theme: MyButtonTheme.primary,
       onTap: () {
         TDMessage.showMessage(
           context: context,
@@ -69,13 +69,13 @@ class _TDMessagePageState extends State<TDMessagePage> {
   }
 
   Widget _buildIconTextMessage(BuildContext context) {
-    return TDButton(
+    return MyButton(
       isBlock: true,
       text: '带图标的通知',
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
+      size: MyButtonSize.large,
+      type: MyButtonType.outline,
       width: 450,
-      theme: TDButtonTheme.primary,
+      theme: MyButtonTheme.primary,
       onTap: () {
         TDMessage.showMessage(
           context: context,
@@ -90,13 +90,13 @@ class _TDMessagePageState extends State<TDMessagePage> {
   }
 
   Widget _buildMessageWithCloseButton(BuildContext context) {
-    return TDButton(
+    return MyButton(
       isBlock: true,
       text: '带关闭的通知',
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
+      size: MyButtonSize.large,
+      type: MyButtonType.outline,
       width: 450,
-      theme: TDButtonTheme.primary,
+      theme: MyButtonTheme.primary,
       onTap: () {
         TDMessage.showMessage(
           context: context,
@@ -116,13 +116,13 @@ class _TDMessagePageState extends State<TDMessagePage> {
   }
 
   Widget _buildRollingMessage(BuildContext context) {
-    return TDButton(
+    return MyButton(
       isBlock: true,
       text: '可滚动的通知',
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
+      size: MyButtonSize.large,
+      type: MyButtonType.outline,
       width: 450,
-      theme: TDButtonTheme.primary,
+      theme: MyButtonTheme.primary,
       onTap: () {
         TDMessage.showMessage(
           context: context,
@@ -141,13 +141,13 @@ class _TDMessagePageState extends State<TDMessagePage> {
   }
 
   Widget _buildLinkMessage(BuildContext context) {
-    return TDButton(
+    return MyButton(
       isBlock: true,
       text: '带按钮的通知',
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
+      size: MyButtonSize.large,
+      type: MyButtonType.outline,
       width: 450,
-      theme: TDButtonTheme.primary,
+      theme: MyButtonTheme.primary,
       onTap: () {
         TDMessage.showMessage(
           context: context,
@@ -170,13 +170,13 @@ class _TDMessagePageState extends State<TDMessagePage> {
   }
 
   Widget _buildInfoMessage(BuildContext context) {
-    return TDButton(
+    return MyButton(
       isBlock: true,
       text: '普通通知',
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
+      size: MyButtonSize.large,
+      type: MyButtonType.outline,
       width: 450,
-      theme: TDButtonTheme.primary,
+      theme: MyButtonTheme.primary,
       onTap: () {
         TDMessage.showMessage(
           context: context,
@@ -191,13 +191,13 @@ class _TDMessagePageState extends State<TDMessagePage> {
   }
 
   Widget _buildSuccessMessage(BuildContext context) {
-    return TDButton(
+    return MyButton(
       isBlock: true,
       text: '成功通知',
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
+      size: MyButtonSize.large,
+      type: MyButtonType.outline,
       width: 450,
-      theme: TDButtonTheme.primary,
+      theme: MyButtonTheme.primary,
       onTap: () {
         TDMessage.showMessage(
           context: context,
@@ -212,13 +212,13 @@ class _TDMessagePageState extends State<TDMessagePage> {
   }
 
   Widget _buildWarningMessage(BuildContext context) {
-    return TDButton(
+    return MyButton(
       isBlock: true,
       text: '警示通知',
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
+      size: MyButtonSize.large,
+      type: MyButtonType.outline,
       width: 450,
-      theme: TDButtonTheme.primary,
+      theme: MyButtonTheme.primary,
       onTap: () {
         TDMessage.showMessage(
           context: context,
@@ -233,13 +233,13 @@ class _TDMessagePageState extends State<TDMessagePage> {
   }
 
   Widget _buildErrorMessage(BuildContext context) {
-    return TDButton(
+    return MyButton(
       isBlock: true,
       text: '错误通知',
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
+      size: MyButtonSize.large,
+      type: MyButtonType.outline,
       width: 450,
-      theme: TDButtonTheme.primary,
+      theme: MyButtonTheme.primary,
       onTap: () {
         TDMessage.showMessage(
           context: context,

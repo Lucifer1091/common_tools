@@ -37,11 +37,11 @@ class TDDialogButtonOptions {
 
   /// Button Style
   /// Setting the style of a single button will override the default style of the Dialog
-  final TDButtonStyle? style;
+  final MyButtonStyle? style;
 
-  final TDButtonType? type;
+  final MyButtonType? type;
 
-  final TDButtonTheme? theme;
+  final MyButtonTheme? theme;
 
   final double? height;
 

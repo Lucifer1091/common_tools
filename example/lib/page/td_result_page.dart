@@ -79,11 +79,11 @@ class _TDResultPageState extends State<TDResultPage> {
   }
 
   Widget _buildPageExample(BuildContext context) {
-    return TDButton(
+    return MyButton(
       text: '页面示例',
-      theme: TDButtonTheme.primary,
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
+      theme: MyButtonTheme.primary,
+      size: MyButtonSize.large,
+      type: MyButtonType.outline,
       isBlock: true,
       onTap: () {
         Navigator.push(
@@ -100,11 +100,11 @@ class _TDResultPageState extends State<TDResultPage> {
                     description: '描述文字',
                   ),
                   const SizedBox(height: 48),
-                  TDButton(
+                  MyButton(
                     text: '返回',
-                    theme: TDButtonTheme.primary,
-                    size: TDButtonSize.large,
-                    type: TDButtonType.outline,
+                    theme: MyButtonTheme.primary,
+                    size: MyButtonSize.large,
+                    type: MyButtonType.outline,
                     isBlock: true,
                     onTap: () {
                       Navigator.pop(context);

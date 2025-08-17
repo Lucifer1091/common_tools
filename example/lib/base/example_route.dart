@@ -14,9 +14,9 @@ class TDExampleRoute {
 
   static void init() {
     exampleMap.forEach((key, value) {
-      value.forEach((model) {
+      for (var model in value) {
         pageModelList[model.name] = model;
-      });
+      }
     });
     // 添加关于页路由
     pageModelList[aboutPath] = ExamplePageModel(
@@ -38,7 +38,7 @@ class TDExampleRoute {
     var paramsMap = <String, String>{};
     if (strings.length > 1) {
       var params = strings[1].split('&');
-      params.forEach((element) {
+      for (var element in params) {
         var kv = element.split('=');
         var key = kv[0];
         var value = '';
@@ -46,7 +46,7 @@ class TDExampleRoute {
           value = kv[1];
         }
         paramsMap[key] = value;
-      });
+      }
     }
     if (model != null) {
       if (paramsMap['showAction'] == '1') {

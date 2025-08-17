@@ -41,7 +41,7 @@ class TDAlertDialog extends StatelessWidget {
   /// Dialog box with vertical button arrangement
   ///
   /// The [buttons] parameter is required. The default style for vertical
-  /// buttons is [TDButtonTheme.primary].
+  /// buttons is [MyButtonTheme.primary].
   const TDAlertDialog.vertical({
     required List<TDDialogButtonOptions> buttons,
     super.key,
@@ -149,7 +149,7 @@ class TDAlertDialog extends StatelessWidget {
         leftBtn ??
         TDDialogButtonOptions(
           title: 'Cancel',
-          theme: TDButtonTheme.light,
+          theme: MyButtonTheme.light,
           action: leftBtnAction,
         );
 
@@ -157,7 +157,7 @@ class TDAlertDialog extends StatelessWidget {
         rightBtn ??
         TDDialogButtonOptions(
           title: 'Confirm',
-          theme: TDButtonTheme.primary,
+          theme: MyButtonTheme.primary,
           action: rightBtnAction,
         );
     return _buttonStyle == TDDialogButtonStyle.text

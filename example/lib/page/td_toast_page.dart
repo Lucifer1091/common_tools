@@ -52,20 +52,20 @@ class _TDToastPageState extends State<TDToastPage> {
   }
 
   Widget _textToast(BuildContext context) {
-    return TDButton(
+    return MyButton(
       onTap: () {
         TDToast.showText('轻提示文字内容', context: context);
       },
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
-      theme: TDButtonTheme.primary,
+      size: MyButtonSize.large,
+      type: MyButtonType.outline,
+      theme: MyButtonTheme.primary,
       isBlock: true,
       text: '纯文字',
     );
   }
 
   Widget _textCustomToast(BuildContext context) {
-    return TDButton(
+    return MyButton(
       onTap: () {
         TDToast.showText(
           '自定义纯文字',
@@ -78,29 +78,29 @@ class _TDToastPageState extends State<TDToastPage> {
           ),
         );
       },
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
-      theme: TDButtonTheme.primary,
+      size: MyButtonSize.large,
+      type: MyButtonType.outline,
+      theme: MyButtonTheme.primary,
       isBlock: true,
       text: '纯文字',
     );
   }
 
   Widget _multipleToast(BuildContext context) {
-    return TDButton(
+    return MyButton(
       onTap: () {
         TDToast.showText('最多一行展示十个汉字宽度限制最多不超过三行文字', context: context);
       },
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
-      theme: TDButtonTheme.primary,
+      size: MyButtonSize.large,
+      type: MyButtonType.outline,
+      theme: MyButtonTheme.primary,
       isBlock: true,
       text: '多行文字',
     );
   }
 
   Widget _horizontalIconToast(BuildContext context) {
-    return TDButton(
+    return MyButton(
       onTap: () {
         TDToast.showIconText(
           '带横向图标',
@@ -108,16 +108,16 @@ class _TDToastPageState extends State<TDToastPage> {
           context: context,
         );
       },
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
-      theme: TDButtonTheme.primary,
+      size: MyButtonSize.large,
+      type: MyButtonType.outline,
+      theme: MyButtonTheme.primary,
       isBlock: true,
       text: '带横向图标',
     );
   }
 
   Widget _verticalIconToast(BuildContext context) {
-    return TDButton(
+    return MyButton(
       onTap: () {
         TDToast.showIconText(
           '带竖向图标',
@@ -126,29 +126,29 @@ class _TDToastPageState extends State<TDToastPage> {
           context: context,
         );
       },
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
-      theme: TDButtonTheme.primary,
+      size: MyButtonSize.large,
+      type: MyButtonType.outline,
+      theme: MyButtonTheme.primary,
       isBlock: true,
       text: '带竖向图标',
     );
   }
 
   Widget _loadingToast(BuildContext context) {
-    return TDButton(
+    return MyButton(
       onTap: () {
         TDToast.showLoading(context: context);
       },
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
-      theme: TDButtonTheme.primary,
+      size: MyButtonSize.large,
+      type: MyButtonType.outline,
+      theme: MyButtonTheme.primary,
       isBlock: true,
       text: '加载状态',
     );
   }
 
   Widget _loadingCustomToast(BuildContext context) {
-    return TDButton(
+    return MyButton(
       onTap: () {
         TDToast.showLoading(
           context: context,
@@ -160,53 +160,53 @@ class _TDToastPageState extends State<TDToastPage> {
           ),
         );
       },
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
-      theme: TDButtonTheme.primary,
+      size: MyButtonSize.large,
+      type: MyButtonType.outline,
+      theme: MyButtonTheme.primary,
       isBlock: true,
       text: '加载状态',
     );
   }
 
   Widget _loadingWithoutTextToast(BuildContext context) {
-    return TDButton(
+    return MyButton(
       onTap: () {
         TDToast.showLoadingWithoutText(context: context);
       },
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
-      theme: TDButtonTheme.primary,
+      size: MyButtonSize.large,
+      type: MyButtonType.outline,
+      theme: MyButtonTheme.primary,
       isBlock: true,
       text: '加载状态（无文案）',
     );
   }
 
   Widget _dismissLoadingToast(BuildContext context) {
-    return const TDButton(
+    return const MyButton(
       onTap: TDToast.dismissLoading,
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
-      theme: TDButtonTheme.primary,
+      size: MyButtonSize.large,
+      type: MyButtonType.outline,
+      theme: MyButtonTheme.primary,
       isBlock: true,
       text: '停止加载',
     );
   }
 
   Widget _successToast(BuildContext context) {
-    return TDButton(
+    return MyButton(
       onTap: () {
         TDToast.showSuccess('成功文案', context: context);
       },
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
-      theme: TDButtonTheme.primary,
+      size: MyButtonSize.large,
+      type: MyButtonType.outline,
+      theme: MyButtonTheme.primary,
       isBlock: true,
       text: '成功提示',
     );
   }
 
   Widget _successVerticalToast(BuildContext context) {
-    return TDButton(
+    return MyButton(
       onTap: () {
         TDToast.showSuccess(
           '成功文案',
@@ -214,16 +214,16 @@ class _TDToastPageState extends State<TDToastPage> {
           context: context,
         );
       },
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
-      theme: TDButtonTheme.primary,
+      size: MyButtonSize.large,
+      type: MyButtonType.outline,
+      theme: MyButtonTheme.primary,
       isBlock: true,
       text: '成功提示(竖向)',
     );
   }
 
   Widget _warningToast(BuildContext context) {
-    return TDButton(
+    return MyButton(
       onTap: () {
         TDToast.showWarning(
           '警告文案',
@@ -231,16 +231,16 @@ class _TDToastPageState extends State<TDToastPage> {
           context: context,
         );
       },
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
-      theme: TDButtonTheme.primary,
+      size: MyButtonSize.large,
+      type: MyButtonType.outline,
+      theme: MyButtonTheme.primary,
       isBlock: true,
       text: '警告提示',
     );
   }
 
   Widget _warningVerticalToast(BuildContext context) {
-    return TDButton(
+    return MyButton(
       onTap: () {
         TDToast.showWarning(
           '警告文案',
@@ -248,16 +248,16 @@ class _TDToastPageState extends State<TDToastPage> {
           context: context,
         );
       },
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
-      theme: TDButtonTheme.primary,
+      size: MyButtonSize.large,
+      type: MyButtonType.outline,
+      theme: MyButtonTheme.primary,
       isBlock: true,
       text: '警告提示(竖向)',
     );
   }
 
   Widget _failToast(BuildContext context) {
-    return TDButton(
+    return MyButton(
       onTap: () {
         TDToast.showFail(
           '失败文案',
@@ -265,16 +265,16 @@ class _TDToastPageState extends State<TDToastPage> {
           context: context,
         );
       },
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
-      theme: TDButtonTheme.primary,
+      size: MyButtonSize.large,
+      type: MyButtonType.outline,
+      theme: MyButtonTheme.primary,
       isBlock: true,
       text: '失败提示',
     );
   }
 
   Widget _failVerticalToast(BuildContext context) {
-    return TDButton(
+    return MyButton(
       onTap: () {
         TDToast.showFail(
           '失败文案',
@@ -282,16 +282,16 @@ class _TDToastPageState extends State<TDToastPage> {
           context: context,
         );
       },
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
-      theme: TDButtonTheme.primary,
+      size: MyButtonSize.large,
+      type: MyButtonType.outline,
+      theme: MyButtonTheme.primary,
       isBlock: true,
       text: '失败提示(竖向)',
     );
   }
 
   Widget _preventTapToast(BuildContext context) {
-    return TDButton(
+    return MyButton(
       onTap: () {
         TDToast.showText(
           '轻提示文字内容',
@@ -300,16 +300,16 @@ class _TDToastPageState extends State<TDToastPage> {
           backgroundColor: Colors.black.withValues(alpha: 0.7),
         );
       },
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
-      theme: TDButtonTheme.primary,
+      size: MyButtonSize.large,
+      type: MyButtonType.outline,
+      theme: MyButtonTheme.primary,
       isBlock: true,
       text: '禁止滚动+点击',
     );
   }
 
   Widget _customMultipleToast(BuildContext context) {
-    return TDButton(
+    return MyButton(
       onTap: () {
         TDToast.showText(
           '最多一行展示十个汉字宽度限制最多不超过三行文字最多一行展示十个汉字宽度限制最多不超过三行文字最多一行展示十个汉字宽度限制最多不超过三行文字最多一行展示十个汉字宽度限制最多不超过三行文字最多一行展示十个汉字宽度限制最多不超过三行文字最多一行展示十个汉字宽度限制最多不超过三行文字',
@@ -318,9 +318,9 @@ class _TDToastPageState extends State<TDToastPage> {
           maxLines: 5,
         );
       },
-      size: TDButtonSize.large,
-      type: TDButtonType.outline,
-      theme: TDButtonTheme.primary,
+      size: MyButtonSize.large,
+      type: MyButtonType.outline,
+      theme: MyButtonTheme.primary,
       isBlock: true,
       text: '多行文字',
     );

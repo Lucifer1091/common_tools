@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../text/td_text.dart';
 
 enum TDPopoverTheme { dark, light, info, success, warning, error }
 

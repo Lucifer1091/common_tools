@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/builders/scrollview.dart';
-import '../widgets/layout/no_widget.dart';
-import 'my_theme.dart';
+import '../index.dart';
 
 const kDefaultDuration = Duration(milliseconds: 150);
 
@@ -20,8 +18,8 @@ class MyUILayer extends StatelessWidget {
   });
 
   final Widget? child;
-  final MyThemeData theme;
-  final MyThemeData? darkTheme;
+  final MyColorScheme theme;
+  final MyColorScheme? darkTheme;
   final ThemeMode themeMode;
   final Widget Function(BuildContext context, Widget? child)? builder;
   final bool enableScrollInterception;
@@ -41,26 +39,28 @@ class MyUILayer extends StatelessWidget {
     return MyAnimatedTheme(
       enableThemeAnimation: enableThemeAnimation,
       duration: duration ?? kDefaultDuration,
-      data: myTheme,
+      data: MyThemeData(colorScheme: myTheme),
       child: Builder(
         builder: (context) {
           final theme = MyTheme.of(context);
-          return ScrollViewInterceptor(
-            enabled: enableScrollInterception,
-            child: DefaultTextStyle.merge(
-              style: theme.typography.bodyLarge.copyWith(
-                color: theme.colorScheme.foreground,
-              ),
-              child: IconTheme.merge(
-                data: IconThemeData(color: theme.colorScheme.foreground),
-                child:
-                    builder != null
-                        ? Builder(
-                          builder: (BuildContext context) {
-                            return builder!(context, child);
-                          },
-                        )
-                        : child ?? const NoWidget(),
+          return MyScrollWrapper(
+            child: ScrollViewInterceptor(
+              enabled: enableScrollInterception,
+              child: DefaultTextStyle.merge(
+                style: theme.typography.bodyLarge.copyWith(
+                  color: theme.colorScheme.foreground,
+                ),
+                child: IconTheme.merge(
+                  data: IconThemeData(color: theme.colorScheme.foreground),
+                  child:
+                      builder != null
+                          ? Builder(
+                            builder: (BuildContext context) {
+                              return builder!(context, child);
+                            },
+                          )
+                          : child ?? const NoWidget(),
+                ),
               ),
             ),
           );

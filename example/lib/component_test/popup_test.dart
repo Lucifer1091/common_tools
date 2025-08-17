@@ -28,7 +28,6 @@ class _TestPageState extends State<TestPage> {
   final TextEditingController _searchRemarkController = TextEditingController();
 
   void _showProblemDialog() {
-
     Navigator.of(context).push(
       TDSlidePopupRoute(
         slideTransitionFrom: SlideTransitionFrom.bottom,
@@ -43,13 +42,7 @@ class _TestPageState extends State<TestPage> {
             child: Container(
               padding: EdgeInsets.only(left: 20, right: 20, bottom: 33),
               decoration: BoxDecoration(color: Colors.white),
-              child: Column(
-                children: [
-                  Center(
-                    child: Text("立即拨打"),
-                  ),
-                ],
-              ),
+              child: Column(children: [Center(child: Text("立即拨打"))]),
             ),
           );
         },
@@ -62,10 +55,7 @@ class _TestPageState extends State<TestPage> {
     return Scaffold(
       appBar: AppBar(title: const Text('TDConfirmDialog测试')),
       body: Center(
-        child: TDButton(
-          child: const Text('显示问题弹窗'),
-          onTap: _showProblemDialog,
-        ),
+        child: MyButton(child: const Text('显示问题弹窗'), onTap: _showProblemDialog),
       ),
     );
   }
