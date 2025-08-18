@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../index.dart';
 
@@ -12,7 +13,7 @@ enum MyButtonShape { rectangle, round, square, circle, filled }
 
 enum MyButtonTheme { defaults, primary, danger, light }
 
-enum MyButtonState { defaults, hovered, pressed, disabled }
+enum MyButtonState { defaults, focused, hovered, pressed, disabled }
 
 enum MyButtonIconPosition { left, right }
 
@@ -27,6 +28,9 @@ class MyButton extends StatefulWidget {
     this.child,
     this.enabled = true,
     this.isBlock = false,
+    this.autofocus = false,
+    this.focusNode,
+    this.onFocusChange,
     this.style,
     this.activeStyle,
     this.disableStyle,
@@ -90,6 +94,12 @@ class MyButton extends StatefulWidget {
 
   final bool isBlock;
 
+  final bool autofocus;
+
+  final FocusNode? focusNode;
+
+  final ValueChanged<bool>? onFocusChange;
+
   @override
   State<StatefulWidget> createState() => _MyButtonState();
 }
@@ -121,9 +131,8 @@ class _MyButtonState extends State<MyButton> {
     if (widget.text != null) {
       _textStyle = !widget.enabled ? widget.disableTextStyle : widget.textStyle;
     }
-    if (widget.icon != null) {
-      _iconSize = _getIconSize();
-    }
+
+    if (widget.icon != null) _iconSize = _getIconSize();
   }
 
   MyButtonStyle get style {
@@ -144,6 +153,10 @@ class _MyButtonState extends State<MyButton> {
     _updateParams();
   }
 
+  void onTap() => widget.onTap?.call();
+
+  bool get enabled => widget.enabled;
+
   @override
   Widget build(BuildContext context) {
     final Widget display = Container(
@@ -162,35 +175,48 @@ class _MyButtonState extends State<MyButton> {
 
     if (!widget.enabled) return display;
 
-    return MyGestureDetector(
-      cursor: _cursor(),
-      onTap: widget.onTap,
-      onLongPress: widget.onLongPress,
-      onHover: (bool value) {
-        if (value) {
-          setState(() => _state = MyButtonState.hovered);
-        } else {
-          setState(() => _state = MyButtonState.defaults);
-        }
-      },
-      onTapDown: (TapDownDetails details) {
-        if (!widget.enabled) return;
+    return CallbackShortcuts(
+      bindings: {const SingleActivator(LogicalKeyboardKey.enter): onTap},
+      child: MyFocusable(
+        canRequestFocus: enabled,
+        autofocus: widget.autofocus,
+        focusNode: focusNode,
+        onFocusChange: widget.onFocusChange,
+        builder:
+            (_, focused, child) =>
+                MyFocusOutline(focused: focused, child: child),
+        child: MyGestureDetector(
+          behavior: HitTestBehavior.opaque,
+          cursor: _cursor(),
+          onTap: widget.onTap,
+          onLongPress: widget.onLongPress,
+          onHover: (bool value) {
+            if (value) {
+              setState(() => _state = MyButtonState.hovered);
+            } else {
+              setState(() => _state = MyButtonState.defaults);
+            }
+          },
+          onTapDown: (TapDownDetails details) {
+            if (!widget.enabled) return;
 
-        setState(() => _state = MyButtonState.pressed);
-      },
-      onTapUp: (TapUpDetails details) {
-        Future.delayed(const Duration(milliseconds: 100), () {
-          if (mounted && widget.enabled) {
+            setState(() => _state = MyButtonState.pressed);
+          },
+          onTapUp: (TapUpDetails details) {
+            Future.delayed(const Duration(milliseconds: 100), () {
+              if (mounted && widget.enabled) {
+                setState(() => _state = MyButtonState.defaults);
+              }
+            });
+          },
+          onTapCancel: () {
+            if (!widget.enabled) return;
+
             setState(() => _state = MyButtonState.defaults);
-          }
-        });
-      },
-      onTapCancel: () {
-        if (!widget.enabled) return;
-
-        setState(() => _state = MyButtonState.defaults);
-      },
-      child: display,
+          },
+          child: display,
+        ),
+      ),
     );
   }
 

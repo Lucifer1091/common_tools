@@ -1,7 +1,7 @@
 export 'auto_refresh_builder.dart';
 export 'enhanced_future_builder.dart';
 export 'enhanced_stream_builder.dart';
-export 'focus_builder.dart';
+export 'focusable.dart';
 export 'focusable_control_builder.dart';
 export 'hover_builder.dart';
 export 'keep_alive_wrapper.dart';
