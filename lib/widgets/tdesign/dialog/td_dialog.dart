@@ -22,7 +22,6 @@ class TDDialogButtonOptions {
     this.titleSize,
     this.style,
     this.type,
-    this.theme,
     this.height,
     this.fontWeight,
   });
@@ -40,8 +39,6 @@ class TDDialogButtonOptions {
   final MyButtonStyle? style;
 
   final MyButtonType? type;
-
-  final MyButtonTheme? theme;
 
   final double? height;
 

@@ -149,17 +149,13 @@ class TDAlertDialog extends StatelessWidget {
         leftBtn ??
         TDDialogButtonOptions(
           title: 'Cancel',
-          theme: MyButtonTheme.light,
+          type: MyButtonType.outline,
           action: leftBtnAction,
         );
 
     final right =
         rightBtn ??
-        TDDialogButtonOptions(
-          title: 'Confirm',
-          theme: MyButtonTheme.primary,
-          action: rightBtnAction,
-        );
+        TDDialogButtonOptions(title: 'Confirm', action: rightBtnAction);
     return _buttonStyle == TDDialogButtonStyle.text
         ? HorizontalTextButtons(leftBtn: left, rightBtn: right)
         : HorizontalNormalButtons(leftBtn: left, rightBtn: right);
@@ -176,7 +172,6 @@ class TDAlertDialog extends StatelessWidget {
         height: value.height,
         buttonTextFontWeight: value.fontWeight ?? FontWeight.w600,
         buttonStyle: value.style,
-        buttonTheme: value.theme,
         buttonType: value.type,
         onPressed: () {
           if (value.action != null) {

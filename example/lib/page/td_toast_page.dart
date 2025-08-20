@@ -58,7 +58,6 @@ class _TDToastPageState extends State<TDToastPage> {
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
       isBlock: true,
       text: '纯文字',
     );
@@ -80,7 +79,6 @@ class _TDToastPageState extends State<TDToastPage> {
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
       isBlock: true,
       text: '纯文字',
     );
@@ -93,7 +91,6 @@ class _TDToastPageState extends State<TDToastPage> {
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
       isBlock: true,
       text: '多行文字',
     );
@@ -110,7 +107,6 @@ class _TDToastPageState extends State<TDToastPage> {
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
       isBlock: true,
       text: '带横向图标',
     );
@@ -128,7 +124,6 @@ class _TDToastPageState extends State<TDToastPage> {
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
       isBlock: true,
       text: '带竖向图标',
     );
@@ -141,7 +136,6 @@ class _TDToastPageState extends State<TDToastPage> {
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
       isBlock: true,
       text: '加载状态',
     );
@@ -162,7 +156,6 @@ class _TDToastPageState extends State<TDToastPage> {
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
       isBlock: true,
       text: '加载状态',
     );
@@ -175,7 +168,6 @@ class _TDToastPageState extends State<TDToastPage> {
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
       isBlock: true,
       text: '加载状态（无文案）',
     );
@@ -186,7 +178,6 @@ class _TDToastPageState extends State<TDToastPage> {
       onTap: TDToast.dismissLoading,
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
       isBlock: true,
       text: '停止加载',
     );
@@ -199,7 +190,6 @@ class _TDToastPageState extends State<TDToastPage> {
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
       isBlock: true,
       text: '成功提示',
     );
@@ -216,7 +206,6 @@ class _TDToastPageState extends State<TDToastPage> {
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
       isBlock: true,
       text: '成功提示(竖向)',
     );
@@ -233,7 +222,6 @@ class _TDToastPageState extends State<TDToastPage> {
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
       isBlock: true,
       text: '警告提示',
     );
@@ -250,7 +238,6 @@ class _TDToastPageState extends State<TDToastPage> {
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
       isBlock: true,
       text: '警告提示(竖向)',
     );
@@ -267,7 +254,6 @@ class _TDToastPageState extends State<TDToastPage> {
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
       isBlock: true,
       text: '失败提示',
     );
@@ -284,7 +270,7 @@ class _TDToastPageState extends State<TDToastPage> {
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
+      
       isBlock: true,
       text: '失败提示(竖向)',
     );
@@ -302,7 +288,7 @@ class _TDToastPageState extends State<TDToastPage> {
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
+      
       isBlock: true,
       text: '禁止滚动+点击',
     );
@@ -320,7 +306,7 @@ class _TDToastPageState extends State<TDToastPage> {
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
+      
       isBlock: true,
       text: '多行文字',
     );

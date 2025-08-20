@@ -153,7 +153,7 @@ Widget _buildSimple(BuildContext context) {
     text: '基础用法',
     isBlock: true,
     size: MyButtonSize.large,
-    theme: MyButtonTheme.primary,
+    
     type: MyButtonType.outline,
     onTap: () {
       Navigator.of(context).push(
@@ -191,7 +191,7 @@ Widget _buildOther(BuildContext context) {
     text: '胶囊索引',
     isBlock: true,
     size: MyButtonSize.large,
-    theme: MyButtonTheme.primary,
+    
     type: MyButtonType.outline,
     onTap: () {
       Navigator.of(context).push(

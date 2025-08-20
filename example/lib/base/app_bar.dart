@@ -35,7 +35,7 @@ class MyAppBar extends ConsumerWidget implements PreferredSizeWidget {
                     : ThemeMode.light,
               );
             },
-            type: MyButtonType.ghost,
+            type: MyButtonType.primary,
             icon: theme.mode == ThemeMode.light
                 ? Icons.light_mode
                 : Icons.dark_mode,
@@ -55,7 +55,7 @@ class MyAppBar extends ConsumerWidget implements PreferredSizeWidget {
                 data: [MyColorScheme.schemes],
               );
             },
-            type: MyButtonType.text,
+            type: MyButtonType.primary,
             text: theme.color.capitalize,
           ),
         ),

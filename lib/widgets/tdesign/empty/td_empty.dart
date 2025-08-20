@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../button/td_button.dart';
-import '../text/td_text.dart';
 
 typedef TDTapEvent = void Function();
 
@@ -14,7 +12,7 @@ class TDEmpty extends StatelessWidget {
     this.image,
     this.emptyText,
     this.operationText,
-    this.operationTheme,
+    this.operationType,
     this.onTapEvent,
     this.emptyTextColor,
     this.emptyTextFont,
@@ -34,7 +32,7 @@ class TDEmpty extends StatelessWidget {
 
   final String? operationText;
 
-  final MyButtonTheme? operationTheme;
+  final MyButtonType? operationType;
 
   final TDEmptyType type;
 
@@ -59,7 +57,7 @@ class TDEmpty extends StatelessWidget {
             fontWeight: FontWeight.w400,
             style:
                 emptyTextFont ??
-                context.bodyMedium?.copyWith(
+                context.bodyMedium.copyWith(
                   color:
                       emptyTextColor ??
                       ThemeColors.neutral.shade800.withValues(alpha: 0.6),
@@ -75,7 +73,7 @@ class TDEmpty extends StatelessWidget {
                   child: MyButton(
                     text: operationText ?? '',
                     size: MyButtonSize.large,
-                    theme: operationTheme ?? MyButtonTheme.primary,
+                    type: operationType ?? MyButtonType.primary,
                     width: 179,
                     onTap: onTapEvent,
                   ),

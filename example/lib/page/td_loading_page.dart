@@ -150,7 +150,7 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
             var list = [
               MyButton(
                 text: '展示Loading',
-                theme: MyButtonTheme.primary,
+                
                 onTap: () {
                   TDLoadingController.show(context);
                 },
@@ -158,7 +158,7 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
               const SizedBox(width: 24),
               const MyButton(
                 text: '隐藏Loading',
-                theme: MyButtonTheme.primary,
+                
                 onTap: TDLoadingController.dismiss,
               ),
             ];

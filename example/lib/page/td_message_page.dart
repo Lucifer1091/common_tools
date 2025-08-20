@@ -51,7 +51,7 @@ class _TDMessagePageState extends State<TDMessagePage> {
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       width: 450,
-      theme: MyButtonTheme.primary,
+      
       onTap: () {
         TDMessage.showMessage(
           context: context,
@@ -75,7 +75,7 @@ class _TDMessagePageState extends State<TDMessagePage> {
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       width: 450,
-      theme: MyButtonTheme.primary,
+      
       onTap: () {
         TDMessage.showMessage(
           context: context,
@@ -96,7 +96,7 @@ class _TDMessagePageState extends State<TDMessagePage> {
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       width: 450,
-      theme: MyButtonTheme.primary,
+      
       onTap: () {
         TDMessage.showMessage(
           context: context,
@@ -122,7 +122,7 @@ class _TDMessagePageState extends State<TDMessagePage> {
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       width: 450,
-      theme: MyButtonTheme.primary,
+      
       onTap: () {
         TDMessage.showMessage(
           context: context,
@@ -147,7 +147,7 @@ class _TDMessagePageState extends State<TDMessagePage> {
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       width: 450,
-      theme: MyButtonTheme.primary,
+      
       onTap: () {
         TDMessage.showMessage(
           context: context,
@@ -176,7 +176,7 @@ class _TDMessagePageState extends State<TDMessagePage> {
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       width: 450,
-      theme: MyButtonTheme.primary,
+      
       onTap: () {
         TDMessage.showMessage(
           context: context,
@@ -197,7 +197,7 @@ class _TDMessagePageState extends State<TDMessagePage> {
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       width: 450,
-      theme: MyButtonTheme.primary,
+      
       onTap: () {
         TDMessage.showMessage(
           context: context,
@@ -218,7 +218,7 @@ class _TDMessagePageState extends State<TDMessagePage> {
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       width: 450,
-      theme: MyButtonTheme.primary,
+      
       onTap: () {
         TDMessage.showMessage(
           context: context,
@@ -239,7 +239,7 @@ class _TDMessagePageState extends State<TDMessagePage> {
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       width: 450,
-      theme: MyButtonTheme.primary,
+      
       onTap: () {
         TDMessage.showMessage(
           context: context,

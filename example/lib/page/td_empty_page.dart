@@ -69,7 +69,7 @@ class _TDEmptyPageState extends State<TDEmptyPage> {
         child: MyButton(
           text: '自定义操作按钮',
           size: MyButtonSize.medium,
-          theme: MyButtonTheme.danger,
+          type: MyButtonType.destructive,
           width: 160,
           onTap: () {},
         ),

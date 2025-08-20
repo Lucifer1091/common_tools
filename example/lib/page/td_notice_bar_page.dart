@@ -102,7 +102,7 @@ Widget _entranceNoticeBar1(BuildContext context) {
     right: MyButton(
       text: '文字按钮',
       type: MyButtonType.text,
-      theme: MyButtonTheme.primary,
+      
       size: MyButtonSize.extraSmall,
       height: 22,
       padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
@@ -234,7 +234,7 @@ Widget _leftNoticeBar(BuildContext context) {
     left: MyButton(
       text: '文本',
       type: MyButtonType.text,
-      theme: MyButtonTheme.primary,
+      
       size: MyButtonSize.extraSmall,
       height: 22,
       padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),

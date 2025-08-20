@@ -81,7 +81,7 @@ class _TDResultPageState extends State<TDResultPage> {
   Widget _buildPageExample(BuildContext context) {
     return MyButton(
       text: '页面示例',
-      theme: MyButtonTheme.primary,
+      
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       isBlock: true,
@@ -102,7 +102,7 @@ class _TDResultPageState extends State<TDResultPage> {
                   const SizedBox(height: 48),
                   MyButton(
                     text: '返回',
-                    theme: MyButtonTheme.primary,
+                    
                     size: MyButtonSize.large,
                     type: MyButtonType.outline,
                     isBlock: true,

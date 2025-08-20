@@ -119,7 +119,6 @@ class TDSideBarPageState extends State<TDSideBarPage> {
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       shape: MyButtonShape.rectangle,
-      theme: MyButtonTheme.primary,
       onTap: () {
         Navigator.pushNamed(
           context,

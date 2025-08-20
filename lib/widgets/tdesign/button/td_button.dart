@@ -1,19 +1,24 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
 
 import '../../../index.dart';
 
-enum MyButtonSize { large, medium, small, extraSmall }
+enum MyButtonSize { extraLarge, large, medium, small, extraSmall }
 
-enum MyButtonType { fill, outline, text, ghost }
+enum MyButtonType {
+  primary,
+  secondary,
+  destructive,
+  outline,
+  ghost,
+  text,
+  link,
+}
 
 enum MyButtonShape { rectangle, round, square, circle, filled }
-
-enum MyButtonTheme { defaults, primary, danger, light }
-
-enum MyButtonState { defaults, focused, hovered, pressed, disabled }
 
 enum MyButtonIconPosition { left, right }
 
@@ -21,38 +26,37 @@ class MyButton extends StatefulWidget {
   const MyButton({
     super.key,
     this.text,
-    this.size = MyButtonSize.medium,
-    this.type = MyButtonType.fill,
-    this.shape = MyButtonShape.rectangle,
-    this.theme,
     this.child,
     this.enabled = true,
+    this.size = MyButtonSize.medium,
+    this.type = MyButtonType.primary,
+    this.shape = MyButtonShape.rectangle,
     this.isBlock = false,
-    this.autofocus = false,
-    this.focusNode,
-    this.onFocusChange,
     this.style,
     this.activeStyle,
     this.disableStyle,
     this.textStyle,
     this.disableTextStyle,
-    this.width,
-    this.height,
+    this.gradient,
+    this.shadows,
+    this.focus = const MyFocusableParams(),
     this.onTap,
+    this.onLongPress,
     this.icon,
     this.iconWidget,
-    this.iconTextSpacing,
-    this.onLongPress,
+    this.iconTextGap,
+    this.iconPosition = MyButtonIconPosition.left,
+    this.width,
+    this.height,
     this.margin,
     this.padding,
-    this.iconPosition = MyButtonIconPosition.left,
   });
+
+  final bool enabled;
 
   final Widget? child;
 
   final String? text;
-
-  final bool enabled;
 
   final double? width;
 
@@ -64,8 +68,6 @@ class MyButton extends StatefulWidget {
 
   final MyButtonShape shape;
 
-  final MyButtonTheme? theme;
-
   final MyButtonStyle? style;
 
   final MyButtonStyle? activeStyle;
@@ -76,6 +78,10 @@ class MyButton extends StatefulWidget {
 
   final TextStyle? disableTextStyle;
 
+  final List<BoxShadow>? shadows;
+
+  final Gradient? gradient;
+
   final VoidCallback? onTap;
 
   final VoidCallback? onLongPress;
@@ -84,7 +90,7 @@ class MyButton extends StatefulWidget {
 
   final Widget? iconWidget;
 
-  final double? iconTextSpacing;
+  final Gap? iconTextGap;
 
   final MyButtonIconPosition? iconPosition;
 
@@ -94,18 +100,65 @@ class MyButton extends StatefulWidget {
 
   final bool isBlock;
 
-  final bool autofocus;
-
-  final FocusNode? focusNode;
-
-  final ValueChanged<bool>? onFocusChange;
+  final MyFocusableParams focus;
 
   @override
   State<StatefulWidget> createState() => _MyButtonState();
 }
 
 class _MyButtonState extends State<MyButton> {
-  MyButtonState _state = MyButtonState.defaults;
+  late WidgetStatesController _state;
+  FocusNode? _focusNode;
+
+  FocusNode get focusNode => widget.focus.focusNode ?? _focusNode!;
+
+  @override
+  void initState() {
+    super.initState();
+    _state = WidgetStatesController();
+    if (widget.focus.focusNode == null) _focusNode = FocusNode();
+    _state.update(WidgetState.disabled, !widget.enabled);
+    focusNode.addListener(onFocusChange);
+    _updateParams();
+  }
+
+  @override
+  void didUpdateWidget(covariant MyButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.enabled != widget.enabled) {
+      _state.update(WidgetState.disabled, !widget.enabled);
+    }
+
+    if (oldWidget.focus.focusNode != null && widget.focus.focusNode == null) {
+      oldWidget.focus.focusNode!.removeListener(onFocusChange);
+      _focusNode?.dispose();
+      _focusNode = FocusNode();
+      focusNode.addListener(onFocusChange);
+    }
+    _updateParams();
+  }
+
+  @override
+  void dispose() {
+    _state.dispose();
+    focusNode.removeListener(onFocusChange);
+    _focusNode?.dispose();
+    super.dispose();
+  }
+
+  void onFocusChange() {
+    _state.update(WidgetState.focused, focusNode.hasFocus);
+  }
+
+  static Future<void> feedbackForTap(BuildContext context) async {
+    context.findRenderObject()!.sendSemanticsEvent(const TapSemanticEvent());
+    if (PlatformChecker.isMobile) {
+      return SystemSound.play(SystemSoundType.click);
+    }
+    return Future<void>.value();
+  }
+
   MyButtonStyle? _innerDefaultStyle;
   MyButtonStyle? _innerActiveStyle;
   MyButtonStyle? _innerDisableStyle;
@@ -117,17 +170,19 @@ class _MyButtonState extends State<MyButton> {
   double? _iconSize;
 
   void _updateParams() {
-    _state = !widget.enabled ? MyButtonState.disabled : MyButtonState.defaults;
     _innerDefaultStyle = widget.style;
     _innerActiveStyle = widget.activeStyle;
     _innerDisableStyle = widget.disableStyle;
+
     _width = _getWidth();
     _height = _getHeight();
     _margin = _getMargin();
+
     _alignment =
         widget.shape == MyButtonShape.filled || widget.isBlock
             ? Alignment.center
             : null;
+
     if (widget.text != null) {
       _textStyle = !widget.enabled ? widget.disableTextStyle : widget.textStyle;
     }
@@ -135,103 +190,110 @@ class _MyButtonState extends State<MyButton> {
     if (widget.icon != null) _iconSize = _getIconSize();
   }
 
-  MyButtonStyle get style {
-    return switch (_state) {
-      MyButtonState.defaults => _defaultStyle,
-      MyButtonState.pressed => _activeStyle,
-      MyButtonState.disabled => _disableStyle,
-    };
+  void _onTap() {
+    if (!widget.enabled) return;
+    widget.onTap?.call();
+    if (widget.focus.enableFeedback) unawaited(feedbackForTap(context));
   }
-
-  MouseCursor _cursor() {
-    return widget.enabled ? SystemMouseCursors.click : MouseCursor.defer;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _updateParams();
-  }
-
-  void onTap() => widget.onTap?.call();
 
   bool get enabled => widget.enabled;
 
   @override
   Widget build(BuildContext context) {
-    final Widget display = Container(
-      width: _width,
-      height: _height,
-      alignment: _alignment,
-      padding: _getPadding(),
-      margin: _margin,
-      decoration: BoxDecoration(
-        color: style.backgroundColor,
-        border: _getBorder(context),
-        borderRadius: style.radius ?? BorderRadius.all(_getRadius()),
-      ),
-      child: widget.child ?? _getChild(),
-    );
-
-    if (!widget.enabled) return display;
-
     return CallbackShortcuts(
-      bindings: {const SingleActivator(LogicalKeyboardKey.enter): onTap},
-      child: MyFocusable(
-        canRequestFocus: enabled,
-        autofocus: widget.autofocus,
-        focusNode: focusNode,
-        onFocusChange: widget.onFocusChange,
-        builder:
-            (_, focused, child) =>
-                MyFocusOutline(focused: focused, child: child),
-        child: MyGestureDetector(
-          behavior: HitTestBehavior.opaque,
-          cursor: _cursor(),
-          onTap: widget.onTap,
-          onLongPress: widget.onLongPress,
-          onHover: (bool value) {
-            if (value) {
-              setState(() => _state = MyButtonState.hovered);
-            } else {
-              setState(() => _state = MyButtonState.defaults);
-            }
-          },
-          onTapDown: (TapDownDetails details) {
-            if (!widget.enabled) return;
+      bindings: {const SingleActivator(LogicalKeyboardKey.enter): _onTap},
+      child: ValueListenableBuilder(
+        valueListenable: _state,
+        builder: (context, states, _) {
+          final pressed = states.contains(WidgetState.pressed);
+          final hovered = states.contains(WidgetState.hovered);
+          final enabled = !states.contains(WidgetState.disabled);
 
-            setState(() => _state = MyButtonState.pressed);
-          },
-          onTapUp: (TapUpDetails details) {
-            Future.delayed(const Duration(milliseconds: 100), () {
-              if (mounted && widget.enabled) {
-                setState(() => _state = MyButtonState.defaults);
-              }
-            });
-          },
-          onTapCancel: () {
-            if (!widget.enabled) return;
+          final MyButtonStyle style =
+              hovered || pressed
+                  ? _activeStyle
+                  : enabled
+                  ? _defaultStyle
+                  : _disableStyle;
 
-            setState(() => _state = MyButtonState.defaults);
-          },
-          child: display,
-        ),
+          final Widget display = Container(
+            width: _width,
+            height: _height,
+            alignment: _alignment,
+            padding: _getPadding(style),
+            margin: _margin,
+            decoration: BoxDecoration(
+              color: style.backgroundColor,
+              border: _getBorder(context, style),
+              borderRadius: style.radius ?? _getRadius(style),
+              gradient: widget.gradient,
+              boxShadow: widget.shadows,
+            ),
+            child: widget.child ?? _getChild(style),
+          );
+
+          if (!widget.enabled) return display;
+
+          return Semantics(
+            container: true,
+            button: true,
+            focusable: enabled,
+            enabled: enabled,
+            child: MyFocusable(
+              params: widget.focus.copyWith(focusNode: focusNode),
+              builder:
+                  (_, focused, child) => MyFocusOutline(
+                    focused: focused,
+                    radius: _getRadius(style),
+                    child: child,
+                  ),
+              child: MyGestureDetector(
+                behavior: HitTestBehavior.opaque,
+                cursor: _getCursor(states),
+                onTap: widget.onTap != null ? _onTap : null,
+                onLongPress: widget.onLongPress,
+                onHover: (bool value) {
+                  _state.update(WidgetState.hovered, value);
+                },
+                onTapDown: (TapDownDetails details) {
+                  if (widget.focus.enableFeedback) {
+                    _state.update(WidgetState.hovered, true);
+                  }
+                  _state.update(WidgetState.pressed, true);
+                },
+                onTapUp: (TapUpDetails details) {
+                  if (widget.focus.enableFeedback) {
+                    _state.update(WidgetState.hovered, false);
+                  }
+                  _state.update(WidgetState.pressed, false);
+                },
+                onTapCancel: () {
+                  if (widget.focus.enableFeedback) {
+                    _state.update(WidgetState.hovered, false);
+                  }
+                  _state.update(WidgetState.pressed, false);
+                },
+                child: display,
+              ),
+            ),
+          );
+        },
       ),
     );
   }
 
-  Border? _getBorder(BuildContext context) {
+  Border? _getBorder(BuildContext context, MyButtonStyle style) {
     if (style.borderWidth != null && style.borderWidth != 0) {
       return Border.all(
-        color: style.borderColor ?? ThemeColors.neutral.shade200,
+        color: style.borderColor ?? context.colorScheme.border,
         width: style.borderWidth!,
       );
     }
     return null;
   }
 
-  Widget _getChild() {
-    final icon = getIcon();
+  Widget _getChild(MyButtonStyle style) {
+    final icon = getIcon(style);
 
     if (widget.text == null && icon == null) return const NoWidget();
 
@@ -242,7 +304,10 @@ class _MyButtonState extends State<MyButton> {
     }
 
     if (widget.text != null) {
-      final text = TDText(widget.text, style: _textStyle ?? _getTextStyle());
+      final text = TDText(
+        widget.text,
+        style: _textStyle ?? _getTextStyle(style),
+      );
       children.add(text);
     }
 
@@ -251,7 +316,7 @@ class _MyButtonState extends State<MyButton> {
     }
 
     if (children.length == 2) {
-      children.insert(1, SizedBox(width: widget.iconTextSpacing ?? 8));
+      children.insert(1, widget.iconTextGap ?? const Gap(8));
     }
 
     return Row(
@@ -261,9 +326,10 @@ class _MyButtonState extends State<MyButton> {
     );
   }
 
-  Widget? getIcon() {
-    if (widget.iconWidget != null) return widget.iconWidget;
-
+  Widget? getIcon(MyButtonStyle style) {
+    if (widget.iconWidget != null) {
+      return widget.iconWidget;
+    }
     if (widget.icon != null) {
       return RichText(
         overflow: TextOverflow.visible,
@@ -283,13 +349,31 @@ class _MyButtonState extends State<MyButton> {
     return null;
   }
 
-  TextStyle _getTextStyle() {
+  MouseCursor _getCursor(Set<WidgetState> states) {
+    if (states.contains(WidgetState.disabled)) {
+      return SystemMouseCursors.forbidden;
+    }
+    if (states.contains(WidgetState.pressed)) {
+      return SystemMouseCursors.click;
+    }
+    if (states.contains(WidgetState.hovered)) {
+      return SystemMouseCursors.click;
+    }
+    return SystemMouseCursors.basic;
+  }
+
+  TextStyle _getTextStyle(MyButtonStyle style) {
     return switch (widget.size) {
+      MyButtonSize.extraLarge => context.bodyLarge,
       MyButtonSize.large => context.bodyLarge,
-      MyButtonSize.medium => context.bodyLarge,
+      MyButtonSize.medium => context.bodyMedium,
       MyButtonSize.small => context.bodyMedium,
-      MyButtonSize.extraSmall => context.bodyMedium,
-    }.copyWith(color: style.textColor ?? context.colorScheme.primaryForeground);
+      MyButtonSize.extraSmall => context.bodySmall,
+    }.copyWith(
+      color: style.textColor ?? context.colorScheme.primaryForeground,
+      decoration: style.decoration,
+      decorationColor: style.textColor,
+    );
   }
 
   double? _getWidth() {
@@ -299,8 +383,9 @@ class _MyButtonState extends State<MyButton> {
         (widget.shape == MyButtonShape.square ||
             widget.shape == MyButtonShape.circle)) {
       return switch (widget.size) {
-        MyButtonSize.large => 48,
-        MyButtonSize.medium => 40,
+        MyButtonSize.extraLarge => 48,
+        MyButtonSize.large => 40,
+        MyButtonSize.medium => 36,
         MyButtonSize.small => 32,
         MyButtonSize.extraSmall => 28,
       };
@@ -312,8 +397,9 @@ class _MyButtonState extends State<MyButton> {
     if (widget.height != null) return widget.height!;
 
     return switch (widget.size) {
-      MyButtonSize.large => 48,
-      MyButtonSize.medium => 40,
+      MyButtonSize.extraLarge => 48,
+      MyButtonSize.large => 40,
+      MyButtonSize.medium => 36,
       MyButtonSize.small => 32,
       MyButtonSize.extraSmall => 28,
     };
@@ -321,8 +407,9 @@ class _MyButtonState extends State<MyButton> {
 
   double _getIconSize() {
     return switch (widget.size) {
-      MyButtonSize.large => 24,
-      MyButtonSize.medium => 20,
+      MyButtonSize.extraLarge => 24,
+      MyButtonSize.large => 20,
+      MyButtonSize.medium => 18,
       MyButtonSize.small => 18,
       MyButtonSize.extraSmall => 14,
     };
@@ -334,7 +421,7 @@ class _MyButtonState extends State<MyButton> {
     return widget.isBlock ? const EdgeInsets.only(left: 16, right: 16) : null;
   }
 
-  EdgeInsetsGeometry? _getPadding() {
+  EdgeInsetsGeometry? _getPadding(MyButtonStyle style) {
     if (widget.padding != null) return widget.padding;
 
     final equalSide =
@@ -345,12 +432,15 @@ class _MyButtonState extends State<MyButton> {
     double verticalPadding;
 
     switch (widget.size) {
-      case MyButtonSize.large:
+      case MyButtonSize.extraLarge:
         horizontalPadding = equalSide ? 12 : 20;
         verticalPadding = 12;
-      case MyButtonSize.medium:
+      case MyButtonSize.large:
         horizontalPadding = equalSide ? 10 : 16;
         verticalPadding = equalSide ? 10 : 8;
+      case MyButtonSize.medium:
+        horizontalPadding = equalSide ? 8 : 14;
+        verticalPadding = equalSide ? 8 : 6;
       case MyButtonSize.small:
         horizontalPadding = equalSide ? 7 : 12;
         verticalPadding = equalSide ? 7 : 5;
@@ -376,35 +466,32 @@ class _MyButtonState extends State<MyButton> {
     );
   }
 
-  @override
-  void didUpdateWidget(covariant MyButton oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    _updateParams();
+  BorderRadius _getRadius(MyButtonStyle style) {
+    return style.radius ??
+        switch (widget.shape) {
+          MyButtonShape.rectangle ||
+          MyButtonShape.square => MyBorderRadius.medium,
+          MyButtonShape.round || MyButtonShape.circle => MyBorderRadius.round,
+          MyButtonShape.filled => BorderRadius.zero,
+        };
   }
 
   MyButtonStyle _generateInnerStyle() {
     switch (widget.type) {
-      case MyButtonType.fill:
-        return MyButtonStyle.fill(context, widget.theme, _state);
+      case MyButtonType.primary:
+        return MyButtonStyle.primary(context, _state.value);
+      case MyButtonType.secondary:
+        return MyButtonStyle.secondary(context, _state.value);
+      case MyButtonType.destructive:
+        return MyButtonStyle.destructive(context, _state.value);
       case MyButtonType.outline:
-        return MyButtonStyle.outline(context, widget.theme, _state);
-      case MyButtonType.text:
-        return MyButtonStyle.text(context, widget.theme, _state);
+        return MyButtonStyle.outline(context, _state.value);
       case MyButtonType.ghost:
-        return MyButtonStyle.ghost(context, widget.theme, _state);
-    }
-  }
-
-  Radius _getRadius() {
-    switch (widget.shape) {
-      case MyButtonShape.rectangle:
-      case MyButtonShape.square:
-        return Radius.circular(6);
-      case MyButtonShape.round:
-      case MyButtonShape.circle:
-        return Radius.circular(9999);
-      case MyButtonShape.filled:
-        return Radius.zero;
+        return MyButtonStyle.ghost(context, _state.value);
+      case MyButtonType.text:
+        return MyButtonStyle.text(context, _state.value);
+      case MyButtonType.link:
+        return MyButtonStyle.link(context, _state.value);
     }
   }
 

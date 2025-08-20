@@ -8,6 +8,7 @@ import 'home.dart';
 import 'package:common_tools/index.dart';
 
 void main() {
+  Logger.configure();
   runApp(const ProviderScope(child: MyApp()));
 
   exampleMap.forEach((key, value) {
@@ -27,15 +28,23 @@ class MyApp extends ConsumerWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MyUILayer(
-        themeMode: theme.mode,
-        theme: MyColorScheme.fromName(theme.color),
-        darkTheme: MyColorScheme.fromName(
-          theme.color,
-          brightness: Brightness.dark,
-        ),
-        child: MyHomePage(title: 'My Flutter Example'),
-      ),
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(
+            context,
+          ).copyWith(textScaler: TextScaler.linear(1.0)),
+          child: MyUILayer(
+            themeMode: theme.mode,
+            theme: MyColorScheme.fromName(theme.color),
+            darkTheme: MyColorScheme.fromName(
+              theme.color,
+              brightness: Brightness.dark,
+            ),
+            child: child,
+          ),
+        );
+      },
+      home: MyHomePage(title: 'My Flutter Example'),
       onGenerateRoute: TDExampleRoute.onGenerateRoute,
     );
   }

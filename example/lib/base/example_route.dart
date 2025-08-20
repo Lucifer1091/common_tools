@@ -18,9 +18,9 @@ class TDExampleRoute {
         pageModelList[model.name] = model;
       }
     });
-    // 添加关于页路由
+    
     pageModelList[aboutPath] = ExamplePageModel(
-      text: '关于',
+      text: 'About',
       name: 'AboutPage',
       pageBuilder: (context, model) => const AboutPage(),
     );

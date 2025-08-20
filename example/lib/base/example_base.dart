@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 typedef PageBuilder =
     Widget Function(BuildContext context, ExamplePageModel model);
 
-/// 示例页面数据
 class ExamplePageModel {
   ExamplePageModel({
     required this.text,
@@ -27,15 +26,14 @@ class ExamplePageModel {
   final PageBuilder pageBuilder;
 }
 
-/// 存储主题数据的内部控件
 class ExamplePageInheritedTheme extends InheritedWidget {
   final ExamplePageModel model;
 
   const ExamplePageInheritedTheme({
     required this.model,
-    Key? key,
-    required Widget child,
-  }) : super(key: key, child: child);
+    super.key,
+    required super.child,
+  });
 
   @override
   bool updateShouldNotify(covariant ExamplePageInheritedTheme oldWidget) {

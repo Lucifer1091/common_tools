@@ -161,7 +161,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
               height: 48,
               text: '按钮',
               size: MyButtonSize.large,
-              type: MyButtonType.fill,
+              type: MyButtonType.primary,
             ),
             Positioned(right: 0, top: 0, child: TDBadge(TDBadgeType.redPoint)),
           ],

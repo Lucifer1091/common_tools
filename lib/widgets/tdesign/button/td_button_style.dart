@@ -6,137 +6,117 @@ class MyButtonStyle {
   MyButtonStyle({
     this.backgroundColor,
     this.borderColor,
-    this.textColor,
     this.borderWidth,
     this.radius,
+    this.textColor,
+    this.decoration,
   });
 
-  MyButtonStyle.fill(
-    BuildContext context,
-    MyButtonTheme? theme,
-    MyButtonState status,
-  ) {
-    switch (theme) {
-      case MyButtonTheme.primary:
-        textColor = ThemeColors.neutral.shade900;
-        backgroundColor = _getBrandColor(context, status);
-      case MyButtonTheme.danger:
-        textColor = ThemeColors.neutral.shade900;
-        backgroundColor = _getErrorColor(context, status);
-      case MyButtonTheme.light:
-        textColor = _getBrandColor(context, status);
-        backgroundColor = _getLightColor(context, status);
-      case MyButtonTheme.defaults:
-      case null:
-        textColor = _getDefaultTextColor(context, status);
-        backgroundColor = _getDefaultBgColor(context, status);
+  MyButtonStyle.primary(BuildContext context, Set<WidgetState> states) {
+    final hovered = states.contains(WidgetState.hovered);
+    final disabled = states.contains(WidgetState.disabled);
+
+    if (disabled) {
+      backgroundColor = context.colorScheme.mutedForeground;
+    } else if (hovered) {
+      backgroundColor = context.colorScheme.primary.scaleAlpha(0.8);
     }
-    borderColor = backgroundColor;
+
+    backgroundColor ??= context.colorScheme.primary;
+    borderColor ??= backgroundColor;
+    textColor ??= context.colorScheme.primaryForeground;
   }
 
-  MyButtonStyle.outline(
-    BuildContext context,
-    MyButtonTheme? theme,
-    MyButtonState status,
-  ) {
-    switch (theme) {
-      case MyButtonTheme.primary:
-        textColor = _getBrandColor(context, status);
-        backgroundColor =
-            status == MyButtonState.pressed
-                ? ThemeColors.neutral.shade200
-                : Colors.white;
-        borderColor = textColor;
-      case MyButtonTheme.danger:
-        textColor = _getErrorColor(context, status);
-        backgroundColor =
-            status == MyButtonState.pressed
-                ? ThemeColors.neutral.shade200
-                : Colors.white;
-        borderColor = textColor;
-      case MyButtonTheme.light:
-        textColor = _getBrandColor(context, status);
-        backgroundColor = _getLightColor(context, status);
-        borderColor = textColor;
-      case MyButtonTheme.defaults:
-      case null:
-        textColor = _getDefaultTextColor(context, status);
-        backgroundColor = _getOutlineDefaultBgColor(context, status);
-        borderColor = ThemeColors.neutral.shade300;
+  MyButtonStyle.secondary(BuildContext context, Set<WidgetState> states) {
+    final hovered = states.contains(WidgetState.hovered);
+    final disabled = states.contains(WidgetState.disabled);
+
+    if (disabled) {
+      backgroundColor = context.colorScheme.primaryForeground;
+      textColor = context.colorScheme.mutedForeground;
+    } else if (hovered) {
+      backgroundColor = context.colorScheme.secondary.scaleAlpha(0.8);
     }
+
+    backgroundColor ??= context.colorScheme.secondary;
+    borderColor ??= backgroundColor;
+    textColor ??= context.colorScheme.secondaryForeground;
+  }
+
+  MyButtonStyle.destructive(BuildContext context, Set<WidgetState> states) {
+    final hovered = states.contains(WidgetState.hovered);
+    final disabled = states.contains(WidgetState.disabled);
+
+    if (disabled) {
+      backgroundColor = context.colorScheme.primaryForeground;
+      textColor = context.colorScheme.mutedForeground;
+    } else if (hovered) {
+      backgroundColor = context.colorScheme.destructive.scaleAlpha(0.8);
+    }
+
+    backgroundColor ??= context.colorScheme.destructive;
+    textColor ??= context.colorScheme.destructiveForeground;
+    borderColor ??= backgroundColor;
+  }
+
+  MyButtonStyle.outline(BuildContext context, Set<WidgetState> states) {
+    final hovered = states.contains(WidgetState.hovered);
+    final disabled = states.contains(WidgetState.disabled);
+
+    if (disabled) {
+      backgroundColor = context.colorScheme.border.withValues(alpha: 0);
+      borderColor = context.colorScheme.border;
+      textColor = context.colorScheme.mutedForeground;
+    } else if (hovered) {
+      backgroundColor = context.colorScheme.muted.scaleAlpha(0.8);
+      borderColor = context.colorScheme.muted.scaleAlpha(0.8);
+    }
+
+    backgroundColor ??= context.colorScheme.muted.withValues(alpha: 0);
+    borderColor ??= context.colorScheme.muted;
     borderWidth = 1;
+    textColor ??= context.colorScheme.foreground;
   }
 
-  MyButtonStyle.text(
-    BuildContext context,
-    MyButtonTheme? theme,
-    MyButtonState status,
-  ) {
-    switch (theme) {
-      case MyButtonTheme.primary:
-        textColor = _getBrandColor(context, status);
-        backgroundColor =
-            status == MyButtonState.pressed
-                ? ThemeColors.neutral.shade200
-                : Colors.transparent;
-      case MyButtonTheme.danger:
-        textColor = _getErrorColor(context, status);
-        backgroundColor =
-            status == MyButtonState.pressed
-                ? ThemeColors.neutral.shade200
-                : Colors.transparent;
-      case MyButtonTheme.light:
-        textColor = _getBrandColor(context, status);
-        backgroundColor =
-            status == MyButtonState.pressed
-                ? ThemeColors.neutral.shade200
-                : Colors.transparent;
-      case MyButtonTheme.defaults:
-      case null:
-        textColor = _getDefaultTextColor(context, status);
-        backgroundColor =
-            status == MyButtonState.pressed
-                ? ThemeColors.neutral.shade200
-                : Colors.transparent;
+  MyButtonStyle.ghost(BuildContext context, Set<WidgetState> states) {
+    final hovered = states.contains(WidgetState.hovered);
+    final disabled = states.contains(WidgetState.disabled);
+
+    if (disabled) {
+      backgroundColor = context.colorScheme.muted.withValues(alpha: 0);
+      textColor = context.colorScheme.mutedForeground;
+    } else if (hovered) {
+      backgroundColor = context.colorScheme.muted.scaleAlpha(0.8);
+      borderColor = context.colorScheme.muted.scaleAlpha(0.8);
     }
-    borderColor = backgroundColor;
+
+    backgroundColor ??= context.colorScheme.muted.withValues(alpha: 0);
+    borderColor ??= backgroundColor;
+    textColor ??= context.colorScheme.foreground;
   }
 
-  MyButtonStyle.ghost(
-    BuildContext context,
-    MyButtonTheme? theme,
-    MyButtonState status,
-  ) {
-    switch (theme) {
-      case MyButtonTheme.primary:
-        textColor =
-            status == MyButtonState.disabled
-                ? ThemeColors.neutral.shade600
-                : _getBrandColor(context, status);
-      case MyButtonTheme.danger:
-        textColor =
-            status == MyButtonState.disabled
-                ? ThemeColors.neutral.shade600
-                : _getErrorColor(context, status);
-      case MyButtonTheme.light:
-        textColor =
-            status == MyButtonState.disabled
-                ? ThemeColors.neutral.shade600
-                : _getBrandColor(context, status);
-      case MyButtonTheme.defaults:
-      case null:
-        switch (status) {
-          case MyButtonState.pressed:
-            textColor = ThemeColors.neutral.shade800;
-          case MyButtonState.disabled:
-            textColor = ThemeColors.neutral.shade600;
-          case MyButtonState.defaults:
-            textColor = ThemeColors.neutral.shade900;
-        }
+  MyButtonStyle.text(BuildContext context, Set<WidgetState> states) {
+    final hovered = states.contains(WidgetState.hovered);
+
+    if (hovered) {
+      textColor = context.colorScheme.primary;
     }
-    backgroundColor = Colors.transparent;
-    borderColor = textColor;
-    borderWidth = 1;
+
+    textColor ??= context.colorScheme.mutedForeground;
+  }
+
+  MyButtonStyle.link(BuildContext context, Set<WidgetState> states) {
+    final hovered = states.contains(WidgetState.hovered);
+    final disabled = states.contains(WidgetState.disabled);
+
+    if (disabled) {
+      textColor = context.colorScheme.mutedForeground;
+    } else if (hovered) {
+      decoration = TextDecoration.underline;
+    }
+
+    textColor ??= context.colorScheme.foreground;
+    decoration ??= TextDecoration.none;
   }
 
   Color? backgroundColor;
@@ -145,71 +125,9 @@ class MyButtonStyle {
 
   Color? textColor;
 
+  TextDecoration? decoration;
+
   double? borderWidth;
 
-  BorderRadiusGeometry? radius;
-
-  Color _getBrandColor(BuildContext context, MyButtonState status) {
-    switch (status) {
-      case MyButtonState.defaults:
-        return ThemeColors.blue.shade600;
-      case MyButtonState.pressed:
-        return ThemeColors.blue.shade700;
-      case MyButtonState.disabled:
-        return ThemeColors.blue.shade200;
-    }
-  }
-
-  Color _getLightColor(BuildContext context, MyButtonState status) {
-    switch (status) {
-      case MyButtonState.defaults:
-      case MyButtonState.disabled:
-        return ThemeColors.blue.shade50;
-      case MyButtonState.pressed:
-        return ThemeColors.blue.shade100;
-    }
-  }
-
-  Color _getErrorColor(BuildContext context, MyButtonState status) {
-    switch (status) {
-      case MyButtonState.defaults:
-        return ThemeColors.error.shade500;
-      case MyButtonState.pressed:
-        return ThemeColors.error.shade600;
-      case MyButtonState.disabled:
-        return ThemeColors.error.shade200;
-    }
-  }
-
-  Color _getDefaultBgColor(BuildContext context, MyButtonState status) {
-    switch (status) {
-      case MyButtonState.defaults:
-        return ThemeColors.neutral.shade200;
-      case MyButtonState.pressed:
-        return ThemeColors.neutral.shade400;
-      case MyButtonState.disabled:
-        return ThemeColors.neutral.shade100;
-    }
-  }
-
-  Color _getDefaultTextColor(BuildContext context, MyButtonState status) {
-    switch (status) {
-      case MyButtonState.defaults:
-      case MyButtonState.pressed:
-        return ThemeColors.neutral.shade900;
-      case MyButtonState.disabled:
-        return ThemeColors.neutral.shade600;
-    }
-  }
-
-  Color _getOutlineDefaultBgColor(BuildContext context, MyButtonState status) {
-    switch (status) {
-      case MyButtonState.defaults:
-        return Colors.white;
-      case MyButtonState.pressed:
-        return ThemeColors.neutral.shade200;
-      case MyButtonState.disabled:
-        return ThemeColors.neutral.shade100;
-    }
-  }
+  BorderRadius? radius;
 }

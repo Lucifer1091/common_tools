@@ -85,7 +85,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
       text: '反馈类-带标题',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
+
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -110,7 +110,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
       text: '反馈类-无标题',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
+
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -132,7 +132,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
       text: '反馈类-纯标题',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
+
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -154,7 +154,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
       text: '反馈类-内容超长',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
+
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -182,7 +182,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
       text: '确认类-带标题',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
+
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -207,7 +207,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
       text: '确认类-无标题',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
+
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -229,7 +229,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
       text: '确认类-纯标题',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
+
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -253,7 +253,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
       text: '输入类-带描述',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
+
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -280,7 +280,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
       text: '输入类-无描述',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
+
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -308,7 +308,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
       text: '图片置顶-带标题描述',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
+
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -334,7 +334,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
       text: '图片置顶-无标题',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
+
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -359,7 +359,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
       text: '图片置顶-纯标题',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
+
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -381,7 +381,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
       text: '图片居中-带标题描述',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
+
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -408,7 +408,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
       text: '图片居中-纯标题',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
+
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -434,7 +434,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
       text: '图片居中-纯图片',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
+
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -461,7 +461,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
       text: '单个文字按钮',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
+
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -487,7 +487,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
       text: '左右文字按钮',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
+
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -515,7 +515,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
       text: '单个横向基础按钮',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
+
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -540,7 +540,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
       text: '左右横向基础按钮',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
+
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -567,7 +567,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
       text: '两个纵向基础按钮',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
+
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -586,7 +586,6 @@ class _TDDialogPageState extends State<TDDialogPage> {
                       action: () {
                         Navigator.pop(context);
                       },
-                      theme: MyButtonTheme.primary,
                     ),
                     TDDialogButtonOptions(
                       title: '次要按钮',
@@ -594,7 +593,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
                       action: () {
                         Navigator.pop(context);
                       },
-                      theme: MyButtonTheme.light,
+                      type: MyButtonType.outline,
                     ),
                   ],
                 );
@@ -609,7 +608,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
       text: '三个纵向基础按钮',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
+
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -628,7 +627,6 @@ class _TDDialogPageState extends State<TDDialogPage> {
                       action: () {
                         Navigator.pop(context);
                       },
-                      theme: MyButtonTheme.primary,
                     ),
                     TDDialogButtonOptions(
                       title: '次要按钮',
@@ -636,7 +634,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
                       action: () {
                         Navigator.pop(context);
                       },
-                      theme: MyButtonTheme.light,
+                      type: MyButtonType.outline,
                     ),
                     TDDialogButtonOptions(
                       title: '次要按钮',
@@ -644,7 +642,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
                       action: () {
                         Navigator.pop(context);
                       },
-                      theme: MyButtonTheme.light,
+                      type: MyButtonType.outline,
                     ),
                   ],
                 );
@@ -659,7 +657,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
       text: '带关闭按钮的对话框',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
+
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -687,7 +685,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
       text: '反馈类-标题偏左',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
+
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -720,7 +718,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
       text: '确认类-标题偏右',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
+
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -753,7 +751,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
       text: '纵向按钮-自定义内容',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
+
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -779,7 +777,6 @@ class _TDDialogPageState extends State<TDDialogPage> {
                       action: () {
                         Navigator.pop(context);
                       },
-                      theme: MyButtonTheme.primary,
                     ),
                     TDDialogButtonOptions(
                       title: '次要按钮',
@@ -787,7 +784,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
                       action: () {
                         Navigator.pop(context);
                       },
-                      theme: MyButtonTheme.light,
+                      type: MyButtonType.outline,
                     ),
                   ],
                 );
@@ -802,7 +799,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
       text: '图片置顶-自定义列表内容',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
+
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -834,7 +831,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
       text: '自定义边距和按钮',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      theme: MyButtonTheme.primary,
+
       onTap: () {
         showGeneralDialog(
           context: context,
@@ -852,7 +849,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
                     padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
                     child: MyButton(
                       text: '自定义按钮',
-                      theme: MyButtonTheme.primary,
+
                       onTap: () {
                         Navigator.of(context).pop();
                       },

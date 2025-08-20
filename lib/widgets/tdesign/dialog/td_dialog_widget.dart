@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../button/td_button.dart';
-import '../button/td_button_style.dart';
-import '../divider/td_divider.dart';
-import '../text/td_text.dart';
-import 'td_dialog.dart';
 
 class TDDialogScaffold extends StatelessWidget {
   const TDDialogScaffold({
@@ -212,7 +207,6 @@ class HorizontalNormalButtons extends StatelessWidget {
               buttonTextSize: leftBtn.titleSize,
               buttonStyle: leftBtn.style,
               buttonType: leftBtn.type,
-              buttonTheme: leftBtn.theme,
               height: leftBtn.height,
               buttonTextFontWeight: leftBtn.fontWeight ?? FontWeight.w600,
               onPressed: () {
@@ -232,7 +226,6 @@ class HorizontalNormalButtons extends StatelessWidget {
               buttonTextSize: rightBtn.titleSize,
               buttonStyle: rightBtn.style,
               buttonType: rightBtn.type,
-              buttonTheme: rightBtn.theme,
               height: rightBtn.height,
               buttonTextFontWeight: rightBtn.fontWeight ?? FontWeight.w600,
               onPressed: () {
@@ -276,7 +269,6 @@ class HorizontalTextButtons extends StatelessWidget {
                 buttonTextSize: leftBtn.titleSize,
                 buttonStyle: leftBtn.style,
                 buttonType: leftBtn.type ?? MyButtonType.text,
-                buttonTheme: leftBtn.theme,
                 // fix： The button height does not fill the container.
                 height: 56,
                 buttonTextFontWeight: leftBtn.fontWeight,
@@ -297,7 +289,6 @@ class HorizontalTextButtons extends StatelessWidget {
                 buttonTextSize: rightBtn.titleSize,
                 buttonStyle: rightBtn.style,
                 buttonType: rightBtn.type ?? MyButtonType.text,
-                buttonTheme: rightBtn.theme ?? MyButtonTheme.primary,
                 height: 56,
                 buttonTextFontWeight: rightBtn.fontWeight ?? FontWeight.w600,
                 onPressed: () {
@@ -326,7 +317,6 @@ class TDDialogButton extends StatelessWidget {
     this.buttonTextFontWeight = FontWeight.w600,
     this.buttonStyle,
     this.buttonType,
-    this.buttonTheme,
     this.height = 40.0,
     this.width,
     this.isBlock = true,
@@ -344,8 +334,6 @@ class TDDialogButton extends StatelessWidget {
 
   final MyButtonType? buttonType;
 
-  final MyButtonTheme? buttonTheme;
-
   final double? width;
 
   final double? height;
@@ -359,8 +347,7 @@ class TDDialogButton extends StatelessWidget {
     return MyButton(
       onTap: onPressed,
       style: buttonStyle,
-      type: buttonType ?? MyButtonType.fill,
-      theme: buttonTheme,
+      type: buttonType ?? MyButtonType.primary,
       text: buttonText,
       textStyle: TextStyle(
         fontWeight: buttonTextFontWeight,

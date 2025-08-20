@@ -78,14 +78,14 @@ class _MyHomePageState extends State<MyHomePage> {
               bottom: 8,
             ),
             child: MyButton(
-              size: MyButtonSize.medium,
               type: MyButtonType.outline,
               shape: MyButtonShape.filled,
-              theme: MyButtonTheme.primary,
               onTap: () {
                 Navigator.pushNamed(context, '${model.name}?showAction=1');
               },
               text: model.text,
+              icon: Icons.arrow_right_alt_rounded,
+              iconPosition: MyButtonIconPosition.right,
             ),
           ),
         );

@@ -109,7 +109,7 @@ Widget _buildBaseSimple(BuildContext context) {
     text: '基础抽屉',
     isBlock: true,
     type: MyButtonType.outline,
-    theme: MyButtonTheme.primary,
+    
     size: MyButtonSize.large,
     onTap: () {
       TDDrawer(
@@ -135,7 +135,7 @@ Widget _buildIconSimple(BuildContext context) {
     text: '带图标抽屉',
     isBlock: true,
     type: MyButtonType.outline,
-    theme: MyButtonTheme.primary,
+    
     size: MyButtonSize.large,
     onTap: () {
       TDDrawer(
@@ -161,7 +161,7 @@ Widget _buildTitleSimple(BuildContext context) {
     text: '带图标抽屉',
     isBlock: true,
     type: MyButtonType.outline,
-    theme: MyButtonTheme.primary,
+    
     size: MyButtonSize.large,
     onTap: () {
       TDDrawer(
@@ -186,7 +186,7 @@ Widget _buildBottomSimple(BuildContext context) {
     text: '带底部插槽样式',
     isBlock: true,
     type: MyButtonType.outline,
-    theme: MyButtonTheme.primary,
+    
     size: MyButtonSize.large,
     onTap: () {
       TDDrawer(
@@ -216,7 +216,7 @@ Widget _buildColorSimple(BuildContext context) {
     text: '自定义背景色',
     isBlock: true,
     type: MyButtonType.outline,
-    theme: MyButtonTheme.primary,
+    
     size: MyButtonSize.large,
     onTap: () {
       TDDrawer(

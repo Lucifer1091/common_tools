@@ -172,7 +172,6 @@ Widget _buildBaseListActionSheet(BuildContext context) {
     text: '常规列表',
     isBlock: true,
     type: MyButtonType.outline,
-    theme: MyButtonTheme.primary,
     size: MyButtonSize.large,
     onTap: () {
       TDActionSheet(
@@ -189,7 +188,6 @@ Widget _buildDescListActionSheet(BuildContext context) {
     text: '带描述列表',
     isBlock: true,
     type: MyButtonType.outline,
-    theme: MyButtonTheme.primary,
     size: MyButtonSize.large,
     onTap: () {
       TDActionSheet(
@@ -207,7 +205,6 @@ Widget _buildIconListActionSheet(BuildContext context) {
     text: '带图标列表',
     isBlock: true,
     type: MyButtonType.outline,
-    theme: MyButtonTheme.primary,
     size: MyButtonSize.large,
     onTap: () {
       TDActionSheet(
@@ -231,7 +228,6 @@ Widget _buildBadgeListActionSheet(BuildContext context) {
     text: '带徽标列表',
     isBlock: true,
     type: MyButtonType.outline,
-    theme: MyButtonTheme.primary,
     size: MyButtonSize.large,
     onTap: () {
       TDActionSheet(
@@ -265,7 +261,6 @@ Widget _buildBaseGridActionSheet(BuildContext context) {
     text: '常规宫格',
     isBlock: true,
     type: MyButtonType.outline,
-    theme: MyButtonTheme.primary,
     size: MyButtonSize.large,
     onTap: () {
       TDActionSheet(
@@ -284,7 +279,6 @@ Widget _buildDescGridActionSheet(BuildContext context) {
     text: '带描述宫格',
     isBlock: true,
     type: MyButtonType.outline,
-    theme: MyButtonTheme.primary,
     size: MyButtonSize.large,
     onTap: () {
       TDActionSheet(
@@ -304,7 +298,6 @@ Widget _buildPaginationGridActionSheet(BuildContext context) {
     text: '带翻页宫格',
     isBlock: true,
     type: MyButtonType.outline,
-    theme: MyButtonTheme.primary,
     size: MyButtonSize.large,
     onTap: () {
       TDActionSheet(
@@ -342,7 +335,6 @@ Widget _buildScrollGridActionSheet(BuildContext context) {
     text: '多行滚动宫格',
     isBlock: true,
     type: MyButtonType.outline,
-    theme: MyButtonTheme.primary,
     size: MyButtonSize.large,
     onTap: () {
       TDActionSheet(
@@ -384,7 +376,6 @@ Widget _buildMultiScrollGridActionSheet(BuildContext context) {
     text: '带描述多行滚动宫格',
     isBlock: true,
     type: MyButtonType.outline,
-    theme: MyButtonTheme.primary,
     size: MyButtonSize.large,
     onTap: () {
       TDActionSheet.showGroupActionSheet(
@@ -432,7 +423,6 @@ Widget _buildBadgeGridActionSheet(BuildContext context) {
     text: '带徽标宫格型',
     isBlock: true,
     type: MyButtonType.outline,
-    theme: MyButtonTheme.primary,
     size: MyButtonSize.large,
     onTap: () {
       TDActionSheet.showGridActionSheet(
@@ -484,7 +474,6 @@ Widget _buildBaseListStateActionSheet(BuildContext context) {
     text: '列表型选项状态',
     isBlock: true,
     type: MyButtonType.outline,
-    theme: MyButtonTheme.primary,
     size: MyButtonSize.large,
     onTap: () {
       TDActionSheet(
@@ -515,7 +504,6 @@ Widget _buildIconListStateActionSheet(BuildContext context) {
     text: '列表型带图标状态',
     isBlock: true,
     type: MyButtonType.outline,
-    theme: MyButtonTheme.primary,
     size: MyButtonSize.large,
     onTap: () {
       TDActionSheet(
@@ -552,7 +540,6 @@ Widget _buildBadgeListCenterActionSheet(BuildContext context) {
     text: '居中带徽标列表',
     isBlock: true,
     type: MyButtonType.outline,
-    theme: MyButtonTheme.primary,
     size: MyButtonSize.large,
     onTap: () {
       TDActionSheet(
@@ -583,7 +570,6 @@ Widget _buildIconListCenterActionSheet(BuildContext context) {
     text: '居中带图标列表',
     isBlock: true,
     type: MyButtonType.outline,
-    theme: MyButtonTheme.primary,
     size: MyButtonSize.large,
     onTap: () {
       TDActionSheet(
@@ -608,7 +594,6 @@ Widget _buildBadgeListLeftActionSheet(BuildContext context) {
     text: '左对齐带徽标列表',
     isBlock: true,
     type: MyButtonType.outline,
-    theme: MyButtonTheme.primary,
     size: MyButtonSize.large,
     onTap: () {
       TDActionSheet(
@@ -634,7 +619,6 @@ Widget _buildIconListLeftActionSheet(BuildContext context) {
     text: '左对齐带图标列表',
     isBlock: true,
     type: MyButtonType.outline,
-    theme: MyButtonTheme.primary,
     size: MyButtonSize.large,
     onTap: () {
       TDActionSheet(

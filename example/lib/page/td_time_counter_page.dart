@@ -467,7 +467,6 @@ Widget _buildControl(BuildContext context) {
           MyButton(
             text: '开始',
             size: MyButtonSize.extraSmall,
-            theme: MyButtonTheme.primary,
             onTap: () {
               controller.start();
             },
@@ -475,7 +474,6 @@ Widget _buildControl(BuildContext context) {
           MyButton(
             text: '结束',
             size: MyButtonSize.extraSmall,
-            theme: MyButtonTheme.primary,
             onTap: () {
               controller.reset(0);
             },
@@ -483,7 +481,6 @@ Widget _buildControl(BuildContext context) {
           MyButton(
             text: '重置',
             size: MyButtonSize.extraSmall,
-            theme: MyButtonTheme.primary,
             onTap: () {
               controller.reset();
             },
@@ -491,7 +488,6 @@ Widget _buildControl(BuildContext context) {
           MyButton(
             text: '暂停',
             size: MyButtonSize.extraSmall,
-            theme: MyButtonTheme.primary,
             onTap: () {
               controller.pause();
             },
@@ -499,7 +495,6 @@ Widget _buildControl(BuildContext context) {
           MyButton(
             text: '继续',
             size: MyButtonSize.extraSmall,
-            theme: MyButtonTheme.primary,
             onTap: () {
               controller.resume();
             },

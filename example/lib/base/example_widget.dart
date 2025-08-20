@@ -1,11 +1,11 @@
 import 'package:common_tools/index.dart';
+import 'package:example/base/app_bar.dart';
 import 'package:flutter/material.dart';
 
 import 'example_base.dart';
 
 var navBarkey = GlobalKey();
 
-/// 示例页面控件，建议每个页面返回一个ExampleWidget即可，不用独自封装
 class ExamplePage extends StatefulWidget {
   const ExamplePage({
     super.key,
@@ -68,7 +68,6 @@ class ExamplePage extends StatefulWidget {
 
 class _ExamplePageState extends State<ExamplePage> {
   late List<ExampleModule> list;
-  bool apiVisible = false;
   ExamplePageModel? model;
   bool showAction = false;
 
@@ -76,11 +75,6 @@ class _ExamplePageState extends State<ExamplePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      var modelTheme = context
-          .dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
-      model = modelTheme?.model;
-      model?.codePath = widget.exampleCodeGroup;
-      model?.apiVisible = apiVisible;
       setState(() {
         showAction = model?.showAction ?? false;
       });
@@ -91,10 +85,11 @@ class _ExamplePageState extends State<ExamplePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: widget.floatingActionButton,
-      backgroundColor: widget.backgroundColor ?? ThemeColors.neutral.shade50,
+      backgroundColor: context.colorScheme.background,
+      appBar: MyAppBar(title: widget.title),
       body: ScrollbarTheme(
         data: ScrollbarThemeData(
-          trackVisibility: MaterialStateProperty.all(true),
+          trackVisibility: WidgetStateProperty.all(true),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,7 +98,6 @@ class _ExamplePageState extends State<ExamplePage> {
               child: widget.showSingleChild && widget.singleChild != null
                   ? _singleChild()
                   : MediaQuery(
-                      // 去掉底部安全区域,保证示例展示正常
                       data: MediaQuery.of(
                         context,
                       ).copyWith(padding: EdgeInsets.zero),
@@ -125,7 +119,7 @@ class _ExamplePageState extends State<ExamplePage> {
                             data = widget.children[index - 1];
                           } else {
                             data = ExampleModule(
-                              title: '单元测试',
+                              title: 'Unit Testing',
                               children: [
                                 _buildTestExampleItem(),
                                 ...widget.test,
@@ -156,8 +150,8 @@ class _ExamplePageState extends State<ExamplePage> {
             child: Column(
               children: [
                 MyButton(
-                  text: '返回首页',
-                  type: MyButtonType.fill,
+                  text: 'Return to homepage',
+                  type: MyButtonType.primary,
                   onTap: () => Navigator.of(context).maybePop(),
                 ),
               ],
@@ -169,9 +163,10 @@ class _ExamplePageState extends State<ExamplePage> {
   }
 
   ExampleItem _buildTestExampleItem() => ExampleItem(
-    desc: '''未在示例稿中体现，但有必要验证的组件样式，请添加到'test'参数中。以下情景必须有测试：
-  1.参数为数字。需测试数字为负数、0、较大数值的场景。
-  2.参数为枚举，需测试所有枚举组合（示例已有的可不写）''',
+    desc:
+        '''Component styles not included in the sample draft but necessary for verification should be added to the 'test' parameter. The following scenarios must be tested:
+1. The parameter is a number. Test scenarios with negative numbers, 0, and larger values.
+2. The parameter is an enumeration. Test all enumeration combinations (optional combinations are optional).''',
     builder: (_) => const TDDivider(),
   );
 
@@ -227,7 +222,6 @@ class _ExamplePageState extends State<ExamplePage> {
   }
 }
 
-/// 示例模块
 class ExampleModule {
   const ExampleModule({Key? key, required this.title, required this.children});
 
@@ -236,7 +230,6 @@ class ExampleModule {
   final List<ExampleItem> children;
 }
 
-/// 示例样例数据
 class ExampleItem {
   const ExampleItem({
     Key? key,
@@ -261,13 +254,12 @@ class ExampleItem {
   final EdgeInsetsGeometry? padding;
 }
 
-/// 组件示例
 class ExampleItemInherited extends InheritedWidget {
   const ExampleItemInherited({
     required this.path,
-    Key? key,
-    required Widget child,
-  }) : super(key: key, child: child);
+    super.key,
+    required super.child,
+  });
 
   final String path;
 
@@ -277,15 +269,14 @@ class ExampleItemInherited extends InheritedWidget {
   }
 }
 
-/// 组件示例
 class ExampleItemWidget extends StatefulWidget {
   const ExampleItemWidget({
     required this.data,
-    Key? key,
+    super.key,
     required this.index,
     this.exampleCodeGroup,
     this.moduleTitle,
-  }) : super(key: key);
+  });
 
   final ExampleItem data;
   final int index;
@@ -336,7 +327,6 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
   }
 }
 
-/// State获取标题的扩展
 extension TDStateExs on State {
   String tdTitle() {
     var modelTheme = context
@@ -345,7 +335,6 @@ extension TDStateExs on State {
   }
 }
 
-/// StatelessWidget获取标题的扩展
 extension TDWidgetExs on StatelessWidget {
   String tdTitle(BuildContext context) {
     var modelTheme = context

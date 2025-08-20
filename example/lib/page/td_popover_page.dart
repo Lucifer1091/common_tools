@@ -175,7 +175,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             size: MyButtonSize.medium,
             text: '带箭头',
             type: MyButtonType.outline,
-            theme: MyButtonTheme.primary,
+            
 
             onTap: () {
               TDPopover.showPopover(context: context, content: '弹出气泡内容');
@@ -193,7 +193,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
           size: MyButtonSize.medium,
           text: '不带箭头',
           type: MyButtonType.outline,
-          theme: MyButtonTheme.primary,
+          
 
           onTap: () {
             TDPopover.showPopover(
@@ -234,7 +234,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
         return MyButton(
           text: '自定义内容',
           type: MyButtonType.outline,
-          theme: MyButtonTheme.primary,
+          
 
           onTap: () {
             TDPopover.showPopover(
@@ -260,7 +260,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             size: MyButtonSize.medium,
             text: '深色',
             type: MyButtonType.outline,
-            theme: MyButtonTheme.primary,
+            
 
             onTap: () {
               TDPopover.showPopover(context: context, content: '弹出气泡内容');
@@ -281,7 +281,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             size: MyButtonSize.medium,
             text: '浅色',
             type: MyButtonType.outline,
-            theme: MyButtonTheme.primary,
+            
 
             onTap: () {
               TDPopover.showPopover(
@@ -306,7 +306,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             size: MyButtonSize.medium,
             text: '品牌色',
             type: MyButtonType.outline,
-            theme: MyButtonTheme.primary,
+            
 
             onTap: () {
               TDPopover.showPopover(
@@ -331,7 +331,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             size: MyButtonSize.medium,
             text: '成功色',
             type: MyButtonType.outline,
-            theme: MyButtonTheme.primary,
+            
 
             onTap: () {
               TDPopover.showPopover(
@@ -356,7 +356,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             size: MyButtonSize.medium,
             text: '警告色',
             type: MyButtonType.outline,
-            theme: MyButtonTheme.primary,
+            
 
             onTap: () {
               TDPopover.showPopover(
@@ -381,7 +381,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             size: MyButtonSize.medium,
             text: '错误色',
             type: MyButtonType.outline,
-            theme: MyButtonTheme.primary,
+            
 
             onTap: () {
               TDPopover.showPopover(
@@ -406,7 +406,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             size: MyButtonSize.medium,
             text: '顶部左',
             type: MyButtonType.outline,
-            theme: MyButtonTheme.primary,
+            
 
             onTap: () {
               TDPopover.showPopover(
@@ -431,7 +431,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             size: MyButtonSize.medium,
             text: '顶部中',
             type: MyButtonType.outline,
-            theme: MyButtonTheme.primary,
+            
 
             onTap: () {
               TDPopover.showPopover(
@@ -456,7 +456,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             size: MyButtonSize.medium,
             text: '顶部右',
             type: MyButtonType.outline,
-            theme: MyButtonTheme.primary,
+            
 
             onTap: () {
               TDPopover.showPopover(
@@ -481,7 +481,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             size: MyButtonSize.medium,
             text: '底部左',
             type: MyButtonType.outline,
-            theme: MyButtonTheme.primary,
+            
 
             onTap: () {
               TDPopover.showPopover(
@@ -506,7 +506,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             size: MyButtonSize.medium,
             text: '底部中',
             type: MyButtonType.outline,
-            theme: MyButtonTheme.primary,
+            
 
             onTap: () {
               TDPopover.showPopover(
@@ -531,7 +531,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             size: MyButtonSize.medium,
             text: '底部右',
             type: MyButtonType.outline,
-            theme: MyButtonTheme.primary,
+            
 
             onTap: () {
               TDPopover.showPopover(
@@ -556,7 +556,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             size: MyButtonSize.medium,
             text: '右侧上',
             type: MyButtonType.outline,
-            theme: MyButtonTheme.primary,
+            
 
             onTap: () {
               TDPopover.showPopover(
@@ -581,7 +581,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             size: MyButtonSize.medium,
             text: '右侧中',
             type: MyButtonType.outline,
-            theme: MyButtonTheme.primary,
+            
 
             onTap: () {
               TDPopover.showPopover(
@@ -606,7 +606,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             size: MyButtonSize.medium,
             text: '右侧下',
             type: MyButtonType.outline,
-            theme: MyButtonTheme.primary,
+            
 
             onTap: () {
               TDPopover.showPopover(
@@ -631,7 +631,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             size: MyButtonSize.medium,
             text: '左侧上',
             type: MyButtonType.outline,
-            theme: MyButtonTheme.primary,
+            
 
             onTap: () {
               TDPopover.showPopover(
@@ -656,7 +656,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             size: MyButtonSize.medium,
             text: '左侧中',
             type: MyButtonType.outline,
-            theme: MyButtonTheme.primary,
+            
 
             onTap: () {
               TDPopover.showPopover(
@@ -681,7 +681,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             size: MyButtonSize.medium,
             text: '左侧下',
             type: MyButtonType.outline,
-            theme: MyButtonTheme.primary,
+            
 
             onTap: () {
               TDPopover.showPopover(
@@ -706,7 +706,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
             size: MyButtonSize.medium,
             text: '多行内容',
             type: MyButtonType.outline,
-            theme: MyButtonTheme.primary,
+            
 
             onTap: () {
               TDPopover.showPopover(
