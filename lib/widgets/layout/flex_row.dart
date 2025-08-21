@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
 
+import '../../index.dart';
+
 /// A [FlexRow] may be used in place of [Row].
 class FlexRow extends Flex {
   /// A [FlexRow] may be used in place of [Row]. It has a [gap] property which ads a gap between the children.
@@ -46,7 +48,7 @@ class FlexRow extends Flex {
                  .map(
                    (w) =>
                        gap > 0 && w.$1 > 0
-                           ? [SizedBox.square(dimension: gap), w.$2]
+                           ? [Gap(gap), w.$2]
                            : [w.$2],
                  )
                  .expand((w) => w)

@@ -3,8 +3,8 @@ import 'package:common_tools/index.dart';
 
 import '../../base/example_widget.dart';
 
-class TDButtonPage extends StatelessWidget {
-  const TDButtonPage({super.key});
+class MyButtonPage extends StatelessWidget {
+  const MyButtonPage({super.key});
 
   @override
   Widget build(BuildContext context) {

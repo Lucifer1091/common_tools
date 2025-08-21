@@ -218,7 +218,7 @@ class HorizontalNormalButtons extends StatelessWidget {
               },
             ),
           ),
-          const MyDivider(width: 12, color: Colors.transparent),
+          const MyDivider(thickness: 12, color: Colors.transparent),
           Expanded(
             child: TDDialogButton(
               buttonText: rightBtn.title,
@@ -281,7 +281,7 @@ class HorizontalTextButtons extends StatelessWidget {
                 },
               ),
             ),
-            const MyDivider(width: 1, height: 56),
+            const MyDivider(thickness: 1, height: 56),
             Expanded(
               child: TDDialogButton(
                 buttonText: rightBtn.title,

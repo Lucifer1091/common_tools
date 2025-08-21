@@ -1,3 +1,4 @@
+import 'package:example/page/my_button_page.dart';
 import 'package:flutter/material.dart';
 
 import 'base/example_base.dart';
@@ -13,7 +14,6 @@ import 'page/td_avatar_page.dart';
 import 'page/td_backtop_page.dart';
 import 'page/td_badge_page.dart';
 import 'page/td_bottom_tab_bar_page.dart';
-import 'page/td_button_page.dart';
 import 'page/td_calendar_page.dart';
 import 'page/td_cascader_page.dart';
 import 'page/td_cell_page.dart';
@@ -21,7 +21,7 @@ import 'page/td_checkbox_page.dart';
 import 'page/td_collapse.dart';
 import 'page/td_date_picker_page.dart';
 import 'page/td_dialog_page.dart';
-import 'page/td_divider_page.dart';
+import 'page/my_divider_page.dart';
 import 'page/td_drawer_page.dart';
 import 'page/td_dropdown_menu_page.dart';
 import 'page/td_empty_page.dart';
@@ -84,12 +84,12 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'Button',
       name: 'button',
-      pageBuilder: _wrapInheritedTheme((context) => const TDButtonPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyButtonPage()),
     ),
     ExamplePageModel(
       text: 'Divider',
       name: 'divider',
-      pageBuilder: _wrapInheritedTheme((context) => const TDDividerPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyDividerPage()),
     ),
     ExamplePageModel(
       text: 'Fab',

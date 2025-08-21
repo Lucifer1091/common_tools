@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../button/my_button.dart';
-import '../divider/td_divider.dart';
+import '../divider/my_divider.dart';
 import 'td_dialog.dart';
 import 'td_dialog_widget.dart';
 

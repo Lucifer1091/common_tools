@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
 
+import '../../index.dart';
+
 /// A [FlexColumn] may be used in place of [Column].
 class FlexColumn extends Flex {
   /// A [FlexColumn] may be used in place of [Column]. It has a [gap] property which ads a gap between the children.
@@ -43,12 +45,7 @@ class FlexColumn extends Flex {
          direction: Axis.vertical,
          children:
              (reversed ? children.reversed : children).indexed
-                 .map(
-                   (w) =>
-                       gap > 0 && w.$1 > 0
-                           ? [SizedBox.square(dimension: gap), w.$2]
-                           : [w.$2],
-                 )
+                 .map((w) => gap > 0 && w.$1 > 0 ? [Gap(gap), w.$2] : [w.$2])
                  .expand((w) => w)
                  .toList(),
        );

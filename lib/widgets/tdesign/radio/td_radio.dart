@@ -4,7 +4,7 @@ import '../../../index.dart';
 import '../../layout/no_widget.dart';
 import '../checkbox/td_check_box.dart';
 import '../checkbox/td_check_box_group.dart';
-import '../divider/td_divider.dart';
+import '../divider/my_divider.dart';
 
 enum TDRadioStyle { circle, square, check, hollowCircle }
 

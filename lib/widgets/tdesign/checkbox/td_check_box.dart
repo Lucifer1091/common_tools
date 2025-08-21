@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../index.dart';
 import '../../layout/no_widget.dart';
-import '../divider/td_divider.dart';
+import '../divider/my_divider.dart';
 import '../text/my_text.dart';
 import 'td_check_box_group.dart';
 
