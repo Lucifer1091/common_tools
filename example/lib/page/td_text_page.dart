@@ -54,7 +54,7 @@ class TDTextPage extends StatelessWidget {
           builder: (context) {
             return Container(
               color: ThemeColors.blue.shade100,
-              child: TDText(exampleTxt),
+              child: MyText(exampleTxt),
             );
           },
         ),
@@ -63,7 +63,7 @@ class TDTextPage extends StatelessWidget {
   }
 
   Widget _buildNormalTDText(BuildContext context) {
-    return TDText(exampleTxt);
+    return MyText(exampleTxt);
   }
 
   Widget _buildSystemText(BuildContext context) {
@@ -71,7 +71,7 @@ class TDTextPage extends StatelessWidget {
   }
 
   Widget _buildGeneralProp(BuildContext context) {
-    return TDText(
+    return MyText(
       exampleTxt,
       fontSize: context.headlineLarge.fontSize,
       textColor: context.colorScheme.primary,
@@ -80,7 +80,7 @@ class TDTextPage extends StatelessWidget {
   }
 
   Widget _buildStyleCoverColor(BuildContext context) {
-    return TDText(
+    return MyText(
       exampleTxt,
       fontSize: context.bodyLarge.fontSize,
       textColor: context.colorScheme.primary,
@@ -89,7 +89,7 @@ class TDTextPage extends StatelessWidget {
   }
 
   Widget _buildStyleCoverColorAndFont(BuildContext context) {
-    return TDText(
+    return MyText(
       exampleTxt,
       fontSize: context.bodyLarge.fontSize,
       textColor: context.colorScheme.primary,
@@ -97,7 +97,7 @@ class TDTextPage extends StatelessWidget {
   }
 
   Widget _buildRichText(BuildContext context) {
-    return TDText.rich(
+    return MyText.rich(
       TDTextSpan(
         children: [
           TDTextSpan(
@@ -121,11 +121,11 @@ class TDTextPage extends StatelessWidget {
   }
 
   Widget _getSystemText(BuildContext context) {
-    return TDText(exampleTxt, backgroundColor: ThemeColors.blue.shade100);
+    return MyText(exampleTxt, backgroundColor: ThemeColors.blue.shade100);
   }
 
   Widget _buildVerticalCenterText(BuildContext context) {
-    return TDText(
+    return MyText(
       '中华人民共和国腾讯科技',
       // font: Font(size: 100, lineHeight: 100),
       backgroundColor: ThemeColors.blue.shade100,
@@ -142,8 +142,8 @@ class CustomPaddingText extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        TDText('中华人民共和国腾讯科技fgjpqy', backgroundColor: ThemeColors.blue.shade100),
-        TDText(
+        MyText('中华人民共和国腾讯科技fgjpqy', backgroundColor: ThemeColors.blue.shade100),
+        MyText(
           'English',
           fontSize: context.headlineLarge.fontSize,
           backgroundColor: ThemeColors.blue.shade100,

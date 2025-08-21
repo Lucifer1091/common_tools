@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../button/td_button.dart';
+import '../button/my_button.dart';
 import '../divider/td_divider.dart';
 import 'td_dialog.dart';
 import 'td_dialog_widget.dart';
@@ -85,7 +85,7 @@ class TDImageDialog extends StatelessWidget {
           content: content,
           contentColor: contentColor,
         ),
-        const TDDivider(height: 24, color: Colors.transparent),
+        const MyDivider(height: 24, color: Colors.transparent),
         _horizontalButtons(context),
       ],
     );
@@ -108,7 +108,7 @@ class TDImageDialog extends StatelessWidget {
           padding: const EdgeInsets.only(top: 24),
           child: ClipRRect(child: _buildImage(context)),
         ),
-        const TDDivider(height: 24, color: Colors.transparent),
+        const MyDivider(height: 24, color: Colors.transparent),
         _horizontalButtons(context),
       ],
     );
@@ -125,7 +125,7 @@ class TDImageDialog extends StatelessWidget {
           ),
           child: _buildImage(context),
         ),
-        const TDDivider(height: 24, color: Colors.transparent),
+        const MyDivider(height: 24, color: Colors.transparent),
         _horizontalButtons(context),
       ],
     );
@@ -163,11 +163,7 @@ class TDImageDialog extends StatelessWidget {
           action: null,
         );
     final right =
-        rightBtn ??
-        TDDialogButtonOptions(
-          title: 'Confirm',
-          action: null,
-        );
+        rightBtn ?? TDDialogButtonOptions(title: 'Confirm', action: null);
     return HorizontalNormalButtons(leftBtn: left, rightBtn: right);
   }
 }

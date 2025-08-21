@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../button/td_button.dart';
+import '../button/my_button.dart';
 import '../divider/td_divider.dart';
 import 'td_dialog.dart';
 import 'td_dialog_widget.dart';
@@ -70,8 +70,8 @@ class TDConfirmDialog extends StatelessWidget {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const TDDivider(height: 23, color: Colors.transparent),
-          const TDDivider(height: 1),
+          const MyDivider(height: 23, color: Colors.transparent),
+          const MyDivider(height: 1),
           TDDialogButton(
             buttonText: buttonText ?? 'Ok',
             buttonTextColor: buttonTextColor,

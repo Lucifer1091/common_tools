@@ -18,4 +18,6 @@ extension ContextThemeExtension on BuildContext {
   }
 
   MyColorScheme get colorScheme => theme.colorScheme;
+
+  bool get enableFocusOutline => theme.enableFocusOutline;
 }

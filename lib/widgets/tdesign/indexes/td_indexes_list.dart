@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import '../../../index.dart';
-import '../text/td_text.dart';
+import '../text/my_text.dart';
 
 class TDIndexesList extends StatefulWidget {
   const TDIndexesList({
@@ -111,7 +111,7 @@ class _TDIndexesListState extends State<TDIndexesList> {
                                       color: ThemeColors.blue.shade50,
                                     ),
                                     child: Center(
-                                      child: TDText(
+                                      child: MyText(
                                         e,
                                         style: context.displaySmall,
                                         textColor: ThemeColors.blue.shade600,
@@ -136,7 +136,7 @@ class _TDIndexesListState extends State<TDIndexesList> {
                                           )
                                           : null,
                                   child: Center(
-                                    child: TDText(
+                                    child: MyText(
                                       e,
                                       style:
                                           isActive

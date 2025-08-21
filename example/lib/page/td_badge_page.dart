@@ -116,7 +116,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
         child: Stack(
           alignment: Alignment.bottomLeft,
           children: [
-            TDText('消息'),
+            MyText('消息'),
             const Positioned(
               right: 0,
               top: 0,
@@ -180,7 +180,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
         child: Stack(
           alignment: Alignment.bottomLeft,
           children: [
-            TDText('消息'),
+            MyText('消息'),
             const Positioned(
               left: 28,
               bottom: 18,
@@ -428,7 +428,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
           color: Colors.white,
           height: 48,
           width: MediaQuery.of(context).size.width,
-          child: TDText('单行标题'),
+          child: MyText('单行标题'),
         ),
         const TDBadge(TDBadgeType.subscript, message: 'NEW'),
       ],

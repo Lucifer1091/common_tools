@@ -6,7 +6,7 @@ import '../../../index.dart';
 import '../../../constants/shadows.dart';
 import '../../layout/no_widget.dart';
 import '../badge/td_badge.dart';
-import '../text/td_text.dart';
+import '../text/my_text.dart';
 
 /// Expand Item Down Arrow Width
 const double _kArrowWidth = 13.5;
@@ -546,7 +546,7 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
     TDBottomTabBarTabConfig config,
     bool isSelected,
   ) {
-    return TDText(
+    return MyText(
       config.tabText,
       fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
       style:
@@ -700,7 +700,7 @@ class PopUpMenuItem extends StatelessWidget {
       alignment: alignment,
       child:
           itemWidget ??
-          TDText(
+          MyText(
             value,
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
           ),

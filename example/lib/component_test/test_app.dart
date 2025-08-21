@@ -169,9 +169,9 @@
 //         },
 //       ),
 //       TDBottomTabBarTabConfig(
-//         selectedIcon: Icon(Icons.app_blocking, size: iconSize, color: Colors.red),
+//         selectedIcon: Icon(Icons.dashboard_rounded, size: iconSize, color: Colors.red),
 //         unselectedIcon: Icon(
-//           Icons.app_blocking,
+//           Icons.dashboard_rounded,
 //           size: iconSize,
 //           color: const Color(0xFF383838),
 //         ),

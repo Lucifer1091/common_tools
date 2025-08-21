@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../index.dart';
 import '../../../extensions/iterable/index.dart';
-import '../text/td_text.dart';
+import '../text/my_text.dart';
 import 'td_swipe_cell_inherited.dart';
 import 'td_swipe_cell_panel.dart';
 
@@ -75,7 +75,7 @@ class TDSwipeCellAction extends StatelessWidget {
 
       if (label != null)
         Flexible(
-          child: TDText(
+          child: MyText(
             label,
             textColor: Colors.white,
             style: labelStyle ?? style,

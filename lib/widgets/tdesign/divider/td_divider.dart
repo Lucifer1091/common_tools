@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../text/td_text.dart';
-import 'dashed_widget.dart';
 
-enum TextAlignment { left, center, right }
+enum MyTextAlignment { left, center, right }
 
-class TDDivider extends StatelessWidget {
-  const TDDivider({
+enum MyDividerType { solid, dotted, dashed, wavy }
+
+class MyDivider extends StatelessWidget {
+  const MyDivider({
     super.key,
     this.color,
     this.margin,
@@ -16,20 +16,20 @@ class TDDivider extends StatelessWidget {
     this.text,
     this.textStyle,
     this.widget,
-    this.gapPadding,
+    this.gap,
     this.hideLine = false,
     this.isDashed = false,
-    this.alignment = TextAlignment.center,
+    this.alignment = MyTextAlignment.center,
     this.direction = Axis.horizontal,
   });
 
   final Color? color;
 
-  final TextAlignment alignment;
+  final MyTextAlignment alignment;
 
-  final EdgeInsetsGeometry? margin;
+  final EdgeInsets? margin;
 
-  final EdgeInsetsGeometry? gapPadding;
+  final EdgeInsets? gap;
 
   final double? width;
 
@@ -50,13 +50,7 @@ class TDDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (widget == null && text == null) {
-      return _buildLine(
-        context,
-        width: width,
-        height: height,
-        margin: margin,
-        color: color,
-      );
+      return _buildLine(context, width: width, height: height, margin: margin);
     }
 
     if (hideLine) {
@@ -71,37 +65,28 @@ class TDDivider extends StatelessWidget {
     return _buildDivider(context, alignment);
   }
 
-  Widget _buildDivider(BuildContext context, TextAlignment alignment) {
+  Widget _buildDivider(BuildContext context, MyTextAlignment alignment) {
     switch (alignment) {
-      case TextAlignment.left:
+      case MyTextAlignment.left:
         return Container(
           width: width,
           margin: margin,
           child: Row(
             children: [
-              _buildLine(
-                context,
-                width: 16,
-                height: height ?? 0.5,
-                color: color ?? ThemeColors.neutral.shade200,
-              ),
+              _buildLine(context, width: 16, height: height ?? 0.5),
               Padding(
-                padding: gapPadding ?? const EdgeInsets.only(left: 8, right: 8),
+                padding: gap ?? const EdgeInsets.only(left: 8, right: 8),
                 child: _buildMiddleWidget(context),
               ),
               Expanded(
                 child: Center(
-                  child: _buildLine(
-                    context,
-                    height: height ?? 0.5,
-                    color: color ?? ThemeColors.neutral.shade200,
-                  ),
+                  child: _buildLine(context, height: height ?? 0.5),
                 ),
               ),
             ],
           ),
         );
-      case TextAlignment.center:
+      case MyTextAlignment.center:
         return Container(
           width: width,
           margin: margin,
@@ -109,30 +94,22 @@ class TDDivider extends StatelessWidget {
             children: [
               Expanded(
                 child: Center(
-                  child: _buildLine(
-                    context,
-                    height: height ?? 0.5,
-                    color: color ?? ThemeColors.neutral.shade200,
-                  ),
+                  child: _buildLine(context, height: height ?? 0.5),
                 ),
               ),
               Padding(
-                padding: gapPadding ?? const EdgeInsets.only(left: 8, right: 8),
+                padding: gap ?? const EdgeInsets.only(left: 8, right: 8),
                 child: _buildMiddleWidget(context),
               ),
               Expanded(
                 child: Center(
-                  child: _buildLine(
-                    context,
-                    height: height ?? 0.5,
-                    color: color ?? ThemeColors.neutral.shade200,
-                  ),
+                  child: _buildLine(context, height: height ?? 0.5),
                 ),
               ),
             ],
           ),
         );
-      case TextAlignment.right:
+      case MyTextAlignment.right:
         return Container(
           width: width,
           margin: margin,
@@ -140,23 +117,14 @@ class TDDivider extends StatelessWidget {
             children: [
               Expanded(
                 child: Center(
-                  child: _buildLine(
-                    context,
-                    height: height ?? 0.5,
-                    color: color ?? ThemeColors.neutral.shade200,
-                  ),
+                  child: _buildLine(context, height: height ?? 0.5),
                 ),
               ),
               Padding(
-                padding: gapPadding ?? const EdgeInsets.only(left: 8, right: 8),
+                padding: gap ?? const EdgeInsets.only(left: 8, right: 8),
                 child: _buildMiddleWidget(context),
               ),
-              _buildLine(
-                context,
-                width: 16,
-                height: height ?? 0.5,
-                color: color ?? ThemeColors.neutral.shade200,
-              ),
+              _buildLine(context, width: 16, height: height ?? 0.5),
             ],
           ),
         );
@@ -177,7 +145,7 @@ class TDDivider extends StatelessWidget {
         child: DashedWidget(
           width: width,
           height: height,
-          color: color ?? ThemeColors.neutral.shade200,
+          color: color ?? context.colorScheme.border,
           direction: direction,
         ),
       );
@@ -186,19 +154,20 @@ class TDDivider extends StatelessWidget {
         width: width,
         height: height ?? 0.5,
         margin: margin,
-        color: color ?? ThemeColors.neutral.shade200,
+        color: color ?? context.colorScheme.border,
       );
     }
   }
 
   Widget _buildMiddleWidget(BuildContext context) {
     return widget ??
-        TDText(
+        MyText(
           text,
-          textColor: ThemeColors.neutral.shade700,
-          style: (textStyle ?? context.bodySmall)?.copyWith(
-            color: ThemeColors.neutral.shade700,
-          ),
+          style:
+              textStyle ??
+              context.bodySmall.copyWith(
+                color: context.colorScheme.mutedForeground,
+              ),
         );
   }
 }

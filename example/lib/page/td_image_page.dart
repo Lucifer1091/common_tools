@@ -197,7 +197,7 @@ class TDImageState extends State<TDImagePage>
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: TDText(
+          child: MyText(
             '裁剪',
             fontSize: context.textTheme.bodyMedium.fontSize,
             textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
@@ -216,7 +216,7 @@ class TDImageState extends State<TDImagePage>
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: TDText(
+          child: MyText(
             '拉伸',
             fontSize: context.textTheme.bodyMedium.fontSize,
             textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
@@ -250,7 +250,7 @@ class TDImageState extends State<TDImagePage>
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: TDText(
+          child: MyText(
             '适应高',
             fontSize: context.textTheme.bodyMedium.fontSize,
             textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
@@ -277,7 +277,7 @@ class TDImageState extends State<TDImagePage>
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: TDText(
+          child: MyText(
             '适应宽',
             fontSize: context.textTheme.bodyMedium.fontSize,
             textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
@@ -304,7 +304,7 @@ class TDImageState extends State<TDImagePage>
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: TDText(
+          child: MyText(
             '方形',
             fontSize: context.textTheme.bodyMedium.fontSize,
             textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
@@ -326,7 +326,7 @@ class TDImageState extends State<TDImagePage>
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: TDText(
+          child: MyText(
             '圆角方形',
             fontSize: context.textTheme.bodyMedium.fontSize,
             textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
@@ -350,7 +350,7 @@ class TDImageState extends State<TDImagePage>
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: TDText(
+          child: MyText(
             '圆形',
             fontSize: context.textTheme.bodyMedium.fontSize,
             textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
@@ -374,7 +374,7 @@ class TDImageState extends State<TDImagePage>
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: TDText(
+          child: MyText(
             '加载默认提示',
             fontSize: context.textTheme.bodyMedium.fontSize,
             textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
@@ -415,7 +415,7 @@ class TDImageState extends State<TDImagePage>
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: TDText(
+          child: MyText(
             '加载自定义提示',
             fontSize: context.textTheme.bodyMedium.fontSize,
             textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
@@ -468,7 +468,7 @@ class TDImageState extends State<TDImagePage>
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: TDText(
+          child: MyText(
             '失败默认提示',
             fontSize: context.textTheme.bodyMedium.fontSize,
             textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
@@ -487,7 +487,7 @@ class TDImageState extends State<TDImagePage>
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: TDText(
+          child: MyText(
             '失败自定义提示',
             fontSize: context.textTheme.bodyMedium.fontSize,
             textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
@@ -495,7 +495,7 @@ class TDImageState extends State<TDImagePage>
         ),
         TDImage(
           imgUrl: 'error',
-          errorWidget: TDText(
+          errorWidget: MyText(
             '加载失败',
             fontWeight: FontWeight.w500,
             textColor: ThemeColors.neutral.shade700,

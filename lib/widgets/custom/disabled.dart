@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../index.dart';
-import '../dialogs/alert_manager.dart';
 
 /// Marks [child] as disabled by reducing its opacity to half and ignoring
 /// pointers.

@@ -698,7 +698,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
                 return TDConfirmDialog(
                   title: _dialogTitle,
                   titleAlignment: Alignment.centerLeft,
-                  contentWidget: TDText.rich(
+                  contentWidget: MyText.rich(
                     TDTextSpan(
                       children: [
                         TDTextSpan(text: '红色文字', textColor: Colors.red),
@@ -731,7 +731,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
                 return TDAlertDialog(
                   title: _dialogTitle,
                   titleAlignment: Alignment.centerRight,
-                  contentWidget: TDText.rich(
+                  contentWidget: MyText.rich(
                     TDTextSpan(
                       children: [
                         TDTextSpan(text: '红色文字', textColor: Colors.red),
@@ -763,7 +763,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
               ) {
                 return TDAlertDialog.vertical(
                   title: _dialogTitle,
-                  contentWidget: TDText.rich(
+                  contentWidget: MyText.rich(
                     TDTextSpan(
                       children: [
                         TDTextSpan(text: '红色文字', textColor: Colors.red),
@@ -815,8 +815,8 @@ class _TDDialogPageState extends State<TDDialogPage> {
                   contentWidget: ListView(
                     shrinkWrap: true,
                     children: const [
-                      TDText('红色文字', textColor: Colors.red),
-                      TDText('绿色文字', textColor: Colors.green),
+                      MyText('红色文字', textColor: Colors.red),
+                      MyText('绿色文字', textColor: Colors.green),
                     ],
                   ),
                 );

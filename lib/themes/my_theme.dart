@@ -7,21 +7,29 @@ class MyThemeData {
   MyThemeData({
     required this.colorScheme,
     this.typography = const MyTypography.geist(),
+    this.enableFocusOutline = true,
   });
 
   MyThemeData.defaults()
     : colorScheme = MyBlueColorScheme.light(),
+      enableFocusOutline = true,
       typography = MyTypography.geist();
 
   final MyColorScheme colorScheme;
   final MyTypography typography;
+  final bool enableFocusOutline;
 
   Brightness get brightness => colorScheme.brightness;
 
-  MyThemeData copyWith({MyColorScheme? colorScheme, MyTypography? typography}) {
+  MyThemeData copyWith({
+    MyColorScheme? colorScheme,
+    MyTypography? typography,
+    bool? enableFocusOutline,
+  }) {
     return MyThemeData(
       colorScheme: colorScheme ?? this.colorScheme,
       typography: typography ?? this.typography,
+      enableFocusOutline: enableFocusOutline ?? this.enableFocusOutline,
     );
   }
 
@@ -29,6 +37,7 @@ class MyThemeData {
     return MyThemeData(
       colorScheme: MyColorScheme.lerp(a.colorScheme, b.colorScheme, t),
       typography: MyTypography.lerp(a.typography, b.typography, t),
+      enableFocusOutline: t < 0.5 ? a.enableFocusOutline : b.enableFocusOutline,
     );
   }
 
@@ -38,17 +47,18 @@ class MyThemeData {
 
     return other is MyThemeData &&
         other.colorScheme == colorScheme &&
-        other.typography == typography;
+        other.typography == typography &&
+        other.enableFocusOutline == enableFocusOutline;
   }
 
   @override
   int get hashCode {
-    return Object.hash(colorScheme, typography);
+    return Object.hash(colorScheme, typography, enableFocusOutline);
   }
 
   @override
   String toString() {
-    return 'MyThemeData(colorScheme: $colorScheme, typography: $typography)';
+    return 'MyThemeData(colorScheme: $colorScheme, typography: $typography, enableFocusOutline: $enableFocusOutline)';
   }
 }
 

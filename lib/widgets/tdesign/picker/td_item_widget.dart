@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../index.dart';
-import '../text/td_text.dart';
+import '../text/my_text.dart';
 
 typedef ItemBuilderType =
     Widget? Function(
@@ -83,7 +83,7 @@ class _TDItemWidgetState extends State<TDItemWidget> {
           _itemDistanceCalculator!,
           distance,
         ) ??
-        TDText(
+        MyText(
           widget.content,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,

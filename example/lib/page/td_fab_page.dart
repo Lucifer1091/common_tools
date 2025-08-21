@@ -148,7 +148,7 @@ class _TDFabPageState extends State<TDFabPage> {
                       child: Column(children: [fab['component']]),
                     ),
                     const SizedBox(height: 24),
-                    TDText(
+                    MyText(
                       fab['desc'],
                       style: TextStyle(
                         fontSize: 14,

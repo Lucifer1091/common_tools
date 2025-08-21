@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../text/td_text.dart';
+import '../text/my_text.dart';
 
 /// Limit the function type to prevent the wrong function from being passed,
 /// which may cause parameter mismatch.
@@ -132,7 +132,7 @@ class TDLink extends StatelessWidget {
 
         linkClick?.call(uri);
       },
-      child: TDText(
+      child: MyText(
         label,
         style: TextStyle(
           fontSize: _getFontSize(context),

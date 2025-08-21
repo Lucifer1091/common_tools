@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../index.dart';
 import '../../layout/no_widget.dart';
 import '../../layout/spaces.dart';
-import '../text/td_text.dart';
+import '../text/my_text.dart';
 import 'td_action_sheet.dart';
 
 class TDActionSheetItemWidget extends StatelessWidget {
@@ -69,7 +69,7 @@ class TDActionSheetItemWidget extends StatelessWidget {
             ),
             const Space.h8(),
           ],
-          TDText(
+          MyText(
             item!.label,
             fontSize: context.bodySmall?.fontSize,
             textColor: ThemeColors.neutral.shade900,
@@ -130,7 +130,7 @@ Widget buildCancelButton(
         ),
         height: 48,
         child: Center(
-          child: TDText(
+          child: MyText(
             cancelText,
             fontSize: context.bodyLarge?.fontSize,
             textColor: ThemeColors.neutral.shade900,

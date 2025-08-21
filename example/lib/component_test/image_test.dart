@@ -10,9 +10,7 @@ class ImageTestApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Image Test',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue),
       home: TestPage(),
     );
   }
@@ -23,16 +21,12 @@ class TestPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      appBar: AppBar(
-        title: TDText('TDImage Test Page'),
-      ),
+      appBar: AppBar(title: MyText('TDImage Test Page')),
       body: Form(
         key: _formKey,
         child: Column(
           children: [
-
             Image.network(
               'assets/img/image.png',
               width: 335,
@@ -47,7 +41,7 @@ class TestPage extends StatelessWidget {
               fit: BoxFit.fitHeight,
             ),
           ],
-        )
+        ),
       ),
     );
   }

@@ -107,9 +107,8 @@ Widget _buildBaseSimple(BuildContext context) {
   var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
   return MyButton(
     text: '基础抽屉',
-    isBlock: true,
+    isExpanded: true,
     type: MyButtonType.outline,
-    
     size: MyButtonSize.large,
     onTap: () {
       TDDrawer(
@@ -133,9 +132,9 @@ Widget _buildIconSimple(BuildContext context) {
   var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
   return MyButton(
     text: '带图标抽屉',
-    isBlock: true,
+    isExpanded: true,
     type: MyButtonType.outline,
-    
+
     size: MyButtonSize.large,
     onTap: () {
       TDDrawer(
@@ -146,7 +145,7 @@ Widget _buildIconSimple(BuildContext context) {
           30,
           (index) => TDDrawerItem(
             title: '菜单${_nums[index]}',
-            icon: const Icon(Icons.app_blocking),
+            icon: const Icon(Icons.dashboard_rounded),
           ),
         ).toList(),
       );
@@ -159,9 +158,9 @@ Widget _buildTitleSimple(BuildContext context) {
   var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
   return MyButton(
     text: '带图标抽屉',
-    isBlock: true,
+    isExpanded: true,
     type: MyButtonType.outline,
-    
+
     size: MyButtonSize.large,
     onTap: () {
       TDDrawer(
@@ -184,9 +183,9 @@ Widget _buildBottomSimple(BuildContext context) {
   var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
   return MyButton(
     text: '带底部插槽样式',
-    isBlock: true,
+    isExpanded: true,
     type: MyButtonType.outline,
-    
+
     size: MyButtonSize.large,
     onTap: () {
       TDDrawer(
@@ -214,9 +213,9 @@ Widget _buildColorSimple(BuildContext context) {
   var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
   return MyButton(
     text: '自定义背景色',
-    isBlock: true,
+    isExpanded: true,
     type: MyButtonType.outline,
-    
+
     size: MyButtonSize.large,
     onTap: () {
       TDDrawer(

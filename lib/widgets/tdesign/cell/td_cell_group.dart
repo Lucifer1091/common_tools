@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../index.dart';
 import '../../layout/no_widget.dart';
-import '../text/td_text.dart';
+import '../text/my_text.dart';
 import 'td_cell.dart';
 import 'td_cell_inherited.dart';
 import 'td_cell_style.dart';
@@ -68,7 +68,7 @@ class _TDCellGroupState extends State<TDCellGroup> {
               padding: style.titlePadding,
               child:
                   widget.titleWidget ??
-                  TDText(widget.title, style: style.groupTitleStyle),
+                  MyText(widget.title, style: style.groupTitleStyle),
             ),
           Flexible(
             child: Container(

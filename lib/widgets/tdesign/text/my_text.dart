@@ -4,17 +4,17 @@ import 'package:flutter/material.dart';
 
 import '../../../index.dart';
 
-class TDText extends StatelessWidget {
-  const TDText(
+class MyText extends StatelessWidget {
+  const MyText(
     this.data, {
     this.fontSize,
     this.fontWeight,
     this.fontFamily,
-    this.textColor = Colors.black,
+    this.textColor,
     this.backgroundColor,
     this.selectionColor,
     this.isTextThrough = false,
-    this.lineThroughColor = Colors.white,
+    this.lineThroughColor,
     this.style,
     this.strutStyle,
     this.textAlign,
@@ -30,16 +30,16 @@ class TDText extends StatelessWidget {
     super.key,
   }) : textSpan = null;
 
-  const TDText.rich(
+  const MyText.rich(
     this.textSpan, {
     this.fontSize,
     this.fontWeight,
     this.fontFamily,
-    this.textColor = Colors.black,
+    this.textColor,
     this.backgroundColor,
     this.selectionColor,
     this.isTextThrough = false,
-    this.lineThroughColor = Colors.white,
+    this.lineThroughColor,
     super.key,
     this.style,
     this.strutStyle,
@@ -61,7 +61,7 @@ class TDText extends StatelessWidget {
 
   final String? fontFamily;
 
-  final Color textColor;
+  final Color? textColor;
 
   final Color? backgroundColor;
 
@@ -117,16 +117,16 @@ class TDText extends StatelessWidget {
 
     return TextStyle(
       inherit: style?.inherit ?? true,
-      overflow: style?.overflow ?? overflow ?? textFont?.overflow,
-      color: style?.color ?? textColor,
+      overflow: style?.overflow ?? overflow ?? textFont.overflow,
+      color: style?.color ?? textColor ?? context.colorScheme.foreground,
       backgroundColor: backgroundColor,
-      fontSize: style?.fontSize ?? fontSize ?? textFont?.fontSize,
-      fontWeight: style?.fontWeight ?? fontWeight ?? textFont?.fontWeight,
+      fontSize: style?.fontSize ?? fontSize ?? textFont.fontSize,
+      fontWeight: style?.fontWeight ?? fontWeight ?? textFont.fontWeight,
       fontStyle: style?.fontStyle,
       letterSpacing: style?.letterSpacing,
       wordSpacing: style?.wordSpacing,
       textBaseline: style?.textBaseline,
-      height: height ?? style?.height ?? textFont?.height,
+      height: height ?? style?.height ?? textFont.height,
       leadingDistribution: style?.leadingDistribution,
       locale: style?.locale,
       foreground: style?.foreground,
@@ -140,8 +140,9 @@ class TDText extends StatelessWidget {
       decorationStyle: style?.decorationStyle,
       decorationThickness: style?.decorationThickness,
       debugLabel: style?.debugLabel,
-      fontFamily: style?.fontFamily ?? fontFamily,
-      fontFamilyFallback: style?.fontFamilyFallback,
+      fontFamily: style?.fontFamily ?? fontFamily ?? textFont.fontFamily,
+      fontFamilyFallback:
+          style?.fontFamilyFallback ?? textFont.fontFamilyFallback,
     );
   }
 
@@ -205,7 +206,7 @@ class TDTextSpan extends TextSpan {
     String? fontFamily,
     Color? textColor,
     bool? isTextThrough = false,
-    Color? lineThroughColor = Colors.white,
+    Color? lineThroughColor,
     String? package,
     super.text,
     super.children,
@@ -217,7 +218,7 @@ class TDTextSpan extends TextSpan {
     super.semanticsLabel,
   }) : super(
          style: _getTextStyle(
-           context,
+           context ,
            style,
            fontWeight,
            fontFamily,
@@ -242,7 +243,7 @@ class TDTextSpan extends TextSpan {
 
     return TextStyle(
       inherit: style?.inherit ?? true,
-      color: style?.color ?? textColor,
+      color: style?.color ?? textColor ?? context?.colorScheme.foreground,
       backgroundColor: style?.backgroundColor,
       fontSize: style?.fontSize ?? textFont?.fontSize,
       fontWeight: style?.fontWeight ?? fontWeight ?? textFont?.fontWeight,
@@ -264,8 +265,8 @@ class TDTextSpan extends TextSpan {
       decorationStyle: style?.decorationStyle,
       decorationThickness: style?.decorationThickness,
       debugLabel: style?.debugLabel,
-      fontFamily: style?.fontFamily ?? fontFamily,
-      fontFamilyFallback: style?.fontFamilyFallback,
+      fontFamily: style?.fontFamily ?? fontFamily ?? textFont?.fontFamily,
+      fontFamilyFallback: style?.fontFamilyFallback ?? textFont?.fontFamilyFallback,
       package: package,
     );
   }

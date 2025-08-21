@@ -80,6 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: MyButton(
               type: MyButtonType.outline,
               shape: MyButtonShape.filled,
+              size: MyButtonSize.large,
               onTap: () {
                 Navigator.pushNamed(context, '${model.name}?showAction=1');
               },
@@ -102,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
               topRight: Radius.circular(MyRadius.large),
             ),
           ),
-          child: TDText(
+          child: MyText(
             '$key(${subList.length})',
             textColor: context.colorScheme.primaryForeground,
           ),

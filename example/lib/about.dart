@@ -40,7 +40,7 @@ class _AboutPageState extends State<AboutPage> {
     return Scaffold(
       backgroundColor: ThemeColors.neutral.shade50,
       appBar: AppBar(
-        title: TDText('关于我们', textColor: context.colorScheme.primaryForeground),
+        title: MyText('关于我们', textColor: context.colorScheme.primaryForeground),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -64,8 +64,8 @@ class _AboutPageState extends State<AboutPage> {
   }) {
     Widget current = Row(
       children: [
-        Expanded(child: TDText(title, textColor: ThemeColors.neutral.shade900)),
-        TDText(desc ?? '', textColor: ThemeColors.neutral.shade500),
+        Expanded(child: MyText(title, textColor: ThemeColors.neutral.shade900)),
+        MyText(desc ?? '', textColor: ThemeColors.neutral.shade500),
       ],
     );
     current = Container(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../index.dart';
 import '../swipe_cell/td_swipe_cell_inherited.dart';
-import '../text/td_text.dart';
+import '../text/my_text.dart';
 import 'td_cell_inherited.dart';
 import 'td_cell_style.dart';
 
@@ -175,13 +175,13 @@ class _TDCellState extends State<TDCell> {
                               Flexible(child: widget.titleWidget!)
                             else if (widget.title.isNotBlank)
                               Flexible(
-                                child: TDText(
+                                child: MyText(
                                   widget.title,
                                   style: style.titleStyle,
                                 ),
                               ),
                             if (widget.required ?? false)
-                              TDText(' *', style: style.requiredStyle),
+                              MyText(' *', style: style.requiredStyle),
                           ],
                         ),
                         if ((widget.titleWidget != null ||
@@ -192,7 +192,7 @@ class _TDCellState extends State<TDCell> {
                         if (widget.descriptionWidget != null)
                           widget.descriptionWidget!
                         else if (widget.description.isNotBlank)
-                          TDText(
+                          MyText(
                             widget.description!,
                             style: style.descriptionStyle,
                           ),
@@ -209,7 +209,7 @@ class _TDCellState extends State<TDCell> {
                 if (widget.noteWidget != null)
                   widget.noteWidget!
                 else if (widget.note.isNotBlank)
-                  TDText(widget.note, style: style.noteStyle),
+                  MyText(widget.note, style: style.noteStyle),
                 if (widget.rightIconWidget != null)
                   widget.rightIconWidget!
                 else if (widget.rightIcon != null)

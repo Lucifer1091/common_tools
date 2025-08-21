@@ -194,10 +194,9 @@ class MyTypography {
 
   static const _sans = 'Geist';
   static const _mono = 'GeistMono';
-  static const _package = 'common_tools';
 
-  static const kDefaultFontFamily = 'packages/$_package/$_sans';
-  static const kDefaultFontFamilyMono = 'packages/$_package/$_mono';
+  static const kDefaultFontFamily = _sans;
+  static const kDefaultFontFamilyMono = _mono;
 
   final TextStyle displayLarge;
   final TextStyle displayMedium;

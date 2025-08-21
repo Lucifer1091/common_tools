@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../button/td_button.dart';
+import '../button/my_button.dart';
 import '../divider/td_divider.dart';
 import 'td_dialog.dart';
 import 'td_dialog_widget.dart';
@@ -132,7 +132,7 @@ class TDAlertDialog extends StatelessWidget {
             contentMaxHeight: contentMaxHeight,
             padding: padding,
           ),
-          const TDDivider(height: 24, color: Colors.transparent),
+          const MyDivider(height: 24, color: Colors.transparent),
           if (_vertical)
             _verticalButtons(context)
           else
@@ -184,7 +184,7 @@ class TDAlertDialog extends StatelessWidget {
 
       widgets.add(btn);
       if (index < _buttons.length - 1) {
-        widgets.add(const TDDivider(height: 12, color: Colors.transparent));
+        widgets.add(const MyDivider(height: 12, color: Colors.transparent));
       }
     });
 

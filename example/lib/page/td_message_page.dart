@@ -46,12 +46,13 @@ class _TDMessagePageState extends State<TDMessagePage> {
 
   Widget _buildPlainTextMessage(BuildContext context) {
     return MyButton(
-      isBlock: true,
+      isExpanded: true,
+
       text: '纯文字的通知',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       width: 450,
-      
+
       onTap: () {
         TDMessage.showMessage(
           context: context,
@@ -70,12 +71,13 @@ class _TDMessagePageState extends State<TDMessagePage> {
 
   Widget _buildIconTextMessage(BuildContext context) {
     return MyButton(
-      isBlock: true,
+      isExpanded: true,
+
       text: '带图标的通知',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       width: 450,
-      
+
       onTap: () {
         TDMessage.showMessage(
           context: context,
@@ -91,12 +93,13 @@ class _TDMessagePageState extends State<TDMessagePage> {
 
   Widget _buildMessageWithCloseButton(BuildContext context) {
     return MyButton(
-      isBlock: true,
+      isExpanded: true,
+
       text: '带关闭的通知',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       width: 450,
-      
+
       onTap: () {
         TDMessage.showMessage(
           context: context,
@@ -117,12 +120,13 @@ class _TDMessagePageState extends State<TDMessagePage> {
 
   Widget _buildRollingMessage(BuildContext context) {
     return MyButton(
-      isBlock: true,
+      isExpanded: true,
+
       text: '可滚动的通知',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       width: 450,
-      
+
       onTap: () {
         TDMessage.showMessage(
           context: context,
@@ -142,12 +146,13 @@ class _TDMessagePageState extends State<TDMessagePage> {
 
   Widget _buildLinkMessage(BuildContext context) {
     return MyButton(
-      isBlock: true,
+      isExpanded: true,
+
       text: '带按钮的通知',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       width: 450,
-      
+
       onTap: () {
         TDMessage.showMessage(
           context: context,
@@ -171,12 +176,13 @@ class _TDMessagePageState extends State<TDMessagePage> {
 
   Widget _buildInfoMessage(BuildContext context) {
     return MyButton(
-      isBlock: true,
+      isExpanded: true,
+
       text: '普通通知',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       width: 450,
-      
+
       onTap: () {
         TDMessage.showMessage(
           context: context,
@@ -192,12 +198,13 @@ class _TDMessagePageState extends State<TDMessagePage> {
 
   Widget _buildSuccessMessage(BuildContext context) {
     return MyButton(
-      isBlock: true,
+      isExpanded: true,
+
       text: '成功通知',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       width: 450,
-      
+
       onTap: () {
         TDMessage.showMessage(
           context: context,
@@ -213,12 +220,13 @@ class _TDMessagePageState extends State<TDMessagePage> {
 
   Widget _buildWarningMessage(BuildContext context) {
     return MyButton(
-      isBlock: true,
+      isExpanded: true,
+
       text: '警示通知',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       width: 450,
-      
+
       onTap: () {
         TDMessage.showMessage(
           context: context,
@@ -234,12 +242,13 @@ class _TDMessagePageState extends State<TDMessagePage> {
 
   Widget _buildErrorMessage(BuildContext context) {
     return MyButton(
-      isBlock: true,
+      isExpanded: true,
+
       text: '错误通知',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       width: 450,
-      
+
       onTap: () {
         TDMessage.showMessage(
           context: context,

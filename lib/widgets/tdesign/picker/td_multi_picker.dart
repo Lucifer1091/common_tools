@@ -214,7 +214,7 @@ class TDMultiPicker extends StatelessWidget {
               }
             },
             behavior: HitTestBehavior.opaque,
-            child: TDText(
+            child: MyText(
               leftText ?? 'Cancel',
               style:
                   leftTextStyle ??
@@ -230,7 +230,7 @@ class TDMultiPicker extends StatelessWidget {
                 title == null
                     ? Container()
                     : Center(
-                      child: TDText(
+                      child: MyText(
                         title,
                         style:
                             centerTextStyle ??
@@ -249,7 +249,7 @@ class TDMultiPicker extends StatelessWidget {
               ]);
             },
             behavior: HitTestBehavior.opaque,
-            child: TDText(
+            child: MyText(
               rightText ?? 'Confirm',
               style:
                   rightTextStyle ??
@@ -574,7 +574,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
               }
             },
             behavior: HitTestBehavior.opaque,
-            child: TDText(
+            child: MyText(
               widget.leftText ?? 'Cancel',
               style:
                   widget.leftTextStyle ??
@@ -589,7 +589,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
                 widget.title == null
                     ? const NoWidget()
                     : Center(
-                      child: TDText(
+                      child: MyText(
                         widget.title,
                         style:
                             widget.centerTextStyle ??
@@ -604,7 +604,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
               widget.onConfirm?.call(model.selectedData);
             },
             behavior: HitTestBehavior.opaque,
-            child: TDText(
+            child: MyText(
               widget.rightText ?? 'Confirm',
               style:
                   widget.rightTextStyle ??

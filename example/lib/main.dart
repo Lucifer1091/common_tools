@@ -29,19 +29,14 @@ class MyApp extends ConsumerWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       builder: (context, child) {
-        return MediaQuery(
-          data: MediaQuery.of(
-            context,
-          ).copyWith(textScaler: TextScaler.linear(1.0)),
-          child: MyUILayer(
-            themeMode: theme.mode,
-            theme: MyColorScheme.fromName(theme.color),
-            darkTheme: MyColorScheme.fromName(
-              theme.color,
-              brightness: Brightness.dark,
-            ),
-            child: child,
+        return MyUILayer(
+          themeMode: theme.mode,
+          theme: MyColorScheme.fromName(theme.color),
+          darkTheme: MyColorScheme.fromName(
+            theme.color,
+            brightness: Brightness.dark,
           ),
+          child: child,
         );
       },
       home: MyHomePage(title: 'My Flutter Example'),

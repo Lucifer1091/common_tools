@@ -61,8 +61,8 @@ class TDPopupPageState extends State<TDPopupPage> {
           builder: (_) {
             return MyButton(
               text: '底部弹出层-带标题及操作',
-              isBlock: true,
-              
+              isExpanded: true,
+
               type: MyButtonType.outline,
               size: MyButtonSize.large,
               onTap: () {
@@ -98,8 +98,8 @@ class TDPopupPageState extends State<TDPopupPage> {
           builder: (_) {
             return MyButton(
               text: '底部弹出层-带标题及操作',
-              isBlock: true,
-              
+              isExpanded: true,
+
               type: MyButtonType.outline,
               size: MyButtonSize.large,
               onTap: () {
@@ -134,8 +134,8 @@ class TDPopupPageState extends State<TDPopupPage> {
                   margin: const EdgeInsets.all(8),
                   child: MyButton(
                     text: '底部弹出层-修改圆角',
-                    isBlock: true,
-                    
+                    isExpanded: true,
+
                     type: MyButtonType.outline,
                     size: MyButtonSize.large,
                     onTap: () {
@@ -163,8 +163,8 @@ class TDPopupPageState extends State<TDPopupPage> {
                   margin: const EdgeInsets.all(8),
                   child: MyButton(
                     text: '底部弹出层-修改圆角',
-                    isBlock: true,
-                    
+                    isExpanded: true,
+
                     type: MyButtonType.outline,
                     size: MyButtonSize.large,
                     onTap: () {
@@ -199,8 +199,8 @@ class TDPopupPageState extends State<TDPopupPage> {
                   margin: const EdgeInsets.all(8),
                   child: MyButton(
                     text: '居中弹出层-修改圆角',
-                    isBlock: true,
-                    
+                    isExpanded: true,
+
                     type: MyButtonType.outline,
                     size: MyButtonSize.large,
                     onTap: () {
@@ -227,8 +227,8 @@ class TDPopupPageState extends State<TDPopupPage> {
                   margin: const EdgeInsets.all(8),
                   child: MyButton(
                     text: '居中弹出层-底部关闭-修改圆角',
-                    isBlock: true,
-                    
+                    isExpanded: true,
+
                     type: MyButtonType.outline,
                     size: MyButtonSize.large,
                     onTap: () {
@@ -260,8 +260,8 @@ class TDPopupPageState extends State<TDPopupPage> {
           builder: (_) {
             return MyButton(
               text: '自定义位置',
-              isBlock: true,
-              
+              isExpanded: true,
+
               type: MyButtonType.outline,
               size: MyButtonSize.large,
               onTap: () {
@@ -292,8 +292,8 @@ class TDPopupPageState extends State<TDPopupPage> {
                   margin: const EdgeInsets.all(8),
                   child: MyButton(
                     text: '底部弹出层-键盘弹默认遮挡',
-                    isBlock: true,
-                    
+                    isExpanded: true,
+
                     type: MyButtonType.outline,
                     size: MyButtonSize.large,
                     onTap: () {
@@ -333,8 +333,8 @@ class TDPopupPageState extends State<TDPopupPage> {
                   margin: const EdgeInsets.all(8),
                   child: MyButton(
                     text: '底部弹出层-键盘弹出不遮挡',
-                    isBlock: true,
-                    
+                    isExpanded: true,
+
                     type: MyButtonType.outline,
                     size: MyButtonSize.large,
                     onTap: () {
@@ -375,8 +375,8 @@ class TDPopupPageState extends State<TDPopupPage> {
                   margin: const EdgeInsets.all(8),
                   child: MyButton(
                     text: '居中弹出层-键盘弹出不遮挡',
-                    isBlock: true,
-                    
+                    isExpanded: true,
+
                     type: MyButtonType.outline,
                     size: MyButtonSize.large,
                     onTap: () {
@@ -465,8 +465,8 @@ class TDPopupPageState extends State<TDPopupPage> {
                   margin: const EdgeInsets.all(8),
                   child: MyButton(
                     text: '可拖动全屏',
-                    isBlock: true,
-                    
+                    isExpanded: true,
+
                     type: MyButtonType.outline,
                     size: MyButtonSize.large,
                     onTap: () {
@@ -494,8 +494,8 @@ class TDPopupPageState extends State<TDPopupPage> {
                   margin: const EdgeInsets.all(8),
                   child: MyButton(
                     text: '可拖动全屏-带标题及操作',
-                    isBlock: true,
-                    
+                    isExpanded: true,
+
                     type: MyButtonType.outline,
                     size: MyButtonSize.large,
                     onTap: () {
@@ -533,8 +533,8 @@ class TDPopupPageState extends State<TDPopupPage> {
   Widget _buildPopFromTop(BuildContext context) {
     return MyButton(
       text: '顶部弹出',
-      isBlock: true,
-      
+      isExpanded: true,
+
       type: MyButtonType.outline,
       size: MyButtonSize.large,
       onTap: () {
@@ -560,8 +560,8 @@ class TDPopupPageState extends State<TDPopupPage> {
   Widget _buildPopFromLeft(BuildContext context) {
     return MyButton(
       text: '左侧弹出',
-      isBlock: true,
-      
+      isExpanded: true,
+
       type: MyButtonType.outline,
       size: MyButtonSize.large,
       onTap: () {
@@ -581,8 +581,8 @@ class TDPopupPageState extends State<TDPopupPage> {
   Widget _buildPopFromCenter(BuildContext context) {
     return MyButton(
       text: '中间弹出',
-      isBlock: true,
-      
+      isExpanded: true,
+
       type: MyButtonType.outline,
       size: MyButtonSize.large,
       onTap: () {
@@ -602,8 +602,8 @@ class TDPopupPageState extends State<TDPopupPage> {
   Widget _buildPopFromBottom(BuildContext context) {
     return MyButton(
       text: '底部弹出',
-      isBlock: true,
-      
+      isExpanded: true,
+
       type: MyButtonType.outline,
       size: MyButtonSize.large,
       onTap: () {
@@ -623,8 +623,8 @@ class TDPopupPageState extends State<TDPopupPage> {
   Widget _buildPopFromRight(BuildContext context) {
     return MyButton(
       text: '右侧弹出',
-      isBlock: true,
-      
+      isExpanded: true,
+
       type: MyButtonType.outline,
       size: MyButtonSize.large,
       onTap: () {
@@ -644,8 +644,8 @@ class TDPopupPageState extends State<TDPopupPage> {
   Widget _buildPopFromBottomWithOperationAndTitle(BuildContext context) {
     return MyButton(
       text: '底部弹出层-带标题及操作',
-      isBlock: true,
-      
+      isExpanded: true,
+
       type: MyButtonType.outline,
       size: MyButtonSize.large,
       onTap: () {
@@ -675,8 +675,8 @@ class TDPopupPageState extends State<TDPopupPage> {
   Widget _buildPopFromBottomWithOperation(BuildContext context) {
     return MyButton(
       text: '底部弹出层-带操作',
-      isBlock: true,
-      
+      isExpanded: true,
+
       type: MyButtonType.outline,
       size: MyButtonSize.large,
       onTap: () {
@@ -705,8 +705,8 @@ class TDPopupPageState extends State<TDPopupPage> {
   Widget _buildPopFromBottomWithCloseAndTitle(BuildContext context) {
     return MyButton(
       text: '底部弹出层-带标题及关闭',
-      isBlock: true,
-      
+      isExpanded: true,
+
       type: MyButtonType.outline,
       size: MyButtonSize.large,
       onTap: () {
@@ -732,8 +732,8 @@ class TDPopupPageState extends State<TDPopupPage> {
   Widget _buildPopFromBottomWithCloseAndLeftTitle(BuildContext context) {
     return MyButton(
       text: '底部弹出层-带左边标题及关闭',
-      isBlock: true,
-      
+      isExpanded: true,
+
       type: MyButtonType.outline,
       size: MyButtonSize.large,
       onTap: () {
@@ -760,8 +760,8 @@ class TDPopupPageState extends State<TDPopupPage> {
   Widget _buildPopFromBottomWithClose(BuildContext context) {
     return MyButton(
       text: '底部弹出层-带关闭',
-      isBlock: true,
-      
+      isExpanded: true,
+
       type: MyButtonType.outline,
       size: MyButtonSize.large,
       onTap: () {
@@ -786,8 +786,8 @@ class TDPopupPageState extends State<TDPopupPage> {
   Widget _buildPopFromBottomWithTitle(BuildContext context) {
     return MyButton(
       text: '底部弹出层-仅标题',
-      isBlock: true,
-      
+      isExpanded: true,
+
       type: MyButtonType.outline,
       size: MyButtonSize.large,
       onTap: () {
@@ -814,8 +814,8 @@ class TDPopupPageState extends State<TDPopupPage> {
   Widget _buildPopFromCenterWithClose(BuildContext context) {
     return MyButton(
       text: '居中弹出层-带关闭',
-      isBlock: true,
-      
+      isExpanded: true,
+
       type: MyButtonType.outline,
       size: MyButtonSize.large,
       onTap: () {
@@ -841,8 +841,8 @@ class TDPopupPageState extends State<TDPopupPage> {
   Widget _buildPopFromCenterWithUnderClose(BuildContext context) {
     return MyButton(
       text: '居中弹出层-关闭在下方',
-      isBlock: true,
-      
+      isExpanded: true,
+
       type: MyButtonType.outline,
       size: MyButtonSize.large,
       onTap: () {

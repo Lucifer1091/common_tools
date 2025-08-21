@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 
 import '../../../extensions/generic/index.dart';
 import '../../../index.dart';
-import '../text/td_text.dart';
+import '../text/my_text.dart';
 import 'td_notice_bar_style.dart';
 
 class TDNoticeBar extends StatefulWidget {
@@ -286,7 +286,7 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
           alignment: Alignment.centerLeft,
           child: SizedBox(
             height: _getTextHeight(),
-            child: TDText(
+            child: MyText(
               widget.content.cast<String>(),
               style: _style?.getTextStyle,
               maxLines: widget.marquee ? 1 : widget.maxLines,
@@ -303,7 +303,7 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
           alignment: Alignment.centerLeft,
           child: SizedBox(
             height: _getTextHeight(),
-            child: TDText(
+            child: MyText(
               widget.content.cast<List<String>>()![0],
               style: _style?.getTextStyle,
               maxLines: 1,
@@ -355,7 +355,7 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
                     height: widget.height,
                     child: Align(
                       alignment: Alignment.centerLeft,
-                      child: TDText(
+                      child: MyText(
                         contents[i],
                         style: _style!.getTextStyle,
                         maxLines: 1,
@@ -368,7 +368,7 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
                   height: widget.height,
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: TDText(
+                    child: MyText(
                       contents[0],
                       style: _style?.getTextStyle,
                       maxLines: 1,

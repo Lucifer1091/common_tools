@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../button/td_button.dart';
-import '../button/td_button_style.dart';
+import '../button/my_button.dart';
+import '../button/my_button_style.dart';
 
 export 'td_alert_dialog.dart';
 export 'td_confirm_dialog.dart';

@@ -40,7 +40,7 @@ class _BounceAnimationState extends State<BounceAnimation>
       animation: _animation,
       builder: (context, child) {
         return Transform.scale(
-          scale: 1 + (_animation.value * 0.2),
+          scale: 1 + (_animation.value * widget.value),
           child: widget.child,
         );
       },

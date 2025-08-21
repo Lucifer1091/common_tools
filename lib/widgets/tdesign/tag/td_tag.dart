@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../index.dart';
-import '../text/td_text.dart';
+import '../text/my_text.dart';
 import 'td_tag_styles.dart';
 
 /// Display label component, only display, internal state cannot be changed
@@ -72,7 +72,7 @@ class TDTag extends StatelessWidget {
   Widget build(BuildContext context) {
     final innerStyle = _getInnerStyle(context);
 
-    Widget child = TDText(
+    Widget child = MyText(
       text,
       overflow: overflow ?? TextOverflow.ellipsis,
       textColor: textColor ?? innerStyle.getTextColor,

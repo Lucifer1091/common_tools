@@ -152,8 +152,9 @@ class MyFocusOutline extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textDirection = Directionality.of(context);
+    final enableFocusOutline = context.enableFocusOutline;
 
-    if (enabled) {
+    if (enableFocusOutline && enabled) {
       return CustomPaint(
         foregroundPainter: _MyOutwardBorderPainter(
           border:

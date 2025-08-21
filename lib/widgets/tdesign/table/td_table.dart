@@ -5,7 +5,7 @@ import '../checkbox/td_check_box.dart';
 import '../empty/td_empty.dart';
 import '../image/td_image.dart';
 import '../loading/td_loading.dart';
-import '../text/td_text.dart';
+import '../text/my_text.dart';
 
 enum TDTableColFixed { left, right, none }
 
@@ -390,7 +390,7 @@ class TDTableState extends State<TDTable> {
     int index,
   ) {
     final overflow = ellipsis ? TextOverflow.ellipsis : TextOverflow.visible;
-    final titleWidget = TDText(
+    final titleWidget = MyText(
       title,
       maxLines: 1,
       overflow: overflow,

@@ -108,7 +108,7 @@ class TDSideBarCustomPageState extends State<TDSideBarCustomPage> {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 2, right: 9),
-            child: TDText('标题$index', style: const TextStyle(fontSize: 14)),
+            child: MyText('标题$index', style: const TextStyle(fontSize: 14)),
           ),
           const SizedBox(height: 16),
           displayImageList(),
@@ -125,7 +125,7 @@ class TDSideBarCustomPageState extends State<TDSideBarCustomPage> {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 2, right: 9),
-            child: TDText('标题$index', style: const TextStyle(fontSize: 14)),
+            child: MyText('标题$index', style: const TextStyle(fontSize: 14)),
           ),
           const SizedBox(height: 16),
           displayImageList(),
@@ -179,7 +179,7 @@ class TDSideBarCustomPageState extends State<TDSideBarCustomPage> {
             height: 48,
           ),
           const SizedBox(height: 8),
-          TDText('$title', style: const TextStyle(fontSize: 12)),
+          MyText('$title', style: const TextStyle(fontSize: 12)),
         ],
       ),
     );

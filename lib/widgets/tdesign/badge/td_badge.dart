@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../text/td_text.dart';
+import '../text/my_text.dart';
 
 enum TDBadgeType { redPoint, message, bubble, square, subscript }
 
@@ -95,7 +95,7 @@ class TDBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Center child = Center(
-      child: TDText(
+      child: MyText(
         _getValue(),
         style: _getBadgeStyle(context),
         textAlign: TextAlign.center,

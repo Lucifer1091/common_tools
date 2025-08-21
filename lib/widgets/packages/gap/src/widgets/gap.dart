@@ -50,6 +50,32 @@ class Gap extends StatelessWidget {
         color: color,
       );
 
+  /// Creates a widget that takes a fixed [mainAxisExtent] of space in the
+  /// [Axis.horizontal] direction of its parent and expands in the cross axis direction.
+  ///
+  /// The [mainAxisExtent] must not be null and must be positive.
+  const Gap.horizontal(double mainAxisExtent, {Key? key, Color? color})
+    : this(
+        mainAxisExtent,
+        key: key,
+        crossAxisExtent: double.infinity,
+        color: color,
+        direction: Axis.horizontal,
+      );
+
+  /// Creates a widget that takes a fixed [mainAxisExtent] of space in the
+  /// [Axis.vertical] direction of its parent and expands in the cross axis direction.
+  ///
+  /// The [mainAxisExtent] must not be null and must be positive.
+  const Gap.vertical(double mainAxisExtent, {Key? key, Color? color})
+    : this(
+        mainAxisExtent,
+        key: key,
+        crossAxisExtent: double.infinity,
+        color: color,
+        direction: Axis.vertical,
+      );
+
   /// The amount of space this widget takes in the direction of its parent.
   ///
   /// For example:
@@ -80,9 +106,12 @@ class Gap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (direction != null) {
-      return direction == Axis.horizontal
-          ? SizedBox(width: mainAxisExtent)
-          : SizedBox(height: mainAxisExtent);
+      final box =
+          direction == Axis.horizontal
+              ? SizedBox(width: mainAxisExtent)
+              : SizedBox(height: mainAxisExtent);
+
+      return color != null ? ColoredBox(color: color!, child: box) : box;
     }
 
     final scrollableState = Scrollable.maybeOf(context);

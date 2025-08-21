@@ -151,9 +151,10 @@ Widget _buildSimple(BuildContext context) {
   final indexList = _list.map((item) => item['index'] as String).toList();
   return MyButton(
     text: '基础用法',
-    isBlock: true,
+    isExpanded: true,
+
     size: MyButtonSize.large,
-    
+
     type: MyButtonType.outline,
     onTap: () {
       Navigator.of(context).push(
@@ -189,9 +190,10 @@ Widget _buildOther(BuildContext context) {
   final indexList = _list.map((item) => item['index'] as String).toList();
   return MyButton(
     text: '胶囊索引',
-    isBlock: true,
+    isExpanded: true,
+
     size: MyButtonSize.large,
-    
+
     type: MyButtonType.outline,
     onTap: () {
       Navigator.of(context).push(

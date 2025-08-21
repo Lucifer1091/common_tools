@@ -18,7 +18,7 @@ class TodoPage extends StatelessWidget {
               child: Container(
                 alignment: Alignment.center,
                 margin: const EdgeInsets.all(16),
-                child: const TDText('欢迎使用TDesign，该组件已在规划中，请关注TDesign项目最新动态'),
+                child: const MyText('欢迎使用TDesign，该组件已在规划中，请关注TDesign项目最新动态'),
               ),
             ),
           ],

@@ -3,34 +3,21 @@ import 'package:common_tools/index.dart';
 
 import '../../base/example_widget.dart';
 
-class TDButtonPage extends StatefulWidget {
+class TDButtonPage extends StatelessWidget {
   const TDButtonPage({super.key});
-
-  @override
-  State<StatefulWidget> createState() => _TDButtonPageState();
-}
-
-class _TDButtonPageState extends State<TDButtonPage> {
-  void onTap() {
-    TDToast.showText('button clicked', context: context);
-  }
-
-  void onLongPress() {
-    TDToast.showText('long press button', context: context);
-  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: context.colorScheme.background,
       child: ExamplePage(
-        title: tdTitle(),
+        title: tdTitle(context),
         desc:
             'Used to start a closed-loop operation task, such as "delete" an object, "purchase" a product, etc. ',
         exampleCodeGroup: 'button',
         children: [
           ExampleModule(
-            title: 'Component Types',
+            title: 'Button Types',
             children: [
               ExampleItem(
                 ignoreCode: true,
@@ -61,7 +48,6 @@ class _TDButtonPageState extends State<TDButtonPage> {
                           margin: const EdgeInsets.all(8),
                           child: _buildGhostButton(context),
                         ),
-
                         Container(
                           margin: const EdgeInsets.all(8),
                           child: _buildTextButton(context),
@@ -86,7 +72,17 @@ class _TDButtonPageState extends State<TDButtonPage> {
                       children: [
                         Container(
                           margin: const EdgeInsets.all(8),
-                          child: _buildRectangleIconButton(context),
+                          child: _buildRectangleIconButton(
+                            context,
+                            MyButtonIconPosition.left,
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.all(8),
+                          child: _buildRectangleIconButton(
+                            context,
+                            MyButtonIconPosition.right,
+                          ),
                         ),
                         Container(
                           margin: const EdgeInsets.all(8),
@@ -109,7 +105,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
             ],
           ),
           ExampleModule(
-            title: 'Component status',
+            title: 'Button status',
             children: [
               ExampleItem(
                 ignoreCode: true,
@@ -169,6 +165,10 @@ class _TDButtonPageState extends State<TDButtonPage> {
                       children: [
                         Container(
                           margin: const EdgeInsets.all(6),
+                          child: _buildExtraLargeButton(context),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.all(6),
                           child: _buildLargeButton(context),
                         ),
                         Container(
@@ -224,6 +224,13 @@ class _TDButtonPageState extends State<TDButtonPage> {
                           margin: const EdgeInsets.only(top: 10),
                           child: _buildFilledButton(context),
                         ),
+                        Container(
+                          margin: const EdgeInsets.only(top: 10),
+                          child: MyButton(
+                            isExpanded: true,
+                            text: 'Filled block button',
+                          ),
+                        ),
                       ],
                     ),
                   );
@@ -231,60 +238,44 @@ class _TDButtonPageState extends State<TDButtonPage> {
               ),
             ],
           ),
-        ],
-        test: [
-          ExampleItem(
-            ignoreCode: true,
-            desc: 'Banner button test',
-            builder: (context) {
-              return Container(
-                color: Colors.grey,
-                padding: const EdgeInsets.only(top: 16, bottom: 16),
-                child: const Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    MyButton(isBlock: true, text: 'Filled block button'),
-                    SizedBox(height: 16),
-                    MyButton(
-                      isBlock: true,
-                      text: 'Outlined block button',
-                      type: MyButtonType.outline,
+          ExampleModule(
+            title: 'Fancy Buttons',
+            children: [
+              ExampleItem(
+                ignoreCode: true,
+                desc: 'Favorite Buttons',
+                builder: (context) {
+                  return Container(
+                    alignment: Alignment.topLeft,
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        MyFavoriteButton(
+                          size: MyButtonSize.extraLarge,
+                          type: MyButtonType.outline,
+                          onChanged: (value) {},
+                        ),
+                        const Gap.horizontal(16),
+                        MyFavoriteButton(
+                          size: MyButtonSize.extraLarge,
+                          icon: Icons.star_border_rounded,
+                          selectedIcon: Icons.star_rounded,
+                          onChanged: (value) {},
+                        ),
+                        const Gap.horizontal(16),
+                        MyFavoriteButton(
+                          size: MyButtonSize.extraLarge,
+                          icon: Icons.thumb_up_alt_outlined,
+                          selectedIcon: Icons.thumb_up_rounded,
+                          onChanged: (value) {},
+                        ),
+                      ],
                     ),
-                    SizedBox(height: 16),
-                    MyButton(
-                      isBlock: true,
-                      text: 'Text block button',
-                      type: MyButtonType.text,
-                    ),
-                    SizedBox(height: 16),
-                    MyButton(
-                      isBlock: true,
-                      text: 'Ghost block button',
-                      type: MyButtonType.ghost,
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-          ExampleItem(
-            ignoreCode: true,
-            desc: 'Button route jump',
-            builder: (context) {
-              return MyButton(
-                text: '点击跳转',
-                size: MyButtonSize.large,
-
-                // type: TDButtonType.text,
-                onTap: () async {
-                  var result = await Navigator.of(context)
-                      .pushNamedAndRemoveUntil('divider', (router) {
-                        return true;
-                      });
-                  print('pushNamedAndRemoveUntil result: $result');
+                  );
                 },
-              );
-            },
+              ),
+            ],
           ),
         ],
       ),
@@ -320,7 +311,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
 
   MyButton _buildCircleButton(BuildContext context) {
     return const MyButton(
-      icon: Icons.app_blocking,
+      icon: Icons.dashboard_rounded,
       size: MyButtonSize.large,
       type: MyButtonType.primary,
       shape: MyButtonShape.circle,
@@ -354,7 +345,7 @@ class _TDButtonPageState extends State<TDButtonPage> {
 
   MyButton _buildMediumButton(BuildContext context) {
     return const MyButton(
-      text: 'Button 40',
+      text: 'Button 36',
       size: MyButtonSize.medium,
       type: MyButtonType.primary,
     );
@@ -362,8 +353,16 @@ class _TDButtonPageState extends State<TDButtonPage> {
 
   MyButton _buildLargeButton(BuildContext context) {
     return const MyButton(
-      text: 'Button 48',
+      text: 'Button 40',
       size: MyButtonSize.large,
+      type: MyButtonType.primary,
+    );
+  }
+
+  MyButton _buildExtraLargeButton(BuildContext context) {
+    return const MyButton(
+      text: 'Button 48',
+      size: MyButtonSize.extraLarge,
       type: MyButtonType.primary,
     );
   }
@@ -409,14 +408,13 @@ class _TDButtonPageState extends State<TDButtonPage> {
     return const MyButton(
       text: 'Primary',
       size: MyButtonSize.large,
-
       enabled: false,
     );
   }
 
   MyButton _buildSquareIconButton(BuildContext context) {
     return const MyButton(
-      icon: Icons.app_blocking,
+      icon: Icons.dashboard_rounded,
       size: MyButtonSize.large,
       type: MyButtonType.primary,
       shape: MyButtonShape.square,
@@ -436,12 +434,16 @@ class _TDButtonPageState extends State<TDButtonPage> {
     );
   }
 
-  MyButton _buildRectangleIconButton(BuildContext context) {
-    return const MyButton(
-      text: 'Rectangle',
-      icon: Icons.app_blocking,
+  MyButton _buildRectangleIconButton(
+    BuildContext context,
+    MyButtonIconPosition position,
+  ) {
+    return MyButton(
+      text: position.name.capitalize,
+      icon: Icons.dashboard_rounded,
       size: MyButtonSize.large,
       type: MyButtonType.primary,
+      iconPosition: position,
     );
   }
 
@@ -512,6 +514,6 @@ class _TDButtonPageState extends State<TDButtonPage> {
         Expanded(child: MyButton(text: 'Confirm')),
         SizedBox(width: 100),
       ],
-    );
+    ).constrained();
   }
 }

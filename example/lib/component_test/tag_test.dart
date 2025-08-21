@@ -20,7 +20,7 @@ class TestPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: TDText('TDTag 宽度测试')),
+      appBar: AppBar(title: MyText('TDTag 宽度测试')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -39,7 +39,7 @@ class TestPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TDText(
+        MyText(
           '不带宽度测试',
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
@@ -62,7 +62,7 @@ class TestPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TDText(
+        MyText(
           '基础固定宽度测试',
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
@@ -90,7 +90,7 @@ class TestPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TDText(
+        MyText(
           '边界情况测试',
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),

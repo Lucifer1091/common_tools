@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import '../../../index.dart';
-import '../text/td_text.dart';
+import '../text/my_text.dart';
 import 'td_action_sheet.dart';
 import 'td_action_sheet_item_widget.dart';
 
@@ -70,7 +70,7 @@ class TDActionSheetList extends StatelessWidget {
       child: Row(
         mainAxisAlignment: getMainAxisAlignment(align),
         children: [
-          TDText(
+          MyText(
             description!,
             fontSize: context.bodyMedium?.fontSize,
             textColor: ThemeColors.neutral.shade500,
@@ -130,7 +130,7 @@ class TDActionSheetList extends StatelessWidget {
                     ),
                     SizedBox(width: 8),
                   ],
-                  TDText(
+                  MyText(
                     item.label,
                     fontSize: context.bodyLarge?.fontSize,
                     textColor:
@@ -164,7 +164,7 @@ class TDActionSheetList extends StatelessWidget {
             color: ThemeColors.neutral.shade300,
             height: 48,
             child: Center(
-              child: TDText(
+              child: MyText(
                 cancelText,
                 fontSize: context.bodyLarge?.fontSize,
                 textColor: ThemeColors.neutral.shade900,

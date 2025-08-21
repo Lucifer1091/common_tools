@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../text/td_text.dart';
+import '../text/my_text.dart';
 import 'td_activity_indicator.dart';
 import 'td_circle_indicator.dart';
 import 'td_point_indicator.dart';
@@ -154,7 +154,7 @@ class TDLoading extends StatelessWidget {
   }
 
   Widget textWidget(BuildContext context) {
-    Widget result = TDText(
+    Widget result = MyText(
       text,
       textColor: textColor,
       fontWeight: FontWeight.w400,

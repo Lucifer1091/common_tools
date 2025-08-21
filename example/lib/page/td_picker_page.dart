@@ -235,7 +235,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16),
-                child: TDText(title, ),
+                child: MyText(title),
               ),
               Expanded(
                 child: Padding(
@@ -243,7 +243,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
                   child: Row(
                     children: [
                       Expanded(
-                        child: TDText(
+                        child: MyText(
                           output,
                           textColor: ThemeColors.neutral.shade200,
                           maxLines: 1,
@@ -263,7 +263,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
               ),
             ],
           ),
-          const TDDivider(margin: EdgeInsets.only(left: 16)),
+          const MyDivider(margin: EdgeInsets.only(left: 16)),
         ],
       ),
     );

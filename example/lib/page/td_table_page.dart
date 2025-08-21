@@ -129,7 +129,7 @@ class TDTablePage extends StatelessWidget {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TDText(
+                MyText(
                   '修改',
                   style: TextStyle(
                     color: context.colorScheme.primary,
@@ -137,7 +137,7 @@ class TDTablePage extends StatelessWidget {
                     height: 1,
                   ),
                 ),
-                TDText(
+                MyText(
                   '通过',
                   style: TextStyle(
                     color: context.colorScheme.primary,
@@ -212,14 +212,14 @@ class TDTablePage extends StatelessWidget {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TDText(
+                MyText(
                   '修改',
                   style: TextStyle(
                     color: context.colorScheme.primary,
                     fontSize: 14,
                   ),
                 ),
-                TDText(
+                MyText(
                   '通过',
                   style: TextStyle(
                     color: context.colorScheme.primary,
@@ -300,14 +300,14 @@ class TDTablePage extends StatelessWidget {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TDText(
+                MyText(
                   '修改',
                   style: TextStyle(
                     color: context.colorScheme.primary,
                     fontSize: 14,
                   ),
                 ),
-                TDText(
+                MyText(
                   '通过',
                   style: TextStyle(
                     color: context.colorScheme.primary,

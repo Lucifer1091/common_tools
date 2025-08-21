@@ -81,10 +81,11 @@ class _TDResultPageState extends State<TDResultPage> {
   Widget _buildPageExample(BuildContext context) {
     return MyButton(
       text: '页面示例',
-      
+
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      isBlock: true,
+      isExpanded: true,
+
       onTap: () {
         Navigator.push(
           context,
@@ -102,10 +103,11 @@ class _TDResultPageState extends State<TDResultPage> {
                   const SizedBox(height: 48),
                   MyButton(
                     text: '返回',
-                    
+
                     size: MyButtonSize.large,
                     type: MyButtonType.outline,
-                    isBlock: true,
+                    isExpanded: true,
+
                     onTap: () {
                       Navigator.pop(context);
                     },

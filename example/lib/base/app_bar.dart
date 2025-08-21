@@ -24,6 +24,9 @@ class MyAppBar extends ConsumerWidget implements PreferredSizeWidget {
         color: context.colorScheme.primaryForeground,
       ),
       title: titleWidget ?? Text(title!),
+      iconTheme: IconThemeData(
+        color: context.colorScheme.primaryForeground,
+      ),
       actions: [
         Padding(
           padding: const EdgeInsets.only(right: 8),

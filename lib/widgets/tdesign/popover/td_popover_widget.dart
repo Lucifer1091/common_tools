@@ -348,7 +348,7 @@ class _TDPopoverWidgetState extends State<TDPopoverWidget> {
         child:
             widget.contentWidget != null
                 ? widget.contentWidget!
-                : TDText(
+                : MyText(
                   widget.content,
                   style: TextStyle(
                     color: _color,
@@ -396,7 +396,7 @@ class _TDPopoverWidgetState extends State<TDPopoverWidget> {
             child:
                 widget.contentWidget != null
                     ? widget.contentWidget!
-                    : TDText(
+                    : MyText(
                       widget.content,
                       style: TextStyle(
                         color: _color,

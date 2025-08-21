@@ -70,7 +70,7 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
                 axis: Axis.horizontal,
                 text: '加载失败',
                 refreshWidget: GestureDetector(
-                  child: TDText(
+                  child: MyText(
                     '刷新',
                     fontSize: context.bodySmall.fontSize,
                     textColor: context.colorScheme.primary,
@@ -94,7 +94,7 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
                 size: TDLoadingSize.small,
                 text: '加载失败',
                 refreshWidget: GestureDetector(
-                  child: TDText(
+                  child: MyText(
                     '刷新',
                     fontSize: context.bodySmall.fontSize,
                     textColor: context.colorScheme.primary,
@@ -150,7 +150,7 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
             var list = [
               MyButton(
                 text: '展示Loading',
-                
+
                 onTap: () {
                   TDLoadingController.show(context);
                 },
@@ -158,7 +158,7 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
               const SizedBox(width: 24),
               const MyButton(
                 text: '隐藏Loading',
-                
+
                 onTap: TDLoadingController.dismiss,
               ),
             ];
@@ -253,7 +253,7 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
         size: TDLoadingSize.small,
         text: '加载失败',
         refreshWidget: GestureDetector(
-          child: TDText(
+          child: MyText(
             '刷新',
             fontSize: context.bodySmall.fontSize,
             textColor: context.colorScheme.primary,

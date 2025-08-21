@@ -22,12 +22,12 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
   @override
   Widget build(BuildContext context) {
     _selectedIcon = Icon(
-      Icons.app_blocking,
+      Icons.dashboard_rounded,
       size: 20,
       color: context.colorScheme.primary,
     );
     _unSelectedIcon = Icon(
-      Icons.app_blocking,
+      Icons.dashboard_rounded,
       size: 20,
       color: context.colorScheme.primary,
     );
@@ -514,11 +514,11 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
 
   Widget _iconTextTypeTabBarOverflow(BuildContext context) {
     final selectedIcon = Icon(
-      Icons.app_blocking,
+      Icons.dashboard_rounded,
       color: context.colorScheme.primary,
     );
     final unSelectedIcon = Icon(
-      Icons.app_blocking,
+      Icons.dashboard_rounded,
       color: context.colorScheme.primary,
     );
     return TDBottomTabBar(
@@ -1058,8 +1058,8 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
           Expanded(
             child: PageView(
               children: const [
-                Center(child: TDText('页面1,手指左滑查看页面2')),
-                Center(child: TDText('页面2,手指右滑查看页面1')),
+                Center(child: MyText('页面1,手指左滑查看页面2')),
+                Center(child: MyText('页面2,手指右滑查看页面1')),
               ],
               onPageChanged: (index) {
                 setState(() {

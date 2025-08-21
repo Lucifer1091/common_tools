@@ -28,15 +28,12 @@ class MyButton extends StatefulWidget {
     this.text,
     this.child,
     this.enabled = true,
+    this.isExpanded = false,
     this.size = MyButtonSize.medium,
     this.type = MyButtonType.primary,
     this.shape = MyButtonShape.rectangle,
-    this.isBlock = false,
     this.style,
-    this.activeStyle,
-    this.disableStyle,
     this.textStyle,
-    this.disableTextStyle,
     this.gradient,
     this.shadows,
     this.focus = const MyFocusableParams(),
@@ -44,7 +41,7 @@ class MyButton extends StatefulWidget {
     this.onLongPress,
     this.icon,
     this.iconWidget,
-    this.iconTextGap,
+    this.iconTextSpacing,
     this.iconPosition = MyButtonIconPosition.left,
     this.width,
     this.height,
@@ -70,13 +67,7 @@ class MyButton extends StatefulWidget {
 
   final MyButtonStyle? style;
 
-  final MyButtonStyle? activeStyle;
-
-  final MyButtonStyle? disableStyle;
-
   final TextStyle? textStyle;
-
-  final TextStyle? disableTextStyle;
 
   final List<BoxShadow>? shadows;
 
@@ -90,15 +81,15 @@ class MyButton extends StatefulWidget {
 
   final Widget? iconWidget;
 
-  final Gap? iconTextGap;
+  final double? iconTextSpacing;
 
   final MyButtonIconPosition? iconPosition;
 
-  final EdgeInsetsGeometry? padding;
+  final EdgeInsets? padding;
 
-  final EdgeInsetsGeometry? margin;
+  final EdgeInsets? margin;
 
-  final bool isBlock;
+  final bool isExpanded;
 
   final MyFocusableParams focus;
 
@@ -144,6 +135,7 @@ class _MyButtonState extends State<MyButton> {
     _state.dispose();
     focusNode.removeListener(onFocusChange);
     _focusNode?.dispose();
+    _focusNode = null;
     super.dispose();
   }
 
@@ -159,33 +151,21 @@ class _MyButtonState extends State<MyButton> {
     return Future<void>.value();
   }
 
-  MyButtonStyle? _innerDefaultStyle;
-  MyButtonStyle? _innerActiveStyle;
-  MyButtonStyle? _innerDisableStyle;
   double? _width;
   double? _height;
-  EdgeInsetsGeometry? _margin;
+  EdgeInsets? _margin;
   Alignment? _alignment;
-  TextStyle? _textStyle;
   double? _iconSize;
 
   void _updateParams() {
-    _innerDefaultStyle = widget.style;
-    _innerActiveStyle = widget.activeStyle;
-    _innerDisableStyle = widget.disableStyle;
-
     _width = _getWidth();
     _height = _getHeight();
     _margin = _getMargin();
 
     _alignment =
-        widget.shape == MyButtonShape.filled || widget.isBlock
+        widget.shape == MyButtonShape.filled || widget.isExpanded
             ? Alignment.center
             : null;
-
-    if (widget.text != null) {
-      _textStyle = !widget.enabled ? widget.disableTextStyle : widget.textStyle;
-    }
 
     if (widget.icon != null) _iconSize = _getIconSize();
   }
@@ -196,8 +176,6 @@ class _MyButtonState extends State<MyButton> {
     if (widget.focus.enableFeedback) unawaited(feedbackForTap(context));
   }
 
-  bool get enabled => widget.enabled;
-
   @override
   Widget build(BuildContext context) {
     return CallbackShortcuts(
@@ -205,23 +183,16 @@ class _MyButtonState extends State<MyButton> {
       child: ValueListenableBuilder(
         valueListenable: _state,
         builder: (context, states, _) {
-          final pressed = states.contains(WidgetState.pressed);
-          final hovered = states.contains(WidgetState.hovered);
           final enabled = !states.contains(WidgetState.disabled);
 
           final MyButtonStyle style =
-              hovered || pressed
-                  ? _activeStyle
-                  : enabled
-                  ? _defaultStyle
-                  : _disableStyle;
+              widget.style ?? _generateInnerStyle(states);
 
           final Widget display = Container(
             width: _width,
             height: _height,
             alignment: _alignment,
             padding: _getPadding(style),
-            margin: _margin,
             decoration: BoxDecoration(
               color: style.backgroundColor,
               border: _getBorder(context, style),
@@ -239,41 +210,35 @@ class _MyButtonState extends State<MyButton> {
             button: true,
             focusable: enabled,
             enabled: enabled,
-            child: MyFocusable(
-              params: widget.focus.copyWith(focusNode: focusNode),
-              builder:
-                  (_, focused, child) => MyFocusOutline(
-                    focused: focused,
-                    radius: _getRadius(style),
-                    child: child,
-                  ),
-              child: MyGestureDetector(
-                behavior: HitTestBehavior.opaque,
-                cursor: _getCursor(states),
-                onTap: widget.onTap != null ? _onTap : null,
-                onLongPress: widget.onLongPress,
-                onHover: (bool value) {
-                  _state.update(WidgetState.hovered, value);
-                },
-                onTapDown: (TapDownDetails details) {
-                  if (widget.focus.enableFeedback) {
-                    _state.update(WidgetState.hovered, true);
-                  }
-                  _state.update(WidgetState.pressed, true);
-                },
-                onTapUp: (TapUpDetails details) {
-                  if (widget.focus.enableFeedback) {
-                    _state.update(WidgetState.hovered, false);
-                  }
-                  _state.update(WidgetState.pressed, false);
-                },
-                onTapCancel: () {
-                  if (widget.focus.enableFeedback) {
-                    _state.update(WidgetState.hovered, false);
-                  }
-                  _state.update(WidgetState.pressed, false);
-                },
-                child: display,
+            child: Padding(
+              padding: _margin ?? EdgeInsets.zero,
+              child: MyFocusable(
+                params: widget.focus.copyWith(focusNode: focusNode),
+                builder:
+                    (_, focused, child) => MyFocusOutline(
+                      focused: focused,
+                      radius: _getRadius(style),
+                      child: child,
+                    ),
+                child: MyGestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  cursor: _getCursor(states),
+                  onTap: widget.onTap != null ? _onTap : null,
+                  onLongPress: widget.onLongPress,
+                  onHover: (bool value) {
+                    _state.update(WidgetState.hovered, value);
+                  },
+                  onTapDown: (TapDownDetails details) {
+                    _state.update(WidgetState.pressed, true);
+                  },
+                  onTapUp: (TapUpDetails details) {
+                    _state.update(WidgetState.pressed, false);
+                  },
+                  onTapCancel: () {
+                    _state.update(WidgetState.pressed, false);
+                  },
+                  child: display,
+                ),
               ),
             ),
           );
@@ -304,9 +269,9 @@ class _MyButtonState extends State<MyButton> {
     }
 
     if (widget.text != null) {
-      final text = TDText(
+      final text = MyText(
         widget.text,
-        style: _textStyle ?? _getTextStyle(style),
+        style: widget.textStyle ?? _getTextStyle(style),
       );
       children.add(text);
     }
@@ -316,7 +281,7 @@ class _MyButtonState extends State<MyButton> {
     }
 
     if (children.length == 2) {
-      children.insert(1, widget.iconTextGap ?? const Gap(8));
+      children.insert(1, Gap(widget.iconTextSpacing ?? 8));
     }
 
     return Row(
@@ -370,16 +335,16 @@ class _MyButtonState extends State<MyButton> {
       MyButtonSize.small => context.bodyMedium,
       MyButtonSize.extraSmall => context.bodySmall,
     }.copyWith(
-      color: style.textColor ?? context.colorScheme.primaryForeground,
+      color: style.textColor ?? context.colorScheme.foreground,
       decoration: style.decoration,
-      decorationColor: style.textColor,
+      decorationColor: style.textColor ?? context.colorScheme.foreground,
     );
   }
 
   double? _getWidth() {
     if (widget.width != null) return widget.width;
 
-    if (!widget.isBlock &&
+    if (!widget.isExpanded &&
         (widget.shape == MyButtonShape.square ||
             widget.shape == MyButtonShape.circle)) {
       return switch (widget.size) {
@@ -415,13 +380,15 @@ class _MyButtonState extends State<MyButton> {
     };
   }
 
-  EdgeInsetsGeometry? _getMargin() {
+  EdgeInsets? _getMargin() {
     if (widget.margin != null) return widget.margin;
 
-    return widget.isBlock ? const EdgeInsets.only(left: 16, right: 16) : null;
+    return widget.isExpanded
+        ? const EdgeInsets.only(left: 16, right: 16)
+        : null;
   }
 
-  EdgeInsetsGeometry? _getPadding(MyButtonStyle style) {
+  EdgeInsets? _getPadding(MyButtonStyle style) {
     if (widget.padding != null) return widget.padding;
 
     final equalSide =
@@ -476,43 +443,22 @@ class _MyButtonState extends State<MyButton> {
         };
   }
 
-  MyButtonStyle _generateInnerStyle() {
+  MyButtonStyle _generateInnerStyle(Set<WidgetState> states) {
     switch (widget.type) {
       case MyButtonType.primary:
-        return MyButtonStyle.primary(context, _state.value);
+        return MyButtonStyle.primary(context, states);
       case MyButtonType.secondary:
-        return MyButtonStyle.secondary(context, _state.value);
+        return MyButtonStyle.secondary(context, states);
       case MyButtonType.destructive:
-        return MyButtonStyle.destructive(context, _state.value);
+        return MyButtonStyle.destructive(context, states);
       case MyButtonType.outline:
-        return MyButtonStyle.outline(context, _state.value);
+        return MyButtonStyle.outline(context, states);
       case MyButtonType.ghost:
-        return MyButtonStyle.ghost(context, _state.value);
+        return MyButtonStyle.ghost(context, states);
       case MyButtonType.text:
-        return MyButtonStyle.text(context, _state.value);
+        return MyButtonStyle.text(context, states);
       case MyButtonType.link:
-        return MyButtonStyle.link(context, _state.value);
+        return MyButtonStyle.link(context, states);
     }
-  }
-
-  MyButtonStyle get _defaultStyle {
-    if (_innerDefaultStyle != null) return _innerDefaultStyle!;
-
-    _innerDefaultStyle = widget.style ?? _generateInnerStyle();
-    return _innerDefaultStyle!;
-  }
-
-  MyButtonStyle get _activeStyle {
-    if (_innerActiveStyle != null) return _innerActiveStyle!;
-
-    _innerActiveStyle = widget.style ?? _generateInnerStyle();
-    return _innerActiveStyle!;
-  }
-
-  MyButtonStyle get _disableStyle {
-    if (_innerDisableStyle != null) return _innerDisableStyle!;
-
-    _innerDisableStyle = widget.style ?? _generateInnerStyle();
-    return _innerDisableStyle!;
   }
 }

@@ -58,7 +58,8 @@ class _TDToastPageState extends State<TDToastPage> {
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      isBlock: true,
+      isExpanded: true,
+
       text: '纯文字',
     );
   }
@@ -73,13 +74,14 @@ class _TDToastPageState extends State<TDToastPage> {
             width: 50,
             height: 20,
             color: ThemeColors.blue.shade700,
-            child: const TDText('自定义纯文字'),
+            child: const MyText('自定义纯文字'),
           ),
         );
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      isBlock: true,
+      isExpanded: true,
+
       text: '纯文字',
     );
   }
@@ -91,7 +93,8 @@ class _TDToastPageState extends State<TDToastPage> {
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      isBlock: true,
+      isExpanded: true,
+
       text: '多行文字',
     );
   }
@@ -107,7 +110,8 @@ class _TDToastPageState extends State<TDToastPage> {
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      isBlock: true,
+      isExpanded: true,
+
       text: '带横向图标',
     );
   }
@@ -124,7 +128,8 @@ class _TDToastPageState extends State<TDToastPage> {
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      isBlock: true,
+      isExpanded: true,
+
       text: '带竖向图标',
     );
   }
@@ -136,7 +141,8 @@ class _TDToastPageState extends State<TDToastPage> {
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      isBlock: true,
+      isExpanded: true,
+
       text: '加载状态',
     );
   }
@@ -150,13 +156,14 @@ class _TDToastPageState extends State<TDToastPage> {
             width: 50,
             height: 20,
             color: ThemeColors.blue.shade50,
-            child: const TDText('自定义加载'),
+            child: const MyText('自定义加载'),
           ),
         );
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      isBlock: true,
+      isExpanded: true,
+
       text: '加载状态',
     );
   }
@@ -168,7 +175,8 @@ class _TDToastPageState extends State<TDToastPage> {
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      isBlock: true,
+      isExpanded: true,
+
       text: '加载状态（无文案）',
     );
   }
@@ -178,7 +186,8 @@ class _TDToastPageState extends State<TDToastPage> {
       onTap: TDToast.dismissLoading,
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      isBlock: true,
+      isExpanded: true,
+
       text: '停止加载',
     );
   }
@@ -190,7 +199,8 @@ class _TDToastPageState extends State<TDToastPage> {
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      isBlock: true,
+      isExpanded: true,
+
       text: '成功提示',
     );
   }
@@ -206,7 +216,8 @@ class _TDToastPageState extends State<TDToastPage> {
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      isBlock: true,
+      isExpanded: true,
+
       text: '成功提示(竖向)',
     );
   }
@@ -222,7 +233,8 @@ class _TDToastPageState extends State<TDToastPage> {
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      isBlock: true,
+      isExpanded: true,
+
       text: '警告提示',
     );
   }
@@ -238,7 +250,8 @@ class _TDToastPageState extends State<TDToastPage> {
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      isBlock: true,
+      isExpanded: true,
+
       text: '警告提示(竖向)',
     );
   }
@@ -254,7 +267,8 @@ class _TDToastPageState extends State<TDToastPage> {
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      isBlock: true,
+      isExpanded: true,
+
       text: '失败提示',
     );
   }
@@ -270,8 +284,9 @@ class _TDToastPageState extends State<TDToastPage> {
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      
-      isBlock: true,
+
+      isExpanded: true,
+
       text: '失败提示(竖向)',
     );
   }
@@ -288,8 +303,9 @@ class _TDToastPageState extends State<TDToastPage> {
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      
-      isBlock: true,
+
+      isExpanded: true,
+
       text: '禁止滚动+点击',
     );
   }
@@ -306,8 +322,9 @@ class _TDToastPageState extends State<TDToastPage> {
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
-      
-      isBlock: true,
+
+      isExpanded: true,
+
       text: '多行文字',
     );
   }

@@ -328,7 +328,7 @@ class TDRadioGroup extends TDCheckboxGroup {
                                      ),
                                      if (showDivider)
                                        divider ??
-                                           const TDDivider(
+                                           const MyDivider(
                                              margin: EdgeInsets.only(left: 16),
                                            ),
                                    ],

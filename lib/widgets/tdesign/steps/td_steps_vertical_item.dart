@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../index.dart';
-import '../text/td_text.dart';
+import '../text/my_text.dart';
 import 'td_steps.dart';
 
 class TDStepsVerticalItem extends StatelessWidget {
@@ -187,7 +187,7 @@ class TDStepsVerticalItem extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
-                            child: TDText(
+                            child: MyText(
                               data.title!,
                               style: TextStyle(
                                 fontWeight:
@@ -217,7 +217,7 @@ class TDStepsVerticalItem extends StatelessWidget {
                       if (data.customContent != null)
                         data.customContent!
                       else if (data.content != null && data.content!.isNotEmpty)
-                        TDText(
+                        MyText(
                           data.content,
                           style: TextStyle(
                             fontWeight: FontWeight.w400,

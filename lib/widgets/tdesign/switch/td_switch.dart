@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../index.dart';
 import '../loading/td_circle_indicator.dart';
-import '../text/td_text.dart';
+import '../text/my_text.dart';
 import 'td_cupertino_switch.dart';
 
 typedef OnSwitchChanged = bool Function(bool value);
@@ -160,7 +160,7 @@ class TDSwitchState extends State<TDSwitch> {
             Container(
               alignment: Alignment.center,
               width: 16,
-              child: TDText(
+              child: MyText(
                 isOn
                     ? (widget.openText ?? 'Open')
                     : (widget.closeText ?? 'Close'),

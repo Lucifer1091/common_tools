@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../index.dart';
 import '../../../extensions/iterable/index.dart';
 import '../../custom/index.dart';
-import '../text/td_text.dart';
+import '../text/my_text.dart';
 
 enum TDAvatarSize { large, medium, small }
 
@@ -158,7 +158,7 @@ class TDAvatar extends StatelessWidget {
               borderRadius: BorderRadius.circular(_getAvatarRadius(context)),
             ),
             child: Center(
-              child: TDText(
+              child: MyText(
                 text,
                 textAlign: TextAlign.center,
                 style: _getTextStyle(context),
@@ -371,7 +371,7 @@ class TDAvatar extends StatelessWidget {
                 child:
                     avatarDisplayWidget ??
                     Center(
-                      child: TDText(
+                      child: MyText(
                         displayText,
                         textAlign: TextAlign.center,
                         style: _getTextStyle(context),
@@ -437,7 +437,7 @@ class TDAvatar extends StatelessWidget {
                 child:
                     avatarDisplayWidget ??
                     Center(
-                      child: TDText(
+                      child: MyText(
                         displayText,
                         textAlign: TextAlign.center,
                         style: _getTextStyle(context),

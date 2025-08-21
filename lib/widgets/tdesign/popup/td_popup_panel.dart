@@ -4,7 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../text/td_text.dart';
+import '../text/my_text.dart';
 
 typedef PopupClick = VoidCallback;
 
@@ -289,7 +289,7 @@ class _TDPopupBottomDisplayPanelState
     Widget header = Container(
       alignment: widget.titleLeft ? Alignment.centerLeft : Alignment.center,
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: TDText(
+      child: MyText(
         widget.title ?? '',
         textColor: widget.titleColor ?? ThemeColors.neutral.shade900,
         style: context.titleLarge?.copyWith(fontSize: widget.titleFontSize),
@@ -417,7 +417,7 @@ class _TDPopupBottomConfirmPanelState
           ),
           Expanded(
             child: Center(
-              child: TDText(
+              child: MyText(
                 widget.title ?? '',
                 textColor: widget.titleColor ?? ThemeColors.neutral.shade900,
                 style: context.titleLarge?.copyWith(
@@ -449,7 +449,7 @@ class _TDPopupBottomConfirmPanelState
     onTap: onTap,
     child: Padding(
       padding: EdgeInsets.only(left: left ? 16 : 0, right: left ? 0 : 16),
-      child: TDText(
+      child: MyText(
         text,
         textColor: color,
         style: (left ? context.bodyLarge : context.titleMedium)?.copyWith(

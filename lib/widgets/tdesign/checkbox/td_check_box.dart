@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../index.dart';
 import '../../layout/no_widget.dart';
 import '../divider/td_divider.dart';
-import '../text/td_text.dart';
+import '../text/my_text.dart';
 import 'td_check_box_group.dart';
 
 enum TDCheckboxStyle { circle, square, check }
@@ -250,7 +250,7 @@ class TDCheckboxState extends State<TDCheckbox> {
                             left: widget.insetSpacing ?? 16,
                             right: 16,
                           ),
-                          child: TDText(
+                          child: MyText(
                             widget.subTitle ?? '',
                             maxLines: widget.subTitleMaxLine,
                             overflow: TextOverflow.ellipsis,
@@ -270,7 +270,7 @@ class TDCheckboxState extends State<TDCheckbox> {
                 ),
                 Visibility(
                   visible: !widget.cardMode && widget.showDivider,
-                  child: const TDDivider(margin: EdgeInsets.only(left: 16)),
+                  child: const MyDivider(margin: EdgeInsets.only(left: 16)),
                 ),
               ],
             );
@@ -312,7 +312,7 @@ class TDCheckboxState extends State<TDCheckbox> {
                             left: widget.cardMode ? 16 : 48,
                             right: widget.insetSpacing ?? 16,
                           ),
-                          child: TDText(
+                          child: MyText(
                             widget.subTitle ?? '',
                             maxLines: widget.subTitleMaxLine,
                             overflow: TextOverflow.ellipsis,
@@ -332,7 +332,7 @@ class TDCheckboxState extends State<TDCheckbox> {
                 ),
                 Visibility(
                   visible: !widget.cardMode && widget.showDivider,
-                  child: const TDDivider(margin: EdgeInsets.only(left: 48)),
+                  child: const MyDivider(margin: EdgeInsets.only(left: 48)),
                 ),
               ],
             );
@@ -431,7 +431,7 @@ class TDCheckboxState extends State<TDCheckbox> {
 
     if (content == null) {
       if (title != null || customContent != null && title != null) {
-        content = TDText(
+        content = MyText(
           title,
           maxLines: widget.titleMaxLine ?? groupState?.widget.titleMaxLine,
           overflow: TextOverflow.ellipsis,

@@ -52,7 +52,7 @@ class TDEmpty extends StatelessWidget {
                 color: ThemeColors.neutral.shade700,
               ),
           Padding(padding: EdgeInsets.only(top: image == null ? 22 : 16)),
-          TDText(
+          MyText(
             emptyText ?? '',
             fontWeight: FontWeight.w400,
             style:

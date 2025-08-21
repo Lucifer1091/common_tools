@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 
 import '../../../index.dart';
 import '../../../extensions/iterable/index.dart';
-import '../text/td_text.dart';
+import '../text/my_text.dart';
 import 'td_action_sheet.dart';
 import 'td_action_sheet_item_widget.dart';
 
@@ -69,7 +69,7 @@ class TDActionSheetGroup extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: getMainAxisAlignment(align),
                     children: [
-                      TDText(
+                      MyText(
                         k,
                         fontSize: context.bodyMedium?.fontSize,
                         textColor: ThemeColors.neutral.shade300,

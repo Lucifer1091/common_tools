@@ -12,18 +12,22 @@ class MyUILayer extends StatelessWidget {
     this.builder,
     this.darkTheme,
     this.themeMode = ThemeMode.system,
+    this.typography,
     this.enableThemeAnimation = true,
     this.enableScrollInterception = false,
+    this.enableFocusOutline = true,
     this.duration,
   });
 
   final Widget? child;
   final MyColorScheme theme;
   final MyColorScheme? darkTheme;
+  final MyTypography? typography;
   final ThemeMode themeMode;
   final Widget Function(BuildContext context, Widget? child)? builder;
   final bool enableScrollInterception;
   final bool enableThemeAnimation;
+  final bool enableFocusOutline;
   final Duration? duration;
 
   @override
@@ -39,7 +43,11 @@ class MyUILayer extends StatelessWidget {
     return MyAnimatedTheme(
       enableThemeAnimation: enableThemeAnimation,
       duration: duration ?? kDefaultDuration,
-      data: MyThemeData(colorScheme: myTheme),
+      data: MyThemeData(
+        colorScheme: myTheme,
+        enableFocusOutline: enableFocusOutline,
+        typography: typography ?? MyTypography.geist(),
+      ),
       child: Builder(
         builder: (context) {
           final theme = MyTheme.of(context);

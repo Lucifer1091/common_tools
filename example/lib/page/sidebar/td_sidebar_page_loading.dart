@@ -165,7 +165,7 @@ class TDSideBarLoadingPageState extends State<TDSideBarLoadingPage> {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 15, right: 9),
-            child: TDText('标题$index', style: const TextStyle(fontSize: 14)),
+            child: MyText('标题$index', style: const TextStyle(fontSize: 14)),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 20),
@@ -180,11 +180,11 @@ class TDSideBarLoadingPageState extends State<TDSideBarLoadingPage> {
     return Column(
       children: [
         displayImageItem(),
-        const TDDivider(),
+        const MyDivider(),
         displayImageItem(),
-        const TDDivider(),
+        const MyDivider(),
         displayImageItem(),
-        const TDDivider(),
+        const MyDivider(),
       ],
     );
   }
@@ -202,7 +202,7 @@ class TDSideBarLoadingPageState extends State<TDSideBarLoadingPage> {
             height: 48,
           ),
           SizedBox(width: 16),
-          TDText('标题', style: TextStyle(fontSize: 16)),
+          MyText('标题', style: TextStyle(fontSize: 16)),
         ],
       ),
     );

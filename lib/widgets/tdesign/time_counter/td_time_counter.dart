@@ -5,7 +5,7 @@ import 'package:flutter/scheduler.dart';
 
 import '../../../extensions/generic/dynamic_extension.dart';
 import '../../../extensions/iterable/index.dart';
-import '../text/td_text.dart';
+import '../text/my_text.dart';
 import 'td_time_counter_controller.dart';
 import 'td_time_counter_style.dart';
 
@@ -240,7 +240,7 @@ class _TDTimeCounterState extends State<TDTimeCounter>
         margin: _style.timeMargin,
         decoration: _style.timeBox,
         child: Center(
-          child: TDText(
+          child: MyText(
             time,
             style: TextStyle(
               fontSize: _style.timeFontSize,
@@ -255,7 +255,7 @@ class _TDTimeCounterState extends State<TDTimeCounter>
     if (split.isNotEmpty) {
       children.addAll([
         SizedBox(width: _style.space),
-        TDText(
+        MyText(
           split,
           style: TextStyle(
             fontSize: _style.splitFontSize,

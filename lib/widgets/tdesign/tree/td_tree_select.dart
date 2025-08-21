@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../index.dart';
 import '../sidebar/td_sidebar.dart';
 import '../sidebar/td_sidebar_item.dart';
-import '../text/td_text.dart';
+import '../text/my_text.dart';
 
 typedef TDTreeSelectChangeEvent = void Function(List<dynamic>, int level);
 
@@ -288,7 +288,7 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
                       left: 16,
                       bottom: 16,
                     ),
-                    child: TDText(
+                    child: MyText(
                       displayOptions[index].label,
                       textColor:
                           (!lastColumn && selected)

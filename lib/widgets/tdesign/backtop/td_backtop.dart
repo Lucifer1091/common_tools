@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../text/td_text.dart';
+import '../text/my_text.dart';
 
 enum TDBackTopTheme { light, dark }
 
@@ -133,7 +133,7 @@ class TDBackTop extends StatelessWidget {
             Icon(Icons.arrow_drop_up_rounded, size: 20, color: color),
             Visibility(
               visible: showText,
-              child: TDText(
+              child: MyText(
                 'Top',
                 maxLines: 1,
                 overflow: TextOverflow.visible,
@@ -191,7 +191,7 @@ class TDBackTop extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    TDText(
+                    MyText(
                       'Back',
                       style: TextStyle(
                         height: 1.2,
@@ -200,7 +200,7 @@ class TDBackTop extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    TDText(
+                    MyText(
                       'Top',
                       style: TextStyle(
                         height: 1.2,

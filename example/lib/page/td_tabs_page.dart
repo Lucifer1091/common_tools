@@ -47,9 +47,9 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
 
   List<Widget> _getTabViews() {
     tabViews = const [
-      Center(child: TDText('内容区')),
-      Center(child: TDText('内容区')),
-      Center(child: TDText('内容区')),
+      Center(child: MyText('内容区')),
+      Center(child: MyText('内容区')),
+      Center(child: MyText('内容区')),
     ];
     return tabViews;
   }
@@ -195,9 +195,9 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
 
   Widget _buildItemWithIcon(BuildContext context) {
     var tabs = [
-      const TDTab(text: '选项', icon: Icon(Icons.app_blocking, size: 18)),
-      const TDTab(text: '选项', icon: Icon(Icons.app_blocking, size: 18)),
-      const TDTab(text: '选项', icon: Icon(Icons.app_blocking, size: 18)),
+      const TDTab(text: '选项', icon: Icon(Icons.dashboard_rounded, size: 18)),
+      const TDTab(text: '选项', icon: Icon(Icons.dashboard_rounded, size: 18)),
+      const TDTab(text: '选项', icon: Icon(Icons.dashboard_rounded, size: 18)),
     ];
     return TDTabBar(
       tabs: tabs,
@@ -224,7 +224,7 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
       const TDTab(
         text: '选项',
         height: 48,
-        icon: Icon(Icons.app_blocking, size: 18),
+        icon: Icon(Icons.dashboard_rounded, size: 18),
       ),
     ];
     return TDTabBar(

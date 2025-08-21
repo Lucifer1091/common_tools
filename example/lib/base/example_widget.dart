@@ -26,40 +26,28 @@ class ExamplePage extends StatefulWidget {
          'children or singleChild must have at least one',
        );
 
-  /// 标题
   final String title;
 
-  /// 如果封装的children无法满足需求，可以自定义子控件
   final bool showSingleChild;
 
-  /// 自定义的自控件，只有showSingleChild为true才会展示。CodeWrapper的builder构建真正的试图
   final WidgetBuilder? singleChild;
 
-  /// 示例组件模块列表
   final List<ExampleModule> children;
 
-  /// 描述，showSingleChild为false会展示
   final String desc;
 
-  /// 填充
   final EdgeInsetsGeometry? padding;
 
-  /// 背景颜色
   final Color? backgroundColor;
 
-  /// 示例代码路径
   final String exampleCodeGroup;
 
-  /// 测试组件列表
   final List<ExampleItem> test;
 
-  /// 滚动控制组件
   final ScrollController? scrollController;
 
-  /// 悬浮按钮
   final Widget? floatingActionButton;
 
-  /// 悬浮按钮
   final GlobalKey? navBarKey;
 
   @override
@@ -114,18 +102,23 @@ class _ExamplePageState extends State<ExamplePage> {
                           if (index == widget.children.length + 2) {
                             return Container();
                           }
-                          ExampleModule data;
+                          ExampleModule? data;
                           if (index <= widget.children.length) {
                             data = widget.children[index - 1];
                           } else {
-                            data = ExampleModule(
-                              title: 'Unit Testing',
-                              children: [
-                                _buildTestExampleItem(),
-                                ...widget.test,
-                              ],
-                            );
+                            if (widget.test.isNotEmpty) {
+                              data = ExampleModule(
+                                title: 'Unit Testing',
+                                children: [
+                                  _buildTestExampleItem(),
+                                  ...widget.test,
+                                ],
+                              );
+                            }
                           }
+
+                          if (data == null) return const SizedBox.shrink();
+
                           return _buildModule(index, data, context);
                         },
                       ),
@@ -167,7 +160,7 @@ class _ExamplePageState extends State<ExamplePage> {
         '''Component styles not included in the sample draft but necessary for verification should be added to the 'test' parameter. The following scenarios must be tested:
 1. The parameter is a number. Test scenarios with negative numbers, 0, and larger values.
 2. The parameter is an enumeration. Test all enumeration combinations (optional combinations are optional).''',
-    builder: (_) => const TDDivider(),
+    builder: (_) => const MyDivider(),
   );
 
   Widget _buildHeader(BuildContext context) {
@@ -180,10 +173,10 @@ class _ExamplePageState extends State<ExamplePage> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TDText(widget.title),
+          MyText(widget.title),
           Container(
             margin: const EdgeInsets.only(top: 4),
-            child: TDText(widget.desc),
+            child: MyText(widget.desc),
           ),
           // Expanded(child: ),
         ],
@@ -198,7 +191,7 @@ class _ExamplePageState extends State<ExamplePage> {
       children: [
         Container(
           margin: const EdgeInsets.only(left: 16, right: 16, top: 32),
-          child: TDText(
+          child: MyText(
             '${index < 10 ? "0$index" : index} ${data.title}',
             fontWeight: FontWeight.bold,
           ),
@@ -297,11 +290,16 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
         child = Center(child: widget.data.builder(context));
       }
     } else {
-      child = Placeholder();
+      child = widget.data.builder(context);
+      if (widget.data.center) {
+        child = Center(child: widget.data.builder(context));
+      }
     }
+
     if (widget.data.padding != null) {
       child = Padding(padding: widget.data.padding!, child: child);
     }
+    
     child = Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: widget.data.center
@@ -318,7 +316,7 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
                   top: widget.index == 0 ? 8 : 24,
                   bottom: 16,
                 ),
-                child: TDText(widget.data.desc),
+                child: MyText(widget.data.desc),
               ),
         child,
       ],

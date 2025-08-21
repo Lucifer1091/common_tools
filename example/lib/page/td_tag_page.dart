@@ -99,21 +99,21 @@ class TDTagPage extends StatelessWidget {
                       // 非浅色填充
                       Row(
                         children: [
-                          const SizedBox(width: 80, child: TDText('dark')),
+                          const SizedBox(width: 80, child: MyText('dark')),
                           _buildDarkSelectTags(context),
                         ],
                       ),
                       // 浅色填充
                       Row(
                         children: [
-                          const SizedBox(width: 80, child: TDText('light')),
+                          const SizedBox(width: 80, child: MyText('light')),
                           _buildLightSelectTags(context),
                         ],
                       ),
                       // 非浅色描边
                       Row(
                         children: [
-                          const SizedBox(width: 80, child: TDText('outline')),
+                          const SizedBox(width: 80, child: MyText('outline')),
                           _buildOutlineSelectTags(context),
                         ],
                       ),
@@ -122,7 +122,7 @@ class TDTagPage extends StatelessWidget {
                         children: [
                           const SizedBox(
                             width: 80,
-                            child: TDText('light-outline'),
+                            child: MyText('light-outline'),
                           ),
                           _buildLightOutlineSelectTags(context),
                         ],

@@ -154,7 +154,7 @@ class TDFab extends StatelessWidget {
               Visibility(visible: showText, child: const SizedBox(width: 4)),
               Visibility(
                 visible: showText,
-                child: TDText(
+                child: MyText(
                   text ?? '',
                   style: TextStyle(
                     height: 1.5,

@@ -170,7 +170,7 @@ class TDActionSheetPage extends StatelessWidget {
 Widget _buildBaseListActionSheet(BuildContext context) {
   return MyButton(
     text: '常规列表',
-    isBlock: true,
+    isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
     onTap: () {
@@ -186,7 +186,7 @@ Widget _buildBaseListActionSheet(BuildContext context) {
 Widget _buildDescListActionSheet(BuildContext context) {
   return MyButton(
     text: '带描述列表',
-    isBlock: true,
+    isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
     onTap: () {
@@ -203,7 +203,7 @@ Widget _buildDescListActionSheet(BuildContext context) {
 Widget _buildIconListActionSheet(BuildContext context) {
   return MyButton(
     text: '带图标列表',
-    isBlock: true,
+    isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
     onTap: () {
@@ -214,7 +214,7 @@ Widget _buildIconListActionSheet(BuildContext context) {
             .map(
               (e) => ActionSheetItem(
                 label: '选项$e',
-                icon: const Icon(Icons.app_blocking),
+                icon: const Icon(Icons.dashboard_rounded),
               ),
             )
             .toList(),
@@ -226,7 +226,7 @@ Widget _buildIconListActionSheet(BuildContext context) {
 Widget _buildBadgeListActionSheet(BuildContext context) {
   return MyButton(
     text: '带徽标列表',
-    isBlock: true,
+    isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
     onTap: () {
@@ -259,7 +259,7 @@ Widget _buildBadgeListActionSheet(BuildContext context) {
 Widget _buildBaseGridActionSheet(BuildContext context) {
   return MyButton(
     text: '常规宫格',
-    isBlock: true,
+    isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
     onTap: () {
@@ -277,7 +277,7 @@ Widget _buildBaseGridActionSheet(BuildContext context) {
 Widget _buildDescGridActionSheet(BuildContext context) {
   return MyButton(
     text: '带描述宫格',
-    isBlock: true,
+    isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
     onTap: () {
@@ -296,7 +296,7 @@ Widget _buildDescGridActionSheet(BuildContext context) {
 Widget _buildPaginationGridActionSheet(BuildContext context) {
   return MyButton(
     text: '带翻页宫格',
-    isBlock: true,
+    isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
     onTap: () {
@@ -333,7 +333,7 @@ Widget _buildPaginationGridActionSheet(BuildContext context) {
 Widget _buildScrollGridActionSheet(BuildContext context) {
   return MyButton(
     text: '多行滚动宫格',
-    isBlock: true,
+    isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
     onTap: () {
@@ -374,7 +374,7 @@ Widget _buildScrollGridActionSheet(BuildContext context) {
 Widget _buildMultiScrollGridActionSheet(BuildContext context) {
   return MyButton(
     text: '带描述多行滚动宫格',
-    isBlock: true,
+    isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
     onTap: () {
@@ -421,7 +421,7 @@ Widget _buildMultiScrollGridActionSheet(BuildContext context) {
 Widget _buildBadgeGridActionSheet(BuildContext context) {
   return MyButton(
     text: '带徽标宫格型',
-    isBlock: true,
+    isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
     onTap: () {
@@ -472,7 +472,7 @@ Widget _buildBadgeGridActionSheet(BuildContext context) {
 Widget _buildBaseListStateActionSheet(BuildContext context) {
   return MyButton(
     text: '列表型选项状态',
-    isBlock: true,
+    isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
     onTap: () {
@@ -502,7 +502,7 @@ Widget _buildBaseListStateActionSheet(BuildContext context) {
 Widget _buildIconListStateActionSheet(BuildContext context) {
   return MyButton(
     text: '列表型带图标状态',
-    isBlock: true,
+    isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
     onTap: () {
@@ -510,20 +510,23 @@ Widget _buildIconListStateActionSheet(BuildContext context) {
         context,
         visible: true,
         items: [
-          ActionSheetItem(label: '默认选项', icon: const Icon(Icons.app_blocking)),
+          ActionSheetItem(
+            label: '默认选项',
+            icon: const Icon(Icons.dashboard_rounded),
+          ),
           ActionSheetItem(
             label: '自定义选项',
-            icon: const Icon(Icons.app_blocking),
+            icon: const Icon(Icons.dashboard_rounded),
             textStyle: TextStyle(color: context.colorScheme.primary),
           ),
           ActionSheetItem(
             label: '失效选项',
-            icon: const Icon(Icons.app_blocking),
+            icon: const Icon(Icons.dashboard_rounded),
             disabled: true,
           ),
           ActionSheetItem(
             label: '警告选项',
-            icon: const Icon(Icons.app_blocking),
+            icon: const Icon(Icons.dashboard_rounded),
             textStyle: const TextStyle(color: Colors.red),
           ),
         ],
@@ -538,7 +541,7 @@ Widget _buildIconListStateActionSheet(BuildContext context) {
 Widget _buildBadgeListCenterActionSheet(BuildContext context) {
   return MyButton(
     text: '居中带徽标列表',
-    isBlock: true,
+    isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
     onTap: () {
@@ -568,7 +571,7 @@ Widget _buildBadgeListCenterActionSheet(BuildContext context) {
 Widget _buildIconListCenterActionSheet(BuildContext context) {
   return MyButton(
     text: '居中带图标列表',
-    isBlock: true,
+    isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
     onTap: () {
@@ -580,7 +583,7 @@ Widget _buildIconListCenterActionSheet(BuildContext context) {
             .map(
               (e) => ActionSheetItem(
                 label: '选项$e',
-                icon: const Icon(Icons.app_blocking),
+                icon: const Icon(Icons.dashboard_rounded),
               ),
             )
             .toList(),
@@ -592,7 +595,7 @@ Widget _buildIconListCenterActionSheet(BuildContext context) {
 Widget _buildBadgeListLeftActionSheet(BuildContext context) {
   return MyButton(
     text: '左对齐带徽标列表',
-    isBlock: true,
+    isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
     onTap: () {
@@ -617,7 +620,7 @@ Widget _buildBadgeListLeftActionSheet(BuildContext context) {
 Widget _buildIconListLeftActionSheet(BuildContext context) {
   return MyButton(
     text: '左对齐带图标列表',
-    isBlock: true,
+    isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
     onTap: () {
@@ -630,7 +633,7 @@ Widget _buildIconListLeftActionSheet(BuildContext context) {
             .map(
               (e) => ActionSheetItem(
                 label: '选项$e',
-                icon: const Icon(Icons.app_blocking),
+                icon: const Icon(Icons.dashboard_rounded),
               ),
             )
             .toList(),

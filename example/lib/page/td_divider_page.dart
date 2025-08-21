@@ -4,27 +4,35 @@ import 'package:common_tools/index.dart';
 import '../../base/example_widget.dart';
 
 class TDDividerPage extends StatelessWidget {
-  const TDDividerPage({Key? key}) : super(key: key);
+  const TDDividerPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tdTitle(context),
-      desc: '用于分割、组织、细化有一定逻辑的组织元素内容和页面结构。',
+      desc:
+          'Used to segment, organize, and refine logically organized element content and page structure.',
       exampleCodeGroup: 'divider',
-      // padding: const EdgeInsets.only(top: 16, bottom: 16),
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: 'Component Types',
           children: [
-            ExampleItem(desc: '水平分割线', builder: _verticalDivider),
-            ExampleItem(desc: '带文字水平分割线', builder: _verticalTextDivider),
-            ExampleItem(desc: '垂直分割', builder: _horizontalTextDivider),
+            ExampleItem(desc: 'Horizontal Divider', builder: _verticalDivider),
+            ExampleItem(
+              desc: 'Text Horizontal Divider',
+              builder: _verticalTextDivider,
+            ),
+            ExampleItem(
+              desc: 'Vertical Divider',
+              builder: _horizontalTextDivider,
+            ),
           ],
         ),
         ExampleModule(
-          title: '组件状态',
-          children: [ExampleItem(desc: '虚线样式', builder: _dashedDivider)],
+          title: 'Component States',
+          children: [
+            ExampleItem(desc: 'Dashed Style', builder: _dashedDivider),
+          ],
         ),
       ],
     );
@@ -33,18 +41,18 @@ class TDDividerPage extends StatelessWidget {
   Widget _verticalDivider(BuildContext context) {
     return SizedBox(
       height: 20,
-      child: Container(alignment: Alignment.center, child: const TDDivider()),
+      child: Container(alignment: Alignment.center, child: const MyDivider()),
     );
   }
 
   Widget _verticalTextDivider(BuildContext context) {
     return Column(
       children: const [
-        TDDivider(text: '文字信息', alignment: TextAlignment.left),
-        SizedBox(height: 20),
-        TDDivider(text: '文字信息', alignment: TextAlignment.center),
-        SizedBox(height: 20),
-        TDDivider(text: '文字信息', alignment: TextAlignment.right),
+        MyDivider(text: 'Left', alignment: MyTextAlignment.left),
+        Gap(20),
+        MyDivider(text: 'Center', alignment: MyTextAlignment.center),
+        Gap(20),
+        MyDivider(text: 'Right', alignment: MyTextAlignment.right),
       ],
     );
   }
@@ -56,30 +64,30 @@ class TDDividerPage extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const SizedBox(width: 16),
-          TDText(
-            '文字信息',
-            textColor: ThemeColors.neutral.shade900.withValues(alpha: 0.9),
+          const Gap(16),
+          MyText(
+            'Text Message',
+            textColor: context.colorScheme.mutedForeground,
           ),
-          const TDDivider(
+          const MyDivider(
             width: 0.5,
             height: 12,
             margin: EdgeInsets.only(left: 16, right: 16),
           ),
-          TDText(
-            '文字信息',
-            textColor: ThemeColors.neutral.shade900.withValues(alpha: 0.9),
+          MyText(
+            'Text Message',
+            textColor: context.colorScheme.mutedForeground,
           ),
-          const TDDivider(
+          const MyDivider(
             width: 0.5,
             height: 12,
             margin: EdgeInsets.only(left: 16, right: 16),
             isDashed: true,
             direction: Axis.vertical,
           ),
-          TDText(
-            '文字信息',
-            textColor: ThemeColors.neutral.shade900.withValues(alpha: 0.9),
+          MyText(
+            'Text Message',
+            textColor: context.colorScheme.mutedForeground,
           ),
         ],
       ),
@@ -90,17 +98,25 @@ class TDDividerPage extends StatelessWidget {
     return Column(
       children: const [
         SizedBox(height: 20),
-        TDDivider(isDashed: true),
+        MyDivider(isDashed: true),
         SizedBox(height: 20),
-        TDDivider(text: '文字信息', alignment: TextAlignment.left, isDashed: true),
-        SizedBox(height: 20),
-        TDDivider(
-          text: '文字信息',
-          alignment: TextAlignment.center,
+        MyDivider(
+          text: 'Text Message',
+          alignment: MyTextAlignment.left,
           isDashed: true,
         ),
         SizedBox(height: 20),
-        TDDivider(text: '文字信息', alignment: TextAlignment.right, isDashed: true),
+        MyDivider(
+          text: 'Text Message',
+          alignment: MyTextAlignment.center,
+          isDashed: true,
+        ),
+        SizedBox(height: 20),
+        MyDivider(
+          text: 'Text Message',
+          alignment: MyTextAlignment.right,
+          isDashed: true,
+        ),
       ],
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../text/td_text.dart';
+import '../text/my_text.dart';
 
 enum TDResultTheme { defaultTheme, success, warning, error }
 
@@ -36,7 +36,7 @@ class TDResult extends StatelessWidget {
         if (title.isNotEmpty)
           Padding(
             padding: const EdgeInsets.only(top: 17),
-            child: TDText(
+            child: MyText(
               title,
               textColor: ThemeColors.neutral.shade900,
               style: (titleStyle ?? context.displayMedium)?.copyWith(
@@ -47,7 +47,7 @@ class TDResult extends StatelessWidget {
         if (description?.isNotEmpty ?? false)
           Padding(
             padding: const EdgeInsets.only(top: 8),
-            child: TDText(
+            child: MyText(
               description!,
               textColor: ThemeColors.neutral.shade800,
               style: context.titleSmall?.copyWith(

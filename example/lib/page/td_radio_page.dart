@@ -280,7 +280,7 @@ class TDRadioPageState extends State<TDRadioPage> {
       selectId: 'index:1',
       direction: Axis.horizontal,
       showDivider: true,
-      divider: const TDDivider(height: 20, color: Colors.red),
+      divider: const MyDivider(height: 20, color: Colors.red),
       directionalTdRadios: const [
         TDRadio(
           id: '0',

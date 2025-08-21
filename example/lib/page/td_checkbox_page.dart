@@ -342,7 +342,7 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
           subTitleMaxLine: 2,
           cardMode: true,
           customIconBuilder: (context, checked) {
-            return const Icon(Icons.app_blocking, size: 12);
+            return const Icon(Icons.dashboard_rounded, size: 12);
           },
         ),
       ],

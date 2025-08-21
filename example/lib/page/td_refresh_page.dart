@@ -47,7 +47,7 @@ class _TdPullDownRefreshPageState extends State<TdPullDownRefreshPage> {
                 borderRadius: MyBorderRadius.large,
               ),
               margin: const EdgeInsets.only(left: 16, right: 16),
-              child: TDText(
+              child: MyText(
                 PlatformChecker.isWeb
                     ? 'Web暂不支持下拉，请下载安装apk体验'
                     : '拖拽该区域演示 顶部下拉刷新',
@@ -62,7 +62,7 @@ class _TdPullDownRefreshPageState extends State<TdPullDownRefreshPage> {
                 borderRadius: MyBorderRadius.large,
               ),
               margin: const EdgeInsets.only(top: 16, left: 16, right: 16),
-              child: TDText(
+              child: MyText(
                 '下拉刷新次数：${count}',
                 textColor: ThemeColors.neutral.shade600,
               ),

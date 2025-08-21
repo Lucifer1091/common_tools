@@ -88,7 +88,7 @@ class _TDActionSheetGridState extends State<TDActionSheetGrid> {
       child: Row(
         mainAxisAlignment: getMainAxisAlignment(widget.align),
         children: [
-          TDText(
+          MyText(
             widget.description,
             fontSize: context.bodyMedium?.fontSize,
             textColor: context.bodyMedium?.color ?? Colors.black,

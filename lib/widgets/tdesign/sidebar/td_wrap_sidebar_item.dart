@@ -163,11 +163,11 @@ class TDWrapSideBarItem extends StatelessWidget {
   }
 
   Widget renderLabel(BuildContext context) {
-    return TDText.rich(
+    return MyText.rich(
       TDTextSpan(
         children: [
           WidgetSpan(
-            child: TDText(
+            child: MyText(
               label,
               style:
                   selected

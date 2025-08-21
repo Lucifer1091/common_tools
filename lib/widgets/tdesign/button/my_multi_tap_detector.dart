@@ -11,8 +11,8 @@ import 'package:flutter/material.dart';
 /// This widget can detect gestures where the user taps multiple times on the child
 /// widget within a configurable time interval. It handles both rapid tapping
 /// and accidental taps where the user pauses or performs other gestures.
-class MultiTapDetector extends StatefulWidget {
-  const MultiTapDetector({
+class MyMultiTapDetector extends StatefulWidget {
+  const MyMultiTapDetector({
     required this.child,
     required this.onTap,
     this.tapCount = 1,
@@ -38,10 +38,10 @@ class MultiTapDetector extends StatefulWidget {
   final Duration duration;
 
   @override
-  State<MultiTapDetector> createState() => _MultiTapDetectorState();
+  State<MyMultiTapDetector> createState() => _MyMultiTapDetectorState();
 }
 
-class _MultiTapDetectorState extends State<MultiTapDetector> {
+class _MyMultiTapDetectorState extends State<MyMultiTapDetector> {
   Timer? _resetTimer;
 
   @override

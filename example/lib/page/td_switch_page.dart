@@ -73,8 +73,8 @@ class TDSwitchPageState extends State<TDSwitchPage> {
   }) {
     Widget current = Row(
       children: [
-        Expanded(child: TDText(title, textColor: ThemeColors.neutral.shade900)),
-        TDText(desc ?? '', textColor: ThemeColors.neutral.shade500),
+        Expanded(child: MyText(title, textColor: ThemeColors.neutral.shade900)),
+        MyText(desc ?? '', textColor: ThemeColors.neutral.shade500),
         SizedBox(
           child: _buildSwitch(
             on: on,
@@ -116,9 +116,9 @@ class TDSwitchPageState extends State<TDSwitchPage> {
     Widget current = Row(
       children: [
         Expanded(
-          child: TDText(title ?? '', textColor: ThemeColors.neutral.shade900),
+          child: MyText(title ?? '', textColor: ThemeColors.neutral.shade900),
         ),
-        TDText(desc ?? '', textColor: ThemeColors.neutral.shade500),
+        MyText(desc ?? '', textColor: ThemeColors.neutral.shade500),
         SizedBox(child: switchItem),
       ],
     );

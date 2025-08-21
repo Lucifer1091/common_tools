@@ -73,7 +73,7 @@ class TDDialogTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TDText(
+    return MyText(
       title,
       textColor: titleColor,
       fontWeight: FontWeight.w600,
@@ -96,7 +96,7 @@ class TDDialogContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TDText(
+    return MyText(
       content,
       textColor: contentColor,
       style: TextStyle(fontSize: 16, height: 24, color: contentColor),
@@ -145,7 +145,7 @@ class TDDialogInfoWidget extends StatelessWidget {
           if (title != null)
             Align(
               alignment: titleAlignment ?? Alignment.center,
-              child: TDText(
+              child: MyText(
                 title,
                 textColor: titleColor,
                 fontWeight: FontWeight.w600,
@@ -218,7 +218,7 @@ class HorizontalNormalButtons extends StatelessWidget {
               },
             ),
           ),
-          const TDDivider(width: 12, color: Colors.transparent),
+          const MyDivider(width: 12, color: Colors.transparent),
           Expanded(
             child: TDDialogButton(
               buttonText: rightBtn.title,
@@ -258,7 +258,7 @@ class HorizontalTextButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const TDDivider(height: 1),
+        const MyDivider(height: 1),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -281,7 +281,7 @@ class HorizontalTextButtons extends StatelessWidget {
                 },
               ),
             ),
-            const TDDivider(width: 1, height: 56),
+            const MyDivider(width: 1, height: 56),
             Expanded(
               child: TDDialogButton(
                 buttonText: rightBtn.title,
@@ -356,7 +356,7 @@ class TDDialogButton extends StatelessWidget {
       ),
       width: width,
       height: height,
-      isBlock: isBlock,
+      isExpanded: isBlock,
       margin: EdgeInsets.zero,
     );
   }

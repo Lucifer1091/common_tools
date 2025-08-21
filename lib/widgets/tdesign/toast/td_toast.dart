@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../index.dart';
 import '../loading/td_circle_indicator.dart';
-import '../text/td_text.dart';
+import '../text/my_text.dart';
 
 enum IconTextDirection { horizontal, vertical }
 
@@ -281,7 +281,7 @@ class _TDIconTextToast extends StatelessWidget {
           children: [
             Icon(iconData, size: 24, color: Colors.white),
             const SizedBox(width: 8),
-            TDText(
+            MyText(
               text ?? '',
               style: context.bodyMedium,
               fontWeight: FontWeight.w400,
@@ -310,7 +310,7 @@ class _TDIconTextToast extends StatelessWidget {
           children: [
             Icon(iconData, size: 32, color: Colors.white),
             const SizedBox(height: 8),
-            TDText(
+            MyText(
               text ?? '',
               style: context.bodyMedium,
               fontWeight: FontWeight.w400,
@@ -353,7 +353,7 @@ class _TDToastLoading extends StatelessWidget {
           TDCircleIndicator(color: Colors.white, size: 26, lineWidth: 4),
           const SizedBox(height: 8),
           customWidget ??
-              TDText(
+              MyText(
                 text ?? 'loading...',
                 style: context.bodyMedium,
                 fontWeight: FontWeight.w400,
@@ -412,7 +412,7 @@ class _TDTextToast extends StatelessWidget {
         ),
         child:
             customWidget ??
-            TDText(
+            MyText(
               text ?? '',
               style: context.bodyMedium,
               fontWeight: FontWeight.w400,

@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../../index.dart';
 import '../image/td_image.dart';
 import '../loading/td_loading.dart';
-import '../text/td_text.dart';
+import '../text/my_text.dart';
 
 enum TDUploadMediaType { image, video }
 
@@ -444,7 +444,7 @@ class _TDUploadState extends State<TDUpload> {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 4),
-                child: TDText(
+                child: MyText(
                   displayText,
                   textColor: Colors.white,
                   style: const TextStyle(fontSize: 12, height: 1.67),

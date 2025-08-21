@@ -13,12 +13,13 @@ class MyButtonStyle {
   });
 
   MyButtonStyle.primary(BuildContext context, Set<WidgetState> states) {
+    final pressed = states.contains(WidgetState.pressed);
     final hovered = states.contains(WidgetState.hovered);
     final disabled = states.contains(WidgetState.disabled);
 
     if (disabled) {
       backgroundColor = context.colorScheme.mutedForeground;
-    } else if (hovered) {
+    } else if (hovered || pressed) {
       backgroundColor = context.colorScheme.primary.scaleAlpha(0.8);
     }
 
@@ -28,13 +29,14 @@ class MyButtonStyle {
   }
 
   MyButtonStyle.secondary(BuildContext context, Set<WidgetState> states) {
+    final pressed = states.contains(WidgetState.pressed);
     final hovered = states.contains(WidgetState.hovered);
     final disabled = states.contains(WidgetState.disabled);
 
     if (disabled) {
       backgroundColor = context.colorScheme.primaryForeground;
       textColor = context.colorScheme.mutedForeground;
-    } else if (hovered) {
+    } else if (hovered || pressed) {
       backgroundColor = context.colorScheme.secondary.scaleAlpha(0.8);
     }
 
@@ -44,13 +46,14 @@ class MyButtonStyle {
   }
 
   MyButtonStyle.destructive(BuildContext context, Set<WidgetState> states) {
+    final pressed = states.contains(WidgetState.pressed);
     final hovered = states.contains(WidgetState.hovered);
     final disabled = states.contains(WidgetState.disabled);
 
     if (disabled) {
       backgroundColor = context.colorScheme.primaryForeground;
       textColor = context.colorScheme.mutedForeground;
-    } else if (hovered) {
+    } else if (hovered || pressed) {
       backgroundColor = context.colorScheme.destructive.scaleAlpha(0.8);
     }
 
@@ -60,6 +63,7 @@ class MyButtonStyle {
   }
 
   MyButtonStyle.outline(BuildContext context, Set<WidgetState> states) {
+    final pressed = states.contains(WidgetState.pressed);
     final hovered = states.contains(WidgetState.hovered);
     final disabled = states.contains(WidgetState.disabled);
 
@@ -67,25 +71,26 @@ class MyButtonStyle {
       backgroundColor = context.colorScheme.border.withValues(alpha: 0);
       borderColor = context.colorScheme.border;
       textColor = context.colorScheme.mutedForeground;
-    } else if (hovered) {
+    } else if (hovered || pressed) {
       backgroundColor = context.colorScheme.muted.scaleAlpha(0.8);
       borderColor = context.colorScheme.muted.scaleAlpha(0.8);
     }
 
     backgroundColor ??= context.colorScheme.muted.withValues(alpha: 0);
-    borderColor ??= context.colorScheme.muted;
+    borderColor ??= context.colorScheme.input;
     borderWidth = 1;
     textColor ??= context.colorScheme.foreground;
   }
 
   MyButtonStyle.ghost(BuildContext context, Set<WidgetState> states) {
+    final pressed = states.contains(WidgetState.pressed);
     final hovered = states.contains(WidgetState.hovered);
     final disabled = states.contains(WidgetState.disabled);
 
     if (disabled) {
       backgroundColor = context.colorScheme.muted.withValues(alpha: 0);
       textColor = context.colorScheme.mutedForeground;
-    } else if (hovered) {
+    } else if (hovered || pressed) {
       backgroundColor = context.colorScheme.muted.scaleAlpha(0.8);
       borderColor = context.colorScheme.muted.scaleAlpha(0.8);
     }
@@ -96,9 +101,10 @@ class MyButtonStyle {
   }
 
   MyButtonStyle.text(BuildContext context, Set<WidgetState> states) {
+    final pressed = states.contains(WidgetState.pressed);
     final hovered = states.contains(WidgetState.hovered);
 
-    if (hovered) {
+    if (hovered || pressed) {
       textColor = context.colorScheme.primary;
     }
 
@@ -106,12 +112,13 @@ class MyButtonStyle {
   }
 
   MyButtonStyle.link(BuildContext context, Set<WidgetState> states) {
+    final pressed = states.contains(WidgetState.pressed);
     final hovered = states.contains(WidgetState.hovered);
     final disabled = states.contains(WidgetState.disabled);
 
     if (disabled) {
       textColor = context.colorScheme.mutedForeground;
-    } else if (hovered) {
+    } else if (hovered || pressed) {
       decoration = TextDecoration.underline;
     }
 

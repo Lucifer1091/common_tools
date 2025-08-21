@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../text/td_text.dart';
+import '../text/my_text.dart';
 import 'td_steps.dart';
 
 class TDStepsHorizontalItem extends StatelessWidget {
@@ -178,7 +178,7 @@ class TDStepsHorizontalItem extends StatelessWidget {
           Container(
             margin: const EdgeInsets.only(top: 8),
             alignment: Alignment.center,
-            child: TDText(
+            child: MyText(
               data.title!,
               style: TextStyle(
                 fontWeight:
@@ -195,7 +195,7 @@ class TDStepsHorizontalItem extends StatelessWidget {
           alignment: Alignment.center,
           child:
               data.customContent ??
-              TDText(
+              MyText(
                 data.content ?? '',
                 style: TextStyle(
                   fontWeight: FontWeight.w400,

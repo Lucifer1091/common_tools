@@ -1,5 +1,21 @@
 import 'package:flutter/widgets.dart';
 
+import '../../index.dart';
+
+class MyAnimationParams {
+  const MyAnimationParams({
+    this.enabled = true,
+    this.duration = kDefaultDuration,
+    this.curve = Curves.linear,
+    this.value = 1.0,
+  });
+
+  final bool enabled;
+  final Duration duration;
+  final Curve curve;
+  final double value;
+}
+
 class AnimationBuilder extends StatefulWidget {
   const AnimationBuilder({
     required this.duration,

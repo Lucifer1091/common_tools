@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../../../index.dart';
 import '../loading/td_loading.dart';
-import '../text/td_text.dart';
+import '../text/my_text.dart';
 
 /// TDesign refreshes the header
 /// Combines with the EasyRefresh class to implement pull-down refresh,
@@ -189,7 +189,7 @@ class TGIconHeaderWidgetState extends State<TGIconHeaderWidget>
                     _refreshState == IndicatorMode.ready,
                 replacement: Visibility(
                   visible: _refreshState != IndicatorMode.inactive,
-                  child: TDText(
+                  child: MyText(
                     _refreshState == IndicatorMode.drag
                         ? 'Pull Down To Refresh'
                         : _refreshState == IndicatorMode.processed ||

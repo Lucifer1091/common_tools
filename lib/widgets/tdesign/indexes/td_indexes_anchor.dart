@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../text/td_text.dart';
+import '../text/my_text.dart';
 
 class TDIndexesAnchor extends StatelessWidget {
   const TDIndexesAnchor({
@@ -53,7 +53,7 @@ class TDIndexesAnchor extends StatelessWidget {
                             )
                         : null,
               ),
-              child: TDText(
+              child: MyText(
                 text,
                 style: (isPinned ? context.labelMedium : context.titleSmall)
                     ?.copyWith(

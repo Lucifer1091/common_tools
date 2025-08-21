@@ -143,7 +143,7 @@ class TDUploadState extends State<TDUploadPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TDText(title, style: const TextStyle(fontSize: 16)),
+          MyText(title, style: const TextStyle(fontSize: 16)),
           const SizedBox(height: 16),
           child,
         ],
