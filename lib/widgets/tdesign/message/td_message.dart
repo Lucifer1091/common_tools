@@ -334,7 +334,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
         return Align(
           child: TDLink(
             label: widget.link.cast<MessageLink>()!.name,
-            style: TDLinkStyle.primary,
+            style: MyLinkStyle.primary,
             uri:
                 widget.link.cast<MessageLink>()!.uri ??
                 Uri.parse('https://example.com'),

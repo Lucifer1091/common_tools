@@ -42,7 +42,7 @@ class TDImageState extends State<TDImagePage>
       desc: '用于展示效果，主要为上下左右居中裁切、拉伸、平铺等方式。',
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: 'Component Types',
           children: [
             ExampleItem(
               ignoreCode: true,
@@ -117,7 +117,7 @@ class TDImageState extends State<TDImagePage>
           ],
         ),
         ExampleModule(
-          title: '组件状态',
+          title: 'Component State',
           children: [
             ExampleItem(
               ignoreCode: true,

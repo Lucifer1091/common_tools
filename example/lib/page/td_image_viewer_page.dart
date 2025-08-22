@@ -20,7 +20,7 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
       exampleCodeGroup: 'image_viewer',
       children: [
         // ExampleModule(
-        //   title: '组件类型',
+        //   title: 'Component Types',
         //   children: [
         //     ExampleItem(desc: '基础图片预览', builder: _basicImageViewer),
         //     ExampleItem(desc: '带操作图片预览', builder: _actionImageViewer),

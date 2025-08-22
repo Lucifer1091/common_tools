@@ -34,7 +34,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
       padding: const EdgeInsets.only(top: 8, bottom: 8),
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: 'Component Types',
           children: [
             ExampleItem(desc: '单游标滑块', builder: _buildSingleHandle),
             ExampleItem(desc: '双游标滑块', builder: _buildDoubleHandle),
@@ -51,7 +51,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
           ],
         ),
         ExampleModule(
-          title: '组件状态',
+          title: 'Component State',
           children: [
             ExampleItem(desc: '禁用状态', builder: _buildDisableSingleHandle),
             ExampleItem(builder: _buildDisableDoubleHandleWithNumber),

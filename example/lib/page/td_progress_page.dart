@@ -35,7 +35,7 @@ class _TDProgressPageState extends State<TDProgressPage> {
       padding: const EdgeInsets.symmetric(vertical: 8),
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: 'Component Types',
           children: [
             ExampleItem(
               desc: '线性进度条',
@@ -73,7 +73,7 @@ class _TDProgressPageState extends State<TDProgressPage> {
           ],
         ),
         ExampleModule(
-          title: '组件状态',
+          title: 'Component State',
           children: [
             ExampleItem(
               desc: '线性进度条',

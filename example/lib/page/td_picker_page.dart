@@ -56,7 +56,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
       exampleCodeGroup: 'picker',
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: 'Component Types',
           children: [
             ExampleItem(desc: '基础选择器--地区', builder: buildArea),
             ExampleItem(desc: '基础选择器--时间', builder: buildTime),
@@ -64,7 +64,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
           ],
         ),
         ExampleModule(
-          title: '组件样式',
+          title: 'Component Style',
           children: [
             ExampleItem(desc: '带标题选择器', builder: buildAreaWithTitle),
             ExampleItem(desc: '无标题选择器', builder: buildAreaWithoutTitle),

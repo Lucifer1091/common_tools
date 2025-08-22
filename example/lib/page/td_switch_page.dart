@@ -24,7 +24,7 @@ class TDSwitchPageState extends State<TDSwitchPage> {
       desc: '用于控制某个功能的开启和关闭。',
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: 'Component Types',
           children: [
             ExampleItem(desc: '基础开关', builder: _buildSwitchWithBase),
             ExampleItem(desc: '带描述开关', builder: _buildSwitchWithText),
@@ -33,7 +33,7 @@ class TDSwitchPageState extends State<TDSwitchPage> {
           ],
         ),
         ExampleModule(
-          title: '组件状态',
+          title: 'Component State',
           children: [
             ExampleItem(desc: '加载状态', builder: _buildSwitchWithLoadingOff),
             ExampleItem(builder: _buildSwitchWithLoadingOn),
@@ -42,7 +42,7 @@ class TDSwitchPageState extends State<TDSwitchPage> {
           ],
         ),
         ExampleModule(
-          title: '组件样式',
+          title: 'Component Style',
           children: [
             ExampleItem(desc: '开关尺寸', builder: _buildSwitchWithSizeLarge),
             ExampleItem(builder: _buildSwitchWithSizeMed),

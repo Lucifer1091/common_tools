@@ -15,7 +15,7 @@ class TDNavBarPage extends StatelessWidget {
       desc: '用于不同页面之间切换或者跳转，位于内容区的上方，系统状态栏的下方。',
       children: [
         // ExampleModule(
-        //   title: '组件类型',
+        //   title: 'Component Types',
         //   children: [
         //     ExampleItem(desc: '基础H5导航栏', builder: _baseH5Navbar),
         //     ExampleItem(builder: _leftMultiAction),
@@ -25,7 +25,7 @@ class TDNavBarPage extends StatelessWidget {
         //   ],
         // ),
         // ExampleModule(
-        //   title: '组件样式',
+        //   title: 'Component Style',
         //   children: [
         //     ExampleItem(desc: '标题对齐', builder: _titleCenterNavbar),
         //     ExampleItem(builder: _titleLeftNavbar),

@@ -18,7 +18,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
       exampleCodeGroup: 'badge',
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: 'Component Types',
           children: [
             ExampleItem(
               desc: '红点徽标',
@@ -65,7 +65,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
           ],
         ),
         ExampleModule(
-          title: '组件样式',
+          title: 'Component Style',
           children: [
             ExampleItem(desc: '圆形徽标', builder: _buildCircleBadge),
             ExampleItem(desc: '方形徽标', builder: _buildSquareBadge),

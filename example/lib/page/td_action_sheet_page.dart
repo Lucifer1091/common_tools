@@ -79,7 +79,7 @@ class TDActionSheetPage extends StatelessWidget {
         exampleCodeGroup: 'action_sheet',
         children: [
           ExampleModule(
-            title: '组件类型',
+            title: 'Component Types',
             children: [
               ExampleItem(
                 ignoreCode: true,
@@ -122,7 +122,7 @@ class TDActionSheetPage extends StatelessWidget {
             ],
           ),
           ExampleModule(
-            title: '组件状态',
+            title: 'Component State',
             children: [
               ExampleItem(
                 ignoreCode: true,
@@ -140,7 +140,7 @@ class TDActionSheetPage extends StatelessWidget {
             ],
           ),
           ExampleModule(
-            title: '组件样式',
+            title: 'Component Style',
             children: [
               ExampleItem(
                 ignoreCode: true,

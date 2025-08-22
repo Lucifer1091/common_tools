@@ -21,7 +21,7 @@ class TDNoticeBarPage extends StatelessWidget {
       backgroundColor: Colors.white,
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: 'Component Types',
           children: [
             ExampleItem(desc: '纯文字的公告栏', builder: _textNoticeBar),
             ExampleItem(desc: '可滚动的公告栏', builder: _scrollNoticeBar),
@@ -34,7 +34,7 @@ class TDNoticeBarPage extends StatelessWidget {
           ],
         ),
         ExampleModule(
-          title: '组件状态',
+          title: 'Component State',
           children: [
             ExampleItem(desc: '普通通知', builder: _normalNoticeBar),
             ExampleItem(desc: '成功通知', builder: _successNoticeBar),
@@ -43,7 +43,7 @@ class TDNoticeBarPage extends StatelessWidget {
           ],
         ),
         ExampleModule(
-          title: '组件样式',
+          title: 'Component Style',
           children: [ExampleItem(desc: '卡片顶部', builder: _cardNoticeBar)],
         ),
       ],
@@ -102,7 +102,7 @@ Widget _entranceNoticeBar1(BuildContext context) {
     right: MyButton(
       text: '文字按钮',
       type: MyButtonType.text,
-      
+
       size: MyButtonSize.extraSmall,
       height: 22,
       padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
@@ -234,7 +234,7 @@ Widget _leftNoticeBar(BuildContext context) {
     left: MyButton(
       text: '文本',
       type: MyButtonType.text,
-      
+
       size: MyButtonSize.extraSmall,
       height: 22,
       padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),

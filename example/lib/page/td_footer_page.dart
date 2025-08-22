@@ -20,7 +20,7 @@ class _TDFooterPageState extends State<TDFooterPage> {
       exampleCodeGroup: 'footer',
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: 'Component Types',
           children: [
             ExampleItem(desc: '基础页脚', builder: _buildFooter),
             ExampleItem(desc: '基础加链接页脚', builder: _buildSingleLinkFooter),
@@ -44,7 +44,7 @@ class _TDFooterPageState extends State<TDFooterPage> {
     final singleLink = <TDLink>[
       TDLink(
         label: '底部链接',
-        style: TDLinkStyle.primary,
+        style: MyLinkStyle.primary,
         // type: TDLinkType.withSuffixIcon,
         uri: Uri.parse('https://example.com'),
         linkClick: (link) {
@@ -64,7 +64,7 @@ class _TDFooterPageState extends State<TDFooterPage> {
     final links = <TDLink>[
       TDLink(
         label: '底部链接1',
-        style: TDLinkStyle.primary,
+        style: MyLinkStyle.primary,
         uri: Uri.parse('https://example.com'),
         linkClick: (link) {
           print('点击了链接1 $link');
@@ -72,7 +72,7 @@ class _TDFooterPageState extends State<TDFooterPage> {
       ),
       TDLink(
         label: '底部链接2',
-        style: TDLinkStyle.primary,
+        style: MyLinkStyle.primary,
         uri: Uri.parse('https://example.com'),
         linkClick: (link) {
           print('点击了链接2 $link');

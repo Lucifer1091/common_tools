@@ -28,7 +28,7 @@ class TDCollapsePageState extends State<TDCollapsePage> {
       desc: '可以折叠/展开的内容区域。',
       children: [
         ExampleModule(
-          title: 'Type 组件类型',
+          title: 'Type Component Types',
           children: [
             ExampleItem(desc: 'Basic 基础折叠面板', builder: _buildBasicCollapse),
             ExampleItem(
@@ -42,7 +42,7 @@ class TDCollapsePageState extends State<TDCollapsePage> {
           ],
         ),
         ExampleModule(
-          title: 'Style 组件样式',
+          title: 'Style Component Style',
           children: [
             ExampleItem(
               desc: 'Block Style 通栏样式',

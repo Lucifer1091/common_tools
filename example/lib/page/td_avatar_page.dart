@@ -20,7 +20,7 @@ class _TDAvatarPageState extends State<TDAvatarPage> {
       desc: '用于告知用户，该区域的状态变化或者待处理任务的数量。',
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: 'Component Types',
           children: [
             ExampleItem(desc: '图片头像', builder: _buildImageAvatar),
             ExampleItem(desc: '字符头像', builder: _buildTextAvatar),

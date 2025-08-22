@@ -104,7 +104,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'Link',
       name: 'link',
-      pageBuilder: _wrapInheritedTheme((context) => const TDLinkViewPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyLinkViewPage()),
     ),
     ExamplePageModel(
       text: 'Text',

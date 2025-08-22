@@ -13,7 +13,7 @@ class TDTagPage extends StatelessWidget {
       exampleCodeGroup: 'tag',
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: 'Component Types',
           children: [
             ExampleItem(
               desc: '基础标签',
@@ -135,7 +135,7 @@ class TDTagPage extends StatelessWidget {
           ],
         ),
         ExampleModule(
-          title: '组件状态（主题）',
+          title: 'Component State（主题）',
           children: [
             ExampleItem(
               desc: '展示型标签',

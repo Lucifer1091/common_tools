@@ -34,7 +34,7 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
       exampleCodeGroup: 'checkbox',
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: 'Component Types',
           children: [
             ExampleItem(desc: '纵向多选框', builder: _verticalCheckbox),
             ExampleItem(desc: '横向多选框', builder: _horizontalCheckbox),
@@ -42,11 +42,11 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
           ],
         ),
         ExampleModule(
-          title: '组件状态',
+          title: 'Component State',
           children: [ExampleItem(desc: '多选框状态', builder: _checkboxStatus)],
         ),
         ExampleModule(
-          title: '组件样式',
+          title: 'Component Style',
           children: [
             ExampleItem(desc: '勾选样式', builder: _checkStyle),
             ExampleItem(desc: '勾选显示位置', builder: _checkPosition),

@@ -15,7 +15,7 @@ class MyDividerPage extends StatelessWidget {
       exampleCodeGroup: 'divider',
       children: [
         ExampleModule(
-          title: 'Basic Dividers',
+          title: 'Component Types',
           children: [
             ExampleItem(
               desc: 'Horizontal Dividers',
@@ -25,7 +25,7 @@ class MyDividerPage extends StatelessWidget {
           ],
         ),
         ExampleModule(
-          title: 'Fancy Dividers',
+          title: 'Component Styles',
           children: [
             ExampleItem(
               desc: 'Horizontal Text / Widget Dividers',

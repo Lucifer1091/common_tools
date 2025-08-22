@@ -37,7 +37,7 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
       exampleCodeGroup: 'bottomTabBar',
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: 'Component Types',
           children: [
             ExampleItem(
               ignoreCode: true,
@@ -154,7 +154,7 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
           ],
         ),
         ExampleModule(
-          title: '组件样式',
+          title: 'Component Style',
           children: [
             ExampleItem(
               ignoreCode: true,

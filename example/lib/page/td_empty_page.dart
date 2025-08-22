@@ -19,7 +19,7 @@ class _TDEmptyPageState extends State<TDEmptyPage> {
       desc: '用于空状态时的占位提示。',
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: 'Component Types',
           children: [
             ExampleItem(desc: '图标空状态', builder: _iconEmpty),
             ExampleItem(desc: '自定义图片空状态', builder: _imageEmpty),

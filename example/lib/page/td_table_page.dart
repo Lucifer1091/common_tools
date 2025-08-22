@@ -54,7 +54,7 @@ class TDTablePage extends StatelessWidget {
       exampleCodeGroup: 'table',
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: 'Component Types',
           children: [
             ExampleItem(desc: '基础表格', builder: _basicTable),
             ExampleItem(desc: '可排序表格', builder: _sortableTable),
@@ -69,7 +69,7 @@ class TDTablePage extends StatelessWidget {
           ],
         ),
         ExampleModule(
-          title: '组件样式',
+          title: 'Component Style',
           children: [
             ExampleItem(desc: '带斑马纹表格样式', builder: _stripeTable),
             ExampleItem(desc: '带边框表格样式', builder: _borderTable),

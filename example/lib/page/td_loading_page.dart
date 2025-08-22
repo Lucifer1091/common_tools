@@ -28,7 +28,7 @@ class _TDLoadingPageState extends State<TDLoadingPage> {
       desc: '用于表示页面或操作的加载状态，给予用户反馈的同时减缓等待的焦虑感，由一个或一组反馈动效组成。',
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: 'Component Types',
           children: [
             ExampleItem(desc: '纯图标', builder: _buildPureIconLoading),
             ExampleItem(

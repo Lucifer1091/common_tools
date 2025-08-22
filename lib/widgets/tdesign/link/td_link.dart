@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../text/my_text.dart';
 
 /// Limit the function type to prevent the wrong function from being passed,
 /// which may cause parameter mismatch.
 typedef LinkClick = void Function(Uri? uri);
 
-enum TDLinkType { basic, withUnderline, withPrefixIcon, withSuffixIcon }
+enum MyLinkType { basic, withUnderline, withPrefix, withSuffix }
 
-enum TDLinkStyle { primary, defaultStyle, danger, warning, success }
+enum MyLinkStyle { primary, defaultStyle, danger, warning, success }
 
-enum TDLinkState { normal, active, disabled }
+enum MyLinkState { normal, active, disabled }
 
-enum TDLinkSize { small, medium, large }
+enum MyLinkSize { small, medium, large }
 
 class TDLink extends StatelessWidget {
   const TDLink({
@@ -23,10 +22,10 @@ class TDLink extends StatelessWidget {
     this.prefixIcon,
     this.suffixIcon,
     this.linkClick,
-    this.type = TDLinkType.basic,
-    this.style = TDLinkStyle.defaultStyle,
-    this.state = TDLinkState.normal,
-    this.size = TDLinkSize.medium,
+    this.type = MyLinkType.basic,
+    this.style = MyLinkStyle.defaultStyle,
+    this.state = MyLinkState.normal,
+    this.size = MyLinkSize.medium,
     this.color,
     this.iconSize,
     this.fontSize,
@@ -38,13 +37,13 @@ class TDLink extends StatelessWidget {
 
   final Uri? uri;
 
-  final TDLinkType type;
+  final MyLinkType type;
 
-  final TDLinkStyle style;
+  final MyLinkStyle style;
 
-  final TDLinkState state;
+  final MyLinkState state;
 
-  final TDLinkSize size;
+  final MyLinkSize size;
 
   final Icon? prefixIcon;
 
@@ -64,7 +63,7 @@ class TDLink extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (type == TDLinkType.withPrefixIcon) {
+    if (type == MyLinkType.withPrefix) {
       return Row(
         children: [
           if (prefixIcon == null) _getDefaultIcon(context) else prefixIcon!,
@@ -72,7 +71,7 @@ class TDLink extends StatelessWidget {
           _buildLink(context),
         ],
       );
-    } else if (type == TDLinkType.withSuffixIcon) {
+    } else if (type == MyLinkType.withSuffix) {
       return Row(
         children: [
           _buildLink(context),
@@ -89,26 +88,26 @@ class TDLink extends StatelessWidget {
     if (color != null) return color!;
 
     final colorMap = {
-      TDLinkState.normal: {
-        TDLinkStyle.primary: ThemeColors.blue.shade600,
-        TDLinkStyle.danger: ThemeColors.error.shade500,
-        TDLinkStyle.warning: ThemeColors.warning.shade400,
-        TDLinkStyle.success: ThemeColors.success.shade400,
-        TDLinkStyle.defaultStyle: ThemeColors.neutral.shade900,
+      MyLinkState.normal: {
+        MyLinkStyle.primary: context.colorScheme.primary,
+        MyLinkStyle.danger: ThemeColors.error.shade500,
+        MyLinkStyle.warning: ThemeColors.warning.shade400,
+        MyLinkStyle.success: ThemeColors.success.shade400,
+        MyLinkStyle.defaultStyle: ThemeColors.neutral.shade900,
       },
-      TDLinkState.active: {
-        TDLinkStyle.primary: ThemeColors.blue.shade700,
-        TDLinkStyle.danger: ThemeColors.error.shade600,
-        TDLinkStyle.warning: ThemeColors.warning.shade500,
-        TDLinkStyle.success: ThemeColors.success.shade500,
-        TDLinkStyle.defaultStyle: ThemeColors.blue.shade700,
+      MyLinkState.active: {
+        MyLinkStyle.primary: ThemeColors.blue.shade700,
+        MyLinkStyle.danger: ThemeColors.error.shade600,
+        MyLinkStyle.warning: ThemeColors.warning.shade500,
+        MyLinkStyle.success: MyColors.success.shade500,
+        MyLinkStyle.defaultStyle: ThemeColors.blue.shade700,
       },
-      TDLinkState.disabled: {
-        TDLinkStyle.primary: ThemeColors.blue.shade200,
-        TDLinkStyle.danger: ThemeColors.error.shade200,
-        TDLinkStyle.warning: ThemeColors.warning.shade200,
-        TDLinkStyle.success: ThemeColors.success.shade200,
-        TDLinkStyle.defaultStyle: ThemeColors.neutral.shade600,
+      MyLinkState.disabled: {
+        MyLinkStyle.primary: ThemeColors.blue.shade200,
+        MyLinkStyle.danger: ThemeColors.error.shade200,
+        MyLinkStyle.warning: ThemeColors.warning.shade200,
+        MyLinkStyle.success: ThemeColors.success.shade200,
+        MyLinkStyle.defaultStyle: ThemeColors.neutral.shade600,
       },
     };
 
@@ -117,7 +116,7 @@ class TDLink extends StatelessWidget {
 
   Widget _getDefaultIcon(BuildContext context) {
     return Icon(
-      type == TDLinkType.withPrefixIcon
+      type == MyLinkType.withPrefix
           ? Icons.link_rounded
           : Icons.open_in_new_rounded,
       size: _getIconSize(context),
@@ -128,7 +127,7 @@ class TDLink extends StatelessWidget {
   Widget _buildLink(BuildContext context) {
     return InkWell(
       onTap: () {
-        if (state == TDLinkState.disabled) return;
+        if (state == MyLinkState.disabled) return;
 
         linkClick?.call(uri);
       },
@@ -138,7 +137,7 @@ class TDLink extends StatelessWidget {
           fontSize: _getFontSize(context),
           color: getColor(context),
           decoration:
-              type == TDLinkType.withUnderline
+              type == MyLinkType.withUnderline
                   ? TextDecoration.underline
                   : null,
           decorationColor: getColor(context),
@@ -150,36 +149,36 @@ class TDLink extends StatelessWidget {
   double _getIconSize(BuildContext context) {
     return iconSize ??
         switch (size) {
-          TDLinkSize.large => 18,
-          TDLinkSize.medium => 16,
-          TDLinkSize.small => 14,
+          MyLinkSize.large => 18,
+          MyLinkSize.medium => 16,
+          MyLinkSize.small => 14,
         };
   }
 
   double _getFontSize(BuildContext context) {
     return fontSize ??
         switch (size) {
-          TDLinkSize.large => 16,
-          TDLinkSize.medium => 14,
-          TDLinkSize.small => 12,
+          MyLinkSize.large => 16,
+          MyLinkSize.medium => 14,
+          MyLinkSize.small => 12,
         };
   }
 
   double _getLeftGapSize(BuildContext context) {
     return leftGapWithIcon ??
         switch (size) {
-          TDLinkSize.large => 14.64,
-          TDLinkSize.medium => 6.05,
-          TDLinkSize.small => 6.34,
+          MyLinkSize.large => 14.64,
+          MyLinkSize.medium => 6.05,
+          MyLinkSize.small => 6.34,
         };
   }
 
   double _getRightGapSize(BuildContext context) {
     return rightGapWithIcon ??
         switch (size) {
-          TDLinkSize.large => 15.37,
-          TDLinkSize.medium => 6.63,
-          TDLinkSize.small => 7,
+          MyLinkSize.large => 15.37,
+          MyLinkSize.medium => 6.63,
+          MyLinkSize.small => 7,
         };
   }
 }

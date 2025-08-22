@@ -20,7 +20,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
       backgroundColor: context.colorScheme.primaryForeground,
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: 'Component Types',
           children: [
             ExampleItem(desc: '带箭头的弹出气泡', builder: _buildPopover),
             ExampleItem(desc: '不带箭头的弹出气泡', builder: _buildNoArrowPopover),
@@ -28,7 +28,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
           ],
         ),
         ExampleModule(
-          title: '组件样式',
+          title: 'Component Style',
           children: [
             ExampleItem(
               ignoreCode: true,

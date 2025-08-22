@@ -13,7 +13,7 @@ class TDSwiperPage extends StatelessWidget {
       exampleCodeGroup: 'swiper',
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: 'Component Types',
           children: [
             ExampleItem(
               desc: '点状(dots)',
@@ -100,7 +100,7 @@ class TDSwiperPage extends StatelessWidget {
           ],
         ),
         ExampleModule(
-          title: '组件样式',
+          title: 'Component Style',
           children: [
             ExampleItem(
               desc: '内部',

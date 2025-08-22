@@ -29,13 +29,13 @@ class _TDStepperPageState extends State<TDStepperPage> {
         exampleCodeGroup: 'stepper',
         children: [
           ExampleModule(
-            title: '组件类型',
+            title: 'Component Types',
             children: [
               ExampleItem(desc: '基础步进器', builder: _buildStepperWithBase),
             ],
           ),
           ExampleModule(
-            title: '组件状态',
+            title: 'Component State',
             children: [
               ExampleItem(
                 desc: '最大最小状态',
@@ -48,7 +48,7 @@ class _TDStepperPageState extends State<TDStepperPage> {
             ],
           ),
           ExampleModule(
-            title: '组件样式',
+            title: 'Component Style',
             children: [
               ExampleItem(desc: '步进器样式', builder: _buildStepperWithTheme),
               ExampleItem(desc: '步进器尺寸', builder: _buildStepperWithSize),

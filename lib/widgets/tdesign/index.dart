@@ -10,7 +10,6 @@ export 'dialog/index.dart';
 export 'divider/index.dart';
 export 'drawer/index.dart';
 export 'empty/index.dart';
-export 'fab/index.dart';
 export 'footer/index.dart';
 export 'image/index.dart';
 export 'image_viewer/index.dart';

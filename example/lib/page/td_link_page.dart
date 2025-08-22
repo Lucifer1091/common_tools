@@ -3,41 +3,48 @@ import 'package:common_tools/index.dart';
 
 import '../base/example_widget.dart';
 
-class TDLinkViewPage extends StatefulWidget {
-  const TDLinkViewPage({Key? key}) : super(key: key);
+class MyLinkViewPage extends StatelessWidget {
+  const MyLinkViewPage({super.key});
 
-  @override
-  _TDLinkViewPageState createState() => _TDLinkViewPageState();
-}
-
-class _TDLinkViewPageState extends State<TDLinkViewPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      backgroundColor: const Color(0xFFF0F2F5),
-      title: tdTitle(),
-      desc: '当功能使用图标即可表意清楚时，可使用纯图标悬浮按钮，例如：添加、发布。',
+      title: tdTitle(context),
+      desc:
+          'When the function can be clearly expressed by an icon, you can use a pure icon floating button, such as: add, publish.',
       exampleCodeGroup: 'link',
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: 'Component Types',
           children: [
-            ExampleItem(desc: '基础文字链接', builder: _basicTypeBasic),
-            ExampleItem(desc: '下划线文字链接', builder: _withUnderline),
-            ExampleItem(desc: '前置图标文字链接', builder: _withPrefixIcon),
-            ExampleItem(desc: '后置图标文字链接', builder: _withSuffixIcon),
+            ExampleItem(
+              desc: 'Primary / Default Type',
+              builder: (context) {
+                return Column(
+                  children: [
+                    _basicTypeBasic(context),
+                    _withUnderline(context),
+                    _withPrefixIcon(context),
+                    _withSuffixIcon(context),
+                  ],
+                );
+              },
+            ),
           ],
         ),
         ExampleModule(
-          title: '组件状态',
+          title: 'Component State',
           children: [
-            ExampleItem(desc: '不同主题', builder: _buildLinkStats),
-            ExampleItem(desc: '禁用状态', builder: _buildDisabledLinkStats),
+            ExampleItem(desc: 'Different Themes', builder: _buildLinkStats),
+            ExampleItem(
+              desc: 'Disabled State',
+              builder: _buildDisabledLinkStats,
+            ),
           ],
         ),
         ExampleModule(
-          title: '组件样式',
-          children: [ExampleItem(desc: '链接尺寸', builder: _buildLinkSizes)],
+          title: 'Component Style',
+          children: [ExampleItem(desc: 'Link Sizes', builder: _buildLinkSizes)],
         ),
       ],
     );
@@ -48,25 +55,25 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
       color: context.colorScheme.primaryForeground,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: _buildLinksWithType(TDLinkType.basic),
+        children: _buildLinksWithType(MyLinkType.basic),
       ),
     );
   }
 
-  List<Widget> _buildLinksWithType(TDLinkType type) {
+  List<Widget> _buildLinksWithType(MyLinkType type) {
     return [
       TDLink(
-        label: '跳转链接',
-        style: TDLinkStyle.primary,
+        label: type.name.sentenceCase ?? '',
+        style: MyLinkStyle.primary,
         type: type,
-        size: TDLinkSize.small,
+        size: MyLinkSize.small,
       ),
       const SizedBox(height: 48, width: 80),
       TDLink(
-        label: '跳转链接',
-        style: TDLinkStyle.defaultStyle,
+        label: type.name.sentenceCase ?? '',
+        style: MyLinkStyle.defaultStyle,
         type: type,
-        size: TDLinkSize.small,
+        size: MyLinkSize.small,
       ),
       const SizedBox(height: 16),
     ];
@@ -77,7 +84,7 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
       color: context.colorScheme.primaryForeground,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: _buildLinksWithType(TDLinkType.withUnderline),
+        children: _buildLinksWithType(MyLinkType.withUnderline),
       ),
     );
   }
@@ -87,7 +94,7 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
       color: context.colorScheme.primaryForeground,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: _buildLinksWithType(TDLinkType.withSuffixIcon),
+        children: _buildLinksWithType(MyLinkType.withSuffix),
       ),
     );
   }
@@ -97,20 +104,20 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
       color: context.colorScheme.primaryForeground,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: _buildLinksWithType(TDLinkType.withPrefixIcon),
+        children: _buildLinksWithType(MyLinkType.withPrefix),
       ),
     );
   }
 
   Widget _buildLinkStats(BuildContext context) {
-    return _buildLinkWithStyles(TDLinkState.normal);
+    return _buildLinkWithStyles(context, MyLinkState.normal);
   }
 
   Widget _buildDisabledLinkStats(BuildContext context) {
-    return _buildLinkWithStyles(TDLinkState.disabled);
+    return _buildLinkWithStyles(context, MyLinkState.disabled);
   }
 
-  Column _buildLinkWithStyles(TDLinkState state) {
+  Column _buildLinkWithStyles(BuildContext context, MyLinkState state) {
     return Column(
       children: [
         Container(
@@ -118,11 +125,11 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildLinkWithTypeAndState(TDLinkStyle.primary, state),
+              _buildLinkWithTypeAndState(MyLinkStyle.primary, state),
               const SizedBox(height: 48, width: 50),
-              _buildLinkWithTypeAndState(TDLinkStyle.defaultStyle, state),
+              _buildLinkWithTypeAndState(MyLinkStyle.defaultStyle, state),
               const SizedBox(height: 48, width: 50),
-              _buildLinkWithTypeAndState(TDLinkStyle.danger, state),
+              _buildLinkWithTypeAndState(MyLinkStyle.danger, state),
             ],
           ),
         ),
@@ -132,9 +139,9 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildLinkWithTypeAndState(TDLinkStyle.warning, state),
+              _buildLinkWithTypeAndState(MyLinkStyle.warning, state),
               const SizedBox(height: 48, width: 50),
-              _buildLinkWithTypeAndState(TDLinkStyle.success, state),
+              _buildLinkWithTypeAndState(MyLinkStyle.success, state),
             ],
           ),
         ),
@@ -142,13 +149,13 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
     );
   }
 
-  TDLink _buildLinkWithTypeAndState(TDLinkStyle style, TDLinkState state) {
+  TDLink _buildLinkWithTypeAndState(MyLinkStyle style, MyLinkState state) {
     return TDLink(
-      label: '跳转链接',
+      label: 'Jump Link',
       style: style,
       state: state,
-      type: TDLinkType.withSuffixIcon,
-      size: TDLinkSize.small,
+      type: MyLinkType.withSuffix,
+      size: MyLinkSize.small,
     );
   }
 
@@ -158,25 +165,22 @@ class _TDLinkViewPageState extends State<TDLinkViewPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _buildLinkWithSizeAndStyle(TDLinkStyle.primary, TDLinkSize.small),
+          _buildLinkWithSizeAndStyle(MyLinkStyle.primary, MyLinkSize.small),
           const SizedBox(height: 48, width: 40),
-          _buildLinkWithSizeAndStyle(TDLinkStyle.primary, TDLinkSize.medium),
+          _buildLinkWithSizeAndStyle(MyLinkStyle.primary, MyLinkSize.medium),
           const SizedBox(height: 48, width: 40),
-          _buildLinkWithSizeAndStyle(TDLinkStyle.primary, TDLinkSize.large),
+          _buildLinkWithSizeAndStyle(MyLinkStyle.primary, MyLinkSize.large),
         ],
       ),
     );
   }
 
-  TDLink _buildLinkWithSizeAndStyle(TDLinkStyle style, TDLinkSize size) {
-    var s = size == TDLinkSize.small
-        ? 'S'
-        : (size == TDLinkSize.medium ? 'M' : 'L');
+  TDLink _buildLinkWithSizeAndStyle(MyLinkStyle style, MyLinkSize size) {
     return TDLink(
-      label: '${s}号链接',
+      label: '${size.name.capitalize} link',
       style: style,
-      state: TDLinkState.normal,
-      type: TDLinkType.withSuffixIcon,
+      state: MyLinkState.normal,
+      type: MyLinkType.withSuffix,
       size: size,
     );
   }

@@ -30,7 +30,7 @@ class TDSideBarPageState extends State<TDSideBarPage> {
       desc: '用于内容分类后的展示切换。',
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: 'Component Types',
           children: [
             ExampleItem(
               desc: '侧边导航用法',
@@ -45,7 +45,7 @@ class TDSideBarPageState extends State<TDSideBarPage> {
           ],
         ),
         ExampleModule(
-          title: '组件样式',
+          title: 'Component Style',
           children: [
             ExampleItem(
               desc: '侧边导航样式',

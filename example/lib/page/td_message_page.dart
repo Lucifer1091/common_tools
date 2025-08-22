@@ -22,7 +22,7 @@ class _TDMessagePageState extends State<TDMessagePage> {
       exampleCodeGroup: 'message',
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: 'Component Types',
           children: [
             ExampleItem(desc: '纯文字的通知', builder: _buildPlainTextMessage),
             ExampleItem(desc: '带图标的通知', builder: _buildIconTextMessage),
@@ -32,7 +32,7 @@ class _TDMessagePageState extends State<TDMessagePage> {
           ],
         ),
         ExampleModule(
-          title: '组件状态',
+          title: 'Component State',
           children: [
             ExampleItem(desc: '普通通知', builder: _buildInfoMessage),
             ExampleItem(desc: '成功通知', builder: _buildSuccessMessage),

@@ -96,7 +96,7 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
       exampleCodeGroup: 'tabs',
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: 'Component Types',
           children: [
             ExampleItem(desc: '均分选项卡', builder: _buildItemWithSplit1),
             ExampleItem(
@@ -118,11 +118,11 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
           ],
         ),
         ExampleModule(
-          title: '组件状态',
+          title: 'Component State',
           children: [ExampleItem(desc: '选项卡状态', builder: _buildItemWithStatus)],
         ),
         ExampleModule(
-          title: '组件样式',
+          title: 'Component Style',
           children: [
             ExampleItem(desc: '选项卡尺寸', builder: _buildItemWithSizeSmall),
             ExampleItem(

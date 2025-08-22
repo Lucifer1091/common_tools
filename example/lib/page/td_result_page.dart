@@ -18,7 +18,7 @@ class _TDResultPageState extends State<TDResultPage> {
       exampleCodeGroup: 'result',
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: 'Component Types',
           children: [
             ExampleItem(
               desc: '基础结果',

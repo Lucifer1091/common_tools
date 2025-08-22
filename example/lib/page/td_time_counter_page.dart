@@ -15,7 +15,7 @@ class TDTimeCounterPage extends StatelessWidget {
         exampleCodeGroup: 'timeCounter',
         children: [
           ExampleModule(
-            title: '组件类型',
+            title: 'Component Types',
             children: [
               ExampleItem(
                 ignoreCode: true,

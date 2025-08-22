@@ -28,14 +28,14 @@ class _TDTreeSelectPageState extends State<TDTreeSelectPage> {
       backgroundColor: ThemeColors.neutral.shade100,
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: 'Component Types',
           children: [
             ExampleItem(desc: '基础树形选择', builder: _buildDefaultTreeSelect),
             ExampleItem(desc: '多选树形选择', builder: _buildMultipleTreeSelect),
           ],
         ),
         ExampleModule(
-          title: '组件状态',
+          title: 'Component State',
           children: [
             ExampleItem(desc: '三级树形选择', builder: _buildThirdTreeSelect),
           ],

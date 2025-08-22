@@ -17,7 +17,7 @@ class MyButtonPage extends StatelessWidget {
         exampleCodeGroup: 'button',
         children: [
           ExampleModule(
-            title: 'Button Types',
+            title: 'Component Types',
             children: [
               ExampleItem(
                 ignoreCode: true,
@@ -98,6 +98,72 @@ class MyButtonPage extends StatelessWidget {
                 },
               ),
               ExampleItem(
+                desc: 'Favorite Buttons',
+                builder: (context) {
+                  return Container(
+                    alignment: Alignment.topLeft,
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      children: [
+                        MyFavoriteButton(
+                          size: MyButtonSize.extraLarge,
+                          type: MyButtonType.outline,
+                          onChanged: (value) {},
+                        ),
+                        const Gap.horizontal(16),
+                        MyFavoriteButton(
+                          size: MyButtonSize.extraLarge,
+                          icon: Icons.star_border_rounded,
+                          selectedIcon: Icons.star_rounded,
+                          onChanged: (value) {},
+                        ),
+                        const Gap.horizontal(16),
+                        MyFavoriteButton(
+                          size: MyButtonSize.extraLarge,
+                          icon: Icons.thumb_up_alt_outlined,
+                          selectedIcon: Icons.thumb_up_rounded,
+                          onChanged: (value) {},
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+              ExampleItem(
+                desc: 'Floating Action Buttons',
+                builder: (BuildContext context) {
+                  return Container(
+                    alignment: Alignment.topLeft,
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      children: [
+                        MyButton(
+                          isFloating: true,
+                          shape: MyButtonShape.circle,
+                          size: MyButtonSize.large,
+                          icon: Icons.add,
+                        ),
+                        Gap(16),
+                        MyButton(
+                          isFloating: true,
+                          shape: MyButtonShape.square,
+                          size: MyButtonSize.large,
+                          icon: Icons.add,
+                        ),
+                        Gap(16),
+                        MyButton(
+                          isFloating: true,
+                          text: 'Floating',
+                          shape: MyButtonShape.round,
+                          size: MyButtonSize.large,
+                          icon: Icons.add,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+              ExampleItem(
                 ignoreCode: true,
                 desc: 'Combination button',
                 builder: (_) => _buildCombinationButtons(context),
@@ -105,7 +171,7 @@ class MyButtonPage extends StatelessWidget {
             ],
           ),
           ExampleModule(
-            title: 'Button status',
+            title: 'Component State',
             children: [
               ExampleItem(
                 ignoreCode: true,
@@ -152,7 +218,7 @@ class MyButtonPage extends StatelessWidget {
             ],
           ),
           ExampleModule(
-            title: 'Component Themes',
+            title: 'Component Styles',
             children: [
               ExampleItem(
                 ignoreCode: true,
@@ -230,45 +296,6 @@ class MyButtonPage extends StatelessWidget {
                             isExpanded: true,
                             text: 'Filled block button',
                           ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-          ExampleModule(
-            title: 'Fancy Buttons',
-            children: [
-              ExampleItem(
-                ignoreCode: true,
-                desc: 'Favorite Buttons',
-                builder: (context) {
-                  return Container(
-                    alignment: Alignment.topLeft,
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        MyFavoriteButton(
-                          size: MyButtonSize.extraLarge,
-                          type: MyButtonType.outline,
-                          onChanged: (value) {},
-                        ),
-                        const Gap.horizontal(16),
-                        MyFavoriteButton(
-                          size: MyButtonSize.extraLarge,
-                          icon: Icons.star_border_rounded,
-                          selectedIcon: Icons.star_rounded,
-                          onChanged: (value) {},
-                        ),
-                        const Gap.horizontal(16),
-                        MyFavoriteButton(
-                          size: MyButtonSize.extraLarge,
-                          icon: Icons.thumb_up_alt_outlined,
-                          selectedIcon: Icons.thumb_up_rounded,
-                          onChanged: (value) {},
                         ),
                       ],
                     ),

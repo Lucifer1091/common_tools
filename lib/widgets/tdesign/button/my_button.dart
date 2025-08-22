@@ -29,6 +29,7 @@ class MyButton extends StatefulWidget {
     this.child,
     this.enabled = true,
     this.isExpanded = false,
+    this.isFloating = false,
     this.size = MyButtonSize.medium,
     this.type = MyButtonType.primary,
     this.shape = MyButtonShape.rectangle,
@@ -90,6 +91,8 @@ class MyButton extends StatefulWidget {
   final EdgeInsets? margin;
 
   final bool isExpanded;
+
+  final bool isFloating;
 
   final MyFocusableParams focus;
 
@@ -198,7 +201,9 @@ class _MyButtonState extends State<MyButton> {
               border: _getBorder(context, style),
               borderRadius: style.radius ?? _getRadius(style),
               gradient: widget.gradient,
-              boxShadow: widget.shadows,
+              boxShadow:
+                  widget.shadows ??
+                  (widget.isFloating ? MyBoxShadows.all : null),
             ),
             child: widget.child ?? _getChild(style),
           );

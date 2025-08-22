@@ -63,7 +63,7 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
       ),
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: 'Component Types',
           children: [
             ExampleItem(desc: '圆形返回顶部', builder: _buildCircleBackTop),
             ExampleItem(desc: '半圆形返回顶部', builder: _buildHalfCircleBackTop),

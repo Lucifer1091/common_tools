@@ -24,14 +24,14 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
       backgroundColor: ThemeColors.neutral.shade100,
       children: [
         //   ExampleModule(
-        //     title: '组件类型',
+        //     title: 'Component Types',
         //     children: [
         //       ExampleItem(desc: '基础搜索框', builder: _buildDefaultSearchBar),
         //       ExampleItem(desc: '获取焦点后显示取消按钮', builder: _buildFocusSearchBar),
         //     ],
         //   ),
         //   ExampleModule(
-        //     title: '组件样式',
+        //     title: 'Component Style',
         //     children: [
         //       ExampleItem(desc: '搜索框形状', builder: _buildSearchBarWithShape),
         //       ExampleItem(desc: '默认状态其他对齐方式', builder: _buildCenterSearchBar),

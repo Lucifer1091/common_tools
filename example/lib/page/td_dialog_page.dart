@@ -33,7 +33,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
       padding: const EdgeInsets.only(top: 8, bottom: 8),
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: 'Component Types',
           children: [
             ExampleItem(desc: '反馈类对话框', builder: _buildFeedbackNormal),
             ExampleItem(builder: _buildFeedbackNoTitle),
@@ -53,7 +53,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
           ],
         ),
         ExampleModule(
-          title: '组件类型',
+          title: 'Component Types',
           children: [
             ExampleItem(desc: '文字按钮', builder: _buildTextButtonSingle),
             ExampleItem(builder: _buildTextButtonDouble),

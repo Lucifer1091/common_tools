@@ -30,7 +30,7 @@ class TDRatePageState extends State<TDRatePage> {
       backgroundColor: ThemeColors.neutral.shade100,
       children: [
         // ExampleModule(
-        //   title: '组件类型',
+        //   title: 'Component Types',
         //   children: [
         //     ExampleItem(desc: '实心评分', builder: _buildFilledRate),
         //     ExampleItem(desc: '自定义评分', builder: _buildCusRate),
@@ -40,14 +40,14 @@ class TDRatePageState extends State<TDRatePage> {
         //   ],
         // ),
         // ExampleModule(
-        //   title: '组件状态',
+        //   title: 'Component State',
         //   children: [
         //     ExampleItem(desc: '只可选全星时', builder: _buildFullRate),
         //     ExampleItem(desc: '可选半星时', builder: _buildHalfRate),
         //   ],
         // ),
         // ExampleModule(
-        //   title: '组件样式',
+        //   title: 'Component Style',
         //   children: [
         //     ExampleItem(desc: '评分大小', builder: _buildSizeRate),
         //     ExampleItem(desc: '设置评分颜色', builder: _buildColorRate),

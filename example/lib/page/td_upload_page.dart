@@ -105,7 +105,7 @@ class TDUploadState extends State<TDUploadPage> {
           '用于相册读取或拉起拍照的图片上传功能。${PlatformChecker.isWeb ? "Web端不支持读取本地图片,请前往移动端体验。" : ""}',
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: 'Component Types',
           children: [
             ExampleItem(desc: '单选上传', builder: _uploadSingle),
             ExampleItem(desc: '单选上传(替换)', builder: _uploadSingleWithReplace),
@@ -113,7 +113,7 @@ class TDUploadState extends State<TDUploadPage> {
           ],
         ),
         ExampleModule(
-          title: '组件状态',
+          title: 'Component State',
           children: [
             ExampleItem(desc: '加载状态', builder: _uploadLoading),
             ExampleItem(desc: '重新上传', builder: _uploadRetry),

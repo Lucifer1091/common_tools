@@ -15,7 +15,7 @@ class TDCellPage extends StatelessWidget {
         exampleCodeGroup: 'cell',
         children: [
           ExampleModule(
-            title: '组件类型',
+            title: 'Component Types',
             children: [
               ExampleItem(
                 ignoreCode: true,
@@ -36,7 +36,7 @@ class TDCellPage extends StatelessWidget {
             ],
           ),
           ExampleModule(
-            title: '组件样式',
+            title: 'Component Style',
             children: [
               ExampleItem(
                 ignoreCode: true,

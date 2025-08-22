@@ -19,7 +19,7 @@ class _TDToastPageState extends State<TDToastPage> {
       exampleCodeGroup: 'toast',
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: 'Component Types',
           children: [
             ExampleItem(desc: '纯文字', builder: _textToast),
             ExampleItem(desc: '多行文字', builder: _multipleToast),
@@ -33,7 +33,7 @@ class _TDToastPageState extends State<TDToastPage> {
           ],
         ),
         ExampleModule(
-          title: '组件状态',
+          title: 'Component State',
           children: [
             ExampleItem(desc: '成功提示', builder: _successToast),
             ExampleItem(desc: '成功提示(竖向)', builder: _successVerticalToast),

@@ -32,7 +32,7 @@ class TDPopupPageState extends State<TDPopupPage> {
       navBarKey: navBarkey,
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: 'Component Types',
           children: [
             ExampleItem(builder: _buildPopFromTop),
             ExampleItem(builder: _buildPopFromLeft),

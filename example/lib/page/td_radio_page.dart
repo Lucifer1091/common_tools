@@ -29,18 +29,18 @@ class TDRadioPageState extends State<TDRadioPage> {
       backgroundColor: const Color(0xfff6f6f6),
       children: [
         ExampleModule(
-          title: '组件类型',
+          title: 'Component Types',
           children: [
             ExampleItem(desc: '纵向单选框', builder: _verticalRadios),
             ExampleItem(desc: '横向单选框', builder: _horizontalRadios),
           ],
         ),
         ExampleModule(
-          title: '组件状态',
+          title: 'Component State',
           children: [ExampleItem(desc: '单选框状态', builder: _radioStatus)],
         ),
         ExampleModule(
-          title: '组件样式',
+          title: 'Component Style',
           children: [
             ExampleItem(desc: '勾选样式', builder: _checkStyle),
             ExampleItem(desc: '勾选显示位置', builder: _checkPosition),
