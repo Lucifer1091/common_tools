@@ -6,19 +6,19 @@ import '../../../index.dart';
 
 class MyText extends StatelessWidget {
   const MyText(
-    this.data, {
+    this.text, {
     this.fontSize,
     this.fontWeight,
     this.fontFamily,
     this.textColor,
-    this.backgroundColor,
-    this.selectionColor,
     this.isTextThrough = false,
     this.lineThroughColor,
     this.style,
     this.strutStyle,
     this.textAlign,
     this.textDirection,
+    this.backgroundColor,
+    this.selectionColor,
     this.locale,
     this.softWrap,
     this.overflow,
@@ -36,15 +36,14 @@ class MyText extends StatelessWidget {
     this.fontWeight,
     this.fontFamily,
     this.textColor,
-    this.backgroundColor,
-    this.selectionColor,
     this.isTextThrough = false,
     this.lineThroughColor,
-    super.key,
     this.style,
     this.strutStyle,
     this.textAlign,
     this.textDirection,
+    this.backgroundColor,
+    this.selectionColor,
     this.locale,
     this.softWrap,
     this.overflow,
@@ -53,80 +52,109 @@ class MyText extends StatelessWidget {
     this.semanticsLabel,
     this.textWidthBasis,
     this.textHeightBehavior,
-  }) : data = null;
+    super.key,
+  }) : text = null;
 
   final double? fontSize;
-
   final FontWeight? fontWeight;
-
   final String? fontFamily;
-
   final Color? textColor;
-
-  final Color? backgroundColor;
-
-  final Color? selectionColor;
-
-  final bool? isTextThrough;
-
+  final bool isTextThrough;
   final Color? lineThroughColor;
-
   final TextStyle? style;
-
-  final String? data;
-
+  final String? text;
   final StrutStyle? strutStyle;
-
   final TextAlign? textAlign;
-
   final TextDirection? textDirection;
-
+  final Color? backgroundColor;
+  final Color? selectionColor;
   final Locale? locale;
-
   final bool? softWrap;
-
   final TextOverflow? overflow;
-
   final double? textScaler;
-
   final int? maxLines;
-
   final String? semanticsLabel;
-
   final TextWidthBasis? textWidthBasis;
-
   final ui.TextHeightBehavior? textHeightBehavior;
-
-  final TDTextSpan? textSpan;
+  final MyTextSpan? textSpan;
 
   @override
   Widget build(BuildContext context) {
     final bgColor = style?.backgroundColor ?? backgroundColor;
 
-    if (bgColor == null) return _getRawText(context: context);
+    if (text == null && textSpan == null) {
+      return const NoWidget();
+    }
 
-    return ColoredBox(color: bgColor, child: _getRawText(context: context));
+    final textWidget = _getRawText(context: context);
+
+    if (bgColor == null) return textWidget;
+
+    return ColoredBox(color: bgColor, child: textWidget);
   }
 
-  TextStyle? getTextStyle(
-    BuildContext context, {
-    double? height,
-    Color? backgroundColor,
-  }) {
-    final textFont = context.bodyLarge;
+  Text _getRawText({required BuildContext context, TextStyle? textStyle}) {
+    final effectiveTextStyle = textStyle ?? _getTextStyle(context);
+
+    if (textSpan == null) {
+      return Text(
+        text!,
+        key: key,
+        style: effectiveTextStyle,
+        strutStyle: strutStyle,
+        textAlign: textAlign,
+        textDirection: textDirection,
+        locale: locale,
+        softWrap: softWrap,
+        overflow: overflow,
+        textScaler:
+            textScaler != null
+                ? TextScaler.linear(textScaler!)
+                : TextScaler.noScaling,
+        maxLines: maxLines,
+        semanticsLabel: semanticsLabel,
+        textWidthBasis: textWidthBasis,
+        textHeightBehavior: textHeightBehavior,
+        selectionColor: selectionColor,
+      );
+    } else {
+      return Text.rich(
+        textSpan!,
+        style: effectiveTextStyle,
+        strutStyle: strutStyle,
+        textAlign: textAlign,
+        textDirection: textDirection,
+        locale: locale,
+        softWrap: softWrap,
+        overflow: overflow,
+        textScaler:
+            textScaler != null
+                ? TextScaler.linear(textScaler!)
+                : TextScaler.noScaling,
+        maxLines: maxLines,
+        semanticsLabel: semanticsLabel,
+        textWidthBasis: textWidthBasis,
+        textHeightBehavior: textHeightBehavior,
+        selectionColor: selectionColor,
+      );
+    }
+  }
+
+  TextStyle _getTextStyle(BuildContext context) {
+    final defaults = context.bodyLarge;
 
     return TextStyle(
       inherit: style?.inherit ?? true,
-      overflow: style?.overflow ?? overflow ?? textFont.overflow,
+      overflow: style?.overflow ?? overflow ?? defaults.overflow,
       color: style?.color ?? textColor ?? context.colorScheme.foreground,
-      backgroundColor: backgroundColor,
-      fontSize: style?.fontSize ?? fontSize ?? textFont.fontSize,
-      fontWeight: style?.fontWeight ?? fontWeight ?? textFont.fontWeight,
+      backgroundColor: style?.backgroundColor ?? backgroundColor,
+      fontSize: style?.fontSize ?? fontSize ?? defaults.fontSize,
+      fontWeight: style?.fontWeight ?? fontWeight ?? defaults.fontWeight,
       fontStyle: style?.fontStyle,
       letterSpacing: style?.letterSpacing,
       wordSpacing: style?.wordSpacing,
       textBaseline: style?.textBaseline,
-      height: height ?? style?.height ?? textFont.height,
+      height: style?.height ?? defaults.height,
       leadingDistribution: style?.leadingDistribution,
       locale: style?.locale,
       foreground: style?.foreground,
@@ -135,79 +163,28 @@ class MyText extends StatelessWidget {
       fontFeatures: style?.fontFeatures,
       decoration:
           style?.decoration ??
-          (isTextThrough! ? TextDecoration.lineThrough : TextDecoration.none),
+          (isTextThrough ? TextDecoration.lineThrough : TextDecoration.none),
       decorationColor: style?.decorationColor ?? lineThroughColor,
       decorationStyle: style?.decorationStyle,
       decorationThickness: style?.decorationThickness,
       debugLabel: style?.debugLabel,
-      fontFamily: style?.fontFamily ?? fontFamily ?? textFont.fontFamily,
+      fontFamily: style?.fontFamily ?? fontFamily ?? defaults.fontFamily,
       fontFamilyFallback:
-          style?.fontFamilyFallback ?? textFont.fontFamilyFallback,
+          style?.fontFamilyFallback ?? defaults.fontFamilyFallback,
     );
-  }
-
-  Text _getRawText({
-    required BuildContext context,
-    TextStyle? textStyle,
-    Color? backgroundColor,
-  }) {
-    return textSpan == null
-        ? Text(
-          data ?? '',
-          key: key,
-          style:
-              textStyle ??
-              getTextStyle(context, backgroundColor: backgroundColor),
-          strutStyle: strutStyle,
-          textAlign: textAlign,
-          textDirection: textDirection,
-          locale: locale,
-          softWrap: softWrap,
-          overflow: overflow,
-          textScaler:
-              textScaler != null
-                  ? TextScaler.linear(textScaler!)
-                  : TextScaler.noScaling,
-          maxLines: maxLines,
-          semanticsLabel: semanticsLabel,
-          textWidthBasis: textWidthBasis,
-          textHeightBehavior: textHeightBehavior,
-          selectionColor: selectionColor,
-        )
-        : Text.rich(
-          textSpan!,
-          style:
-              textStyle ??
-              getTextStyle(context, backgroundColor: backgroundColor),
-          strutStyle: strutStyle,
-          textAlign: textAlign,
-          textDirection: textDirection,
-          locale: locale,
-          softWrap: softWrap,
-          overflow: overflow,
-          textScaler:
-              textScaler != null
-                  ? TextScaler.linear(textScaler!)
-                  : TextScaler.noScaling,
-          maxLines: maxLines,
-          semanticsLabel: semanticsLabel,
-          textWidthBasis: textWidthBasis,
-          textHeightBehavior: textHeightBehavior,
-          selectionColor: selectionColor,
-        );
   }
 }
 
-/// TDesign extension of TextSpan, flattens some parameters in TextStyle.
-class TDTextSpan extends TextSpan {
-  TDTextSpan({
+/// Extension of TextSpan, flattens some parameters in TextStyle.
+class MyTextSpan extends TextSpan {
+  MyTextSpan({
     BuildContext? context,
+    double? fontSize,
     FontWeight? fontWeight,
     String? fontFamily,
     Color? textColor,
-    bool? isTextThrough = false,
+    bool isTextThrough = false,
     Color? lineThroughColor,
-    String? package,
     super.text,
     super.children,
     TextStyle? style,
@@ -218,40 +195,40 @@ class TDTextSpan extends TextSpan {
     super.semanticsLabel,
   }) : super(
          style: _getTextStyle(
-           context ,
+           context,
            style,
+           fontSize,
            fontWeight,
            fontFamily,
            textColor,
            isTextThrough,
            lineThroughColor,
-           package,
          ),
        );
 
-  static TextStyle? _getTextStyle(
+  static TextStyle _getTextStyle(
     BuildContext? context,
     TextStyle? style,
+    double? fontSize,
     FontWeight? fontWeight,
     String? fontFamily,
     Color? textColor,
-    bool? isTextThrough,
+    bool isTextThrough,
     Color? lineThroughColor,
-    String? package,
   ) {
-    final textFont = context?.bodyLarge;
+    final defaults = context?.bodyLarge ?? MyTypography.geist().bodyLarge;
 
     return TextStyle(
       inherit: style?.inherit ?? true,
       color: style?.color ?? textColor ?? context?.colorScheme.foreground,
       backgroundColor: style?.backgroundColor,
-      fontSize: style?.fontSize ?? textFont?.fontSize,
-      fontWeight: style?.fontWeight ?? fontWeight ?? textFont?.fontWeight,
+      fontSize: style?.fontSize ?? fontSize ?? defaults.fontSize,
+      fontWeight: style?.fontWeight ?? fontWeight ?? defaults.fontWeight,
       fontStyle: style?.fontStyle,
       letterSpacing: style?.letterSpacing,
       wordSpacing: style?.wordSpacing,
       textBaseline: style?.textBaseline,
-      height: style?.height ?? textFont?.height,
+      height: style?.height ?? defaults.height,
       leadingDistribution: style?.leadingDistribution,
       locale: style?.locale,
       foreground: style?.foreground,
@@ -260,14 +237,14 @@ class TDTextSpan extends TextSpan {
       fontFeatures: style?.fontFeatures,
       decoration:
           style?.decoration ??
-          (isTextThrough! ? TextDecoration.lineThrough : TextDecoration.none),
+          (isTextThrough ? TextDecoration.lineThrough : TextDecoration.none),
       decorationColor: style?.decorationColor ?? lineThroughColor,
       decorationStyle: style?.decorationStyle,
       decorationThickness: style?.decorationThickness,
       debugLabel: style?.debugLabel,
-      fontFamily: style?.fontFamily ?? fontFamily ?? textFont?.fontFamily,
-      fontFamilyFallback: style?.fontFamilyFallback ?? textFont?.fontFamilyFallback,
-      package: package,
+      fontFamily: style?.fontFamily ?? fontFamily ?? defaults.fontFamily,
+      fontFamilyFallback:
+          style?.fontFamilyFallback ?? defaults.fontFamilyFallback,
     );
   }
 }

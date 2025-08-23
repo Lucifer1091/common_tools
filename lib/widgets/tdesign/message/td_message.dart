@@ -4,7 +4,7 @@ import '../../../index.dart';
 import '../../../constants/shadows.dart';
 import '../../../extensions/generic/scope_functions.dart';
 import '../../layout/no_widget.dart';
-import '../link/td_link.dart';
+import '../link/my_link.dart';
 
 class MessageLink {
   MessageLink({required this.name, required this.uri, this.color});
@@ -332,8 +332,8 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
     Widget getLink(BuildContext context) {
       if (widget.link is MessageLink) {
         return Align(
-          child: TDLink(
-            label: widget.link.cast<MessageLink>()!.name,
+          child: MyLink(
+            text: widget.link.cast<MessageLink>()!.name,
             style: MyLinkStyle.primary,
             uri:
                 widget.link.cast<MessageLink>()!.uri ??
@@ -341,7 +341,7 @@ class _TDMessageState extends State<TDMessage> with TickerProviderStateMixin {
             color:
                 widget.link.cast<MessageLink>()!.color ??
                 ThemeColors.blue.shade600,
-            linkClick: (link) => clickLink(),
+            onTap: (link) => clickLink(),
           ),
         );
       } else if (widget.link is String) {

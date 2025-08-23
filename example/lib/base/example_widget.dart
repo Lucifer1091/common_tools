@@ -100,7 +100,7 @@ class _ExamplePageState extends State<ExamplePage> {
                             return _buildHeader(context);
                           }
                           if (index == widget.children.length + 2) {
-                            return Container();
+                            return const NoWidget();
                           }
                           ExampleModule? data;
                           if (index <= widget.children.length) {
@@ -165,7 +165,7 @@ class _ExamplePageState extends State<ExamplePage> {
 
   Widget _buildHeader(BuildContext context) {
     if (widget.showSingleChild) {
-      return Container();
+      return const NoWidget();
     }
     return Container(
       margin: const EdgeInsets.only(left: 16, right: 16),
@@ -173,7 +173,7 @@ class _ExamplePageState extends State<ExamplePage> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          MyText(widget.title),
+          MyText(widget.title, style: context.titleLarge),
           Container(
             margin: const EdgeInsets.only(top: 4),
             child: MyText(widget.desc),
@@ -194,6 +194,7 @@ class _ExamplePageState extends State<ExamplePage> {
           child: MyText(
             '${index < 10 ? "0$index" : index} ${data.title}',
             fontWeight: FontWeight.bold,
+            fontSize: 16,
           ),
         ),
         for (var index = 0; index < data.children.length; index++)
@@ -299,7 +300,7 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
     if (widget.data.padding != null) {
       child = Padding(padding: widget.data.padding!, child: child);
     }
-    
+
     child = Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: widget.data.center
@@ -307,7 +308,7 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
           : CrossAxisAlignment.start,
       children: [
         widget.data.desc.isEmpty
-            ? Container()
+            ? const NoWidget()
             : Container(
                 alignment: Alignment.topLeft,
                 margin: EdgeInsets.only(

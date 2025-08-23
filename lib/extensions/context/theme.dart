@@ -13,7 +13,7 @@ extension ContextThemeExtension on BuildContext {
   Brightness get platformBrightness => MediaQuery.platformBrightnessOf(this);
 
   /// extension to get value according to theme
-  T themedValue<T>(T light, [T? dark]) {
+  T themed<T>(T light, [T? dark]) {
     return isDark ? (dark ?? light) : light;
   }
 

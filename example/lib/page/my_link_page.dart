@@ -3,8 +3,8 @@ import 'package:common_tools/index.dart';
 
 import '../base/example_widget.dart';
 
-class MyLinkViewPage extends StatelessWidget {
-  const MyLinkViewPage({super.key});
+class MyLinkPage extends StatelessWidget {
+  const MyLinkPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,8 @@ class MyLinkViewPage extends StatelessWidget {
             ExampleItem(
               desc: 'Primary / Default Type',
               builder: (context) {
-                return Column(
+                return FlexColumn(
+                  gap: 8,
                   children: [
                     _basicTypeBasic(context),
                     _withUnderline(context),
@@ -35,11 +36,11 @@ class MyLinkViewPage extends StatelessWidget {
         ExampleModule(
           title: 'Component State',
           children: [
-            ExampleItem(desc: 'Different Themes', builder: _buildLinkStats),
             ExampleItem(
-              desc: 'Disabled State',
-              builder: _buildDisabledLinkStats,
+              desc: 'Different Themes (Normal State)',
+              builder: _buildLinkStats,
             ),
+            ExampleItem(desc: 'Disabled State', builder: _buildDisabledLinks),
           ],
         ),
         ExampleModule(
@@ -52,7 +53,7 @@ class MyLinkViewPage extends StatelessWidget {
 
   Widget _basicTypeBasic(BuildContext context) {
     return Container(
-      color: context.colorScheme.primaryForeground,
+      color: context.colorScheme.secondary,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: _buildLinksWithType(MyLinkType.basic),
@@ -62,26 +63,25 @@ class MyLinkViewPage extends StatelessWidget {
 
   List<Widget> _buildLinksWithType(MyLinkType type) {
     return [
-      TDLink(
-        label: type.name.sentenceCase ?? '',
+      MyLink(
+        text: type.name.sentenceCase ?? '',
         style: MyLinkStyle.primary,
         type: type,
         size: MyLinkSize.small,
       ),
-      const SizedBox(height: 48, width: 80),
-      TDLink(
-        label: type.name.sentenceCase ?? '',
-        style: MyLinkStyle.defaultStyle,
+      const SizedBox(height: 30, width: 80),
+      MyLink(
+        text: type.name.sentenceCase ?? '',
+        style: MyLinkStyle.defaults,
         type: type,
         size: MyLinkSize.small,
       ),
-      const SizedBox(height: 16),
     ];
   }
 
   Widget _withUnderline(BuildContext context) {
     return Container(
-      color: context.colorScheme.primaryForeground,
+      color: context.colorScheme.secondary,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: _buildLinksWithType(MyLinkType.withUnderline),
@@ -91,7 +91,7 @@ class MyLinkViewPage extends StatelessWidget {
 
   Widget _withSuffixIcon(BuildContext context) {
     return Container(
-      color: context.colorScheme.primaryForeground,
+      color: context.colorScheme.secondary,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: _buildLinksWithType(MyLinkType.withSuffix),
@@ -101,7 +101,7 @@ class MyLinkViewPage extends StatelessWidget {
 
   Widget _withPrefixIcon(BuildContext context) {
     return Container(
-      color: context.colorScheme.primaryForeground,
+      color: context.colorScheme.secondary,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: _buildLinksWithType(MyLinkType.withPrefix),
@@ -110,37 +110,37 @@ class MyLinkViewPage extends StatelessWidget {
   }
 
   Widget _buildLinkStats(BuildContext context) {
-    return _buildLinkWithStyles(context, MyLinkState.normal);
+    return _buildLinkWithStyles(context, true);
   }
 
-  Widget _buildDisabledLinkStats(BuildContext context) {
-    return _buildLinkWithStyles(context, MyLinkState.disabled);
+  Widget _buildDisabledLinks(BuildContext context) {
+    return _buildLinkWithStyles(context, false);
   }
 
-  Column _buildLinkWithStyles(BuildContext context, MyLinkState state) {
-    return Column(
+  FlexColumn _buildLinkWithStyles(BuildContext context, bool state) {
+    return FlexColumn(
+      gap: 8,
       children: [
         Container(
-          color: context.colorScheme.primaryForeground,
+          color: context.colorScheme.secondary,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _buildLinkWithTypeAndState(MyLinkStyle.primary, state),
-              const SizedBox(height: 48, width: 50),
-              _buildLinkWithTypeAndState(MyLinkStyle.defaultStyle, state),
-              const SizedBox(height: 48, width: 50),
+              const SizedBox(height: 30, width: 50),
+              _buildLinkWithTypeAndState(MyLinkStyle.defaults, state),
+              const SizedBox(height: 30, width: 50),
               _buildLinkWithTypeAndState(MyLinkStyle.danger, state),
             ],
           ),
         ),
-        const SizedBox(height: 16),
         Container(
-          color: context.colorScheme.primaryForeground,
+          color: context.colorScheme.secondary,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _buildLinkWithTypeAndState(MyLinkStyle.warning, state),
-              const SizedBox(height: 48, width: 50),
+              const SizedBox(height: 30, width: 50),
               _buildLinkWithTypeAndState(MyLinkStyle.success, state),
             ],
           ),
@@ -149,11 +149,11 @@ class MyLinkViewPage extends StatelessWidget {
     );
   }
 
-  TDLink _buildLinkWithTypeAndState(MyLinkStyle style, MyLinkState state) {
-    return TDLink(
-      label: 'Jump Link',
+  MyLink _buildLinkWithTypeAndState(MyLinkStyle style, bool state) {
+    return MyLink(
+      text: 'Jump Link',
       style: style,
-      state: state,
+      enabled: state,
       type: MyLinkType.withSuffix,
       size: MyLinkSize.small,
     );
@@ -161,25 +161,25 @@ class MyLinkViewPage extends StatelessWidget {
 
   Widget _buildLinkSizes(BuildContext context) {
     return Container(
-      color: context.colorScheme.primaryForeground,
+      color: context.colorScheme.secondary,
+      padding: EdgeInsets.all(8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _buildLinkWithSizeAndStyle(MyLinkStyle.primary, MyLinkSize.small),
-          const SizedBox(height: 48, width: 40),
-          _buildLinkWithSizeAndStyle(MyLinkStyle.primary, MyLinkSize.medium),
-          const SizedBox(height: 48, width: 40),
-          _buildLinkWithSizeAndStyle(MyLinkStyle.primary, MyLinkSize.large),
+          _buildLinkWithSizeAndStyle(MyLinkStyle.defaults, MyLinkSize.small),
+          const Gap(40),
+          _buildLinkWithSizeAndStyle(MyLinkStyle.defaults, MyLinkSize.medium),
+          const Gap(40),
+          _buildLinkWithSizeAndStyle(MyLinkStyle.defaults, MyLinkSize.large),
         ],
       ),
     );
   }
 
-  TDLink _buildLinkWithSizeAndStyle(MyLinkStyle style, MyLinkSize size) {
-    return TDLink(
-      label: '${size.name.capitalize} link',
+  MyLink _buildLinkWithSizeAndStyle(MyLinkStyle style, MyLinkSize size) {
+    return MyLink(
+      text: '${size.name.capitalize} link',
       style: style,
-      state: MyLinkState.normal,
       type: MyLinkType.withSuffix,
       size: size,
     );

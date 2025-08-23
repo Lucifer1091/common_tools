@@ -2,23 +2,25 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-enum CircularTextDirection { clockwise, anticlockwise }
+import 'my_text.dart';
 
-enum CircularTextPosition { outside, inside }
+enum MyCircularTextDirection { clockwise, anticlockwise }
 
-enum StartAngleAlignment { start, center, end }
+enum MyCircularTextPosition { outside, inside }
 
-class TextItem {
-  TextItem({
+enum MyStartAngleAlignment { start, center, end }
+
+class MyCircularTextItem {
+  MyCircularTextItem({
     required this.text,
     this.space = 10,
     this.startAngle = 0,
-    this.startAngleAlignment = StartAngleAlignment.start,
-    this.direction = CircularTextDirection.clockwise,
+    this.startAngleAlignment = MyStartAngleAlignment.start,
+    this.direction = MyCircularTextDirection.clockwise,
   }) : assert(space >= 0, 'Space between characters must be non-negative.');
 
   /// Text
-  final Text text;
+  final MyText text;
 
   /// Space between characters
   final double space;
@@ -27,17 +29,17 @@ class TextItem {
   final double startAngle;
 
   /// Text alignment around [startAngle]
-  /// [StartAngleAlignment.start] text will starts from [startAngle]
-  /// [StartAngleAlignment.center] text will be centered on [startAngle]
-  /// [StartAngleAlignment.end] text will ends on [startAngle]
-  final StartAngleAlignment startAngleAlignment;
+  /// [MyStartAngleAlignment.start] text will starts from [startAngle]
+  /// [MyStartAngleAlignment.center] text will be centered on [startAngle]
+  /// [MyStartAngleAlignment.end] text will ends on [startAngle]
+  final MyStartAngleAlignment startAngleAlignment;
 
   /// Text direction either clockwise or anticlockwise
-  final CircularTextDirection direction;
+  final MyCircularTextDirection direction;
 
-  bool isChanged(TextItem oldTextItem) {
+  bool isChanged(MyCircularTextItem oldTextItem) {
     bool isTextChanged() {
-      return oldTextItem.text.data != text.data ||
+      return oldTextItem.text.text != text.text ||
           oldTextItem.text.style != text.style;
     }
 
@@ -49,23 +51,23 @@ class TextItem {
   }
 }
 
-class CircularText extends StatelessWidget {
-  const CircularText({
+class MyCircularText extends StatelessWidget {
+  const MyCircularText({
     required this.children,
     super.key,
     this.radius = 125,
-    this.position = CircularTextPosition.inside,
+    this.position = MyCircularTextPosition.inside,
     this.backgroundPaint,
   }) : assert(radius >= 0, 'Radius must be non-negative.');
 
   /// List of text
-  final List<TextItem> children;
+  final List<MyCircularTextItem> children;
 
   /// Circle radius
   final double radius;
 
   /// Text position either outside or inside circle
-  final CircularTextPosition position;
+  final MyCircularTextPosition position;
 
   /// Background paint
   final Paint? backgroundPaint;
@@ -92,13 +94,13 @@ class _CircularTextPainter extends CustomPainter {
   _CircularTextPainter({
     required this.children,
     required this.textDirection,
-    this.position = CircularTextPosition.inside,
+    this.position = MyCircularTextPosition.inside,
     Paint? backgroundPaint,
   }) : backgroundPaint =
            backgroundPaint ?? (Paint()..color = Colors.transparent);
 
-  final List<TextItem> children;
-  final CircularTextPosition position;
+  final List<MyCircularTextItem> children;
+  final MyCircularTextPosition position;
   final Paint backgroundPaint;
   final TextDirection textDirection;
 
@@ -114,9 +116,9 @@ class _CircularTextPainter extends CustomPainter {
     for (final textItem in children) {
       canvas.save();
       final List<TextPainter> charPainters = [];
-      final Text text = textItem.text;
+      final MyText text = textItem.text;
 
-      for (final int rune in text.data!.runes) {
+      for (final int rune in text.text!.runes) {
         charPainters.add(
           TextPainter(
             text: TextSpan(text: String.fromCharCode(rune), style: text.style),
@@ -124,7 +126,7 @@ class _CircularTextPainter extends CustomPainter {
           )..layout(),
         );
       }
-      if (textItem.direction == CircularTextDirection.clockwise) {
+      if (textItem.direction == MyCircularTextDirection.clockwise) {
         _paintTextClockwise(canvas, size, textItem, charPainters);
       } else {
         _paintTextAntiClockwise(canvas, size, textItem, charPainters);
@@ -136,7 +138,7 @@ class _CircularTextPainter extends CustomPainter {
   void _paintTextClockwise(
     Canvas canvas,
     Size size,
-    TextItem textItem,
+    MyCircularTextItem textItem,
     List<TextPainter> charPainters,
   ) {
     final bool hasStrokeStyle =
@@ -153,7 +155,7 @@ class _CircularTextPainter extends CustomPainter {
       final tp = charPainters[i];
       final x = -tp.width / 2;
       final y =
-          position == CircularTextPosition.outside
+          position == MyCircularTextPosition.outside
               ? (-_radius - tp.height) -
                   (hasStrokeStyle ? backgroundPaint.strokeWidth / 2 : 0.0)
               : -_radius - (hasStrokeStyle ? tp.height / 2 : 0.0);
@@ -166,7 +168,7 @@ class _CircularTextPainter extends CustomPainter {
   void _paintTextAntiClockwise(
     Canvas canvas,
     Size size,
-    TextItem textItem,
+    MyCircularTextItem textItem,
     List<TextPainter> charPainters,
   ) {
     final bool hasStrokeStyle =
@@ -182,7 +184,7 @@ class _CircularTextPainter extends CustomPainter {
       final tp = charPainters[i];
       final x = -tp.width / 2;
       final y =
-          position == CircularTextPosition.outside
+          position == MyCircularTextPosition.outside
               ? _radius +
                   (hasStrokeStyle ? backgroundPaint.strokeWidth / 2 : 0.0)
               : (_radius - tp.height) + (hasStrokeStyle ? tp.height / 2 : 0.0);
@@ -192,12 +194,12 @@ class _CircularTextPainter extends CustomPainter {
     }
   }
 
-  double _calculateAngleShift(TextItem textItem, int textLength) {
+  double _calculateAngleShift(MyCircularTextItem textItem, int textLength) {
     double angleShift = -1;
     switch (textItem.startAngleAlignment) {
-      case StartAngleAlignment.start:
+      case MyStartAngleAlignment.start:
         angleShift = 0;
-      case StartAngleAlignment.center:
+      case MyStartAngleAlignment.center:
         final int halfItemsLength = textLength ~/ 2;
         if (textLength.isEven) {
           angleShift =
@@ -205,7 +207,7 @@ class _CircularTextPainter extends CustomPainter {
         } else {
           angleShift = halfItemsLength * textItem.space;
         }
-      case StartAngleAlignment.end:
+      case MyStartAngleAlignment.end:
         angleShift = (textLength - 1) * textItem.space;
     }
     return angleShift;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../index.dart';
 import '../image/td_image.dart';
-import '../link/td_link.dart';
+import '../link/my_link.dart';
 
 enum TDFooterType { text, link, brand }
 
@@ -27,7 +27,7 @@ class TDFooter extends StatefulWidget {
 
   final double? height;
 
-  final List<TDLink> links;
+  final List<MyLink> links;
 
   @override
   State<TDFooter> createState() => _TDFooterState();

@@ -41,13 +41,13 @@ class _TDFooterPageState extends State<TDFooterPage> {
 
   Widget _buildSingleLinkFooter(BuildContext context) {
     // 示例链接列表
-    final singleLink = <TDLink>[
-      TDLink(
-        label: '底部链接',
+    final singleLink = <MyLink>[
+      MyLink(
+        text: '底部链接',
         style: MyLinkStyle.primary,
-        // type: TDLinkType.withSuffixIcon,
+        // type: MyLinkType.withSuffixIcon,
         uri: Uri.parse('https://example.com'),
-        linkClick: (link) {
+        onTap: (link) {
           print('点击了链接 $link');
         },
       ),
@@ -61,20 +61,20 @@ class _TDFooterPageState extends State<TDFooterPage> {
   }
 
   Widget _buildLinksFooter(BuildContext context) {
-    final links = <TDLink>[
-      TDLink(
-        label: '底部链接1',
+    final links = <MyLink>[
+      MyLink(
+        text: '底部链接1',
         style: MyLinkStyle.primary,
         uri: Uri.parse('https://example.com'),
-        linkClick: (link) {
+        onTap: (link) {
           print('点击了链接1 $link');
         },
       ),
-      TDLink(
-        label: '底部链接2',
+      MyLink(
+        text: '底部链接2',
         style: MyLinkStyle.primary,
         uri: Uri.parse('https://example.com'),
-        linkClick: (link) {
+        onTap: (link) {
           print('点击了链接2 $link');
         },
       ),

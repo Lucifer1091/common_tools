@@ -1,0 +1,164 @@
+import 'package:flutter/material.dart';
+import 'package:common_tools/index.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
+
+import '../../base/example_widget.dart';
+
+class MyTextPage extends StatelessWidget {
+  const MyTextPage({super.key});
+
+  final exampleTxt = 'Example Text';
+
+  @override
+  Widget build(BuildContext context) {
+    // debugPaintBaselinesEnabled = true;
+    return ExamplePage(
+      padding: const EdgeInsets.all(8),
+      title: tdTitle(context),
+      exampleCodeGroup: 'text',
+      desc: 'Use to display text with various styles using exposed properties.',
+      children: [
+        ExampleModule(
+          title: 'Usage example',
+          children: [
+            ExampleItem(desc: 'System Text', builder: _buildSystemText),
+            ExampleItem(desc: 'Normal MyText', builder: _buildNormalMyText),
+            ExampleItem(desc: 'General Properties', builder: _buildGeneralProp),
+            ExampleItem(desc: 'MyText.rich', builder: _buildRichText),
+            ExampleItem(desc: 'Circular Text', builder: _buildCircularText),
+            ExampleItem(desc: 'Drop Cap Text', builder: _buildDropCapText),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNormalMyText(BuildContext context) {
+    return MyText(exampleTxt);
+  }
+
+  Widget _buildSystemText(BuildContext context) {
+    return Text(
+      exampleTxt,
+      style: TextStyle(color: context.colorScheme.foreground),
+    );
+  }
+
+  Widget _buildGeneralProp(BuildContext context) {
+    return MyText(
+      exampleTxt,
+      fontSize: context.headlineLarge.fontSize,
+      textColor: context.colorScheme.primary,
+      backgroundColor: context.colorScheme.secondary,
+    );
+  }
+
+  Widget _buildRichText(BuildContext context) {
+    return MyText.rich(
+      MyTextSpan(
+        children: [
+          MyTextSpan(
+            text: 'MyTextSpan1',
+            textColor: MyColors.warning,
+            isTextThrough: true,
+            fontSize: 20,
+            lineThroughColor: context.colorScheme.primary,
+            style: TextStyle(color: MyColors.error.shade500),
+          ),
+          TextSpan(
+            text: 'TextSpan2',
+            style: TextStyle(fontSize: 14, color: context.colorScheme.primary),
+          ),
+          const WidgetSpan(child: Icon(LucideIcons.settings, size: 24)),
+        ],
+      ),
+      fontSize: context.bodyLarge.fontSize,
+      textColor: context.colorScheme.primary,
+      style: TextStyle(color: MyColors.error.shade500, fontSize: 32),
+    );
+  }
+
+  Widget _buildCircularText(BuildContext context) {
+    return Container(
+      width: 200,
+      height: 200,
+      padding: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: context.colorScheme.secondary,
+      ),
+      child: MyCircularText(
+        children: [
+          MyCircularTextItem(
+            text: MyText(
+              "Chuck Norris".toUpperCase(),
+              style: TextStyle(
+                fontSize: 28,
+                color: context.colorScheme.primary,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            space: 12,
+            startAngle: -90,
+            startAngleAlignment: MyStartAngleAlignment.center,
+            direction: MyCircularTextDirection.clockwise,
+          ),
+          MyCircularTextItem(
+            text: MyText(
+              "top 100 Facts".toUpperCase(),
+              style: TextStyle(
+                color: context.colorScheme.secondaryForeground,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            space: 10,
+            startAngle: 90,
+            startAngleAlignment: MyStartAngleAlignment.center,
+            direction: MyCircularTextDirection.anticlockwise,
+          ),
+          MyCircularTextItem(
+            text: MyText(
+              "༒",
+              style: TextStyle(
+                color: context.colorScheme.secondaryForeground,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            space: 10,
+            startAngle: 180,
+            startAngleAlignment: MyStartAngleAlignment.center,
+            direction: MyCircularTextDirection.clockwise,
+          ),
+          MyCircularTextItem(
+            text: MyText(
+              "༒",
+              style: TextStyle(
+                color: context.colorScheme.secondaryForeground,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            space: 10,
+            startAngle: 0,
+            startAngleAlignment: MyStartAngleAlignment.center,
+            direction: MyCircularTextDirection.clockwise,
+          ),
+        ],
+        radius: 135,
+        position: MyCircularTextPosition.inside,
+      ),
+    );
+  }
+
+  Widget _buildDropCapText(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: MyDropCapText(
+        Faker.generateLoremIpsumWords(200),
+        style: TextStyle(fontStyle: FontStyle.italic),
+      ),
+    );
+  }
+}

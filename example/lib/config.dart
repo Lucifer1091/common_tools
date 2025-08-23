@@ -33,7 +33,7 @@ import 'page/td_image_page.dart';
 import 'page/td_image_viewer_page.dart';
 import 'page/td_indexes_page.dart';
 import 'page/td_input_page.dart';
-import 'page/td_link_page.dart';
+import 'page/my_link_page.dart';
 import 'page/td_loading_page.dart';
 import 'page/td_message_page.dart';
 import 'page/td_navbar_page.dart';
@@ -60,7 +60,7 @@ import 'page/td_switch_page.dart';
 import 'page/td_table_page.dart';
 import 'page/td_tabs_page.dart';
 import 'page/td_tag_page.dart';
-import 'page/td_text_page.dart';
+import 'page/my_text_page.dart';
 import 'page/td_textarea_page.dart';
 import 'page/td_theme_page.dart';
 import 'page/td_time_counter_page.dart';
@@ -104,12 +104,12 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'Link',
       name: 'link',
-      pageBuilder: _wrapInheritedTheme((context) => const MyLinkViewPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyLinkPage()),
     ),
     ExamplePageModel(
       text: 'Text',
       name: 'text',
-      pageBuilder: _wrapInheritedTheme((context) => const TDTextPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyTextPage()),
     ),
   ],
   'Navigation': [

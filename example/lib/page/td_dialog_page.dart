@@ -699,10 +699,10 @@ class _TDDialogPageState extends State<TDDialogPage> {
                   title: _dialogTitle,
                   titleAlignment: Alignment.centerLeft,
                   contentWidget: MyText.rich(
-                    TDTextSpan(
+                    MyTextSpan(
                       children: [
-                        TDTextSpan(text: '红色文字', textColor: Colors.red),
-                        TDTextSpan(text: '绿色文字', textColor: Colors.green),
+                        MyTextSpan(text: '红色文字', textColor: Colors.red),
+                        MyTextSpan(text: '绿色文字', textColor: Colors.green),
                       ],
                     ),
                   ),
@@ -732,10 +732,10 @@ class _TDDialogPageState extends State<TDDialogPage> {
                   title: _dialogTitle,
                   titleAlignment: Alignment.centerRight,
                   contentWidget: MyText.rich(
-                    TDTextSpan(
+                    MyTextSpan(
                       children: [
-                        TDTextSpan(text: '红色文字', textColor: Colors.red),
-                        TDTextSpan(text: '绿色文字', textColor: Colors.green),
+                        MyTextSpan(text: '红色文字', textColor: Colors.red),
+                        MyTextSpan(text: '绿色文字', textColor: Colors.green),
                       ],
                     ),
                   ),
@@ -764,10 +764,10 @@ class _TDDialogPageState extends State<TDDialogPage> {
                 return TDAlertDialog.vertical(
                   title: _dialogTitle,
                   contentWidget: MyText.rich(
-                    TDTextSpan(
+                    MyTextSpan(
                       children: [
-                        TDTextSpan(text: '红色文字', textColor: Colors.red),
-                        TDTextSpan(text: '绿色文字', textColor: Colors.green),
+                        MyTextSpan(text: '红色文字', textColor: Colors.red),
+                        MyTextSpan(text: '绿色文字', textColor: Colors.green),
                       ],
                     ),
                   ),

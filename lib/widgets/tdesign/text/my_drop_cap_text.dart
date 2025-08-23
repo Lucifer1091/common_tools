@@ -2,7 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-enum DropCapMode {
+import '../../../index.dart';
+
+enum MyDropCapMode {
   /// default
   inside,
   upwards,
@@ -13,10 +15,10 @@ enum DropCapMode {
   baseline,
 }
 
-enum DropCapPosition { start, end }
+enum MyDropCapPosition { start, end }
 
-class DropCap extends StatelessWidget {
-  const DropCap({
+class MyDropCap extends StatelessWidget {
+  const MyDropCap({
     required this.child,
     required this.width,
     required this.height,
@@ -32,11 +34,11 @@ class DropCap extends StatelessWidget {
   }
 }
 
-class DropCapText extends StatelessWidget {
-  const DropCapText(
+class MyDropCapText extends StatelessWidget {
+  const MyDropCapText(
     this.data, {
     super.key,
-    this.mode = DropCapMode.inside,
+    this.mode = MyDropCapMode.inside,
     this.style,
     this.dropCapStyle,
     this.textAlign = TextAlign.start,
@@ -49,32 +51,32 @@ class DropCapText extends StatelessWidget {
     this.textDirection = TextDirection.ltr,
     this.overflow = TextOverflow.clip,
     this.maxLines,
-    this.dropCapPosition,
+    this.position,
   });
 
   final String data;
-  final DropCapMode mode;
+  final MyDropCapMode mode;
   final TextStyle? style, dropCapStyle;
   final TextAlign textAlign;
-  final DropCap? dropCap;
+  final MyDropCap? dropCap;
   final EdgeInsets dropCapPadding;
   final Offset indentation;
   final bool forceNoDescent, parseInlineMarkdown;
   final TextDirection textDirection;
-  final DropCapPosition? dropCapPosition;
+  final MyDropCapPosition? position;
   final int dropCapChars;
   final int? maxLines;
   final TextOverflow overflow;
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle? bodyLargeStyle = Theme.of(context).textTheme.bodyLarge;
+    final TextStyle bodyLarge = context.bodyLarge;
 
     TextStyle textStyle = TextStyle(
-      color: bodyLargeStyle?.color ?? Colors.black,
+      color: bodyLarge.color ?? context.colorScheme.foreground,
       fontSize: 14,
       height: 1,
-      fontFamily: bodyLargeStyle?.fontFamily,
+      fontFamily: bodyLarge.fontFamily,
     ).merge(style);
 
     if (data == '') return Text(data, style: textStyle);
@@ -97,14 +99,14 @@ class DropCapText extends StatelessWidget {
     double capWidth, capHeight;
     final int dropCapChars = dropCap != null ? 0 : this.dropCapChars;
     CrossAxisAlignment sideCrossAxisAlignment = CrossAxisAlignment.start;
-    final MarkdownParser? mdData =
-        parseInlineMarkdown ? MarkdownParser(data) : null;
+    final _MarkdownParser? mdData =
+        parseInlineMarkdown ? _MarkdownParser(data) : null;
     final String dropCapStr = (mdData?.plainText ?? data).substring(
       0,
       dropCapChars,
     );
 
-    if (mode == DropCapMode.baseline && dropCap == null) {
+    if (mode == MyDropCapMode.baseline && dropCap == null) {
       return _buildBaseline(context, textStyle, capStyle);
     }
 
@@ -130,7 +132,7 @@ class DropCapText extends StatelessWidget {
     capWidth += dropCapPadding.left + dropCapPadding.right;
     capHeight += dropCapPadding.top + dropCapPadding.bottom;
 
-    final MarkdownParser? mdRest =
+    final _MarkdownParser? mdRest =
         parseInlineMarkdown ? mdData!.subchars(dropCapChars) : null;
     final String restData = data.substring(dropCapChars);
 
@@ -150,7 +152,7 @@ class DropCapText extends StatelessWidget {
     int rows = ((capHeight - indentation.dy) / lineHeight).ceil();
 
     // DROP CAP MODE - UPWARDS
-    if (mode == DropCapMode.upwards) {
+    if (mode == MyDropCapMode.upwards) {
       rows = 1;
       sideCrossAxisAlignment = CrossAxisAlignment.end;
     }
@@ -179,7 +181,7 @@ class DropCapText extends StatelessWidget {
         //int totMillis = new DateTime.now().millisecondsSinceEpoch - startMillis;
 
         // DROP CAP MODE - LEFT
-        if (mode == DropCapMode.aside) charIndexEnd = data.length;
+        if (mode == MyDropCapMode.aside) charIndexEnd = data.length;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,8 +189,8 @@ class DropCapText extends StatelessWidget {
             // Text(totMillis.toString() + ' ms'),
             Row(
               textDirection:
-                  dropCapPosition == null ||
-                          dropCapPosition == DropCapPosition.start
+                  position == null ||
+                          position == MyDropCapPosition.start
                       ? textDirection
                       : (textDirection == TextDirection.ltr
                           ? TextDirection.rtl
@@ -213,7 +215,7 @@ class DropCapText extends StatelessWidget {
                     padding: EdgeInsets.only(top: indentation.dy),
                     width: boundsWidth,
                     height:
-                        mode != DropCapMode.aside
+                        mode != MyDropCapMode.aside
                             ? (lineHeight * min(maxLines ?? rows, rows)) +
                                 indentation.dy
                             : null,
@@ -270,7 +272,7 @@ class DropCapText extends StatelessWidget {
     TextStyle textStyle,
     TextStyle capStyle,
   ) {
-    final MarkdownParser mdData = MarkdownParser(data);
+    final _MarkdownParser mdData = _MarkdownParser(data);
 
     return RichText(
       textAlign: textAlign,
@@ -291,10 +293,10 @@ class DropCapText extends StatelessWidget {
   }
 }
 
-class MarkdownParser {
-  MarkdownParser(this.data) {
+class _MarkdownParser {
+  _MarkdownParser(this.data) {
     plainText = '';
-    spans = [MarkdownSpan(text: '', markups: [], style: TextStyle())];
+    spans = [_MarkdownSpan(text: '', markups: [], style: TextStyle())];
 
     bool bold = false;
     bool italic = false;
@@ -305,18 +307,18 @@ class MarkdownParser {
     const String MARKUP_UNDERLINE = '++';
 
     void addSpan(String markup, bool isOpening) {
-      final List<Markup> markups = [Markup(markup, isOpening)];
+      final List<_Markup> markups = [_Markup(markup, isOpening)];
 
-      if (bold && markup != MARKUP_BOLD) markups.add(Markup(MARKUP_BOLD, true));
+      if (bold && markup != MARKUP_BOLD) markups.add(_Markup(MARKUP_BOLD, true));
       if (italic && markup != MARKUP_ITALIC) {
-        markups.add(Markup(MARKUP_ITALIC, true));
+        markups.add(_Markup(MARKUP_ITALIC, true));
       }
       if (underline && markup != MARKUP_UNDERLINE) {
-        markups.add(Markup(MARKUP_UNDERLINE, true));
+        markups.add(_Markup(MARKUP_UNDERLINE, true));
       }
 
       spans.add(
-        MarkdownSpan(
+        _MarkdownSpan(
           text: '',
           markups: markups,
           style: TextStyle(
@@ -352,25 +354,25 @@ class MarkdownParser {
     }
   }
   final String data;
-  late List<MarkdownSpan> spans;
+  late List<_MarkdownSpan> spans;
   String plainText = '';
 
   List<TextSpan> toTextSpanList() {
     return spans.map((s) => s.toTextSpan()).toList();
   }
 
-  MarkdownParser subchars(int startIndex, [int? endIndex]) {
-    final List<MarkdownSpan> subspans = [];
+  _MarkdownParser subchars(int startIndex, [int? endIndex]) {
+    final List<_MarkdownSpan> subspans = [];
     int skip = startIndex;
     for (int s = 0; s < spans.length; s++) {
-      final MarkdownSpan span = spans[s];
+      final _MarkdownSpan span = spans[s];
       if (skip <= 0) {
         subspans.add(span);
       } else if (span.text.length < skip) {
         skip -= span.text.length;
       } else {
         subspans.add(
-          MarkdownSpan(
+          _MarkdownSpan(
             style: span.style,
             markups: span.markups,
             text: span.text.substring(skip, span.text.length),
@@ -380,10 +382,10 @@ class MarkdownParser {
       }
     }
 
-    return MarkdownParser(
+    return _MarkdownParser(
       subspans
           .asMap()
-          .map((int index, MarkdownSpan span) {
+          .map((int index, _MarkdownSpan span) {
             final String markup =
                 index > 0
                     ? (span.markups.isNotEmpty ? span.markups[0].code : '')
@@ -397,21 +399,22 @@ class MarkdownParser {
   }
 }
 
-class MarkdownSpan {
-  MarkdownSpan({
+class _MarkdownSpan {
+  _MarkdownSpan({
     required this.text,
     required this.style,
     required this.markups,
   });
+
   final TextStyle style;
-  final List<Markup> markups;
+  final List<_Markup> markups;
   String text;
 
   TextSpan toTextSpan() => TextSpan(text: text, style: style);
 }
 
-class Markup {
-  Markup(this.code, this.isActive);
+class _Markup {
+  _Markup(this.code, this.isActive);
   final String code;
   final bool isActive;
 }
