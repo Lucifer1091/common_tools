@@ -158,7 +158,7 @@ Widget _buildSimple(BuildContext context) {
     type: MyButtonType.outline,
     onTap: () {
       Navigator.of(context).push(
-        TDSlidePopupRoute(
+        MySlidePopupRoute(
           slideTransitionFrom: SlideTransitionFrom.right,
           modalTop: renderBox?.size.height,
           builder: (context) {
@@ -197,7 +197,7 @@ Widget _buildOther(BuildContext context) {
     type: MyButtonType.outline,
     onTap: () {
       Navigator.of(context).push(
-        TDSlidePopupRoute(
+        MySlidePopupRoute(
           slideTransitionFrom: SlideTransitionFrom.right,
           modalTop: renderBox?.size.height,
           builder: (context) {

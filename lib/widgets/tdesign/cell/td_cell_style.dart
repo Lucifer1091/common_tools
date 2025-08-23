@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../index.dart';
 
-class TDCellStyle {
-  TDCellStyle({
+class MyCellStyle {
+  MyCellStyle({
     this.context,
     this.leftIconColor,
     this.rightIconColor,
@@ -26,7 +26,7 @@ class TDCellStyle {
     if (context != null) defaultStyle(context!);
   }
 
-  TDCellStyle.cellStyle(BuildContext context) {
+  MyCellStyle.cellStyle(BuildContext context) {
     defaultStyle(context);
   }
 

@@ -3,17 +3,18 @@ import 'package:common_tools/index.dart';
 
 import '../base/example_widget.dart';
 
-class TDBackTopPage extends StatefulWidget {
-  const TDBackTopPage({Key? key}) : super(key: key);
+class MyBackTopPage extends StatefulWidget {
+  const MyBackTopPage({super.key});
 
   @override
-  State<TDBackTopPage> createState() => _TDBackTopPageState();
+  State<MyBackTopPage> createState() => _MyBackTopPageState();
 }
 
-class _TDBackTopPageState extends State<TDBackTopPage> {
+class _MyBackTopPageState extends State<MyBackTopPage> {
   ScrollController controller = ScrollController();
   bool showBackTop = false;
-  TDBackTopStyle style = TDBackTopStyle.circle;
+  bool showText = false;
+  MyBackTopStyle style = MyBackTopStyle.circle;
 
   @override
   void initState() {
@@ -34,28 +35,27 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
     return ExamplePage(
       scrollController: controller,
       title: tdTitle(),
-      desc: '用于当页面过长往下滑动时，帮助用户快速回到页面顶部。',
+      desc:
+          'Used to help users quickly return to the top of the page when the page is too long and slides down.',
       exampleCodeGroup: 'backtop',
       floatingActionButton: Stack(
         clipBehavior: Clip.none,
         children: [
           Visibility(
             visible: showBackTop,
-            child: style == TDBackTopStyle.halfCircle
+            child: style == MyBackTopStyle.halfCircle
                 ? Positioned(
                     right: -16,
                     bottom: 10,
-                    child: TDBackTop(
+                    child: MyBackTop(
                       controller: controller,
-                      theme: TDBackTopTheme.dark,
-                      showText: true,
+                      showText: showText,
                       style: style,
                     ),
                   )
-                : TDBackTop(
+                : MyBackTop(
                     controller: controller,
-                    theme: TDBackTopTheme.dark,
-                    showText: true,
+                    showText: showText,
                     style: style,
                   ),
           ),
@@ -65,8 +65,29 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
         ExampleModule(
           title: 'Component Types',
           children: [
-            ExampleItem(desc: '圆形返回顶部', builder: _buildCircleBackTop),
-            ExampleItem(desc: '半圆形返回顶部', builder: _buildHalfCircleBackTop),
+            ExampleItem(
+              desc: 'Toggle Button Text',
+              builder: (context) {
+                return TDSwitch(
+                  isOn: showText,
+                  onChanged: (value) {
+                    setState(() {
+                      showText = value;
+                    });
+
+                    return value;
+                  },
+                );
+              },
+            ),
+            ExampleItem(
+              desc: 'Circle Return to Top',
+              builder: _buildCircleBackTop,
+            ),
+            ExampleItem(
+              desc: 'Semi Circle Return to Top',
+              builder: _buildHalfCircleBackTop,
+            ),
           ],
         ),
       ],
@@ -74,13 +95,17 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
   }
 
   Widget _buildCircleBackTop(BuildContext context) {
-    return getCustomButton(context, '圆形返回顶部', () {
+    return getCustomButton(context, 'Show Circle Button', () {
       setState(() {
         showBackTop = true;
         if (controller.hasClients) {
-          controller.jumpTo(500);
+          controller.animateTo(
+            controller.position.maxScrollExtent,
+            duration: kDefaultDuration,
+            curve: Curves.easeInOut,
+          );
         }
-        style = TDBackTopStyle.circle;
+        style = MyBackTopStyle.circle;
       });
     });
   }
@@ -88,13 +113,17 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
   Widget _buildHalfCircleBackTop(BuildContext context) {
     return Column(
       children: [
-        getCustomButton(context, '半圆形返回顶部', () {
+        getCustomButton(context, 'Show Semi Circle Button', () {
           setState(() {
             showBackTop = true;
             if (controller.hasClients) {
-              controller.jumpTo(500);
+              controller.animateTo(
+                controller.position.maxScrollExtent,
+                duration: kDefaultDuration,
+                curve: Curves.easeInOut,
+              );
             }
-            style = TDBackTopStyle.halfCircle;
+            style = MyBackTopStyle.halfCircle;
           });
         }),
         Padding(
@@ -103,6 +132,12 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
             spacing: 16,
             runSpacing: 24,
             children: [
+              getDemoBox(context),
+              getDemoBox(context),
+              getDemoBox(context),
+              getDemoBox(context),
+              getDemoBox(context),
+              getDemoBox(context),
               getDemoBox(context),
               getDemoBox(context),
               getDemoBox(context),
@@ -125,10 +160,10 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: MyButton(
         text: text,
-        width: MediaQuery.of(context).size.width - 16 * 2,
         size: MyButtonSize.large,
         type: MyButtonType.outline,
         shape: MyButtonShape.rectangle,
+        isExpanded: true,
         onTap: onTap,
       ),
     );
@@ -142,7 +177,7 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
           width: 163,
           height: 163,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: context.colorScheme.secondary,
             borderRadius: BorderRadius.circular(12),
           ),
         ),
@@ -151,7 +186,7 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
           width: 163,
           height: 16,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: context.colorScheme.secondary,
             borderRadius: BorderRadius.circular(3),
           ),
         ),
@@ -160,7 +195,7 @@ class _TDBackTopPageState extends State<TDBackTopPage> {
           width: 100,
           height: 16,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: context.colorScheme.secondary,
             borderRadius: BorderRadius.circular(3),
           ),
         ),

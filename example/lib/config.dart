@@ -1,3 +1,4 @@
+import 'package:example/page/my_backtop_page.dart';
 import 'package:example/page/my_button_page.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +12,6 @@ import 'page/sidebar/td_sidebar_page_outline.dart';
 import 'page/sidebar/td_sidebar_page_pagination.dart';
 import 'page/td_action_sheet_page.dart';
 import 'page/td_avatar_page.dart';
-import 'page/td_backtop_page.dart';
 import 'page/td_badge_page.dart';
 import 'page/td_bottom_tab_bar_page.dart';
 import 'page/td_calendar_page.dart';
@@ -22,7 +22,7 @@ import 'page/td_collapse.dart';
 import 'page/td_date_picker_page.dart';
 import 'page/td_dialog_page.dart';
 import 'page/my_divider_page.dart';
-import 'page/td_drawer_page.dart';
+import 'page/my_drawer_page.dart';
 import 'page/td_dropdown_menu_page.dart';
 import 'page/td_empty_page.dart';
 import 'page/td_fab_page.dart';
@@ -117,12 +117,12 @@ Map<String, List<ExamplePageModel>> exampleMap = {
       text: 'BackTop',
       name: 'back-top',
       pageName: 'backtop',
-      pageBuilder: _wrapInheritedTheme((context) => const TDBackTopPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyBackTopPage()),
     ),
     ExamplePageModel(
       text: 'Drawer',
       name: 'drawer',
-      pageBuilder: _wrapInheritedTheme((context) => const TDDrawerPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyDrawerPage()),
     ),
     ExamplePageModel(
       text: 'Indexes',

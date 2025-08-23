@@ -66,12 +66,12 @@ class TDCellPage extends StatelessWidget {
 
 Widget _buildSimple(BuildContext context) {
   // 可统一修改样式
-  var style = TDCellStyle(context: context);
+  var style = MyCellStyle(context: context);
   return TDCellGroup(
     style: style,
     cells: [
       // 可单独修改样式
-      TDCell(arrow: true, title: '单行标题', style: TDCellStyle.cellStyle(context)),
+      TDCell(arrow: true, title: '单行标题', style: MyCellStyle.cellStyle(context)),
       TDCell(
         arrow: true,
         title: '单行标题',
@@ -171,7 +171,7 @@ Widget _buildCard(BuildContext context) {
 }
 
 Widget _buildPadding(BuildContext context) {
-  var style = TDCellStyle(context: context);
+  var style = MyCellStyle(context: context);
   style.padding = const EdgeInsets.all(30);
   return TDCellGroup(
     theme: TDCellGroupTheme.cardTheme,

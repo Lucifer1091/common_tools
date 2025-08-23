@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../cell/td_cell.dart';
-import '../cell/td_cell_group.dart';
-import '../cell/td_cell_style.dart';
 
-typedef TDDrawerItemClickCallback = void Function(int index, TDDrawerItem item);
+typedef OnTapMyDrawerItem = void Function(int index, MyDrawerItem item);
 
 /// Drawer content component
 /// Can be used for drawer properties in Scaffold
-class TDDrawerWidget extends StatelessWidget {
-  const TDDrawerWidget({
+class MyDrawerWidget extends StatelessWidget {
+  const MyDrawerWidget({
     super.key,
     this.footer,
     this.items,
@@ -28,7 +25,7 @@ class TDDrawerWidget extends StatelessWidget {
 
   final Widget? footer;
 
-  final List<TDDrawerItem>? items;
+  final List<MyDrawerItem>? items;
 
   /// Custom content, with higher priority than [items]/[footer]/[title]
   final Widget? contentWidget;
@@ -37,11 +34,11 @@ class TDDrawerWidget extends StatelessWidget {
 
   final Widget? titleWidget;
 
-  final TDDrawerItemClickCallback? onItemClick;
+  final OnTapMyDrawerItem? onItemClick;
 
   final double? width;
 
-  final TDCellStyle? style;
+  final MyCellStyle? style;
 
   final bool? hover;
 
@@ -58,7 +55,7 @@ class TDDrawerWidget extends StatelessWidget {
 
     if (content == null) {
       var cellStyle = style;
-      cellStyle ??= TDCellStyle.cellStyle(context)
+      cellStyle ??= MyCellStyle.cellStyle(context)
         ..leftIconColor = ThemeColors.neutral.shade900;
 
       final cells =
@@ -74,10 +71,7 @@ class TDDrawerWidget extends StatelessWidget {
                     hover: hover,
                     bordered: bordered,
                     onClick: (cell) {
-                      if (onItemClick == null) {
-                        return;
-                      }
-                      onItemClick!(index, items![index]);
+                      onItemClick?.call(index, items![index]);
                     },
                   ),
                 ),
@@ -104,7 +98,7 @@ class TDDrawerWidget extends StatelessWidget {
     }
 
     return Container(
-      color: backgroundColor ?? Colors.white,
+      color: backgroundColor ?? context.colorScheme.background,
       width: width ?? 280,
       height: double.infinity,
       child: content,
@@ -112,8 +106,8 @@ class TDDrawerWidget extends StatelessWidget {
   }
 }
 
-class TDDrawerItem {
-  TDDrawerItem({this.title, this.icon, this.content});
+class MyDrawerItem {
+  MyDrawerItem({this.title, this.icon, this.content});
 
   final String? title;
 

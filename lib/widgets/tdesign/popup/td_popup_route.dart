@@ -10,8 +10,8 @@ enum SlideTransitionFrom { top, right, left, bottom, center }
 
 /// The route of the Dialog box that pops up by sliding from a certain direction
 /// of the screen, such as sliding out the page from the top, bottom, left, or right
-class TDSlidePopupRoute<T> extends PopupRoute<T> {
-  TDSlidePopupRoute({
+class MySlidePopupRoute<T> extends PopupRoute<T> {
+  MySlidePopupRoute({
     required this.builder,
     this.barrierLabel,
     this.modalBarrierColor = Colors.black54,

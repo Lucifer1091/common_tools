@@ -127,14 +127,9 @@ class MyButtonStyle {
   }
 
   Color? backgroundColor;
-
   Color? borderColor;
-
   Color? textColor;
-
   TextDecoration? decoration;
-
   double? borderWidth;
-
   BorderRadius? radius;
 }

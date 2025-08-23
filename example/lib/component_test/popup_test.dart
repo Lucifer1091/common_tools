@@ -29,7 +29,7 @@ class _TestPageState extends State<TestPage> {
 
   void _showProblemDialog() {
     Navigator.of(context).push(
-      TDSlidePopupRoute(
+      MySlidePopupRoute(
         slideTransitionFrom: SlideTransitionFrom.bottom,
         builder: (context) {
           return TDPopupBottomDisplayPanel(

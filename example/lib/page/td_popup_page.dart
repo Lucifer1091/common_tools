@@ -67,7 +67,7 @@ class TDPopupPageState extends State<TDPopupPage> {
               size: MyButtonSize.large,
               onTap: () {
                 Navigator.of(context).push(
-                  TDSlidePopupRoute(
+                  MySlidePopupRoute(
                     modalBarrierColor: ThemeColors.neutral.shade800,
                     slideTransitionFrom: SlideTransitionFrom.bottom,
                     builder: (context) {
@@ -104,7 +104,7 @@ class TDPopupPageState extends State<TDPopupPage> {
               size: MyButtonSize.large,
               onTap: () {
                 Navigator.of(context).push(
-                  TDSlidePopupRoute(
+                  MySlidePopupRoute(
                     modalBarrierColor: ThemeColors.neutral.shade800,
                     slideTransitionFrom: SlideTransitionFrom.bottom,
                     builder: (context) {
@@ -140,7 +140,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                     size: MyButtonSize.large,
                     onTap: () {
                       Navigator.of(context).push(
-                        TDSlidePopupRoute(
+                        MySlidePopupRoute(
                           modalBarrierColor: ThemeColors.neutral.shade800,
                           slideTransitionFrom: SlideTransitionFrom.bottom,
                           builder: (context) {
@@ -169,7 +169,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                     size: MyButtonSize.large,
                     onTap: () {
                       Navigator.of(context).push(
-                        TDSlidePopupRoute(
+                        MySlidePopupRoute(
                           modalBarrierColor: ThemeColors.neutral.shade800,
                           slideTransitionFrom: SlideTransitionFrom.bottom,
                           builder: (context) {
@@ -205,7 +205,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                     size: MyButtonSize.large,
                     onTap: () {
                       Navigator.of(context).push(
-                        TDSlidePopupRoute(
+                        MySlidePopupRoute(
                           modalBarrierColor: ThemeColors.neutral.shade800,
                           slideTransitionFrom: SlideTransitionFrom.center,
                           builder: (context) {
@@ -233,7 +233,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                     size: MyButtonSize.large,
                     onTap: () {
                       Navigator.of(context).push(
-                        TDSlidePopupRoute(
+                        MySlidePopupRoute(
                           modalBarrierColor: ThemeColors.neutral.shade800,
                           slideTransitionFrom: SlideTransitionFrom.center,
                           builder: (context) {
@@ -268,7 +268,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                 var renderBox =
                     navBarkey.currentContext!.findRenderObject() as RenderBox;
                 Navigator.of(context).push(
-                  TDSlidePopupRoute(
+                  MySlidePopupRoute(
                     modalBarrierColor: ThemeColors.neutral.shade800,
                     slideTransitionFrom: SlideTransitionFrom.right,
                     modalTop: renderBox.size.height,
@@ -298,7 +298,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                     size: MyButtonSize.large,
                     onTap: () {
                       Navigator.of(context).push(
-                        TDSlidePopupRoute(
+                        MySlidePopupRoute(
                           modalBarrierColor: ThemeColors.neutral.shade800,
                           slideTransitionFrom: SlideTransitionFrom.bottom,
                           builder: (context) {
@@ -339,7 +339,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                     size: MyButtonSize.large,
                     onTap: () {
                       Navigator.of(context).push(
-                        TDSlidePopupRoute(
+                        MySlidePopupRoute(
                           modalBarrierColor: ThemeColors.neutral.shade800,
                           slideTransitionFrom: SlideTransitionFrom.bottom,
                           focusMove: true,
@@ -381,7 +381,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                     size: MyButtonSize.large,
                     onTap: () {
                       Navigator.of(context).push(
-                        TDSlidePopupRoute(
+                        MySlidePopupRoute(
                           modalBarrierColor: ThemeColors.neutral.shade800,
                           slideTransitionFrom: SlideTransitionFrom.center,
                           focusMove: true,
@@ -471,7 +471,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                     size: MyButtonSize.large,
                     onTap: () {
                       Navigator.of(context).push(
-                        TDSlidePopupRoute(
+                        MySlidePopupRoute(
                           modalBarrierColor: ThemeColors.neutral.shade800,
                           slideTransitionFrom: SlideTransitionFrom.bottom,
                           builder: (context) {
@@ -500,7 +500,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                     size: MyButtonSize.large,
                     onTap: () {
                       Navigator.of(context).push(
-                        TDSlidePopupRoute(
+                        MySlidePopupRoute(
                           modalBarrierColor: ThemeColors.neutral.shade800,
                           slideTransitionFrom: SlideTransitionFrom.bottom,
                           builder: (context) {
@@ -539,7 +539,7 @@ class TDPopupPageState extends State<TDPopupPage> {
       size: MyButtonSize.large,
       onTap: () {
         Navigator.of(context).push(
-          TDSlidePopupRoute(
+          MySlidePopupRoute(
             modalBarrierColor: ThemeColors.neutral.shade800,
             slideTransitionFrom: SlideTransitionFrom.top,
             open: () {
@@ -566,7 +566,7 @@ class TDPopupPageState extends State<TDPopupPage> {
       size: MyButtonSize.large,
       onTap: () {
         Navigator.of(context).push(
-          TDSlidePopupRoute(
+          MySlidePopupRoute(
             modalBarrierColor: ThemeColors.neutral.shade800,
             slideTransitionFrom: SlideTransitionFrom.left,
             builder: (context) {
@@ -587,7 +587,7 @@ class TDPopupPageState extends State<TDPopupPage> {
       size: MyButtonSize.large,
       onTap: () {
         Navigator.of(context).push(
-          TDSlidePopupRoute(
+          MySlidePopupRoute(
             modalBarrierColor: ThemeColors.neutral.shade800,
             slideTransitionFrom: SlideTransitionFrom.center,
             builder: (context) {
@@ -608,7 +608,7 @@ class TDPopupPageState extends State<TDPopupPage> {
       size: MyButtonSize.large,
       onTap: () {
         Navigator.of(context).push(
-          TDSlidePopupRoute(
+          MySlidePopupRoute(
             modalBarrierColor: ThemeColors.neutral.shade800,
             slideTransitionFrom: SlideTransitionFrom.bottom,
             builder: (context) {
@@ -629,7 +629,7 @@ class TDPopupPageState extends State<TDPopupPage> {
       size: MyButtonSize.large,
       onTap: () {
         Navigator.of(context).push(
-          TDSlidePopupRoute(
+          MySlidePopupRoute(
             modalBarrierColor: ThemeColors.neutral.shade800,
             slideTransitionFrom: SlideTransitionFrom.right,
             builder: (context) {
@@ -650,7 +650,7 @@ class TDPopupPageState extends State<TDPopupPage> {
       size: MyButtonSize.large,
       onTap: () {
         Navigator.of(context).push(
-          TDSlidePopupRoute(
+          MySlidePopupRoute(
             modalBarrierColor: ThemeColors.neutral.shade800,
             slideTransitionFrom: SlideTransitionFrom.bottom,
             builder: (context) {
@@ -681,7 +681,7 @@ class TDPopupPageState extends State<TDPopupPage> {
       size: MyButtonSize.large,
       onTap: () {
         Navigator.of(context).push(
-          TDSlidePopupRoute(
+          MySlidePopupRoute(
             modalBarrierColor: ThemeColors.neutral.shade800,
             slideTransitionFrom: SlideTransitionFrom.bottom,
             builder: (context) {
@@ -711,7 +711,7 @@ class TDPopupPageState extends State<TDPopupPage> {
       size: MyButtonSize.large,
       onTap: () {
         Navigator.of(context).push(
-          TDSlidePopupRoute(
+          MySlidePopupRoute(
             modalBarrierColor: ThemeColors.neutral.shade800,
             slideTransitionFrom: SlideTransitionFrom.bottom,
             builder: (context) {
@@ -738,7 +738,7 @@ class TDPopupPageState extends State<TDPopupPage> {
       size: MyButtonSize.large,
       onTap: () {
         Navigator.of(context).push(
-          TDSlidePopupRoute(
+          MySlidePopupRoute(
             modalBarrierColor: ThemeColors.neutral.shade800,
             slideTransitionFrom: SlideTransitionFrom.bottom,
             builder: (context) {
@@ -766,7 +766,7 @@ class TDPopupPageState extends State<TDPopupPage> {
       size: MyButtonSize.large,
       onTap: () {
         Navigator.of(context).push(
-          TDSlidePopupRoute(
+          MySlidePopupRoute(
             modalBarrierColor: ThemeColors.neutral.shade800,
             slideTransitionFrom: SlideTransitionFrom.bottom,
             builder: (context) {
@@ -792,7 +792,7 @@ class TDPopupPageState extends State<TDPopupPage> {
       size: MyButtonSize.large,
       onTap: () {
         Navigator.of(context).push(
-          TDSlidePopupRoute(
+          MySlidePopupRoute(
             modalBarrierColor: ThemeColors.neutral.shade800,
             slideTransitionFrom: SlideTransitionFrom.bottom,
             builder: (context) {
@@ -820,7 +820,7 @@ class TDPopupPageState extends State<TDPopupPage> {
       size: MyButtonSize.large,
       onTap: () {
         Navigator.of(context).push(
-          TDSlidePopupRoute(
+          MySlidePopupRoute(
             modalBarrierColor: ThemeColors.neutral.shade800,
             isDismissible: false,
             slideTransitionFrom: SlideTransitionFrom.center,
@@ -847,7 +847,7 @@ class TDPopupPageState extends State<TDPopupPage> {
       size: MyButtonSize.large,
       onTap: () {
         Navigator.of(context).push(
-          TDSlidePopupRoute(
+          MySlidePopupRoute(
             modalBarrierColor: ThemeColors.neutral.shade800,
             isDismissible: false,
             slideTransitionFrom: SlideTransitionFrom.center,

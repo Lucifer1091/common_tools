@@ -98,7 +98,7 @@ class TDActionSheet {
 
   final bool useSafeArea;
 
-  static TDSlidePopupRoute<void>? _actionSheetRoute;
+  static MySlidePopupRoute<void>? _actionSheetRoute;
 
   static void showListActionSheet(
     BuildContext context, {
@@ -261,7 +261,7 @@ class TDActionSheet {
   }) {
     if (_actionSheetRoute != null) return;
 
-    _actionSheetRoute = TDSlidePopupRoute(
+    _actionSheetRoute = MySlidePopupRoute(
       isDismissible: showOverlay && closeOnOverlayClick,
       modalBarrierColor: showOverlay ? null : Colors.transparent,
       builder: (context) {

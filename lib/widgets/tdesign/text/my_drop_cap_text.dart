@@ -1,40 +1,33 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
-
 import '../../../index.dart';
 
+/// Drop cap modes for [MyDropCapText].
 enum MyDropCapMode {
-  /// default
+  /// Default: drop cap inside the paragraph.
   inside,
+
+  /// Drop cap upwards, aligned to the last line of the first row.
   upwards,
+
+  /// Drop cap aside, not affecting the paragraph flow.
   aside,
 
-  /// Does not support dropCapPadding, indentation, dropCapPosition and custom dropCap.
-  /// Try using DropCapMode.upwards in combination with dropCapPadding and forceNoDescent=true
+  /// Baseline mode. Does not support dropCapPadding, indentation, dropCapPosition and custom dropCap.
+  /// Try using DropCapMode.upwards with dropCapPadding and forceNoDescent=true for similar effect.
   baseline,
 }
 
+/// Drop cap position for [MyDropCapText].
 enum MyDropCapPosition { start, end }
 
-class MyDropCap extends StatelessWidget {
-  const MyDropCap({
-    required this.child,
-    required this.width,
-    required this.height,
-    super.key,
-  });
-
-  final Widget child;
-  final double width, height;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(width: width, height: height, child: child);
-  }
-}
-
+/// A widget for rendering a drop cap (large initial letter or widget) in a paragraph of text.
+///
+/// Supports custom drop cap widget, markdown parsing, indentation, and multiple layout modes.
 class MyDropCapText extends StatelessWidget {
+  /// Creates a drop cap text widget.
+  ///
+  /// [data] is required. See parameters for customization.
   const MyDropCapText(
     this.data, {
     super.key,
@@ -54,18 +47,49 @@ class MyDropCapText extends StatelessWidget {
     this.position,
   });
 
+  /// The full text to display.
   final String data;
+
+  /// The drop cap layout mode.
   final MyDropCapMode mode;
-  final TextStyle? style, dropCapStyle;
+
+  /// The text style for the main paragraph.
+  final TextStyle? style;
+
+  /// The text style for the drop cap.
+  final TextStyle? dropCapStyle;
+
+  /// The alignment of the paragraph text.
   final TextAlign textAlign;
+
+  /// Custom drop cap widget. If provided, overrides [dropCapChars].
   final MyDropCap? dropCap;
+
+  /// Padding around the drop cap.
   final EdgeInsets dropCapPadding;
+
+  /// Indentation for the paragraph after the drop cap.
   final Offset indentation;
-  final bool forceNoDescent, parseInlineMarkdown;
-  final TextDirection textDirection;
-  final MyDropCapPosition? position;
+
+  /// Number of characters to use as the drop cap (ignored if [dropCap] is provided).
   final int dropCapChars;
+
+  /// Forces the drop cap to ignore font descent for tighter layout.
+  final bool forceNoDescent;
+
+  /// Enables parsing of inline markdown in the paragraph.
+  final bool parseInlineMarkdown;
+
+  /// The text direction.
+  final TextDirection textDirection;
+
+  /// The drop cap position (start or end).
+  final MyDropCapPosition? position;
+
+  /// Maximum number of lines for the paragraph.
   final int? maxLines;
+
+  /// Overflow behavior for the paragraph.
   final TextOverflow overflow;
 
   @override
@@ -79,7 +103,7 @@ class MyDropCapText extends StatelessWidget {
       fontFamily: bodyLarge.fontFamily,
     ).merge(style);
 
-    if (data == '') return Text(data, style: textStyle);
+    if (data.isEmpty) return MyText(data, style: textStyle);
 
     final double textStyleFontSize = textStyle.fontSize!;
 
@@ -110,13 +134,13 @@ class MyDropCapText extends StatelessWidget {
       return _buildBaseline(context, textStyle, capStyle);
     }
 
-    // custom DropCap
+    // Custom DropCap widget
     if (dropCap != null) {
       capWidth = dropCap!.width;
       capHeight = dropCap!.height;
     } else {
       final TextPainter capPainter = TextPainter(
-        text: TextSpan(text: dropCapStr, style: capStyle),
+        text: MyTextSpan(text: dropCapStr, style: capStyle),
         textDirection: textDirection,
       )..layout();
       capWidth = capPainter.width;
@@ -128,7 +152,7 @@ class MyDropCapText extends StatelessWidget {
       }
     }
 
-    // compute drop cap padding
+    // Compute drop cap padding
     capWidth += dropCapPadding.left + dropCapPadding.right;
     capHeight += dropCapPadding.top + dropCapPadding.bottom;
 
@@ -136,7 +160,7 @@ class MyDropCapText extends StatelessWidget {
         parseInlineMarkdown ? mdData!.subchars(dropCapChars) : null;
     final String restData = data.substring(dropCapChars);
 
-    final TextSpan textSpan = TextSpan(
+    final MyTextSpan textSpan = MyTextSpan(
       text: parseInlineMarkdown ? null : restData,
       children: parseInlineMarkdown ? mdRest!.toTextSpanList() : null,
       style: textStyle,
@@ -151,13 +175,13 @@ class MyDropCapText extends StatelessWidget {
 
     int rows = ((capHeight - indentation.dy) / lineHeight).ceil();
 
-    // DROP CAP MODE - UPWARDS
+    // Drop cap mode: upwards
     if (mode == MyDropCapMode.upwards) {
       rows = 1;
       sideCrossAxisAlignment = CrossAxisAlignment.end;
     }
 
-    // BUILDER
+    // Layout builder for responsive drop cap
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         double boundsWidth = constraints.maxWidth - capWidth;
@@ -165,7 +189,6 @@ class MyDropCapText extends StatelessWidget {
 
         int charIndexEnd = data.length;
 
-        //int startMillis = new DateTime.now().millisecondsSinceEpoch;
         if (rows > 0) {
           textPainter.layout(maxWidth: boundsWidth);
           final double yPos = rows * lineHeight;
@@ -178,19 +201,16 @@ class MyDropCapText extends StatelessWidget {
         } else {
           charIndexEnd = dropCapChars;
         }
-        //int totMillis = new DateTime.now().millisecondsSinceEpoch - startMillis;
 
-        // DROP CAP MODE - LEFT
+        // Drop cap mode: aside
         if (mode == MyDropCapMode.aside) charIndexEnd = data.length;
 
-        return Column(
+        return FlexColumn(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            // Text(totMillis.toString() + ' ms'),
             Row(
               textDirection:
-                  position == null ||
-                          position == MyDropCapPosition.start
+                  position == null || position == MyDropCapPosition.start
                       ? textDirection
                       : (textDirection == TextDirection.ltr
                           ? TextDirection.rtl
@@ -207,7 +227,7 @@ class MyDropCapText extends StatelessWidget {
                     child: RichText(
                       textDirection: textDirection,
                       textAlign: textAlign,
-                      text: TextSpan(text: dropCapStr, style: capStyle),
+                      text: MyTextSpan(text: dropCapStr, style: capStyle),
                     ),
                   ),
                 Flexible(
@@ -246,7 +266,7 @@ class MyDropCapText extends StatelessWidget {
                           : null,
                   textAlign: textAlign,
                   textDirection: textDirection,
-                  text: TextSpan(
+                  text: MyTextSpan(
                     text:
                         parseInlineMarkdown
                             ? null
@@ -267,6 +287,7 @@ class MyDropCapText extends StatelessWidget {
     );
   }
 
+  /// Builds drop cap text in baseline mode.
   RichText _buildBaseline(
     BuildContext context,
     TextStyle textStyle,
@@ -276,14 +297,14 @@ class MyDropCapText extends StatelessWidget {
 
     return RichText(
       textAlign: textAlign,
-      text: TextSpan(
+      text: MyTextSpan(
         style: textStyle,
-        children: <TextSpan>[
-          TextSpan(
+        children: <MyTextSpan>[
+          MyTextSpan(
             text: mdData.plainText.substring(0, dropCapChars),
-            style: capStyle.merge(TextStyle(height: 0)),
+            style: capStyle.merge(const TextStyle(height: 0)),
           ),
-          TextSpan(
+          MyTextSpan(
             children: mdData.subchars(dropCapChars).toTextSpanList(),
             style: textStyle,
           ),
@@ -292,6 +313,33 @@ class MyDropCapText extends StatelessWidget {
     );
   }
 }
+
+/// A widget for rendering a custom drop cap (large initial letter or widget).
+class MyDropCap extends StatelessWidget {
+  /// Creates a custom drop cap widget.
+  const MyDropCap({
+    required this.child,
+    required this.width,
+    required this.height,
+    super.key,
+  });
+
+  /// The drop cap widget.
+  final Widget child;
+
+  /// The width of the drop cap.
+  final double width;
+
+  /// The height of the drop cap.
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(width: width, height: height, child: child);
+  }
+}
+
+// ...existing _MarkdownParser, _MarkdownSpan, _Markup classes...
 
 class _MarkdownParser {
   _MarkdownParser(this.data) {
@@ -309,7 +357,8 @@ class _MarkdownParser {
     void addSpan(String markup, bool isOpening) {
       final List<_Markup> markups = [_Markup(markup, isOpening)];
 
-      if (bold && markup != MARKUP_BOLD) markups.add(_Markup(MARKUP_BOLD, true));
+      if (bold && markup != MARKUP_BOLD)
+        markups.add(_Markup(MARKUP_BOLD, true));
       if (italic && markup != MARKUP_ITALIC) {
         markups.add(_Markup(MARKUP_ITALIC, true));
       }

@@ -38,7 +38,7 @@ class TDCellGroup extends StatefulWidget {
 
   final CellBuilder? builder;
 
-  final TDCellStyle? style;
+  final MyCellStyle? style;
 
   final bool? scrollable;
 
@@ -51,7 +51,7 @@ class TDCellGroup extends StatefulWidget {
 class _TDCellGroupState extends State<TDCellGroup> {
   @override
   Widget build(BuildContext context) {
-    final style = widget.style ?? TDCellStyle.cellStyle(context);
+    final style = widget.style ?? MyCellStyle.cellStyle(context);
     final itemCount = widget.cells.length;
     final radius = _getBorderRadius(style);
 
@@ -117,21 +117,21 @@ class _TDCellGroupState extends State<TDCellGroup> {
     );
   }
 
-  BoxBorder? _getBordered(TDCellStyle style) {
+  BoxBorder? _getBordered(MyCellStyle style) {
     if (!(widget.bordered ?? false)) return null;
 
     final color = style.groupBorderedColor ?? ThemeColors.neutral.shade200;
     return Border.all(color: color);
   }
 
-  BorderRadiusGeometry _getBorderRadius(TDCellStyle style) {
+  BorderRadiusGeometry _getBorderRadius(MyCellStyle style) {
     if (widget.theme == TDCellGroupTheme.cardTheme) {
       return style.cardBorderRadius ?? BorderRadius.zero;
     }
     return BorderRadius.zero;
   }
 
-  Widget _borderWidget(TDCellStyle style) {
+  Widget _borderWidget(MyCellStyle style) {
     return Row(
       children: [
         Container(height: 0.5, width: 16, color: style.backgroundColor),

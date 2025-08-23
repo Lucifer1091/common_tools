@@ -82,7 +82,7 @@ class TDCell extends StatefulWidget {
 
   final TDCellClick? onLongPress;
 
-  final TDCellStyle? style;
+  final MyCellStyle? style;
 
   final bool? disabled;
 
@@ -102,7 +102,7 @@ class _TDCellState extends State<TDCell> {
     final style =
         widget.style ??
         TDCellInherited.of(context)?.style ??
-        TDCellStyle.cellStyle(context);
+        MyCellStyle.cellStyle(context);
     final crossAxisAlignment = _getAlign();
     final color =
         _status == 'default'

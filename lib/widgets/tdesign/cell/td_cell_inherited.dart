@@ -5,7 +5,7 @@ import 'td_cell_style.dart';
 class TDCellInherited extends InheritedWidget {
   const TDCellInherited({required super.child, required this.style, super.key});
 
-  final TDCellStyle style;
+  final MyCellStyle style;
 
   @override
   bool updateShouldNotify(covariant TDCellInherited oldWidget) {
