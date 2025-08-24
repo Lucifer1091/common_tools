@@ -635,7 +635,7 @@ class TDBottomTabBarPopUpBtnConfig {
          return true;
        }(), '');
 
-  /// 选项list
+  /// Optionslist
   final List<PopUpMenuItem> items;
 
   /// 统一在 onChanged 中处理各item点击事件
@@ -659,7 +659,7 @@ class TDBottomTabBarPopUpShapeConfig {
   /// 弹窗宽度（不设置，默认为按钮宽度 - 20）
   final double? popUpWidth;
 
-  /// 单个选项高度 所有选项等高 不设置则使用默认值 48
+  /// 单个Options高度 所有Options等高 不设置则使用默认值 48
   final double? popUpitemHeight;
 
   /// 弹窗背景颜色
@@ -684,10 +684,10 @@ class PopUpMenuItem extends StatelessWidget {
     this.alignment = AlignmentDirectional.center,
   });
 
-  /// 选项widget
+  /// Optionswidget
   final Widget? itemWidget;
 
-  /// 选项值
+  /// Options值
   final String value;
 
   /// 对齐方式

@@ -210,17 +210,17 @@ class _TDPopoverPage extends State<TDPopoverPage> {
       children: [
         Container(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-          child: MyText('选项1', style: TextStyle(color: Colors.white)),
+          child: MyText('Options1', style: TextStyle(color: Colors.white)),
         ),
         MyDivider(color: context.colorScheme.primaryForeground, height: 0.5),
         Container(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-          child: MyText('选项2', style: TextStyle(color: Colors.white)),
+          child: MyText('Options2', style: TextStyle(color: Colors.white)),
         ),
         MyDivider(color: context.colorScheme.primaryForeground, height: 0.5),
         Container(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-          child: MyText('选项3', style: TextStyle(color: Colors.white)),
+          child: MyText('Options3', style: TextStyle(color: Colors.white)),
         ),
       ],
     );

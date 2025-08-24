@@ -66,8 +66,8 @@ class _TDPickerPageState extends State<TDPickerPage> {
         ExampleModule(
           title: 'Component Style',
           children: [
-            ExampleItem(desc: '带标题选择器', builder: buildAreaWithTitle),
-            ExampleItem(desc: '无标题选择器', builder: buildAreaWithoutTitle),
+            ExampleItem(desc: '带Title选择器', builder: buildAreaWithTitle),
+            ExampleItem(desc: '无Title选择器', builder: buildAreaWithoutTitle),
           ],
         ),
       ],
@@ -155,7 +155,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
           data: [data_1],
         );
       },
-      child: buildSelectRow(context, selected_4, '带标题选择器'),
+      child: buildSelectRow(context, selected_4, '带Title选择器'),
     );
   }
 
@@ -174,7 +174,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
           data: [data_1],
         );
       },
-      child: buildSelectRow(context, selected_5, '无标题选择器'),
+      child: buildSelectRow(context, selected_5, '无Title选择器'),
     );
   }
 

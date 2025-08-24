@@ -53,13 +53,13 @@ class MyLink extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (type == MyLinkType.withPrefix) {
-      return MyRow(
-        gap: _getGap(context),
+      return Row(
+        spacing: _getGap(context),
         children: [_getDefaultIcon(context), _buildLink(context)],
       );
     } else if (type == MyLinkType.withSuffix) {
-      return MyRow(
-        gap: _getGap(context),
+      return Row(
+        spacing: _getGap(context),
         children: [_buildLink(context), _getDefaultIcon(context)],
       );
     }

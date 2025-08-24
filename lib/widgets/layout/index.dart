@@ -1,8 +1,6 @@
 export 'adaptive_ui.dart';
 export 'adaptive_widget.dart';
 export 'alignments.dart';
-export 'my_column.dart';
-export 'my_row.dart';
 export 'no_widget.dart';
 export 'orientation_widget.dart';
 export 'platform_widget.dart';

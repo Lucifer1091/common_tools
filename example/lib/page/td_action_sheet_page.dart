@@ -126,7 +126,7 @@ class TDActionSheetPage extends StatelessWidget {
             children: [
               ExampleItem(
                 ignoreCode: true,
-                desc: '列表型选项状态',
+                desc: '列表型Options状态',
                 builder: (BuildContext context) {
                   return Column(
                     children: [
@@ -177,7 +177,7 @@ Widget _buildBaseListActionSheet(BuildContext context) {
       TDActionSheet(
         context,
         visible: true,
-        items: _nums.map((e) => ActionSheetItem(label: '选项$e')).toList(),
+        items: _nums.map((e) => ActionSheetItem(label: 'Options$e')).toList(),
       );
     },
   );
@@ -194,7 +194,7 @@ Widget _buildDescListActionSheet(BuildContext context) {
         context,
         visible: true,
         description: '动作面板描述文字',
-        items: _nums.map((e) => ActionSheetItem(label: '选项$e')).toList(),
+        items: _nums.map((e) => ActionSheetItem(label: 'Options$e')).toList(),
       );
     },
   );
@@ -213,7 +213,7 @@ Widget _buildIconListActionSheet(BuildContext context) {
         items: _nums
             .map(
               (e) => ActionSheetItem(
-                label: '选项$e',
+                label: 'Options$e',
                 icon: const Icon(Icons.dashboard_rounded),
               ),
             )
@@ -235,19 +235,19 @@ Widget _buildBadgeListActionSheet(BuildContext context) {
         visible: true,
         items: [
           ActionSheetItem(
-            label: '选项一',
+            label: 'Options一',
             badge: const MyBadge(MyBadgeType.redPoint),
           ),
           ActionSheetItem(
-            label: '选项二',
+            label: 'Options二',
             badge: const MyBadge(MyBadgeType.message, count: 8),
           ),
           ActionSheetItem(
-            label: '选项三',
+            label: 'Options三',
             badge: const MyBadge(MyBadgeType.message, count: 99),
           ),
           ActionSheetItem(
-            label: '选项四',
+            label: 'Options四',
             badge: const MyBadge(MyBadgeType.message, message: '99+'),
           ),
         ],
@@ -471,7 +471,7 @@ Widget _buildBadgeGridActionSheet(BuildContext context) {
 
 Widget _buildBaseListStateActionSheet(BuildContext context) {
   return MyButton(
-    text: '列表型选项状态',
+    text: '列表型Options状态',
     isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
@@ -480,14 +480,14 @@ Widget _buildBaseListStateActionSheet(BuildContext context) {
         context,
         visible: true,
         items: [
-          ActionSheetItem(label: '默认选项'),
+          ActionSheetItem(label: '默认Options'),
           ActionSheetItem(
-            label: '自定义选项',
+            label: '自定义Options',
             textStyle: TextStyle(color: context.colorScheme.primary),
           ),
-          ActionSheetItem(label: '失效选项', disabled: true),
+          ActionSheetItem(label: '失效Options', disabled: true),
           ActionSheetItem(
-            label: '警告选项',
+            label: '警告Options',
             textStyle: const TextStyle(color: Colors.red),
           ),
         ],
@@ -511,21 +511,21 @@ Widget _buildIconListStateActionSheet(BuildContext context) {
         visible: true,
         items: [
           ActionSheetItem(
-            label: '默认选项',
+            label: '默认Options',
             icon: const Icon(Icons.dashboard_rounded),
           ),
           ActionSheetItem(
-            label: '自定义选项',
+            label: '自定义Options',
             icon: const Icon(Icons.dashboard_rounded),
             textStyle: TextStyle(color: context.colorScheme.primary),
           ),
           ActionSheetItem(
-            label: '失效选项',
+            label: '失效Options',
             icon: const Icon(Icons.dashboard_rounded),
             disabled: true,
           ),
           ActionSheetItem(
-            label: '警告选项',
+            label: '警告Options',
             icon: const Icon(Icons.dashboard_rounded),
             textStyle: const TextStyle(color: Colors.red),
           ),
@@ -551,15 +551,15 @@ Widget _buildBadgeListCenterActionSheet(BuildContext context) {
         description: '动作面板描述文字',
         items: [
           ActionSheetItem(
-            label: '选项一',
+            label: 'Options一',
             badge: const MyBadge(MyBadgeType.redPoint),
           ),
           ActionSheetItem(
-            label: '选项二',
+            label: 'Options二',
             badge: const MyBadge(MyBadgeType.message, count: 8),
           ),
           ActionSheetItem(
-            label: '选项三',
+            label: 'Options三',
             badge: const MyBadge(MyBadgeType.message, message: '99'),
           ),
         ],
@@ -582,7 +582,7 @@ Widget _buildIconListCenterActionSheet(BuildContext context) {
         items: _nums
             .map(
               (e) => ActionSheetItem(
-                label: '选项$e',
+                label: 'Options$e',
                 icon: const Icon(Icons.dashboard_rounded),
               ),
             )
@@ -607,7 +607,7 @@ Widget _buildBadgeListLeftActionSheet(BuildContext context) {
         items: _nums
             .map(
               (e) => ActionSheetItem(
-                label: '选项$e',
+                label: 'Options$e',
                 badge: const MyBadge(MyBadgeType.redPoint),
               ),
             )
@@ -632,7 +632,7 @@ Widget _buildIconListLeftActionSheet(BuildContext context) {
         items: _nums
             .map(
               (e) => ActionSheetItem(
-                label: '选项$e',
+                label: 'Options$e',
                 icon: const Icon(Icons.dashboard_rounded),
               ),
             )

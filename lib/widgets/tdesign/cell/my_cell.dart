@@ -183,12 +183,12 @@ class _MyCellState extends State<MyCell> {
               height: widget.height,
               padding: style.padding,
               decoration: BoxDecoration(color: color, border: border),
-              child: MyRow(
+              child: Row(
                 crossAxisAlignment: crossAxisAlignment,
                 children: [
                   ..._getImage(),
                   Expanded(
-                    child: MyRow(
+                    child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         if (widget.leftIcon != null ||
@@ -202,10 +202,10 @@ class _MyCellState extends State<MyCell> {
                           const Gap(12),
                         ],
                         Expanded(
-                          child: MyColumn(
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              MyRow(
+                              Row(
                                 children: [
                                   if (widget.titleWidget != null)
                                     Flexible(child: widget.titleWidget!)

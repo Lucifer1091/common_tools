@@ -80,7 +80,7 @@ class TDActionSheetList extends StatelessWidget {
     );
   }
 
-  /// 构建选项列表
+  /// 构建Options列表
   Widget _buildOptionsList(BuildContext context) {
     return ColoredBox(
       color: ThemeColors.neutral.shade300,

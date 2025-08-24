@@ -1,11 +1,9 @@
-/// @Type Flutter
-/// @Author lwb
-/// @Date 2024/5/28
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:common_tools/index.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../base/example_widget.dart';
 
@@ -124,7 +122,7 @@ Widget _entranceNoticeBar2(BuildContext context) {
 Widget _customNoticeBar(BuildContext context) {
   return TDNoticeBar(
     content: '这是一条普通的通知信息',
-    prefixIcon: Icons.notifications,
+    prefixIcon: LucideIcons.bell,
     suffixIcon: Icons.chevron_right,
     style: TDNoticeBarStyle(backgroundColor: ThemeColors.neutral.shade200),
   );

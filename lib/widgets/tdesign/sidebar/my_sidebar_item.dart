@@ -5,7 +5,7 @@ import '../badge/my_badge.dart';
 class MySideBarItem {
   const MySideBarItem({
     this.badge,
-    this.disabled = false,
+    this.enabled = true,
     this.icon,
     this.textStyle,
     this.label = '',
@@ -14,7 +14,7 @@ class MySideBarItem {
 
   final MyBadge? badge;
 
-  final bool disabled;
+  final bool enabled;
 
   final IconData? icon;
 

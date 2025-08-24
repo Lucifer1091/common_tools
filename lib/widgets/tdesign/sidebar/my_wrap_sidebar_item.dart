@@ -4,14 +4,14 @@ import '../../../index.dart';
 
 class MyWrapSideBarItem extends StatelessWidget {
   const MyWrapSideBarItem({
-    required this.disabled,
+    required this.enabled,
     required this.style,
     super.key,
     this.badge,
     this.icon,
     this.label = '',
     this.contentPadding,
-    this.textStyle = const TextStyle(fontSize: 16, height: 1.5),
+    this.textStyle,
     this.selectedTextStyle,
     this.value = -1,
     this.selected = false,
@@ -24,12 +24,11 @@ class MyWrapSideBarItem extends StatelessWidget {
   });
 
   final MyBadge? badge;
-  final bool disabled;
+  final bool enabled;
   final IconData? icon;
   final String label;
   final EdgeInsetsGeometry? contentPadding;
-  final TextStyle? textStyle;
-  final TextStyle? selectedTextStyle;
+  final TextStyle? textStyle, selectedTextStyle;
   final int value;
   final bool selected;
   final Color? selectedColor;
@@ -40,7 +39,8 @@ class MyWrapSideBarItem extends StatelessWidget {
   final VoidCallback? onTap;
   final MySideBarStyle style;
 
-  static const preLineWidth = 3.0;
+  static const double preLineWidth = 3.0;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -53,20 +53,20 @@ class MyWrapSideBarItem extends StatelessWidget {
   }
 
   Widget renderNormalItem(BuildContext context) {
+    final selectedBg = selectedBgColor ?? context.colorScheme.background;
     return DecoratedBox(
-      decoration: BoxDecoration(color: selectedBgColor ?? Colors.white),
+      decoration: BoxDecoration(color: selectedBg),
       child: DecoratedBox(
         decoration: BoxDecoration(
           color:
               selected
-                  ? (selectedBgColor ?? Colors.white)
-                  : (unSelectedBgColor ??
-                      const Color.fromRGBO(243, 243, 243, 1)),
+                  ? selectedBg
+                  : (unSelectedBgColor ?? context.colorScheme.secondary),
           borderRadius:
               bottomAdjacent || topAdjacent
                   ? bottomAdjacent
-                      ? const BorderRadius.only(bottomRight: Radius.circular(9))
-                      : const BorderRadius.only(topRight: Radius.circular(9))
+                      ? const BorderRadius.only(bottomRight: MyRadi.large)
+                      : const BorderRadius.only(topRight: MyRadi.large)
                   : null,
         ),
         child: Row(
@@ -74,7 +74,9 @@ class MyWrapSideBarItem extends StatelessWidget {
             renderPreLine(context),
             Expanded(
               child: Padding(
-                padding: contentPadding ?? const EdgeInsets.all(16),
+                padding:
+                    contentPadding ??
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: renderMainContent(context),
               ),
             ),
@@ -88,15 +90,12 @@ class MyWrapSideBarItem extends StatelessWidget {
     return ConstrainedBox(
       constraints: const BoxConstraints(minHeight: 56),
       child: Container(
-        // height: 86,
-        decoration: const BoxDecoration(
-          color: Color.fromRGBO(246, 246, 246, 1),
-        ),
+        decoration: BoxDecoration(color: context.colorScheme.secondary),
         padding: const EdgeInsets.all(8),
         child: Container(
           decoration: BoxDecoration(
-            color: selected && !disabled ? Colors.white : null,
-            borderRadius: BorderRadius.circular(6),
+            color: selected && enabled ? context.colorScheme.background : null,
+            borderRadius: MyBorderRadius.medium,
           ),
           padding: const EdgeInsets.all(8),
           child: renderMainContent(context),
@@ -107,33 +106,26 @@ class MyWrapSideBarItem extends StatelessWidget {
 
   Widget renderMainContent(BuildContext context) {
     return Row(
-      children: [
-        renderIcon(context),
-        Expanded(child: renderLabel(context)),
-        if (label.length > 4) renderBadge(context),
-        // SizedBox(
-        //   width: !disabled && selected ? 0 : preLineWidth,
-        // )
-      ],
+      children: [renderIcon(context), Expanded(child: renderLabel(context))],
     );
   }
 
   Widget renderPreLine(BuildContext context) {
     return Visibility(
-      visible: !disabled && selected,
+      visible: enabled && selected,
       replacement: const SizedBox(width: preLineWidth),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
             width: preLineWidth,
-            height: 14,
+            height: 16,
             decoration: BoxDecoration(
               color:
                   selectedTextStyle != null
                       ? selectedTextStyle?.color
-                      : (selectedColor ?? ThemeColors.blue.shade600),
-              borderRadius: BorderRadius.circular(4),
+                      : (selectedColor ?? context.colorScheme.primary),
+              borderRadius: MyBorderRadius.small,
             ),
           ),
         ],
@@ -150,67 +142,35 @@ class MyWrapSideBarItem extends StatelessWidget {
           icon,
           size: 20,
           color:
-              disabled
-                  ? ThemeColors.neutral.shade600
+              !enabled
+                  ? context.colorScheme.mutedForeground
                   : selected
                   ? selectedTextStyle != null
                       ? selectedTextStyle?.color
-                      : (selectedColor ?? ThemeColors.blue.shade600)
-                  : Colors.black,
+                      : (selectedColor ?? context.colorScheme.primary)
+                  : context.colorScheme.secondaryForeground,
         ),
       ),
     );
   }
 
   Widget renderLabel(BuildContext context) {
-    return MyText.rich(
-      MyTextSpan(
-        children: [
-          WidgetSpan(
-            child: MyText(
-              label,
-              style:
-                  selected
-                      ? (selectedTextStyle ?? TextStyle(color: selectedColor))
-                      : textStyle,
-              fontWeight:
-                  selected && !disabled ? FontWeight.w600 : FontWeight.w400,
-              textColor:
-                  disabled
-                      ? ThemeColors.neutral.shade600
-                      : selected
-                      ? selectedColor ?? ThemeColors.blue.shade600
-                      : Colors.black,
-              //
-            ),
-          ),
-          if (label.length < 4)
-            WidgetSpan(
-              child: SizedBox(
-                width: 1,
-                height: 16,
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    if (badge != null) Positioned(top: -6, child: badge!),
-                  ],
-                ),
-              ),
-            ),
-        ],
-      ),
-      softWrap: true,
-      style: selectedTextStyle,
-    );
-  }
-
-  Widget renderBadge(BuildContext context) {
-    return SizedBox(
-      width: 1,
-      height: 40,
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [if (badge != null) Positioned(top: -6, child: badge!)],
+    return MyBadgeWrapper(
+      badge: badge,
+      top: 0,
+      right: badge?.type == MyBadgeType.redPoint ? 4 : -4,
+      child: MyText(
+        label,
+        style: selected ? (selectedTextStyle ?? context.bodyLarge) : textStyle,
+        fontWeight: selected && enabled ? FontWeight.w600 : FontWeight.w400,
+        softWrap: true,
+        textColor:
+            !enabled
+                ? context.colorScheme.mutedForeground
+                : selected
+                ? selectedColor ?? context.colorScheme.primary
+                : context.colorScheme.secondaryForeground,
+        //
       ),
     );
   }

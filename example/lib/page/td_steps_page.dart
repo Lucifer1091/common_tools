@@ -61,7 +61,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
             ExampleItem(desc: '垂直错误状态图标步骤条', builder: _buildVErrorIconSteps),
             ExampleItem(desc: '垂直错误状态简略步骤条', builder: _buildVErrorSimpleSteps),
             ExampleItem(
-              desc: '垂直自定义标题基本步骤条',
+              desc: '垂直自定义Title基本步骤条',
               builder: _buildVCustomTitleBaseSteps,
             ),
             ExampleItem(
@@ -734,7 +734,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
       customTitle: Container(
         margin: const EdgeInsets.only(bottom: 16, top: 4),
         child: const Text(
-          '这是一个很长很长的自定义标题，可以自动换行的一个标题内容',
+          '这是一个很长很长的自定义Title，可以自动换行的一个Title内容',
           softWrap: true,
           maxLines: 2,
           overflow: TextOverflow.visible,
@@ -748,7 +748,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
   List<TDStepsItemData> vCustomContentBasicStepsListData = [
     TDStepsItemData(title: 'Filish', content: 'Customize content'),
     TDStepsItemData(
-      title: '这是一个很长很长很长很长的文字，他是用来展示这个步骤的标题',
+      title: '这是一个很长很长很长很长的文字，他是用来展示这个步骤的Title',
       content: 'Customize content',
       customContent: Container(
         margin: const EdgeInsets.only(bottom: 16, top: 4),
@@ -765,7 +765,7 @@ class _TDStepsPageState extends State<TDStepsPage> {
     TDStepsItemData(title: 'Default', content: 'Customize content'),
   ];
 
-  /// 垂直自定义标题基本步骤条
+  /// 垂直自定义Title基本步骤条
 
   Widget _buildVCustomTitleBaseSteps(BuildContext context) {
     return Padding(

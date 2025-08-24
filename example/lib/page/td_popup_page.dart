@@ -60,7 +60,7 @@ class TDPopupPageState extends State<TDPopupPage> {
           desc: '操作栏超长文本,指定颜色',
           builder: (_) {
             return MyButton(
-              text: '底部弹出层-带标题及操作',
+              text: '底部弹出层-带Title及操作',
               isExpanded: true,
 
               type: MyButtonType.outline,
@@ -72,7 +72,8 @@ class TDPopupPageState extends State<TDPopupPage> {
                     slideTransitionFrom: MySlideFrom.bottom,
                     builder: (context) {
                       return TDPopupBottomConfirmPanel(
-                        title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
+                        title:
+                            'Title CharacterTitle CharacterTitle CharacterTitle CharacterTitle CharacterTitle CharacterTitle CharacterTitle Character',
                         leftText: '点这里确认!',
                         leftTextColor: context.colorScheme.primary,
                         leftClick: () {
@@ -97,7 +98,7 @@ class TDPopupPageState extends State<TDPopupPage> {
           desc: '带关闭超长文本',
           builder: (_) {
             return MyButton(
-              text: '底部弹出层-带标题及操作',
+              text: '底部弹出层-带Title及操作',
               isExpanded: true,
 
               type: MyButtonType.outline,
@@ -109,7 +110,8 @@ class TDPopupPageState extends State<TDPopupPage> {
                     slideTransitionFrom: MySlideFrom.bottom,
                     builder: (context) {
                       return TDPopupBottomDisplayPanel(
-                        title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
+                        title:
+                            'Title CharacterTitle CharacterTitle CharacterTitle CharacterTitle CharacterTitle CharacterTitle Character',
                         closeColor: ThemeColors.error.shade500,
                         closeClick: () {
                           Navigator.maybePop(context);
@@ -145,7 +147,8 @@ class TDPopupPageState extends State<TDPopupPage> {
                           slideTransitionFrom: MySlideFrom.bottom,
                           builder: (context) {
                             return TDPopupBottomDisplayPanel(
-                              title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
+                              title:
+                                  'Title CharacterTitle CharacterTitle CharacterTitle CharacterTitle CharacterTitle CharacterTitle Character',
                               closeColor: ThemeColors.error.shade500,
                               closeClick: () {
                                 Navigator.maybePop(context);
@@ -174,7 +177,8 @@ class TDPopupPageState extends State<TDPopupPage> {
                           slideTransitionFrom: MySlideFrom.bottom,
                           builder: (context) {
                             return TDPopupBottomConfirmPanel(
-                              title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
+                              title:
+                                  'Title CharacterTitle CharacterTitle CharacterTitle CharacterTitle CharacterTitle CharacterTitle Character',
                               leftText: '点这里确认!',
                               leftTextColor: context.colorScheme.primary,
                               leftClick: () {
@@ -303,7 +307,8 @@ class TDPopupPageState extends State<TDPopupPage> {
                           slideTransitionFrom: MySlideFrom.bottom,
                           builder: (context) {
                             return TDPopupBottomDisplayPanel(
-                              title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
+                              title:
+                                  'Title CharacterTitle CharacterTitle CharacterTitle CharacterTitle CharacterTitle CharacterTitle Character',
                               closeColor: ThemeColors.error.shade500,
                               closeClick: () {
                                 Navigator.maybePop(context);
@@ -345,7 +350,8 @@ class TDPopupPageState extends State<TDPopupPage> {
                           focusMove: true,
                           builder: (context) {
                             return TDPopupBottomDisplayPanel(
-                              title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
+                              title:
+                                  'Title CharacterTitle CharacterTitle CharacterTitle CharacterTitle CharacterTitle CharacterTitle Character',
                               closeColor: ThemeColors.error.shade500,
                               closeClick: () {
                                 Navigator.maybePop(context);
@@ -476,7 +482,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                           slideTransitionFrom: MySlideFrom.bottom,
                           builder: (context) {
                             return TDPopupBottomDisplayPanel(
-                              title: '标题文字',
+                              title: 'Title Character',
                               draggable: true,
                               closeColor: ThemeColors.error.shade500,
                               closeClick: () {
@@ -493,7 +499,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                 Container(
                   margin: const EdgeInsets.all(8),
                   child: MyButton(
-                    text: '可拖动全屏-带标题及操作',
+                    text: '可拖动全屏-带Title及操作',
                     isExpanded: true,
 
                     type: MyButtonType.outline,
@@ -505,7 +511,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                           slideTransitionFrom: MySlideFrom.bottom,
                           builder: (context) {
                             return TDPopupBottomConfirmPanel(
-                              title: '标题文字',
+                              title: 'Title Character',
                               draggable: true,
                               leftClick: () {
                                 Navigator.maybePop(context);
@@ -643,7 +649,7 @@ class TDPopupPageState extends State<TDPopupPage> {
 
   Widget _buildPopFromBottomWithOperationAndTitle(BuildContext context) {
     return MyButton(
-      text: '底部弹出层-带标题及操作',
+      text: '底部弹出层-带Title及操作',
       isExpanded: true,
 
       type: MyButtonType.outline,
@@ -655,7 +661,7 @@ class TDPopupPageState extends State<TDPopupPage> {
             slideTransitionFrom: MySlideFrom.bottom,
             builder: (context) {
               return TDPopupBottomConfirmPanel(
-                title: '标题文字',
+                title: 'Title Character',
                 leftClick: () {
                   Navigator.maybePop(context);
                 },
@@ -704,7 +710,7 @@ class TDPopupPageState extends State<TDPopupPage> {
 
   Widget _buildPopFromBottomWithCloseAndTitle(BuildContext context) {
     return MyButton(
-      text: '底部弹出层-带标题及关闭',
+      text: '底部弹出层-带Title及关闭',
       isExpanded: true,
 
       type: MyButtonType.outline,
@@ -716,7 +722,7 @@ class TDPopupPageState extends State<TDPopupPage> {
             slideTransitionFrom: MySlideFrom.bottom,
             builder: (context) {
               return TDPopupBottomDisplayPanel(
-                title: '标题文字',
+                title: 'Title Character',
                 closeClick: () {
                   Navigator.maybePop(context);
                 },
@@ -731,7 +737,7 @@ class TDPopupPageState extends State<TDPopupPage> {
 
   Widget _buildPopFromBottomWithCloseAndLeftTitle(BuildContext context) {
     return MyButton(
-      text: '底部弹出层-带左边标题及关闭',
+      text: '底部弹出层-带左边Title及关闭',
       isExpanded: true,
 
       type: MyButtonType.outline,
@@ -743,7 +749,7 @@ class TDPopupPageState extends State<TDPopupPage> {
             slideTransitionFrom: MySlideFrom.bottom,
             builder: (context) {
               return TDPopupBottomDisplayPanel(
-                title: '标题文字',
+                title: 'Title Character',
                 titleLeft: true,
                 closeClick: () {
                   Navigator.maybePop(context);
@@ -785,7 +791,7 @@ class TDPopupPageState extends State<TDPopupPage> {
 
   Widget _buildPopFromBottomWithTitle(BuildContext context) {
     return MyButton(
-      text: '底部弹出层-仅标题',
+      text: '底部弹出层-仅Title',
       isExpanded: true,
 
       type: MyButtonType.outline,
@@ -797,7 +803,7 @@ class TDPopupPageState extends State<TDPopupPage> {
             slideTransitionFrom: MySlideFrom.bottom,
             builder: (context) {
               return TDPopupBottomDisplayPanel(
-                title: '标题文字',
+                title: 'Title Character',
                 hideClose: true,
                 // closeClick: () {
                 //   Navigator.maybePop(context);

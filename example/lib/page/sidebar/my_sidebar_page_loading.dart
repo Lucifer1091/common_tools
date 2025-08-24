@@ -86,7 +86,7 @@ class MySideBarLoadingPageState extends State<MySideBarLoadingPage> {
     list = [];
     pages = [];
     for (var i = 0; i < 20; i++) {
-      list.add(MySideItemProps(index: i, label: '选项', value: i));
+      list.add(MySideItemProps(index: i, label: 'Options', value: i));
       pages.add(getLoadingDemo(i));
     }
 
@@ -162,7 +162,7 @@ class MySideBarLoadingPageState extends State<MySideBarLoadingPage> {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 15, right: 9),
-            child: MyText('标题$index', style: const TextStyle(fontSize: 14)),
+            child: MyText('Title$index', style: const TextStyle(fontSize: 14)),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 20),
@@ -199,7 +199,7 @@ class MySideBarLoadingPageState extends State<MySideBarLoadingPage> {
             height: 48,
           ),
           SizedBox(width: 16),
-          MyText('标题', style: TextStyle(fontSize: 16)),
+          MyText('Title', style: TextStyle(fontSize: 16)),
         ],
       ),
     );

@@ -25,7 +25,7 @@ class MySideBarPaginationPageState extends State<MySideBarPaginationPage> {
 
   Widget buildWidget(BuildContext context) {
     return ExamplePage(
-      title: 'SideBar 切页用法',
+      title: 'SideBar Pagination',
       exampleCodeGroup: 'sideBar',
       showSingleChild: true,
       singleChild: _buildPaginationSideBar,
@@ -33,12 +33,11 @@ class MySideBarPaginationPageState extends State<MySideBarPaginationPage> {
   }
 
   Widget _buildPaginationSideBar(BuildContext context) {
-    // 切页用法
     final list = <MySideItemProps>[];
     final pages = <Widget>[];
 
     for (var i = 0; i < 100; i++) {
-      list.add(MySideItemProps(index: i, label: '选项', value: i));
+      list.add(MySideItemProps(index: i, label: 'Options', value: i));
       pages.add(getPageDemo(i));
     }
 
@@ -47,9 +46,8 @@ class MySideBarPaginationPageState extends State<MySideBarPaginationPage> {
 
     void setCurrentValue(int value) {
       _pageController.jumpToPage(value);
-      if (currentValue != value) {
-        currentValue = value;
-      }
+
+      if (currentValue != value) currentValue = value;
     }
 
     var demoHeight = MediaQuery.of(context).size.height;
@@ -82,8 +80,8 @@ class MySideBarPaginationPageState extends State<MySideBarPaginationPage> {
             child: PageView(
               controller: _pageController,
               scrollDirection: Axis.vertical,
-              children: pages,
               physics: const NeverScrollableScrollPhysics(),
+              children: pages,
             ),
           ),
         ),
@@ -93,13 +91,13 @@ class MySideBarPaginationPageState extends State<MySideBarPaginationPage> {
 
   Widget getPageDemo(int index) {
     return Container(
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(color: context.colorScheme.background),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 2, right: 9),
-            child: MyText('标题$index', style: const TextStyle(fontSize: 14)),
+            child: MyText('Title$index', style: const TextStyle(fontSize: 14)),
           ),
           const SizedBox(height: 16),
           displayImageList(),
@@ -110,13 +108,13 @@ class MySideBarPaginationPageState extends State<MySideBarPaginationPage> {
 
   Widget getAnchorDemo(int index) {
     return Container(
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(color: context.colorScheme.background),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 2, right: 9),
-            child: MyText('标题$index', style: const TextStyle(fontSize: 14)),
+            child: MyText('Title$index', style: const TextStyle(fontSize: 14)),
           ),
           const SizedBox(height: 16),
           displayImageList(),
@@ -131,27 +129,27 @@ class MySideBarPaginationPageState extends State<MySideBarPaginationPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            displayImageItem('标题文字'),
-            displayImageItem('标题文字'),
-            displayImageItem('最多六个文字'),
+            displayImageItem('Title Character'),
+            displayImageItem('Title Character'),
+            displayImageItem('Up to Six Characters'),
           ],
         ),
         const SizedBox(height: 18),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            displayImageItem('标题文字'),
-            displayImageItem('标题文字'),
-            displayImageItem('最多六个文字'),
+            displayImageItem('Title Character'),
+            displayImageItem('Title Character'),
+            displayImageItem('Up to Six Characters'),
           ],
         ),
         const SizedBox(height: 18),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            displayImageItem('标题文字'),
-            displayImageItem('标题文字'),
-            displayImageItem('最多六个文字'),
+            displayImageItem('Title Character'),
+            displayImageItem('Title Character'),
+            displayImageItem('Up to Six Characters'),
           ],
         ),
       ],
@@ -170,7 +168,7 @@ class MySideBarPaginationPageState extends State<MySideBarPaginationPage> {
             height: 48,
           ),
           const SizedBox(height: 8),
-          MyText('$title', style: const TextStyle(fontSize: 12)),
+          MyText(title, style: const TextStyle(fontSize: 12)),
         ],
       ),
     );

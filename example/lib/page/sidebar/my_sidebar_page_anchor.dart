@@ -72,7 +72,7 @@ class MySideBarAnchorPageState extends State<MySideBarAnchorPage> {
 
   Widget buildWidget(BuildContext context) {
     return ExamplePage(
-      title: 'SideBar 锚点用法',
+      title: 'SideBar Anchor Usage',
       exampleCodeGroup: 'sideBar',
       showSingleChild: true,
       singleChild: _buildAnchorSideBar,
@@ -80,19 +80,20 @@ class MySideBarAnchorPageState extends State<MySideBarAnchorPage> {
   }
 
   Widget _buildAnchorSideBar(BuildContext context) {
-    // 锚点用法
     final list = <MySideItemProps>[];
     final pages = <Widget>[];
 
     for (var i = 0; i < 20; i++) {
-      list.add(MySideItemProps(index: i, label: '选项', value: i));
-      pages.add(getAnchorDemo(i));
+      list.add(
+        MySideItemProps(index: i, label: 'Options', value: i, enabled: i != 4),
+      );
+      pages.add(getAnchorDemo(context, i));
     }
 
     pages.add(
       Container(
         height: MediaQuery.of(context).size.height - itemHeight,
-        decoration: const BoxDecoration(color: Colors.white),
+        decoration: const BoxDecoration(color: Colors.red),
       ),
     );
 
@@ -118,6 +119,7 @@ class MySideBarAnchorPageState extends State<MySideBarAnchorPage> {
                     badge: ele.badge,
                     value: ele.value,
                     icon: ele.icon,
+                    enabled: ele.enabled,
                   ),
                 )
                 .toList(),
@@ -138,15 +140,15 @@ class MySideBarAnchorPageState extends State<MySideBarAnchorPage> {
     );
   }
 
-  Widget getAnchorDemo(int index) {
+  Widget getAnchorDemo(BuildContext context, int index) {
     return Container(
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(color: context.colorScheme.background),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 15, right: 9),
-            child: MyText('标题$index', style: const TextStyle(fontSize: 14)),
+            child: MyText('Title$index', style: const TextStyle(fontSize: 14)),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 20),
@@ -183,7 +185,7 @@ class MySideBarAnchorPageState extends State<MySideBarAnchorPage> {
             height: 48,
           ),
           SizedBox(width: 16),
-          MyText('标题', style: TextStyle(fontSize: 16)),
+          MyText('Title', style: TextStyle(fontSize: 16)),
         ],
       ),
     );

@@ -174,6 +174,9 @@ class CollapseDataItem {
 
 List<CollapseDataItem> generateItems(int numOfItems) {
   return List.generate(numOfItems, (index) {
-    return CollapseDataItem(headerValue: '标题 $index', expandedValue: '$index');
+    return CollapseDataItem(
+      headerValue: 'Title $index',
+      expandedValue: '$index',
+    );
   });
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:common_tools/index.dart';
 import '../../base/example_widget.dart';
 
-const titleText = '标题文字';
+const titleText = 'Title Character';
 
 class TDNavBarPage extends StatelessWidget {
   const TDNavBarPage({Key? key}) : super(key: key);
@@ -27,10 +27,10 @@ class TDNavBarPage extends StatelessWidget {
         // ExampleModule(
         //   title: 'Component Style',
         //   children: [
-        //     ExampleItem(desc: '标题对齐', builder: _titleCenterNavbar),
+        //     ExampleItem(desc: 'Title对齐', builder: _titleCenterNavbar),
         //     ExampleItem(builder: _titleLeftNavbar),
 
-        //     ExampleItem(desc: '标题尺寸', builder: _titleNormalNavbar),
+        //     ExampleItem(desc: 'Title尺寸', builder: _titleNormalNavbar),
         //     ExampleItem(builder: _titleBelowNavbar),
         //     ExampleItem(desc: '自定义颜色', builder: _setBgColorNavbar),
         //   ],

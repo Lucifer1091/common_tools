@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:common_tools/index.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../base/example_widget.dart';
 
@@ -15,6 +16,7 @@ class MySideBarIconPage extends StatefulWidget {
 class MySideBarIconPageState extends State<MySideBarIconPage> {
   var currentValue = 1;
   var itemHeight = 278.5;
+
   final _demoScroller = ScrollController(initialScrollOffset: 278.5);
   final _sideBarController = MySideBarController();
   static const threshold = 50;
@@ -70,7 +72,7 @@ class MySideBarIconPageState extends State<MySideBarIconPage> {
 
   Widget buildWidget(BuildContext context) {
     return ExamplePage(
-      title: 'SideBar 带图标侧边栏',
+      title: 'SideBar with Icons',
       exampleCodeGroup: 'sideBar',
       showSingleChild: true,
       singleChild: _buildIconSideBar,
@@ -85,9 +87,9 @@ class MySideBarIconPageState extends State<MySideBarIconPage> {
       list.add(
         MySideItemProps(
           index: i,
-          label: '选项',
+          label: 'Options',
           value: i,
-          icon: Icons.dashboard_rounded,
+          icon: LucideIcons.layoutDashboard300,
         ),
       );
       pages.add(getAnchorDemo(i));
@@ -108,7 +110,7 @@ class MySideBarIconPageState extends State<MySideBarIconPage> {
     return Row(
       children: [
         SizedBox(
-          width: 110,
+          width: 135,
           child: MySideBar(
             height: demoHeight,
             style: MySideBarStyle.normal,
@@ -143,13 +145,13 @@ class MySideBarIconPageState extends State<MySideBarIconPage> {
 
   Widget getAnchorDemo(int index) {
     return Container(
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(color: context.colorScheme.background),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 15, right: 9),
-            child: MyText('标题$index', style: const TextStyle(fontSize: 14)),
+            child: MyText('Title$index', style: const TextStyle(fontSize: 14)),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 20),
@@ -186,7 +188,7 @@ class MySideBarIconPageState extends State<MySideBarIconPage> {
             height: 48,
           ),
           SizedBox(width: 16),
-          MyText('标题', style: TextStyle(fontSize: 16)),
+          MyText('Title', style: TextStyle(fontSize: 16)),
         ],
       ),
     );

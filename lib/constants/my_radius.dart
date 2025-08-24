@@ -14,16 +14,22 @@ class MyRadius {
   static const double round = 9999;
 }
 
+class MyRadi {
+  MyRadi._();
+
+  static const small = Radius.circular(MyRadius.small);
+  static const medium = Radius.circular(MyRadius.medium);
+  static const large = Radius.circular(MyRadius.large);
+  static const extraLarge = Radius.circular(MyRadius.extraLarge);
+  static const round = Radius.circular(MyRadius.round);
+}
+
 class MyBorderRadius {
   MyBorderRadius._();
 
-  static BorderRadius small = BorderRadius.circular(MyRadius.small);
-
-  static BorderRadius medium = BorderRadius.circular(MyRadius.medium);
-
-  static BorderRadius large = BorderRadius.circular(MyRadius.large);
-
-  static BorderRadius extraLarge = BorderRadius.circular(MyRadius.extraLarge);
-
-  static BorderRadius round = BorderRadius.circular(MyRadius.round);
+  static final small = BorderRadius.circular(MyRadius.small);
+  static final medium = BorderRadius.circular(MyRadius.medium);
+  static final large = BorderRadius.circular(MyRadius.large);
+  static final extraLarge = BorderRadius.circular(MyRadius.extraLarge);
+  static final round = BorderRadius.circular(MyRadius.round);
 }

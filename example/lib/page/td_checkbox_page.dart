@@ -30,7 +30,7 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tdTitle(),
-      desc: '用于预设的一组选项中执行多项选择，并呈现选择结果。',
+      desc: '用于预设的一组Options中执行多项选择，并呈现选择结果。',
       exampleCodeGroup: 'checkbox',
       children: [
         ExampleModule(
@@ -80,7 +80,7 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
           var title = '多选';
           var subTitle = '';
           if (index == 2) {
-            title = '多选标题多行多选标题多行多选标题多行多选标题多行多选标题多行多选标题多行';
+            title = '多选Title多行多选Title多行多选Title多行多选Title多行多选Title多行多选Title多行';
           }
           if (index == 3) {
             subTitle = '描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息';
@@ -105,14 +105,14 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
       directionalTdCheckboxes: const [
         TDCheckbox(
           id: '0',
-          title: '多选标题',
+          title: '多选Title',
           style: TDCheckboxStyle.circle,
           insetSpacing: 12,
           showDivider: false,
         ),
         TDCheckbox(
           id: '1',
-          title: '多选标题',
+          title: '多选Title',
           style: TDCheckboxStyle.circle,
           insetSpacing: 12,
           showDivider: false,
@@ -202,13 +202,13 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
         children: [
           TDCheckbox(
             id: '0',
-            title: '选项禁用-已选',
+            title: 'Options禁用-已选',
             style: TDCheckboxStyle.circle,
             enable: false,
           ),
           TDCheckbox(
             id: '1',
-            title: '选项禁用-默认',
+            title: 'Options禁用-默认',
             style: TDCheckboxStyle.circle,
             enable: false,
           ),
@@ -359,7 +359,7 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
             selectColor: ThemeColors.error.shade200,
             disableColor: ThemeColors.error.shade50,
             id: '0',
-            title: '选项禁用-已选',
+            title: 'Options禁用-已选',
             style: TDCheckboxStyle.circle,
             enable: false,
           ),
@@ -367,7 +367,7 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
             selectColor: ThemeColors.error.shade200,
             disableColor: ThemeColors.error.shade50,
             id: '1',
-            title: '选项禁用-默认',
+            title: 'Options禁用-默认',
             style: TDCheckboxStyle.circle,
           ),
 
@@ -406,14 +406,14 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
         children: [
           TDCheckbox(
             id: '0',
-            title: '选项禁用-已选',
+            title: 'Options禁用-已选',
             subTitle: '描述文本',
             style: TDCheckboxStyle.circle,
             enable: false,
           ),
           TDCheckbox(
             id: '1',
-            title: '选项禁用-默认',
+            title: 'Options禁用-默认',
             subTitle: '描述文本',
             style: TDCheckboxStyle.circle,
           ),

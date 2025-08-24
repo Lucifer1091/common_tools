@@ -24,18 +24,18 @@ class MySideBarPageState extends State<MySideBarPage> {
     return ExamplePage(
       title: tdTitle(),
       exampleCodeGroup: 'sideBar',
-      desc: '用于内容分类后的展示切换。',
+      desc: 'Used for display switching after content classification.',
       children: [
         ExampleModule(
           title: 'Component Types',
           children: [
             ExampleItem(
-              desc: '侧边导航用法',
+              desc: 'Side Navigation Usage',
               ignoreCode: true,
               builder: _buildNavigatorSideBar,
             ),
             ExampleItem(
-              desc: '图标侧边导航',
+              desc: 'Icon Side Navigation',
               builder: _buildIconSideBar,
               methodName: '_buildIconSideBar',
             ),
@@ -45,7 +45,7 @@ class MySideBarPageState extends State<MySideBarPage> {
           title: 'Component Style',
           children: [
             ExampleItem(
-              desc: '侧边导航样式',
+              desc: 'Side Navigation Style',
               ignoreCode: true,
               builder: _buildStyleSideBar,
             ),
@@ -53,7 +53,11 @@ class MySideBarPageState extends State<MySideBarPage> {
         ),
       ],
       test: [
-        ExampleItem(desc: '延迟加载', ignoreCode: true, builder: _loadingSideBar),
+        ExampleItem(
+          desc: 'Lazy Loading',
+          ignoreCode: true,
+          builder: _loadingSideBar,
+        ),
       ],
     );
   }
@@ -63,11 +67,9 @@ class MySideBarPageState extends State<MySideBarPage> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
-          getCustomButton(context, '锚点用法', 'SideBarAnchor'),
-
-          const SizedBox(height: 16),
-
-          getCustomButton(context, '切页用法', 'SideBarPagination'),
+          getCustomButton(context, 'SideBar Anchor', 'SideBarAnchor'),
+          const Gap(16),
+          getCustomButton(context, 'SideBar Pagination', 'SideBarPagination'),
         ],
       ),
     );
@@ -77,7 +79,9 @@ class MySideBarPageState extends State<MySideBarPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
-        children: [getCustomButton(context, '带图标侧边导航', 'SideBarIcon')],
+        children: [
+          getCustomButton(context, 'Side Navigation with Icons', 'SideBarIcon'),
+        ],
       ),
     );
   }
@@ -87,10 +91,14 @@ class MySideBarPageState extends State<MySideBarPage> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
-          getCustomButton(context, '非通栏选项样式', 'SideBarOutline'),
+          getCustomButton(
+            context,
+            'Non-full-width option styles',
+            'SideBarOutline',
+          ),
 
           const SizedBox(height: 16),
-          getCustomButton(context, '自定义样式', 'SideBarCustom'),
+          getCustomButton(context, 'Custom Styles', 'SideBarCustom'),
         ],
       ),
     );
@@ -100,7 +108,7 @@ class MySideBarPageState extends State<MySideBarPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
-        children: [getCustomButton(context, '延迟加载', 'SideBarLoading')],
+        children: [getCustomButton(context, 'Lazy Loading', 'SideBarLoading')],
       ),
     );
   }
@@ -117,10 +125,7 @@ class MySideBarPageState extends State<MySideBarPage> {
       type: MyButtonType.outline,
       shape: MyButtonShape.rectangle,
       onTap: () {
-        Navigator.pushNamed(
-          context,
-          PlatformChecker.isWeb ? routeName : '$routeName',
-        );
+        Navigator.pushNamed(context, routeName);
       },
     );
   }

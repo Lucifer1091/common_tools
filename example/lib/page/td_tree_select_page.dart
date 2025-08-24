@@ -49,11 +49,15 @@ class _TDTreeSelectPageState extends State<TDTreeSelectPage> {
     var options = <TDSelectOption>[];
 
     for (var i = 1; i <= 10; i++) {
-      options.add(TDSelectOption(label: '选项$i', value: i, children: []));
+      options.add(TDSelectOption(label: 'Options$i', value: i, children: []));
 
       for (var j = 1; j <= 10; j++) {
         options[i - 1].children.add(
-          TDSelectOption(label: '选项$i.$j', value: i * 10 + j, children: []),
+          TDSelectOption(
+            label: 'Options$i.$j',
+            value: i * 10 + j,
+            children: [],
+          ),
         );
       }
     }
@@ -71,11 +75,15 @@ class _TDTreeSelectPageState extends State<TDTreeSelectPage> {
     var options = <TDSelectOption>[];
 
     for (var i = 1; i <= 10; i++) {
-      options.add(TDSelectOption(label: '选项$i', value: i, children: []));
+      options.add(TDSelectOption(label: 'Options$i', value: i, children: []));
 
       for (var j = 1; j <= 10; j++) {
         options[i - 1].children.add(
-          TDSelectOption(label: '选项$i.$j', value: i * 10 + j, children: []),
+          TDSelectOption(
+            label: 'Options$i.$j',
+            value: i * 10 + j,
+            children: [],
+          ),
         );
       }
     }
@@ -94,16 +102,23 @@ class _TDTreeSelectPageState extends State<TDTreeSelectPage> {
     var options = <TDSelectOption>[];
 
     for (var i = 1; i <= 10; i++) {
-      options.add(TDSelectOption(label: '选项$i', value: i, children: []));
+      options.add(TDSelectOption(label: 'Options$i', value: i, children: []));
 
       for (var j = 1; j <= 10; j++) {
         options[i - 1].children.add(
-          TDSelectOption(label: '选项$i.$j', value: i * 10 + j, children: []),
+          TDSelectOption(
+            label: 'Options$i.$j',
+            value: i * 10 + j,
+            children: [],
+          ),
         );
 
         for (var k = 1; k <= 10; k++) {
           options[i - 1].children[j - 1].children.add(
-            TDSelectOption(label: '选项$i.$j.$k', value: i * 100 + j * 10 + k),
+            TDSelectOption(
+              label: 'Options$i.$j.$k',
+              value: i * 100 + j * 10 + k,
+            ),
           );
         }
       }
@@ -133,7 +148,7 @@ class _TDTreeSelectPageState extends State<TDTreeSelectPage> {
       for (var j = 1; j <= 10; j++) {
         options[i - 1].children.add(
           TDSelectOption(
-            label: '选项$i.$j',
+            label: 'Options$i.$j',
             value: i * 10 + j,
             children: [],
             multiple: i == 2,

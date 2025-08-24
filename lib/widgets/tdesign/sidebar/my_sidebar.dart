@@ -14,7 +14,7 @@ class MySideItemProps {
   MySideItemProps({
     required this.value,
     required this.index,
-    this.disabled,
+    this.enabled = true,
     this.icon,
     this.label,
     this.badge,
@@ -23,7 +23,7 @@ class MySideItemProps {
 
   int index;
   int value;
-  bool? disabled;
+  bool enabled;
   IconData? icon;
   String? label;
   MyBadge? badge;
@@ -50,49 +50,34 @@ class MySideBar extends StatefulWidget {
     this.unSelectedBgColor,
   });
 
-  /// 选项值
   final int? value;
 
-  /// 默认值
   final int? defaultValue;
 
-  /// 单项
   final List<MySideBarItem> children;
 
-  /// 选中值发生变化（Controller控制）
   final ValueChanged<int>? onChanged;
 
-  /// 选中值发生变化（点击事件）
   final ValueChanged<int>? onSelected;
 
-  /// 选中值后颜色
   final Color? selectedColor;
 
-  /// 选中样式
   final TextStyle? selectedTextStyle;
 
-  /// 样式
   final MySideBarStyle style;
 
-  /// 高度
   final double? height;
 
-  /// 自定义文本框内边距
   final EdgeInsetsGeometry? contentPadding;
 
-  /// 控制器
   final MySideBarController? controller;
 
-  /// 加载效果
   final bool? loading;
 
-  /// 自定义加载动画
   final Widget? loadingWidget;
 
-  /// 选择的背景颜色
   final Color? selectedBgColor;
 
-  /// 未选择的背景颜色
   final Color? unSelectedBgColor;
 
   @override
@@ -108,12 +93,10 @@ class _MySideBarState extends State<MySideBar> {
   final double itemHeight = 56;
   bool _loading = false;
 
-  // 查找某值对应项
   MySideItemProps findSideItem(int value) {
     return displayChildren.where((element) => element.value == value).first;
   }
 
-  // 选中某值
   void selectValue(int value, {bool needScroll = false}) {
     MySideItemProps? item;
     for (final element in displayChildren) {
@@ -159,7 +142,7 @@ class _MySideBarState extends State<MySideBar> {
     super.initState();
 
     _loading = widget.loading ?? widget.controller?.loading ?? false;
-    // controller注册事件
+
     if (widget.controller != null) {
       widget.controller!.addListener(() {
         selectValue(widget.controller!.currentValue, needScroll: true);
@@ -176,7 +159,7 @@ class _MySideBarState extends State<MySideBar> {
             .map(
               (entry) => MySideItemProps(
                 index: entry.key,
-                disabled: entry.value.disabled,
+                enabled: entry.value.enabled,
                 value: entry.value.value,
                 icon: entry.value.icon,
                 label: entry.value.label,
@@ -190,6 +173,7 @@ class _MySideBarState extends State<MySideBar> {
         widget.value ??
         widget.defaultValue ??
         (displayChildren.isNotEmpty ? displayChildren[0].value : null);
+
     if (currentValue != null) {
       try {
         final item = findSideItem(currentValue!);
@@ -212,7 +196,7 @@ class _MySideBarState extends State<MySideBar> {
               .map(
                 (entry) => MySideItemProps(
                   index: entry.key,
-                  disabled: entry.value.disabled,
+                  enabled: entry.value.enabled,
                   value: entry.value.value,
                   icon: entry.value.icon,
                   label: entry.value.label,
@@ -229,7 +213,7 @@ class _MySideBarState extends State<MySideBar> {
               .map(
                 (entry) => MySideItemProps(
                   index: entry.key,
-                  disabled: entry.value.disabled,
+                  enabled: entry.value.enabled,
                   value: entry.value.value,
                   icon: entry.value.icon,
                   label: entry.value.label,
@@ -243,7 +227,6 @@ class _MySideBarState extends State<MySideBar> {
     }
   }
 
-  // 选中某项
   void onSelect(MySideItemProps item, {bool isController = false}) {
     if (currentIndex != item.index) {
       if (isController) {
@@ -262,14 +245,14 @@ class _MySideBarState extends State<MySideBar> {
   Widget build(BuildContext context) {
     if (_loading) {
       widget.controller?.loading = true;
-      if (widget.loadingWidget != null) {
-        return widget.loadingWidget!;
-      }
-      return SizedBox(
-        width: MediaQuery.of(context).size.width,
-        child: const Align(child: TDLoading(size: TDLoadingSize.large)),
-      );
+
+      return widget.loadingWidget ??
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: const Align(child: TDLoading(size: TDLoadingSize.large)),
+          );
     }
+
     return ConstrainedBox(
       key: globalKey,
       constraints: BoxConstraints(
@@ -296,7 +279,7 @@ class _MySideBarState extends State<MySideBar> {
                 style: widget.style,
                 value: ele.value,
                 icon: ele.icon,
-                disabled: ele.disabled ?? false,
+                enabled: ele.enabled,
                 label: ele.label ?? '',
                 badge: ele.badge,
                 textStyle: ele.textStyle,
@@ -311,7 +294,7 @@ class _MySideBarState extends State<MySideBar> {
                 selectedBgColor: widget.selectedBgColor,
                 unSelectedBgColor: widget.unSelectedBgColor,
                 onTap: () {
-                  if (!(ele.disabled ?? false)) onSelect(ele);
+                  if (ele.enabled) onSelect(ele);
                 },
               );
             },

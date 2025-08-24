@@ -205,7 +205,7 @@ class MyDropCapText extends StatelessWidget {
         // Drop cap mode: aside
         if (mode == MyDropCapMode.aside) charIndexEnd = data.length;
 
-        return MyColumn(
+        return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Row(

@@ -30,14 +30,14 @@ class TDCheckboxGroupController {
   }
 
   ///
-  /// 选中某一个选项
+  /// 选中某一个Options
   ///
   void toggle(String id, bool check) {
     _state?.toggle(id, check, true);
   }
 
   ///
-  /// 打勾的选项
+  /// 打勾的Options
   ///
   List<String> allChecked() {
     return MapScrewdriver(
@@ -122,7 +122,7 @@ class TDCheckboxGroup extends StatefulWidget {
   /// 超过最大可勾选的个数
   final VoidCallback? onOverloadChecked;
 
-  /// CheckBox标题的行数
+  /// CheckBoxTitle的行数
   final int? titleMaxLine;
 
   /// CheckBox完全自定义内容
@@ -314,7 +314,7 @@ class TDCheckboxGroupContainer extends TDCheckboxGroup {
              '[TDCheckboxGroupContainer] direction means use child as the exact one, but child is null',
            );
          }
-         // 横向单选框 每个选项有字数限制
+         // 横向单选框 每个Options有字数限制
          if (direction == Axis.horizontal && directionalTdCheckboxes != null) {
            for (final element in directionalTdCheckboxes) {
              if (element.subTitle != null) {
@@ -345,7 +345,7 @@ class TDCheckboxGroupContainer extends TDCheckboxGroup {
              }
            }
          }
-         // 卡片模式要求每个TDRadio必须设置cardMode属性为true，且不能有子标题（空间不够）
+         // 卡片模式要求每个TDRadio必须设置cardMode属性为true，且不能有子Title（空间不够）
          if (cardMode) {
            assert(direction != null && directionalTdCheckboxes != null, '');
            for (final element in directionalTdCheckboxes!) {

@@ -20,8 +20,8 @@ class MyLinkPage extends StatelessWidget {
             ExampleItem(
               desc: 'Primary / Default Type',
               builder: (context) {
-                return MyColumn(
-                  gap: 8,
+                return Column(
+                  spacing: 8,
                   children: [
                     _basicTypeBasic(context),
                     _withUnderline(context),
@@ -117,9 +117,9 @@ class MyLinkPage extends StatelessWidget {
     return _buildLinkWithStyles(context, false);
   }
 
-  MyColumn _buildLinkWithStyles(BuildContext context, bool state) {
-    return MyColumn(
-      gap: 8,
+  Column _buildLinkWithStyles(BuildContext context, bool state) {
+    return Column(
+      spacing: 8,
       children: [
         Container(
           color: context.colorScheme.secondary,

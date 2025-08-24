@@ -54,8 +54,6 @@ class MyBadge extends StatelessWidget {
 
   final bool showZero;
 
-  Color get background => color ?? ThemeColors.error.shade500;
-
   double _getBadgeSize() {
     return switch (size) {
       MyBadgeSize.large => 20,
@@ -64,10 +62,12 @@ class MyBadge extends StatelessWidget {
   }
 
   TextStyle? _getBadgeStyle(BuildContext context) {
+    final foreground = textColor ?? context.colorScheme.destructiveForeground;
+
     return switch (size) {
       MyBadgeSize.large => context.labelMedium,
       MyBadgeSize.small => context.labelSmall,
-    }?.copyWith(color: textColor, fontWeight: FontWeight.w500);
+    }.copyWith(color: foreground, fontWeight: FontWeight.w500);
   }
 
   bool _isVisible() {
@@ -92,6 +92,8 @@ class MyBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final background = color ?? context.colorScheme.destructive;
+
     final Center child = Center(
       child: MyText(
         _getValue(),
@@ -146,7 +148,7 @@ class MyBadge extends StatelessWidget {
             child: Transform.rotate(
               angle: pi / 4,
               child: Padding(
-                padding: padding ?? const EdgeInsets.only(left: 4, bottom: 8),
+                padding: padding ?? const EdgeInsets.only(left: 4, bottom: 12),
                 child: child,
               ),
             ),
@@ -212,4 +214,47 @@ class _TrapezoidPath extends CustomClipper<Path> {
 
   @override
   bool shouldReclip(CustomClipper<Path> oldClipper) => true;
+}
+
+class MyBadgeWrapper extends StatelessWidget {
+  const MyBadgeWrapper({
+    this.badge,
+    required this.child,
+    super.key,
+    this.top,
+    this.right,
+    this.left,
+    this.bottom,
+    this.height,
+    this.width,
+  });
+
+  final Widget child;
+  final MyBadge? badge;
+  final double? top, right, left, bottom, height, width;
+
+  @override
+  Widget build(BuildContext context) {
+    if (badge == null) return child;
+
+    final stack = Stack(
+      clipBehavior: Clip.none,
+      children: [
+        child,
+        Positioned(
+          top: top,
+          right: right,
+          left: left,
+          bottom: bottom,
+          child: badge!,
+        ),
+      ],
+    );
+
+    if (height != null || width != null) {
+      return SizedBox(height: height, width: width, child: stack);
+    }
+
+    return stack;
+  }
 }

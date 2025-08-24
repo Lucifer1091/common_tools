@@ -52,7 +52,7 @@ class _MyCellGroupState extends State<MyCellGroup> {
 
     return MyCellInherited(
       style: style,
-      child: MyColumn(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -93,7 +93,7 @@ class _MyCellGroupState extends State<MyCellGroup> {
                             : widget.builder!(context, item, index);
                     if (itemCount - 1 == index &&
                         (widget.showLastBorder ?? false)) {
-                      return MyColumn(children: [cell, _borderWidget(style)]);
+                      return Column(children: [cell, _borderWidget(style)]);
                     }
                     return cell;
                   },
@@ -127,7 +127,7 @@ class _MyCellGroupState extends State<MyCellGroup> {
   }
 
   Widget _borderWidget(MyCellStyle style) {
-    return MyRow(
+    return Row(
       children: [
         Container(height: 0.5, width: 16, color: style.backgroundColor),
         Expanded(

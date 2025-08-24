@@ -17,7 +17,7 @@ class TDDialogPage extends StatefulWidget {
 }
 
 class _TDDialogPageState extends State<TDDialogPage> {
-  final _dialogTitle = '对话框标题';
+  final _dialogTitle = '对话框Title';
   final _commonContent = '告知当前状态、信息和解决方法，等内容。描述尽可能控制在三行内。';
   final _longContent = '这里是辅助内容文案，这里是辅助内容文案，这里是辅助内容文案，这里是辅助内容文案。\n\n' * 4;
   final _inputHint = '请输入文字';
@@ -69,7 +69,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
         ),
       ],
       test: [
-        ExampleItem(desc: '自定义标题对齐和内容组件', builder: _customFeedbackNormal),
+        ExampleItem(desc: '自定义Title对齐和内容组件', builder: _customFeedbackNormal),
         ExampleItem(builder: _customConfirmNormal),
         ExampleItem(builder: _customConfirmVertical),
         ExampleItem(builder: _customImageTop),
@@ -82,7 +82,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
 
   Widget _buildFeedbackNormal(BuildContext context) {
     return MyButton(
-      text: '反馈类-带标题',
+      text: '反馈类-带Title',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
 
@@ -107,7 +107,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
 
   Widget _buildFeedbackNoTitle(BuildContext context) {
     return MyButton(
-      text: '反馈类-无标题',
+      text: '反馈类-无Title',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
 
@@ -129,7 +129,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
 
   Widget _buildFeedbackOnlyTitle(BuildContext context) {
     return MyButton(
-      text: '反馈类-纯标题',
+      text: '反馈类-纯Title',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
 
@@ -179,7 +179,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
 
   Widget _buildConfirmNormal(BuildContext context) {
     return MyButton(
-      text: '确认类-带标题',
+      text: '确认类-带Title',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
 
@@ -204,7 +204,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
 
   Widget _buildConfirmNoTitle(BuildContext context) {
     return MyButton(
-      text: '确认类-无标题',
+      text: '确认类-无Title',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
 
@@ -226,7 +226,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
 
   Widget _buildConfirmOnlyTitle(BuildContext context) {
     return MyButton(
-      text: '确认类-纯标题',
+      text: '确认类-纯Title',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
 
@@ -305,7 +305,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
 
   Widget _buildImageTop(BuildContext context) {
     return MyButton(
-      text: '图片置顶-带标题描述',
+      text: '图片置顶-带Title描述',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
 
@@ -331,7 +331,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
 
   Widget _buildImageTopNoTitle(BuildContext context) {
     return MyButton(
-      text: '图片置顶-无标题',
+      text: '图片置顶-无Title',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
 
@@ -356,7 +356,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
 
   Widget _buildImageTopOnlyTitle(BuildContext context) {
     return MyButton(
-      text: '图片置顶-纯标题',
+      text: '图片置顶-纯Title',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
 
@@ -378,7 +378,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
 
   Widget _buildImageMiddle(BuildContext context) {
     return MyButton(
-      text: '图片居中-带标题描述',
+      text: '图片居中-带Title描述',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
 
@@ -405,7 +405,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
 
   Widget _buildImageMiddleOnlyTitle(BuildContext context) {
     return MyButton(
-      text: '图片居中-纯标题',
+      text: '图片居中-纯Title',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
 
@@ -682,7 +682,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
 
   Widget _customFeedbackNormal(BuildContext context) {
     return MyButton(
-      text: '反馈类-标题偏左',
+      text: '反馈类-Title偏左',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
 
@@ -715,7 +715,7 @@ class _TDDialogPageState extends State<TDDialogPage> {
 
   Widget _customConfirmNormal(BuildContext context) {
     return MyButton(
-      text: '确认类-标题偏右',
+      text: '确认类-Title偏右',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
 

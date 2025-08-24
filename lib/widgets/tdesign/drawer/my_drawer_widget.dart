@@ -79,7 +79,7 @@ class MyDrawerWidget extends StatelessWidget {
               .values
               .toList();
 
-      content = MyColumn(
+      content = Column(
         children: [
           Expanded(
             child: MyCellGroup(

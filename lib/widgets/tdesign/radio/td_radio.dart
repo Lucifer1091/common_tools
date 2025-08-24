@@ -187,7 +187,7 @@ class TDRadioGroup extends TDCheckboxGroup {
              '[TDRadioGroup] direction means use child as the exact one, but child is null',
            );
          }
-         // 横向单选框 每个选项有字数限制
+         // 横向单选框 每个Options有字数限制
          if (direction == Axis.horizontal && directionalTdRadios != null) {
            for (final element in directionalTdRadios) {
              if (element.subTitle != null) {
@@ -218,7 +218,7 @@ class TDRadioGroup extends TDCheckboxGroup {
              }
            }
          }
-         // 卡片模式要求每个TDRadio必须设置cardMode属性为true，且不能有子标题（空间不够）
+         // 卡片模式要求每个TDRadio必须设置cardMode属性为true，且不能有子Title（空间不够）
          if (cardMode) {
            assert(direction != null && directionalTdRadios != null, '');
            for (final element in directionalTdRadios!) {

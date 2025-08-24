@@ -20,27 +20,27 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
 
   List<TDTab> _getTabs() {
     tabs = const [
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
-      TDTab(text: '选项'),
+      TDTab(text: 'Options'),
+      TDTab(text: 'Options'),
+      TDTab(text: 'Options'),
+      TDTab(text: 'Options'),
+      TDTab(text: 'Options'),
+      TDTab(text: 'Options'),
+      TDTab(text: 'Options'),
+      TDTab(text: 'Options'),
+      TDTab(text: 'Options'),
+      TDTab(text: 'Options'),
+      TDTab(text: 'Options'),
+      TDTab(text: 'Options'),
+      TDTab(text: 'Options'),
+      TDTab(text: 'Options'),
+      TDTab(text: 'Options'),
+      TDTab(text: 'Options'),
+      TDTab(text: 'Options'),
+      TDTab(text: 'Options'),
+      TDTab(text: 'Options'),
+      TDTab(text: 'Options'),
+      TDTab(text: 'Options'),
     ];
     return tabs;
   }
@@ -98,7 +98,7 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
         ExampleModule(
           title: 'Component Types',
           children: [
-            ExampleItem(desc: '均分选项卡', builder: _buildItemWithSplit1),
+            ExampleItem(desc: '均分Options卡', builder: _buildItemWithSplit1),
             ExampleItem(
               builder: _buildItemWithSplit2,
               padding: const EdgeInsets.only(top: 16),
@@ -111,25 +111,30 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
               builder: _buildItemWithSplit4,
               padding: const EdgeInsets.only(top: 16),
             ),
-            ExampleItem(desc: '等距选项卡', builder: _buildItemWithSpace),
-            ExampleItem(desc: '带图标选项卡', builder: _buildItemWithIcon),
-            ExampleItem(desc: '带微标选项卡', builder: _buildItemWithLogo),
-            ExampleItem(desc: '带内容区选项卡', builder: _buildItemWithContent),
+            ExampleItem(desc: '等距Options卡', builder: _buildItemWithSpace),
+            ExampleItem(desc: '带图标Options卡', builder: _buildItemWithIcon),
+            ExampleItem(desc: '带微标Options卡', builder: _buildItemWithLogo),
+            ExampleItem(desc: '带内容区Options卡', builder: _buildItemWithContent),
           ],
         ),
         ExampleModule(
           title: 'Component State',
-          children: [ExampleItem(desc: '选项卡状态', builder: _buildItemWithStatus)],
+          children: [
+            ExampleItem(desc: 'Options卡状态', builder: _buildItemWithStatus),
+          ],
         ),
         ExampleModule(
           title: 'Component Style',
           children: [
-            ExampleItem(desc: '选项卡尺寸', builder: _buildItemWithSizeSmall),
+            ExampleItem(desc: 'Options卡尺寸', builder: _buildItemWithSizeSmall),
             ExampleItem(
               builder: _buildItemWithSizeBig,
               padding: const EdgeInsets.only(top: 16),
             ),
-            ExampleItem(desc: '选项卡样式', builder: _buildItemWithOutlineNormal),
+            ExampleItem(
+              desc: 'Options卡样式',
+              builder: _buildItemWithOutlineNormal,
+            ),
             ExampleItem(
               builder: _buildItemWithOutlineCard,
               padding: const EdgeInsets.only(top: 16),
@@ -195,9 +200,18 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
 
   Widget _buildItemWithIcon(BuildContext context) {
     var tabs = [
-      const TDTab(text: '选项', icon: Icon(Icons.dashboard_rounded, size: 18)),
-      const TDTab(text: '选项', icon: Icon(Icons.dashboard_rounded, size: 18)),
-      const TDTab(text: '选项', icon: Icon(Icons.dashboard_rounded, size: 18)),
+      const TDTab(
+        text: 'Options',
+        icon: Icon(Icons.dashboard_rounded, size: 18),
+      ),
+      const TDTab(
+        text: 'Options',
+        icon: Icon(Icons.dashboard_rounded, size: 18),
+      ),
+      const TDTab(
+        text: 'Options',
+        icon: Icon(Icons.dashboard_rounded, size: 18),
+      ),
     ];
     return TDTabBar(
       tabs: tabs,
@@ -210,19 +224,19 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
   Widget _buildItemWithLogo(BuildContext context) {
     var tabs = [
       const TDTab(
-        text: '选项',
+        text: 'Options',
         contentHeight: 48,
         textMargin: EdgeInsets.only(right: 8),
         badge: MyBadge(MyBadgeType.redPoint),
       ),
       const TDTab(
-        text: '选项',
+        text: 'Options',
         contentHeight: 42,
         textMargin: EdgeInsets.only(right: 16, top: 2, bottom: 2),
         badge: MyBadge(MyBadgeType.message, message: '8'),
       ),
       const TDTab(
-        text: '选项',
+        text: 'Options',
         height: 48,
         icon: Icon(Icons.dashboard_rounded, size: 18),
       ),
@@ -278,9 +292,9 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
   Widget _buildItemWithSizeSmall(BuildContext context) {
     var tabs = [
       const TDTab(text: '小尺寸'),
-      const TDTab(text: '选项'),
-      const TDTab(text: '选项'),
-      const TDTab(text: '选项'),
+      const TDTab(text: 'Options'),
+      const TDTab(text: 'Options'),
+      const TDTab(text: 'Options'),
     ];
     return TDTabBar(
       tabs: tabs,
@@ -293,9 +307,9 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
   Widget _buildItemWithSizeBig(BuildContext context) {
     var tabs = [
       const TDTab(text: '大尺寸', size: TDTabSize.large),
-      const TDTab(text: '选项', size: TDTabSize.large),
-      const TDTab(text: '选项', size: TDTabSize.large),
-      const TDTab(text: '选项', size: TDTabSize.large),
+      const TDTab(text: 'Options', size: TDTabSize.large),
+      const TDTab(text: 'Options', size: TDTabSize.large),
+      const TDTab(text: 'Options', size: TDTabSize.large),
     ];
     return TDTabBar(
       tabs: tabs,
@@ -307,10 +321,10 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
 
   Widget _buildItemWithOutlineNormal(BuildContext context) {
     var tabs = [
-      const TDTab(text: '选项'),
-      const TDTab(text: '选项'),
-      const TDTab(text: '选项'),
-      const TDTab(text: '选项'),
+      const TDTab(text: 'Options'),
+      const TDTab(text: 'Options'),
+      const TDTab(text: 'Options'),
+      const TDTab(text: 'Options'),
     ];
     return TDTabBar(
       tabs: tabs,
@@ -323,10 +337,10 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
 
   Widget _buildItemWithOutlineCard(BuildContext context) {
     var tabs = [
-      const TDTab(text: '选项'),
-      const TDTab(text: '选项'),
-      const TDTab(text: '选项'),
-      const TDTab(text: '选项'),
+      const TDTab(text: 'Options'),
+      const TDTab(text: 'Options'),
+      const TDTab(text: 'Options'),
+      const TDTab(text: 'Options'),
     ];
     return TDTabBar(
       tabs: tabs,

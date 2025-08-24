@@ -90,10 +90,10 @@ class TDTablePage extends StatelessWidget {
   Widget _basicTable(BuildContext context) {
     return TDTable(
       columns: [
-        TDTableCol(title: '标题', colKey: 'title1', ellipsis: true),
-        TDTableCol(title: '标题', colKey: 'title2'),
-        TDTableCol(title: '标题', colKey: 'title3'),
-        TDTableCol(title: '标题', colKey: 'title4'),
+        TDTableCol(title: 'Title', colKey: 'title1', ellipsis: true),
+        TDTableCol(title: 'Title', colKey: 'title2'),
+        TDTableCol(title: 'Title', colKey: 'title3'),
+        TDTableCol(title: 'Title', colKey: 'title4'),
       ],
       data: _getData(9),
     );
@@ -103,14 +103,14 @@ class TDTablePage extends StatelessWidget {
     return TDTable(
       columns: [
         TDTableCol(
-          title: '标题',
+          title: 'Title',
           colKey: 'title1',
           ellipsis: true,
           sortable: true,
         ),
-        TDTableCol(title: '标题', colKey: 'title2', sortable: true),
-        TDTableCol(title: '标题', colKey: 'title3', sortable: true),
-        TDTableCol(title: '标题', colKey: 'title4', sortable: true),
+        TDTableCol(title: 'Title', colKey: 'title2', sortable: true),
+        TDTableCol(title: 'Title', colKey: 'title3', sortable: true),
+        TDTableCol(title: 'Title', colKey: 'title4', sortable: true),
       ],
       data: _getData(9),
     );
@@ -119,11 +119,11 @@ class TDTablePage extends StatelessWidget {
   Widget _operationBtnTable(BuildContext context) {
     return TDTable(
       columns: [
-        TDTableCol(title: '标题', colKey: 'title1', ellipsis: true),
-        TDTableCol(title: '标题', colKey: 'title2'),
-        TDTableCol(title: '标题', colKey: 'title3'),
+        TDTableCol(title: 'Title', colKey: 'title1', ellipsis: true),
+        TDTableCol(title: 'Title', colKey: 'title2'),
+        TDTableCol(title: 'Title', colKey: 'title3'),
         TDTableCol(
-          title: '标题',
+          title: 'Title',
           colKey: 'title4',
           cellBuilder: (BuildContext context, int index) {
             return Row(
@@ -157,11 +157,11 @@ class TDTablePage extends StatelessWidget {
   Widget _operationIconTable(BuildContext context) {
     return TDTable(
       columns: [
-        TDTableCol(title: '标题', colKey: 'title1', ellipsis: true),
-        TDTableCol(title: '标题', colKey: 'title2'),
-        TDTableCol(title: '标题', colKey: 'title3'),
+        TDTableCol(title: 'Title', colKey: 'title1', ellipsis: true),
+        TDTableCol(title: 'Title', colKey: 'title2'),
+        TDTableCol(title: 'Title', colKey: 'title3'),
         TDTableCol(
-          title: '标题',
+          title: 'Title',
           colKey: 'title4',
           cellBuilder: (BuildContext context, int index) {
             return Row(
@@ -189,10 +189,14 @@ class TDTablePage extends StatelessWidget {
   Widget _fixedFirstColTable(BuildContext context) {
     return TDTable(
       columns: [
-        TDTableCol(title: '标题', colKey: 'title1'),
-        TDTableCol(title: '标题', colKey: 'title2'),
-        TDTableCol(title: '标题', colKey: 'title3'),
-        TDTableCol(title: '标题', colKey: 'title4', fixed: TDTableColFixed.left),
+        TDTableCol(title: 'Title', colKey: 'title1'),
+        TDTableCol(title: 'Title', colKey: 'title2'),
+        TDTableCol(title: 'Title', colKey: 'title3'),
+        TDTableCol(
+          title: 'Title',
+          colKey: 'title4',
+          fixed: TDTableColFixed.left,
+        ),
       ],
       data: _getData(10),
     );
@@ -201,11 +205,11 @@ class TDTablePage extends StatelessWidget {
   Widget _fixedEndColTable(BuildContext context) {
     return TDTable(
       columns: [
-        TDTableCol(title: '标题', colKey: 'title1'),
-        TDTableCol(title: '标题', colKey: 'title2'),
-        TDTableCol(title: '标题', colKey: 'title3'),
+        TDTableCol(title: 'Title', colKey: 'title1'),
+        TDTableCol(title: 'Title', colKey: 'title2'),
+        TDTableCol(title: 'Title', colKey: 'title3'),
         TDTableCol(
-          title: '标题',
+          title: 'Title',
           colKey: 'title4',
           fixed: TDTableColFixed.right,
           cellBuilder: (BuildContext context, int index) {
@@ -238,9 +242,9 @@ class TDTablePage extends StatelessWidget {
   Widget _horizontalScrollTable(BuildContext context) {
     return TDTable(
       columns: [
-        TDTableCol(title: '标题', colKey: 'title1', width: 160),
-        TDTableCol(title: '标题', colKey: 'title2', width: 160),
-        TDTableCol(title: '标题', colKey: 'title3', width: 160),
+        TDTableCol(title: 'Title', colKey: 'title1', width: 160),
+        TDTableCol(title: 'Title', colKey: 'title2', width: 160),
+        TDTableCol(title: 'Title', colKey: 'title3', width: 160),
       ],
       data: _getData2(),
     );
@@ -250,10 +254,10 @@ class TDTablePage extends StatelessWidget {
     return TDTable(
       stripe: true,
       columns: [
-        TDTableCol(title: '标题', colKey: 'title1', ellipsis: true),
-        TDTableCol(title: '标题', colKey: 'title2'),
-        TDTableCol(title: '标题', colKey: 'title3'),
-        TDTableCol(title: '标题', colKey: 'title4'),
+        TDTableCol(title: 'Title', colKey: 'title1', ellipsis: true),
+        TDTableCol(title: 'Title', colKey: 'title2'),
+        TDTableCol(title: 'Title', colKey: 'title3'),
+        TDTableCol(title: 'Title', colKey: 'title4'),
       ],
       data: _getData(9),
     );
@@ -263,10 +267,10 @@ class TDTablePage extends StatelessWidget {
     return TDTable(
       bordered: true,
       columns: [
-        TDTableCol(title: '标题', colKey: 'title1', ellipsis: true),
-        TDTableCol(title: '标题', colKey: 'title2'),
-        TDTableCol(title: '标题', colKey: 'title3'),
-        TDTableCol(title: '标题', colKey: 'title4'),
+        TDTableCol(title: 'Title', colKey: 'title1', ellipsis: true),
+        TDTableCol(title: 'Title', colKey: 'title2'),
+        TDTableCol(title: 'Title', colKey: 'title3'),
+        TDTableCol(title: 'Title', colKey: 'title4'),
       ],
       data: _getData(9),
     );
@@ -277,10 +281,10 @@ class TDTablePage extends StatelessWidget {
       bordered: true,
       height: 240,
       columns: [
-        TDTableCol(title: '标题', colKey: 'title1', ellipsis: true),
-        TDTableCol(title: '标题', colKey: 'title2'),
-        TDTableCol(title: '标题', colKey: 'title3'),
-        TDTableCol(title: '标题', colKey: 'title4'),
+        TDTableCol(title: 'Title', colKey: 'title1', ellipsis: true),
+        TDTableCol(title: 'Title', colKey: 'title2'),
+        TDTableCol(title: 'Title', colKey: 'title3'),
+        TDTableCol(title: 'Title', colKey: 'title4'),
       ],
       data: _getData(9),
     );
@@ -289,11 +293,11 @@ class TDTablePage extends StatelessWidget {
   Widget _fixedScrollTable(BuildContext context) {
     return TDTable(
       columns: [
-        TDTableCol(title: '标题', colKey: 'title1', width: 200),
-        TDTableCol(title: '标题', colKey: 'title2', width: 160),
-        TDTableCol(title: '标题', colKey: 'title3', width: 160),
+        TDTableCol(title: 'Title', colKey: 'title1', width: 200),
+        TDTableCol(title: 'Title', colKey: 'title2', width: 160),
+        TDTableCol(title: 'Title', colKey: 'title3', width: 160),
         TDTableCol(
-          title: '标题',
+          title: 'Title',
           colKey: 'title4',
           fixed: TDTableColFixed.right,
           cellBuilder: (BuildContext context, int index) {
@@ -327,22 +331,22 @@ class TDTablePage extends StatelessWidget {
     return TDTable(
       columns: [
         TDTableCol(
-          title: '标题',
+          title: 'Title',
           colKey: 'title1',
           align: TDTableColAlign.center,
         ),
         TDTableCol(
-          title: '标题',
+          title: 'Title',
           colKey: 'title2',
           align: TDTableColAlign.center,
         ),
         TDTableCol(
-          title: '标题',
+          title: 'Title',
           colKey: 'title3',
           align: TDTableColAlign.center,
         ),
         TDTableCol(
-          title: '标题',
+          title: 'Title',
           colKey: 'title4',
           align: TDTableColAlign.center,
         ),
@@ -354,10 +358,10 @@ class TDTablePage extends StatelessWidget {
   Widget _emptyTable(BuildContext context) {
     return TDTable(
       columns: [
-        TDTableCol(title: '标题', colKey: 'title1'),
-        TDTableCol(title: '标题', colKey: 'title2'),
-        TDTableCol(title: '标题', colKey: 'title3'),
-        TDTableCol(title: '标题', colKey: 'title4'),
+        TDTableCol(title: 'Title', colKey: 'title1'),
+        TDTableCol(title: 'Title', colKey: 'title2'),
+        TDTableCol(title: 'Title', colKey: 'title3'),
+        TDTableCol(title: 'Title', colKey: 'title4'),
       ],
     );
   }
@@ -365,10 +369,10 @@ class TDTablePage extends StatelessWidget {
   Widget _loadingTable(BuildContext context) {
     return TDTable(
       columns: [
-        TDTableCol(title: '标题', colKey: 'title1'),
-        TDTableCol(title: '标题', colKey: 'title2'),
-        TDTableCol(title: '标题', colKey: 'title3'),
-        TDTableCol(title: '标题', colKey: 'title4'),
+        TDTableCol(title: 'Title', colKey: 'title1'),
+        TDTableCol(title: 'Title', colKey: 'title2'),
+        TDTableCol(title: 'Title', colKey: 'title3'),
+        TDTableCol(title: 'Title', colKey: 'title4'),
       ],
       loading: true,
     );
@@ -385,10 +389,10 @@ class TDTablePage extends StatelessWidget {
             return index % 2 == 0;
           },
         ),
-        TDTableCol(title: '标题', colKey: 'title1'),
-        TDTableCol(title: '标题', colKey: 'title2'),
-        TDTableCol(title: '标题', colKey: 'title3'),
-        TDTableCol(title: '标题', colKey: 'title4'),
+        TDTableCol(title: 'Title', colKey: 'title1'),
+        TDTableCol(title: 'Title', colKey: 'title2'),
+        TDTableCol(title: 'Title', colKey: 'title3'),
+        TDTableCol(title: 'Title', colKey: 'title4'),
       ],
     );
   }

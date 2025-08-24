@@ -38,7 +38,7 @@ class MySideBarCustomPageState extends State<MySideBarCustomPage> {
     final pages = <Widget>[];
 
     for (var i = 0; i < 100; i++) {
-      list.add(MySideItemProps(index: i, label: '选项', value: i));
+      list.add(MySideItemProps(index: i, label: 'Options', value: i));
       pages.add(getPageDemo(i));
     }
 
@@ -105,7 +105,7 @@ class MySideBarCustomPageState extends State<MySideBarCustomPage> {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 2, right: 9),
-            child: MyText('标题$index', style: const TextStyle(fontSize: 14)),
+            child: MyText('Title$index', style: const TextStyle(fontSize: 14)),
           ),
           const SizedBox(height: 16),
           displayImageList(),
@@ -122,7 +122,7 @@ class MySideBarCustomPageState extends State<MySideBarCustomPage> {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 2, right: 9),
-            child: MyText('标题$index', style: const TextStyle(fontSize: 14)),
+            child: MyText('Title$index', style: const TextStyle(fontSize: 14)),
           ),
           const SizedBox(height: 16),
           displayImageList(),
@@ -137,27 +137,27 @@ class MySideBarCustomPageState extends State<MySideBarCustomPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            displayImageItem('标题文字'),
-            displayImageItem('标题文字'),
-            displayImageItem('最多六个文字'),
+            displayImageItem('Title Character'),
+            displayImageItem('Title Character'),
+            displayImageItem('Up to Six Characters'),
           ],
         ),
         const SizedBox(height: 18),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            displayImageItem('标题文字'),
-            displayImageItem('标题文字'),
-            displayImageItem('最多六个文字'),
+            displayImageItem('Title Character'),
+            displayImageItem('Title Character'),
+            displayImageItem('Up to Six Characters'),
           ],
         ),
         const SizedBox(height: 18),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            displayImageItem('标题文字'),
-            displayImageItem('标题文字'),
-            displayImageItem('最多六个文字'),
+            displayImageItem('Title Character'),
+            displayImageItem('Title Character'),
+            displayImageItem('Up to Six Characters'),
           ],
         ),
       ],

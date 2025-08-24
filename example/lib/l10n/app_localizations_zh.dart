@@ -162,7 +162,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get notRated => '未评分';
 
   @override
-  String get cascadeLabel => '选择选项';
+  String get cascadeLabel => '选择Options';
 
   @override
   String get back => '返回';
