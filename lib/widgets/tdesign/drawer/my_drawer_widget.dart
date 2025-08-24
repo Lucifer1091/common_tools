@@ -11,16 +11,16 @@ class MyDrawerWidget extends StatelessWidget {
     super.key,
     this.footer,
     this.items,
-    this.contentWidget,
+    this.content,
     this.title,
     this.titleWidget,
-    this.onItemClick,
+    this.onItemTap,
     this.width = 280,
     this.style,
     this.hover = true,
     this.backgroundColor,
     this.bordered = true,
-    this.isShowLastBordered = true,
+    this.showLastBorder = true,
   });
 
   final Widget? footer;
@@ -28,35 +28,35 @@ class MyDrawerWidget extends StatelessWidget {
   final List<MyDrawerItem>? items;
 
   /// Custom content, with higher priority than [items]/[footer]/[title]
-  final Widget? contentWidget;
+  final Widget? content;
 
   final String? title;
 
   final Widget? titleWidget;
 
-  final OnTapMyDrawerItem? onItemClick;
+  final OnTapMyDrawerItem? onItemTap;
 
   final double? width;
 
   final MyCellStyle? style;
 
-  final bool? hover;
+  final bool hover;
 
   final Color? backgroundColor;
 
   final bool? bordered;
 
   /// Whether to display the last line separator
-  final bool? isShowLastBordered;
+  final bool? showLastBorder;
 
   @override
   Widget build(BuildContext context) {
-    var content = contentWidget;
+    var content = this.content;
 
     if (content == null) {
       var cellStyle = style;
-      cellStyle ??= MyCellStyle.cellStyle(context)
-        ..leftIconColor = ThemeColors.neutral.shade900;
+      cellStyle ??= MyCellStyle.style(context)
+        ..leftIconColor = context.colorScheme.foreground;
 
       final cells =
           items
@@ -64,14 +64,14 @@ class MyDrawerWidget extends StatelessWidget {
               .map(
                 (index, item) => MapEntry(
                   index,
-                  TDCell(
-                    titleWidget: item.content,
+                  MyCell(
                     title: item.title,
+                    titleWidget: item.content,
                     leftIconWidget: item.icon,
                     hover: hover,
                     bordered: bordered,
-                    onClick: (cell) {
-                      onItemClick?.call(index, items![index]);
+                    onTap: (cell) {
+                      onItemTap?.call(index, items![index]);
                     },
                   ),
                 ),
@@ -79,28 +79,28 @@ class MyDrawerWidget extends StatelessWidget {
               .values
               .toList();
 
-      content = Column(
+      content = MyColumn(
         children: [
           Expanded(
-            child: TDCellGroup(
+            child: MyCellGroup(
               title: title,
               titleWidget: titleWidget,
               style: cellStyle,
               scrollable: true,
-              isShowLastBordered: isShowLastBordered,
+              showLastBorder: showLastBorder,
               cells: cells ?? [],
             ),
           ),
           if (footer != null)
-            Container(padding: const EdgeInsets.all(16), child: footer),
+            Padding(padding: const EdgeInsets.all(16), child: footer),
         ],
       );
     }
 
     return Container(
-      color: backgroundColor ?? context.colorScheme.background,
       width: width ?? 280,
       height: double.infinity,
+      color: backgroundColor ?? context.colorScheme.background,
       child: content,
     );
   }

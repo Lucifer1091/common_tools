@@ -20,7 +20,7 @@ class MyLinkPage extends StatelessWidget {
             ExampleItem(
               desc: 'Primary / Default Type',
               builder: (context) {
-                return FlexColumn(
+                return MyColumn(
                   gap: 8,
                   children: [
                     _basicTypeBasic(context),
@@ -117,8 +117,8 @@ class MyLinkPage extends StatelessWidget {
     return _buildLinkWithStyles(context, false);
   }
 
-  FlexColumn _buildLinkWithStyles(BuildContext context, bool state) {
-    return FlexColumn(
+  MyColumn _buildLinkWithStyles(BuildContext context, bool state) {
+    return MyColumn(
       gap: 8,
       children: [
         Container(

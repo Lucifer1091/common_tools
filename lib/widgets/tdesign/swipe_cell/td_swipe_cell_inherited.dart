@@ -6,16 +6,16 @@ import 'td_swipe_cell_action.dart';
 class TDSwipeCellInherited extends InheritedWidget {
   const TDSwipeCellInherited({
     required super.child,
-    required this.cellClick,
-    required this.actionClick,
+    required this.onTap,
+    required this.onAction,
     required this.duration,
     required this.controller,
     super.key,
   });
 
   final Duration duration;
-  final void Function() cellClick;
-  final bool Function(TDSwipeCellAction action) actionClick;
+  final void Function() onTap;
+  final bool Function(TDSwipeCellAction action) onAction;
   final SlidableController controller;
 
   @override

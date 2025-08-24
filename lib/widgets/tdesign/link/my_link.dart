@@ -53,12 +53,12 @@ class MyLink extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (type == MyLinkType.withPrefix) {
-      return FlexRow(
+      return MyRow(
         gap: _getGap(context),
         children: [_getDefaultIcon(context), _buildLink(context)],
       );
     } else if (type == MyLinkType.withSuffix) {
-      return FlexRow(
+      return MyRow(
         gap: _getGap(context),
         children: [_buildLink(context), _getDefaultIcon(context)],
       );
@@ -73,7 +73,7 @@ class MyLink extends StatelessWidget {
     final colorMap = {
       true: {
         MyLinkStyle.primary: context.colorScheme.primary,
-        MyLinkStyle.danger: MyColors.error,
+        MyLinkStyle.danger: context.colorScheme.destructive,
         MyLinkStyle.warning: MyColors.warning,
         MyLinkStyle.success: MyColors.success,
         MyLinkStyle.defaults: context.colorScheme.foreground,

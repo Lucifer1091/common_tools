@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:common_tools/index.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../base/example_widget.dart';
 
@@ -41,64 +42,31 @@ class MyDrawerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: ThemeColors.neutral.shade100,
-      child: ExamplePage(
-        title: tdTitle(context),
-        desc:
-            'Used as a switcher for a set of parallel pages/contents, it can display more options on the same screen than Tab.',
-        exampleCodeGroup: 'drawer',
-        navBarKey: navBarkey,
-        children: [
-          ExampleModule(
-            title: 'Component Types',
-            children: [
-              ExampleItem(
-                ignoreCode: true,
-                desc: 'Basic drawer',
-                builder: (BuildContext context) {
-                  return _buildBaseSimple(context);
-                },
-              ),
-              ExampleItem(
-                ignoreCode: true,
-                desc: 'Drawer with icons',
-                builder: (BuildContext context) {
-                  return _buildIconSimple(context);
-                },
-              ),
-            ],
-          ),
-          ExampleModule(
-            title: 'Component Style',
-            children: [
-              ExampleItem(
-                ignoreCode: true,
-                desc: 'Drawer with title',
-                builder: (BuildContext context) {
-                  return _buildTitleSimple(context);
-                },
-              ),
-              ExampleItem(
-                ignoreCode: true,
-                desc: 'Drawer with footer',
-                builder: (BuildContext context) {
-                  return _buildBottomSimple(context);
-                },
-              ),
-            ],
-          ),
-        ],
-        test: [
-          ExampleItem(
-            ignoreCode: true,
-            desc: 'Custom background color',
-            builder: (BuildContext context) {
-              return _buildColorSimple(context);
-            },
-          ),
-        ],
-      ),
+    return ExamplePage(
+      title: tdTitle(context),
+      desc:
+          'Used as a switcher for a set of parallel pages/contents, it can display more options on the same screen than Tab.',
+      exampleCodeGroup: 'drawer',
+      navBarKey: navBarkey,
+      children: [
+        ExampleModule(
+          title: 'Component Types',
+          children: [
+            ExampleItem(desc: 'Basic drawer', builder: _buildBaseSimple),
+            ExampleItem(desc: 'Drawer with icons', builder: _buildIconSimple),
+          ],
+        ),
+        ExampleModule(
+          title: 'Component Style',
+          children: [
+            ExampleItem(desc: 'Drawer with title', builder: _buildTitleSimple),
+            ExampleItem(
+              desc: 'Drawer with footer',
+              builder: _buildBottomSimple,
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -117,10 +85,12 @@ Widget _buildBaseSimple(BuildContext context) {
         drawerTop: renderBox?.size.height,
         items: List.generate(
           30,
-          (index) => MyDrawerItem(title: '菜单${_nums[index]}'),
+          (index) => MyDrawerItem(title: _nums[index]),
         ).toList(),
-        onItemClick: (index, item) {
-          print('drawer Item is clicked, index: $index，title：${item.title}');
+        onItemTap: (index, item) {
+          debugPrint(
+            'drawer Item is clicked, index: $index，title：${item.title}',
+          );
         },
       );
     },
@@ -143,8 +113,8 @@ Widget _buildIconSimple(BuildContext context) {
         items: List.generate(
           30,
           (index) => MyDrawerItem(
-            title: '菜单${_nums[index]}',
-            icon: const Icon(Icons.dashboard_rounded),
+            title: _nums[index],
+            icon: const Icon(LucideIcons.layoutDashboard300),
           ),
         ).toList(),
       );
@@ -158,7 +128,6 @@ Widget _buildTitleSimple(BuildContext context) {
     text: 'Drawer with title',
     isExpanded: true,
     type: MyButtonType.outline,
-
     size: MyButtonSize.large,
     onTap: () {
       MyDrawer(
@@ -169,7 +138,7 @@ Widget _buildTitleSimple(BuildContext context) {
         placement: MyDrawerPlacement.left,
         items: List.generate(
           10,
-          (index) => MyDrawerItem(title: '菜单${_nums[index]}'),
+          (index) => MyDrawerItem(title: _nums[index]),
         ).toList(),
       );
     },
@@ -182,7 +151,6 @@ Widget _buildBottomSimple(BuildContext context) {
     text: 'Drawer with footer',
     isExpanded: true,
     type: MyButtonType.outline,
-
     size: MyButtonSize.large,
     onTap: () {
       MyDrawer(
@@ -193,7 +161,7 @@ Widget _buildBottomSimple(BuildContext context) {
         placement: MyDrawerPlacement.left,
         items: List.generate(
           10,
-          (index) => MyDrawerItem(title: '菜单${_nums[index]}'),
+          (index) => MyDrawerItem(title: _nums[index]),
         ).toList(),
         footer: const MyButton(
           text: 'Action',
@@ -201,31 +169,6 @@ Widget _buildBottomSimple(BuildContext context) {
           width: double.infinity,
           size: MyButtonSize.large,
         ),
-      );
-    },
-  );
-}
-
-Widget _buildColorSimple(BuildContext context) {
-  var renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
-  return MyButton(
-    text: 'Custom background color',
-    isExpanded: true,
-    type: MyButtonType.outline,
-
-    size: MyButtonSize.large,
-    onTap: () {
-      MyDrawer(
-        context,
-        visible: true,
-        drawerTop: renderBox?.size.height,
-        title: 'Title',
-        backgroundColor: ThemeColors.neutral.shade50,
-        placement: MyDrawerPlacement.right,
-        items: List.generate(
-          10,
-          (index) => MyDrawerItem(title: '菜单${_nums[index]}'),
-        ).toList(),
       );
     },
   );

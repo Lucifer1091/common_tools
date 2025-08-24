@@ -6,7 +6,7 @@ import 'package:flutter/rendering.dart';
 const Duration _bottomSheetEnterDuration = Duration(milliseconds: 250);
 const Duration _bottomSheetExitDuration = Duration(milliseconds: 200);
 
-enum SlideTransitionFrom { top, right, left, bottom, center }
+enum MySlideFrom { top, right, left, bottom, center }
 
 /// The route of the Dialog box that pops up by sliding from a certain direction
 /// of the screen, such as sliding out the page from the top, bottom, left, or right
@@ -17,7 +17,7 @@ class MySlidePopupRoute<T> extends PopupRoute<T> {
     this.modalBarrierColor = Colors.black54,
     this.isDismissible = true,
     this.modalBarrierFull = false,
-    this.slideTransitionFrom = SlideTransitionFrom.bottom,
+    this.slideTransitionFrom = MySlideFrom.bottom,
     this.modalWidth,
     this.modalHeight,
     this.modalTop = 0,
@@ -37,7 +37,7 @@ class MySlidePopupRoute<T> extends PopupRoute<T> {
 
   final bool modalBarrierFull;
 
-  final SlideTransitionFrom slideTransitionFrom;
+  final MySlideFrom slideTransitionFrom;
 
   final double? modalWidth;
 
@@ -124,7 +124,7 @@ class MySlidePopupRoute<T> extends PopupRoute<T> {
           Align(
             alignment: slideTransitionFromToAlignment(slideTransitionFrom),
             child:
-                slideTransitionFrom != SlideTransitionFrom.center
+                slideTransitionFrom != MySlideFrom.center
                     ? FractionalTranslation(
                       translation: _getOffset(animValue, slideTransitionFrom),
                       child: ClipRect(
@@ -175,18 +175,15 @@ class MySlidePopupRoute<T> extends PopupRoute<T> {
     super.dispose();
   }
 
-  /// 监听焦点变化
   void startFocusListener(BuildContext context) {
     FocusManager.instance.addListener(_handleFocusChange);
   }
 
-  /// 停止监听焦点变化
   void stopFocusListener(BuildContext context) {
     FocusManager.instance.removeListener(_handleFocusChange);
   }
 
   void _handleFocusChange() {
-    // 获取当前的焦点节点
     final focusNode = FocusManager.instance.primaryFocus;
     if (focusNode != null && focusNode.context != null) {
       final renderObject = focusNode.context!.findRenderObject();
@@ -207,7 +204,7 @@ class MySlidePopupRoute<T> extends PopupRoute<T> {
   Widget _getPositionWidget(BuildContext context, Widget child) {
     var bottom = 0.0;
     final mediaQuery = MediaQuery.of(context);
-    if (slideTransitionFrom == SlideTransitionFrom.bottom) {
+    if (slideTransitionFrom == MySlideFrom.bottom) {
       bottom = mediaQuery.viewInsets.bottom;
     } else {
       if ((_focusY + mediaQuery.viewInsets.bottom + _focusHeight) >
@@ -246,33 +243,33 @@ class MySlidePopupRoute<T> extends PopupRoute<T> {
     );
   }
 
-  Offset _getOffset(double animValue, SlideTransitionFrom slideTransitionFrom) {
+  Offset _getOffset(double animValue, MySlideFrom slideTransitionFrom) {
     switch (slideTransitionFrom) {
-      case SlideTransitionFrom.top:
+      case MySlideFrom.top:
         return Offset(0, animValue - 1);
-      case SlideTransitionFrom.right:
+      case MySlideFrom.right:
         return Offset(1 - animValue, 0);
-      case SlideTransitionFrom.left:
+      case MySlideFrom.left:
         return Offset(animValue - 1, 0);
-      case SlideTransitionFrom.bottom:
+      case MySlideFrom.bottom:
         return Offset(0, 1 - animValue);
-      case SlideTransitionFrom.center:
+      case MySlideFrom.center:
         return Offset.zero;
     }
   }
 }
 
-Alignment slideTransitionFromToAlignment(SlideTransitionFrom from) {
+Alignment slideTransitionFromToAlignment(MySlideFrom from) {
   switch (from) {
-    case SlideTransitionFrom.top:
+    case MySlideFrom.top:
       return Alignment.topCenter;
-    case SlideTransitionFrom.right:
+    case MySlideFrom.right:
       return Alignment.centerRight;
-    case SlideTransitionFrom.left:
+    case MySlideFrom.left:
       return Alignment.centerLeft;
-    case SlideTransitionFrom.bottom:
+    case MySlideFrom.bottom:
       return Alignment.bottomCenter;
-    case SlideTransitionFrom.center:
+    case MySlideFrom.center:
       return Alignment.center;
   }
 }
@@ -281,30 +278,30 @@ class RectClipper extends CustomClipper<Rect> {
   RectClipper(this.animValue, this.slideTransitionFrom);
 
   final double animValue;
-  final SlideTransitionFrom slideTransitionFrom;
+  final MySlideFrom slideTransitionFrom;
 
   @override
   Rect getClip(Size size) {
     switch (slideTransitionFrom) {
-      case SlideTransitionFrom.top:
+      case MySlideFrom.top:
         return Rect.fromLTWH(
           0,
           size.height * (1 - animValue),
           size.width,
           size.height,
         );
-      case SlideTransitionFrom.right:
+      case MySlideFrom.right:
         return Rect.fromLTWH(0, 0, size.width * animValue, size.height);
-      case SlideTransitionFrom.left:
+      case MySlideFrom.left:
         return Rect.fromLTWH(
           size.width * (1 - animValue),
           0,
           size.width,
           size.height,
         );
-      case SlideTransitionFrom.bottom:
+      case MySlideFrom.bottom:
         return Rect.fromLTWH(0, 0, size.width, size.height * animValue);
-      case SlideTransitionFrom.center:
+      case MySlideFrom.center:
         return Rect.fromLTWH(0, 0, size.width, size.height);
     }
   }

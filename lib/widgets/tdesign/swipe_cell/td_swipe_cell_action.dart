@@ -110,7 +110,7 @@ class TDSwipeCellAction extends StatelessWidget {
 
   void _handleTap(BuildContext context) {
     final swipeInherited = TDSwipeCellInherited.of(context)!;
-    final openConfirm = swipeInherited.actionClick(this);
+    final openConfirm = swipeInherited.onAction(this);
 
     if (openConfirm) return;
 

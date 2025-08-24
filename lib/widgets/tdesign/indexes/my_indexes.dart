@@ -4,17 +4,17 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../../../extensions/iterable/index.dart';
+import 'my_indexes_anchor.dart';
+import 'my_indexes_list.dart';
 import 'sticky_header/sticky_header_widget.dart';
-import 'td_indexes_anchor.dart';
-import 'td_indexes_list.dart';
 
+export 'my_indexes_anchor.dart';
+export 'my_indexes_list.dart';
 export 'sticky_header/sticky_header_widget.dart';
-export 'td_indexes_anchor.dart';
-export 'td_indexes_list.dart';
 
-class TDIndexes extends StatefulWidget {
-  const TDIndexes({
-    required this.builderContent,
+class MyIndexes extends StatefulWidget {
+  const MyIndexes({
+    required this.builder,
     super.key,
     this.indexList,
     this.indexListMaxHeight = 0.8,
@@ -49,7 +49,7 @@ class TDIndexes extends StatefulWidget {
 
   final void Function(String index)? onSelect;
 
-  final Widget? Function(BuildContext context, String index) builderContent;
+  final Widget? Function(BuildContext context, String index) builder;
 
   final Widget? Function(
     BuildContext context,
@@ -62,10 +62,10 @@ class TDIndexes extends StatefulWidget {
   builderIndex;
 
   @override
-  _TDIndexesState createState() => _TDIndexesState();
+  _MyIndexesState createState() => _MyIndexesState();
 }
 
-class _TDIndexesState extends State<TDIndexes> {
+class _MyIndexesState extends State<MyIndexes> {
   late List<String> _indexList;
   late ValueNotifier<String> _activeIndex;
   late ScrollController _scrollController;
@@ -82,7 +82,7 @@ class _TDIndexesState extends State<TDIndexes> {
   }
 
   @override
-  void didUpdateWidget(TDIndexes oldWidget) {
+  void didUpdateWidget(MyIndexes oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.indexList != oldWidget.indexList) {
       _indexList = widget.indexList ?? _azList();
@@ -160,7 +160,7 @@ class _TDIndexesState extends State<TDIndexes> {
               return Padding(
                 padding:
                     isPinnedOffset ? EdgeInsets.only(top: 8) : EdgeInsets.zero,
-                child: widget.builderContent(context, e),
+                child: widget.builder(context, e),
               );
             },
           ),

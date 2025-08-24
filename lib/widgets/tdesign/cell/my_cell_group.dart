@@ -1,63 +1,58 @@
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../../layout/no_widget.dart';
-import '../text/my_text.dart';
-import 'td_cell.dart';
-import 'td_cell_inherited.dart';
-import 'td_cell_style.dart';
 
-typedef CellBuilder =
-    Widget Function(BuildContext context, TDCell cell, int index);
+typedef MyCellBuilder =
+    Widget Function(BuildContext context, MyCell cell, int index);
 
-enum TDCellGroupTheme { defaultTheme, cardTheme }
+enum MyCellGroupTheme { defaults, card }
 
-class TDCellGroup extends StatefulWidget {
-  const TDCellGroup({
+class MyCellGroup extends StatefulWidget {
+  const MyCellGroup({
     required this.cells,
     super.key,
     this.bordered = false,
-    this.theme = TDCellGroupTheme.defaultTheme,
+    this.theme = MyCellGroupTheme.defaults,
     this.title,
     this.builder,
     this.style,
     this.titleWidget,
     this.scrollable = false,
-    this.isShowLastBordered = false,
+    this.showLastBorder = false,
   });
 
   final bool? bordered;
 
-  final TDCellGroupTheme? theme;
+  final MyCellGroupTheme? theme;
 
   final String? title;
 
   final Widget? titleWidget;
 
-  final List<TDCell> cells;
+  final List<MyCell> cells;
 
-  final CellBuilder? builder;
+  final MyCellBuilder? builder;
 
   final MyCellStyle? style;
 
   final bool? scrollable;
 
-  final bool? isShowLastBordered;
+  final bool? showLastBorder;
 
   @override
-  _TDCellGroupState createState() => _TDCellGroupState();
+  _MyCellGroupState createState() => _MyCellGroupState();
 }
 
-class _TDCellGroupState extends State<TDCellGroup> {
+class _MyCellGroupState extends State<MyCellGroup> {
   @override
   Widget build(BuildContext context) {
-    final style = widget.style ?? MyCellStyle.cellStyle(context);
+    final style = widget.style ?? MyCellStyle.style(context);
     final itemCount = widget.cells.length;
     final radius = _getBorderRadius(style);
 
-    return TDCellInherited(
+    return MyCellInherited(
       style: style,
-      child: Column(
+      child: MyColumn(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -73,7 +68,7 @@ class _TDCellGroupState extends State<TDCellGroup> {
           Flexible(
             child: Container(
               padding:
-                  widget.theme == TDCellGroupTheme.cardTheme
+                  widget.theme == MyCellGroupTheme.card
                       ? style.cardPadding
                       : EdgeInsets.zero,
               decoration: BoxDecoration(
@@ -97,8 +92,8 @@ class _TDCellGroupState extends State<TDCellGroup> {
                             ? item
                             : widget.builder!(context, item, index);
                     if (itemCount - 1 == index &&
-                        (widget.isShowLastBordered ?? false)) {
-                      return Column(children: [cell, _borderWidget(style)]);
+                        (widget.showLastBorder ?? false)) {
+                      return MyColumn(children: [cell, _borderWidget(style)]);
                     }
                     return cell;
                   },
@@ -120,25 +115,25 @@ class _TDCellGroupState extends State<TDCellGroup> {
   BoxBorder? _getBordered(MyCellStyle style) {
     if (!(widget.bordered ?? false)) return null;
 
-    final color = style.groupBorderedColor ?? ThemeColors.neutral.shade200;
+    final color = style.groupBorderedColor ?? context.colorScheme.border;
     return Border.all(color: color);
   }
 
   BorderRadiusGeometry _getBorderRadius(MyCellStyle style) {
-    if (widget.theme == TDCellGroupTheme.cardTheme) {
+    if (widget.theme == MyCellGroupTheme.card) {
       return style.cardBorderRadius ?? BorderRadius.zero;
     }
     return BorderRadius.zero;
   }
 
   Widget _borderWidget(MyCellStyle style) {
-    return Row(
+    return MyRow(
       children: [
         Container(height: 0.5, width: 16, color: style.backgroundColor),
         Expanded(
           child: Container(
             height: 0.5,
-            color: style.borderedColor ?? ThemeColors.neutral.shade200,
+            color: style.borderedColor ?? context.colorScheme.border,
           ),
         ),
       ],

@@ -6,7 +6,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../../../extensions/generic/dynamic_extension.dart';
 import '../../../extensions/iterable/index.dart';
-import '../cell/td_cell.dart';
+import '../cell/my_cell.dart';
 import 'td_swipe_cell_action.dart';
 import 'td_swipe_cell_inherited.dart';
 import 'td_swipe_cell_panel.dart';
@@ -36,7 +36,7 @@ class TDSwipeCell extends StatefulWidget {
 
   final Key? slidableKey;
 
-  /// Cell [TDCell]
+  /// Cell [MyCell]
   final Widget cell;
 
   final bool? disabled;
@@ -188,12 +188,12 @@ class _TDSwipeCellState extends State<TDSwipeCell>
     return TDSwipeCellInherited(
       duration: widget.getDuration,
       controller: controller,
-      cellClick: () {
+      onTap: () {
         if (widget.closeWhenTapped.isTrue) {
           TDSwipeCell.close(widget.groupTag);
         }
       },
-      actionClick: (action) {
+      onAction: (action) {
         final isLeft = openDirection == TDSwipeDirection.left;
         final panel = isLeft ? widget.left! : widget.right!;
         final index = panel.children.indexOf(action);

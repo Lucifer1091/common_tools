@@ -2,13 +2,13 @@ import 'package:flutter/widgets.dart';
 
 import '../../index.dart';
 
-/// A [FlexRow] may be used in place of [Row].
-class FlexRow extends Flex {
-  /// A [FlexRow] may be used in place of [Row]. It has a [gap] property which ads a gap between the children.
+/// A [MyColumn] may be used in place of [Column].
+class MyColumn extends Flex {
+  /// A [MyColumn] may be used in place of [Column]. It has a [gap] property which ads a gap between the children.
   ///
   /// Example:
   /// ```dart
-  /// FlexRow(
+  /// MyColumn(
   ///   gap: 16,
   ///   children: [
   ///     Container(
@@ -29,7 +29,7 @@ class FlexRow extends Flex {
   ///   ],
   /// )
   /// ```
-  FlexRow({
+  MyColumn({
     double gap = 0,
     bool reversed = false,
     List<Widget> children = const [],
@@ -42,15 +42,10 @@ class FlexRow extends Flex {
     super.mainAxisAlignment,
     super.verticalDirection,
   }) : super(
-         direction: Axis.horizontal,
+         direction: Axis.vertical,
          children:
              (reversed ? children.reversed : children).indexed
-                 .map(
-                   (w) =>
-                       gap > 0 && w.$1 > 0
-                           ? [Gap(gap), w.$2]
-                           : [w.$2],
-                 )
+                 .map((w) => gap > 0 && w.$1 > 0 ? [Gap(gap), w.$2] : [w.$2])
                  .expand((w) => w)
                  .toList(),
        );

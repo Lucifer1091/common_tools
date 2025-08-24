@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../text/my_text.dart';
 
 typedef PopupClick = VoidCallback;
 

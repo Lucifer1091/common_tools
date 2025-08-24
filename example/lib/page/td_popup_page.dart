@@ -69,7 +69,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                 Navigator.of(context).push(
                   MySlidePopupRoute(
                     modalBarrierColor: ThemeColors.neutral.shade800,
-                    slideTransitionFrom: SlideTransitionFrom.bottom,
+                    slideTransitionFrom: MySlideFrom.bottom,
                     builder: (context) {
                       return TDPopupBottomConfirmPanel(
                         title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
@@ -106,7 +106,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                 Navigator.of(context).push(
                   MySlidePopupRoute(
                     modalBarrierColor: ThemeColors.neutral.shade800,
-                    slideTransitionFrom: SlideTransitionFrom.bottom,
+                    slideTransitionFrom: MySlideFrom.bottom,
                     builder: (context) {
                       return TDPopupBottomDisplayPanel(
                         title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
@@ -142,7 +142,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                       Navigator.of(context).push(
                         MySlidePopupRoute(
                           modalBarrierColor: ThemeColors.neutral.shade800,
-                          slideTransitionFrom: SlideTransitionFrom.bottom,
+                          slideTransitionFrom: MySlideFrom.bottom,
                           builder: (context) {
                             return TDPopupBottomDisplayPanel(
                               title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
@@ -171,7 +171,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                       Navigator.of(context).push(
                         MySlidePopupRoute(
                           modalBarrierColor: ThemeColors.neutral.shade800,
-                          slideTransitionFrom: SlideTransitionFrom.bottom,
+                          slideTransitionFrom: MySlideFrom.bottom,
                           builder: (context) {
                             return TDPopupBottomConfirmPanel(
                               title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
@@ -207,7 +207,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                       Navigator.of(context).push(
                         MySlidePopupRoute(
                           modalBarrierColor: ThemeColors.neutral.shade800,
-                          slideTransitionFrom: SlideTransitionFrom.center,
+                          slideTransitionFrom: MySlideFrom.center,
                           builder: (context) {
                             return TDPopupCenterPanel(
                               closeColor: ThemeColors.error.shade500,
@@ -235,7 +235,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                       Navigator.of(context).push(
                         MySlidePopupRoute(
                           modalBarrierColor: ThemeColors.neutral.shade800,
-                          slideTransitionFrom: SlideTransitionFrom.center,
+                          slideTransitionFrom: MySlideFrom.center,
                           builder: (context) {
                             return TDPopupCenterPanel(
                               closeUnderBottom: true,
@@ -270,7 +270,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                 Navigator.of(context).push(
                   MySlidePopupRoute(
                     modalBarrierColor: ThemeColors.neutral.shade800,
-                    slideTransitionFrom: SlideTransitionFrom.right,
+                    slideTransitionFrom: MySlideFrom.right,
                     modalTop: renderBox.size.height,
                     builder: (context) {
                       return Container(color: Colors.white, width: 280);
@@ -300,7 +300,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                       Navigator.of(context).push(
                         MySlidePopupRoute(
                           modalBarrierColor: ThemeColors.neutral.shade800,
-                          slideTransitionFrom: SlideTransitionFrom.bottom,
+                          slideTransitionFrom: MySlideFrom.bottom,
                           builder: (context) {
                             return TDPopupBottomDisplayPanel(
                               title: '标题文字标题文字标题文字标题文字标题文字标题文字标题文字',
@@ -341,7 +341,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                       Navigator.of(context).push(
                         MySlidePopupRoute(
                           modalBarrierColor: ThemeColors.neutral.shade800,
-                          slideTransitionFrom: SlideTransitionFrom.bottom,
+                          slideTransitionFrom: MySlideFrom.bottom,
                           focusMove: true,
                           builder: (context) {
                             return TDPopupBottomDisplayPanel(
@@ -383,7 +383,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                       Navigator.of(context).push(
                         MySlidePopupRoute(
                           modalBarrierColor: ThemeColors.neutral.shade800,
-                          slideTransitionFrom: SlideTransitionFrom.center,
+                          slideTransitionFrom: MySlideFrom.center,
                           focusMove: true,
                           builder: (context) {
                             return TDPopupCenterPanel(
@@ -473,7 +473,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                       Navigator.of(context).push(
                         MySlidePopupRoute(
                           modalBarrierColor: ThemeColors.neutral.shade800,
-                          slideTransitionFrom: SlideTransitionFrom.bottom,
+                          slideTransitionFrom: MySlideFrom.bottom,
                           builder: (context) {
                             return TDPopupBottomDisplayPanel(
                               title: '标题文字',
@@ -502,7 +502,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                       Navigator.of(context).push(
                         MySlidePopupRoute(
                           modalBarrierColor: ThemeColors.neutral.shade800,
-                          slideTransitionFrom: SlideTransitionFrom.bottom,
+                          slideTransitionFrom: MySlideFrom.bottom,
                           builder: (context) {
                             return TDPopupBottomConfirmPanel(
                               title: '标题文字',
@@ -541,7 +541,7 @@ class TDPopupPageState extends State<TDPopupPage> {
         Navigator.of(context).push(
           MySlidePopupRoute(
             modalBarrierColor: ThemeColors.neutral.shade800,
-            slideTransitionFrom: SlideTransitionFrom.top,
+            slideTransitionFrom: MySlideFrom.top,
             open: () {
               print('open');
             },
@@ -568,7 +568,7 @@ class TDPopupPageState extends State<TDPopupPage> {
         Navigator.of(context).push(
           MySlidePopupRoute(
             modalBarrierColor: ThemeColors.neutral.shade800,
-            slideTransitionFrom: SlideTransitionFrom.left,
+            slideTransitionFrom: MySlideFrom.left,
             builder: (context) {
               return Container(color: Colors.white, width: 280);
             },
@@ -589,7 +589,7 @@ class TDPopupPageState extends State<TDPopupPage> {
         Navigator.of(context).push(
           MySlidePopupRoute(
             modalBarrierColor: ThemeColors.neutral.shade800,
-            slideTransitionFrom: SlideTransitionFrom.center,
+            slideTransitionFrom: MySlideFrom.center,
             builder: (context) {
               return Container(color: Colors.white, width: 240, height: 240);
             },
@@ -610,7 +610,7 @@ class TDPopupPageState extends State<TDPopupPage> {
         Navigator.of(context).push(
           MySlidePopupRoute(
             modalBarrierColor: ThemeColors.neutral.shade800,
-            slideTransitionFrom: SlideTransitionFrom.bottom,
+            slideTransitionFrom: MySlideFrom.bottom,
             builder: (context) {
               return Container(color: Colors.white, height: 240);
             },
@@ -631,7 +631,7 @@ class TDPopupPageState extends State<TDPopupPage> {
         Navigator.of(context).push(
           MySlidePopupRoute(
             modalBarrierColor: ThemeColors.neutral.shade800,
-            slideTransitionFrom: SlideTransitionFrom.right,
+            slideTransitionFrom: MySlideFrom.right,
             builder: (context) {
               return Container(color: Colors.white, width: 280);
             },
@@ -652,7 +652,7 @@ class TDPopupPageState extends State<TDPopupPage> {
         Navigator.of(context).push(
           MySlidePopupRoute(
             modalBarrierColor: ThemeColors.neutral.shade800,
-            slideTransitionFrom: SlideTransitionFrom.bottom,
+            slideTransitionFrom: MySlideFrom.bottom,
             builder: (context) {
               return TDPopupBottomConfirmPanel(
                 title: '标题文字',
@@ -683,7 +683,7 @@ class TDPopupPageState extends State<TDPopupPage> {
         Navigator.of(context).push(
           MySlidePopupRoute(
             modalBarrierColor: ThemeColors.neutral.shade800,
-            slideTransitionFrom: SlideTransitionFrom.bottom,
+            slideTransitionFrom: MySlideFrom.bottom,
             builder: (context) {
               return TDPopupBottomConfirmPanel(
                 leftClick: () {
@@ -713,7 +713,7 @@ class TDPopupPageState extends State<TDPopupPage> {
         Navigator.of(context).push(
           MySlidePopupRoute(
             modalBarrierColor: ThemeColors.neutral.shade800,
-            slideTransitionFrom: SlideTransitionFrom.bottom,
+            slideTransitionFrom: MySlideFrom.bottom,
             builder: (context) {
               return TDPopupBottomDisplayPanel(
                 title: '标题文字',
@@ -740,7 +740,7 @@ class TDPopupPageState extends State<TDPopupPage> {
         Navigator.of(context).push(
           MySlidePopupRoute(
             modalBarrierColor: ThemeColors.neutral.shade800,
-            slideTransitionFrom: SlideTransitionFrom.bottom,
+            slideTransitionFrom: MySlideFrom.bottom,
             builder: (context) {
               return TDPopupBottomDisplayPanel(
                 title: '标题文字',
@@ -768,7 +768,7 @@ class TDPopupPageState extends State<TDPopupPage> {
         Navigator.of(context).push(
           MySlidePopupRoute(
             modalBarrierColor: ThemeColors.neutral.shade800,
-            slideTransitionFrom: SlideTransitionFrom.bottom,
+            slideTransitionFrom: MySlideFrom.bottom,
             builder: (context) {
               return TDPopupBottomDisplayPanel(
                 closeClick: () {
@@ -794,7 +794,7 @@ class TDPopupPageState extends State<TDPopupPage> {
         Navigator.of(context).push(
           MySlidePopupRoute(
             modalBarrierColor: ThemeColors.neutral.shade800,
-            slideTransitionFrom: SlideTransitionFrom.bottom,
+            slideTransitionFrom: MySlideFrom.bottom,
             builder: (context) {
               return TDPopupBottomDisplayPanel(
                 title: '标题文字',
@@ -823,7 +823,7 @@ class TDPopupPageState extends State<TDPopupPage> {
           MySlidePopupRoute(
             modalBarrierColor: ThemeColors.neutral.shade800,
             isDismissible: false,
-            slideTransitionFrom: SlideTransitionFrom.center,
+            slideTransitionFrom: MySlideFrom.center,
             builder: (context) {
               return TDPopupCenterPanel(
                 closeClick: () {
@@ -850,7 +850,7 @@ class TDPopupPageState extends State<TDPopupPage> {
           MySlidePopupRoute(
             modalBarrierColor: ThemeColors.neutral.shade800,
             isDismissible: false,
-            slideTransitionFrom: SlideTransitionFrom.center,
+            slideTransitionFrom: MySlideFrom.center,
             builder: (context) {
               return TDPopupCenterPanel(
                 closeUnderBottom: true,

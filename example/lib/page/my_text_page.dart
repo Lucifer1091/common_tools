@@ -63,7 +63,7 @@ class MyTextPage extends StatelessWidget {
             isTextThrough: true,
             fontSize: 20,
             lineThroughColor: context.colorScheme.primary,
-            style: TextStyle(color: MyColors.error.shade500),
+            style: TextStyle(color: context.colorScheme.destructive),
           ),
           TextSpan(
             text: 'TextSpan2',
@@ -74,7 +74,7 @@ class MyTextPage extends StatelessWidget {
       ),
       fontSize: context.bodyLarge.fontSize,
       textColor: context.colorScheme.primary,
-      style: TextStyle(color: MyColors.error.shade500, fontSize: 32),
+      style: TextStyle(color: context.colorScheme.destructive, fontSize: 32),
     );
   }
 

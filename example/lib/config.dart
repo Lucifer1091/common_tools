@@ -16,7 +16,7 @@ import 'page/td_badge_page.dart';
 import 'page/td_bottom_tab_bar_page.dart';
 import 'page/td_calendar_page.dart';
 import 'page/td_cascader_page.dart';
-import 'page/td_cell_page.dart';
+import 'page/my_cell_page.dart';
 import 'page/td_checkbox_page.dart';
 import 'page/td_collapse.dart';
 import 'page/td_date_picker_page.dart';
@@ -31,7 +31,7 @@ import 'page/td_footer_page.dart';
 import 'page/td_icon_page.dart';
 import 'page/td_image_page.dart';
 import 'page/td_image_viewer_page.dart';
-import 'page/td_indexes_page.dart';
+import 'page/my_indexes_page.dart';
 import 'page/td_input_page.dart';
 import 'page/my_link_page.dart';
 import 'page/td_loading_page.dart';
@@ -91,16 +91,16 @@ Map<String, List<ExamplePageModel>> exampleMap = {
       name: 'divider',
       pageBuilder: _wrapInheritedTheme((context) => const MyDividerPage()),
     ),
-    ExamplePageModel(
-      text: 'Fab',
-      name: 'fab',
-      pageBuilder: _wrapInheritedTheme((context) => const TDFabPage()),
-    ),
-    ExamplePageModel(
-      text: 'Icon',
-      name: 'icon',
-      pageBuilder: _wrapInheritedTheme((context) => const TDIconPage()),
-    ),
+    // ExamplePageModel(
+    //   text: 'Fab',
+    //   name: 'fab',
+    //   pageBuilder: _wrapInheritedTheme((context) => const TDFabPage()),
+    // ),
+    // ExamplePageModel(
+    //   text: 'Icon',
+    //   name: 'icon',
+    //   pageBuilder: _wrapInheritedTheme((context) => const TDIconPage()),
+    // ),
     ExamplePageModel(
       text: 'Link',
       name: 'link',
@@ -127,7 +127,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'Indexes',
       name: 'indexes',
-      pageBuilder: _wrapInheritedTheme((context) => const TDIndexesPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyIndexesPage()),
     ),
     ExamplePageModel(
       text: 'NavBar',
@@ -249,7 +249,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'Cell',
       name: 'cell',
-      pageBuilder: _wrapInheritedTheme((context) => const TDCellPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyCellPage()),
     ),
     ExamplePageModel(
       text: 'TimeCounter',

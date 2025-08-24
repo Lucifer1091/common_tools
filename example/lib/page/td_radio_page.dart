@@ -69,7 +69,7 @@ class TDRadioPageState extends State<TDRadioPage> {
   }
 
   Widget _verticalRadios(BuildContext context) {
-    return TDCell(
+    return MyCell(
       title: '单选标题',
       hover: false,
       required: true,

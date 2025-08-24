@@ -42,7 +42,7 @@ class MyDividerPage extends StatelessWidget {
   }
 
   Widget _horizontalDividers(BuildContext context) {
-    return FlexColumn(
+    return MyColumn(
       gap: 24,
       children: [
         const MyDivider(),
@@ -56,7 +56,7 @@ class MyDividerPage extends StatelessWidget {
   Widget _verticalDividers(BuildContext context) {
     return SizedBox(
       height: 50,
-      child: FlexRow(
+      child: MyRow(
         gap: 16,
         children: [
           Gap(4),
@@ -74,7 +74,7 @@ class MyDividerPage extends StatelessWidget {
   }
 
   Widget _horizontalTextDividers(BuildContext context) {
-    return FlexColumn(
+    return MyColumn(
       gap: 16,
       children: [
         MyDivider(text: 'Left', alignment: MyTextAlignment.left),
@@ -120,7 +120,7 @@ class MyDividerPage extends StatelessWidget {
   Widget _verticalTextDividers(BuildContext context) {
     return SizedBox(
       height: 200,
-      child: FlexRow(
+      child: MyRow(
         gap: 32,
         children: [
           SizedBox.shrink(),

@@ -18,15 +18,15 @@ class MyDrawer {
     this.titleWidget,
     this.visible,
     this.onClose,
-    this.onItemClick,
+    this.onItemTap,
     this.width = 280,
     this.drawerTop,
     this.style,
     this.hover = true,
     this.backgroundColor,
     this.bordered = true,
-    this.isShowLastBordered = true,
-    this.contentWidget,
+    this.showLastBorder = true,
+    this.content,
   }) {
     if (visible.getOr()) show();
   }
@@ -40,7 +40,7 @@ class MyDrawer {
   final List<MyDrawerItem>? items;
 
   /// Custom content has higher priority than [items]/[footer]/[title]
-  final Widget? contentWidget;
+  final Widget? content;
 
   final MyDrawerPlacement? placement;
 
@@ -54,7 +54,7 @@ class MyDrawer {
 
   final VoidCallback? onClose;
 
-  final OnTapMyDrawerItem? onItemClick;
+  final OnTapMyDrawerItem? onItemTap;
 
   final double? width;
 
@@ -64,13 +64,13 @@ class MyDrawer {
   /// The custom style for the list
   final MyCellStyle? style;
 
-  final bool? hover;
+  final bool hover;
 
   final Color? backgroundColor;
 
   final bool? bordered;
 
-  final bool? isShowLastBordered;
+  final bool? showLastBorder;
 
   MySlidePopupRoute<void>? _drawerRoute;
 
@@ -81,8 +81,8 @@ class MyDrawer {
     _drawerRoute = MySlidePopupRoute(
       slideTransitionFrom:
           placement == MyDrawerPlacement.right
-              ? SlideTransitionFrom.right
-              : SlideTransitionFrom.left,
+              ? MySlideFrom.right
+              : MySlideFrom.left,
       isDismissible: (showOverlay ?? true) && (closeOnOverlayClick ?? true),
       modalBarrierColor: (showOverlay ?? true) ? null : Colors.transparent,
       modalTop: drawerTop,
@@ -90,16 +90,16 @@ class MyDrawer {
         return MyDrawerWidget(
           footer: footer,
           items: items,
-          contentWidget: contentWidget,
+          content: content,
           title: title,
           titleWidget: titleWidget,
-          onItemClick: onItemClick,
+          onItemTap: onItemTap,
           width: width,
           style: style,
           hover: hover,
           backgroundColor: backgroundColor,
           bordered: bordered,
-          isShowLastBordered: isShowLastBordered,
+          showLastBorder: showLastBorder,
         );
       },
     );
