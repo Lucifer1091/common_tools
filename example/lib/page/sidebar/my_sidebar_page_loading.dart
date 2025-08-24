@@ -1,25 +1,24 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:common_tools/index.dart';
 
 import '../../base/example_widget.dart';
 
-///
-/// TDSideBarIconPage演示
-///
-class TDSideBarIconPage extends StatefulWidget {
-  const TDSideBarIconPage({Key? key}) : super(key: key);
+class MySideBarLoadingPage extends StatefulWidget {
+  const MySideBarLoadingPage({super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return TDSideBarIconPageState();
+    return MySideBarLoadingPageState();
   }
 }
 
-class TDSideBarIconPageState extends State<TDSideBarIconPage> {
+class MySideBarLoadingPageState extends State<MySideBarLoadingPage> {
   var currentValue = 1;
   var itemHeight = 278.5;
   final _demoScroller = ScrollController(initialScrollOffset: 278.5);
-  final _sideBarController = TDSideBarController();
+  final _sideBarController = MySideBarController();
   static const threshold = 50;
   var lock = false;
 
@@ -73,27 +72,22 @@ class TDSideBarIconPageState extends State<TDSideBarIconPage> {
 
   Widget buildWidget(BuildContext context) {
     return ExamplePage(
-      title: 'SideBar 带图标侧边栏',
+      title: 'SideBar 延迟加载',
       exampleCodeGroup: 'sideBar',
       showSingleChild: true,
-      singleChild: _buildIconSideBar,
+      singleChild: _buildLoadingSideBar,
     );
   }
 
-  Widget _buildIconSideBar(BuildContext context) {
-    final list = <SideItemProps>[];
-    final pages = <Widget>[];
+  List<MySideItemProps> list = <MySideItemProps>[];
+  List<Widget> pages = <Widget>[];
 
+  void _initData() {
+    list = [];
+    pages = [];
     for (var i = 0; i < 20; i++) {
-      list.add(
-        SideItemProps(
-          index: i,
-          label: '选项',
-          value: i,
-          icon: Icons.dashboard_rounded,
-        ),
-      );
-      pages.add(getAnchorDemo(i));
+      list.add(MySideItemProps(index: i, label: '选项', value: i));
+      pages.add(getLoadingDemo(i));
     }
 
     pages.add(
@@ -103,23 +97,39 @@ class TDSideBarIconPageState extends State<TDSideBarIconPage> {
       ),
     );
 
-    list[1].badge = const TDBadge(TDBadgeType.redPoint);
-    list[2].badge = const TDBadge(TDBadgeType.message, count: 8);
+    list[1].badge = const MyBadge(MyBadgeType.redPoint);
+    list[2].badge = const MyBadge(MyBadgeType.message, count: 8);
+    if (_sideBarController.loading) {
+      _sideBarController.init(list);
+      _sideBarController.selectTo(currentValue);
+      // 初始化时避免右侧内容与左侧item不匹配
+      _demoScroller.animateTo(
+        currentValue.toDouble() * itemHeight,
+        duration: const Duration(milliseconds: 1),
+        curve: Curves.easeIn,
+      );
+    }
+  }
 
-    var demoHeight = MediaQuery.of(context).size.height;
+  Widget _buildLoadingSideBar(BuildContext context) {
+    // 延迟加载
+    Future.delayed(const Duration(seconds: 3), _initData);
+    var size = MediaQuery.of(context).size;
+    var demoHeight = size.height;
 
     return Row(
       children: [
         SizedBox(
-          width: 110,
-          child: TDSideBar(
+          width: list.isEmpty ? size.width : 110,
+          child: MySideBar(
             height: demoHeight,
-            style: TDSideBarStyle.normal,
+            style: MySideBarStyle.normal,
             value: currentValue,
             controller: _sideBarController,
+            loading: true,
             children: list
                 .map(
-                  (ele) => TDSideBarItem(
+                  (ele) => MySideBarItem(
                     label: ele.label ?? '',
                     badge: ele.badge,
                     value: ele.value,
@@ -144,7 +154,7 @@ class TDSideBarIconPageState extends State<TDSideBarIconPage> {
     );
   }
 
-  Widget getAnchorDemo(int index) {
+  Widget getLoadingDemo(int index) {
     return Container(
       decoration: const BoxDecoration(color: Colors.white),
       child: Column(

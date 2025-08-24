@@ -3,16 +3,16 @@ import 'package:example/page/my_button_page.dart';
 import 'package:flutter/material.dart';
 
 import 'base/example_base.dart';
-import 'page/sidebar/td_sidebar_page.dart';
-import 'page/sidebar/td_sidebar_page_anchor.dart';
-import 'page/sidebar/td_sidebar_page_custom.dart';
-import 'page/sidebar/td_sidebar_page_icon.dart';
-import 'page/sidebar/td_sidebar_page_loading.dart';
-import 'page/sidebar/td_sidebar_page_outline.dart';
-import 'page/sidebar/td_sidebar_page_pagination.dart';
+import 'page/sidebar/my_sidebar_page.dart';
+import 'page/sidebar/my_sidebar_page_anchor.dart';
+import 'page/sidebar/my_sidebar_page_custom.dart';
+import 'page/sidebar/my_sidebar_page_icon.dart';
+import 'page/sidebar/my_sidebar_page_loading.dart';
+import 'page/sidebar/my_sidebar_page_outline.dart';
+import 'page/sidebar/my_sidebar_page_pagination.dart';
 import 'page/td_action_sheet_page.dart';
 import 'page/td_avatar_page.dart';
-import 'page/td_badge_page.dart';
+import 'page/my_badge_page.dart';
 import 'page/td_bottom_tab_bar_page.dart';
 import 'page/td_calendar_page.dart';
 import 'page/td_cascader_page.dart';
@@ -137,7 +137,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'SideBar',
       name: 'side-bar',
-      pageBuilder: _wrapInheritedTheme((context) => const TDSideBarPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MySideBarPage()),
     ),
     ExamplePageModel(
       text: 'Steps',
@@ -244,7 +244,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'Badge',
       name: 'badge',
-      pageBuilder: _wrapInheritedTheme((context) => const TDBadgePage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyBadgePage()),
     ),
     ExamplePageModel(
       text: 'Cell',
@@ -425,37 +425,37 @@ List<ExamplePageModel> sideBarExamplePage = [
     isTodo: false,
     showAction: false,
     pageBuilder: _wrapInheritedTheme(
-      (context) => const TDSideBarPaginationPage(),
+      (context) => const MySideBarPaginationPage(),
     ),
   ),
   ExamplePageModel(
     text: 'SideBar Anchor',
     name: 'SideBarAnchor',
     isTodo: false,
-    pageBuilder: _wrapInheritedTheme((context) => const TDSideBarAnchorPage()),
+    pageBuilder: _wrapInheritedTheme((context) => const MySideBarAnchorPage()),
   ),
   ExamplePageModel(
     text: 'SideBar Icon',
     name: 'SideBarIcon',
     isTodo: false,
-    pageBuilder: _wrapInheritedTheme((context) => const TDSideBarIconPage()),
+    pageBuilder: _wrapInheritedTheme((context) => const MySideBarIconPage()),
   ),
   ExamplePageModel(
     text: 'SideBar Oultine',
     name: 'SideBarOutline',
     isTodo: false,
-    pageBuilder: _wrapInheritedTheme((context) => const TDSideBarOutlinePage()),
+    pageBuilder: _wrapInheritedTheme((context) => const MySideBarOutlinePage()),
   ),
   ExamplePageModel(
     text: 'SideBar Custom',
     name: 'SideBarCustom',
     isTodo: false,
-    pageBuilder: _wrapInheritedTheme((context) => const TDSideBarCustomPage()),
+    pageBuilder: _wrapInheritedTheme((context) => const MySideBarCustomPage()),
   ),
   ExamplePageModel(
     text: 'SideBar Loading',
     name: 'SideBarLoading',
     isTodo: false,
-    pageBuilder: _wrapInheritedTheme((context) => const TDSideBarLoadingPage()),
+    pageBuilder: _wrapInheritedTheme((context) => const MySideBarLoadingPage()),
   ),
 ];

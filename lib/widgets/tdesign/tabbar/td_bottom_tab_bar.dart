@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../index.dart';
 import '../../../constants/shadows.dart';
 import '../../layout/no_widget.dart';
-import '../badge/td_badge.dart';
+import '../badge/my_badge.dart';
 import '../text/my_text.dart';
 
 /// Expand Item Down Arrow Width
@@ -56,14 +56,14 @@ enum TDBottomTabBarOutlineType { filled, capsule }
 class BadgeConfig {
   BadgeConfig({
     required this.showBadge,
-    TDBadge? badge,
+    MyBadge? badge,
     this.badgeTopOffset,
     this.badgeRightOffset,
-  }) : badge = badge ?? const TDBadge(TDBadgeType.redPoint);
+  }) : badge = badge ?? const MyBadge(MyBadgeType.redPoint);
 
   final bool showBadge;
 
-  final TDBadge? badge;
+  final MyBadge? badge;
 
   final double? badgeTopOffset;
 

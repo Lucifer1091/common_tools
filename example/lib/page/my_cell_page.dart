@@ -96,7 +96,7 @@ Widget _buildSimple(BuildContext context) {
       const MyCell(
         arrow: true,
         title: 'Single Row Title',
-        noteWidget: TDBadge(TDBadgeType.message, count: 8),
+        noteWidget: MyBadge(MyBadgeType.message, count: 8),
       ),
       const MyCell(
         arrow: false,
@@ -136,7 +136,7 @@ Widget _buildDesSimple(BuildContext context) {
         arrow: true,
         title: 'Single Row Title',
         description: 'A long piece of content text',
-        noteWidget: TDBadge(TDBadgeType.message, count: 8),
+        noteWidget: MyBadge(MyBadgeType.message, count: 8),
       ),
       MyCell(
         arrow: false,

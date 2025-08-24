@@ -3,23 +3,20 @@ import 'package:common_tools/index.dart';
 
 import '../../base/example_widget.dart';
 
-///
-/// TDSideBarOutlinePage演示
-///
-class TDSideBarOutlinePage extends StatefulWidget {
-  const TDSideBarOutlinePage({Key? key}) : super(key: key);
+class MySideBarAnchorPage extends StatefulWidget {
+  const MySideBarAnchorPage({super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return TDSideBarOutlinePageState();
+    return MySideBarAnchorPageState();
   }
 }
 
-class TDSideBarOutlinePageState extends State<TDSideBarOutlinePage> {
+class MySideBarAnchorPageState extends State<MySideBarAnchorPage> {
   var currentValue = 1;
   var itemHeight = 278.5;
   final _demoScroller = ScrollController(initialScrollOffset: 278.5);
-  final _sideBarController = TDSideBarController();
+  final _sideBarController = MySideBarController();
   static const threshold = 50;
   var lock = false;
 
@@ -60,9 +57,11 @@ class TDSideBarOutlinePageState extends State<TDSideBarOutlinePage> {
   }
 
   void onChanged(int value) {
-    setState(() {
-      currentValue = value;
-    });
+    if (mounted) {
+      setState(() {
+        currentValue = value;
+      });
+    }
   }
 
   @override
@@ -73,20 +72,20 @@ class TDSideBarOutlinePageState extends State<TDSideBarOutlinePage> {
 
   Widget buildWidget(BuildContext context) {
     return ExamplePage(
-      title: 'SideBar 非通栏选项样式',
+      title: 'SideBar 锚点用法',
       exampleCodeGroup: 'sideBar',
       showSingleChild: true,
-      singleChild: _buildOutlineSideBar,
+      singleChild: _buildAnchorSideBar,
     );
   }
 
-  Widget _buildOutlineSideBar(BuildContext context) {
-    // 非通栏选项样式
-    final list = <SideItemProps>[];
+  Widget _buildAnchorSideBar(BuildContext context) {
+    // 锚点用法
+    final list = <MySideItemProps>[];
     final pages = <Widget>[];
 
     for (var i = 0; i < 20; i++) {
-      list.add(SideItemProps(index: i, label: '选项', value: i));
+      list.add(MySideItemProps(index: i, label: '选项', value: i));
       pages.add(getAnchorDemo(i));
     }
 
@@ -97,23 +96,24 @@ class TDSideBarOutlinePageState extends State<TDSideBarOutlinePage> {
       ),
     );
 
-    list[1].badge = const TDBadge(TDBadgeType.redPoint);
-    list[2].badge = const TDBadge(TDBadgeType.message, count: 8);
+    list[1].badge = const MyBadge(MyBadgeType.redPoint);
+    list[2].badge = const MyBadge(MyBadgeType.message, count: 8);
 
     var demoHeight = MediaQuery.of(context).size.height;
+    _sideBarController.init(list);
 
     return Row(
       children: [
         SizedBox(
           width: 110,
-          child: TDSideBar(
+          child: MySideBar(
             height: demoHeight,
-            style: TDSideBarStyle.outline,
+            style: MySideBarStyle.normal,
             value: currentValue,
             controller: _sideBarController,
             children: list
                 .map(
-                  (ele) => TDSideBarItem(
+                  (ele) => MySideBarItem(
                     label: ele.label ?? '',
                     badge: ele.badge,
                     value: ele.value,

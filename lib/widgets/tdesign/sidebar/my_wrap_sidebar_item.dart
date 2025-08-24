@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../index.dart';
 
-class TDWrapSideBarItem extends StatelessWidget {
-  const TDWrapSideBarItem({
+class MyWrapSideBarItem extends StatelessWidget {
+  const MyWrapSideBarItem({
     required this.disabled,
     required this.style,
     super.key,
@@ -23,7 +23,7 @@ class TDWrapSideBarItem extends StatelessWidget {
     this.unSelectedBgColor,
   });
 
-  final TDBadge? badge;
+  final MyBadge? badge;
   final bool disabled;
   final IconData? icon;
   final String label;
@@ -38,7 +38,7 @@ class TDWrapSideBarItem extends StatelessWidget {
   final bool topAdjacent;
   final bool bottomAdjacent;
   final VoidCallback? onTap;
-  final TDSideBarStyle style;
+  final MySideBarStyle style;
 
   static const preLineWidth = 3.0;
   @override
@@ -46,7 +46,7 @@ class TDWrapSideBarItem extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child:
-          style == TDSideBarStyle.normal
+          style == MySideBarStyle.normal
               ? renderNormalItem(context)
               : renderOutlineItem(context),
     );

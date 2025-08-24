@@ -2,16 +2,16 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../badge/td_badge.dart';
+import '../badge/my_badge.dart';
 import '../loading/td_loading.dart';
-import 'td_sidebar_controller.dart';
-import 'td_sidebar_item.dart';
-import 'td_wrap_sidebar_item.dart';
+import 'my_sidebar_controller.dart';
+import 'my_sidebar_item.dart';
+import 'my_wrap_sidebar_item.dart';
 
-enum TDSideBarStyle { normal, outline }
+enum MySideBarStyle { normal, outline }
 
-class SideItemProps {
-  SideItemProps({
+class MySideItemProps {
+  MySideItemProps({
     required this.value,
     required this.index,
     this.disabled,
@@ -26,12 +26,12 @@ class SideItemProps {
   bool? disabled;
   IconData? icon;
   String? label;
-  TDBadge? badge;
+  MyBadge? badge;
   TextStyle? textStyle;
 }
 
-class TDSideBar extends StatefulWidget {
-  const TDSideBar({
+class MySideBar extends StatefulWidget {
+  const MySideBar({
     super.key,
     this.value,
     this.defaultValue,
@@ -43,7 +43,7 @@ class TDSideBar extends StatefulWidget {
     this.controller,
     this.contentPadding,
     this.selectedTextStyle,
-    this.style = TDSideBarStyle.normal,
+    this.style = MySideBarStyle.normal,
     this.loading,
     this.loadingWidget,
     this.selectedBgColor,
@@ -57,7 +57,7 @@ class TDSideBar extends StatefulWidget {
   final int? defaultValue;
 
   /// 单项
-  final List<TDSideBarItem> children;
+  final List<MySideBarItem> children;
 
   /// 选中值发生变化（Controller控制）
   final ValueChanged<int>? onChanged;
@@ -72,7 +72,7 @@ class TDSideBar extends StatefulWidget {
   final TextStyle? selectedTextStyle;
 
   /// 样式
-  final TDSideBarStyle style;
+  final MySideBarStyle style;
 
   /// 高度
   final double? height;
@@ -81,7 +81,7 @@ class TDSideBar extends StatefulWidget {
   final EdgeInsetsGeometry? contentPadding;
 
   /// 控制器
-  final TDSideBarController? controller;
+  final MySideBarController? controller;
 
   /// 加载效果
   final bool? loading;
@@ -96,11 +96,11 @@ class TDSideBar extends StatefulWidget {
   final Color? unSelectedBgColor;
 
   @override
-  State<TDSideBar> createState() => _TDSideBarState();
+  State<MySideBar> createState() => _MySideBarState();
 }
 
-class _TDSideBarState extends State<TDSideBar> {
-  late List<SideItemProps> displayChildren;
+class _MySideBarState extends State<MySideBar> {
+  late List<MySideItemProps> displayChildren;
   late int? currentValue;
   late int? currentIndex;
   final _scrollerController = ScrollController();
@@ -109,13 +109,13 @@ class _TDSideBarState extends State<TDSideBar> {
   bool _loading = false;
 
   // 查找某值对应项
-  SideItemProps findSideItem(int value) {
+  MySideItemProps findSideItem(int value) {
     return displayChildren.where((element) => element.value == value).first;
   }
 
   // 选中某值
   void selectValue(int value, {bool needScroll = false}) {
-    SideItemProps? item;
+    MySideItemProps? item;
     for (final element in displayChildren) {
       if (element.value == value) {
         item = element;
@@ -174,7 +174,7 @@ class _TDSideBarState extends State<TDSideBar> {
             .asMap()
             .entries
             .map(
-              (entry) => SideItemProps(
+              (entry) => MySideItemProps(
                 index: entry.key,
                 disabled: entry.value.disabled,
                 value: entry.value.value,
@@ -210,7 +210,7 @@ class _TDSideBarState extends State<TDSideBar> {
               .asMap()
               .entries
               .map(
-                (entry) => SideItemProps(
+                (entry) => MySideItemProps(
                   index: entry.key,
                   disabled: entry.value.disabled,
                   value: entry.value.value,
@@ -227,7 +227,7 @@ class _TDSideBarState extends State<TDSideBar> {
               .asMap()
               .entries
               .map(
-                (entry) => SideItemProps(
+                (entry) => MySideItemProps(
                   index: entry.key,
                   disabled: entry.value.disabled,
                   value: entry.value.value,
@@ -244,7 +244,7 @@ class _TDSideBarState extends State<TDSideBar> {
   }
 
   // 选中某项
-  void onSelect(SideItemProps item, {bool isController = false}) {
+  void onSelect(MySideItemProps item, {bool isController = false}) {
     if (currentIndex != item.index) {
       if (isController) {
         widget.onChanged?.call(item.value);
@@ -292,7 +292,7 @@ class _TDSideBarState extends State<TDSideBar> {
             itemBuilder: (BuildContext context, int index) {
               final ele = displayChildren[index];
 
-              return TDWrapSideBarItem(
+              return MyWrapSideBarItem(
                 style: widget.style,
                 value: ele.value,
                 icon: ele.icon,

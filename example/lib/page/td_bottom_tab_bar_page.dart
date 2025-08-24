@@ -744,7 +744,7 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
         TDBottomTabBarTabConfig(
           badgeConfig: BadgeConfig(
             showBadge: true,
-            badge: const TDBadge(TDBadgeType.redPoint),
+            badge: const MyBadge(MyBadgeType.redPoint),
             badgeTopOffset: -2,
             badgeRightOffset: -10,
           ),
@@ -780,7 +780,7 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
           unselectedIcon: _unSelectedIcon,
           badgeConfig: BadgeConfig(
             showBadge: true,
-            badge: const TDBadge(TDBadgeType.redPoint),
+            badge: const MyBadge(MyBadgeType.redPoint),
             badgeTopOffset: -2,
             badgeRightOffset: -10,
           ),
@@ -820,7 +820,7 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
           unselectedIcon: _unSelectedIcon,
           badgeConfig: BadgeConfig(
             showBadge: true,
-            badge: const TDBadge(TDBadgeType.redPoint),
+            badge: const MyBadge(MyBadgeType.redPoint),
             badgeTopOffset: -2,
             badgeRightOffset: -10,
           ),
@@ -942,7 +942,7 @@ class _TDBottomTabBarPageState extends State<TDBottomTabBarPage> {
           unselectedIcon: _unSelectedIcon,
           badgeConfig: BadgeConfig(
             showBadge: true,
-            badge: const TDBadge(TDBadgeType.redPoint),
+            badge: const MyBadge(MyBadgeType.redPoint),
             badgeTopOffset: -2,
             badgeRightOffset: -10,
           ),

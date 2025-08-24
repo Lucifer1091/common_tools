@@ -1,26 +1,24 @@
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../text/my_text.dart';
 
-enum TDBadgeType { redPoint, message, bubble, square, subscript }
+enum MyBadgeType { redPoint, message, bubble, square, subscript }
 
-enum TDBadgeBorder { large, small }
+enum MyBadgeBorder { large, small }
 
-enum TDBadgeSize { large, small }
+enum MyBadgeSize { large, small }
 
-class TDBadge extends StatelessWidget {
-  const TDBadge(
+class MyBadge extends StatelessWidget {
+  const MyBadge(
     this.type, {
     super.key,
     this.count,
     this.maxCount = 99,
     this.message,
-    this.border = TDBadgeBorder.large,
-    this.size = TDBadgeSize.small,
+    this.border = MyBadgeBorder.large,
+    this.size = MyBadgeSize.small,
     this.color,
     this.textColor,
     this.style,
@@ -36,11 +34,11 @@ class TDBadge extends StatelessWidget {
 
   final String? message;
 
-  final TDBadgeType type;
+  final MyBadgeType type;
 
-  final TDBadgeSize size;
+  final MyBadgeSize size;
 
-  final TDBadgeBorder border;
+  final MyBadgeBorder border;
 
   final Color? color;
 
@@ -60,15 +58,15 @@ class TDBadge extends StatelessWidget {
 
   double _getBadgeSize() {
     return switch (size) {
-      TDBadgeSize.large => 20,
-      TDBadgeSize.small => 16,
+      MyBadgeSize.large => 20,
+      MyBadgeSize.small => 16,
     };
   }
 
   TextStyle? _getBadgeStyle(BuildContext context) {
     return switch (size) {
-      TDBadgeSize.large => context.labelMedium,
-      TDBadgeSize.small => context.labelSmall,
+      MyBadgeSize.large => context.labelMedium,
+      MyBadgeSize.small => context.labelSmall,
     }?.copyWith(color: textColor, fontWeight: FontWeight.w500);
   }
 
@@ -103,7 +101,7 @@ class TDBadge extends StatelessWidget {
     );
 
     switch (type) {
-      case TDBadgeType.redPoint:
+      case MyBadgeType.redPoint:
         return Container(
           alignment: Alignment.center,
           height: _getBadgeSize() / 2,
@@ -113,7 +111,7 @@ class TDBadge extends StatelessWidget {
             borderRadius: BorderRadius.circular(_getBadgeSize() / 4),
           ),
         );
-      case TDBadgeType.message:
+      case MyBadgeType.message:
         return Visibility(
           visible: _isVisible(),
           child:
@@ -137,7 +135,7 @@ class TDBadge extends StatelessWidget {
                     child: child,
                   ),
         );
-      case TDBadgeType.subscript:
+      case MyBadgeType.subscript:
         return ClipPath(
           clipper: _TrapezoidPath(widthLarge, widthSmall),
           child: Container(
@@ -154,7 +152,7 @@ class TDBadge extends StatelessWidget {
             ),
           ),
         );
-      case TDBadgeType.bubble:
+      case MyBadgeType.bubble:
         return Visibility(
           visible: _isVisible(),
           child: Container(
@@ -172,7 +170,7 @@ class TDBadge extends StatelessWidget {
             child: child,
           ),
         );
-      case TDBadgeType.square:
+      case MyBadgeType.square:
         return Visibility(
           visible: _isVisible(),
           child: IntrinsicWidth(
@@ -182,7 +180,7 @@ class TDBadge extends StatelessWidget {
               decoration: BoxDecoration(
                 color: background,
                 borderRadius:
-                    border == TDBadgeBorder.large
+                    border == MyBadgeBorder.large
                         ? BorderRadius.circular(8)
                         : BorderRadius.circular(2),
               ),

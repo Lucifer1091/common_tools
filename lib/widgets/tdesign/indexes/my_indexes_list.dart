@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import '../../../index.dart';
-import '../text/my_text.dart';
 
-class TDIndexesList extends StatefulWidget {
-  const TDIndexesList({
+class MyIndexesList extends StatefulWidget {
+  const MyIndexesList({
     required this.indexList,
     required this.activeIndex,
     required this.onSelect,
@@ -30,10 +29,10 @@ class TDIndexesList extends StatefulWidget {
   builderIndex;
 
   @override
-  State<TDIndexesList> createState() => _TDIndexesListState();
+  State<MyIndexesList> createState() => _MyIndexesListState();
 }
 
-class _TDIndexesListState extends State<TDIndexesList> {
+class _MyIndexesListState extends State<MyIndexesList> {
   late Map<String, GlobalKey> _containerKeys;
   final _indexSize = 20.0;
   Timer? _hideTipTimer;
@@ -48,7 +47,7 @@ class _TDIndexesListState extends State<TDIndexesList> {
   }
 
   @override
-  void didUpdateWidget(TDIndexesList oldWidget) {
+  void didUpdateWidget(MyIndexesList oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.indexList != oldWidget.indexList) {
       _containerKeys = widget.indexList.asMap().map(
@@ -107,14 +106,17 @@ class _TDIndexesListState extends State<TDIndexesList> {
                                     height: 48,
                                     width: 48,
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(9999),
-                                      color: ThemeColors.blue.shade50,
+                                      borderRadius: MyBorderRadius.round,
+                                      color: context.colorScheme.secondary,
                                     ),
                                     child: Center(
                                       child: MyText(
                                         e,
                                         style: context.displaySmall,
-                                        textColor: ThemeColors.blue.shade600,
+                                        textColor:
+                                            context
+                                                .colorScheme
+                                                .secondaryForeground,
                                       ),
                                     ),
                                   ),
@@ -129,10 +131,8 @@ class _TDIndexesListState extends State<TDIndexesList> {
                                   decoration:
                                       isActive
                                           ? BoxDecoration(
-                                            borderRadius: BorderRadius.circular(
-                                              9999,
-                                            ),
-                                            color: ThemeColors.blue.shade600,
+                                            borderRadius: MyBorderRadius.round,
+                                            color: context.colorScheme.primary,
                                           )
                                           : null,
                                   child: Center(
@@ -144,8 +144,10 @@ class _TDIndexesListState extends State<TDIndexesList> {
                                               : context.labelSmall,
                                       textColor:
                                           isActive
-                                              ? Colors.white
-                                              : ThemeColors.neutral.shade900,
+                                              ? context
+                                                  .colorScheme
+                                                  .primaryForeground
+                                              : context.colorScheme.foreground,
                                     ),
                                   ),
                                 ),
@@ -177,15 +179,15 @@ class _TDIndexesListState extends State<TDIndexesList> {
     for (final entry in _containerKeys.entries) {
       final renderBox =
           entry.value.currentContext?.findRenderObject() as RenderBox?;
+
       if (renderBox != null) {
         final localPosition = renderBox.globalToLocal(globalPosition);
         final isIn = renderBox.hitTest(
           BoxHitTestResult(),
           position: localPosition,
         );
-        if (isIn) {
-          return entry.key;
-        }
+
+        if (isIn) return entry.key;
       }
     }
     return null;

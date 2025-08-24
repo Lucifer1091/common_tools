@@ -25,8 +25,8 @@ class MyIndexes extends StatefulWidget {
     this.scrollController,
     this.onChange,
     this.onSelect,
-    this.builderAnchor,
-    this.builderIndex,
+    this.anchorBuilder,
+    this.indexBuilder,
   });
 
   /// Index character list. If not passed, the default is A-Z
@@ -56,10 +56,10 @@ class MyIndexes extends StatefulWidget {
     String index,
     bool isPinnedToTop,
   )?
-  builderAnchor;
+  anchorBuilder;
 
   final Widget Function(BuildContext context, String index, bool isActive)?
-  builderIndex;
+  indexBuilder;
 
   @override
   _MyIndexesState createState() => _MyIndexesState();
@@ -102,28 +102,25 @@ class _MyIndexesState extends State<MyIndexes> {
 
   @override
   Widget build(BuildContext context) {
-    return ColoredBox(
-      color: Colors.white,
-      child: Stack(
-        children: [
-          CustomScrollView(
-            controller: _scrollController,
-            reverse: widget.reverse ?? false,
-            slivers: _slivers(),
-          ),
-          TDIndexesList(
-            indexList: _indexList,
-            activeIndex: _activeIndex,
-            onSelect: (newIndex, oldIndex) {
-              widget.onSelect?.call(newIndex);
-              widget.onChange?.call(newIndex);
-              _scrollToTarget(newIndex, oldIndex);
-            },
-            indexListMaxHeight: widget.indexListMaxHeight ?? 0.8,
-            builderIndex: widget.builderIndex,
-          ),
-        ],
-      ),
+    return Stack(
+      children: [
+        CustomScrollView(
+          controller: _scrollController,
+          reverse: widget.reverse ?? false,
+          slivers: _slivers(),
+        ),
+        MyIndexesList(
+          indexList: _indexList,
+          activeIndex: _activeIndex,
+          onSelect: (newIndex, oldIndex) {
+            widget.onSelect?.call(newIndex);
+            widget.onChange?.call(newIndex);
+            _scrollToTarget(newIndex, oldIndex);
+          },
+          indexListMaxHeight: widget.indexListMaxHeight ?? 0.8,
+          builderIndex: widget.indexBuilder,
+        ),
+      ],
     );
   }
 
@@ -132,35 +129,38 @@ class _MyIndexesState extends State<MyIndexes> {
     final stickyOffset = widget.stickyOffset ?? 0;
     _anchorKeys.clear();
     _contentKeys.clear();
-    return _indexList.map((e) {
-      final isPinnedOffset = capsuleTheme && _activeIndex.value == e;
+    return _indexList.map((index) {
+      final isPinnedOffset = capsuleTheme && _activeIndex.value == index;
+
       return SliverStickyHeader.builder(
         sticky: widget.sticky ?? true,
         pinnedOffset: isPinnedOffset ? 8 + stickyOffset : stickyOffset,
         builder: (context, state) {
-          _anchorKeys[e] = context;
-          if (state.isPinned && _activeIndex.value != e && !_isAnimating) {
+          _anchorKeys[index] = context;
+
+          if (state.isPinned && _activeIndex.value != index && !_isAnimating) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              _activeIndex.value = e;
-              widget.onChange?.call(e);
+              _activeIndex.value = index;
+              widget.onChange?.call(index);
             });
           }
-          return TDIndexesAnchor(
-            text: e,
+
+          return MyIndexesAnchor(
+            text: index,
             capsuleTheme: capsuleTheme,
             activeIndex: _activeIndex,
-            builderAnchor: widget.builderAnchor,
+            anchorBuilder: widget.anchorBuilder,
             sticky: widget.sticky ?? true,
           );
         },
         sliver: SliverToBoxAdapter(
           child: Builder(
             builder: (context) {
-              _contentKeys[e] = context;
+              _contentKeys[index] = context;
               return Padding(
                 padding:
                     isPinnedOffset ? EdgeInsets.only(top: 8) : EdgeInsets.zero,
-                child: widget.builder(context, e),
+                child: widget.builder(context, index),
               );
             },
           ),
@@ -180,7 +180,7 @@ class _MyIndexesState extends State<MyIndexes> {
   void _scrollToTarget(String newIndex, String oldIndex) {
     _isAnimating = true;
 
-    /// isUp: 是否（手指）向上滑动
+    /// isUp: Whether (finger) slides up
     final isUp = _indexList.indexOf(newIndex) > _indexList.indexOf(oldIndex);
     if (isUp) {
       var index = oldIndex;

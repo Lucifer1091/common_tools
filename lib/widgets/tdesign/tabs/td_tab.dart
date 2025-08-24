@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../extensions/index.dart';
-import '../badge/td_badge.dart';
+import '../badge/my_badge.dart';
 
 const double _kTabHeight = 48;
 
@@ -28,7 +28,7 @@ class TDTab extends Tab {
     super.iconMargin = const EdgeInsets.only(bottom: 4, right: 4),
   });
 
-  final TDBadge? badge;
+  final MyBadge? badge;
 
   final double? contentHeight;
 

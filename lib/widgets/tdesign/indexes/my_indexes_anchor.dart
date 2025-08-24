@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../text/my_text.dart';
 
-class TDIndexesAnchor extends StatelessWidget {
-  const TDIndexesAnchor({
+class MyIndexesAnchor extends StatelessWidget {
+  const MyIndexesAnchor({
     required this.sticky,
     required this.text,
     required this.capsuleTheme,
     required this.activeIndex,
     super.key,
-    this.builderAnchor,
+    this.anchorBuilder,
   });
 
   final bool sticky;
@@ -26,7 +25,7 @@ class TDIndexesAnchor extends StatelessWidget {
     String index,
     bool isPinnedToTop,
   )?
-  builderAnchor;
+  anchorBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -34,38 +33,35 @@ class TDIndexesAnchor extends StatelessWidget {
       valueListenable: activeIndex,
       builder: (context, value, child) {
         final isPinned = value == text;
-        final customAnchor = builderAnchor?.call(context, text, isPinned);
+        final customAnchor = anchorBuilder?.call(context, text, isPinned);
         return customAnchor ??
             Container(
               padding: EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-              margin: capsuleTheme ? EdgeInsets.symmetric(horizontal: 8) : null,
+              margin:
+                  capsuleTheme
+                      ? EdgeInsets.symmetric(horizontal: 8).except(top: 8)
+                      : null,
               decoration: BoxDecoration(
-                color: isPinned ? Colors.white : ThemeColors.neutral.shade50,
-                borderRadius: capsuleTheme ? BorderRadius.circular(9999) : null,
+                color:
+                    isPinned
+                        ? context.colorScheme.primary
+                        : context.colorScheme.secondary,
+                borderRadius: capsuleTheme ? MyBorderRadius.round : null,
                 border:
                     isPinned
                         ? capsuleTheme
-                            ? Border.all(color: ThemeColors.neutral.shade50)
+                            ? Border.all(color: context.colorScheme.border)
                             : Border(
                               bottom: BorderSide(
-                                color: ThemeColors.neutral.shade50,
+                                color: context.colorScheme.border,
                               ),
                             )
                         : null,
               ),
               child: MyText(
                 text,
-                style: (isPinned ? context.labelMedium : context.titleSmall)
-                    ?.copyWith(
-                      color:
-                          isPinned
-                              ? ThemeColors.blue.shade600
-                              : ThemeColors.neutral.shade900,
-                    ),
-                textColor:
-                    isPinned
-                        ? ThemeColors.blue.shade600
-                        : ThemeColors.neutral.shade900,
+                textColor: isPinned ? context.colorScheme.primaryForeground : null,
+                style: (isPinned ? context.labelMedium : context.titleSmall),
               ),
             );
       },

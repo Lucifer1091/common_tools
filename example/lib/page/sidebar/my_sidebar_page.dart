@@ -4,19 +4,16 @@ import 'package:common_tools/index.dart';
 
 import '../../base/example_widget.dart';
 
-///
-/// TDSideBarPage演示
-///
-class TDSideBarPage extends StatefulWidget {
-  const TDSideBarPage({Key? key}) : super(key: key);
+class MySideBarPage extends StatefulWidget {
+  const MySideBarPage({super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return TDSideBarPageState();
+    return MySideBarPageState();
   }
 }
 
-class TDSideBarPageState extends State<TDSideBarPage> {
+class MySideBarPageState extends State<MySideBarPage> {
   @override
   Widget build(BuildContext context) {
     var current = buildWidget(context);

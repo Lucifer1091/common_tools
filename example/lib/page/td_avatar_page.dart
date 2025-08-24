@@ -135,7 +135,7 @@ class _TDAvatarPageState extends State<TDAvatarPage> {
                 Positioned(
                   right: 0,
                   top: 0,
-                  child: TDBadge(TDBadgeType.redPoint),
+                  child: MyBadge(MyBadgeType.redPoint),
                 ),
               ],
             ),
@@ -155,7 +155,7 @@ class _TDAvatarPageState extends State<TDAvatarPage> {
                 Positioned(
                   right: 0,
                   top: 0,
-                  child: TDBadge(TDBadgeType.message, count: 8),
+                  child: MyBadge(MyBadgeType.message, count: 8),
                 ),
               ],
             ),
@@ -171,7 +171,7 @@ class _TDAvatarPageState extends State<TDAvatarPage> {
                 Positioned(
                   right: 0,
                   top: 0,
-                  child: TDBadge(TDBadgeType.message, count: 12),
+                  child: MyBadge(MyBadgeType.message, count: 12),
                 ),
               ],
             ),

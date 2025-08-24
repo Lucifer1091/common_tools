@@ -3,22 +3,19 @@ import 'package:common_tools/index.dart';
 
 import '../../base/example_widget.dart';
 
-///
-/// TDSideBarCustomPage演示
-///
-class TDSideBarCustomPage extends StatefulWidget {
-  const TDSideBarCustomPage({Key? key}) : super(key: key);
+class MySideBarPaginationPage extends StatefulWidget {
+  const MySideBarPaginationPage({super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return TDSideBarCustomPageState();
+    return MySideBarPaginationPageState();
   }
 }
 
-class TDSideBarCustomPageState extends State<TDSideBarCustomPage> {
+class MySideBarPaginationPageState extends State<MySideBarPaginationPage> {
   var currentValue = 1;
   final _pageController = PageController(initialPage: 1);
-  final _sideBarController = TDSideBarController();
+  final _sideBarController = MySideBarController();
 
   @override
   Widget build(BuildContext context) {
@@ -28,26 +25,25 @@ class TDSideBarCustomPageState extends State<TDSideBarCustomPage> {
 
   Widget buildWidget(BuildContext context) {
     return ExamplePage(
-      title: 'SideBar 自定义样式',
+      title: 'SideBar 切页用法',
       exampleCodeGroup: 'sideBar',
       showSingleChild: true,
-      singleChild: _buildCustomSideBar,
+      singleChild: _buildPaginationSideBar,
     );
   }
 
-  Widget _buildCustomSideBar(BuildContext context) {
-    // 自定义样式
-    final list = <SideItemProps>[];
+  Widget _buildPaginationSideBar(BuildContext context) {
+    // 切页用法
+    final list = <MySideItemProps>[];
     final pages = <Widget>[];
 
     for (var i = 0; i < 100; i++) {
-      list.add(SideItemProps(index: i, label: '选项', value: i));
+      list.add(MySideItemProps(index: i, label: '选项', value: i));
       pages.add(getPageDemo(i));
     }
 
-    list[1].badge = const TDBadge(TDBadgeType.redPoint);
-    list[2].badge = const TDBadge(TDBadgeType.message, count: 8);
-    list[1].textStyle = const TextStyle(color: Colors.green);
+    list[1].badge = const MyBadge(MyBadgeType.redPoint);
+    list[2].badge = const MyBadge(MyBadgeType.message, count: 8);
 
     void setCurrentValue(int value) {
       _pageController.jumpToPage(value);
@@ -62,27 +58,22 @@ class TDSideBarCustomPageState extends State<TDSideBarCustomPage> {
       children: [
         SizedBox(
           width: 110,
-          child: TDSideBar(
+          child: MySideBar(
             height: demoHeight,
-            style: TDSideBarStyle.normal,
+            style: MySideBarStyle.normal,
             value: currentValue,
             controller: _sideBarController,
             children: list
                 .map(
-                  (ele) => TDSideBarItem(
+                  (ele) => MySideBarItem(
                     label: ele.label ?? '',
                     badge: ele.badge,
                     value: ele.value,
-                    textStyle: ele.textStyle,
                     icon: ele.icon,
                   ),
                 )
                 .toList(),
-            selectedTextStyle: TextStyle(color: Colors.red),
             onSelected: setCurrentValue,
-            contentPadding: EdgeInsets.only(left: 16, top: 16, bottom: 16),
-            selectedBgColor: Colors.blue,
-            unSelectedBgColor: Colors.yellow,
           ),
         ),
         Expanded(

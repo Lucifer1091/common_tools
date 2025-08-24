@@ -139,12 +139,13 @@ class _ExamplePageState extends State<ExamplePage> {
           Positioned(
             left: 16,
             right: 16,
-            bottom: 0,
+            bottom: 16,
             child: Column(
               children: [
                 MyButton(
                   text: 'Return to homepage',
                   type: MyButtonType.primary,
+                  shape: MyButtonShape.round,
                   onTap: () => Navigator.of(context).maybePop(),
                 ),
               ],

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../badge/td_badge.dart';
+import '../badge/my_badge.dart';
 
-class TDSideBarItem {
-  const TDSideBarItem({
+class MySideBarItem {
+  const MySideBarItem({
     this.badge,
     this.disabled = false,
     this.icon,
@@ -12,7 +12,7 @@ class TDSideBarItem {
     this.value = -1,
   });
 
-  final TDBadge? badge;
+  final MyBadge? badge;
 
   final bool disabled;
 

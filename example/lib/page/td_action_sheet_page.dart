@@ -236,19 +236,19 @@ Widget _buildBadgeListActionSheet(BuildContext context) {
         items: [
           ActionSheetItem(
             label: '选项一',
-            badge: const TDBadge(TDBadgeType.redPoint),
+            badge: const MyBadge(MyBadgeType.redPoint),
           ),
           ActionSheetItem(
             label: '选项二',
-            badge: const TDBadge(TDBadgeType.message, count: 8),
+            badge: const MyBadge(MyBadgeType.message, count: 8),
           ),
           ActionSheetItem(
             label: '选项三',
-            badge: const TDBadge(TDBadgeType.message, count: 99),
+            badge: const MyBadge(MyBadgeType.message, count: 99),
           ),
           ActionSheetItem(
             label: '选项四',
-            badge: const TDBadge(TDBadgeType.message, message: '99+'),
+            badge: const MyBadge(MyBadgeType.message, message: '99+'),
           ),
         ],
       );
@@ -431,7 +431,7 @@ Widget _buildBadgeGridActionSheet(BuildContext context) {
           ActionSheetItem(
             label: '微信',
             icon: Image.asset('assets/img/td_action_sheet_1.png'),
-            badge: const TDBadge(TDBadgeType.message, message: 'NEW'),
+            badge: const MyBadge(MyBadgeType.message, message: 'NEW'),
           ),
           ActionSheetItem(
             label: '朋友圈',
@@ -448,7 +448,7 @@ Widget _buildBadgeGridActionSheet(BuildContext context) {
           ActionSheetItem(
             label: '收藏',
             icon: const IconWithBackground(icon: Icons.star),
-            badge: const TDBadge(TDBadgeType.redPoint),
+            badge: const MyBadge(MyBadgeType.redPoint),
           ),
           ActionSheetItem(
             label: '刷新',
@@ -457,7 +457,7 @@ Widget _buildBadgeGridActionSheet(BuildContext context) {
           ActionSheetItem(
             label: '下载',
             icon: const IconWithBackground(icon: Icons.download),
-            badge: const TDBadge(TDBadgeType.message, count: 8),
+            badge: const MyBadge(MyBadgeType.message, count: 8),
           ),
           ActionSheetItem(
             label: '复制',
@@ -552,15 +552,15 @@ Widget _buildBadgeListCenterActionSheet(BuildContext context) {
         items: [
           ActionSheetItem(
             label: '选项一',
-            badge: const TDBadge(TDBadgeType.redPoint),
+            badge: const MyBadge(MyBadgeType.redPoint),
           ),
           ActionSheetItem(
             label: '选项二',
-            badge: const TDBadge(TDBadgeType.message, count: 8),
+            badge: const MyBadge(MyBadgeType.message, count: 8),
           ),
           ActionSheetItem(
             label: '选项三',
-            badge: const TDBadge(TDBadgeType.message, message: '99'),
+            badge: const MyBadge(MyBadgeType.message, message: '99'),
           ),
         ],
       );
@@ -608,7 +608,7 @@ Widget _buildBadgeListLeftActionSheet(BuildContext context) {
             .map(
               (e) => ActionSheetItem(
                 label: '选项$e',
-                badge: const TDBadge(TDBadgeType.redPoint),
+                badge: const MyBadge(MyBadgeType.redPoint),
               ),
             )
             .toList(),

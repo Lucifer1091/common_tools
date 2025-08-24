@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:common_tools/index.dart';
 import '../../base/example_widget.dart';
 
-class TDBadgePage extends StatefulWidget {
-  const TDBadgePage({Key? key}) : super(key: key);
+class MyBadgePage extends StatefulWidget {
+  const MyBadgePage({super.key});
 
   @override
-  State<StatefulWidget> createState() => _TDBadgePageState();
+  State<StatefulWidget> createState() => _MyBadgePageState();
 }
 
-class _TDBadgePageState extends State<TDBadgePage> {
+class _MyBadgePageState extends State<MyBadgePage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
@@ -120,7 +120,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
             const Positioned(
               right: 0,
               top: 0,
-              child: TDBadge(TDBadgeType.redPoint),
+              child: MyBadge(MyBadgeType.redPoint),
             ),
           ],
         ),
@@ -139,7 +139,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
           alignment: Alignment.bottomLeft,
           children: [
             Icon(Icons.notifications),
-            Positioned(right: 0, top: 0, child: TDBadge(TDBadgeType.redPoint)),
+            Positioned(right: 0, top: 0, child: MyBadge(MyBadgeType.redPoint)),
           ],
         ),
       ),
@@ -163,7 +163,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
               size: MyButtonSize.large,
               type: MyButtonType.primary,
             ),
-            Positioned(right: 0, top: 0, child: TDBadge(TDBadgeType.redPoint)),
+            Positioned(right: 0, top: 0, child: MyBadge(MyBadgeType.redPoint)),
           ],
         ),
       ),
@@ -184,7 +184,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
             const Positioned(
               left: 28,
               bottom: 18,
-              child: TDBadge(TDBadgeType.message, count: 8),
+              child: MyBadge(MyBadgeType.message, count: 8),
             ),
           ],
         ),
@@ -206,7 +206,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
             Positioned(
               left: 18,
               bottom: 18,
-              child: TDBadge(TDBadgeType.message, count: 8),
+              child: MyBadge(MyBadgeType.message, count: 8),
             ),
           ],
         ),
@@ -233,7 +233,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
             Positioned(
               right: 0,
               top: 0,
-              child: TDBadge(TDBadgeType.message, count: 8),
+              child: MyBadge(MyBadgeType.message, count: 8),
             ),
           ],
         ),
@@ -263,7 +263,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
             const Positioned(
               right: 0,
               top: 0,
-              child: TDBadge(TDBadgeType.message, count: 8),
+              child: MyBadge(MyBadgeType.message, count: 8),
             ),
           ],
         ),
@@ -293,7 +293,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
             const Positioned(
               right: 0,
               top: 0,
-              child: TDBadge(TDBadgeType.message, count: 0),
+              child: MyBadge(MyBadgeType.message, count: 0),
             ),
           ],
         ),
@@ -323,7 +323,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
             const Positioned(
               right: 0,
               top: 0,
-              child: TDBadge(TDBadgeType.message, count: 0, showZero: false),
+              child: MyBadge(MyBadgeType.message, count: 0, showZero: false),
             ),
           ],
         ),
@@ -346,7 +346,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
                 Positioned(
                   left: 18,
                   bottom: 18,
-                  child: TDBadge(TDBadgeType.message, count: 16),
+                  child: MyBadge(MyBadgeType.message, count: 16),
                 ),
               ],
             ),
@@ -371,9 +371,9 @@ class _TDBadgePageState extends State<TDBadgePage> {
                 Positioned(
                   left: 20,
                   bottom: 18,
-                  child: TDBadge(
-                    TDBadgeType.square,
-                    border: TDBadgeBorder.small,
+                  child: MyBadge(
+                    MyBadgeType.square,
+                    border: MyBadgeBorder.small,
                     count: 16,
                   ),
                 ),
@@ -408,7 +408,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
                 const Positioned(
                   right: 0,
                   top: 0,
-                  child: TDBadge(TDBadgeType.bubble, message: '领积分'),
+                  child: MyBadge(MyBadgeType.bubble, message: '领积分'),
                 ),
               ],
             ),
@@ -430,7 +430,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
           width: MediaQuery.of(context).size.width,
           child: MyText('单行标题'),
         ),
-        const TDBadge(TDBadgeType.subscript, message: 'NEW'),
+        const MyBadge(MyBadgeType.subscript, message: 'NEW'),
       ],
     );
   }
@@ -450,9 +450,9 @@ class _TDBadgePageState extends State<TDBadgePage> {
                 Positioned(
                   left: 48,
                   bottom: 48,
-                  child: TDBadge(
-                    TDBadgeType.message,
-                    size: TDBadgeSize.large,
+                  child: MyBadge(
+                    MyBadgeType.message,
+                    size: MyBadgeSize.large,
                     count: 8,
                   ),
                 ),
@@ -479,7 +479,7 @@ class _TDBadgePageState extends State<TDBadgePage> {
                 Positioned(
                   left: 36,
                   bottom: 36,
-                  child: TDBadge(TDBadgeType.message, count: 8),
+                  child: MyBadge(MyBadgeType.message, count: 8),
                 ),
               ],
             ),
@@ -502,12 +502,12 @@ class _TDBadgePageState extends State<TDBadgePage> {
             Positioned(
               left: 18,
               bottom: 18,
-              child: TDBadge(
-                TDBadgeType.square,
+              child: MyBadge(
+                MyBadgeType.square,
                 count: 8888,
                 maxCount: 9000,
-                size: TDBadgeSize.large,
-                border: TDBadgeBorder.large,
+                size: MyBadgeSize.large,
+                border: MyBadgeBorder.large,
               ),
             ),
           ],
@@ -529,12 +529,12 @@ class _TDBadgePageState extends State<TDBadgePage> {
             Positioned(
               left: 18,
               bottom: 18,
-              child: TDBadge(
-                TDBadgeType.square,
+              child: MyBadge(
+                MyBadgeType.square,
                 count: 888,
                 maxCount: 99,
-                size: TDBadgeSize.large,
-                border: TDBadgeBorder.large,
+                size: MyBadgeSize.large,
+                border: MyBadgeBorder.large,
               ),
             ),
           ],

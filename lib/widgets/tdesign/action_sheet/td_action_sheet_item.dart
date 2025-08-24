@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../badge/td_badge.dart';
+import '../badge/my_badge.dart';
 import 'td_action_sheet.dart';
 
 class ActionSheetItem {
@@ -20,7 +20,7 @@ class ActionSheetItem {
 
   final Widget? icon;
 
-  final TDBadge? badge;
+  final MyBadge? badge;
 
   final bool disabled;
 

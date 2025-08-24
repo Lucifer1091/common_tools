@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../sidebar/td_sidebar.dart';
-import '../sidebar/td_sidebar_item.dart';
+import '../sidebar/my_sidebar.dart';
+import '../sidebar/my_sidebar_item.dart';
 import '../text/my_text.dart';
 
 typedef TDTreeSelectChangeEvent = void Function(List<dynamic>, int level);
@@ -124,18 +124,18 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
       children: [
         SizedBox(
           width: 106,
-          child: TDSideBar(
+          child: MySideBar(
             height: widget.height,
             value: firstValue,
             style:
                 widget.style == TDTreeSelectStyle.outline
-                    ? TDSideBarStyle.outline
-                    : TDSideBarStyle.normal,
+                    ? MySideBarStyle.outline
+                    : MySideBarStyle.normal,
             children:
                 widget.options
                     .map(
                       (ele) =>
-                          TDSideBarItem(value: ele.value, label: ele.label),
+                          MySideBarItem(value: ele.value, label: ele.label),
                     )
                     .toList(),
             onSelected: (value) {

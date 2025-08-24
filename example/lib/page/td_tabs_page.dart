@@ -213,13 +213,13 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
         text: '选项',
         contentHeight: 48,
         textMargin: EdgeInsets.only(right: 8),
-        badge: TDBadge(TDBadgeType.redPoint),
+        badge: MyBadge(MyBadgeType.redPoint),
       ),
       const TDTab(
         text: '选项',
         contentHeight: 42,
         textMargin: EdgeInsets.only(right: 16, top: 2, bottom: 2),
-        badge: TDBadge(TDBadgeType.message, message: '8'),
+        badge: MyBadge(MyBadgeType.message, message: '8'),
       ),
       const TDTab(
         text: '选项',

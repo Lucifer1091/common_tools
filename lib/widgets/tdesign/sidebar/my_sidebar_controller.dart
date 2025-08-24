@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'td_sidebar.dart';
+import 'my_sidebar.dart';
 
-class TDSideBarController extends ChangeNotifier {
+class MySideBarController extends ChangeNotifier {
   int currentValue = 0;
-  List<SideItemProps> children = [];
+  List<MySideItemProps> children = [];
   bool loading = false;
 
   void selectTo(int value) {
@@ -12,7 +12,7 @@ class TDSideBarController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void init(List<SideItemProps> data) {
+  void init(List<MySideItemProps> data) {
     closeLoading(false, needNotify: false);
     children = data;
     notifyListeners();
