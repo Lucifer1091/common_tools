@@ -1,5 +1,6 @@
 import 'package:example/page/my_backtop_page.dart';
 import 'package:example/page/my_button_page.dart';
+import 'package:example/page/my_steps_page.dart';
 import 'package:flutter/material.dart';
 
 import 'base/example_base.dart';
@@ -25,16 +26,14 @@ import 'page/my_divider_page.dart';
 import 'page/my_drawer_page.dart';
 import 'page/td_dropdown_menu_page.dart';
 import 'page/td_empty_page.dart';
-import 'page/td_fab_page.dart';
 import 'page/td_font_page.dart';
 import 'page/td_footer_page.dart';
-import 'page/td_icon_page.dart';
 import 'page/td_image_page.dart';
 import 'page/td_image_viewer_page.dart';
 import 'page/my_indexes_page.dart';
 import 'page/td_input_page.dart';
 import 'page/my_link_page.dart';
-import 'page/td_loading_page.dart';
+import 'page/my_loading_page.dart';
 import 'page/td_message_page.dart';
 import 'page/td_navbar_page.dart';
 import 'page/td_notice_bar_page.dart';
@@ -52,9 +51,7 @@ import 'page/td_shadows_page.dart';
 import 'page/td_skeleton_page.dart';
 import 'page/td_slider_page.dart';
 import 'page/td_stepper_page.dart';
-import 'page/td_steps_page.dart';
 import 'page/td_swipe_cell_page.dart';
-import 'page/td_steps_page.dart';
 import 'page/td_swiper_page.dart';
 import 'page/td_switch_page.dart';
 import 'page/td_table_page.dart';
@@ -346,7 +343,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'Loading',
       name: 'loading',
-      pageBuilder: _wrapInheritedTheme((context) => const TDLoadingPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyLoadingPage()),
     ),
     ExamplePageModel(
       text: 'Message',

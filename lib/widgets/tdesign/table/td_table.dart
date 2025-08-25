@@ -4,7 +4,7 @@ import '../../../index.dart';
 import '../checkbox/td_check_box.dart';
 import '../empty/td_empty.dart';
 import '../image/td_image.dart';
-import '../loading/td_loading.dart';
+import '../loading/my_loader.dart';
 import '../text/my_text.dart';
 
 enum TDTableColFixed { left, right, none }
@@ -198,8 +198,7 @@ class TDTableState extends State<TDTable> {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 32),
           child:
-              widget.loadingWidget ??
-              const TDLoading(size: TDLoadingSize.large),
+              widget.loadingWidget ?? const MyLoader(size: MyLoaderSize.large),
         ),
       );
     }
@@ -543,7 +542,7 @@ class TDTableState extends State<TDTable> {
               padding: const EdgeInsets.symmetric(vertical: 32),
               child:
                   widget.loadingWidget ??
-                  const TDLoading(size: TDLoadingSize.large),
+                  const MyLoader(size: MyLoaderSize.large),
             ),
           ),
         ];
@@ -583,8 +582,7 @@ class TDTableState extends State<TDTable> {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 32),
           child:
-              widget.loadingWidget ??
-              const TDLoading(size: TDLoadingSize.large),
+              widget.loadingWidget ?? const MyLoader(size: MyLoaderSize.large),
         ),
       );
     }

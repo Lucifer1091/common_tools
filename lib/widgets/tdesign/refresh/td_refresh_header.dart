@@ -4,7 +4,7 @@ import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../loading/td_loading.dart';
+import '../loading/my_loader.dart';
 import '../text/my_text.dart';
 
 /// TDesign refreshes the header
@@ -26,7 +26,7 @@ class TDRefreshHeader extends Header {
     this.enableInfiniteRefresh = false,
     bool? infiniteHitOver,
     this.overScroll = true,
-    this.loadingIcon = TDLoadingIcon.circle,
+    this.loadingIcon = MyLoaderIcon.circle,
     this.backgroundColor,
     super.spring,
     super.horizontalSpring,
@@ -77,7 +77,7 @@ class TDRefreshHeader extends Header {
 
   final Key? key;
 
-  final TDLoadingIcon loadingIcon;
+  final MyLoaderIcon loadingIcon;
 
   final Color? backgroundColor;
 
@@ -126,7 +126,7 @@ class TGIconHeaderWidget extends StatefulWidget {
     this.backgroundColor,
   });
 
-  final TDLoadingIcon loadingIcon;
+  final MyLoaderIcon loadingIcon;
 
   final Color? backgroundColor;
 
@@ -148,7 +148,7 @@ class TGIconHeaderWidgetState extends State<TGIconHeaderWidget>
   bool get _reverse => widget.state.reverse;
   double get _safeOffset => widget.state.safeOffset;
 
-  Widget _buildLoading() => TDLoading(
+  Widget _buildLoading() => MyLoader(
     icon: widget.loadingIcon,
     iconColor: ThemeColors.blue.shade600,
     axis: Axis.horizontal,

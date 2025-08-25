@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 
 import '../../../index.dart';
 
-class TDCircleIndicator extends StatefulWidget {
-  const TDCircleIndicator({
+class MyCircleIndicator extends StatefulWidget {
+  const MyCircleIndicator({
     super.key,
     this.color,
     this.size = 20.0,
@@ -20,10 +20,10 @@ class TDCircleIndicator extends StatefulWidget {
   final int duration;
 
   @override
-  _TDCircleIndicatorState createState() => _TDCircleIndicatorState();
+  _MyCircleIndicatorState createState() => _MyCircleIndicatorState();
 }
 
-class _TDCircleIndicatorState extends State<TDCircleIndicator>
+class _MyCircleIndicatorState extends State<MyCircleIndicator>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation1;
@@ -46,7 +46,7 @@ class _TDCircleIndicatorState extends State<TDCircleIndicator>
   }
 
   @override
-  void didUpdateWidget(covariant TDCircleIndicator oldWidget) {
+  void didUpdateWidget(covariant MyCircleIndicator oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.duration != oldWidget.duration) {
       _controller.duration = Duration(milliseconds: widget.duration);
@@ -63,7 +63,7 @@ class _TDCircleIndicatorState extends State<TDCircleIndicator>
   @override
   Widget build(BuildContext context) {
     final value = (_animation1.value) * 2 * pi;
-    final paintColor = widget.color ?? ThemeColors.blue.shade600;
+    final paintColor = widget.color ?? context.colorScheme.primary;
 
     return Transform(
       transform: Matrix4.identity()..rotateZ(value),

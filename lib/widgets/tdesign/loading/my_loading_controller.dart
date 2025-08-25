@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'td_loading.dart';
+import 'my_loader.dart';
 
-class TDLoadingController {
-  TDLoadingController._();
+class MyLoadingController {
+  MyLoadingController._();
 
   static BuildContext? _context;
   static OverlayEntry? _overlayEntry;
@@ -12,12 +12,12 @@ class TDLoadingController {
   static void show(
     BuildContext context, {
     Widget? child,
-    TDLoadingSize size = TDLoadingSize.medium,
-    TDLoadingIcon? icon = TDLoadingIcon.circle,
+    MyLoaderSize size = MyLoaderSize.medium,
+    MyLoaderIcon? icon = MyLoaderIcon.circle,
     Color? iconColor,
     String? text,
     Widget? refreshWidget,
-    Color textColor = Colors.black,
+    Color? textColor,
     Axis axis = Axis.vertical,
     Widget? customIcon,
     int duration = 2000,
@@ -29,7 +29,7 @@ class TDLoadingController {
         return Center(
           child:
               child ??
-              TDLoading(
+              MyLoader(
                 size: size,
                 icon: icon,
                 customIcon: customIcon,

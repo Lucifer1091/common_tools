@@ -7,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../index.dart';
 import '../image/td_image.dart';
-import '../loading/td_loading.dart';
+import '../loading/my_loader.dart';
 import '../text/my_text.dart';
 
 enum TDUploadMediaType { image, video }
@@ -425,8 +425,8 @@ class _TDUploadState extends State<TDUpload> {
             children: [
               Visibility(
                 visible: file.status == TDUploadFileStatus.loading,
-                child: const TDLoading(
-                  size: TDLoadingSize.large,
+                child: const MyLoader(
+                  size: MyLoaderSize.large,
                   iconColor: Colors.white,
                 ),
               ),

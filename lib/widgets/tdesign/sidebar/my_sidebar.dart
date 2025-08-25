@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../badge/my_badge.dart';
-import '../loading/td_loading.dart';
+import '../loading/my_loader.dart';
 import 'my_sidebar_controller.dart';
 import 'my_sidebar_item.dart';
 import 'my_wrap_sidebar_item.dart';
@@ -249,7 +249,7 @@ class _MySideBarState extends State<MySideBar> {
       return widget.loadingWidget ??
           SizedBox(
             width: MediaQuery.of(context).size.width,
-            child: const Align(child: TDLoading(size: TDLoadingSize.large)),
+            child: const Align(child: MyLoader(size: MyLoaderSize.large)),
           );
     }
 

@@ -451,9 +451,9 @@ class MyButtonPage extends StatelessWidget {
   MyButton _buildLoadingIconButton(BuildContext context) {
     return MyButton(
       text: 'Loading',
-      iconWidget: TDLoading(
-        size: TDLoadingSize.small,
-        icon: TDLoadingIcon.circle,
+      iconWidget: MyLoader(
+        size: MyLoaderSize.small,
+        icon: MyLoaderIcon.circle,
         iconColor: context.colorScheme.primaryForeground,
       ),
       size: MyButtonSize.large,

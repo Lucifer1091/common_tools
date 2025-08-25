@@ -11,17 +11,16 @@ const double _kDefaultIndicatorRadius = 10;
 /// See also:
 ///
 ///  * <https://developer.apple.com/ios/human-interface-guidelines/controls/progress-indicators/#activity-indicators>
-class TDCupertinoActivityIndicator extends StatefulWidget {
+class MyCupertinoActivityIndicator extends StatefulWidget {
   /// Creates an iOS-style activity indicator that spins clockwise.
-  const TDCupertinoActivityIndicator({
+  const MyCupertinoActivityIndicator({
     super.key,
     this.animating = true,
     this.radius = _kDefaultIndicatorRadius,
     this.activeColor,
     this.progress = 1,
     this.duration = 2000,
-  }) : 
-       assert(
+  }) : assert(
          radius > 0.0,
          'Ensures that the [radius] value is greater than zero.',
        );
@@ -49,12 +48,12 @@ class TDCupertinoActivityIndicator extends StatefulWidget {
   final int duration;
 
   @override
-  _TDCupertinoActivityIndicatorState createState() =>
-      _TDCupertinoActivityIndicatorState();
+  _MyCupertinoActivityIndicatorState createState() =>
+      _MyCupertinoActivityIndicatorState();
 }
 
-class _TDCupertinoActivityIndicatorState
-    extends State<TDCupertinoActivityIndicator>
+class _MyCupertinoActivityIndicatorState
+    extends State<MyCupertinoActivityIndicator>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
@@ -66,13 +65,11 @@ class _TDCupertinoActivityIndicatorState
       vsync: this,
     );
 
-    if (widget.animating) {
-      _controller.repeat();
-    }
+    if (widget.animating) _controller.repeat();
   }
 
   @override
-  void didUpdateWidget(TDCupertinoActivityIndicator oldWidget) {
+  void didUpdateWidget(MyCupertinoActivityIndicator oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.animating != oldWidget.animating ||
         widget.duration != oldWidget.duration) {

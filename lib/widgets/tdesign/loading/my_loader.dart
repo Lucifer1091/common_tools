@@ -1,32 +1,28 @@
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../text/my_text.dart';
-import 'td_activity_indicator.dart';
-import 'td_circle_indicator.dart';
-import 'td_point_indicator.dart';
 
-enum TDLoadingSize { small, medium, large }
+enum MyLoaderSize { small, medium, large }
 
-enum TDLoadingIcon { circle, point, activity }
+enum MyLoaderIcon { circle, point, activity }
 
-class TDLoading extends StatelessWidget {
-  const TDLoading({
+class MyLoader extends StatelessWidget {
+  const MyLoader({
     super.key,
-    this.size = TDLoadingSize.medium,
-    this.icon = TDLoadingIcon.circle,
+    this.size = MyLoaderSize.medium,
+    this.icon = MyLoaderIcon.circle,
     this.iconColor,
     this.axis = Axis.vertical,
     this.text,
     this.refreshWidget,
     this.customIcon,
-    this.textColor = Colors.black,
+    this.textColor,
     this.duration = 2000,
   });
 
-  final TDLoadingSize size;
+  final MyLoaderSize size;
 
-  final TDLoadingIcon? icon;
+  final MyLoaderIcon? icon;
 
   final Color? iconColor;
 
@@ -34,7 +30,7 @@ class TDLoading extends StatelessWidget {
 
   final Widget? refreshWidget;
 
-  final Color textColor;
+  final Color? textColor;
 
   final Axis axis;
 
@@ -59,24 +55,24 @@ class TDLoading extends StatelessWidget {
         indicator = customIcon;
       } else {
         switch (icon!) {
-          case TDLoadingIcon.activity:
-            indicator = TDCupertinoActivityIndicator(
+          case MyLoaderIcon.activity:
+            indicator = MyCupertinoActivityIndicator(
               activeColor: iconColor,
               radius:
-                  size == TDLoadingSize.small
+                  size == MyLoaderSize.small
                       ? 10
-                      : (size == TDLoadingSize.medium ? 11 : 13),
+                      : (size == MyLoaderSize.medium ? 11 : 13),
               duration: _innerDuration,
             );
-          case TDLoadingIcon.circle:
+          case MyLoaderIcon.circle:
             indicator = _getCircleIndicator();
-          case TDLoadingIcon.point:
-            indicator = TDPointBounceIndicator(
+          case MyLoaderIcon.point:
+            indicator = MyPointBounceIndicator(
               color: iconColor,
               size:
-                  size == TDLoadingSize.small
+                  size == MyLoaderSize.small
                       ? 12
-                      : (size == TDLoadingSize.medium ? 16 : 20),
+                      : (size == MyLoaderSize.medium ? 16 : 20),
               duration: _innerDuration,
             );
         }
@@ -108,22 +104,22 @@ class TDLoading extends StatelessWidget {
 
   Widget _getCircleIndicator() {
     switch (size) {
-      case TDLoadingSize.large:
-        return TDCircleIndicator(
+      case MyLoaderSize.large:
+        return MyCircleIndicator(
           color: iconColor,
           size: 24,
           lineWidth: 3 * 4 / 3,
           duration: _innerDuration,
         );
-      case TDLoadingSize.medium:
-        return TDCircleIndicator(
+      case MyLoaderSize.medium:
+        return MyCircleIndicator(
           color: iconColor,
           size: 21,
           lineWidth: 3 * 7 / 6,
           duration: _innerDuration,
         );
-      case TDLoadingSize.small:
-        return TDCircleIndicator(
+      case MyLoaderSize.small:
+        return MyCircleIndicator(
           color: iconColor,
           size: 18,
           duration: _innerDuration,
@@ -132,35 +128,29 @@ class TDLoading extends StatelessWidget {
   }
 
   double _getPaddingWidth() {
-    switch (size) {
-      case TDLoadingSize.large:
-        return 10;
-      case TDLoadingSize.medium:
-        return 8;
-      case TDLoadingSize.small:
-        return 6;
-    }
+    return switch (size) {
+      MyLoaderSize.large => 10,
+      MyLoaderSize.medium => 8,
+      MyLoaderSize.small => 6,
+    };
   }
 
   TextStyle _getStlye(BuildContext context) {
     return switch (size) {
-      TDLoadingSize.large =>
-        context.bodyLarge ?? TextStyle(fontSize: 16, height: 24),
-      TDLoadingSize.medium =>
-        context.bodyMedium ?? TextStyle(fontSize: 14, height: 22),
-      TDLoadingSize.small =>
-        context.bodySmall ?? TextStyle(fontSize: 12, height: 20),
+      MyLoaderSize.large => context.bodyLarge,
+      MyLoaderSize.medium => context.bodyMedium,
+      MyLoaderSize.small => context.bodySmall,
     };
   }
 
   Widget textWidget(BuildContext context) {
     Widget result = MyText(
       text,
-      textColor: textColor,
       fontWeight: FontWeight.w400,
-      style: _getStlye(
-        context,
-      ).copyWith(color: textColor, fontWeight: FontWeight.w400),
+      style: _getStlye(context).copyWith(
+        color: textColor ?? context.colorScheme.foreground,
+        fontWeight: FontWeight.w400,
+      ),
       textAlign: TextAlign.center,
     );
 
