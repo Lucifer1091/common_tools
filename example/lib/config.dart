@@ -142,7 +142,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'Steps',
       name: 'steps',
-      pageBuilder: _wrapInheritedTheme((context) => const TDStepsPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyStepsPage()),
     ),
     ExamplePageModel(
       text: 'TabBar',

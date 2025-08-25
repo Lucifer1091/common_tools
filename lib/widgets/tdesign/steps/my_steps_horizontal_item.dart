@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../index.dart';
 import '../text/my_text.dart';
-import 'td_steps.dart';
+import 'my_steps.dart';
 
 class TDStepsHorizontalItem extends StatelessWidget {
   const TDStepsHorizontalItem({

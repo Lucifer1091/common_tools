@@ -39,6 +39,11 @@ class MySideBarPageState extends State<MySideBarPage> {
               builder: _buildIconSideBar,
               methodName: '_buildIconSideBar',
             ),
+            ExampleItem(
+              desc: 'Lazy Loading',
+              ignoreCode: true,
+              builder: _loadingSideBar,
+            ),
           ],
         ),
         ExampleModule(
@@ -50,13 +55,6 @@ class MySideBarPageState extends State<MySideBarPage> {
               builder: _buildStyleSideBar,
             ),
           ],
-        ),
-      ],
-      test: [
-        ExampleItem(
-          desc: 'Lazy Loading',
-          ignoreCode: true,
-          builder: _loadingSideBar,
         ),
       ],
     );

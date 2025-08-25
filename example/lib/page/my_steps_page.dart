@@ -3,14 +3,14 @@ import 'package:common_tools/index.dart';
 
 import '../../base/example_widget.dart';
 
-class TDStepsPage extends StatefulWidget {
-  const TDStepsPage({Key? key}) : super(key: key);
+class MyStepsPage extends StatefulWidget {
+  const MyStepsPage({super.key});
 
   @override
-  State<StatefulWidget> createState() => _TDStepsPageState();
+  State<StatefulWidget> createState() => _MyStepsPageState();
 }
 
-class _TDStepsPageState extends State<TDStepsPage> {
+class _MyStepsPageState extends State<MyStepsPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(

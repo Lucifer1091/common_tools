@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'td_steps.dart';
-import 'td_steps_vertical_item.dart';
+import 'my_steps.dart';
+import 'my_steps_vertical_item.dart';
 
 class TDStepsVertical extends StatelessWidget {
   const TDStepsVertical({

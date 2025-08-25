@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'td_steps_horizontal.dart';
-import 'td_steps_vertical.dart';
+import 'my_steps_horizontal.dart';
+import 'my_steps_vertical.dart';
 
 class TDStepsItemData {
   TDStepsItemData({
