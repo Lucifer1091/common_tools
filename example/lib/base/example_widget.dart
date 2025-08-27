@@ -165,9 +165,8 @@ class _ExamplePageState extends State<ExamplePage> {
   );
 
   Widget _buildHeader(BuildContext context) {
-    if (widget.showSingleChild) {
-      return const NoWidget();
-    }
+    if (widget.showSingleChild) return const NoWidget();
+
     return Container(
       margin: const EdgeInsets.only(left: 16, right: 16),
       child: Column(
@@ -308,18 +307,17 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
           ? CrossAxisAlignment.center
           : CrossAxisAlignment.start,
       children: [
-        widget.data.desc.isEmpty
-            ? const NoWidget()
-            : Container(
-                alignment: Alignment.topLeft,
-                margin: EdgeInsets.only(
-                  left: 16,
-                  right: 16,
-                  top: widget.index == 0 ? 8 : 24,
-                  bottom: 16,
-                ),
-                child: MyText(widget.data.desc),
-              ),
+        if (widget.data.desc.isNotEmpty)
+          Container(
+            alignment: Alignment.topLeft,
+            margin: EdgeInsets.only(
+              left: 16,
+              right: 16,
+              top: widget.index == 0 ? 8 : 24,
+              bottom: 16,
+            ),
+            child: MyText(widget.data.desc),
+          ),
         child,
       ],
     );

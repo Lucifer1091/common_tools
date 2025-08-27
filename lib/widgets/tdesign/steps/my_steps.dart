@@ -3,77 +3,59 @@ import 'package:flutter/material.dart';
 import 'my_steps_horizontal.dart';
 import 'my_steps_vertical.dart';
 
-class TDStepsItemData {
-  TDStepsItemData({
+class MyStepItem {
+  MyStepItem({
     this.title,
     this.content,
     this.successIcon,
     this.errorIcon,
     this.customContent,
     this.customTitle,
-  }) {
-    _validate();
-  }
+  }) : assert(
+         title != null ||
+             customTitle != null ||
+             content != null ||
+             customContent != null,
+         'At least one of title, customTitle, content, or customContent must be non-null',
+       );
 
   final String? title;
-
   final String? content;
-
   final IconData? successIcon;
-
   final IconData? errorIcon;
-
   final Widget? customContent;
-
   final Widget? customTitle;
-
-  void _validate() {
-    if (title == null &&
-        customTitle == null &&
-        content == null &&
-        customContent == null) {
-      throw ArgumentError(
-        'title, content, customContent needs at least one non-empty value',
-      );
-    }
-  }
 }
 
-enum TDStepsDirection { horizontal, vertical }
+enum MyStepsDirection { horizontal, vertical }
 
-enum TDStepsStatus { success, error }
+enum MyStepsStatus { success, error }
 
-class TDSteps extends StatefulWidget {
-  const TDSteps({
+class MySteps extends StatefulWidget {
+  const MySteps({
     required this.steps,
     super.key,
     this.activeIndex = 0,
-    this.direction = TDStepsDirection.horizontal,
-    this.status = TDStepsStatus.success,
+    this.direction = MyStepsDirection.horizontal,
+    this.status = MyStepsStatus.success,
     this.simple = false,
     this.readOnly = false,
     this.verticalSelect = false,
   });
 
-  final List<TDStepsItemData> steps;
-
-  final TDStepsDirection direction;
-
   final int activeIndex;
-
-  final TDStepsStatus status;
-
+  final List<MyStepItem> steps;
+  final MyStepsDirection direction;
+  final MyStepsStatus status;
   final bool simple;
-
   final bool readOnly;
-
   final bool verticalSelect;
 
   @override
-  _TDStepsState createState() => _TDStepsState();
+  _MyStepsState createState() => _MyStepsState();
 }
 
-class _TDStepsState extends State<TDSteps> {
+class _MyStepsState extends State<MySteps> {
   @override
   Widget build(BuildContext context) {
     final currentActiveIndex =
@@ -82,15 +64,16 @@ class _TDStepsState extends State<TDSteps> {
             : (widget.activeIndex >= widget.steps.length
                 ? widget.steps.length - 1
                 : widget.activeIndex);
-    return widget.direction == TDStepsDirection.horizontal
-        ? TDStepsHorizontal(
+
+    return widget.direction == MyStepsDirection.horizontal
+        ? MyStepsHorizontal(
           steps: widget.steps,
           activeIndex: currentActiveIndex,
           status: widget.status,
           simple: widget.simple,
           readOnly: widget.readOnly,
         )
-        : TDStepsVertical(
+        : MyStepsVertical(
           steps: widget.steps,
           activeIndex: currentActiveIndex,
           status: widget.status,
