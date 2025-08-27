@@ -369,7 +369,7 @@ extension BuildContextPlatformExtension on BuildContext {
   PlatformSizeInfo get platformSizeInfo => PlatformSizeInfo(
     breakpoint: watchBreakpoint,
     orientation: MediaQuery.orientationOf(this),
-    platform: PlatformChecker.targetPlatform,
+    platform: MyPlatform.targetPlatform,
   );
 }
 

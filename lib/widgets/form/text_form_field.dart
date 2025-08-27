@@ -441,7 +441,7 @@ class CustomTextFormField extends StatelessWidget {
 
 class KeyBoardType {
   static TextInputType get number =>
-      PlatformChecker.isIOS
+      MyPlatform.isIOS
           ? const TextInputType.numberWithOptions(signed: true)
           : TextInputType.number;
 }

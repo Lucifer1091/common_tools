@@ -102,7 +102,7 @@ class TDUploadState extends State<TDUploadPage> {
       title: tdTitle(),
       exampleCodeGroup: 'upload',
       desc:
-          '用于相册读取或拉起拍照的图片上传功能。${PlatformChecker.isWeb ? "Web端不支持读取本地图片,请前往移动端体验。" : ""}',
+          '用于相册读取或拉起拍照的图片上传功能。${MyPlatform.isWeb ? "Web端不支持读取本地图片,请前往移动端体验。" : ""}',
       children: [
         ExampleModule(
           title: 'Component Types',

@@ -66,7 +66,7 @@ class TestPage extends StatelessWidget {
                   steps: horizontalSteps,
                   activeIndex: 1, // 设置当前激活的步骤索引
                   direction: MyStepsDirection.horizontal, // 设置步骤条方向为水平
-                  status: MyStepsStatus.success, // 设置步骤条状态
+                  status: MyStepState.success, // 设置步骤条状态
                 ),
               ),
             ),
@@ -78,7 +78,7 @@ class TestPage extends StatelessWidget {
                   steps: verticalSteps,
                   activeIndex: 1, // 设置当前激活的步骤索引
                   direction: MyStepsDirection.vertical, // 设置步骤条方向为垂直
-                  status: MyStepsStatus.success, // 设置步骤条状态
+                  status: MyStepState.success, // 设置步骤条状态
                 ),
               ),
             ),

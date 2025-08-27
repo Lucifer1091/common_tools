@@ -52,6 +52,7 @@ class MyUILayer extends StatelessWidget {
         builder: (context) {
           final theme = MyTheme.of(context);
           return MyScrollWrapper(
+            scrollbars: MyPlatform.isDesktopOrWeb,
             child: ScrollViewInterceptor(
               enabled: enableScrollInterception,
               child: DefaultTextStyle.merge(

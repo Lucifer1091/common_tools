@@ -93,8 +93,8 @@ class CenterLoading extends StatelessWidget {
   }
 
   static bool get isCupertino {
-    if (PlatformChecker.isWeb) return false;
+    if (MyPlatform.isWeb) return false;
 
-    return PlatformChecker.isIOS || PlatformChecker.isMacOS;
+    return MyPlatform.isIOS || MyPlatform.isMacOS;
   }
 }

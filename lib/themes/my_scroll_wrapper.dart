@@ -1,6 +1,36 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'my_theme.dart';
+import '../index.dart';
+
+class MyScrollbar extends StatelessWidget {
+  const MyScrollbar({
+    required this.child,
+    this.controller,
+    super.key,
+    this.theme,
+  });
+
+  final Widget child;
+  final ScrollController? controller;
+  final ScrollbarThemeData? theme;
+
+  @override
+  Widget build(BuildContext context) {
+    return ScrollbarTheme(
+      data:
+          theme ??
+          ScrollbarThemeData(
+            crossAxisMargin: 4,
+            thumbColor: WidgetStateProperty.all(context.colorScheme.border),
+            radius: MyRadi.small,
+            interactive: true,
+            thumbVisibility: WidgetStateProperty.all(true),
+            thickness: WidgetStateProperty.all(7),
+          ),
+      child: Scrollbar(controller: controller, child: child),
+    );
+  }
+}
 
 class MyScrollBehavior extends ScrollBehavior {
   const MyScrollBehavior();
@@ -26,7 +56,7 @@ class MyScrollBehavior extends ScrollBehavior {
           case TargetPlatform.linux:
           case TargetPlatform.macOS:
           case TargetPlatform.windows:
-            return Scrollbar(controller: details.controller, child: child);
+            return MyScrollbar(controller: details.controller, child: child);
           case TargetPlatform.android:
           case TargetPlatform.fuchsia:
           case TargetPlatform.iOS:
@@ -70,19 +100,22 @@ class MyScrollBehavior extends ScrollBehavior {
 class MyScrollWrapper extends StatelessWidget {
   const MyScrollWrapper({
     required this.child,
-    this.dragWithMouse = true,
     super.key,
+    this.dragWithMouse = true,
+    this.overscroll = true,
+    this.scrollbars = true,
   });
 
-  final bool dragWithMouse;
+  final bool dragWithMouse, overscroll, scrollbars;
+
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return ScrollConfiguration(
       behavior: MyScrollBehavior().copyWith(
-        overscroll: false,
-        scrollbars: false,
+        overscroll: overscroll,
+        scrollbars: scrollbars,
         dragDevices:
             dragWithMouse
                 ? <PointerDeviceKind>{

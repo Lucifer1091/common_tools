@@ -29,20 +29,11 @@ class _MyStepsPageState extends State<MyStepsPage> {
           ],
         ),
         ExampleModule(
-          title: 'Horizontal Error Bar',
+          title: 'Horizontal Error Bars',
           children: [
-            ExampleItem(
-              desc: 'Horizontal Error Bar1',
-              builder: _buildHErrorSteps1,
-            ),
-            ExampleItem(
-              desc: 'Horizontal Error Bar2',
-              builder: _buildHErrorSteps2,
-            ),
-            ExampleItem(
-              desc: 'Horizontal Error Bar3',
-              builder: _buildHErrorSteps3,
-            ),
+            ExampleItem(desc: 'Error Bar', builder: _buildHErrorSteps1),
+            ExampleItem(desc: 'Error Icon Bar', builder: _buildHErrorSteps2),
+            ExampleItem(desc: 'Error Simple Bar', builder: _buildHErrorSteps3),
           ],
         ),
         ExampleModule(
@@ -100,32 +91,6 @@ class _MyStepsPageState extends State<MyStepsPage> {
     );
   }
 
-  List<MyStepItem> basicHStepsListData3 = [
-    MyStepItem(title: 'Steps1', content: 'Content1'),
-    MyStepItem(title: 'Steps2', content: 'Content2'),
-    MyStepItem(title: 'Steps3', content: 'Content3'),
-    MyStepItem(title: 'Steps4', content: 'Content4'),
-  ];
-
-  List<MyStepItem> basicStepsListData4 = [
-    MyStepItem(
-      title: 'Steps1',
-      content: 'Content1',
-      successIcon: LucideIcons.phone,
-    ),
-    MyStepItem(title: 'Steps2', content: 'Content2'),
-    MyStepItem(
-      title: 'Steps3',
-      content: 'Content3',
-      successIcon: LucideIcons.phone,
-    ),
-    MyStepItem(
-      title: 'Steps4',
-      content: 'Content4',
-      successIcon: LucideIcons.phone,
-    ),
-  ];
-
   Widget _buildBasicHSteps3(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -134,7 +99,12 @@ class _MyStepsPageState extends State<MyStepsPage> {
           Expanded(
             flex: 1,
             child: MySteps(
-              steps: basicHStepsListData3,
+              steps: [
+                MyStepItem(title: 'Steps1', content: 'Content1'),
+                MyStepItem(title: 'Steps2', content: 'Content2'),
+                MyStepItem(title: 'Steps3', content: 'Content3'),
+                MyStepItem(title: 'Steps4', content: 'Content4'),
+              ],
               direction: MyStepsDirection.horizontal,
               activeIndex: 1,
             ),
@@ -143,29 +113,6 @@ class _MyStepsPageState extends State<MyStepsPage> {
       ),
     );
   }
-
-  List<MyStepItem> hIconStepsListData3 = [
-    MyStepItem(
-      title: 'Steps1',
-      content: 'Content1',
-      successIcon: LucideIcons.phone,
-    ),
-    MyStepItem(
-      title: 'Steps2',
-      content: 'Content2',
-      successIcon: LucideIcons.phone,
-    ),
-    MyStepItem(
-      title: 'Steps3',
-      content: 'Content3',
-      successIcon: LucideIcons.phone,
-    ),
-    MyStepItem(
-      title: 'Steps4',
-      content: 'Content4',
-      successIcon: LucideIcons.phone,
-    ),
-  ];
 
   Widget _buildHIconSteps3(BuildContext context) {
     return Padding(
@@ -175,7 +122,28 @@ class _MyStepsPageState extends State<MyStepsPage> {
           Expanded(
             flex: 1,
             child: MySteps(
-              steps: hIconStepsListData3,
+              steps: [
+                MyStepItem(
+                  title: 'Steps1',
+                  content: 'Content1',
+                  successIcon: LucideIcons.phone,
+                ),
+                MyStepItem(
+                  title: 'Steps2',
+                  content: 'Content2',
+                  successIcon: LucideIcons.phone,
+                ),
+                MyStepItem(
+                  title: 'Steps3',
+                  content: 'Content3',
+                  successIcon: LucideIcons.phone,
+                ),
+                MyStepItem(
+                  title: 'Steps4',
+                  content: 'Content4',
+                  successIcon: LucideIcons.phone,
+                ),
+              ],
               direction: MyStepsDirection.horizontal,
               activeIndex: 1,
             ),
@@ -185,13 +153,6 @@ class _MyStepsPageState extends State<MyStepsPage> {
     );
   }
 
-  List<MyStepItem> simpleHStepsListData3 = [
-    MyStepItem(title: 'Steps1', content: 'Content1'),
-    MyStepItem(title: 'Steps2', content: 'Content2'),
-    MyStepItem(title: 'Steps3', content: 'Content3'),
-    MyStepItem(title: 'Steps4', content: 'Content4'),
-  ];
-
   Widget _buildSimpleHSteps3(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -200,7 +161,12 @@ class _MyStepsPageState extends State<MyStepsPage> {
           Expanded(
             flex: 1,
             child: MySteps(
-              steps: simpleHStepsListData3,
+              steps: [
+                MyStepItem(title: 'Steps1', content: 'Content1'),
+                MyStepItem(title: 'Steps2', content: 'Content2'),
+                MyStepItem(title: 'Steps3', content: 'Content3'),
+                MyStepItem(title: 'Steps4', content: 'Content4'),
+              ],
               direction: MyStepsDirection.horizontal,
               activeIndex: 1,
               simple: true,
@@ -211,13 +177,6 @@ class _MyStepsPageState extends State<MyStepsPage> {
     );
   }
 
-  List<MyStepItem> hErrorStepsListData1 = [
-    MyStepItem(title: 'Steps1', content: 'Content1'),
-    MyStepItem(title: 'Error', content: 'Content2'),
-    MyStepItem(title: 'Steps3', content: 'Content3'),
-    MyStepItem(title: 'Steps4', content: 'Content4'),
-  ];
-
   Widget _buildHErrorSteps1(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -226,40 +185,21 @@ class _MyStepsPageState extends State<MyStepsPage> {
           Expanded(
             flex: 1,
             child: MySteps(
-              steps: hErrorStepsListData1,
+              steps: [
+                MyStepItem(title: 'Steps1', content: 'Content1'),
+                MyStepItem(title: 'Error', content: 'Content2'),
+                MyStepItem(title: 'Steps3', content: 'Content3'),
+                MyStepItem(title: 'Steps4', content: 'Content4'),
+              ],
               direction: MyStepsDirection.horizontal,
               activeIndex: 1,
-              status: MyStepsStatus.error,
+              status: MyStepState.error,
             ),
           ),
         ],
       ),
     );
   }
-
-  List<MyStepItem> hErrorStepsListData2 = [
-    MyStepItem(
-      title: 'Steps1',
-      content: 'Content1',
-      successIcon: LucideIcons.phone,
-    ),
-    MyStepItem(
-      title: 'Error',
-      content: 'Content2',
-      successIcon: LucideIcons.phone,
-      errorIcon: LucideIcons.circleX,
-    ),
-    MyStepItem(
-      title: 'Steps3',
-      content: 'Content3',
-      successIcon: LucideIcons.phone,
-    ),
-    MyStepItem(
-      title: 'Steps4',
-      content: 'Content4',
-      successIcon: LucideIcons.phone,
-    ),
-  ];
 
   Widget _buildHErrorSteps2(BuildContext context) {
     return Padding(
@@ -269,40 +209,38 @@ class _MyStepsPageState extends State<MyStepsPage> {
           Expanded(
             flex: 1,
             child: MySteps(
-              steps: hErrorStepsListData2,
+              steps: [
+                MyStepItem(
+                  title: 'Steps1',
+                  content: 'Content1',
+                  successIcon: LucideIcons.phone,
+                ),
+                MyStepItem(
+                  title: 'Error',
+                  content: 'Content2',
+                  successIcon: LucideIcons.phone,
+                  errorIcon: LucideIcons.circleX,
+                ),
+                MyStepItem(
+                  title: 'Steps3',
+                  content: 'Content3',
+                  successIcon: LucideIcons.phone,
+                ),
+                MyStepItem(
+                  title: 'Steps4',
+                  content: 'Content4',
+                  successIcon: LucideIcons.phone,
+                ),
+              ],
               direction: MyStepsDirection.horizontal,
               activeIndex: 1,
-              status: MyStepsStatus.error,
+              status: MyStepState.error,
             ),
           ),
         ],
       ),
     );
   }
-
-  List<MyStepItem> hErrorStepsListData3 = [
-    MyStepItem(
-      title: 'Steps1',
-      content: 'Content1',
-      successIcon: LucideIcons.phone,
-    ),
-    MyStepItem(
-      title: 'Error',
-      content: 'Content2',
-      successIcon: LucideIcons.phone,
-      errorIcon: LucideIcons.circleX,
-    ),
-    MyStepItem(
-      title: 'Steps3',
-      content: 'Content3',
-      successIcon: LucideIcons.phone,
-    ),
-    MyStepItem(
-      title: 'Steps4',
-      content: 'Content4',
-      successIcon: LucideIcons.phone,
-    ),
-  ];
 
   Widget _buildHErrorSteps3(BuildContext context) {
     return Padding(
@@ -312,10 +250,32 @@ class _MyStepsPageState extends State<MyStepsPage> {
           Expanded(
             flex: 1,
             child: MySteps(
-              steps: hErrorStepsListData3,
+              steps: [
+                MyStepItem(
+                  title: 'Steps1',
+                  content: 'Content1',
+                  successIcon: LucideIcons.phone,
+                ),
+                MyStepItem(
+                  title: 'Error',
+                  content: 'Content2',
+                  successIcon: LucideIcons.phone,
+                  errorIcon: LucideIcons.circleX,
+                ),
+                MyStepItem(
+                  title: 'Steps3',
+                  content: 'Content3',
+                  successIcon: LucideIcons.phone,
+                ),
+                MyStepItem(
+                  title: 'Steps4',
+                  content: 'Content4',
+                  successIcon: LucideIcons.phone,
+                ),
+              ],
               direction: MyStepsDirection.horizontal,
               activeIndex: 1,
-              status: MyStepsStatus.error,
+              status: MyStepState.error,
               simple: true,
             ),
           ),
@@ -450,7 +410,7 @@ class _MyStepsPageState extends State<MyStepsPage> {
               steps: vErrorBasicStepsListData,
               direction: MyStepsDirection.vertical,
               activeIndex: 1,
-              status: MyStepsStatus.error,
+              status: MyStepState.error,
             ),
           ),
         ],
@@ -493,7 +453,7 @@ class _MyStepsPageState extends State<MyStepsPage> {
               steps: vErrorIconStepsListData,
               direction: MyStepsDirection.vertical,
               activeIndex: 1,
-              status: MyStepsStatus.error,
+              status: MyStepState.error,
             ),
           ),
         ],
@@ -536,7 +496,7 @@ class _MyStepsPageState extends State<MyStepsPage> {
               direction: MyStepsDirection.vertical,
               activeIndex: 1,
               simple: true,
-              status: MyStepsStatus.error,
+              status: MyStepState.error,
             ),
           ),
         ],

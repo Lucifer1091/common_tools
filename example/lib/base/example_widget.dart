@@ -78,6 +78,7 @@ class _ExamplePageState extends State<ExamplePage> {
       body: ScrollbarTheme(
         data: ScrollbarThemeData(
           trackVisibility: WidgetStateProperty.all(true),
+          thumbColor: WidgetStateProperty.all(context.colorScheme.border),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

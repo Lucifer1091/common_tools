@@ -46,7 +46,7 @@ class _BarcodeAndQRScannerState extends State<BarcodeAndQRScanner>
 
   @override
   void initState() {
-    if (!PlatformChecker.isWeb) {
+    if (!MyPlatform.isWeb) {
       _animationController = AnimationController(
         duration: const Duration(milliseconds: 1500),
         vsync: this,
@@ -111,16 +111,16 @@ class _BarcodeAndQRScannerState extends State<BarcodeAndQRScanner>
     // );
 
     final mustRotate =
-        !PlatformChecker.isWeb &&
+        !MyPlatform.isWeb &&
         MediaQuery.of(context).orientation == Orientation.landscape;
 
     final cameraBox = MobileScanner(
       controller: controller,
       onDetect: widget.onDetect,
-      // scanWindow: PlatformChecker.isWeb ? null : scanWindow,
-      // scanWindowUpdateThreshold: PlatformChecker.isWeb ? 200.0 : 0.0,
+      // scanWindow: MyPlatform.isWeb ? null : scanWindow,
+      // scanWindowUpdateThreshold: MyPlatform.isWeb ? 200.0 : 0.0,
       overlayBuilder:
-          PlatformChecker.isWeb || !context.isCompact
+          MyPlatform.isWeb || !context.isCompact
               ? null
               : (context, constraints) {
                 return ScannerAnimation(
@@ -144,12 +144,12 @@ class _BarcodeAndQRScannerState extends State<BarcodeAndQRScanner>
 
           return Stack(
             children: [
-              if (PlatformChecker.isWeb) ...[
+              if (MyPlatform.isWeb) ...[
                 cameraBox,
               ] else ...[
                 RotatedBox(quarterTurns: mustRotate ? 3 : 0, child: cameraBox),
               ],
-              if (!PlatformChecker.isWeb && isStarted) ...[
+              if (!MyPlatform.isWeb && isStarted) ...[
                 BlurCutout.backDropFilter(width: width, height: height),
                 ScanAreaShape.build(width: width, height: height),
               ],

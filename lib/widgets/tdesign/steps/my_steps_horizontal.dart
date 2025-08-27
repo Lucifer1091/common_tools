@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../index.dart';
 
@@ -14,7 +15,7 @@ class MyStepsHorizontal extends StatelessWidget {
 
   final List<MyStepItem> steps;
   final int activeIndex;
-  final MyStepsStatus status;
+  final MyStepState status;
   final bool simple;
   final bool readOnly;
 
@@ -60,7 +61,7 @@ class MyStepsHorizontalItem extends StatelessWidget {
   final int index;
   final int stepsCount;
   final int activeIndex;
-  final MyStepsStatus status;
+  final MyStepState status;
   final bool simple;
   final bool readOnly;
 
@@ -81,7 +82,7 @@ class MyStepsHorizontalItem extends StatelessWidget {
     Widget? completeIconWidget;
 
     final Widget errorIconWidget = Icon(
-      Icons.close_rounded,
+      LucideIcons.x,
       color: context.colorScheme.destructive,
       size: 16,
     );
@@ -119,7 +120,7 @@ class MyStepsHorizontalItem extends StatelessWidget {
 
     /// The status is an error status, the activation index is the current
     /// index, and only the current activation index needs to be displayed
-    if (status == MyStepsStatus.error && activeIndex == index) {
+    if (status == MyStepState.error && activeIndex == index) {
       stepsNumberBgColor = ThemeColors.error.shade50;
       stepsTitleColor = context.colorScheme.destructive;
 

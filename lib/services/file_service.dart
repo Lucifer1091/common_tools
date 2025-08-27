@@ -16,7 +16,7 @@ class FileService {
     int? quality,
   }) async {
     try {
-      if (!PlatformChecker.isDesktop) {
+      if (!MyPlatform.isDesktop) {
         // For Android / IOS / Web
 
         final XFile? image = await ImagePicker().pickImage(
@@ -96,7 +96,7 @@ class FileService {
           fileExt == 'csv' ||
           fileExt == 'pdf' ||
           fileExt == 'txt') {
-        if (PlatformChecker.isWeb) {
+        if (MyPlatform.isWeb) {
           return XFile.fromData(
             result.files.single.bytes!,
             mimeType: fileExt,
@@ -124,7 +124,7 @@ class FileService {
     int? quality,
   }) async {
     try {
-      if (!PlatformChecker.isDesktop) {
+      if (!MyPlatform.isDesktop) {
         // For Android / IOS / Web
 
         final List<XFile?> images = await ImagePicker().pickMultiImage(
@@ -194,7 +194,7 @@ class FileService {
 
       final List<XFile> files = [];
 
-      if (PlatformChecker.isWeb) {
+      if (MyPlatform.isWeb) {
         for (final PlatformFile file in result.files) {
           files.add(
             XFile.fromData(
@@ -230,7 +230,7 @@ class FileService {
   }) async {
     XFile? source;
     // For Windows / MacOs / Linux Upload image/file by galley only.
-    if (PlatformChecker.isDesktop) {
+    if (MyPlatform.isDesktop) {
       if (isFilePicker) {
         source = await pickFile(allowedExtensions: allowedExtensions);
       } else {

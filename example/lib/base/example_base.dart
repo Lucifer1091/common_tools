@@ -49,6 +49,6 @@ class ScreenUtil {
   }
 
   static bool isWebLargeScreen(BuildContext context) {
-    return PlatformChecker.isWeb && isLargeScreen(context);
+    return MyPlatform.isWeb && isLargeScreen(context);
   }
 }

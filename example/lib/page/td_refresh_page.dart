@@ -48,9 +48,7 @@ class _TdPullDownRefreshPageState extends State<TdPullDownRefreshPage> {
               ),
               margin: const EdgeInsets.only(left: 16, right: 16),
               child: MyText(
-                PlatformChecker.isWeb
-                    ? 'Web暂不支持下拉，请下载安装apk体验'
-                    : '拖拽该区域演示 顶部下拉刷新',
+                MyPlatform.isWeb ? 'Web暂不支持下拉，请下载安装apk体验' : '拖拽该区域演示 顶部下拉刷新',
                 textColor: ThemeColors.neutral.shade600,
               ),
             ),

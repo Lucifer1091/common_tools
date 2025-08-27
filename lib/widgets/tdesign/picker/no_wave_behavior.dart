@@ -11,7 +11,7 @@ class NoWaveBehavior extends ScrollBehavior {
     Widget child,
     ScrollableDetails details,
   ) {
-    if (PlatformChecker.isAndroid || PlatformChecker.isFuchsia) {
+    if (MyPlatform.isAndroid || MyPlatform.isFuchsia) {
       return child;
     } else {
       return super.buildOverscrollIndicator(context, child, details);

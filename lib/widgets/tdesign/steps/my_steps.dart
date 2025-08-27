@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'my_steps_horizontal.dart';
@@ -29,7 +30,7 @@ class MyStepItem {
 
 enum MyStepsDirection { horizontal, vertical }
 
-enum MyStepsStatus { success, error }
+enum MyStepState { success, error, disabled }
 
 class MySteps extends StatefulWidget {
   const MySteps({
@@ -37,7 +38,7 @@ class MySteps extends StatefulWidget {
     super.key,
     this.activeIndex = 0,
     this.direction = MyStepsDirection.horizontal,
-    this.status = MyStepsStatus.success,
+    this.status = MyStepState.success,
     this.simple = false,
     this.readOnly = false,
     this.verticalSelect = false,
@@ -46,7 +47,7 @@ class MySteps extends StatefulWidget {
   final int activeIndex;
   final List<MyStepItem> steps;
   final MyStepsDirection direction;
-  final MyStepsStatus status;
+  final MyStepState status;
   final bool simple;
   final bool readOnly;
   final bool verticalSelect;
@@ -81,5 +82,55 @@ class _MyStepsState extends State<MySteps> {
           readOnly: widget.readOnly,
           verticalSelect: widget.verticalSelect,
         );
+  }
+}
+
+class MyStepController extends ValueNotifier<MyStepValue> {
+  MyStepController({Map<int, MyStepState>? stepStates, int? currentStep})
+    : super(MyStepValue(states: stepStates ?? {}, current: currentStep ?? 0));
+
+  void next() {
+    value = MyStepValue(states: value.states, current: value.current + 1);
+  }
+
+  void previous() {
+    value = MyStepValue(states: value.states, current: value.current - 1);
+  }
+
+  void setState(int step, MyStepState? state) {
+    final Map<int, MyStepState> newStates = Map.from(value.states);
+    if (state == null) {
+      newStates.remove(step);
+    } else {
+      newStates[step] = state;
+    }
+    value = MyStepValue(states: newStates, current: value.current);
+  }
+
+  void jumpTo(int step) {
+    value = MyStepValue(states: value.states, current: step);
+  }
+}
+
+class MyStepValue {
+  MyStepValue({required this.states, required this.current});
+
+  final Map<int, MyStepState> states;
+  final int current;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is MyStepValue &&
+        mapEquals(other.states, states) &&
+        other.current == current;
+  }
+
+  @override
+  int get hashCode => Object.hash(states, current);
+
+  @override
+  String toString() {
+    return 'MyStepValue{states: $states, current: $current}';
   }
 }

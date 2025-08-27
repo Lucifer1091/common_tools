@@ -3,8 +3,8 @@ import 'package:flutter/foundation.dart';
 import '../index.dart';
 
 /// A class to check all platforms supported by Flutter.
-class PlatformChecker {
-  PlatformChecker._();
+class MyPlatform {
+  MyPlatform._();
 
   /// Returns `true` if the platform is Android.
   static bool get isAndroid =>

@@ -148,7 +148,7 @@ class _MyButtonState extends State<MyButton> {
 
   static Future<void> feedbackForTap(BuildContext context) async {
     context.findRenderObject()!.sendSemanticsEvent(const TapSemanticEvent());
-    if (PlatformChecker.isMobile) {
+    if (MyPlatform.isMobile) {
       return SystemSound.play(SystemSoundType.click);
     }
     return Future<void>.value();

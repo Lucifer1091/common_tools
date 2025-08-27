@@ -10,7 +10,7 @@ export 'guid.dart';
 export 'in_memory_cache.dart';
 export 'isolate_parser.dart';
 export 'logger.dart';
-export 'platform_checker.dart';
+export 'my_platform.dart';
 export 'safe_url_launcher.dart';
 export 'system.dart';
 export 'time_utils.dart';

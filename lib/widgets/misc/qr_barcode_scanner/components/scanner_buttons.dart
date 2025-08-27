@@ -81,8 +81,7 @@ class _ZoomButtonsState extends State<ZoomButtons> {
     return ValueListenableBuilder(
       valueListenable: widget.controller,
       builder: (context, state, child) {
-        if (!PlatformChecker.isWeb &&
-            (!state.isInitialized || !state.isRunning)) {
+        if (!MyPlatform.isWeb && (!state.isInitialized || !state.isRunning)) {
           return const SizedBox.shrink();
         }
 
