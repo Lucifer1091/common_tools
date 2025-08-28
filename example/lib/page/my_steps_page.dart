@@ -12,8 +12,9 @@ class MyStepsPage extends StatefulWidget {
 }
 
 class _MyStepsPageState extends State<MyStepsPage> {
-  MyStepController controller = MyStepController(current: 1);
+  MyStepController controller = MyStepController(total: 4, current: 1);
   MyStepController errorCtrl = MyStepController(
+    total: 4,
     current: 1,
     states: {1: MyStepState.error},
   );

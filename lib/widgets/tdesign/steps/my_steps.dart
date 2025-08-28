@@ -60,16 +60,31 @@ class MySteps extends StatelessWidget {
 }
 
 class MyStepController extends ValueNotifier<MyStepValue> {
-  MyStepController({Map<int, MyStepState>? states, int? current})
-    : super(MyStepValue(states: states ?? {}, current: current ?? 0));
+  MyStepController({
+    required int total,
+    Map<int, MyStepState>? states,
+    int? current,
+  }) : super(
+         MyStepValue(total: total, states: states ?? {}, current: current ?? 0),
+       );
 
   void next() {
-    value = MyStepValue(states: value.states, current: value.current + 1);
+    if (value.current < value.total) {
+      value = MyStepValue(
+        states: value.states,
+        current: value.current + 1,
+        total: value.total,
+      );
+    }
   }
 
   void previous() {
     if (value.current != 0) {
-      value = MyStepValue(states: value.states, current: value.current - 1);
+      value = MyStepValue(
+        states: value.states,
+        current: value.current - 1,
+        total: value.total,
+      );
     }
   }
 
@@ -80,34 +95,48 @@ class MyStepController extends ValueNotifier<MyStepValue> {
     } else {
       newStates[step] = state;
     }
-    value = MyStepValue(states: newStates, current: value.current);
+    value = MyStepValue(
+      states: newStates,
+      current: value.current,
+      total: value.total,
+    );
   }
 
   void jumpTo(int step) {
-    value = MyStepValue(states: value.states, current: step);
+    value = MyStepValue(
+      states: value.states,
+      current: step,
+      total: value.total,
+    );
   }
 }
 
 class MyStepValue {
-  MyStepValue({required this.states, required this.current});
+  MyStepValue({
+    required this.states,
+    required this.current,
+    required this.total,
+  });
 
   final Map<int, MyStepState> states;
   final int current;
+  final int total;
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     return other is MyStepValue &&
         mapEquals(other.states, states) &&
-        other.current == current;
+        other.current == current &&
+        other.total == total;
   }
 
   @override
-  int get hashCode => Object.hash(states, current);
+  int get hashCode => Object.hash(states, current, total);
 
   @override
   String toString() {
-    return 'MyStepValue{states: $states, current: $current}';
+    return 'MyStepValue{states: $states, current: $current, total: $total}';
   }
 }
 
