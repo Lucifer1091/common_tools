@@ -1,22 +1,19 @@
-import 'package:flutter/material.dart';
+part of 'my_steps.dart';
 
-import '../../../index.dart';
-
-class MyStepsVertical extends StatelessWidget {
-  const MyStepsVertical({
+class _MyStepsVertical extends StatelessWidget {
+  const _MyStepsVertical({
     required this.steps,
     required this.activeIndex,
-    required this.status,
-    required this.simple,
+    required this.size,
+    required this.type,
     required this.readOnly,
     required this.verticalSelect,
-    super.key,
   });
 
   final List<MyStepItem> steps;
   final int activeIndex;
-  final MyStepState status;
-  final bool simple;
+  final MyStepState size;
+  final bool type;
   final bool readOnly;
   final bool verticalSelect;
 
@@ -25,13 +22,13 @@ class MyStepsVertical extends StatelessWidget {
     final stepsCount = steps.length;
     final List<Widget> stepsVerticalItem =
         steps.asMap().entries.map((item) {
-          return MyStepsVerticalItem(
+          return _MyStepsVerticalItem(
             index: item.key,
             data: item.value,
             stepsCount: stepsCount,
             activeIndex: activeIndex,
-            status: status,
-            simple: simple,
+            status: size,
+            simple: type,
             readOnly: readOnly,
             verticalSelect: verticalSelect,
           );
@@ -41,8 +38,8 @@ class MyStepsVertical extends StatelessWidget {
   }
 }
 
-class MyStepsVerticalItem extends StatelessWidget {
-  const MyStepsVerticalItem({
+class _MyStepsVerticalItem extends StatelessWidget {
+  const _MyStepsVerticalItem({
     required this.data,
     required this.index,
     required this.stepsCount,
@@ -51,8 +48,6 @@ class MyStepsVerticalItem extends StatelessWidget {
     required this.simple,
     required this.readOnly,
     required this.verticalSelect,
-    this.titleWidget,
-    super.key,
   });
 
   final MyStepItem data;
@@ -63,7 +58,6 @@ class MyStepsVerticalItem extends StatelessWidget {
   final bool simple;
   final bool readOnly;
   final bool verticalSelect;
-  final Widget? titleWidget;
 
   @override
   Widget build(BuildContext context) {

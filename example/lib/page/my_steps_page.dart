@@ -12,6 +12,12 @@ class MyStepsPage extends StatefulWidget {
 }
 
 class _MyStepsPageState extends State<MyStepsPage> {
+  MyStepController controller = MyStepController(current: 1);
+  MyStepController errorCtrl = MyStepController(
+    current: 1,
+    states: {1: MyStepState.error},
+  );
+
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
@@ -21,11 +27,35 @@ class _MyStepsPageState extends State<MyStepsPage> {
       desc: 'Steps Bar',
       children: [
         ExampleModule(
+          title: 'Controls',
+          children: [
+            ExampleItem(
+              desc: 'Stepper Controller',
+              builder: (context) {
+                return Row(
+                  children: [
+                    Gap(16),
+                    MyButton(
+                      text: 'Previous',
+                      type: MyButtonType.outline,
+                      onTap: controller.previous,
+                    ),
+                    Gap(16),
+                    MyButton(text: 'Next', onTap: controller.next),
+                    Gap(16),
+                  ],
+                );
+              },
+            ),
+          ],
+        ),
+        ExampleModule(
           title: 'Horizontal Bars',
           children: [
             ExampleItem(desc: 'Default Bar', builder: _buildBasicHSteps3),
             ExampleItem(desc: 'Icon Bar', builder: _buildHIconSteps3),
             ExampleItem(desc: 'Simple Bar', builder: _buildSimpleHSteps3),
+            ExampleItem(desc: 'Line Bar', builder: _buildSimpleHSteps3),
           ],
         ),
         ExampleModule(
@@ -99,6 +129,7 @@ class _MyStepsPageState extends State<MyStepsPage> {
           Expanded(
             flex: 1,
             child: MySteps(
+              controller: controller,
               steps: [
                 MyStepItem(title: 'Steps1', content: 'Content1'),
                 MyStepItem(title: 'Steps2', content: 'Content2'),
@@ -106,7 +137,6 @@ class _MyStepsPageState extends State<MyStepsPage> {
                 MyStepItem(title: 'Steps4', content: 'Content4'),
               ],
               direction: MyStepsDirection.horizontal,
-              activeIndex: 1,
             ),
           ),
         ],
@@ -122,6 +152,7 @@ class _MyStepsPageState extends State<MyStepsPage> {
           Expanded(
             flex: 1,
             child: MySteps(
+              controller: controller,
               steps: [
                 MyStepItem(
                   title: 'Steps1',
@@ -145,7 +176,6 @@ class _MyStepsPageState extends State<MyStepsPage> {
                 ),
               ],
               direction: MyStepsDirection.horizontal,
-              activeIndex: 1,
             ),
           ),
         ],
@@ -161,6 +191,7 @@ class _MyStepsPageState extends State<MyStepsPage> {
           Expanded(
             flex: 1,
             child: MySteps(
+              controller: controller,
               steps: [
                 MyStepItem(title: 'Steps1', content: 'Content1'),
                 MyStepItem(title: 'Steps2', content: 'Content2'),
@@ -168,8 +199,8 @@ class _MyStepsPageState extends State<MyStepsPage> {
                 MyStepItem(title: 'Steps4', content: 'Content4'),
               ],
               direction: MyStepsDirection.horizontal,
-              activeIndex: 1,
-              simple: true,
+
+              type: MyStepType.simple,
             ),
           ),
         ],
@@ -185,6 +216,7 @@ class _MyStepsPageState extends State<MyStepsPage> {
           Expanded(
             flex: 1,
             child: MySteps(
+              controller: errorCtrl,
               steps: [
                 MyStepItem(title: 'Steps1', content: 'Content1'),
                 MyStepItem(title: 'Error', content: 'Content2'),
@@ -192,8 +224,6 @@ class _MyStepsPageState extends State<MyStepsPage> {
                 MyStepItem(title: 'Steps4', content: 'Content4'),
               ],
               direction: MyStepsDirection.horizontal,
-              activeIndex: 1,
-              status: MyStepState.error,
             ),
           ),
         ],
@@ -209,6 +239,7 @@ class _MyStepsPageState extends State<MyStepsPage> {
           Expanded(
             flex: 1,
             child: MySteps(
+              controller: errorCtrl,
               steps: [
                 MyStepItem(
                   title: 'Steps1',
@@ -233,8 +264,6 @@ class _MyStepsPageState extends State<MyStepsPage> {
                 ),
               ],
               direction: MyStepsDirection.horizontal,
-              activeIndex: 1,
-              status: MyStepState.error,
             ),
           ),
         ],
@@ -250,6 +279,7 @@ class _MyStepsPageState extends State<MyStepsPage> {
           Expanded(
             flex: 1,
             child: MySteps(
+              controller: errorCtrl,
               steps: [
                 MyStepItem(
                   title: 'Steps1',
@@ -274,9 +304,7 @@ class _MyStepsPageState extends State<MyStepsPage> {
                 ),
               ],
               direction: MyStepsDirection.horizontal,
-              activeIndex: 1,
-              status: MyStepState.error,
-              simple: true,
+              type: MyStepType.simple,
             ),
           ),
         ],
@@ -299,9 +327,9 @@ class _MyStepsPageState extends State<MyStepsPage> {
           Expanded(
             flex: 1,
             child: MySteps(
+              controller: controller,
               steps: vBasicStepsListData,
               direction: MyStepsDirection.vertical,
-              activeIndex: 1,
             ),
           ),
         ],
@@ -340,9 +368,9 @@ class _MyStepsPageState extends State<MyStepsPage> {
           Expanded(
             flex: 1,
             child: MySteps(
+              controller: controller,
               steps: vIconStepsListData,
               direction: MyStepsDirection.vertical,
-              activeIndex: 1,
             ),
           ),
         ],
@@ -381,10 +409,11 @@ class _MyStepsPageState extends State<MyStepsPage> {
           Expanded(
             flex: 1,
             child: MySteps(
+              controller: controller,
               steps: vSimpleStepsListData,
               direction: MyStepsDirection.vertical,
-              activeIndex: 1,
-              simple: true,
+
+              type: MyStepType.simple,
             ),
           ),
         ],
@@ -407,10 +436,9 @@ class _MyStepsPageState extends State<MyStepsPage> {
           Expanded(
             flex: 1,
             child: MySteps(
+              controller: controller,
               steps: vErrorBasicStepsListData,
               direction: MyStepsDirection.vertical,
-              activeIndex: 1,
-              status: MyStepState.error,
             ),
           ),
         ],
@@ -450,10 +478,9 @@ class _MyStepsPageState extends State<MyStepsPage> {
           Expanded(
             flex: 1,
             child: MySteps(
+              controller: controller,
               steps: vErrorIconStepsListData,
               direction: MyStepsDirection.vertical,
-              activeIndex: 1,
-              status: MyStepState.error,
             ),
           ),
         ],
@@ -492,11 +519,10 @@ class _MyStepsPageState extends State<MyStepsPage> {
           Expanded(
             flex: 1,
             child: MySteps(
+              controller: controller,
               steps: vErrorSimpleStepsListData,
               direction: MyStepsDirection.vertical,
-              activeIndex: 1,
-              simple: true,
-              status: MyStepState.error,
+              type: MyStepType.simple,
             ),
           ),
         ],
@@ -552,9 +578,9 @@ class _MyStepsPageState extends State<MyStepsPage> {
           Expanded(
             flex: 1,
             child: MySteps(
+              controller: controller,
               steps: vCustomTitleBasicStepsListData,
               direction: MyStepsDirection.vertical,
-              activeIndex: 1,
             ),
           ),
         ],
@@ -570,9 +596,9 @@ class _MyStepsPageState extends State<MyStepsPage> {
           Expanded(
             flex: 1,
             child: MySteps(
+              controller: controller,
               steps: vCustomContentBasicStepsListData,
               direction: MyStepsDirection.vertical,
-              activeIndex: 1,
             ),
           ),
         ],
@@ -594,7 +620,11 @@ class _MyStepsPageState extends State<MyStepsPage> {
         children: [
           Expanded(
             flex: 1,
-            child: MySteps(steps: hReadOnlyStepsListData, readOnly: true),
+            child: MySteps(
+              controller: controller,
+              steps: hReadOnlyStepsListData,
+              readOnly: true,
+            ),
           ),
         ],
       ),
@@ -616,9 +646,9 @@ class _MyStepsPageState extends State<MyStepsPage> {
           Expanded(
             flex: 1,
             child: MySteps(
+              controller: controller,
               steps: vReadOnlyStepsListData,
               direction: MyStepsDirection.vertical,
-              activeIndex: 0,
               readOnly: true,
             ),
           ),
@@ -642,10 +672,10 @@ class _MyStepsPageState extends State<MyStepsPage> {
           Expanded(
             flex: 1,
             child: MySteps(
+              controller: controller,
               steps: vCustomizeStepsListData,
               direction: MyStepsDirection.vertical,
-              simple: true,
-              activeIndex: 3,
+              type: MyStepType.simple,
               verticalSelect: true,
             ),
           ),

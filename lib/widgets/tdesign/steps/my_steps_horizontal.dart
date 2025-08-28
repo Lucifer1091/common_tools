@@ -1,22 +1,18 @@
-import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
+part of 'my_steps.dart';
 
-import '../../../index.dart';
-
-class MyStepsHorizontal extends StatelessWidget {
-  const MyStepsHorizontal({
+class _MyStepsHorizontal extends StatelessWidget {
+  const _MyStepsHorizontal({
     required this.steps,
-    required this.activeIndex,
-    required this.status,
-    required this.simple,
+    required this.controller,
+    required this.size,
+    required this.type,
     required this.readOnly,
-    super.key,
   });
 
   final List<MyStepItem> steps;
-  final int activeIndex;
-  final MyStepState status;
-  final bool simple;
+  final MyStepController controller;
+  final MyStepSize size;
+  final MyStepType type;
   final bool readOnly;
 
   @override
@@ -26,14 +22,20 @@ class MyStepsHorizontal extends StatelessWidget {
     final List<Widget> stepsHorizontalItem =
         steps.asMap().entries.map((item) {
           return Expanded(
-            child: MyStepsHorizontalItem(
-              index: item.key,
-              data: item.value,
-              stepsCount: stepsCount,
-              activeIndex: activeIndex,
-              status: status,
-              simple: simple,
-              readOnly: readOnly,
+            child: ValueListenableBuilder<MyStepValue>(
+              valueListenable: controller,
+              builder: (context, value, child) {
+                return _MyStepsHorizontalItem(
+                  index: item.key,
+                  data: item.value,
+                  current: value.current,
+                  stepsCount: stepsCount,
+                  state: value.states[value.current],
+                  type: type,
+                  size: size,
+                  readOnly: readOnly,
+                );
+              },
             ),
           );
         }).toList();
@@ -45,38 +47,34 @@ class MyStepsHorizontal extends StatelessWidget {
   }
 }
 
-class MyStepsHorizontalItem extends StatelessWidget {
-  const MyStepsHorizontalItem({
+class _MyStepsHorizontalItem extends StatelessWidget {
+  const _MyStepsHorizontalItem({
     required this.data,
     required this.index,
-    required this.stepsCount,
-    required this.activeIndex,
-    required this.status,
-    required this.simple,
     required this.readOnly,
-    super.key,
+    required this.stepsCount,
+    required this.current,
+    required this.state,
+    required this.type,
+    required this.size,
   });
 
   final MyStepItem data;
   final int index;
   final int stepsCount;
-  final int activeIndex;
-  final MyStepState status;
-  final bool simple;
+  final int current;
+  final MyStepState? state;
+  final MyStepType type;
+  final MyStepSize size;
   final bool readOnly;
 
   @override
   Widget build(BuildContext context) {
     var stepsNumberBgColor = context.colorScheme.primary;
-
     var stepsNumberTextColor = Colors.white;
-
     var stepsTitleColor = context.colorScheme.primary;
-
     var stepsIconColor = context.colorScheme.primary;
-
     var simpleStepsIconColor = context.colorScheme.primary;
-
     bool shouldSetIconWidgetDecoration = true;
 
     Widget? completeIconWidget;
@@ -87,22 +85,30 @@ class MyStepsHorizontalItem extends StatelessWidget {
       size: 16,
     );
 
-    if (activeIndex > index) {
-      stepsNumberBgColor = ThemeColors.blue.shade50;
+    BoxDecoration? iconWidgetDecoration;
+
+    if (current > index) {
+      stepsNumberBgColor = context.colorScheme.primary;
       stepsNumberTextColor = context.colorScheme.primary;
-      stepsTitleColor = ThemeColors.neutral.shade900;
+      stepsTitleColor = context.colorScheme.foreground;
 
       completeIconWidget = Icon(
         Icons.check_rounded,
-        color: context.colorScheme.primary,
+        color: context.colorScheme.primaryForeground,
         size: 16,
       );
-    } else if (activeIndex < index) {
-      stepsNumberBgColor = ThemeColors.neutral.shade50;
-      stepsNumberTextColor = ThemeColors.neutral.shade700;
-      stepsTitleColor = ThemeColors.neutral.shade700;
-      stepsIconColor = ThemeColors.neutral.shade700;
-      simpleStepsIconColor = ThemeColors.neutral.shade300;
+    } else if (current < index) {
+      stepsNumberBgColor = context.colorScheme.secondary;
+      stepsNumberTextColor = context.colorScheme.mutedForeground;
+      stepsTitleColor = context.colorScheme.mutedForeground;
+      stepsIconColor = context.colorScheme.mutedForeground;
+      simpleStepsIconColor = context.colorScheme.mutedForeground;
+    } else {
+      stepsNumberTextColor = context.colorScheme.primary;
+      iconWidgetDecoration = BoxDecoration(
+        border: Border.all(color: stepsNumberBgColor),
+        shape: BoxShape.circle,
+      );
     }
 
     Widget? stepsIconWidget = Text(
@@ -120,11 +126,12 @@ class MyStepsHorizontalItem extends StatelessWidget {
 
     /// The status is an error status, the activation index is the current
     /// index, and only the current activation index needs to be displayed
-    if (status == MyStepState.error && activeIndex == index) {
+    if (state == MyStepState.error && current == index) {
       stepsNumberBgColor = ThemeColors.error.shade50;
       stepsTitleColor = context.colorScheme.destructive;
 
       stepsIconWidget = errorIconWidget;
+
       if (data.errorIcon != null) {
         stepsIconWidget = Icon(
           data.errorIcon,
@@ -135,17 +142,20 @@ class MyStepsHorizontalItem extends StatelessWidget {
 
       shouldSetIconWidgetDecoration = data.errorIcon == null;
 
-      if (simple) simpleStepsIconColor = context.colorScheme.destructive;
+      if (type == MyStepType.simple) {
+        simpleStepsIconColor = context.colorScheme.destructive;
+      }
     }
 
-    BoxDecoration? iconWidgetDecoration =
+    iconWidgetDecoration =
         shouldSetIconWidgetDecoration
-            ? BoxDecoration(color: stepsNumberBgColor, shape: BoxShape.circle)
+            ? iconWidgetDecoration ??
+                BoxDecoration(color: stepsNumberBgColor, shape: BoxShape.circle)
             : null;
 
     double iconContainerSize = 22;
 
-    if (simple || readOnly) {
+    if (type == MyStepType.simple || readOnly) {
       if (readOnly) {
         simpleStepsIconColor = context.colorScheme.primary;
         stepsTitleColor = ThemeColors.neutral.shade900;
@@ -159,7 +169,7 @@ class MyStepsHorizontalItem extends StatelessWidget {
         border: Border.all(color: simpleStepsIconColor),
       );
 
-      if (activeIndex == index && !readOnly) {
+      if (current == index && !readOnly) {
         simpleDecoration = BoxDecoration(
           color: simpleStepsIconColor,
           shape: BoxShape.circle,
@@ -180,7 +190,7 @@ class MyStepsHorizontalItem extends StatelessWidget {
                   width: double.infinity,
                   height: 1,
                   color:
-                      (activeIndex >= index || readOnly)
+                      (current >= index || readOnly)
                           ? context.colorScheme.primary
                           : context.colorScheme.border,
                 ),
@@ -201,7 +211,7 @@ class MyStepsHorizontalItem extends StatelessWidget {
                   width: double.infinity,
                   height: 1,
                   color:
-                      (activeIndex > index || readOnly)
+                      (current > index || readOnly)
                           ? context.colorScheme.primary
                           : context.colorScheme.border,
                 ),
@@ -219,7 +229,7 @@ class MyStepsHorizontalItem extends StatelessWidget {
               data.title,
               style: context.bodyMedium.copyWith(
                 fontWeight:
-                    (activeIndex == index && !readOnly)
+                    (current == index && !readOnly)
                         ? FontWeight.w600
                         : FontWeight.w400,
                 color: stepsTitleColor,

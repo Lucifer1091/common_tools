@@ -1,100 +1,76 @@
+library;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'my_steps_horizontal.dart';
-import 'my_steps_vertical.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-class MyStepItem {
-  MyStepItem({
-    this.title,
-    this.content,
-    this.successIcon,
-    this.errorIcon,
-    this.customContent,
-    this.customTitle,
-  }) : assert(
-         title != null ||
-             customTitle != null ||
-             content != null ||
-             customContent != null,
-         'At least one of title, customTitle, content, or customContent must be non-null',
-       );
+import '../../../index.dart';
 
-  final String? title;
-  final String? content;
-  final IconData? successIcon;
-  final IconData? errorIcon;
-  final Widget? customContent;
-  final Widget? customTitle;
-}
+part 'my_steps_horizontal.dart';
+part 'my_steps_vertical.dart';
+
+enum MyStepType { indexed, icon, simple, line }
 
 enum MyStepsDirection { horizontal, vertical }
 
-enum MyStepState { success, error, disabled }
+enum MyStepState { success, error }
 
-class MySteps extends StatefulWidget {
+enum MyStepSize { large, medium, small }
+
+class MySteps extends StatelessWidget {
   const MySteps({
     required this.steps,
+    required this.controller,
     super.key,
-    this.activeIndex = 0,
     this.direction = MyStepsDirection.horizontal,
-    this.status = MyStepState.success,
-    this.simple = false,
+    this.size = MyStepSize.medium,
+    this.type = MyStepType.indexed,
     this.readOnly = false,
     this.verticalSelect = false,
   });
 
-  final int activeIndex;
   final List<MyStepItem> steps;
+  final MyStepController controller;
   final MyStepsDirection direction;
-  final MyStepState status;
-  final bool simple;
+  final MyStepSize size;
+  final MyStepType type;
   final bool readOnly;
   final bool verticalSelect;
 
   @override
-  _MyStepsState createState() => _MyStepsState();
-}
-
-class _MyStepsState extends State<MySteps> {
-  @override
   Widget build(BuildContext context) {
-    final currentActiveIndex =
-        widget.activeIndex < 0
-            ? 0
-            : (widget.activeIndex >= widget.steps.length
-                ? widget.steps.length - 1
-                : widget.activeIndex);
-
-    return widget.direction == MyStepsDirection.horizontal
-        ? MyStepsHorizontal(
-          steps: widget.steps,
-          activeIndex: currentActiveIndex,
-          status: widget.status,
-          simple: widget.simple,
-          readOnly: widget.readOnly,
+    return direction == MyStepsDirection.horizontal
+        ? _MyStepsHorizontal(
+          steps: steps,
+          controller: controller,
+          size: size,
+          type: type,
+          readOnly: readOnly,
         )
-        : MyStepsVertical(
-          steps: widget.steps,
-          activeIndex: currentActiveIndex,
-          status: widget.status,
-          simple: widget.simple,
-          readOnly: widget.readOnly,
-          verticalSelect: widget.verticalSelect,
+        : _MyStepsVertical(
+          steps: steps,
+          activeIndex: 0,
+          size: MyStepState.success,
+          type: true,
+          readOnly: readOnly,
+          verticalSelect: verticalSelect,
         );
   }
 }
 
 class MyStepController extends ValueNotifier<MyStepValue> {
-  MyStepController({Map<int, MyStepState>? stepStates, int? currentStep})
-    : super(MyStepValue(states: stepStates ?? {}, current: currentStep ?? 0));
+  MyStepController({Map<int, MyStepState>? states, int? current})
+    : super(MyStepValue(states: states ?? {}, current: current ?? 0));
 
   void next() {
     value = MyStepValue(states: value.states, current: value.current + 1);
   }
 
   void previous() {
-    value = MyStepValue(states: value.states, current: value.current - 1);
+    if (value.current != 0) {
+      value = MyStepValue(states: value.states, current: value.current - 1);
+    }
   }
 
   void setState(int step, MyStepState? state) {
@@ -133,4 +109,28 @@ class MyStepValue {
   String toString() {
     return 'MyStepValue{states: $states, current: $current}';
   }
+}
+
+class MyStepItem {
+  MyStepItem({
+    this.title,
+    this.content,
+    this.successIcon,
+    this.errorIcon,
+    this.customContent,
+    this.customTitle,
+  }) : assert(
+         title != null ||
+             customTitle != null ||
+             content != null ||
+             customContent != null,
+         'At least one of title, customTitle, content, or customContent must be non-null',
+       );
+
+  final String? title;
+  final String? content;
+  final IconData? successIcon;
+  final IconData? errorIcon;
+  final Widget? customContent;
+  final Widget? customTitle;
 }
