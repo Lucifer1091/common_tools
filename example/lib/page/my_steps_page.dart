@@ -25,96 +25,103 @@ class _MyStepsPageState extends State<MyStepsPage> {
       backgroundColor: context.colorScheme.primaryForeground,
       title: tdTitle(),
       exampleCodeGroup: 'steps',
-      desc: 'Steps Bar',
+      desc:
+          'A stepper is a fundamental part of material design guidelines. Steps convey progress through numbered steps.',
       children: [
-        ExampleModule(
-          title: 'Controls',
-          children: [
-            ExampleItem(
-              desc: 'Stepper Controller',
-              builder: (context) {
-                return Row(
-                  children: [
-                    Gap(16),
-                    MyButton(
-                      text: 'Previous',
-                      type: MyButtonType.outline,
-                      onTap: controller.previous,
-                    ),
-                    Gap(16),
-                    MyButton(text: 'Next', onTap: controller.next),
-                    Gap(16),
-                  ],
-                );
-              },
-            ),
-          ],
-        ),
+        //  ExampleModule(
+        //   title: 'Controls',
+        //   children: [
+        //     ExampleItem(
+        //       desc: 'Stepper Controller',
+        //       builder: (context) {
+        //         return Row(
+        //           children: [
+        //             Gap(16),
+        //             MyButton(
+        //               text: 'Previous',
+        //               type: MyButtonType.outline,
+        //               onTap: controller.previous,
+        //             ),
+        //             Gap(16),
+        //             MyButton(text: 'Next', onTap: controller.next),
+        //             Gap(16),
+        //           ],
+        //         );
+        //       },
+        //     ),
+        //   ],
+        // ),
         ExampleModule(
           title: 'Horizontal Bars',
           children: [
-            ExampleItem(desc: 'Default Bar', builder: _buildBasicHSteps3),
-            ExampleItem(desc: 'Icon Bar', builder: _buildHIconSteps3),
-            ExampleItem(desc: 'Simple Bar', builder: _buildSimpleHSteps3),
-            ExampleItem(desc: 'Line Bar', builder: _buildSimpleHSteps3),
+            ExampleItem(desc: 'Default Bar', builder: _buildBasicHSteps),
+            ExampleItem(desc: 'Icon Bar', builder: _buildHIconSteps),
+            ExampleItem(desc: 'Simple Bar', builder: _buildSimpleHSteps),
+            ExampleItem(desc: 'Line Bar', builder: _buildLineHSteps),
           ],
         ),
         ExampleModule(
           title: 'Horizontal Error Bars',
           children: [
-            ExampleItem(desc: 'Error Bar', builder: _buildHErrorSteps1),
-            ExampleItem(desc: 'Error Icon Bar', builder: _buildHErrorSteps2),
-            ExampleItem(desc: 'Error Simple Bar', builder: _buildHErrorSteps3),
+            ExampleItem(desc: 'Error Bar', builder: _buildHErrorSteps),
+            ExampleItem(desc: 'Error Icon Bar', builder: _buildIconHErrorSteps),
+            ExampleItem(
+              desc: 'Error Simple Bar',
+              builder: _buildSimpleHErrorSteps,
+            ),
+            ExampleItem(desc: 'Error Line Bar', builder: _buildLineHErrorSteps),
           ],
         ),
+
         ExampleModule(
-          title: 'Vertical Bar',
+          title: 'Vertical Bars',
           children: [
+            ExampleItem(desc: 'Default Bar', builder: _buildVBasicSteps),
+            ExampleItem(desc: 'Icon Bar', builder: _buildVIconSteps),
+            ExampleItem(desc: 'Simple Bar', builder: _buildVSimpleSteps),
+            ExampleItem(desc: 'Line Bar', builder: _buildVLineSteps),
+            ExampleItem(desc: 'Error Bar', builder: _buildVErrorBasicSteps),
             ExampleItem(
-              desc: 'Vertical Default Bar',
-              builder: _buildVBasicSteps,
-            ),
-            ExampleItem(desc: 'Vertical Icon Bar', builder: _buildVIconSteps),
-            ExampleItem(
-              desc: 'Vertical Simple Bar',
-              builder: _buildVSimpleSteps,
-            ),
-            ExampleItem(
-              desc: 'Vertical Error Bar',
-              builder: _buildVErrorBasicSteps,
-            ),
-            ExampleItem(
-              desc: 'Vertical error status icons Bar',
+              desc: 'Error Icons Bar',
               builder: _buildVErrorIconSteps,
             ),
             ExampleItem(
-              desc: 'Vertical error status simple Bar',
+              desc: 'Error Simple Bar',
               builder: _buildVErrorSimpleSteps,
             ),
             ExampleItem(
-              desc: 'Vertical custom title base Bar',
+              desc: 'Error Line Bar',
+              builder: _buildLineSimpleSteps,
+            ),
+            ExampleItem(
+              desc: 'Custom Title Bar',
               builder: _buildVCustomTitleBaseSteps,
             ),
             ExampleItem(
-              desc: 'Vertical custom content base Bar',
+              desc: 'Custom Content Bar',
               builder: _buildVCustomContentBaseSteps,
             ),
           ],
         ),
         ExampleModule(
-          title: 'Extension Bar',
+          title: 'Read-only Bars',
           children: [
             ExampleItem(
-              desc: 'Read-only Steps Pure display level Bar',
+              desc: 'Read-only Steps Bar',
               builder: _buildHReadOnlySteps,
             ),
             ExampleItem(
-              desc: 'Read-only Steps Pure display vertical Bar',
+              desc: 'Read-only Steps Vertical Bar',
               builder: _buildVReadOnlySteps,
             ),
+          ],
+        ),
+        ExampleModule(
+          title: 'Fixed Steps',
+          children: [
             ExampleItem(
-              desc: 'Vertical Customize Steps Vertical customization Bar',
-              builder: _buildVCustomizeSteps,
+              desc: 'A series of steps for progress.',
+              builder: _buildVFixSteps,
             ),
           ],
         ),
@@ -122,7 +129,7 @@ class _MyStepsPageState extends State<MyStepsPage> {
     );
   }
 
-  Widget _buildBasicHSteps3(BuildContext context) {
+  Widget _buildBasicHSteps(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
       child: Row(
@@ -132,12 +139,12 @@ class _MyStepsPageState extends State<MyStepsPage> {
             child: MySteps(
               controller: controller,
               steps: [
-                MyStepItem(title: 'Steps1', content: 'Content1'),
-                MyStepItem(title: 'Steps2', content: 'Content2'),
-                MyStepItem(title: 'Steps3', content: 'Content3'),
-                MyStepItem(title: 'Steps4', content: 'Content4'),
+                MyStepItem(title: 'Steps 1', content: 'Content 1'),
+                MyStepItem(title: 'Steps 2', content: 'Content 2'),
+                MyStepItem(title: 'Steps 3', content: 'Content 3'),
+                MyStepItem(title: 'Steps 4', content: 'Content 4'),
               ],
-              direction: MyStepsDirection.horizontal,
+              direction: Axis.horizontal,
             ),
           ),
         ],
@@ -145,7 +152,7 @@ class _MyStepsPageState extends State<MyStepsPage> {
     );
   }
 
-  Widget _buildHIconSteps3(BuildContext context) {
+  Widget _buildHIconSteps(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
       child: Row(
@@ -154,29 +161,30 @@ class _MyStepsPageState extends State<MyStepsPage> {
             flex: 1,
             child: MySteps(
               controller: controller,
+              type: MyStepType.icon,
               steps: [
                 MyStepItem(
-                  title: 'Steps1',
-                  content: 'Content1',
+                  title: 'Steps 1',
+                  content: 'Content 1',
                   successIcon: LucideIcons.phone,
                 ),
                 MyStepItem(
-                  title: 'Steps2',
-                  content: 'Content2',
+                  title: 'Steps 2',
+                  content: 'Content 2',
                   successIcon: LucideIcons.phone,
                 ),
                 MyStepItem(
-                  title: 'Steps3',
-                  content: 'Content3',
+                  title: 'Steps 3',
+                  content: 'Content 3',
                   successIcon: LucideIcons.phone,
                 ),
                 MyStepItem(
-                  title: 'Steps4',
-                  content: 'Content4',
+                  title: 'Steps 4',
+                  content: 'Content 4',
                   successIcon: LucideIcons.phone,
                 ),
               ],
-              direction: MyStepsDirection.horizontal,
+              direction: Axis.horizontal,
             ),
           ),
         ],
@@ -184,7 +192,7 @@ class _MyStepsPageState extends State<MyStepsPage> {
     );
   }
 
-  Widget _buildSimpleHSteps3(BuildContext context) {
+  Widget _buildSimpleHSteps(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
       child: Row(
@@ -194,13 +202,12 @@ class _MyStepsPageState extends State<MyStepsPage> {
             child: MySteps(
               controller: controller,
               steps: [
-                MyStepItem(title: 'Steps1', content: 'Content1'),
-                MyStepItem(title: 'Steps2', content: 'Content2'),
-                MyStepItem(title: 'Steps3', content: 'Content3'),
-                MyStepItem(title: 'Steps4', content: 'Content4'),
+                MyStepItem(title: 'Steps 1', content: 'Content 1'),
+                MyStepItem(title: 'Steps 2', content: 'Content 2'),
+                MyStepItem(title: 'Steps 3', content: 'Content 3'),
+                MyStepItem(title: 'Steps 4', content: 'Content 4'),
               ],
-              direction: MyStepsDirection.horizontal,
-
+              direction: Axis.horizontal,
               type: MyStepType.simple,
             ),
           ),
@@ -209,7 +216,7 @@ class _MyStepsPageState extends State<MyStepsPage> {
     );
   }
 
-  Widget _buildHErrorSteps1(BuildContext context) {
+  Widget _buildLineHSteps(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
       child: Row(
@@ -217,14 +224,15 @@ class _MyStepsPageState extends State<MyStepsPage> {
           Expanded(
             flex: 1,
             child: MySteps(
-              controller: errorCtrl,
+              controller: controller,
               steps: [
-                MyStepItem(title: 'Steps1', content: 'Content1'),
-                MyStepItem(title: 'Error', content: 'Content2'),
-                MyStepItem(title: 'Steps3', content: 'Content3'),
-                MyStepItem(title: 'Steps4', content: 'Content4'),
+                MyStepItem(title: 'Steps 1', content: 'Content 1'),
+                MyStepItem(title: 'Steps 2', content: 'Content 2'),
+                MyStepItem(title: 'Steps 3', content: 'Content 3'),
+                MyStepItem(title: 'Steps 4', content: 'Content 4'),
               ],
-              direction: MyStepsDirection.horizontal,
+              direction: Axis.horizontal,
+              type: MyStepType.line,
             ),
           ),
         ],
@@ -232,7 +240,7 @@ class _MyStepsPageState extends State<MyStepsPage> {
     );
   }
 
-  Widget _buildHErrorSteps2(BuildContext context) {
+  Widget _buildHErrorSteps(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
       child: Row(
@@ -242,29 +250,12 @@ class _MyStepsPageState extends State<MyStepsPage> {
             child: MySteps(
               controller: errorCtrl,
               steps: [
-                MyStepItem(
-                  title: 'Steps1',
-                  content: 'Content1',
-                  successIcon: LucideIcons.phone,
-                ),
-                MyStepItem(
-                  title: 'Error',
-                  content: 'Content2',
-                  successIcon: LucideIcons.phone,
-                  errorIcon: LucideIcons.circleX,
-                ),
-                MyStepItem(
-                  title: 'Steps3',
-                  content: 'Content3',
-                  successIcon: LucideIcons.phone,
-                ),
-                MyStepItem(
-                  title: 'Steps4',
-                  content: 'Content4',
-                  successIcon: LucideIcons.phone,
-                ),
+                MyStepItem(title: 'Steps 1', content: 'Content 1'),
+                MyStepItem(title: 'Error', content: 'Content 2'),
+                MyStepItem(title: 'Steps 3', content: 'Content 3'),
+                MyStepItem(title: 'Steps 4', content: 'Content 4'),
               ],
-              direction: MyStepsDirection.horizontal,
+              direction: Axis.horizontal,
             ),
           ),
         ],
@@ -272,7 +263,7 @@ class _MyStepsPageState extends State<MyStepsPage> {
     );
   }
 
-  Widget _buildHErrorSteps3(BuildContext context) {
+  Widget _buildIconHErrorSteps(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
       child: Row(
@@ -283,28 +274,68 @@ class _MyStepsPageState extends State<MyStepsPage> {
               controller: errorCtrl,
               steps: [
                 MyStepItem(
-                  title: 'Steps1',
-                  content: 'Content1',
+                  title: 'Steps 1',
+                  content: 'Content 1',
                   successIcon: LucideIcons.phone,
                 ),
                 MyStepItem(
                   title: 'Error',
-                  content: 'Content2',
+                  content: 'Content 2',
                   successIcon: LucideIcons.phone,
                   errorIcon: LucideIcons.circleX,
                 ),
                 MyStepItem(
-                  title: 'Steps3',
-                  content: 'Content3',
+                  title: 'Steps 3',
+                  content: 'Content 3',
                   successIcon: LucideIcons.phone,
                 ),
                 MyStepItem(
-                  title: 'Steps4',
-                  content: 'Content4',
+                  title: 'Steps 4',
+                  content: 'Content 4',
                   successIcon: LucideIcons.phone,
                 ),
               ],
-              direction: MyStepsDirection.horizontal,
+              direction: Axis.horizontal,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSimpleHErrorSteps(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: MySteps(
+              controller: errorCtrl,
+              steps: [
+                MyStepItem(
+                  title: 'Steps 1',
+                  content: 'Content 1',
+                  successIcon: LucideIcons.phone,
+                ),
+                MyStepItem(
+                  title: 'Error',
+                  content: 'Content 2',
+                  successIcon: LucideIcons.phone,
+                  errorIcon: LucideIcons.circleX,
+                ),
+                MyStepItem(
+                  title: 'Steps 3',
+                  content: 'Content 3',
+                  successIcon: LucideIcons.phone,
+                ),
+                MyStepItem(
+                  title: 'Steps 4',
+                  content: 'Content 4',
+                  successIcon: LucideIcons.phone,
+                ),
+              ],
+              direction: Axis.horizontal,
               type: MyStepType.simple,
             ),
           ),
@@ -313,12 +344,29 @@ class _MyStepsPageState extends State<MyStepsPage> {
     );
   }
 
-  List<MyStepItem> vBasicStepsListData = [
-    MyStepItem(title: 'Filish', content: 'Customize content'),
-    MyStepItem(title: 'Process', content: 'Customize content'),
-    MyStepItem(title: 'Default', content: 'Customize content'),
-    MyStepItem(title: 'Default', content: 'Customize content'),
-  ];
+  Widget _buildLineHErrorSteps(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: MySteps(
+              controller: errorCtrl,
+              steps: [
+                MyStepItem(title: 'Steps 1', content: 'Content 1'),
+                MyStepItem(title: 'Error', content: 'Content 2'),
+                MyStepItem(title: 'Steps 3', content: 'Content 3'),
+                MyStepItem(title: 'Steps 4', content: 'Content 4'),
+              ],
+              direction: Axis.horizontal,
+              type: MyStepType.line,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _buildVBasicSteps(BuildContext context) {
     return Padding(
@@ -329,37 +377,19 @@ class _MyStepsPageState extends State<MyStepsPage> {
             flex: 1,
             child: MySteps(
               controller: controller,
-              steps: vBasicStepsListData,
-              direction: MyStepsDirection.vertical,
+              steps: [
+                MyStepItem(title: 'Step 1', content: 'Customize content'),
+                MyStepItem(title: 'Step 2', content: 'Customize content'),
+                MyStepItem(title: 'Step 3', content: 'Customize content'),
+                MyStepItem(title: 'Step 4', content: 'Customize content'),
+              ],
+              direction: Axis.vertical,
             ),
           ),
         ],
       ),
     );
   }
-
-  List<MyStepItem> vIconStepsListData = [
-    MyStepItem(
-      title: 'Filish',
-      content: 'Customize content',
-      successIcon: LucideIcons.shoppingCart,
-    ),
-    MyStepItem(
-      title: 'Process',
-      content: 'Customize content',
-      successIcon: LucideIcons.shoppingCart,
-    ),
-    MyStepItem(
-      title: 'Default',
-      content: 'Customize content',
-      successIcon: LucideIcons.shoppingCart,
-    ),
-    MyStepItem(
-      title: 'Default',
-      content: 'Customize content',
-      successIcon: LucideIcons.shoppingCart,
-    ),
-  ];
 
   Widget _buildVIconSteps(BuildContext context) {
     return Padding(
@@ -370,37 +400,36 @@ class _MyStepsPageState extends State<MyStepsPage> {
             flex: 1,
             child: MySteps(
               controller: controller,
-              steps: vIconStepsListData,
-              direction: MyStepsDirection.vertical,
+              type: MyStepType.icon,
+              steps: [
+                MyStepItem(
+                  title: 'Step 1',
+                  content: 'Customize content',
+                  successIcon: LucideIcons.shoppingCart,
+                ),
+                MyStepItem(
+                  title: 'Step 2',
+                  content: 'Customize content',
+                  successIcon: LucideIcons.shoppingCart,
+                ),
+                MyStepItem(
+                  title: 'Step 3',
+                  content: 'Customize content',
+                  successIcon: LucideIcons.shoppingCart,
+                ),
+                MyStepItem(
+                  title: 'Step 4',
+                  content: 'Customize content',
+                  successIcon: LucideIcons.shoppingCart,
+                ),
+              ],
+              direction: Axis.vertical,
             ),
           ),
         ],
       ),
     );
   }
-
-  List<MyStepItem> vSimpleStepsListData = [
-    MyStepItem(
-      title: 'Filish',
-      content: 'Customize content',
-      successIcon: LucideIcons.shoppingCart,
-    ),
-    MyStepItem(
-      title: 'Process',
-      content: 'Customize content',
-      successIcon: LucideIcons.shoppingCart,
-    ),
-    MyStepItem(
-      title: 'Default',
-      content: 'Customize content',
-      successIcon: LucideIcons.shoppingCart,
-    ),
-    MyStepItem(
-      title: 'Default',
-      content: 'Customize content',
-      successIcon: LucideIcons.shoppingCart,
-    ),
-  ];
 
   Widget _buildVSimpleSteps(BuildContext context) {
     return Padding(
@@ -411,8 +440,13 @@ class _MyStepsPageState extends State<MyStepsPage> {
             flex: 1,
             child: MySteps(
               controller: controller,
-              steps: vSimpleStepsListData,
-              direction: MyStepsDirection.vertical,
+              steps: [
+                MyStepItem(title: 'Step 1', content: 'Customize content'),
+                MyStepItem(title: 'Step 2', content: 'Customize content'),
+                MyStepItem(title: 'Step 3', content: 'Customize content'),
+                MyStepItem(title: 'Step 4', content: 'Customize content'),
+              ],
+              direction: Axis.vertical,
 
               type: MyStepType.simple,
             ),
@@ -422,12 +456,29 @@ class _MyStepsPageState extends State<MyStepsPage> {
     );
   }
 
-  List<MyStepItem> vErrorBasicStepsListData = [
-    MyStepItem(title: 'Filish', content: 'Customize content'),
-    MyStepItem(title: 'Process', content: 'Customize content'),
-    MyStepItem(title: 'Default', content: 'Customize content'),
-    MyStepItem(title: 'Default', content: 'Customize content'),
-  ];
+  Widget _buildVLineSteps(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: MySteps(
+              controller: controller,
+              steps: [
+                MyStepItem(title: 'Step 1', content: 'Customize content'),
+                MyStepItem(title: 'Step 2', content: 'Customize content'),
+                MyStepItem(title: 'Step 3', content: 'Customize content'),
+                MyStepItem(title: 'Step 4', content: 'Customize content'),
+              ],
+              direction: Axis.vertical,
+              type: MyStepType.line,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _buildVErrorBasicSteps(BuildContext context) {
     return Padding(
@@ -437,39 +488,20 @@ class _MyStepsPageState extends State<MyStepsPage> {
           Expanded(
             flex: 1,
             child: MySteps(
-              controller: controller,
-              steps: vErrorBasicStepsListData,
-              direction: MyStepsDirection.vertical,
+              controller: errorCtrl,
+              steps: [
+                MyStepItem(title: 'Step 1', content: 'Customize content'),
+                MyStepItem(title: 'Step 2', content: 'Customize content'),
+                MyStepItem(title: 'Step 3', content: 'Customize content'),
+                MyStepItem(title: 'Step 4', content: 'Customize content'),
+              ],
+              direction: Axis.vertical,
             ),
           ),
         ],
       ),
     );
   }
-
-  List<MyStepItem> vErrorIconStepsListData = [
-    MyStepItem(
-      title: 'Filish',
-      content: 'Customize content',
-      successIcon: LucideIcons.shoppingCart,
-    ),
-    MyStepItem(
-      title: 'Process',
-      content: 'Customize content',
-      successIcon: LucideIcons.shoppingCart,
-      errorIcon: LucideIcons.circleX,
-    ),
-    MyStepItem(
-      title: 'Default',
-      content: 'Customize content',
-      successIcon: LucideIcons.shoppingCart,
-    ),
-    MyStepItem(
-      title: 'Default',
-      content: 'Customize content',
-      successIcon: LucideIcons.shoppingCart,
-    ),
-  ];
 
   Widget _buildVErrorIconSteps(BuildContext context) {
     return Padding(
@@ -479,38 +511,38 @@ class _MyStepsPageState extends State<MyStepsPage> {
           Expanded(
             flex: 1,
             child: MySteps(
-              controller: controller,
-              steps: vErrorIconStepsListData,
-              direction: MyStepsDirection.vertical,
+              controller: errorCtrl,
+              type: MyStepType.icon,
+              steps: [
+                MyStepItem(
+                  title: 'Step 1',
+                  content: 'Customize content',
+                  successIcon: LucideIcons.shoppingCart,
+                ),
+                MyStepItem(
+                  title: 'Step 2',
+                  content: 'Customize content',
+                  successIcon: LucideIcons.shoppingCart,
+                  errorIcon: LucideIcons.circleX,
+                ),
+                MyStepItem(
+                  title: 'Step 3',
+                  content: 'Customize content',
+                  successIcon: LucideIcons.shoppingCart,
+                ),
+                MyStepItem(
+                  title: 'Step 4',
+                  content: 'Customize content',
+                  successIcon: LucideIcons.shoppingCart,
+                ),
+              ],
+              direction: Axis.vertical,
             ),
           ),
         ],
       ),
     );
   }
-
-  List<MyStepItem> vErrorSimpleStepsListData = [
-    MyStepItem(
-      title: 'Filish',
-      content: 'Customize content',
-      successIcon: LucideIcons.shoppingCart,
-    ),
-    MyStepItem(
-      title: 'Process',
-      content: 'Customize content',
-      successIcon: LucideIcons.shoppingCart,
-    ),
-    MyStepItem(
-      title: 'Default',
-      content: 'Customize content',
-      successIcon: LucideIcons.shoppingCart,
-    ),
-    MyStepItem(
-      title: 'Default',
-      content: 'Customize content',
-      successIcon: LucideIcons.shoppingCart,
-    ),
-  ];
 
   Widget _buildVErrorSimpleSteps(BuildContext context) {
     return Padding(
@@ -520,9 +552,14 @@ class _MyStepsPageState extends State<MyStepsPage> {
           Expanded(
             flex: 1,
             child: MySteps(
-              controller: controller,
-              steps: vErrorSimpleStepsListData,
-              direction: MyStepsDirection.vertical,
+              controller: errorCtrl,
+              steps: [
+                MyStepItem(title: 'Step 1', content: 'Customize content'),
+                MyStepItem(title: 'Step 2', content: 'Customize content'),
+                MyStepItem(title: 'Step 3', content: 'Customize content'),
+                MyStepItem(title: 'Step 4', content: 'Customize content'),
+              ],
+              direction: Axis.vertical,
               type: MyStepType.simple,
             ),
           ),
@@ -531,45 +568,29 @@ class _MyStepsPageState extends State<MyStepsPage> {
     );
   }
 
-  List<MyStepItem> vCustomTitleBasicStepsListData = [
-    MyStepItem(title: 'Filish', content: 'Customize content'),
-    MyStepItem(
-      title: 'Process',
-      content: 'Customize content',
-      customTitle: Container(
-        margin: const EdgeInsets.only(bottom: 16, top: 4),
-        child: const Text(
-          'This is a very long custom title, which can automatically wrap the title content',
-          softWrap: true,
-          maxLines: 2,
-          overflow: TextOverflow.visible,
-        ),
-      ),
-    ),
-    MyStepItem(title: 'Default', content: 'Customize content'),
-    MyStepItem(title: 'Default', content: 'Customize content'),
-  ];
-
-  List<MyStepItem> vCustomContentBasicStepsListData = [
-    MyStepItem(title: 'Filish', content: 'Customize content'),
-    MyStepItem(
-      title:
-          'This is a very long, very long text, it is used to show the title of this step',
-      content: 'Customize content',
-      customContent: Container(
-        margin: const EdgeInsets.only(bottom: 16, top: 4),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(6),
-          child: const TDImage(
-            assetUrl: 'assets/img/image.png',
-            type: TDImageType.square,
+    Widget _buildLineSimpleSteps(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: MySteps(
+              controller: errorCtrl,
+              steps: [
+                MyStepItem(title: 'Step 1', content: 'Customize content'),
+                MyStepItem(title: 'Step 2', content: 'Customize content'),
+                MyStepItem(title: 'Step 3', content: 'Customize content'),
+                MyStepItem(title: 'Step 4', content: 'Customize content'),
+              ],
+              direction: Axis.vertical,
+              type: MyStepType.line,
+            ),
           ),
-        ),
+        ],
       ),
-    ),
-    MyStepItem(title: 'Default', content: 'Customize content'),
-    MyStepItem(title: 'Default', content: 'Customize content'),
-  ];
+    );
+  }
 
   Widget _buildVCustomTitleBaseSteps(BuildContext context) {
     return Padding(
@@ -580,8 +601,26 @@ class _MyStepsPageState extends State<MyStepsPage> {
             flex: 1,
             child: MySteps(
               controller: controller,
-              steps: vCustomTitleBasicStepsListData,
-              direction: MyStepsDirection.vertical,
+              steps: [
+                MyStepItem(title: 'Step 1', content: 'Customize content'),
+                MyStepItem(
+                  title: 'Step 2',
+                  content: 'Customize content',
+                  customTitle: Container(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    child: MyText(
+                      'This is a very long custom title, which can automatically wrap the title content',
+                      softWrap: true,
+                      maxLines: 2,
+                      overflow: TextOverflow.visible,
+                      style: context.bodyMedium,
+                    ),
+                  ),
+                ),
+                MyStepItem(title: 'Step 3', content: 'Customize content'),
+                MyStepItem(title: 'Step 4', content: 'Customize content'),
+              ],
+              direction: Axis.vertical,
             ),
           ),
         ],
@@ -598,21 +637,33 @@ class _MyStepsPageState extends State<MyStepsPage> {
             flex: 1,
             child: MySteps(
               controller: controller,
-              steps: vCustomContentBasicStepsListData,
-              direction: MyStepsDirection.vertical,
+              steps: [
+                MyStepItem(title: 'Step 1', content: 'Customize content'),
+                MyStepItem(
+                  title:
+                      'This is a very long, very long text, it is used to show the title of this step',
+                  content: 'Customize content',
+                  customContent: Container(
+                    margin: const EdgeInsets.only(bottom: 16),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(6),
+                      child: const TDImage(
+                        assetUrl: 'assets/img/image.png',
+                        type: TDImageType.square,
+                      ),
+                    ),
+                  ),
+                ),
+                MyStepItem(title: 'Step 3', content: 'Customize content'),
+                MyStepItem(title: 'Step 4', content: 'Customize content'),
+              ],
+              direction: Axis.vertical,
             ),
           ),
         ],
       ),
     );
   }
-
-  List<MyStepItem> hReadOnlyStepsListData = [
-    MyStepItem(title: 'Filish', content: 'content'),
-    MyStepItem(title: 'Process', content: 'content'),
-    MyStepItem(title: 'Default', content: 'content'),
-    MyStepItem(title: 'Default', content: 'content'),
-  ];
 
   Widget _buildHReadOnlySteps(BuildContext context) {
     return Padding(
@@ -622,22 +673,20 @@ class _MyStepsPageState extends State<MyStepsPage> {
           Expanded(
             flex: 1,
             child: MySteps(
-              controller: controller,
-              steps: hReadOnlyStepsListData,
               readOnly: true,
+              controller: controller,
+              steps: [
+                MyStepItem(title: 'Step 1', content: 'content'),
+                MyStepItem(title: 'Step 2', content: 'content'),
+                MyStepItem(title: 'Step 3', content: 'content'),
+                MyStepItem(title: 'Step 4', content: 'content'),
+              ],
             ),
           ),
         ],
       ),
     );
   }
-
-  List<MyStepItem> vReadOnlyStepsListData = [
-    MyStepItem(title: 'Filish', content: 'Customize content'),
-    MyStepItem(title: 'Process', content: 'Customize content'),
-    MyStepItem(title: 'Default', content: 'Customize content'),
-    MyStepItem(title: 'Default', content: 'Customize content'),
-  ];
 
   Widget _buildVReadOnlySteps(BuildContext context) {
     return Padding(
@@ -648,8 +697,13 @@ class _MyStepsPageState extends State<MyStepsPage> {
             flex: 1,
             child: MySteps(
               controller: controller,
-              steps: vReadOnlyStepsListData,
-              direction: MyStepsDirection.vertical,
+              steps: [
+                MyStepItem(title: 'Step 1', content: 'Customize content'),
+                MyStepItem(title: 'Step 2', content: 'Customize content'),
+                MyStepItem(title: 'Step 3', content: 'Customize content'),
+                MyStepItem(title: 'Step 4', content: 'Customize content'),
+              ],
+              direction: Axis.vertical,
               readOnly: true,
             ),
           ),
@@ -658,14 +712,7 @@ class _MyStepsPageState extends State<MyStepsPage> {
     );
   }
 
-  List<MyStepItem> vCustomizeStepsListData = [
-    MyStepItem(title: 'Selected', content: ''),
-    MyStepItem(title: 'Selected', content: ''),
-    MyStepItem(title: 'Selected', content: ''),
-    MyStepItem(title: 'Please Selected', content: ''),
-  ];
-
-  Widget _buildVCustomizeSteps(BuildContext context) {
+  Widget _buildVFixSteps(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
       child: Row(
@@ -674,10 +721,38 @@ class _MyStepsPageState extends State<MyStepsPage> {
             flex: 1,
             child: MySteps(
               controller: controller,
-              steps: vCustomizeStepsListData,
-              direction: MyStepsDirection.vertical,
-              type: MyStepType.simple,
-              verticalSelect: true,
+              type: MyStepType.steps,
+              size: MyStepSize.medium,
+              steps: [
+                MyStepItem(
+                  title: 'Create a project',
+                  customContent: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      MyText('Create a new project in the project manager.'),
+                      MyText('Add the required files to the project.'),
+                    ],
+                  ),
+                ),
+                MyStepItem(
+                  title: 'Add dependencies',
+                  customContent: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      MyText('Add the required dependencies to the project.'),
+                    ],
+                  ),
+                ),
+                MyStepItem(
+                  title: 'Run the project',
+                  customContent: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      MyText('Run the project in the project manager.'),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         ],

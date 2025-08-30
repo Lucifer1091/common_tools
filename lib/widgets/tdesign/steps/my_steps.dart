@@ -7,55 +7,75 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../index.dart';
 
-part 'my_steps_horizontal.dart';
-part 'my_steps_vertical.dart';
+part 'my_steps_item.dart';
 
-enum MyStepType { indexed, icon, simple, line }
-
-enum MyStepsDirection { horizontal, vertical }
+enum MyStepType { indexed, icon, simple, line, steps }
 
 enum MyStepState { success, error }
 
-enum MyStepSize { large, medium, small }
+enum MyStepSize { large, medium, small, extraSmall }
 
 class MySteps extends StatelessWidget {
   const MySteps({
     required this.steps,
-    required this.controller,
+    this.controller,
     super.key,
-    this.direction = MyStepsDirection.horizontal,
-    this.size = MyStepSize.medium,
+    this.direction = Axis.horizontal,
+    this.size = MyStepSize.extraSmall,
     this.type = MyStepType.indexed,
     this.readOnly = false,
-    this.verticalSelect = false,
+    this.clickable = false,
   });
 
   final List<MyStepItem> steps;
-  final MyStepController controller;
-  final MyStepsDirection direction;
+  final MyStepController? controller;
+  final Axis direction;
   final MyStepSize size;
   final MyStepType type;
   final bool readOnly;
-  final bool verticalSelect;
+  final bool clickable;
 
   @override
   Widget build(BuildContext context) {
-    return direction == MyStepsDirection.horizontal
-        ? _MyStepsHorizontal(
-          steps: steps,
-          controller: controller,
-          size: size,
-          type: type,
-          readOnly: readOnly,
-        )
-        : _MyStepsVertical(
-          steps: steps,
-          activeIndex: 0,
-          size: MyStepState.success,
-          type: true,
-          readOnly: readOnly,
-          verticalSelect: verticalSelect,
-        );
+    final controller0 = controller ?? MyStepController(total: steps.length);
+
+    final direction0 = type == MyStepType.steps ? Axis.vertical : direction;
+
+    final List<Widget> stepItems =
+        steps.asMap().entries.map((item) {
+          final listener = ValueListenableBuilder<MyStepValue>(
+            valueListenable: controller0,
+            builder: (context, value, child) {
+              return _MyStepsItems(
+                direction: direction0,
+                index: item.key,
+                data: item.value,
+                current: value.current,
+                stepsCount: steps.length,
+                state: value.states[value.current],
+                type: type,
+                size: size,
+                readOnly: readOnly,
+                onTap: readOnly || !clickable ? null : controller0.jumpTo,
+              );
+            },
+          );
+
+          if (direction0 == Axis.horizontal) {
+            return Expanded(child: listener);
+          }
+
+          return listener;
+        }).toList();
+
+    if (direction0 == Axis.horizontal) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: stepItems,
+      );
+    }
+
+    return Column(children: stepItems);
   }
 }
 
