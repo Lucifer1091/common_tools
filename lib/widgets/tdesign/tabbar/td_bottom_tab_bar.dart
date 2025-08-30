@@ -3,10 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../../../constants/shadows.dart';
-import '../../layout/no_widget.dart';
-import '../badge/my_badge.dart';
-import '../text/my_text.dart';
 
 /// Expand Item Down Arrow Width
 const double _kArrowWidth = 13.5;
@@ -429,9 +425,7 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () => handleTap(context),
-      onLongPress: () {
-        onLongPress?.call();
-      },
+      onLongPress: onLongPress,
       child: Container(
         height: itemHeight,
         alignment: Alignment.center,

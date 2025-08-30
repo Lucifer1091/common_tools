@@ -4,10 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../../extensions/generic/index.dart';
 import '../../../index.dart';
-import '../text/my_text.dart';
-import 'td_notice_bar_style.dart';
 
 class TDNoticeBar extends StatefulWidget {
   const TDNoticeBar({

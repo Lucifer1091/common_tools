@@ -118,7 +118,7 @@ class _MyIndexesState extends State<MyIndexes> {
             _scrollToTarget(newIndex, oldIndex);
           },
           indexListMaxHeight: widget.indexListMaxHeight ?? 0.8,
-          builderIndex: widget.indexBuilder,
+          indexBuilder: widget.indexBuilder,
         ),
       ],
     );

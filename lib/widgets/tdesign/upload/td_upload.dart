@@ -6,9 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../index.dart';
-import '../image/td_image.dart';
-import '../loading/my_loader.dart';
-import '../text/my_text.dart';
 
 enum TDUploadMediaType { image, video }
 
@@ -69,7 +66,11 @@ class TDUpload extends StatefulWidget {
     this.width = 80.0,
     this.height = 80.0,
     this.type = TDUploadBoxType.roundedSquare,
+    this.disabled = false,
     this.enabledReplaceType = false,
+    this.wrapSpacing,
+    this.wrapRunSpacing,
+    this.wrapAlignment,
   });
 
   final List<TDUploadFile> files;
@@ -104,6 +105,14 @@ class TDUpload extends StatefulWidget {
 
   final bool? enabledReplaceType;
 
+  final bool? disabled;
+
+  final double? wrapSpacing;
+
+  final double? wrapRunSpacing;
+
+  final WrapAlignment? wrapAlignment;
+
   @override
   State<TDUpload> createState() => _TDUploadState();
 }
@@ -115,6 +124,7 @@ class _TDUploadState extends State<TDUpload> {
       widget.multiple
           ? (widget.max == 0 || fileList.length < widget.max)
           : fileList.isEmpty;
+
   final ImagePicker _picker = ImagePicker();
 
   final Map<TDUploadBoxType, TDImageType> _imageTypeMap = {
@@ -164,7 +174,9 @@ class _TDUploadState extends State<TDUpload> {
         }
       }
 
-      if (widget.max > 0 && fileList.length + medias.length > widget.max) {
+      if (widget.max > 0 &&
+          isMultiple &&
+          fileList.length + medias.length > widget.max) {
         if (widget.onMaxLimitReached != null) {
           widget.onMaxLimitReached!();
         } else if (widget.onValidate != null) {
@@ -213,7 +225,7 @@ class _TDUploadState extends State<TDUpload> {
   Future<void> replaceMedia(List<XFile> files, TDUploadFile oldFile) async {
     if (files.isEmpty || files.length != 1) return;
 
-    final result = await validateResources(files);
+    final result = await validateResources(files, false);
 
     if (result != null) {
       widget.onValidate?.call(result);
@@ -235,7 +247,8 @@ class _TDUploadState extends State<TDUpload> {
   ]) async {
     TDUploadValidatorError? error;
 
-    var isMultiple = widget.multiple;
+    var isMultiple = multiple ?? widget.multiple;
+
     if (multiple != null) {
       isMultiple = multiple;
     }
@@ -268,24 +281,28 @@ class _TDUploadState extends State<TDUpload> {
 
   @override
   Widget build(BuildContext context) {
+    final children = fileList.map((f) => _buildImageBox(context, f)).toList();
+    if (canUpload) {
+      children.add(
+        _buildUploadBox(
+          context,
+          shouldDisplay: canUpload,
+          onTap: () async {
+            if (widget.disabled!) return;
+
+            final files = await getMediaFromPicker(widget.multiple);
+            unawaited(extractImageList(files));
+          },
+        ),
+      );
+    }
     return SizedBox(
       width: double.infinity,
       child: Wrap(
-        spacing: 8,
-        runSpacing: 16,
-        children: [
-          ...fileList.map((file) => _buildImageBox(context, file)),
-          _buildUploadBox(
-            context,
-            shouldDisplay: canUpload,
-            onTap: () async {
-              if (!canUpload) return;
-
-              final files = await getMediaFromPicker(widget.multiple);
-              unawaited(extractImageList(files));
-            },
-          ),
-        ],
+        spacing: widget.wrapSpacing ?? 8,
+        runSpacing: widget.wrapRunSpacing ?? 16,
+        alignment: widget.wrapAlignment ?? WrapAlignment.start,
+        children: children,
       ),
     );
   }
@@ -341,8 +358,8 @@ class _TDUploadState extends State<TDUpload> {
             width: widget.width,
             height: widget.height,
             imgUrl: file.remotePath,
-            // assetUrl: file.assetPath,
             imageFile: file.file,
+            assetUrl: file.file == null ? file.assetPath : null,
             type: _imageTypeMap[widget.type] ?? TDImageType.roundedSquare,
           ),
           Visibility(

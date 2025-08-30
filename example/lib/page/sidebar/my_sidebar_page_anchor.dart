@@ -15,10 +15,14 @@ class MySideBarAnchorPage extends StatefulWidget {
 class MySideBarAnchorPageState extends State<MySideBarAnchorPage> {
   var currentValue = 1;
   var itemHeight = 278.5;
+  var titleBarHeight = 44;
+  var testButtonHeight = 80.0;
   final _demoScroller = ScrollController(initialScrollOffset: 278.5);
   final _sideBarController = MySideBarController();
   static const threshold = 50;
   var lock = false;
+  var list = <MySideItemProps>[];
+  final pages = <Widget>[];
 
   @override
   void initState() {
@@ -38,6 +42,16 @@ class MySideBarAnchorPageState extends State<MySideBarAnchorPage> {
         });
       }
     });
+
+    for (var i = 0; i < 20; i++) {
+      list.add(MySideItemProps(index: i, label: '选项', value: i));
+      pages.add(getAnchorDemo(i));
+    }
+
+    list[1].badge = const MyBadge(MyBadgeType.redPoint);
+    list[2].badge = const MyBadge(MyBadgeType.message, count: 8);
+
+    _sideBarController.init(list);
   }
 
   Future<void> onSelected(int value) async {
@@ -80,67 +94,74 @@ class MySideBarAnchorPageState extends State<MySideBarAnchorPage> {
   }
 
   Widget _buildAnchorSideBar(BuildContext context) {
-    final list = <MySideItemProps>[];
-    final pages = <Widget>[];
-
-    for (var i = 0; i < 20; i++) {
-      list.add(
-        MySideItemProps(index: i, label: 'Options', value: i, enabled: i != 4),
-      );
-      pages.add(getAnchorDemo(context, i));
-    }
+    var demoHeight =
+        MediaQuery.of(context).size.height -
+        MediaQuery.of(context).padding.top -
+        titleBarHeight -
+        testButtonHeight;
 
     pages.add(
       Container(
-        height: MediaQuery.of(context).size.height - itemHeight,
-        decoration: const BoxDecoration(color: Colors.red),
+        height: demoHeight - itemHeight,
+        decoration: const BoxDecoration(color: Colors.white),
       ),
     );
 
-    list[1].badge = const MyBadge(MyBadgeType.redPoint);
-    list[2].badge = const MyBadge(MyBadgeType.message, count: 8);
-
-    var demoHeight = MediaQuery.of(context).size.height;
-    _sideBarController.init(list);
-
-    return Row(
+    return Column(
       children: [
-        SizedBox(
-          width: 110,
-          child: MySideBar(
-            height: demoHeight,
-            style: MySideBarStyle.normal,
-            value: currentValue,
-            controller: _sideBarController,
-            children: list
-                .map(
-                  (ele) => MySideBarItem(
-                    label: ele.label ?? '',
-                    badge: ele.badge,
-                    value: ele.value,
-                    icon: ele.icon,
-                    enabled: ele.enabled,
-                  ),
-                )
-                .toList(),
-            onChanged: onChanged,
-            onSelected: onSelected,
+        Container(
+          height: testButtonHeight,
+          padding: const EdgeInsets.all(16),
+          child: MyButton(
+            text: '更新children',
+            onTap: () {
+              setState(() {
+                var children = list
+                    .map(
+                      (e) => MySideItemProps(
+                        index: e.index,
+                        label: '变更',
+                        badge: e.badge,
+                        value: e.value,
+                        icon: e.icon,
+                      ),
+                    )
+                    .toList();
+                _sideBarController.children = children;
+                setState(() {});
+              });
+            },
           ),
         ),
-        Expanded(
-          child: SizedBox(
-            height: demoHeight,
-            child: SingleChildScrollView(
-              controller: _demoScroller,
-              child: Column(children: pages),
+        Row(
+          children: [
+            SizedBox(
+              width: 110,
+              child: MySideBar(
+                height: demoHeight,
+                style: MySideBarStyle.normal,
+                value: currentValue,
+                controller: _sideBarController,
+                onChanged: onChanged,
+                onSelected: onSelected,
+              ),
             ),
-          ),
+            Expanded(
+              child: SizedBox(
+                height: demoHeight,
+                child: SingleChildScrollView(
+                  controller: _demoScroller,
+                  child: Column(children: pages),
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );
   }
 
-  Widget getAnchorDemo(BuildContext context, int index) {
+  Widget getAnchorDemo(int index) {
     return Container(
       decoration: BoxDecoration(color: context.colorScheme.background),
       child: Column(

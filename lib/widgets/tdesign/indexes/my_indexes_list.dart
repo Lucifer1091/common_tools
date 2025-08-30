@@ -12,7 +12,7 @@ class MyIndexesList extends StatefulWidget {
     required this.onSelect,
     super.key,
     this.indexListMaxHeight = 0.8,
-    this.builderIndex,
+    this.indexBuilder,
   });
 
   /// Index character list. If not passed, the default is A-Z
@@ -26,7 +26,7 @@ class MyIndexesList extends StatefulWidget {
   final void Function(String newIndex, String oldIndex) onSelect;
 
   final Widget Function(BuildContext context, String index, bool isActive)?
-  builderIndex;
+  indexBuilder;
 
   @override
   State<MyIndexesList> createState() => _MyIndexesListState();
@@ -92,8 +92,11 @@ class _MyIndexesListState extends State<MyIndexesList> {
                     children:
                         widget.indexList.map((e) {
                           final isActive = value == e;
-                          if (widget.builderIndex != null) {
-                            return widget.builderIndex!(context, e, isActive);
+                          if (widget.indexBuilder != null) {
+                            return Container(
+                              key: _containerKeys[e],
+                              child: widget.indexBuilder!(context, e, isActive),
+                            );
                           }
                           return Stack(
                             clipBehavior: Clip.none,

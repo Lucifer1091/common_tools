@@ -303,4 +303,10 @@ class _MySideBarState extends State<MySideBar> {
       ),
     );
   }
+
+  @override
+  void didUpdateWidget(covariant MySideBar oldWidget) {
+    getDisplayChildren();
+    super.didUpdateWidget(oldWidget);
+  }
 }

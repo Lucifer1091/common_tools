@@ -168,96 +168,150 @@ class MyIndexesPage extends StatelessWidget {
           ],
         ),
       ],
-      test: const [],
+      test: [
+        ExampleItem(
+          ignoreCode: true,
+          desc: '自定义索引触发点击事件',
+          builder: _buildCustomIndexes,
+        ),
+      ],
     );
   }
-}
 
-Widget _buildSimple(BuildContext context) {
-  final renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
-  final indexList = _list.map((item) => item['index'] as String).toList();
-  return MyButton(
-    text: 'Basic usage',
-    isExpanded: true,
-    size: MyButtonSize.large,
-    type: MyButtonType.outline,
-    onTap: () {
-      Navigator.of(context).push(
-        MySlidePopupRoute(
-          slideTransitionFrom: MySlideFrom.right,
-          modalTop: renderBox?.size.height,
-          builder: (context) {
-            return ExamplePage(
-              title: 'Basic Index',
-              exampleCodeGroup: '',
-              showSingleChild: true,
-              singleChild: (context) {
-                return Container(
-                  color: context.colorScheme.background,
-                  child: MyIndexes(
-                    indexList: indexList,
-                    builder: (context, index) {
-                      final list =
-                          _list.firstWhere(
-                                (element) => element['index'] == index,
-                              )['children']
-                              as List<String>;
-                      return MyCellGroup(
-                        cells: list.map((e) => MyCell(title: e)).toList(),
-                      );
-                    },
-                  ),
-                );
-              },
-            );
-          },
-        ),
-      );
-    },
-  );
-}
+  Widget _buildSimple(BuildContext context) {
+    final renderBox =
+        navBarkey.currentContext?.findRenderObject() as RenderBox?;
+    final indexList = _list.map((item) => item['index'] as String).toList();
+    return MyButton(
+      text: 'Basic usage',
+      isExpanded: true,
+      size: MyButtonSize.large,
+      type: MyButtonType.outline,
+      onTap: () {
+        Navigator.of(context).push(
+          MySlidePopupRoute(
+            slideTransitionFrom: MySlideFrom.right,
+            modalTop: renderBox?.size.height,
+            builder: (context) {
+              return ExamplePage(
+                title: 'Basic Index',
+                exampleCodeGroup: '',
+                showSingleChild: true,
+                singleChild: (context) {
+                  return Container(
+                    color: context.colorScheme.background,
+                    child: MyIndexes(
+                      indexList: indexList,
+                      builder: (context, index) {
+                        final list =
+                            _list.firstWhere(
+                                  (element) => element['index'] == index,
+                                )['children']
+                                as List<String>;
+                        return MyCellGroup(
+                          cells: list.map((e) => MyCell(title: e)).toList(),
+                        );
+                      },
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
 
-Widget _buildOther(BuildContext context) {
-  final renderBox = navBarkey.currentContext?.findRenderObject() as RenderBox?;
-  final indexList = _list.map((item) => item['index'] as String).toList();
-  return MyButton(
-    text: 'Capsule Index',
-    isExpanded: true,
-    size: MyButtonSize.large,
-    type: MyButtonType.outline,
-    onTap: () {
-      Navigator.of(context).push(
-        MySlidePopupRoute(
-          slideTransitionFrom: MySlideFrom.right,
-          modalTop: renderBox?.size.height,
-          builder: (context) {
-            return ExamplePage(
-              title: 'Capsule Index',
-              exampleCodeGroup: '',
-              showSingleChild: true,
-              singleChild: (context) {
-                return Container(
-                  color: context.colorScheme.background,
-                  child: MyIndexes(
-                    indexList: indexList,
-                    capsuleTheme: true,
-                    builder: (context, index) {
-                      final list =
-                          _list.firstWhere(
-                                (element) => element['index'] == index,
-                              )['children']
-                              as List<String>;
-                      return MyCellGroup(
-                        cells: list.map((e) => MyCell(title: e)).toList(),
-                      );
-                    },
-                  ),
-                );
-              },
-            );
-          },
-        ),
-      );
-    },
-  );
+  Widget _buildOther(BuildContext context) {
+    final renderBox =
+        navBarkey.currentContext?.findRenderObject() as RenderBox?;
+    final indexList = _list.map((item) => item['index'] as String).toList();
+    return MyButton(
+      text: 'Capsule Index',
+      isExpanded: true,
+      size: MyButtonSize.large,
+      type: MyButtonType.outline,
+      onTap: () {
+        Navigator.of(context).push(
+          MySlidePopupRoute(
+            slideTransitionFrom: MySlideFrom.right,
+            modalTop: renderBox?.size.height,
+            builder: (context) {
+              return ExamplePage(
+                title: 'Capsule Index',
+                exampleCodeGroup: '',
+                showSingleChild: true,
+                singleChild: (context) {
+                  return Container(
+                    color: context.colorScheme.background,
+                    child: MyIndexes(
+                      indexList: indexList,
+                      capsuleTheme: true,
+                      builder: (context, index) {
+                        final list =
+                            _list.firstWhere(
+                                  (element) => element['index'] == index,
+                                )['children']
+                                as List<String>;
+                        return MyCellGroup(
+                          cells: list.map((e) => MyCell(title: e)).toList(),
+                        );
+                      },
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildCustomIndexes(BuildContext context) {
+    final renderBox =
+        navBarkey.currentContext?.findRenderObject() as RenderBox?;
+    final indexList = _list.map((item) => item['index'] as String).toList();
+    return MyButton(
+      text: '自定义索引',
+      isExpanded: true,
+      size: MyButtonSize.large,
+      type: MyButtonType.outline,
+      onTap: () {
+        Navigator.of(context).push(
+          MySlidePopupRoute(
+            slideTransitionFrom: MySlideFrom.right,
+            modalTop: renderBox?.size.height,
+            builder: (context) {
+              return Container(
+                color: Colors.white,
+                child: MyIndexes(
+                  indexList: indexList,
+                  indexBuilder: (context, index, isActive) {
+                    return Text(
+                      '自定义 $index',
+                      style: TextStyle(
+                        color: isActive ? Colors.red : Colors.black,
+                      ),
+                    );
+                  },
+                  builder: (context, index) {
+                    final list =
+                        _list.firstWhere(
+                              (element) => element['index'] == index,
+                            )['children']
+                            as List<String>;
+                    return MyCellGroup(
+                      cells: list.map((e) => MyCell(title: e)).toList(),
+                    );
+                  },
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
 }

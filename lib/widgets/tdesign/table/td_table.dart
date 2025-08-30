@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../checkbox/td_check_box.dart';
-import '../empty/td_empty.dart';
-import '../image/td_image.dart';
-import '../loading/my_loader.dart';
-import '../text/my_text.dart';
 
 enum TDTableColFixed { left, right, none }
 
@@ -16,6 +11,7 @@ typedef OnScroll = void Function(ScrollController controller);
 typedef OnSelect = void Function(List<dynamic>? data);
 typedef OnRowSelect = void Function(int index, bool checked);
 typedef SelectableFunc = bool Function(int index, Json? row);
+typedef RowCheckFunc = bool Function(int index, Json row);
 
 class TDTableCol {
   TDTableCol({
@@ -30,6 +26,7 @@ class TDTableCol {
     this.sortable = false,
     this.selection,
     this.selectable,
+    this.checked,
   });
 
   /// Whether to display a checkbox in the row, invalid when customizing columns
@@ -55,6 +52,9 @@ class TDTableCol {
 
   /// Whether the CheckBox of the current row is selectable, only selection: true is valid
   SelectableFunc? selectable;
+
+  /// Is the current row selected ?
+  RowCheckFunc? checked;
 
   double? get widthPx => width;
 }
@@ -131,6 +131,8 @@ class TDTableState extends State<TDTable> {
   bool? _sortable;
   String? _sortKey;
   int _hasChecked = 0;
+  int _totalSelectable = 0;
+  late TDTableCol _selectableCol;
   late List<bool> _checkedList;
   final _scrollController = ScrollController();
 
@@ -316,6 +318,7 @@ class TDTableState extends State<TDTable> {
             }
             widget.onSelect?.call(selectList);
             widget.onRowSelect?.call(index, checked);
+            print('!!!!::::${_hasChecked}');
           });
         },
       );
@@ -323,7 +326,7 @@ class TDTableState extends State<TDTable> {
       if (isHeader) {
         checkBox = TDCheckbox(
           id: 'header',
-          checked: _hasChecked == widget.data!.length,
+          checked: _hasChecked == _totalSelectable,
           customIconBuilder: (context, checked) {
             if (_hasChecked == 0) {
               return Icon(
@@ -332,16 +335,20 @@ class TDTableState extends State<TDTable> {
                 color: ThemeColors.neutral.shade700,
               );
             }
-            final allCheck = _hasChecked >= widget.data!.length;
+            final allCheck = _hasChecked >= _totalSelectable;
             final halfSelected =
                 _hasChecked > 0 && _hasChecked < widget.data!.length;
             return getAllIcon(allCheck, halfSelected);
           },
           onCheckBoxChanged: (checked) {
             setState(() {
-              _hasChecked = checked ? widget.data!.length : 0;
+              _hasChecked = checked ? _totalSelectable : 0;
               for (var i = 0; i < widget.data!.length; i++) {
                 _checkedList[i] = checked;
+                // Unselect rows where selectable == false
+                if (_selectableCol.selectable!(i, widget.data![i])) {
+                  _checkedList[i] = checked;
+                }
               }
               widget.onSelect?.call(checked ? widget.data : []);
             });
@@ -486,7 +493,37 @@ class TDTableState extends State<TDTable> {
     _scrollController.addListener(() {
       widget.onScroll?.call(_scrollController);
     });
+    _initCols();
+  }
+
+  @override
+  void didUpdateWidget(covariant TDTable oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _initCols();
+  }
+
+  void _initCols() {
+    _totalSelectable = 0;
+    _hasChecked = 0;
     _checkedList = List.generate(widget.data?.length ?? 0, (index) => false);
+    final cols = widget.columns.where((col) => col.selection ?? false);
+    if (cols.length > 1) {
+      throw FlutterError('selectable column must be only one');
+    }
+    if (widget.data != null && cols.isNotEmpty) {
+      _selectableCol = cols.first;
+      final data = widget.data!;
+      for (var i = 0; i < data.length; i++) {
+        final check = _selectableCol.checked?.call(i, data[i]) ?? false;
+        _checkedList[i] = check;
+        if (check) {
+          _hasChecked++;
+        }
+        if (_selectableCol.selectable?.call(i, data[i]) ?? false) {
+          _totalSelectable++;
+        }
+      }
+    }
   }
 
   Widget _getFixedTable(BuildContext context) {
@@ -666,6 +703,7 @@ class TDTableState extends State<TDTable> {
           : halfSelected
           ? Icons.indeterminate_check_box_rounded
           : Icons.circle,
+          // checked ? TDIcons.check_rectangle_filled : halfSelected ? TDIcons.minus_rectangle_filled : TDIcons.check_rectangle,
       size: 16,
       color:
           (checked || halfSelected)

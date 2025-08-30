@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../../../extensions/iterable/index.dart';
-import '../../custom/index.dart';
-import '../text/my_text.dart';
 
 enum TDAvatarSize { large, medium, small }
 
@@ -88,7 +85,7 @@ class TDAvatar extends StatelessWidget {
           TDAvatarSize.large => context.titleLarge,
           TDAvatarSize.medium => context.titleMedium,
           TDAvatarSize.small => context.titleSmall,
-        }?.copyWith(color: textColor);
+        }.copyWith(color: textColor);
   }
 
   double _getIconWidth() {

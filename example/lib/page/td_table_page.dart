@@ -384,6 +384,9 @@ class TDTablePage extends StatelessWidget {
       columns: [
         TDTableCol(
           selection: true,
+          checked: (index, row) {
+            return index == 0;
+          },
           width: 50,
           selectable: (index, row) {
             return index % 2 == 0;

@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-
 import '../../../index.dart';
-import '../sidebar/my_sidebar.dart';
-import '../sidebar/my_sidebar_item.dart';
-import '../text/my_text.dart';
 
 typedef TDTreeSelectChangeEvent = void Function(List<dynamic>, int level);
 
@@ -13,6 +9,8 @@ class TDSelectOption {
     required this.value,
     this.children = const [],
     this.multiple = false,
+    this.maxLines = 1,
+    this.columnWidth,
   });
 
   final String label;
@@ -22,6 +20,10 @@ class TDSelectOption {
   List<TDSelectOption> children;
 
   final bool multiple;
+
+  final int maxLines;
+
+  final double? columnWidth;
 }
 
 enum TDTreeSelectStyle { normal, outline }
@@ -122,33 +124,73 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        SizedBox(
-          width: 106,
-          child: MySideBar(
-            height: widget.height,
-            value: firstValue,
-            style:
+        Container(
+          width: _getLevelWidth(widget.options, 1) ?? 106,
+          height: widget.height,
+          decoration: BoxDecoration(
+            color:
                 widget.style == TDTreeSelectStyle.outline
-                    ? MySideBarStyle.outline
-                    : MySideBarStyle.normal,
-            children:
-                widget.options
-                    .map(
-                      (ele) =>
-                          MySideBarItem(value: ele.value, label: ele.label),
-                    )
-                    .toList(),
-            onSelected: (value) {
-              setState(() {
-                if (values.isEmpty) {
-                  values.add(value);
-                } else {
-                  values = [value];
-                  if (controller2.hasClients) controller2.jumpTo(0);
-                }
+                    ? Colors.white
+                    : const Color(0xFFF6F6F6),
+            border:
+                widget.style == TDTreeSelectStyle.outline
+                    ? Border(right: BorderSide(color: Colors.grey.shade200))
+                    : null,
+          ),
+          child: ListView.builder(
+            itemCount: widget.options.length,
+            itemBuilder: (context, index) {
+              final option = widget.options[index];
+              final isSelected = firstValue == option.value;
 
-                widget.onChange?.call(values, 1);
-              });
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    if (values.isEmpty) {
+                      values.add(option.value);
+                    } else {
+                      values = [option.value];
+                      if (controller2.hasClients) controller2.jumpTo(0);
+                    }
+                    widget.onChange?.call(values, 1);
+                  });
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 16,
+                  ),
+                  decoration: BoxDecoration(
+                    color: isSelected ? Colors.white : null,
+                    border:
+                        isSelected && widget.style == TDTreeSelectStyle.outline
+                            ? Border(
+                              left: BorderSide(
+                                color: context.colorScheme.primary,
+                                width: 3,
+                              ),
+                            )
+                            : null,
+                  ),
+                  child: Text(
+                    option.label,
+                    maxLines: option.maxLines,
+                    overflow:
+                        option.maxLines == 1
+                            ? TextOverflow.ellipsis
+                            : TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color:
+                          isSelected
+                              ? context.colorScheme.primary
+                              : const Color(0xFF333333),
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.normal,
+                    ),
+                  ),
+                ),
+              );
             },
           ),
         ),
@@ -164,21 +206,42 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
   }
 
   Widget _buildRightParts(BuildContext context) {
-    return Visibility(
-      visible: maxLevel() >= 2,
-      child:
-          maxLevel() == 2
-              ? Container(child: _buildNextColumn(context))
-              : Row(
-                children: [
-                  SizedBox(
-                    width: 103,
-                    child: _buildNextColumn(context, lastColumn: false),
-                  ),
-                  Expanded(child: _buildNextColumn(context, level: 3)),
-                ],
-              ),
+    // Determine whether the third-level menu should be displayed
+    final showThirdLevel =
+        values.length >= 2 &&
+        secondOptions.any(
+          (opt) => opt.value == secondValue && opt.children.isNotEmpty,
+        );
+
+    return Row(
+      children: [
+        if (showThirdLevel)
+          SizedBox(
+            width: _getLevelWidth(secondOptions, 2) ?? 103,
+            child: _buildNextColumn(context, lastColumn: false),
+          )
+        else
+          Expanded(child: _buildNextColumn(context)),
+
+        if (showThirdLevel)
+          //Third-level menu
+          _getLevelWidth(thirdOptions, 3) != null
+              ? SizedBox(
+                width: _getLevelWidth(thirdOptions, 3),
+                child: _buildNextColumn(context, level: 3),
+              )
+              : Expanded(child: _buildNextColumn(context, level: 3)),
+      ],
     );
+  }
+
+  double? _getLevelWidth(List<TDSelectOption> options, int level) {
+    for (final option in options) {
+      if (option.columnWidth != null) {
+        return option.columnWidth;
+      }
+    }
+    return null;
   }
 
   Widget _buildNextColumn(
@@ -187,142 +250,156 @@ class _TDTreeSelectState extends State<TDTreeSelect> {
     bool lastColumn = true,
   }) {
     final displayOptions = level == 2 ? secondOptions : thirdOptions;
-    return MediaQuery.removePadding(
-      context: context,
-      removeTop: true,
-      removeBottom: true,
-      child: ListView.builder(
-        controller: level == 2 ? controller2 : controller3,
-        itemExtent: 56,
-        itemCount: displayOptions.length,
-        itemBuilder: (BuildContext ctx, int index) {
-          final currentValue = displayOptions[index].value;
 
-          final isMultiple =
-              widget.multiple
-                  ? widget.multiple
-                  : displayOptions[index].multiple;
-
-          var selected = false;
-          if (isMultiple) {
-            if (level == 2) {
-              if (maxLevel() == 2) {
-                selected =
-                    secondValue != null &&
-                    (secondValue as List<int>).contains(currentValue);
-              } else {
-                selected = secondValue == currentValue;
-              }
-            } else {
-              selected =
-                  thirdValue != null &&
-                  (thirdValue as List<int>).contains(currentValue);
-            }
-          } else {
-            selected = (level == 2 ? secondValue : thirdValue) == currentValue;
-          }
-
-          return GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            onTap: () {
-              setState(() {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return MediaQuery.removePadding(
+          context: context,
+          removeTop: true,
+          removeBottom: true,
+          child: ListView.builder(
+            controller: level == 2 ? controller2 : controller3,
+            itemCount: displayOptions.length,
+            itemBuilder: (BuildContext ctx, int index) {
+              final currentValue = displayOptions[index].value;
+              final isMultiple =
+                  widget.multiple
+                      ? widget.multiple
+                      : displayOptions[index].multiple;
+              final maxLines = displayOptions[index].maxLines;
+              var selected = false;
+              if (isMultiple) {
                 if (level == 2) {
-                  switch (values.length) {
-                    case 1:
-                      values.add(isMultiple ? [currentValue] : currentValue);
-                    case 2:
-                      if (isMultiple) {
-                        final hasContains = (values[1] as List<int>).contains(
-                          currentValue,
-                        );
-                        if (hasContains) {
-                          (values[1] as List<int>).remove(currentValue);
-                        } else {
-                          (values[1] as List<int>).add(currentValue);
-                        }
-                      } else {
-                        values[1] = currentValue;
-                      }
-                      if (controller3.hasClients) {
-                        controller3.jumpTo(0);
-                      }
-                    default:
-                      values[1] = currentValue;
-                      values.removeLast();
-                      if (controller3.hasClients) {
-                        controller3.jumpTo(0);
-                      }
+                  if (maxLevel() == 2) {
+                    selected =
+                        secondValue != null &&
+                        (secondValue as List<int>).contains(currentValue);
+                  } else {
+                    selected = secondValue == currentValue;
                   }
                 } else {
-                  switch (values.length) {
-                    case 1:
-                    case 2:
-                      values.add(isMultiple ? [currentValue] : currentValue);
-                    default:
-                      if (isMultiple) {
-                        final hasContains = (values[2] as List<int>).contains(
-                          currentValue,
-                        );
-                        if (hasContains) {
-                          (values[2] as List<int>).remove(currentValue);
-                        } else {
-                          (values[2] as List<int>).add(currentValue);
+                  selected =
+                      thirdValue != null &&
+                      (thirdValue as List<int>).contains(currentValue);
+                }
+              } else {
+                selected =
+                    (level == 2 ? secondValue : thirdValue) == currentValue;
+              }
+
+              return Container(
+                constraints: BoxConstraints(
+                  minHeight: 56,
+                  maxWidth: constraints.maxWidth,
+                ),
+                child: GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () {
+                    setState(() {
+                      if (level == 2) {
+                        switch (values.length) {
+                          case 1:
+                            values.add(
+                              isMultiple ? [currentValue] : currentValue,
+                            );
+                          case 2:
+                            if (isMultiple) {
+                              final hasContains = (values[1] as List<int>)
+                                  .contains(currentValue);
+                              if (hasContains) {
+                                (values[1] as List<int>).remove(currentValue);
+                              } else {
+                                (values[1] as List<int>).add(currentValue);
+                              }
+                            } else {
+                              values[1] = currentValue;
+                            }
+                            if (controller3.hasClients) controller3.jumpTo(0);
+                          default:
+                            values[1] = currentValue;
+                            values.removeLast();
+                            if (controller3.hasClients) controller3.jumpTo(0);
                         }
                       } else {
-                        values[2] = currentValue;
+                        switch (values.length) {
+                          case 1:
+                          case 2:
+                            values.add(
+                              isMultiple ? [currentValue] : currentValue,
+                            );
+                          default:
+                            if (isMultiple) {
+                              final hasContains = (values[2] as List<int>)
+                                  .contains(currentValue);
+                              if (hasContains) {
+                                (values[2] as List<int>).remove(currentValue);
+                              } else {
+                                (values[2] as List<int>).add(currentValue);
+                              }
+                            } else {
+                              values[2] = currentValue;
+                            }
+                        }
                       }
-                  }
-                }
-
-                widget.onChange?.call(values, level);
-              });
-            },
-            child: SizedBox(
-              height: 56,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      top: 16,
-                      left: 16,
-                      bottom: 16,
-                    ),
-                    child: MyText(
-                      displayOptions[index].label,
-                      textColor:
-                          (!lastColumn && selected)
-                              ? ThemeColors.blue.shade600
-                              : const Color.fromRGBO(0, 0, 0, 0.9),
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight:
-                            (!lastColumn && selected)
-                                ? FontWeight.w600
-                                : FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                  Visibility(
-                    visible: lastColumn && selected,
-                    child: SizedBox(
-                      width: 56,
-                      height: 56,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Icon(
-                          Icons.check_rounded,
-                          color: ThemeColors.blue.shade600,
+                      widget.onChange?.call(values, level);
+                    });
+                  },
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minWidth: constraints.maxWidth),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              top: 16,
+                              left: 16,
+                              bottom: 16,
+                            ),
+                            child: Text(
+                              displayOptions[index].label,
+                              maxLines: maxLines,
+                              overflow:
+                                  maxLines == 1
+                                      ? TextOverflow.ellipsis
+                                      : TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color:
+                                    (!lastColumn && selected)
+                                        ? context.colorScheme.primary
+                                        : const Color.fromRGBO(0, 0, 0, 0.9),
+                                fontWeight:
+                                    (!lastColumn && selected)
+                                        ? FontWeight.w600
+                                        : FontWeight.w400,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                        Visibility(
+                          visible: lastColumn && selected,
+                          child: SizedBox(
+                            width: 56,
+                            height: 56,
+                            child: Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Icon(
+                                Icons.check_rounded,
+                                color: context.colorScheme.primary,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
+                ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

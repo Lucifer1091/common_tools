@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -11,7 +13,25 @@ enum TDStepperIconType { remove, add }
 
 enum TDStepperOverlimitType { minus, plus }
 
+enum TDStepperEventType { cleanValue }
+
 typedef TDStepperOverlimitFunction = void Function(TDStepperOverlimitType type);
+
+class TDStepperController {
+  _TDStepperState? _state;
+
+  int _value = 0;
+  int get value => _value;
+
+  set value(int value) {
+    _value = value;
+    _state?.updateUI();
+  }
+
+  void _bindState(_TDStepperState _tdStepperState) {
+    _state = _tdStepperState;
+  }
+}
 
 class TDStepper extends StatefulWidget {
   const TDStepper({
@@ -19,6 +39,7 @@ class TDStepper extends StatefulWidget {
     this.disableInput = false,
     this.disabled = false,
     this.inputWidth,
+    this.eventController,
     this.max = 100,
     this.min = 0,
     this.size = TDStepperSize.medium,
@@ -29,6 +50,7 @@ class TDStepper extends StatefulWidget {
     this.onBlur,
     this.onChange,
     this.onOverlimit,
+    this.controller,
   });
 
   final bool disableInput;
@@ -57,20 +79,42 @@ class TDStepper extends StatefulWidget {
 
   final TDStepperOverlimitFunction? onOverlimit;
 
+  final StreamController<TDStepperEventType>? eventController;
+
+  final TDStepperController? controller;
+
   @override
   State<TDStepper> createState() => _TDStepperState();
 }
 
 class _TDStepperState extends State<TDStepper> {
   late int value;
-  late TextEditingController _controller;
+  late TDStepperController _controller;
+  late TextEditingController _textController;
   final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    value = widget.value ?? widget.defaultValue ?? 0;
-    _controller = TextEditingController(text: value.toString());
+    if (widget.controller != null) {
+      _controller = widget.controller!;
+    } else {
+      _controller =
+          TDStepperController()
+            ..value = widget.value ?? widget.defaultValue ?? 0;
+    }
+    _controller._bindState(this);
+
+    if (widget.eventController != null) {
+      widget.eventController?.stream.listen((TDStepperEventType event) {
+        if (event == TDStepperEventType.cleanValue) {
+          cleanValue();
+        }
+      });
+    }
+    _textController = TextEditingController(
+      text: _controller._value.toString(),
+    );
 
     _focusNode.addListener(() {
       if (!_focusNode.hasFocus) widget.onBlur?.call();
@@ -79,7 +123,7 @@ class _TDStepperState extends State<TDStepper> {
 
   @override
   void dispose() {
-    _controller.dispose();
+    _textController.dispose();
     _focusNode.dispose();
     super.dispose();
   }
@@ -97,7 +141,7 @@ class _TDStepperState extends State<TDStepper> {
   }
 
   double _getTextWidth() {
-    final textLength = value.toString().length;
+    final textLength = _controller._value.toString().length;
     return textLength < 4 ? 0 : (textLength - 4) * _getFontSize();
   }
 
@@ -132,10 +176,10 @@ class _TDStepperState extends State<TDStepper> {
   }
 
   void onAdd() {
-    if (value >= widget.max) return;
+    if (_controller._value >= widget.max) return;
 
-    if (value + widget.step > widget.max) {
-      setState(() => value = widget.max);
+    if (_controller._value + widget.step > widget.max) {
+      setState(() => _controller._value = widget.max);
 
       widget.onOverlimit?.call(TDStepperOverlimitType.plus);
 
@@ -144,16 +188,16 @@ class _TDStepperState extends State<TDStepper> {
       return;
     }
 
-    setState(() => value += widget.step);
+    setState(() => _controller._value += widget.step);
 
     renderNumber();
   }
 
   void onReduce() {
-    if (value <= widget.min) return;
+    if (_controller._value <= widget.min) return;
 
-    if (value - widget.step < widget.min) {
-      setState(() => value = widget.min);
+    if (_controller._value - widget.step < widget.min) {
+      setState(() => _controller._value = widget.min);
 
       widget.onOverlimit?.call(TDStepperOverlimitType.minus);
 
@@ -162,21 +206,32 @@ class _TDStepperState extends State<TDStepper> {
       return;
     }
 
-    setState(() => value -= widget.step);
+    setState(() => _controller._value -= widget.step);
 
     renderNumber();
   }
 
-  void renderNumber() {
-    _controller.value = TextEditingValue(
-      text: value.toString(),
+  void cleanValue() {
+    _controller._value = 0;
+    _textController.value = TextEditingValue(
+      text: _controller._value.toString(),
       selection: TextSelection.fromPosition(
-        TextPosition(offset: value.toString().length),
+        TextPosition(offset: _controller._value.toString().length),
+      ),
+    );
+    _focusNode.unfocus();
+  }
+
+  void renderNumber() {
+    _textController.value = TextEditingValue(
+      text: _controller._value.toString(),
+      selection: TextSelection.fromPosition(
+        TextPosition(offset: _controller._value.toString().length),
       ),
     );
     _focusNode.unfocus();
 
-    widget.onChange?.call(value);
+    widget.onChange?.call(_controller._value);
   }
 
   @override
@@ -185,7 +240,7 @@ class _TDStepperState extends State<TDStepper> {
       children: [
         TDStepperIconButton(
           type: TDStepperIconType.remove,
-          disabled: widget.disabled || value <= widget.min,
+          disabled: widget.disabled || _controller._value <= widget.min,
           theme: widget.theme,
           size: widget.size,
           onTap: onReduce,
@@ -217,7 +272,7 @@ class _TDStepperState extends State<TDStepper> {
                   height: MyPlatform.isWeb ? _getFontSize() : null,
                   padding: const EdgeInsets.symmetric(vertical: 2),
                   child: TextField(
-                    controller: _controller,
+                    controller: _textController,
                     enabled: !widget.disabled && !widget.disableInput,
                     focusNode: _focusNode,
                     style: TextStyle(
@@ -240,16 +295,16 @@ class _TDStepperState extends State<TDStepper> {
                       TextInputFormatter.withFunction((oldValue, newValue) {
                         try {
                           if (newValue.text == '') {
-                            setState(() => value = widget.min);
+                            setState(() => _controller._value = widget.min);
 
                             widget.onOverlimit?.call(
                               TDStepperOverlimitType.minus,
                             );
 
                             return newValue.copyWith(
-                              text: value.toString(),
+                              text: _controller._value.toString(),
                               selection: TextSelection.collapsed(
-                                offset: value.toString().length,
+                                offset: _controller._value.toString().length,
                               ),
                             );
                           }
@@ -257,24 +312,24 @@ class _TDStepperState extends State<TDStepper> {
                           final newNum = int.parse(newValue.text);
 
                           if (newNum < widget.min) {
-                            setState(() => value = widget.min);
+                            setState(() => _controller._value = widget.min);
 
                             widget.onOverlimit?.call(
                               TDStepperOverlimitType.minus,
                             );
                           } else if (newNum > widget.max) {
-                            setState(() => value = widget.max);
+                            setState(() => _controller._value = widget.max);
                             widget.onOverlimit?.call(
                               TDStepperOverlimitType.plus,
                             );
                           } else {
-                            setState(() => value = newNum);
+                            setState(() => _controller._value = newNum);
                           }
 
                           return newValue.copyWith(
-                            text: value.toString(),
+                            text: _controller._value.toString(),
                             selection: TextSelection.collapsed(
-                              offset: value.toString().length,
+                              offset: _controller._value.toString().length,
                             ),
                           );
                         } catch (e) {
@@ -294,13 +349,24 @@ class _TDStepperState extends State<TDStepper> {
         ),
         TDStepperIconButton(
           type: TDStepperIconType.add,
-          disabled: widget.disabled || value >= widget.max,
+          disabled: widget.disabled || _controller._value >= widget.max,
           theme: widget.theme,
           size: widget.size,
           onTap: onAdd,
         ),
       ],
     );
+  }
+
+  void updateUI() {
+    if (mounted) {
+      _textController.value = TextEditingValue(
+        text: _controller._value.toString(),
+        selection: TextSelection.fromPosition(
+          TextPosition(offset: _controller._value.toString().length),
+        ),
+      );
+    }
   }
 }
 

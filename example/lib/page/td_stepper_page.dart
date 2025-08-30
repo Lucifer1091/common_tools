@@ -5,7 +5,7 @@ import 'package:common_tools/index.dart';
 import '../base/example_widget.dart';
 
 class TDStepperPage extends StatefulWidget {
-  const TDStepperPage({Key? key}) : super(key: key);
+  const TDStepperPage({super.key});
 
   @override
   State<TDStepperPage> createState() => _TDStepperPageState();
@@ -55,6 +55,7 @@ class _TDStepperPageState extends State<TDStepperPage> {
             ],
           ),
         ],
+        test: [ExampleItem(desc: '自定义stepValue', builder: _customStepperValue)],
       ),
     );
   }
@@ -121,6 +122,22 @@ class _TDStepperPageState extends State<TDStepperPage> {
               .toList(),
         ),
       ),
+    );
+  }
+
+  var controller = TDStepperController()..value = 1;
+  Widget _customStepperValue(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        TDStepper(theme: TDStepperTheme.filled, controller: controller),
+        MyButton(
+          text: 'value * 2',
+          onTap: () {
+            controller.value *= 2;
+          },
+        ),
+      ],
     );
   }
 }
