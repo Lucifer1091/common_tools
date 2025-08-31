@@ -25,7 +25,7 @@ const double _kDefaultTabBarHeight = 56;
 /// Expand item pop-up window pop-up animation time
 const Duration _kPopupMenuDuration = Duration(milliseconds: 10);
 
-enum TDBottomTabBarBasicType {
+enum MyBottomTabBarBasicType {
   /// Single-level plain text tab bar
   text,
 
@@ -39,7 +39,7 @@ enum TDBottomTabBarBasicType {
   expansionPanel,
 }
 
-enum TDBottomTabBarComponentType {
+enum MyBottomTabBarComponentType {
   /// Normal Stlye
   normal,
 
@@ -47,10 +47,10 @@ enum TDBottomTabBarComponentType {
   label,
 }
 
-enum TDBottomTabBarOutlineType { filled, capsule }
+enum MyBottomTabBarOutlineType { filled, capsule }
 
-class BadgeConfig {
-  BadgeConfig({
+class MyBadgeConfig {
+  MyBadgeConfig({
     required this.showBadge,
     MyBadge? badge,
     this.badgeTopOffset,
@@ -67,14 +67,14 @@ class BadgeConfig {
 }
 
 /// Single tab configuration
-class TDBottomTabBarTabConfig {
-  TDBottomTabBarTabConfig({
+class MyBottomTabBarTabConfig {
+  MyBottomTabBarTabConfig({
     required this.onTap,
     this.selectedIcon,
     this.unselectedIcon,
-    this.tabText,
-    this.selectTabTextStyle,
-    this.unselectTabTextStyle,
+    this.label,
+    this.selectedStyle,
+    this.unselectedStyle,
     this.badgeConfig,
     this.popUpButtonConfig,
     this.onLongPress,
@@ -95,15 +95,15 @@ class TDBottomTabBarTabConfig {
 
   final Widget? unselectedIcon;
 
-  final String? tabText;
+  final String? label;
 
-  final TextStyle? selectTabTextStyle;
+  final TextStyle? selectedStyle;
 
-  final TextStyle? unselectTabTextStyle;
+  final TextStyle? unselectedStyle;
 
   final GestureTapCallback? onTap;
 
-  final BadgeConfig? badgeConfig;
+  final MyBadgeConfig? badgeConfig;
 
   final TDBottomTabBarPopUpBtnConfig? popUpButtonConfig;
 
@@ -112,13 +112,13 @@ class TDBottomTabBarTabConfig {
   final GestureLongPressCallback? onLongPress;
 }
 
-class TDBottomTabBar extends StatefulWidget {
-  TDBottomTabBar(
+class MyBottomTabBar extends StatefulWidget {
+  MyBottomTabBar(
     this.basicType, {
     required this.navigationTabs,
     super.key,
-    this.componentType = TDBottomTabBarComponentType.label,
-    this.outlineType = TDBottomTabBarOutlineType.filled,
+    this.componentType = MyBottomTabBarComponentType.label,
+    this.outlineType = MyBottomTabBarOutlineType.filled,
     this.barHeight = _kDefaultTabBarHeight,
     this.useVerticalDivider,
     this.dividerHeight,
@@ -137,16 +137,16 @@ class TDBottomTabBar extends StatefulWidget {
          if (navigationTabs.isEmpty) {
            throw FlutterError('[TDBottomTabBar] please set at least one tab!');
          }
-         if (basicType == TDBottomTabBarBasicType.text) {
+         if (basicType == MyBottomTabBarBasicType.text) {
            for (final item in navigationTabs) {
-             if (item.tabText == null) {
+             if (item.label == null) {
                throw FlutterError(
                  '[TDBottomTabBar] type is TDBottomBarType.text, but not set tabText.',
                );
              }
            }
          }
-         if (basicType == TDBottomTabBarBasicType.icon) {
+         if (basicType == MyBottomTabBarBasicType.icon) {
            for (final item in navigationTabs) {
              if (item.selectedIcon == null || item.unselectedIcon == null) {
                throw FlutterError(
@@ -155,9 +155,9 @@ class TDBottomTabBar extends StatefulWidget {
              }
            }
          }
-         if (basicType == TDBottomTabBarBasicType.iconText) {
+         if (basicType == MyBottomTabBarBasicType.iconText) {
            for (final item in navigationTabs) {
-             if (item.tabText == null ||
+             if (item.label == null ||
                  item.selectedIcon == null ||
                  item.unselectedIcon == null) {
                throw FlutterError(
@@ -175,13 +175,13 @@ class TDBottomTabBar extends StatefulWidget {
          return true;
        }(), '');
 
-  final TDBottomTabBarBasicType basicType;
+  final MyBottomTabBarBasicType basicType;
 
-  final TDBottomTabBarComponentType? componentType;
+  final MyBottomTabBarComponentType? componentType;
 
-  final TDBottomTabBarOutlineType? outlineType;
+  final MyBottomTabBarOutlineType? outlineType;
 
-  final List<TDBottomTabBarTabConfig> navigationTabs;
+  final List<MyBottomTabBarTabConfig> navigationTabs;
 
   final double? barHeight;
 
@@ -212,10 +212,10 @@ class TDBottomTabBar extends StatefulWidget {
   final bool needInkWell;
 
   @override
-  State<TDBottomTabBar> createState() => _TDBottomTabBarState();
+  State<MyBottomTabBar> createState() => _MyBottomTabBarState();
 }
 
-class _TDBottomTabBarState extends State<TDBottomTabBar> {
+class _MyBottomTabBarState extends State<MyBottomTabBar> {
   int _selectedIndex = 0;
 
   @override
@@ -225,7 +225,7 @@ class _TDBottomTabBarState extends State<TDBottomTabBar> {
   }
 
   @override
-  void didUpdateWidget(covariant TDBottomTabBar oldWidget) {
+  void didUpdateWidget(covariant MyBottomTabBar oldWidget) {
     super.didUpdateWidget(oldWidget);
     _selectedIndex = widget.currentIndex ?? _selectedIndex;
   }
@@ -233,7 +233,7 @@ class _TDBottomTabBarState extends State<TDBottomTabBar> {
   @override
   Widget build(BuildContext context) {
     final isCapsuleOutlineType =
-        widget.outlineType == TDBottomTabBarOutlineType.capsule;
+        widget.outlineType == MyBottomTabBarOutlineType.capsule;
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         /// -2 is to increase the border
@@ -253,7 +253,7 @@ class _TDBottomTabBarState extends State<TDBottomTabBar> {
                   ? const EdgeInsets.symmetric(horizontal: 16)
                   : null,
           decoration: BoxDecoration(
-            color: widget.backgroundColor ?? Colors.white,
+            color: widget.backgroundColor ?? context.colorScheme.secondary,
             borderRadius:
                 isCapsuleOutlineType ? BorderRadius.circular(56) : null,
             border:
@@ -262,7 +262,7 @@ class _TDBottomTabBarState extends State<TDBottomTabBar> {
                       top:
                           widget.topBorder ??
                           BorderSide(
-                            color: ThemeColors.neutral.shade200,
+                            color: context.colorScheme.border,
                             width: 0.5,
                           ),
                     )
@@ -310,13 +310,13 @@ class _TDBottomTabBarState extends State<TDBottomTabBar> {
       alignment: Alignment.center,
       padding: EdgeInsets.only(
         top: 7,
-        bottom: widget.basicType == TDBottomTabBarBasicType.iconText ? 5 : 7,
+        bottom: widget.basicType == MyBottomTabBarBasicType.iconText ? 5 : 7,
       ),
-      child: TDBottomTabBarItemWithBadge(
+      child: MyBottomTabBarItemWithBadge(
         basiceType: widget.basicType,
         componentType:
-            widget.componentType ?? TDBottomTabBarComponentType.label,
-        outlineType: widget.outlineType ?? TDBottomTabBarOutlineType.filled,
+            widget.componentType ?? MyBottomTabBarComponentType.label,
+        outlineType: widget.outlineType ?? MyBottomTabBarOutlineType.filled,
         itemConfig: tabItemConfig,
         isSelected: index == _selectedIndex,
         itemHeight: widget.barHeight ?? _kDefaultTabBarHeight,
@@ -326,21 +326,17 @@ class _TDBottomTabBarState extends State<TDBottomTabBar> {
         unselectedBgColor: widget.unselectedBgColor,
         centerDistance: widget.centerDistance ?? 0,
         needInkWell: widget.needInkWell,
-        onTap: () {
-          _onTap(index);
-        },
-        onLongPress: () {
-          tabItemConfig.onLongPress?.call();
-        },
+        onTap: () => _onTap(index),
+        onLongPress: () => tabItemConfig.onLongPress?.call(),
       ),
     );
   }
 
   Widget _verticalDivider() {
-    if (widget.componentType == TDBottomTabBarComponentType.label) {}
+    if (widget.componentType == MyBottomTabBarComponentType.label) {}
     return Visibility(
       visible:
-          widget.componentType != TDBottomTabBarComponentType.label &&
+          widget.componentType != MyBottomTabBarComponentType.label &&
           (widget.useVerticalDivider ?? false),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -359,8 +355,8 @@ class _TDBottomTabBarState extends State<TDBottomTabBar> {
   }
 }
 
-class TDBottomTabBarItemWithBadge extends StatelessWidget {
-  const TDBottomTabBarItemWithBadge({
+class MyBottomTabBarItemWithBadge extends StatelessWidget {
+  const MyBottomTabBarItemWithBadge({
     required this.basiceType,
     required this.componentType,
     required this.outlineType,
@@ -379,16 +375,16 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
   });
 
   /// tab基本类型
-  final TDBottomTabBarBasicType basiceType;
+  final MyBottomTabBarBasicType basiceType;
 
   /// tab选中背景类型
-  final TDBottomTabBarComponentType componentType;
+  final MyBottomTabBarComponentType componentType;
 
   //
-  final TDBottomTabBarOutlineType outlineType;
+  final MyBottomTabBarOutlineType outlineType;
 
   /// 单个tab的属性配置
-  final TDBottomTabBarTabConfig itemConfig;
+  final MyBottomTabBarTabConfig itemConfig;
 
   /// 选中状态
   final bool isSelected;
@@ -435,20 +431,20 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
           children: [
             if (isSelected || unselectedBgColor != null)
               Visibility(
-                visible: componentType == TDBottomTabBarComponentType.label,
+                visible: componentType == MyBottomTabBarComponentType.label,
                 child: Container(
                   /// 设计稿上 tab个数大于3时，左右边距为8，小于等于3时，左右边距为12
                   width: itemWidth - (tabsLength > 3 ? 16 : 24),
                   height:
-                      basiceType == TDBottomTabBarBasicType.text ||
+                      basiceType == MyBottomTabBarBasicType.text ||
                               basiceType ==
-                                  TDBottomTabBarBasicType.expansionPanel
+                                  MyBottomTabBarBasicType.expansionPanel
                           ? 32
                           : null,
                   decoration: BoxDecoration(
                     color:
                         isSelected
-                            ? selectedBgColor ?? ThemeColors.blue.shade50
+                            ? selectedBgColor ?? context.colorScheme.background
                             : unselectedBgColor,
                     borderRadius: const BorderRadius.all(Radius.circular(24)),
                   ),
@@ -461,7 +457,7 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
     );
   }
 
-  Widget _badge(BadgeConfig? badgeConfig) {
+  Widget _badge(MyBadgeConfig? badgeConfig) {
     if (badgeConfig?.showBadge ?? false) {
       if (badgeConfig?.badge != null) {
         return badgeConfig!.badge!;
@@ -472,14 +468,14 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
 
   Widget _constructItem(
     BuildContext context,
-    BadgeConfig? badgeConfig,
+    MyBadgeConfig? badgeConfig,
     bool isInOrOutCapsule,
   ) {
     Widget child = const NoWidget();
-    if (basiceType == TDBottomTabBarBasicType.text) {
+    if (basiceType == MyBottomTabBarBasicType.text) {
       child = _textItem(context, itemConfig, isSelected);
     }
-    if (basiceType == TDBottomTabBarBasicType.expansionPanel) {
+    if (basiceType == MyBottomTabBarBasicType.expansionPanel) {
       if (itemConfig.popUpButtonConfig != null) {
         child = Row(
           mainAxisSize: MainAxisSize.min,
@@ -489,8 +485,8 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
               size: 16,
               color:
                   isSelected
-                      ? ThemeColors.blue.shade600
-                      : ThemeColors.neutral.shade900,
+                      ? context.colorScheme.primary
+                      : context.colorScheme.foreground,
             ),
             const SizedBox(width: 5),
             _textItem(context, itemConfig, isSelected),
@@ -500,13 +496,13 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
         child = _textItem(context, itemConfig, isSelected);
       }
     }
-    if (basiceType == TDBottomTabBarBasicType.icon) {
+    if (basiceType == MyBottomTabBarBasicType.icon) {
       final selectedIcon = itemConfig.selectedIcon;
       final unSelectedIcon = itemConfig.unselectedIcon;
       child = isSelected ? selectedIcon! : unSelectedIcon!;
     }
 
-    if (basiceType == TDBottomTabBarBasicType.iconText) {
+    if (basiceType == MyBottomTabBarBasicType.iconText) {
       final selectedIcon = itemConfig.selectedIcon;
       final unSelectedIcon = itemConfig.unselectedIcon;
       child = Column(
@@ -514,7 +510,7 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
         children: [
           if (isSelected) selectedIcon! else unSelectedIcon!,
           if (centerDistance > 0) SizedBox(height: centerDistance),
-          if (itemConfig.tabText?.isNotEmpty ?? false)
+          if (itemConfig.label?.isNotEmpty ?? false)
             _textItem(context, itemConfig, isSelected),
         ],
       );
@@ -537,24 +533,25 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
 
   Widget _textItem(
     BuildContext context,
-    TDBottomTabBarTabConfig config,
+    MyBottomTabBarTabConfig config,
     bool isSelected,
   ) {
     return MyText(
-      config.tabText,
+      config.label,
       fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-      style:
-          isSelected ? config.selectTabTextStyle : config.unselectTabTextStyle,
+      style: isSelected ? config.selectedStyle : config.unselectedStyle,
       textColor:
-          isSelected ? ThemeColors.blue.shade600 : ThemeColors.neutral.shade900,
+          isSelected
+              ? context.colorScheme.primary
+              : context.colorScheme.foreground,
     );
   }
 
   Widget _buildItem(BuildContext context) {
     final badgeConfig = itemConfig.badgeConfig;
     final isInOrOutCapsule =
-        componentType == TDBottomTabBarComponentType.label ||
-        outlineType == TDBottomTabBarOutlineType.capsule;
+        componentType == MyBottomTabBarComponentType.label ||
+        outlineType == MyBottomTabBarOutlineType.capsule;
 
     final child = Container(
       alignment: Alignment.center,
@@ -562,24 +559,23 @@ class TDBottomTabBarItemWithBadge extends StatelessWidget {
         top: isInOrOutCapsule ? 3.0 : 2.0,
         bottom:
             isInOrOutCapsule
-                ? (basiceType == TDBottomTabBarBasicType.iconText ? 0.0 : 1.0)
+                ? (basiceType == MyBottomTabBarBasicType.iconText ? 0.0 : 1.0)
                 : 0.0,
       ),
       color: Colors.transparent,
       child: _constructItem(context, badgeConfig, isInOrOutCapsule),
     );
 
-    if (!needInkWell) {
-      return child;
-    }
+    if (!needInkWell) return child;
+
     return Material(
       color: Colors.transparent,
       borderRadius: isInOrOutCapsule ? BorderRadius.circular(24) : null,
       child: InkWell(
         borderRadius: isInOrOutCapsule ? BorderRadius.circular(24) : null,
         splashFactory: InkRipple.splashFactory,
-        splashColor: selectedBgColor ?? ThemeColors.blue.shade50,
-        highlightColor: selectedBgColor ?? ThemeColors.blue.shade50,
+        splashColor: selectedBgColor ?? context.colorScheme.primary,
+        highlightColor: selectedBgColor ?? context.colorScheme.primary,
         onTap: () => handleTap(context),
         child: child,
       ),

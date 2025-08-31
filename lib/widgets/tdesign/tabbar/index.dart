@@ -1,1 +1,1 @@
-export 'td_bottom_tab_bar.dart';
+export 'my_bottom_tab_bar.dart';

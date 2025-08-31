@@ -21,10 +21,8 @@ class ExamplePage extends StatefulWidget {
     this.singleChild,
     this.scrollController,
     this.floatingActionButton,
-  }) : assert(
-         children.length > 0 || (showSingleChild && singleChild != null),
-         'children or singleChild must have at least one',
-       );
+    this.bottomNavigationBar
+  });
 
   final String title;
 
@@ -47,6 +45,8 @@ class ExamplePage extends StatefulWidget {
   final ScrollController? scrollController;
 
   final Widget? floatingActionButton;
+
+  final Widget? bottomNavigationBar;
 
   final GlobalKey? navBarKey;
 
@@ -75,6 +75,7 @@ class _ExamplePageState extends State<ExamplePage> {
       floatingActionButton: widget.floatingActionButton,
       backgroundColor: context.colorScheme.background,
       appBar: MyAppBar(title: widget.title),
+      bottomNavigationBar: widget.bottomNavigationBar,
       body: ScrollbarTheme(
         data: ScrollbarThemeData(
           trackVisibility: WidgetStateProperty.all(true),

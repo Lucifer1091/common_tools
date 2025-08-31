@@ -1,5 +1,7 @@
 library;
 
+import 'dart:ui';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +11,7 @@ import '../../../index.dart';
 
 part 'my_steps_item.dart';
 
-enum MyStepType { indexed, icon, simple, line, steps }
+enum MyStepType { indexed, icon, simple, line, steps, timeline }
 
 enum MyStepState { success, error }
 
@@ -39,7 +41,10 @@ class MySteps extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller0 = controller ?? MyStepController(total: steps.length);
 
-    final direction0 = type == MyStepType.steps ? Axis.vertical : direction;
+    final direction0 =
+        type == MyStepType.steps || type == MyStepType.timeline
+            ? Axis.vertical
+            : direction;
 
     final List<Widget> stepItems =
         steps.asMap().entries.map((item) {
@@ -168,6 +173,8 @@ class MyStepItem {
     this.errorIcon,
     this.customContent,
     this.customTitle,
+    this.time,
+    this.customTime,
   }) : assert(
          title != null ||
              customTitle != null ||
@@ -182,4 +189,6 @@ class MyStepItem {
   final IconData? errorIcon;
   final Widget? customContent;
   final Widget? customTitle;
+  final String? time;
+  final Widget? customTime;
 }

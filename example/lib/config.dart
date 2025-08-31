@@ -129,7 +129,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'NavBar',
       name: 'navbar',
-      pageBuilder: _wrapInheritedTheme((context) => const TDNavBarPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyNavBarPage()),
     ),
     ExamplePageModel(
       text: 'SideBar',
@@ -145,7 +145,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
       text: 'TabBar',
       name: 'tab-bar',
       pageName: 'bottom_tab_bar',
-      pageBuilder: _wrapInheritedTheme((context) => const TDBottomTabBarPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyBottomTabBarPage()),
     ),
     ExamplePageModel(
       text: 'Tabs',

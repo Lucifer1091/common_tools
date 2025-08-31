@@ -17,6 +17,7 @@ export 'indexes/index.dart';
 export 'link/index.dart';
 export 'loading/index.dart';
 export 'message/index.dart';
+export 'navbar/index.dart';
 export 'notice_bar/index.dart';
 export 'picker/index.dart';
 export 'popover/index.dart';

@@ -54,11 +54,25 @@ class _MyStepsItems extends StatelessWidget {
     MyStepSize.extraSmall => 8,
   };
 
+  double get timelineSize => switch (size) {
+    MyStepSize.large => 18,
+    MyStepSize.medium => 16,
+    MyStepSize.small => 14,
+    MyStepSize.extraSmall => 12,
+  };
+
   double get iconMargin => switch (size) {
     MyStepSize.large => 10,
     MyStepSize.medium => 8,
     MyStepSize.small => 8,
     MyStepSize.extraSmall => 8,
+  };
+
+  double get boxConstraints => switch (size) {
+    MyStepSize.large => 120,
+    MyStepSize.medium => 110,
+    MyStepSize.small => 110,
+    MyStepSize.extraSmall => 100,
   };
 
   double get lineHeight => switch (size) {
@@ -82,8 +96,12 @@ class _MyStepsItems extends StatelessWidget {
     MyStepSize.extraSmall => context.bodyMedium,
   }.copyWith(
     fontWeight:
-        (current == index && !readOnly) ? FontWeight.w600 : FontWeight.w400,
-    color: color,
+        type == MyStepType.steps || type == MyStepType.timeline
+            ? FontWeight.w600
+            : (current == index && !readOnly)
+            ? FontWeight.w600
+            : FontWeight.w400,
+    color: type != MyStepType.timeline ? color : null,
   );
 
   TextStyle contentStyle(BuildContext context, Color color) => switch (size) {
@@ -186,7 +204,6 @@ class _MyStepsItems extends StatelessWidget {
       if (type != MyStepType.icon) iconWidget = null;
     }
 
-    // Simple type override
     if (type == MyStepType.simple) {
       iconWidget = null;
       iconDecoration = BoxDecoration(
@@ -199,6 +216,18 @@ class _MyStepsItems extends StatelessWidget {
           shape: BoxShape.circle,
         );
       }
+    }
+
+    if (type == MyStepType.timeline) {
+      bgColor = primary;
+      dividerColor = primary;
+      simpleIconColor = primary;
+      iconWidget = null;
+
+      iconDecoration = BoxDecoration(
+        color: simpleIconColor,
+        shape: BoxShape.circle,
+      );
     }
 
     // Readonly override (applies to all types)
@@ -222,7 +251,7 @@ class _MyStepsItems extends StatelessWidget {
       }
     }
 
-    if (type != MyStepType.simple) {
+    if (type != MyStepType.simple && type != MyStepType.timeline) {
       // Default icon widget if not set
       iconWidget ??= MyText(
         (index + 1).toString(),
@@ -266,13 +295,19 @@ class _MyStepsItems extends StatelessWidget {
     final style = getStepStyle(context);
 
     final iconContainerSize =
-        type == MyStepType.simple ? simpleIconSize : stepSize;
+        type == MyStepType.timeline
+            ? timelineSize
+            : type == MyStepType.simple
+            ? simpleIconSize
+            : stepSize;
+
     final simpleSize =
         type == MyStepType.line
             ? lineHeight * 2
             : type == MyStepType.simple
             ? iconSize
             : iconContainerSize;
+
     final iconMarginBottom =
         type == MyStepType.simple ? iconMargin / 2 : iconMargin;
 
@@ -282,11 +317,41 @@ class _MyStepsItems extends StatelessWidget {
 
     if (direction == Axis.vertical) {
       stepContent = Container(
-        margin: EdgeInsets.only(bottom: iconMargin),
+        margin:
+            type != MyStepType.timeline
+                ? EdgeInsets.only(bottom: iconMargin)
+                : EdgeInsets.zero,
         child: IntrinsicHeight(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if (type == MyStepType.timeline) ...[
+                if (data.customTime != null)
+                  data.customTime!
+                else if (data.time != null && data.time!.isNotEmpty)
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minWidth: boxConstraints,
+                      maxWidth: boxConstraints,
+                    ),
+                    child: Container(
+                      alignment: Alignment.topRight,
+                      margin:
+                          type == MyStepType.timeline
+                              ? EdgeInsets.only(right: iconMargin * 1.5)
+                              : EdgeInsets.zero,
+                      child: MyText(
+                        data.time,
+                        style: titleStyle(
+                          context,
+                          style.titleColor,
+                        ).copyWith(fontWeight: FontWeight.w500),
+                        softWrap: true,
+                        overflow: TextOverflow.visible,
+                      ),
+                    ),
+                  ),
+              ],
               Container(
                 margin: EdgeInsets.only(right: stepRightMargin),
                 width: simpleSize,
@@ -299,24 +364,39 @@ class _MyStepsItems extends StatelessWidget {
                           width: iconContainerSize,
                           height: simpleSize,
                           alignment: Alignment.center,
-                          margin: EdgeInsets.only(bottom: iconMarginBottom),
+                          margin:
+                              type != MyStepType.timeline
+                                  ? EdgeInsets.only(bottom: iconMarginBottom)
+                                  : type == MyStepType.timeline
+                                  ? EdgeInsets.only(top: iconMargin / 2)
+                                  : EdgeInsets.zero,
                           decoration: style.iconDecoration,
                           child: style.iconWidget,
                         ),
-                        Expanded(
-                          child: Opacity(
-                            opacity: index == stepsCount - 1 ? 0 : 1,
-                            child: Container(
-                              width: 1.5,
-                              height: double.infinity,
-                              color:
-                                  style.dividerColor ??
-                                  ((current > index || readOnly)
-                                      ? context.colorScheme.primary
-                                      : context.colorScheme.border),
+                        if (index != stepsCount - 1)
+                          if (type == MyStepType.timeline)
+                            Expanded(
+                              child: _MyTimelineDivider(
+                                thickness: 1.5,
+                                color:
+                                    style.dividerColor ??
+                                    ((current > index || readOnly)
+                                        ? context.colorScheme.primary
+                                        : context.colorScheme.border),
+                                endIndent: -4 - iconMargin,
+                              ),
+                            )
+                          else
+                            Expanded(
+                              child: Container(
+                                width: 1.5,
+                                color:
+                                    style.dividerColor ??
+                                    ((current > index || readOnly)
+                                        ? context.colorScheme.primary
+                                        : context.colorScheme.border),
+                              ),
                             ),
-                          ),
-                        ),
                       ] else
                         Expanded(
                           child: Container(
@@ -344,28 +424,11 @@ class _MyStepsItems extends StatelessWidget {
                             type != MyStepType.steps
                                 ? EdgeInsets.only(bottom: iconMargin / 2)
                                 : EdgeInsets.zero,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: MyText(
-                                data.title,
-                                style: titleStyle(
-                                  context,
-                                  style.titleColor,
-                                ).copyWith(
-                                  fontWeight:
-                                      type == MyStepType.steps
-                                          ? FontWeight.w600
-                                          : null,
-                                  fontSize:
-                                      type == MyStepType.steps ? 18 : null,
-                                ),
-                                softWrap: true,
-                                overflow: TextOverflow.visible,
-                              ),
-                            ),
-                          ],
+                        child: MyText(
+                          data.title,
+                          style: titleStyle(context, style.titleColor),
+                          softWrap: true,
+                          overflow: TextOverflow.visible,
                         ),
                       ),
                     Column(
@@ -381,6 +444,7 @@ class _MyStepsItems extends StatelessWidget {
                           ),
                       ],
                     ),
+                    if (type == MyStepType.timeline) Gap(iconMargin * 1.75),
                   ],
                 ),
               ),
@@ -396,8 +460,8 @@ class _MyStepsItems extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Expanded(
-                  child: Opacity(
-                    opacity: index == 0 ? 0 : 1,
+                  child: Visibility(
+                    visible: index != 0,
                     child: Container(
                       width: double.infinity,
                       height: 1.5,
@@ -418,8 +482,8 @@ class _MyStepsItems extends StatelessWidget {
                   child: style.iconWidget,
                 ),
                 Expanded(
-                  child: Opacity(
-                    opacity: index == stepsCount - 1 ? 0 : 1,
+                  child: Visibility(
+                    visible: index != stepsCount - 1,
                     child: Container(
                       width: double.infinity,
                       height: 1.5,
@@ -476,8 +540,15 @@ class _MyStepsItems extends StatelessWidget {
     }
 
     // Make steps clickable if not readOnly
-    if (!readOnly && onTap != null) {
-      stepContent = InkWell(onTap: () => onTap!(index), child: stepContent);
+    if (type != MyStepType.steps &&
+        type != MyStepType.timeline &&
+        !readOnly &&
+        onTap != null) {
+      stepContent =
+          GestureDetector(
+            onTap: () => onTap!(index),
+            child: stepContent,
+          ).mouseRegion;
     }
 
     return stepContent;
@@ -506,4 +577,64 @@ class _MyStepStyle {
   final Color simpleIconColor;
   final BoxDecoration? iconDecoration;
   final Widget? iconWidget;
+}
+
+class _MyTimelineDividerPainter extends CustomPainter {
+  const _MyTimelineDividerPainter({
+    required this.color,
+    required this.thickness,
+    required this.indent,
+    required this.endIndent,
+  });
+
+  final Color color;
+  final double thickness;
+  final double indent;
+  final double endIndent;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint =
+        Paint()
+          ..color = color
+          ..strokeWidth = thickness
+          ..strokeCap = StrokeCap.square;
+    final start = Offset(size.width / 2, indent);
+    final end = Offset(size.width / 2, size.height - endIndent);
+    canvas.drawLine(start, end, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _MyTimelineDividerPainter oldDelegate) {
+    return oldDelegate.color != color ||
+        oldDelegate.thickness != thickness ||
+        oldDelegate.indent != indent ||
+        oldDelegate.endIndent != endIndent;
+  }
+}
+
+class _MyTimelineDivider extends StatelessWidget
+    implements PreferredSizeWidget {
+  const _MyTimelineDivider({this.color, this.thickness, this.endIndent});
+
+  final Color? color;
+  final double? thickness;
+  final double? endIndent;
+
+  @override
+  Size get preferredSize => Size(1, 0);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = MyTheme.of(context);
+
+    return CustomPaint(
+      painter: _MyTimelineDividerPainter(
+        color: color ?? theme.colorScheme.border,
+        thickness: thickness ?? 1,
+        indent: 0,
+        endIndent: endIndent ?? 0,
+      ),
+    );
+  }
 }

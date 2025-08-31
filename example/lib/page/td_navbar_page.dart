@@ -1,246 +1,75 @@
-import 'package:flutter/material.dart';
 import 'package:common_tools/index.dart';
+import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
+
 import '../../base/example_widget.dart';
 
-const titleText = 'Title Character';
+class MyNavBarPage extends StatefulWidget {
+  const MyNavBarPage({super.key});
 
-class TDNavBarPage extends StatelessWidget {
-  const TDNavBarPage({Key? key}) : super(key: key);
+  @override
+  State<MyNavBarPage> createState() => _MyNavBarPageState();
+}
+
+class _MyNavBarPageState extends State<MyNavBarPage> {
+  int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(context),
+      title: tdTitle(),
       exampleCodeGroup: 'navbar',
-      desc: '用于不同页面之间切换或者跳转，位于内容区的上方，系统状态栏的下方。',
+      desc: 'A widget that displays a bar with navigation buttons and labels.',
+      bottomNavigationBar: MyNavBar(
+        currentIndex: _currentIndex,
+        bottombarAlignment: MainAxisAlignment.spaceEvenly,
+        onTap: (i) => setState(() => _currentIndex = i),
+        items: [
+          MyNavBarItem(
+            icon: Icon(LucideIcons.house),
+            title: Text("Home"),
+            selectedColor: Colors.purple,
+          ),
+          MyNavBarItem(
+            icon: Icon(LucideIcons.heart),
+            title: Text("Likes"),
+            selectedColor: Colors.pink,
+          ),
+          MyNavBarItem(
+            icon: Icon(LucideIcons.search),
+            title: Text("Search"),
+            selectedColor: Colors.orange,
+          ),
+          MyNavBarItem(
+            icon: Icon(LucideIcons.user),
+            title: Text("Profile"),
+            selectedColor: Colors.teal,
+          ),
+        ],
+      ),
       children: [
-        // ExampleModule(
-        //   title: 'Component Types',
-        //   children: [
-        //     ExampleItem(desc: '基础H5导航栏', builder: _baseH5Navbar),
-        //     ExampleItem(builder: _leftMultiAction),
-        //     ExampleItem(builder: _rightMultiAction),
-        //     ExampleItem(desc: '带搜索导航栏', builder: _searchNavbar),
-        //     ExampleItem(desc: '带图片导航栏', builder: _logoNavbar),
-        //   ],
-        // ),
-        // ExampleModule(
-        //   title: 'Component Style',
-        //   children: [
-        //     ExampleItem(desc: 'Title对齐', builder: _titleCenterNavbar),
-        //     ExampleItem(builder: _titleLeftNavbar),
-
-        //     ExampleItem(desc: 'Title尺寸', builder: _titleNormalNavbar),
-        //     ExampleItem(builder: _titleBelowNavbar),
-        //     ExampleItem(desc: '自定义颜色', builder: _setBgColorNavbar),
-        //   ],
-        // ),
+        ExampleModule(
+          title: 'Basic Usage',
+          children: [
+            ExampleItem(
+              desc: 'My Lazy Indexed Stack',
+              builder: (context) {
+                return MyIndexedStack(
+                  index: _currentIndex,
+                  animate: false,
+                  children: List.generate(4, (index) {
+                    return Container(
+                      height: 500,
+                      width: 500,
+                      color: MyColors.pick(index),
+                    );
+                  }),
+                );
+              },
+            ),
+          ],
+        ),
       ],
-      // test: [ExampleItem(desc: '底部阴影', builder: _shadowNavbar)],
     );
   }
-
-  // Widget _baseH5Navbar(BuildContext context) {
-  //   return const TDNavBar(
-  //     height: 48,
-  //     titleFontWeight: FontWeight.w600,
-  //     title: titleText,
-  //     screenAdaptation: false,
-  //     useDefaultBack: true,
-  //   );
-  // }
-
-  // Widget _leftMultiAction(BuildContext context) {
-  //   return Padding(
-  //     padding: const EdgeInsets.only(top: 16),
-  //     child: TDNavBar(
-  //       height: 48,
-  //       title: titleText,
-  //       titleFontWeight: FontWeight.w600,
-  //       screenAdaptation: false,
-  //       useDefaultBack: true,
-  //       leftBarItems: [TDNavBarItem(icon: Icons.close, iconSize: 24)],
-  //       rightBarItems: [TDNavBarItem(icon: Icons.ellipsis, iconSize: 24)],
-  //     ),
-  //   );
-  // }
-
-  // Widget _rightMultiAction(BuildContext context) {
-  //   return Padding(
-  //     padding: const EdgeInsets.only(top: 16),
-  //     child: TDNavBar(
-  //       height: 48,
-  //       title: titleText,
-  //       titleFontWeight: FontWeight.w600,
-  //       screenAdaptation: false,
-  //       useDefaultBack: true,
-  //       rightBarItems: [
-  //         TDNavBarItem(icon: Icons.home, iconSize: 24),
-  //         TDNavBarItem(icon: Icons.ellipsis, iconSize: 24),
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  // Widget _searchNavbar(BuildContext context) {
-  //   return TDNavBar(
-  //     useDefaultBack: false,
-  //     screenAdaptation: false,
-  //     centerTitle: false,
-  //     titleMargin: 0,
-  //     titleWidget: TDSearchBar(
-  //       needCancel: false,
-  //       autoHeight: true,
-  //       padding: const EdgeInsets.fromLTRB(0, 2, 0, 2),
-  //       placeHolder: '搜索预设文案',
-  //       mediumStyle: true,
-  //       style: TDSearchStyle.round,
-  //       onTextChanged: (String text) {
-  //         print('input：$text');
-  //       },
-  //     ),
-  //     rightBarItems: [
-  //       TDNavBarItem(icon: Icons.home, iconSize: 24),
-  //       TDNavBarItem(icon: Icons.ellipsis, iconSize: 24),
-  //     ],
-  //   );
-  // }
-
-  // Widget _logoNavbar(BuildContext context) {
-  //   return TDNavBar(
-  //     useDefaultBack: false,
-  //     screenAdaptation: false,
-  //     centerTitle: false,
-  //     titleMargin: 0,
-  //     titleWidget: const TDImage(
-  //       assetUrl: 'assets/img/td_brand.png',
-  //       width: 102,
-  //       height: 24,
-  //     ),
-  //     rightBarItems: [
-  //       TDNavBarItem(icon: Icons.home, iconSize: 24),
-  //       TDNavBarItem(icon: Icons.ellipsis, iconSize: 24),
-  //     ],
-  //   );
-  // }
-
-  // Widget _titleCenterNavbar(BuildContext context) {
-  //   return TDNavBar(
-  //     height: 48,
-  //     title: titleText,
-  //     titleFontWeight: FontWeight.w600,
-  //     screenAdaptation: false,
-  //     useDefaultBack: true,
-  //     rightBarItems: [
-  //       TDNavBarItem(icon: Icons.home, iconSize: 24),
-  //       TDNavBarItem(icon: Icons.ellipsis, iconSize: 24),
-  //     ],
-  //   );
-  // }
-
-  // Widget _titleLeftNavbar(BuildContext context) {
-  //   return Padding(
-  //     padding: const EdgeInsets.only(top: 16),
-  //     child: TDNavBar(
-  //       height: 48,
-  //       title: titleText,
-  //       titleFontWeight: FontWeight.w600,
-  //       centerTitle: false,
-  //       titleMargin: 0,
-  //       screenAdaptation: false,
-  //       useDefaultBack: true,
-  //       rightBarItems: [
-  //         TDNavBarItem(icon: Icons.home, iconSize: 24),
-  //         TDNavBarItem(icon: Icons.ellipsis, iconSize: 24),
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  // Widget _titleNormalNavbar(BuildContext context) {
-  //   return TDNavBar(
-  //     height: 48,
-  //     title: titleText,
-  //     titleFontWeight: FontWeight.w600,
-  //     screenAdaptation: false,
-  //     useDefaultBack: true,
-  //     rightBarItems: [
-  //       TDNavBarItem(icon: Icons.home, iconSize: 24),
-  //       TDNavBarItem(icon: Icons.ellipsis, iconSize: 24),
-  //     ],
-  //   );
-  // }
-
-  // Widget _titleBelowNavbar(BuildContext context) {
-  //   return Padding(
-  //     padding: const EdgeInsets.only(top: 16),
-  //     child: TDNavBar(
-  //       height: 104,
-  //       title: '返回',
-  //       titleColor: const Color.fromRGBO(0, 0, 0, 0.9),
-  //       belowTitleWidget: SizedBox(
-  //         height: 56,
-  //         child: TDText(
-  //           titleText,
-  //           font: Font(size: 28, lineHeight: 52),
-  //           fontWeight: FontWeight.w600,
-  //         ),
-  //       ),
-  //       titleFont: Font(size: 16, lineHeight: 24),
-  //       centerTitle: false,
-  //       titleMargin: 0,
-  //       screenAdaptation: false,
-  //       useDefaultBack: false,
-  //       leftBarItems: [TDNavBarItem(icon: Icons.chevron_left, iconSize: 24)],
-  //       rightBarItems: [
-  //         TDNavBarItem(icon: Icons.home, iconSize: 24),
-  //         TDNavBarItem(icon: Icons.ellipsis, iconSize: 24),
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  // Widget _setBgColorNavbar(BuildContext context) {
-  //   return TDNavBar(
-  //     height: 48,
-  //     title: titleText,
-  //     titleColor: Colors.white,
-  //     backgroundColor: context.colorScheme.primary,
-  //     titleFontWeight: FontWeight.w600,
-  //     useDefaultBack: false,
-  //     screenAdaptation: false,
-  //     leftBarItems: [
-  //       TDNavBarItem(
-  //         icon: Icons.chevron_left,
-  //         iconSize: 24,
-  //         iconColor: Colors.white,
-  //       ),
-  //     ],
-  //     rightBarItems: [
-  //       TDNavBarItem(icon: Icons.home, iconSize: 24, iconColor: Colors.white),
-  //       TDNavBarItem(
-  //         icon: Icons.ellipsis,
-  //         iconSize: 24,
-  //         iconColor: Colors.white,
-  //       ),
-  //     ],
-  //   );
-  // }
-
-  // Widget _shadowNavbar(BuildContext context) {
-  //   return TDNavBar(
-  //     height: 48,
-  //     titleFontWeight: FontWeight.w600,
-  //     title: titleText,
-  //     screenAdaptation: false,
-  //     useDefaultBack: true,
-  //     boxShadow: [
-  //       BoxShadow(
-  //         blurRadius: 4,
-  //         offset: const Offset(0, 4),
-  //         color: TDTheme.of(context).grayColor5,
-  //       ),
-  //     ],
-  //   );
-  // }
 }
