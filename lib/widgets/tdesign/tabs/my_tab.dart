@@ -1,44 +1,36 @@
 import 'package:flutter/material.dart';
 
-import '../../../extensions/index.dart';
-import '../badge/my_badge.dart';
+import '../../../index.dart';
 
 const double _kTabHeight = 48;
 
 const double _kTextAndIconTabHeight = 72;
 
-enum TDTabSize { large, small }
+enum MyTabSize { large, small }
 
-enum TDTabOutlineType { filled, capsule, card }
+enum MyTabOutlineType { filled, capsule, card }
 
-class TDTab extends Tab {
+class MyTab extends Tab {
   @override
-  const TDTab({
+  const MyTab({
     super.key,
     super.text,
-    super.child,
     super.icon,
+    super.child,
     this.badge,
     super.height,
-    this.contentHeight,
     this.textMargin,
-    this.size = TDTabSize.small,
-    this.outlineType = TDTabOutlineType.filled,
     this.enable = true,
+    this.size = MyTabSize.small,
+    this.outlineType = MyTabOutlineType.filled,
     super.iconMargin = const EdgeInsets.only(bottom: 4, right: 4),
   });
 
-  final MyBadge? badge;
-
-  final double? contentHeight;
-
-  final EdgeInsetsGeometry? textMargin;
-
   final bool enable;
-
-  final TDTabSize size;
-
-  final TDTabOutlineType outlineType;
+  final MyBadgeConfig? badge;
+  final EdgeInsetsGeometry? textMargin;
+  final MyTabSize size;
+  final MyTabOutlineType outlineType;
 
   @override
   Widget build(BuildContext context) {
@@ -56,24 +48,32 @@ class TDTab extends Tab {
       label = Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          icon ?? Container(),
-          SizedBox(width: iconMargin?.horizontal, height: iconMargin?.vertical),
+          if (icon != null) icon!,
+          if (iconMargin != null)
+            SizedBox(
+              width: iconMargin?.horizontal,
+              height: iconMargin?.vertical,
+            ),
           _buildLabelText(context),
         ],
       );
     }
 
-    if (badge != null) {
+    if (badge != null && badge!.enabled) {
       label = Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          Container(margin: textMargin, child: label),
-          Positioned(right: 0, top: 0, child: badge!),
+          Padding(padding: textMargin ?? EdgeInsets.zero, child: label),
+          Positioned(
+            top: badge!.top ?? 0,
+            right: badge!.right ?? 0,
+            child: badge!.badge,
+          ),
         ],
       );
     }
 
-    final isCapsuleOutlineType = outlineType == TDTabOutlineType.capsule;
+    final isCapsuleOutlineType = outlineType == MyTabOutlineType.capsule;
 
     return IgnorePointer(
       ignoring: !enable,
@@ -91,15 +91,11 @@ class TDTab extends Tab {
 
   Widget _buildLabelText(BuildContext context) {
     if (child != null) {
-      return DefaultTextStyle(
-        style: DefaultTextStyle.of(
-          context,
-        ).style.copyWith(fontSize: context.bodySmall?.fontSize ?? 14),
-        child: child!,
-      );
+      return DefaultTextStyle.merge(style: context.titleSmall, child: child!);
     }
-    return Text(
-      text!,
+
+    return MyText(
+      text,
       softWrap: false,
       overflow: TextOverflow.fade,
       style: TextStyle(fontSize: _getFontSize(context)),
@@ -108,10 +104,12 @@ class TDTab extends Tab {
 
   double _getFontSize(BuildContext context) {
     final defaultTextStyle = DefaultTextStyle.of(context);
+
     if (defaultTextStyle.style.fontSize != null) {
       return defaultTextStyle.style.fontSize!;
     }
-    if (size == TDTabSize.large) {
+
+    if (size == MyTabSize.large) {
       return 16;
     } else {
       return 14;

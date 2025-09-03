@@ -3,44 +3,44 @@ import 'package:common_tools/index.dart';
 
 import '../../base/example_widget.dart';
 
-class TDTabsPage extends StatefulWidget {
-  const TDTabsPage({Key? key}) : super(key: key);
+class MyTabsPage extends StatefulWidget {
+  const MyTabsPage({super.key});
 
   @override
-  State<StatefulWidget> createState() => _TDTabsPageState();
+  State<StatefulWidget> createState() => _MyTabsPageState();
 }
 
-class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
+class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
   TabController? _tabController1;
   TabController? _tabController2;
   TabController? _tabController3;
   TabController? _tabController4;
-  List<TDTab> tabs = [];
+  List<MyTab> tabs = [];
   List<Widget> tabViews = [];
 
-  List<TDTab> _getTabs() {
+  List<MyTab> _getTabs() {
     tabs = const [
-      TDTab(text: 'Options'),
-      TDTab(text: 'Options'),
-      TDTab(text: 'Options'),
-      TDTab(text: 'Options'),
-      TDTab(text: 'Options'),
-      TDTab(text: 'Options'),
-      TDTab(text: 'Options'),
-      TDTab(text: 'Options'),
-      TDTab(text: 'Options'),
-      TDTab(text: 'Options'),
-      TDTab(text: 'Options'),
-      TDTab(text: 'Options'),
-      TDTab(text: 'Options'),
-      TDTab(text: 'Options'),
-      TDTab(text: 'Options'),
-      TDTab(text: 'Options'),
-      TDTab(text: 'Options'),
-      TDTab(text: 'Options'),
-      TDTab(text: 'Options'),
-      TDTab(text: 'Options'),
-      TDTab(text: 'Options'),
+      MyTab(text: 'Options'),
+      MyTab(text: 'Options'),
+      MyTab(text: 'Options'),
+      MyTab(text: 'Options'),
+      MyTab(text: 'Options'),
+      MyTab(text: 'Options'),
+      MyTab(text: 'Options'),
+      MyTab(text: 'Options'),
+      MyTab(text: 'Options'),
+      MyTab(text: 'Options'),
+      MyTab(text: 'Options'),
+      MyTab(text: 'Options'),
+      MyTab(text: 'Options'),
+      MyTab(text: 'Options'),
+      MyTab(text: 'Options'),
+      MyTab(text: 'Options'),
+      MyTab(text: 'Options'),
+      MyTab(text: 'Options'),
+      MyTab(text: 'Options'),
+      MyTab(text: 'Options'),
+      MyTab(text: 'Options'),
     ];
     return tabs;
   }
@@ -61,20 +61,20 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
     super.initState();
   }
 
-  List<TDTab> subList(int length) {
-    var temp = <TDTab>[];
+  List<MyTab> subList(int length) {
+    var temp = <MyTab>[];
     for (var i = 0; i < length; i++) {
       temp.add(tabs[i]);
     }
     switch (length) {
       case 3:
-        temp[temp.length - 1] = const TDTab(text: '上限六个字');
+        temp[temp.length - 1] = const MyTab(text: '上限六个字');
         break;
       case 4:
-        temp[temp.length - 1] = const TDTab(text: '上限四字');
+        temp[temp.length - 1] = const MyTab(text: '上限四字');
         break;
       case 5:
-        temp[temp.length - 1] = const TDTab(text: '上限三');
+        temp[temp.length - 1] = const MyTab(text: '上限三');
         break;
     }
     return temp;
@@ -152,7 +152,7 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
   }
 
   Widget _buildItemWithSplit1(BuildContext context) {
-    return TDTabBar(
+    return MyTabBar(
       tabs: subList(2),
       controller: _tabController1,
       backgroundColor: Colors.white,
@@ -161,7 +161,7 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
   }
 
   Widget _buildItemWithSplit2(BuildContext context) {
-    return TDTabBar(
+    return MyTabBar(
       tabs: subList(3),
       controller: _tabController2,
       backgroundColor: Colors.white,
@@ -170,7 +170,7 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
   }
 
   Widget _buildItemWithSplit3(BuildContext context) {
-    return TDTabBar(
+    return MyTabBar(
       tabs: subList(4),
       controller: _tabController3,
       backgroundColor: Colors.white,
@@ -179,7 +179,7 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
   }
 
   Widget _buildItemWithSplit4(BuildContext context) {
-    return TDTabBar(
+    return MyTabBar(
       tabs: subList(5),
       controller: _tabController4,
       backgroundColor: Colors.white,
@@ -188,7 +188,7 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
   }
 
   Widget _buildItemWithSpace(BuildContext context) {
-    return TDTabBar(
+    return MyTabBar(
       tabs: subList(16),
       controller: TabController(length: 16, vsync: this),
       backgroundColor: Colors.white,
@@ -200,20 +200,20 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
 
   Widget _buildItemWithIcon(BuildContext context) {
     var tabs = [
-      const TDTab(
+      const MyTab(
         text: 'Options',
         icon: Icon(Icons.dashboard_rounded, size: 18),
       ),
-      const TDTab(
+      const MyTab(
         text: 'Options',
         icon: Icon(Icons.dashboard_rounded, size: 18),
       ),
-      const TDTab(
+      const MyTab(
         text: 'Options',
         icon: Icon(Icons.dashboard_rounded, size: 18),
       ),
     ];
-    return TDTabBar(
+    return MyTabBar(
       tabs: tabs,
       controller: TabController(length: 3, vsync: this),
       backgroundColor: Colors.white,
@@ -223,25 +223,23 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
 
   Widget _buildItemWithLogo(BuildContext context) {
     var tabs = [
-      const TDTab(
+      const MyTab(
         text: 'Options',
-        contentHeight: 48,
         textMargin: EdgeInsets.only(right: 8),
-        badge: MyBadge(MyBadgeType.redPoint),
+        badge: MyBadgeConfig(),
       ),
-      const TDTab(
+      const MyTab(
         text: 'Options',
-        contentHeight: 42,
         textMargin: EdgeInsets.only(right: 16, top: 2, bottom: 2),
-        badge: MyBadge(MyBadgeType.message, message: '8'),
+        badge: MyBadgeConfig(badge: MyBadge(MyBadgeType.message, message: '8')),
       ),
-      const TDTab(
+      const MyTab(
         text: 'Options',
         height: 48,
         icon: Icon(Icons.dashboard_rounded, size: 18),
       ),
     ];
-    return TDTabBar(
+    return MyTabBar(
       tabs: tabs,
       controller: TabController(length: 3, vsync: this),
       backgroundColor: Colors.white,
@@ -255,7 +253,7 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
       height: 120 + 48,
       child: Column(
         children: [
-          TDTabBar(
+          MyTabBar(
             tabs: subList(3),
             controller: tabController,
             showIndicator: true,
@@ -265,9 +263,9 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
           Container(
             height: 120,
             color: Colors.white,
-            child: TDTabBarView(
-              children: _getTabViews(),
+            child: MyTabView(
               controller: tabController,
+              children: _getTabViews(),
             ),
           ),
         ],
@@ -277,11 +275,11 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
 
   Widget _buildItemWithStatus(BuildContext context) {
     var tabs = [
-      const TDTab(text: '选中'),
-      const TDTab(text: '默认'),
-      const TDTab(text: '禁用', enable: false),
+      const MyTab(text: '选中'),
+      const MyTab(text: '默认'),
+      const MyTab(text: '禁用', enable: false),
     ];
-    return TDTabBar(
+    return MyTabBar(
       tabs: tabs,
       controller: TabController(length: 3, vsync: this),
       backgroundColor: Colors.white,
@@ -291,12 +289,12 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
 
   Widget _buildItemWithSizeSmall(BuildContext context) {
     var tabs = [
-      const TDTab(text: '小尺寸'),
-      const TDTab(text: 'Options'),
-      const TDTab(text: 'Options'),
-      const TDTab(text: 'Options'),
+      const MyTab(text: '小尺寸'),
+      const MyTab(text: 'Options'),
+      const MyTab(text: 'Options'),
+      const MyTab(text: 'Options'),
     ];
-    return TDTabBar(
+    return MyTabBar(
       tabs: tabs,
       controller: TabController(length: 4, vsync: this),
       backgroundColor: Colors.white,
@@ -306,12 +304,12 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
 
   Widget _buildItemWithSizeBig(BuildContext context) {
     var tabs = [
-      const TDTab(text: '大尺寸', size: TDTabSize.large),
-      const TDTab(text: 'Options', size: TDTabSize.large),
-      const TDTab(text: 'Options', size: TDTabSize.large),
-      const TDTab(text: 'Options', size: TDTabSize.large),
+      const MyTab(text: '大尺寸', size: MyTabSize.large),
+      const MyTab(text: 'Options', size: MyTabSize.large),
+      const MyTab(text: 'Options', size: MyTabSize.large),
+      const MyTab(text: 'Options', size: MyTabSize.large),
     ];
-    return TDTabBar(
+    return MyTabBar(
       tabs: tabs,
       controller: TabController(length: 4, vsync: this),
       backgroundColor: Colors.white,
@@ -321,14 +319,14 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
 
   Widget _buildItemWithOutlineNormal(BuildContext context) {
     var tabs = [
-      const TDTab(text: 'Options'),
-      const TDTab(text: 'Options'),
-      const TDTab(text: 'Options'),
-      const TDTab(text: 'Options'),
+      const MyTab(text: 'Options'),
+      const MyTab(text: 'Options'),
+      const MyTab(text: 'Options'),
+      const MyTab(text: 'Options'),
     ];
-    return TDTabBar(
+    return MyTabBar(
       tabs: tabs,
-      outlineType: TDTabBarOutlineType.capsule,
+      outlineType: MyTabOutlineType.capsule,
       controller: TabController(length: 4, vsync: this),
       backgroundColor: Colors.white,
       showIndicator: false,
@@ -337,14 +335,14 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
 
   Widget _buildItemWithOutlineCard(BuildContext context) {
     var tabs = [
-      const TDTab(text: 'Options'),
-      const TDTab(text: 'Options'),
-      const TDTab(text: 'Options'),
-      const TDTab(text: 'Options'),
+      const MyTab(text: 'Options'),
+      const MyTab(text: 'Options'),
+      const MyTab(text: 'Options'),
+      const MyTab(text: 'Options'),
     ];
-    return TDTabBar(
+    return MyTabBar(
       tabs: tabs,
-      outlineType: TDTabBarOutlineType.card,
+      outlineType: MyTabOutlineType.card,
       controller: TabController(length: 4, vsync: this),
       backgroundColor: Colors.white,
       showIndicator: false,
@@ -352,7 +350,7 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
   }
 
   Widget _customIndicatorStyle(BuildContext context) {
-    return TDTabBar(
+    return MyTabBar(
       tabs: subList(2),
       controller: _tabController1,
       backgroundColor: Colors.white,
@@ -365,7 +363,7 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
   }
 
   Widget _customDividerStyle(BuildContext context) {
-    return TDTabBar(
+    return MyTabBar(
       tabs: subList(2),
       controller: _tabController1,
       backgroundColor: Colors.white,
@@ -376,7 +374,7 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
   }
 
   Widget _hideBottomDivider(BuildContext context) {
-    return TDTabBar(
+    return MyTabBar(
       tabs: subList(2),
       controller: _tabController1,
       backgroundColor: Colors.white,
@@ -387,11 +385,11 @@ class _TDTabsPageState extends State<TDTabsPage> with TickerProviderStateMixin {
   }
 
   Widget _capsuleBackgroundColor(BuildContext context) {
-    return TDTabBar(
+    return MyTabBar(
       tabs: subList(2),
       controller: _tabController1,
       backgroundColor: Colors.red,
-      outlineType: TDTabBarOutlineType.capsule,
+      outlineType: MyTabOutlineType.capsule,
     );
   }
 }

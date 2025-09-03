@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
-class TDTabBarView extends TabBarView {
+class MyTabView extends TabBarView {
   @override
-  const TDTabBarView({
+  const MyTabView({
     required super.children,
     super.key,
     super.controller,
-    this.isSlideSwitch = false,
+    this.enableSwipe = false,
   }) : super(
          physics:
-             isSlideSwitch
+             enableSwipe
                  ? const ScrollPhysics()
                  : const NeverScrollableScrollPhysics(),
        );
 
-  final bool isSlideSwitch;
+  final bool enableSwipe;
 
   Widget build(BuildContext context) {
     return TabBarView(controller: controller, children: children);

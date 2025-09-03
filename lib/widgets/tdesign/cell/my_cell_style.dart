@@ -56,13 +56,13 @@ class MyCellStyle {
 
   TextStyle? groupTitleStyle;
 
-  EdgeInsets? padding;
+  EdgeInsetsGeometry? padding;
 
   BorderRadius? cardBorderRadius;
 
-  EdgeInsets? cardPadding;
+  EdgeInsetsGeometry? cardPadding;
 
-  EdgeInsets? titlePadding;
+  EdgeInsetsGeometry? titlePadding;
 
   Color? titleBackgroundColor;
 
@@ -116,10 +116,10 @@ class MyCellStyle {
     Color? backgroundColor,
     Color? hoverColor,
     TextStyle? groupTitleStyle,
-    EdgeInsets? padding,
+    EdgeInsetsGeometry? padding,
     BorderRadius? cardBorderRadius,
-    EdgeInsets? cardPadding,
-    EdgeInsets? titlePadding,
+    EdgeInsetsGeometry? cardPadding,
+    EdgeInsetsGeometry? titlePadding,
     Color? titleBackgroundColor,
   }) {
     return MyCellStyle(

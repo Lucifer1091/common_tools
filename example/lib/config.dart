@@ -14,7 +14,7 @@ import 'page/sidebar/my_sidebar_page_pagination.dart';
 import 'page/td_action_sheet_page.dart';
 import 'page/td_avatar_page.dart';
 import 'page/my_badge_page.dart';
-import 'page/td_bottom_tab_bar_page.dart';
+import 'page/my_bottom_tab_bar_page.dart';
 import 'page/td_calendar_page.dart';
 import 'page/td_cascader_page.dart';
 import 'page/my_cell_page.dart';
@@ -55,7 +55,7 @@ import 'page/td_swipe_cell_page.dart';
 import 'page/td_swiper_page.dart';
 import 'page/td_switch_page.dart';
 import 'page/td_table_page.dart';
-import 'page/td_tabs_page.dart';
+import 'page/my_tabs_page.dart';
 import 'page/td_tag_page.dart';
 import 'page/my_text_page.dart';
 import 'page/td_textarea_page.dart';
@@ -150,7 +150,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'Tabs',
       name: 'tabs',
-      pageBuilder: _wrapInheritedTheme((context) => const TDTabsPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyTabsPage()),
     ),
   ],
   'Input': [

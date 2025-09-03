@@ -218,8 +218,8 @@ class _TrapezoidPath extends CustomClipper<Path> {
 
 class MyBadgeWrapper extends StatelessWidget {
   const MyBadgeWrapper({
-    this.badge,
     required this.child,
+    this.badge,
     super.key,
     this.top,
     this.right,
@@ -257,4 +257,18 @@ class MyBadgeWrapper extends StatelessWidget {
 
     return stack;
   }
+}
+
+class MyBadgeConfig {
+  const MyBadgeConfig({
+    this.enabled = true,
+    this.top,
+    this.right,
+    MyBadge? badge,
+  }) : badge = badge ?? const MyBadge(MyBadgeType.redPoint);
+
+  final bool enabled;
+  final double? top;
+  final double? right;
+  final MyBadge badge;
 }

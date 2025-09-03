@@ -28,30 +28,30 @@ class MySideBarAnchorPageState extends State<MySideBarAnchorPage> {
   void initState() {
     super.initState();
 
-    _demoScroller.addListener(() {
-      if (lock) {
-        return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _demoScroller.addListener(() {
+        if (lock) return;
+
+        var scrollTop = _demoScroller.offset;
+        var index = (scrollTop + threshold) ~/ itemHeight;
+
+        if (currentValue != index) {
+          setState(() {
+            _sideBarController.selectTo(index);
+          });
+        }
+      });
+
+      for (var i = 0; i < 20; i++) {
+        list.add(MySideItemProps(index: i, label: '选项', value: i));
+        pages.add(getAnchorDemo(i));
       }
 
-      var scrollTop = _demoScroller.offset;
-      var index = (scrollTop + threshold) ~/ itemHeight;
+      list[1].badge = const MyBadge(MyBadgeType.redPoint);
+      list[2].badge = const MyBadge(MyBadgeType.message, count: 8);
 
-      if (currentValue != index) {
-        setState(() {
-          _sideBarController.selectTo(index);
-        });
-      }
+      _sideBarController.init(list);
     });
-
-    for (var i = 0; i < 20; i++) {
-      list.add(MySideItemProps(index: i, label: '选项', value: i));
-      pages.add(getAnchorDemo(i));
-    }
-
-    list[1].badge = const MyBadge(MyBadgeType.redPoint);
-    list[2].badge = const MyBadge(MyBadgeType.message, count: 8);
-
-    _sideBarController.init(list);
   }
 
   Future<void> onSelected(int value) async {
@@ -100,62 +100,34 @@ class MySideBarAnchorPageState extends State<MySideBarAnchorPage> {
         titleBarHeight -
         testButtonHeight;
 
-    pages.add(
-      Container(
-        height: demoHeight - itemHeight,
-        decoration: const BoxDecoration(color: Colors.white),
-      ),
-    );
+    // pages.add(
+    //   Container(
+    //     height: demoHeight - itemHeight,
+    //     color: context.colorScheme.background,
+    //   ),
+    // );
 
-    return Column(
+    return Row(
       children: [
-        Container(
-          height: testButtonHeight,
-          padding: const EdgeInsets.all(16),
-          child: MyButton(
-            text: '更新children',
-            onTap: () {
-              setState(() {
-                var children = list
-                    .map(
-                      (e) => MySideItemProps(
-                        index: e.index,
-                        label: '变更',
-                        badge: e.badge,
-                        value: e.value,
-                        icon: e.icon,
-                      ),
-                    )
-                    .toList();
-                _sideBarController.children = children;
-                setState(() {});
-              });
-            },
+        SizedBox(
+          width: 110,
+          child: MySideBar(
+            height: demoHeight,
+            style: MySideBarStyle.normal,
+            value: currentValue,
+            controller: _sideBarController,
+            onChanged: onChanged,
+            onSelected: onSelected,
           ),
         ),
-        Row(
-          children: [
-            SizedBox(
-              width: 110,
-              child: MySideBar(
-                height: demoHeight,
-                style: MySideBarStyle.normal,
-                value: currentValue,
-                controller: _sideBarController,
-                onChanged: onChanged,
-                onSelected: onSelected,
-              ),
+        Expanded(
+          child: SizedBox(
+            height: demoHeight,
+            child: SingleChildScrollView(
+              controller: _demoScroller,
+              child: Column(children: pages),
             ),
-            Expanded(
-              child: SizedBox(
-                height: demoHeight,
-                child: SingleChildScrollView(
-                  controller: _demoScroller,
-                  child: Column(children: pages),
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ],
     );

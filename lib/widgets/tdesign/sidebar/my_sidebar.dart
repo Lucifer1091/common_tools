@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../../../index.dart';
 import '../badge/my_badge.dart';
 import '../loading/my_loader.dart';
 import 'my_sidebar_controller.dart';
@@ -268,36 +269,39 @@ class _MySideBarState extends State<MySideBar> {
           context: context,
           removeTop: true,
           removeBottom: true,
-          child: ListView.builder(
-            physics: const ClampingScrollPhysics(),
-            itemCount: displayChildren.length,
-            controller: _scrollerController,
-            itemBuilder: (BuildContext context, int index) {
-              final ele = displayChildren[index];
+          child: MyScrollWrapper(
+            scrollbars: false,
+            child: ListView.builder(
+              physics: const ClampingScrollPhysics(),
+              itemCount: displayChildren.length,
+              controller: _scrollerController,
+              itemBuilder: (BuildContext context, int index) {
+                final ele = displayChildren[index];
 
-              return MyWrapSideBarItem(
-                style: widget.style,
-                value: ele.value,
-                icon: ele.icon,
-                enabled: ele.enabled,
-                label: ele.label ?? '',
-                badge: ele.badge,
-                textStyle: ele.textStyle,
-                selected: currentIndex == ele.index,
-                selectedColor: widget.selectedColor,
-                selectedTextStyle: widget.selectedTextStyle,
-                contentPadding: widget.contentPadding,
-                topAdjacent:
-                    currentIndex != null && currentIndex! + 1 == ele.index,
-                bottomAdjacent:
-                    currentIndex != null && currentIndex! - 1 == ele.index,
-                selectedBgColor: widget.selectedBgColor,
-                unSelectedBgColor: widget.unSelectedBgColor,
-                onTap: () {
-                  if (ele.enabled) onSelect(ele);
-                },
-              );
-            },
+                return MyWrapSideBarItem(
+                  style: widget.style,
+                  value: ele.value,
+                  icon: ele.icon,
+                  enabled: ele.enabled,
+                  label: ele.label ?? '',
+                  badge: ele.badge,
+                  textStyle: ele.textStyle,
+                  selected: currentIndex == ele.index,
+                  selectedColor: widget.selectedColor,
+                  selectedTextStyle: widget.selectedTextStyle,
+                  contentPadding: widget.contentPadding,
+                  topAdjacent:
+                      currentIndex != null && currentIndex! + 1 == ele.index,
+                  bottomAdjacent:
+                      currentIndex != null && currentIndex! - 1 == ele.index,
+                  selectedBgColor: widget.selectedBgColor,
+                  unSelectedBgColor: widget.unSelectedBgColor,
+                  onTap: () {
+                    if (ele.enabled) onSelect(ele);
+                  },
+                );
+              },
+            ),
           ),
         ),
       ),

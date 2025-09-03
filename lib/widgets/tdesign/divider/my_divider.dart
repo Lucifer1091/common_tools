@@ -39,10 +39,10 @@ class MyDivider extends StatelessWidget {
 
   final MyDividerType type;
 
-  final EdgeInsets? margin;
+  final EdgeInsetsGeometry? margin;
 
   /// Gap between the divider and the middle surrounding content.
-  final EdgeInsets? gap;
+  final EdgeInsetsGeometry? gap;
 
   final double? thickness;
 

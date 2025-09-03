@@ -34,7 +34,6 @@ export 'steps/index.dart';
 export 'swipe_cell/index.dart';
 export 'swiper/index.dart';
 export 'switch/index.dart';
-export 'tabbar/index.dart';
 export 'table/index.dart';
 export 'tabs/index.dart';
 export 'tag/index.dart';

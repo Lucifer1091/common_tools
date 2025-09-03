@@ -41,16 +41,16 @@ class _TabStyle extends AnimatedWidget {
     final defaultStyle = (labelStyle ??
             tabBarTheme.labelStyle ??
             TextStyle(
-              height: context.bodyMedium?.height ?? 1.57,
-              fontSize: context.bodyMedium?.fontSize ?? 14,
+              height: context.bodyMedium.height ?? 1.57,
+              fontSize: context.bodyMedium.fontSize ?? 14,
             ))
         .copyWith(inherit: true);
     final defaultUnselectedStyle = (unselectedLabelStyle ??
             tabBarTheme.unselectedLabelStyle ??
             labelStyle ??
             TextStyle(
-              height: context.bodyMedium?.height ?? 1.57,
-              fontSize: context.bodyMedium?.fontSize ?? 14,
+              height: context.bodyMedium.height ?? 1.57,
+              fontSize: context.bodyMedium.fontSize ?? 14,
             ))
         .copyWith(inherit: true);
     final textStyle =
@@ -142,7 +142,7 @@ class TDHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
   ///
   /// The length of this list must match the [controller]'s [TabController.length]
   /// and the length of the [TDHorizontalTabBarView.children] list.
-  final List<TDTab> tabs;
+  final List<MyTab> tabs;
 
   /// This widget's selection and animation state.
   ///
@@ -319,7 +319,7 @@ class TDHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
   /// Defaults to matching platform conventions.
   final ScrollPhysics? physics;
 
-  final TDTabBarOutlineType? outlineType;
+  final MyTabOutlineType? outlineType;
 
   final Color? backgroundColor;
 
@@ -814,7 +814,7 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
   }
 
   BoxDecoration? _getContentDecorateInner(int index) {
-    if (widget.outlineType == TDTabBarOutlineType.capsule) {
+    if (widget.outlineType == MyTabOutlineType.capsule) {
       return BoxDecoration(
         color:
             index == _currentIndex
@@ -827,9 +827,9 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
   }
 
   BoxDecoration? _getContentDecorateOuter(int index) {
-    if (widget.outlineType == TDTabBarOutlineType.capsule) {
+    if (widget.outlineType == MyTabOutlineType.capsule) {
       return BoxDecoration(color: widget.backgroundColor ?? Colors.white);
-    } else if (widget.outlineType == TDTabBarOutlineType.card) {
+    } else if (widget.outlineType == MyTabOutlineType.card) {
       if (index == _currentIndex) {
         return BoxDecoration(
           color: widget.backgroundColor ?? Colors.white,
@@ -852,7 +852,7 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
   }
 
   Color? _getBackgroundColor(int index) {
-    if (widget.outlineType == TDTabBarOutlineType.card) {
+    if (widget.outlineType == MyTabOutlineType.card) {
       if (index == _currentIndex) {
         return ThemeColors.neutral.shade50;
       }
@@ -923,7 +923,7 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
       }
 
       EdgeInsetsGeometry? capsuleDefaultPadding;
-      if (widget.outlineType == TDTabBarOutlineType.capsule) {
+      if (widget.outlineType == MyTabOutlineType.capsule) {
         capsuleDefaultPadding = const EdgeInsets.all(4);
       }
       return Container(
@@ -1028,7 +1028,7 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
             overlayColor: widget.overlayColor,
             child: Container(
               padding:
-                  widget.outlineType == TDTabBarOutlineType.filled
+                  widget.outlineType == MyTabOutlineType.filled
                       ? EdgeInsets.only(bottom: widget.indicatorWeight)
                       : EdgeInsets.zero,
               child: Stack(

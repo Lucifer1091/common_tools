@@ -86,9 +86,9 @@ class MyButton extends StatefulWidget {
 
   final MyButtonIconPosition? iconPosition;
 
-  final EdgeInsets? padding;
+  final EdgeInsetsGeometry? padding;
 
-  final EdgeInsets? margin;
+  final EdgeInsetsGeometry? margin;
 
   final bool isExpanded;
 
@@ -156,7 +156,7 @@ class _MyButtonState extends State<MyButton> {
 
   double? _width;
   double? _height;
-  EdgeInsets? _margin;
+  EdgeInsetsGeometry? _margin;
   Alignment? _alignment;
   double? _iconSize;
 
@@ -385,7 +385,7 @@ class _MyButtonState extends State<MyButton> {
     };
   }
 
-  EdgeInsets? _getMargin() {
+  EdgeInsetsGeometry? _getMargin() {
     if (widget.margin != null) return widget.margin;
 
     return widget.isExpanded
@@ -393,7 +393,7 @@ class _MyButtonState extends State<MyButton> {
         : null;
   }
 
-  EdgeInsets? _getPadding(MyButtonStyle style) {
+  EdgeInsetsGeometry? _getPadding(MyButtonStyle style) {
     if (widget.padding != null) return widget.padding;
 
     final equalSide =

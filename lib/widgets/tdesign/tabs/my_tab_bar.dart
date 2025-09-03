@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import 'td_horizontal_tab_bar.dart';
-import 'td_tab.dart';
 
-enum TDTabBarOutlineType { filled, capsule, card }
-
-class TDTabBar extends StatefulWidget {
-  const TDTabBar({
+class MyTabBar extends StatefulWidget {
+  const MyTabBar({
     required this.tabs,
     super.key,
     this.controller,
@@ -28,7 +24,7 @@ class TDTabBar extends StatefulWidget {
     this.indicator,
     this.physics,
     this.onTap,
-    this.outlineType = TDTabBarOutlineType.filled,
+    this.outlineType = MyTabOutlineType.filled,
     this.showIndicator = false,
     this.dividerColor,
     this.dividerHeight = 0.5,
@@ -41,7 +37,7 @@ class TDTabBar extends StatefulWidget {
          'To provide both, use "decoration: BoxDecoration(color: color)".',
        );
 
-  final List<TDTab> tabs;
+  final List<MyTab> tabs;
 
   final TabController? controller;
 
@@ -81,7 +77,7 @@ class TDTabBar extends StatefulWidget {
 
   final EdgeInsetsGeometry? labelPadding;
 
-  final TDTabBarOutlineType outlineType;
+  final MyTabOutlineType outlineType;
 
   final Color? dividerColor;
 
@@ -94,10 +90,10 @@ class TDTabBar extends StatefulWidget {
   final TabAlignment? tabAlignment;
 
   @override
-  State<StatefulWidget> createState() => _TDTabBarState();
+  State<StatefulWidget> createState() => _MyTabBarState();
 }
 
-class _TDTabBarState extends State<TDTabBar> {
+class _MyTabBarState extends State<MyTabBar> {
   /// 默认高度
   static const double _defaultHeight = 48;
 
@@ -108,7 +104,7 @@ class _TDTabBarState extends State<TDTabBar> {
       height: widget.height ?? _defaultHeight,
       decoration:
           widget.decoration ??
-          (widget.outlineType == TDTabBarOutlineType.card
+          (widget.outlineType == MyTabOutlineType.card
               ? BoxDecoration(color: widget.backgroundColor)
               : BoxDecoration(
                 color: widget.backgroundColor,
@@ -144,9 +140,7 @@ class _TDTabBarState extends State<TDTabBar> {
         selectedBgColor: widget.selectedBgColor,
         unSelectedBgColor: widget.unSelectedBgColor,
         tabAlignment: widget.tabAlignment,
-        onTap: (index) {
-          widget.onTap?.call(index);
-        },
+        onTap: widget.onTap,
       ),
     );
   }

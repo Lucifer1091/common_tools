@@ -63,7 +63,7 @@ class MyFavoriteButton extends StatefulWidget {
 
   final MyButtonStyle? style;
 
-  final EdgeInsets? padding;
+  final EdgeInsetsGeometry? padding;
 
   final MyFocusableParams focus;
 
