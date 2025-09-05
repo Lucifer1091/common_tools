@@ -40,7 +40,7 @@ class MyApp extends ConsumerWidget {
         );
       },
       home: MyHomePage(title: 'My Flutter Example'),
-      onGenerateRoute: TDExampleRoute.onGenerateRoute,
+      onGenerateRoute: MyRoute.onGenerateRoute,
     );
   }
 }

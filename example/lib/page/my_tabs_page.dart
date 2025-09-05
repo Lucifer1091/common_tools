@@ -1,3 +1,6 @@
+import 'package:common_tools/widgets/tdesign/tabs/indicators/dot_indicator.dart';
+import 'package:common_tools/widgets/tdesign/tabs/pointTabIndicator.dart';
+import 'package:common_tools/widgets/tdesign/tabs/tab_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:common_tools/index.dart';
 
@@ -20,36 +23,36 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
 
   List<MyTab> _getTabs() {
     tabs = const [
-      MyTab(text: 'Options'),
-      MyTab(text: 'Options'),
-      MyTab(text: 'Options'),
-      MyTab(text: 'Options'),
-      MyTab(text: 'Options'),
-      MyTab(text: 'Options'),
-      MyTab(text: 'Options'),
-      MyTab(text: 'Options'),
-      MyTab(text: 'Options'),
-      MyTab(text: 'Options'),
-      MyTab(text: 'Options'),
-      MyTab(text: 'Options'),
-      MyTab(text: 'Options'),
-      MyTab(text: 'Options'),
-      MyTab(text: 'Options'),
-      MyTab(text: 'Options'),
-      MyTab(text: 'Options'),
-      MyTab(text: 'Options'),
-      MyTab(text: 'Options'),
-      MyTab(text: 'Options'),
-      MyTab(text: 'Options'),
+      MyTab(text: 'Tab 1'),
+      MyTab(text: 'Tab 2'),
+      MyTab(text: 'Tab 3'),
+      MyTab(text: 'Tab 4'),
+      MyTab(text: 'Tab 5'),
+      MyTab(text: 'Tab 6'),
+      MyTab(text: 'Tab 7'),
+      MyTab(text: 'Tab 8'),
+      MyTab(text: 'Tab 9'),
+      MyTab(text: 'Tab 10'),
+      MyTab(text: 'Tab 11'),
+      MyTab(text: 'Tab 12'),
+      MyTab(text: 'Tab 13'),
+      MyTab(text: 'Tab 14'),
+      MyTab(text: 'Tab 15'),
+      MyTab(text: 'Tab 16'),
+      MyTab(text: 'Tab 17'),
+      MyTab(text: 'Tab 18'),
+      MyTab(text: 'Tab 19'),
+      MyTab(text: 'Tab 20'),
+      MyTab(text: 'Tab 21'),
     ];
     return tabs;
   }
 
   List<Widget> _getTabViews() {
     tabViews = const [
-      Center(child: MyText('内容区')),
-      Center(child: MyText('内容区')),
-      Center(child: MyText('内容区')),
+      NumberedContainer(index: 1),
+      NumberedContainer(index: 2),
+      NumberedContainer(index: 3),
     ];
     return tabViews;
   }
@@ -63,24 +66,14 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
 
   List<MyTab> subList(int length) {
     var temp = <MyTab>[];
+
     for (var i = 0; i < length; i++) {
       temp.add(tabs[i]);
     }
-    switch (length) {
-      case 3:
-        temp[temp.length - 1] = const MyTab(text: '上限六个字');
-        break;
-      case 4:
-        temp[temp.length - 1] = const MyTab(text: '上限四字');
-        break;
-      case 5:
-        temp[temp.length - 1] = const MyTab(text: '上限三');
-        break;
-    }
+
     return temp;
   }
 
-  //初始化tab
   void _initTabController() {
     _tabController1 = TabController(length: 2, vsync: this);
     _tabController2 = TabController(length: 3, vsync: this);
@@ -92,13 +85,14 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tdTitle(),
-      desc: '用于内容分类后的展示切换。',
+      desc:
+          'A set of layered sections of content—known as tab panels—that are displayed one at a time.',
       exampleCodeGroup: 'tabs',
       children: [
         ExampleModule(
           title: 'Component Types',
           children: [
-            ExampleItem(desc: '均分Options卡', builder: _buildItemWithSplit1),
+            ExampleItem(desc: 'Non Scrollable', builder: _buildItemWithSplit1),
             ExampleItem(
               builder: _buildItemWithSplit2,
               padding: const EdgeInsets.only(top: 16),
@@ -111,28 +105,43 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
               builder: _buildItemWithSplit4,
               padding: const EdgeInsets.only(top: 16),
             ),
-            ExampleItem(desc: '等距Options卡', builder: _buildItemWithSpace),
-            ExampleItem(desc: '带图标Options卡', builder: _buildItemWithIcon),
-            ExampleItem(desc: '带微标Options卡', builder: _buildItemWithLogo),
-            ExampleItem(desc: '带内容区Options卡', builder: _buildItemWithContent),
+            ExampleItem(desc: 'Scrollable', builder: _buildItemWithSpace),
+            ExampleItem(
+              desc: 'Options Card with Icon',
+              builder: _buildItemWithIcon,
+            ),
+            ExampleItem(
+              desc: 'Options Card with Micro Logo',
+              builder: _buildItemWithLogo,
+            ),
+            ExampleItem(
+              desc: 'Options Card with Content Area',
+              builder: _buildItemWithContent,
+            ),
           ],
         ),
         ExampleModule(
           title: 'Component State',
           children: [
-            ExampleItem(desc: 'Options卡状态', builder: _buildItemWithStatus),
+            ExampleItem(
+              desc: 'Options card status',
+              builder: _buildItemWithStatus,
+            ),
           ],
         ),
         ExampleModule(
           title: 'Component Style',
           children: [
-            ExampleItem(desc: 'Options卡尺寸', builder: _buildItemWithSizeSmall),
+            ExampleItem(
+              desc: 'Options card size',
+              builder: _buildItemWithSizeSmall,
+            ),
             ExampleItem(
               builder: _buildItemWithSizeBig,
               padding: const EdgeInsets.only(top: 16),
             ),
             ExampleItem(
-              desc: 'Options卡样式',
+              desc: 'Options card style',
               builder: _buildItemWithOutlineNormal,
             ),
             ExampleItem(
@@ -143,10 +152,22 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
         ),
       ],
       test: [
-        ExampleItem(desc: '自定义下标属性', builder: _customIndicatorStyle),
-        ExampleItem(desc: '自定义下划线样式', builder: _customDividerStyle),
-        ExampleItem(desc: '不展示下划线-高度为0', builder: _hideBottomDivider),
-        ExampleItem(desc: 'capsule类型可修改背景色', builder: _capsuleBackgroundColor),
+        ExampleItem(
+          desc: 'Custom subscript attributes',
+          builder: _customIndicatorStyle,
+        ),
+        ExampleItem(
+          desc: 'Custom underline style',
+          builder: _customDividerStyle,
+        ),
+        ExampleItem(
+          desc: 'No underline - height is 0',
+          builder: _hideBottomDivider,
+        ),
+        ExampleItem(
+          desc: 'Capsule type can modify the background color',
+          builder: _capsuleBackgroundColor,
+        ),
       ],
     );
   }
@@ -155,8 +176,7 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
     return MyTabBar(
       tabs: subList(2),
       controller: _tabController1,
-      backgroundColor: Colors.white,
-      showIndicator: true,
+      indicator: MyDotIndicator(distanceFromCenter: 15),
     );
   }
 
@@ -164,8 +184,7 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
     return MyTabBar(
       tabs: subList(3),
       controller: _tabController2,
-      backgroundColor: Colors.white,
-      showIndicator: true,
+      indicator: PointTabIndicator(),
     );
   }
 
@@ -173,27 +192,19 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
     return MyTabBar(
       tabs: subList(4),
       controller: _tabController3,
-      backgroundColor: Colors.white,
-      showIndicator: true,
+      indicator: TabIndicator(height: 5, width: 5, radius: 5),
     );
   }
 
   Widget _buildItemWithSplit4(BuildContext context) {
-    return MyTabBar(
-      tabs: subList(5),
-      controller: _tabController4,
-      backgroundColor: Colors.white,
-      showIndicator: true,
-    );
+    return MyTabBar(tabs: subList(5), controller: _tabController4);
   }
 
   Widget _buildItemWithSpace(BuildContext context) {
     return MyTabBar(
       tabs: subList(16),
       controller: TabController(length: 16, vsync: this),
-      backgroundColor: Colors.white,
       labelPadding: const EdgeInsets.all(10),
-      showIndicator: true,
       isScrollable: true,
     );
   }
@@ -216,8 +227,6 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
     return MyTabBar(
       tabs: tabs,
       controller: TabController(length: 3, vsync: this),
-      backgroundColor: Colors.white,
-      showIndicator: true,
     );
   }
 
@@ -231,7 +240,7 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
       const MyTab(
         text: 'Options',
         textMargin: EdgeInsets.only(right: 16, top: 2, bottom: 2),
-        badge: MyBadgeConfig(badge: MyBadge(MyBadgeType.message, message: '8')),
+        badge: MyBadgeConfig(badge: MyBadge(MyBadgeType.message, count: 8)),
       ),
       const MyTab(
         text: 'Options',
@@ -242,8 +251,6 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
     return MyTabBar(
       tabs: tabs,
       controller: TabController(length: 3, vsync: this),
-      backgroundColor: Colors.white,
-      showIndicator: true,
     );
   }
 
@@ -256,8 +263,7 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
           MyTabBar(
             tabs: subList(3),
             controller: tabController,
-            showIndicator: true,
-            backgroundColor: Colors.white,
+
             isScrollable: false,
           ),
           Container(
@@ -275,21 +281,19 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
 
   Widget _buildItemWithStatus(BuildContext context) {
     var tabs = [
-      const MyTab(text: '选中'),
-      const MyTab(text: '默认'),
-      const MyTab(text: '禁用', enable: false),
+      const MyTab(text: 'Selected'),
+      const MyTab(text: 'Default'),
+      const MyTab(text: 'Disabled', enable: false),
     ];
     return MyTabBar(
       tabs: tabs,
       controller: TabController(length: 3, vsync: this),
-      backgroundColor: Colors.white,
-      showIndicator: true,
     );
   }
 
   Widget _buildItemWithSizeSmall(BuildContext context) {
     var tabs = [
-      const MyTab(text: '小尺寸'),
+      const MyTab(text: 'Small size'),
       const MyTab(text: 'Options'),
       const MyTab(text: 'Options'),
       const MyTab(text: 'Options'),
@@ -297,14 +301,12 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
     return MyTabBar(
       tabs: tabs,
       controller: TabController(length: 4, vsync: this),
-      backgroundColor: Colors.white,
-      showIndicator: true,
     );
   }
 
   Widget _buildItemWithSizeBig(BuildContext context) {
     var tabs = [
-      const MyTab(text: '大尺寸', size: MyTabSize.large),
+      const MyTab(text: 'Large size', size: MyTabSize.large),
       const MyTab(text: 'Options', size: MyTabSize.large),
       const MyTab(text: 'Options', size: MyTabSize.large),
       const MyTab(text: 'Options', size: MyTabSize.large),
@@ -312,8 +314,6 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
     return MyTabBar(
       tabs: tabs,
       controller: TabController(length: 4, vsync: this),
-      backgroundColor: Colors.white,
-      showIndicator: true,
     );
   }
 
@@ -326,9 +326,9 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
     ];
     return MyTabBar(
       tabs: tabs,
-      outlineType: MyTabOutlineType.capsule,
+      type: MyTabType.capsule,
       controller: TabController(length: 4, vsync: this),
-      backgroundColor: Colors.white,
+
       showIndicator: false,
     );
   }
@@ -342,9 +342,9 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
     ];
     return MyTabBar(
       tabs: tabs,
-      outlineType: MyTabOutlineType.card,
+      type: MyTabType.card,
       controller: TabController(length: 4, vsync: this),
-      backgroundColor: Colors.white,
+
       showIndicator: false,
     );
   }
@@ -353,8 +353,7 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
     return MyTabBar(
       tabs: subList(2),
       controller: _tabController1,
-      backgroundColor: Colors.white,
-      showIndicator: true,
+
       indicatorColor: Colors.red,
       indicatorHeight: 20,
       indicatorWidth: 10,
@@ -366,8 +365,7 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
     return MyTabBar(
       tabs: subList(2),
       controller: _tabController1,
-      backgroundColor: Colors.white,
-      showIndicator: true,
+
       dividerColor: Colors.red,
       dividerHeight: 5,
     );
@@ -377,8 +375,7 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
     return MyTabBar(
       tabs: subList(2),
       controller: _tabController1,
-      backgroundColor: Colors.white,
-      showIndicator: true,
+
       dividerColor: Colors.red,
       dividerHeight: 0,
     );
@@ -389,7 +386,46 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
       tabs: subList(2),
       controller: _tabController1,
       backgroundColor: Colors.red,
-      outlineType: MyTabOutlineType.capsule,
+      type: MyTabType.capsule,
+    );
+  }
+}
+
+class NumberedContainer extends StatelessWidget {
+  final int index;
+  final double? width;
+  final double? height;
+  final bool fill;
+  final BorderRadius? radius;
+
+  const NumberedContainer({
+    super.key,
+    required this.index,
+    this.width,
+    this.height,
+    this.fill = true,
+    this.radius,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var colors = MyColors.values;
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        color: fill
+            ? colors[(colors.length - 1 - index) % colors.length]
+            : null,
+        borderRadius: radius ?? MyBorderRadius.small,
+      ),
+      child: Center(
+        child: MyText(
+          index.toString(),
+          fontSize: 24,
+          textColor: context.colorScheme.primaryForeground,
+        ),
+      ),
     );
   }
 }

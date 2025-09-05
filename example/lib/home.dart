@@ -20,8 +20,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    TDExampleRoute.init();
-    sideBarExamplePage.forEach(TDExampleRoute.add);
+    MyRoute.init();
+    sideBarExamplePage.forEach(MyRoute.add);
   }
 
   @override

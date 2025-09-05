@@ -55,21 +55,14 @@ class MyUILayer extends StatelessWidget {
             scrollbars: MyPlatform.isDesktopOrWeb,
             child: ScrollViewInterceptor(
               enabled: enableScrollInterception,
-              child: DefaultTextStyle.merge(
-                style: theme.typography.bodyLarge.copyWith(
-                  color: theme.colorScheme.foreground,
-                ),
-                child: IconTheme.merge(
-                  data: IconThemeData(color: theme.colorScheme.foreground),
-                  child:
-                      builder != null
-                          ? Builder(
-                            builder: (BuildContext context) {
-                              return builder!(context, child);
-                            },
-                          )
-                          : child ?? const NoWidget(),
-                ),
+              child: IconTheme.merge(
+                data: IconThemeData(color: theme.colorScheme.foreground),
+                child:
+                    builder != null
+                        ? Builder(
+                          builder: (context) => builder!(context, child),
+                        )
+                        : child ?? const NoWidget(),
               ),
             ),
           );

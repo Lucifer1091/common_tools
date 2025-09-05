@@ -7,10 +7,11 @@ class MyTabView extends TabBarView {
     super.key,
     super.controller,
     this.enableSwipe = false,
+    ScrollPhysics? physics,
   }) : super(
          physics:
              enableSwipe
-                 ? const ScrollPhysics()
+                 ? physics ?? const ScrollPhysics()
                  : const NeverScrollableScrollPhysics(),
        );
 

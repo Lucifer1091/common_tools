@@ -21,7 +21,7 @@ class ExamplePage extends StatefulWidget {
     this.singleChild,
     this.scrollController,
     this.floatingActionButton,
-    this.bottomNavigationBar
+    this.bottomNavigationBar,
   });
 
   final String title;
@@ -76,58 +76,44 @@ class _ExamplePageState extends State<ExamplePage> {
       backgroundColor: context.colorScheme.background,
       appBar: MyAppBar(title: widget.title),
       bottomNavigationBar: widget.bottomNavigationBar,
-      body: ScrollbarTheme(
-        data: ScrollbarThemeData(
-          trackVisibility: WidgetStateProperty.all(true),
-          thumbColor: WidgetStateProperty.all(context.colorScheme.border),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: widget.showSingleChild && widget.singleChild != null
-                  ? _singleChild()
-                  : MediaQuery(
-                      data: MediaQuery.of(
-                        context,
-                      ).copyWith(padding: EdgeInsets.zero),
-                      child: ListView.builder(
-                        controller: widget.scrollController,
-                        shrinkWrap: true,
-                        physics: const BouncingScrollPhysics(),
-                        padding: const EdgeInsets.only(top: 24, bottom: 24),
-                        itemCount: widget.children.length + 3,
-                        itemBuilder: (context, index) {
-                          if (index == 0) {
-                            return _buildHeader(context);
-                          }
-                          if (index == widget.children.length + 2) {
-                            return const NoWidget();
-                          }
-                          ExampleModule? data;
-                          if (index <= widget.children.length) {
-                            data = widget.children[index - 1];
-                          } else {
-                            if (widget.test.isNotEmpty) {
-                              data = ExampleModule(
-                                title: 'Unit Testing',
-                                children: [
-                                  _buildTestExampleItem(),
-                                  ...widget.test,
-                                ],
-                              );
-                            }
-                          }
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: widget.showSingleChild && widget.singleChild != null
+                ? _singleChild()
+                : ListView.builder(
+                    controller: widget.scrollController,
+                    shrinkWrap: true,
+                    physics: const BouncingScrollPhysics(),
+                    padding: const EdgeInsets.only(top: 24, bottom: 24),
+                    itemCount: widget.children.length + 3,
+                    itemBuilder: (context, index) {
+                      if (index == 0) {
+                        return _buildHeader(context);
+                      }
+                      if (index == widget.children.length + 2) {
+                        return const NoWidget();
+                      }
+                      ExampleModule? data;
+                      if (index <= widget.children.length) {
+                        data = widget.children[index - 1];
+                      } else {
+                        if (widget.test.isNotEmpty) {
+                          data = ExampleModule(
+                            title: 'Unit Testing',
+                            children: [_buildTestExampleItem(), ...widget.test],
+                          );
+                        }
+                      }
 
-                          if (data == null) return const SizedBox.shrink();
+                      if (data == null) return const SizedBox.shrink();
 
-                          return _buildModule(index, data, context);
-                        },
-                      ),
-                    ),
-            ),
-          ],
-        ),
+                      return _buildModule(index, data, context);
+                    },
+                  ),
+          ),
+        ],
       ),
     );
   }
@@ -327,7 +313,7 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
   }
 }
 
-extension TDStateExs on State {
+extension MyStateExs on State {
   String tdTitle() {
     var modelTheme = context
         .dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
@@ -335,7 +321,7 @@ extension TDStateExs on State {
   }
 }
 
-extension TDWidgetExs on StatelessWidget {
+extension MyWidgetExs on StatelessWidget {
   String tdTitle(BuildContext context) {
     var modelTheme = context
         .dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();

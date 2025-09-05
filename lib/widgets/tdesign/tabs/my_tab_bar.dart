@@ -14,7 +14,6 @@ class MyTabBar extends StatefulWidget {
     this.indicatorHeight,
     this.labelColor,
     this.unselectedLabelColor,
-    this.isScrollable = false,
     this.unselectedLabelStyle,
     this.labelStyle,
     this.width,
@@ -24,8 +23,9 @@ class MyTabBar extends StatefulWidget {
     this.indicator,
     this.physics,
     this.onTap,
-    this.outlineType = MyTabOutlineType.filled,
-    this.showIndicator = false,
+    this.isScrollable = false,
+    this.type = MyTabType.underline,
+    this.showIndicator = true,
     this.dividerColor,
     this.dividerHeight = 0.5,
     this.selectedBgColor,
@@ -77,7 +77,7 @@ class MyTabBar extends StatefulWidget {
 
   final EdgeInsetsGeometry? labelPadding;
 
-  final MyTabOutlineType outlineType;
+  final MyTabType type;
 
   final Color? dividerColor;
 
@@ -94,7 +94,6 @@ class MyTabBar extends StatefulWidget {
 }
 
 class _MyTabBarState extends State<MyTabBar> {
-  /// 默认高度
   static const double _defaultHeight = 48;
 
   @override
@@ -104,7 +103,7 @@ class _MyTabBarState extends State<MyTabBar> {
       height: widget.height ?? _defaultHeight,
       decoration:
           widget.decoration ??
-          (widget.outlineType == MyTabOutlineType.card
+          (widget.type == MyTabType.card
               ? BoxDecoration(color: widget.backgroundColor)
               : BoxDecoration(
                 color: widget.backgroundColor,
@@ -115,26 +114,27 @@ class _MyTabBarState extends State<MyTabBar> {
                           bottom: BorderSide(
                             color:
                                 widget.dividerColor ??
-                                ThemeColors.neutral.shade200,
+                                context.colorScheme.border,
                             width: widget.dividerHeight,
                           ),
                         ),
               )),
 
-      child: TDHorizontalTabBar(
+      child: MyHorizontalTabBar(
         physics: widget.physics,
         isScrollable: widget.isScrollable,
         indicator: widget.indicator ?? _getIndicator(context),
         indicatorColor: widget.indicatorColor,
         unselectedLabelColor: widget.unselectedLabelColor,
         labelColor: widget.labelColor,
+        indicatorSize: TabBarIndicatorSize.label,
         labelStyle: widget.labelStyle ?? _getLabelStyle(context),
         labelPadding: widget.labelPadding ?? const EdgeInsets.all(8),
         unselectedLabelStyle:
             widget.unselectedLabelStyle ?? _getUnSelectLabelStyle(context),
         tabs: widget.tabs,
         indicatorPadding: widget.indicatorPadding ?? EdgeInsets.zero,
-        outlineType: widget.outlineType,
+        outlineType: widget.type,
         controller: widget.controller,
         backgroundColor: widget.backgroundColor,
         selectedBgColor: widget.selectedBgColor,
@@ -148,45 +148,50 @@ class _MyTabBarState extends State<MyTabBar> {
   TextStyle _getUnSelectLabelStyle(BuildContext context) {
     return TextStyle(
       fontWeight: FontWeight.w400,
-      color: ThemeColors.neutral.shade800,
+      color: context.colorScheme.mutedForeground,
     );
   }
 
   TextStyle _getLabelStyle(BuildContext context) {
     return TextStyle(
       fontWeight: FontWeight.w600,
-      color: ThemeColors.neutral.shade800,
+      color: context.colorScheme.foreground,
     );
   }
 
   Decoration _getIndicator(BuildContext context) {
     return widget.showIndicator
-        ? TDTabBarIndicator(
+        ? MyTabUnderlineIndicator(
           context: context,
           height: widget.indicatorHeight,
           width: widget.indicatorWidth,
           color: widget.indicatorColor,
         )
-        : TDNoneIndicator();
+        : MyNoIndicator();
   }
 }
 
-class TDTabBarIndicator extends Decoration {
-  const TDTabBarIndicator({this.context, this.width, this.height, this.color});
+class MyTabUnderlineIndicator extends Decoration {
+  const MyTabUnderlineIndicator({
+    required this.context,
+    this.width,
+    this.height,
+    this.color,
+  });
 
-  final BuildContext? context;
+  final BuildContext context;
   final double? width;
   final double? height;
   final Color? color;
 
   @override
   BoxPainter createBoxPainter([VoidCallback? onChanged]) =>
-      _TDTabBarIndicatorPainter(this);
+      _MyTabUnderlineIndicatorPainter(context, this);
 }
 
-class _TDTabBarIndicatorPainter extends BoxPainter {
-  _TDTabBarIndicatorPainter(this.decoration) {
-    _paint.color = decoration.color ?? ThemeColors.blue.shade600;
+class _MyTabUnderlineIndicatorPainter extends BoxPainter {
+  _MyTabUnderlineIndicatorPainter(this.context, this.decoration) {
+    _paint.color = decoration.color ?? context.colorScheme.primary;
     _paint.strokeCap = StrokeCap.round;
   }
 
@@ -194,7 +199,9 @@ class _TDTabBarIndicatorPainter extends BoxPainter {
 
   static const double _defaultIndicatorHeight = 3;
 
-  final TDTabBarIndicator decoration;
+  final MyTabUnderlineIndicator decoration;
+
+  final BuildContext context;
 
   final _paint = Paint();
 
@@ -218,64 +225,67 @@ class _TDTabBarIndicatorPainter extends BoxPainter {
   double _indicatorWidth() => decoration.width ?? _defaultIndicatorWidth;
 }
 
-class TDTabBarVerticalIndicator extends Decoration {
-  const TDTabBarVerticalIndicator({
-    this.context,
-    this.indicatorWidth,
-    this.indicatorHeight,
+class MyTabCapsuleIndicator extends Decoration {
+  const MyTabCapsuleIndicator({
+    required this.context,
+    this.height,
+    this.color,
+    this.radius,
+    this.indicatorPadding,
   });
-  final BuildContext? context;
-  final double? indicatorWidth;
-  final double? indicatorHeight;
+
+  final BuildContext context;
+  final double? height;
+  final Color? color;
+  final double? radius;
+  final EdgeInsetsGeometry? indicatorPadding;
 
   @override
   BoxPainter createBoxPainter([VoidCallback? onChanged]) =>
-      _TDTabBarVerticalIndicatorPainter(this);
+      _MyTabCapsuleIndicatorPainter(context, this);
 }
 
-class _TDTabBarVerticalIndicatorPainter extends BoxPainter {
-  _TDTabBarVerticalIndicatorPainter(this.decoration) {
-    _paint.color = ThemeColors.blue.shade600;
-    _paint.strokeCap = StrokeCap.round;
-  }
+class _MyTabCapsuleIndicatorPainter extends BoxPainter {
+  _MyTabCapsuleIndicatorPainter(this.context, this.decoration);
 
-  static const double _defaultIndicatorWidth = 1.5;
-
-  static const double _defaultIndicatorHeight = 54;
-
-  final TDTabBarVerticalIndicator decoration;
-
-  final _paint = Paint();
+  final MyTabCapsuleIndicator decoration;
+  final BuildContext context;
 
   @override
   void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
-    canvas.drawLine(
-      Offset(
-        0 + _indicatorWidth() / 2,
-        offset.dx + (configuration.size!.width - _indicatorHeight()) / 2,
-      ),
-      Offset(
-        0 + _indicatorWidth() / 2,
-        offset.dx + (configuration.size!.width + _indicatorHeight()) / 2,
-      ),
-      _paint..strokeWidth = _indicatorWidth(),
+    final indicatorHeight = decoration.height ?? 32;
+    final indicatorRadius = decoration.radius ?? indicatorHeight / 2;
+    final indicatorColor = decoration.color ?? context.colorScheme.primary;
+    final EdgeInsets padding = (decoration.indicatorPadding ??
+            decoration.padding)
+        .resolve(Directionality.of(context));
+
+    final rect =
+        Offset(
+          offset.dx + padding.left,
+          offset.dy + configuration.size!.height / 2 - indicatorHeight / 2,
+        ) &
+        Size(configuration.size!.width - padding.horizontal, indicatorHeight);
+
+    final paint =
+        Paint()
+          ..color = indicatorColor
+          ..style = PaintingStyle.fill;
+
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(rect, Radius.circular(indicatorRadius)),
+      paint,
     );
   }
-
-  double _indicatorHeight() =>
-      decoration.indicatorHeight ?? _defaultIndicatorHeight;
-
-  double _indicatorWidth() =>
-      decoration.indicatorWidth ?? _defaultIndicatorWidth;
 }
 
-class TDNoneIndicator extends Decoration {
+class MyNoIndicator extends Decoration {
   @override
   BoxPainter createBoxPainter([VoidCallback? onChanged]) =>
-      _TDNoneIndicatorPainter();
+      _MyNoIndicatorPainter();
 }
 
-class _TDNoneIndicatorPainter extends BoxPainter {
+class _MyNoIndicatorPainter extends BoxPainter {
   @override
   void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {}
 }

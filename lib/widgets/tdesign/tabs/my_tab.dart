@@ -8,7 +8,7 @@ const double _kTextAndIconTabHeight = 72;
 
 enum MyTabSize { large, small }
 
-enum MyTabOutlineType { filled, capsule, card }
+enum MyTabType { underline, capsule, card }
 
 class MyTab extends Tab {
   @override
@@ -16,39 +16,43 @@ class MyTab extends Tab {
     super.key,
     super.text,
     super.icon,
+    this.iconData,
     super.child,
     this.badge,
     super.height,
     this.textMargin,
     this.enable = true,
     this.size = MyTabSize.small,
-    this.outlineType = MyTabOutlineType.filled,
+    this.type = MyTabType.underline,
     super.iconMargin = const EdgeInsets.only(bottom: 4, right: 4),
   });
 
   final bool enable;
+  final IconData? iconData;
   final MyBadgeConfig? badge;
   final EdgeInsetsGeometry? textMargin;
   final MyTabSize size;
-  final MyTabOutlineType outlineType;
+  final MyTabType type;
 
   @override
   Widget build(BuildContext context) {
     final double calculatedHeight;
     Widget label;
 
-    if (icon == null) {
+    final Widget? icon0 = icon ?? (iconData != null ? Icon(iconData) : null);
+
+    if (icon0 == null) {
       calculatedHeight = _kTabHeight;
       label = _buildLabelText(context);
     } else if (text == null && child == null) {
       calculatedHeight = _kTabHeight;
-      label = icon!;
+      label = icon0;
     } else {
       calculatedHeight = _kTextAndIconTabHeight;
       label = Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          if (icon != null) icon!,
+          icon0,
           if (iconMargin != null)
             SizedBox(
               width: iconMargin?.horizontal,
@@ -60,20 +64,15 @@ class MyTab extends Tab {
     }
 
     if (badge != null && badge!.enabled) {
-      label = Stack(
-        alignment: Alignment.bottomLeft,
-        children: [
-          Padding(padding: textMargin ?? EdgeInsets.zero, child: label),
-          Positioned(
-            top: badge!.top ?? 0,
-            right: badge!.right ?? 0,
-            child: badge!.badge,
-          ),
-        ],
+      label = MyBadgeWrapper(
+        top: badge!.top ?? 0,
+        right: badge!.right ?? 0,
+        badge: badge!.badge,
+        child: Padding(padding: textMargin ?? EdgeInsets.zero, child: label),
       );
     }
 
-    final isCapsuleOutlineType = outlineType == MyTabOutlineType.capsule;
+    final isCapsuleOutlineType = type == MyTabType.capsule;
 
     return IgnorePointer(
       ignoring: !enable,
@@ -94,21 +93,15 @@ class MyTab extends Tab {
       return DefaultTextStyle.merge(style: context.titleSmall, child: child!);
     }
 
-    return MyText(
-      text,
+    return Text(
+      text!,
       softWrap: false,
       overflow: TextOverflow.fade,
-      style: TextStyle(fontSize: _getFontSize(context)),
+      style: context.bodyMedium.copyWith(fontSize: _getFontSize(context)),
     );
   }
 
   double _getFontSize(BuildContext context) {
-    final defaultTextStyle = DefaultTextStyle.of(context);
-
-    if (defaultTextStyle.style.fontSize != null) {
-      return defaultTextStyle.style.fontSize!;
-    }
-
     if (size == MyTabSize.large) {
       return 16;
     } else {

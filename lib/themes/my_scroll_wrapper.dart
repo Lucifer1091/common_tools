@@ -24,7 +24,6 @@ class MyScrollbar extends StatelessWidget {
             thumbColor: WidgetStateProperty.all(context.colorScheme.border),
             radius: MyRadi.small,
             interactive: true,
-            thumbVisibility: WidgetStateProperty.all(true),
             thickness: WidgetStateProperty.all(7),
           ),
       child: Scrollbar(controller: controller, child: child),
@@ -91,7 +90,7 @@ class MyScrollBehavior extends ScrollBehavior {
 
     return GlowingOverscrollIndicator(
       axisDirection: details.direction,
-      color: MyTheme.of(context).colorScheme.secondary,
+      color: context.colorScheme.secondary,
       child: child,
     );
   }

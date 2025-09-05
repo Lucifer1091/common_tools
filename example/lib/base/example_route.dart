@@ -3,7 +3,7 @@ import '../about.dart';
 import '../config.dart';
 import 'example_base.dart';
 
-class TDExampleRoute {
+class MyRoute {
   static final Map<String, ExamplePageModel> pageModelList = {};
   static const String aboutPath = 'about';
   static const String apiPath = 'api';
@@ -18,7 +18,7 @@ class TDExampleRoute {
         pageModelList[model.name] = model;
       }
     });
-    
+
     pageModelList[aboutPath] = ExamplePageModel(
       text: 'About',
       name: 'AboutPage',
@@ -36,6 +36,7 @@ class TDExampleRoute {
     var name = strings[0];
     var model = pageModelList[name];
     var paramsMap = <String, String>{};
+
     if (strings.length > 1) {
       var params = strings[1].split('&');
       for (var element in params) {
@@ -48,6 +49,7 @@ class TDExampleRoute {
         paramsMap[key] = value;
       }
     }
+
     if (model != null) {
       if (paramsMap['showAction'] == '1') {
         model.showAction = true;
@@ -60,7 +62,6 @@ class TDExampleRoute {
     } else {
       if (name.startsWith(apiPath)) {
         if (strings.length > 1) {
-          var component = strings[1];
           final Route route = MaterialPageRoute(
             settings: settings,
             builder: (context) => Placeholder(),
@@ -68,9 +69,10 @@ class TDExampleRoute {
           return route;
         }
       }
+
       return MaterialPageRoute(
         settings: settings,
-        builder: (context) => Center(child: Text('error, url:${url}')),
+        builder: (context) => Center(child: Text('error, url:$url')),
       );
     }
   }

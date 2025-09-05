@@ -40,19 +40,15 @@ class _TabStyle extends AnimatedWidget {
     // the same value of inherit. Force that to be inherit=true here.
     final defaultStyle = (labelStyle ??
             tabBarTheme.labelStyle ??
-            TextStyle(
-              height: context.bodyMedium.height ?? 1.57,
-              fontSize: context.bodyMedium.fontSize ?? 14,
-            ))
+            context.bodyMedium)
         .copyWith(inherit: true);
+
     final defaultUnselectedStyle = (unselectedLabelStyle ??
             tabBarTheme.unselectedLabelStyle ??
             labelStyle ??
-            TextStyle(
-              height: context.bodyMedium.height ?? 1.57,
-              fontSize: context.bodyMedium.fontSize ?? 14,
-            ))
+            context.bodyMedium)
         .copyWith(inherit: true);
+
     final textStyle =
         selected
             ? TextStyle.lerp(
@@ -67,16 +63,12 @@ class _TabStyle extends AnimatedWidget {
             )!;
 
     final selectedColor =
-        labelColor ??
-        tabBarTheme.labelColor ??
-        labelStyle?.color ??
-        ThemeColors.blue.shade600;
+        labelColor ?? tabBarTheme.labelColor ?? labelStyle?.color;
 
     final unselectedColor =
         unselectedLabelColor ??
         tabBarTheme.unselectedLabelColor ??
-        unselectedLabelStyle?.color ??
-        ThemeColors.neutral.shade800;
+        unselectedLabelStyle?.color;
 
     final color =
         selected
@@ -93,7 +85,7 @@ class _TabStyle extends AnimatedWidget {
   }
 }
 
-class TDHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
+class MyHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
   /// Creates a material design tab bar.
   ///
   /// The [tabs] argument must not be null and its length must match the [controller]'s
@@ -108,7 +100,7 @@ class TDHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
   ///
   /// If [indicator] is not null or provided from [TabBarTheme],
   /// then [indicatorWeight], [indicatorPadding], and [indicatorColor] are ignored.
-  const TDHorizontalTabBar({
+  const MyHorizontalTabBar({
     required this.tabs,
     super.key,
     this.controller,
@@ -141,7 +133,7 @@ class TDHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
   /// Typically a list of two or more [Tab] widgets.
   ///
   /// The length of this list must match the [controller]'s [TabController.length]
-  /// and the length of the [TDHorizontalTabBarView.children] list.
+  /// and the length of the [MyTabView.children] list.
   final List<MyTab> tabs;
 
   /// This widget's selection and animation state.
@@ -153,14 +145,14 @@ class TDHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
   /// Whether this tab bar can be scrolled horizontally.
   ///
   /// If [isScrollable] is true, then each tab is as wide as needed for its label
-  /// and the entire [TDHorizontalTabBar] is scrollable. Otherwise each tab gets an equal
+  /// and the entire [MyHorizontalTabBar] is scrollable. Otherwise each tab gets an equal
   /// share of the available space.
   final bool isScrollable;
 
   /// The amount of space by which to inset the tab bar.
   ///
   /// When [isScrollable] is false, this will yield the same result as if you had wrapped your
-  /// [TDHorizontalTabBar] in a [Padding] widget. When [isScrollable] is true, the scrollable itself is inset,
+  /// [MyHorizontalTabBar] in a [Padding] widget. When [isScrollable] is true, the scrollable itself is inset,
   /// allowing the padding to scroll with the tab bar, rather than enclosing it.
   final EdgeInsetsGeometry? padding;
 
@@ -300,7 +292,7 @@ class TDHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
   /// Defaults to true.
   final bool? enableFeedback;
 
-  /// An optional callback that's called when the [TDHorizontalTabBar] is tapped.
+  /// An optional callback that's called when the [MyHorizontalTabBar] is tapped.
   ///
   /// The callback is applied to the index of the tab where the tap occurred.
   ///
@@ -311,7 +303,7 @@ class TDHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
   /// interfere with the default tap handler.
   final ValueChanged<int>? onTap;
 
-  /// How the [TDHorizontalTabBar]'s scroll view should respond to user input.
+  /// How the [MyHorizontalTabBar]'s scroll view should respond to user input.
   ///
   /// For example, determines how the scroll view continues to animate after the
   /// user stops dragging the scroll view.
@@ -319,7 +311,7 @@ class TDHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
   /// Defaults to matching platform conventions.
   final ScrollPhysics? physics;
 
-  final MyTabOutlineType? outlineType;
+  final MyTabType? outlineType;
 
   final Color? backgroundColor;
 
@@ -344,9 +336,9 @@ class TDHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
     return Size.fromHeight(maxHeight + indicatorWeight);
   }
 
-  /// Returns whether the [TDHorizontalTabBar] contains a tab with both text and icon.
+  /// Returns whether the [MyHorizontalTabBar] contains a tab with both text and icon.
   ///
-  /// [TDHorizontalTabBar] uses this to give uniform padding to all tabs in cases where
+  /// [MyHorizontalTabBar] uses this to give uniform padding to all tabs in cases where
   /// there are some tabs with both text and icon and some which contain only
   /// text or icon.
   bool get tabHasTextAndIcon {
@@ -361,7 +353,7 @@ class TDHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
   }
 
   @override
-  State<TDHorizontalTabBar> createState() => _TDHorizontalTabBarState();
+  State<MyHorizontalTabBar> createState() => _MyHorizontalTabBarState();
 }
 
 class _ChangeAnimation extends Animation<double>
@@ -439,20 +431,35 @@ class _IndicatorPainter extends CustomPainter {
   int get maxTabIndex => _currentTabOffsets!.length - 2;
 
   double centerOf(int tabIndex) {
-    assert(_currentTabOffsets != null);
-    assert(_currentTabOffsets!.isNotEmpty);
-    assert(tabIndex >= 0);
-    assert(tabIndex <= maxTabIndex);
+    assert(_currentTabOffsets != null, '_currentTabOffsets must not be null');
+    assert(
+      _currentTabOffsets!.isNotEmpty,
+      '_currentTabOffsets must not be empty',
+    );
+    assert(tabIndex >= 0, 'tabIndex must be >= 0');
+    assert(
+      tabIndex <= maxTabIndex,
+      'tabIndex must be <= maxTabIndex ($maxTabIndex)',
+    );
     return (_currentTabOffsets![tabIndex] + _currentTabOffsets![tabIndex + 1]) /
         2.0;
   }
 
   Rect indicatorRect(Size tabBarSize, int tabIndex) {
-    assert(_currentTabOffsets != null);
-    assert(_currentTextDirection != null);
-    assert(_currentTabOffsets!.isNotEmpty);
-    assert(tabIndex >= 0);
-    assert(tabIndex <= maxTabIndex);
+    assert(_currentTabOffsets != null, '_currentTabOffsets must not be null');
+    assert(
+      _currentTextDirection != null,
+      '_currentTextDirection must not be null',
+    );
+    assert(
+      _currentTabOffsets!.isNotEmpty,
+      '_currentTabOffsets must not be empty',
+    );
+    assert(tabIndex >= 0, 'tabIndex must be >= 0');
+    assert(
+      tabIndex <= maxTabIndex,
+      'tabIndex must be <= maxTabIndex ($maxTabIndex)',
+    );
 
     double tabLeft, tabRight;
 
@@ -502,7 +509,10 @@ class _IndicatorPainter extends CustomPainter {
     final fromRect = indicatorRect(size, from);
     final toRect = indicatorRect(size, to);
     _currentRect = Rect.lerp(fromRect, toRect, (value - from).abs());
-    assert(_currentRect != null);
+    assert(
+      _currentRect != null,
+      '_currentRect must not be null. Ensure that indicatorRect returns a valid Rect.',
+    );
 
     final configuration = ImageConfiguration(
       size: _currentRect!.size,
@@ -538,7 +548,7 @@ double _indexChangeProgress(TabController controller) {
       (currentIndex - previousIndex).abs();
 }
 
-class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
+class _MyHorizontalTabBarState extends State<MyHorizontalTabBar> {
   ScrollController? _scrollController;
   TabController? _controller;
   _IndicatorPainter? _indicatorPainter;
@@ -555,13 +565,11 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
   }
 
   Decoration get _indicator {
-    if (widget.indicator != null) {
-      return widget.indicator!;
-    }
+    if (widget.indicator != null) return widget.indicator!;
+
     final tabBarTheme = TabBarTheme.of(context);
-    if (tabBarTheme.indicator != null) {
-      return tabBarTheme.indicator!;
-    }
+
+    if (tabBarTheme.indicator != null) return tabBarTheme.indicator!;
 
     var color =
         widget.indicatorColor ?? Theme.of(context).tabBarTheme.indicatorColor;
@@ -587,14 +595,14 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
     return UnderlineTabIndicator(
       borderSide: BorderSide(
         width: widget.indicatorWeight,
-        color: color ?? ThemeColors.blue.shade600,
+        color: color ?? context.colorScheme.primary,
       ),
     );
   }
 
-  // If the TDHorizontalTabBar is rebuilt with a new tab controller, the caller should
-  // dispose the old one. In that case the old controller's animation will be
-  // null and should not be accessed.
+  /// If the [MyHorizontalTabBar] is rebuilt with a new tab controller, the caller should
+  /// dispose the old one. In that case the old controller's animation will be
+  /// null and should not be accessed.
   bool get _controllerIsValid => _controller?.animation != null;
 
   void _updateTabController() {
@@ -632,13 +640,13 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    assert(debugCheckHasMaterial(context));
+    assert(debugCheckHasMaterial(context), '');
     _updateTabController();
     _initIndicatorPainter();
   }
 
   @override
-  void didUpdateWidget(TDHorizontalTabBar oldWidget) {
+  void didUpdateWidget(MyHorizontalTabBar oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.controller != oldWidget.controller) {
       _updateTabController();
@@ -760,7 +768,7 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
   }
 
   void _handleTabControllerAnimationTick() {
-    assert(mounted);
+    assert(mounted, '');
     if (!_controller!.indexIsChanging && widget.isScrollable) {
       // Sync the TDHorizontalTabBar's scroll position with the TDHorizontalTabBarView's PageView.
       _currentIndex = _controller!.index;
@@ -771,9 +779,8 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
   void _handleTabControllerTick() {
     if (_controller!.index != _currentIndex) {
       _currentIndex = _controller!.index;
-      if (widget.isScrollable) {
-        _scrollToCurrentIndex();
-      }
+
+      if (widget.isScrollable) _scrollToCurrentIndex();
     }
     setState(() {
       // Rebuild the tabs after a (potentially animated) index change
@@ -792,7 +799,10 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
   }
 
   void _handleTap(int index) {
-    assert(index >= 0 && index < widget.tabs.length);
+    assert(
+      index >= 0 && index < widget.tabs.length,
+      'Tab index ($index) is out of bounds. Must be between 0 and ${widget.tabs.length - 1}.',
+    );
     _controller!.animateTo(index);
     widget.onTap?.call(index);
   }
@@ -814,7 +824,7 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
   }
 
   BoxDecoration? _getContentDecorateInner(int index) {
-    if (widget.outlineType == MyTabOutlineType.capsule) {
+    if (widget.outlineType == MyTabType.capsule) {
       return BoxDecoration(
         color:
             index == _currentIndex
@@ -827,12 +837,14 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
   }
 
   BoxDecoration? _getContentDecorateOuter(int index) {
-    if (widget.outlineType == MyTabOutlineType.capsule) {
-      return BoxDecoration(color: widget.backgroundColor ?? Colors.white);
-    } else if (widget.outlineType == MyTabOutlineType.card) {
+    if (widget.outlineType == MyTabType.capsule) {
+      return BoxDecoration(
+        color: widget.backgroundColor ?? context.colorScheme.background,
+      );
+    } else if (widget.outlineType == MyTabType.card) {
       if (index == _currentIndex) {
         return BoxDecoration(
-          color: widget.backgroundColor ?? Colors.white,
+          color: widget.backgroundColor ?? context.colorScheme.background,
           borderRadius: BorderRadius.only(
             topRight: Radius.circular(index + 1 < widget.tabs.length ? 9 : 0),
             topLeft: Radius.circular(index > 0 ? 9 : 0),
@@ -852,7 +864,7 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
   }
 
   Color? _getBackgroundColor(int index) {
-    if (widget.outlineType == MyTabOutlineType.card) {
+    if (widget.outlineType == MyTabType.card) {
       if (index == _currentIndex) {
         return ThemeColors.neutral.shade50;
       }
@@ -888,8 +900,8 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
     final tabBarTheme = TabBarTheme.of(context);
     final TabAlignment effectiveTabAlignment =
         widget.tabAlignment ?? tabBarTheme.tabAlignment ?? _defaults;
-    assert(_debugTabAlignmentIsValid(effectiveTabAlignment));
-    assert(debugCheckHasMaterialLocalizations(context));
+    assert(_debugTabAlignmentIsValid(effectiveTabAlignment), '');
+    assert(debugCheckHasMaterialLocalizations(context), '');
     assert(() {
       if (_controller!.length != widget.tabs.length) {
         throw FlutterError(
@@ -923,13 +935,14 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
       }
 
       EdgeInsetsGeometry? capsuleDefaultPadding;
-      if (widget.outlineType == MyTabOutlineType.capsule) {
+      if (widget.outlineType == MyTabType.capsule) {
         capsuleDefaultPadding = const EdgeInsets.all(4);
       }
-      return Container(
-        color: _getBackgroundColor(index),
-        child: Container(
-          decoration: _getContentDecorateOuter(index),
+
+      return ColoredBox(
+        color: _getBackgroundColor(index) ?? Colors.transparent,
+        child: DecoratedBox(
+          decoration: _getContentDecorateOuter(index) ?? BoxDecoration(),
           child: Center(
             heightFactor: 1,
             child: Padding(
@@ -941,8 +954,9 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
                   kTabLabelPadding,
               child: KeyedSubtree(
                 key: _tabKeys[index],
-                child: Container(
-                  decoration: _getContentDecorateInner(index),
+                child: DecoratedBox(
+                  decoration:
+                      _getContentDecorateInner(index) ?? BoxDecoration(),
                   child: widget.tabs[index],
                 ),
               ),
@@ -960,7 +974,10 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
 
       if (_controller!.indexIsChanging) {
         // The user tapped on a tab, the tab controller's animation is running.
-        assert(_currentIndex != previousIndex);
+        assert(
+          _currentIndex != previousIndex,
+          'Current index ($_currentIndex) should not be equal to previous index ($previousIndex) during index change.',
+        );
         final Animation<double> animation = _ChangeAnimation(_controller!);
         wrappedTabs[_currentIndex!] = _buildStyledTab(
           wrappedTabs[_currentIndex!],
@@ -1020,15 +1037,16 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
         child: IgnorePointer(
           ignoring: !widget.tabs[index].enable,
           child: InkWell(
+            splashColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            highlightColor: Colors.transparent,
             mouseCursor: widget.mouseCursor ?? SystemMouseCursors.click,
-            onTap: () {
-              _handleTap(index);
-            },
+            onTap: () => _handleTap(index),
             enableFeedback: widget.enableFeedback ?? true,
             overlayColor: widget.overlayColor,
             child: Container(
               padding:
-                  widget.outlineType == MyTabOutlineType.filled
+                  widget.outlineType == MyTabType.underline
                       ? EdgeInsets.only(bottom: widget.indicatorWeight)
                       : EdgeInsets.zero,
               child: Stack(
@@ -1052,7 +1070,7 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
       }
     }
 
-    Widget tdHorizontalTabBar = CustomPaint(
+    Widget myHorizontalTabBar = CustomPaint(
       painter: _indicatorPainter,
       child: _TabStyle(
         animation: kAlwaysDismissedAnimation,
@@ -1079,23 +1097,24 @@ class _TDHorizontalTabBarState extends State<TDHorizontalTabBar> {
                 start: _kStartOffset,
               ).add(widget.padding ?? EdgeInsets.zero)
               : widget.padding;
+
       _scrollController ??= _TabBarScrollController(this);
-      tdHorizontalTabBar = SingleChildScrollView(
+      myHorizontalTabBar = SingleChildScrollView(
         dragStartBehavior: widget.dragStartBehavior,
         scrollDirection: Axis.horizontal,
         controller: _scrollController,
         padding: effectivePadding,
         physics: widget.physics,
-        child: tdHorizontalTabBar,
+        child: myHorizontalTabBar,
       );
     } else if (widget.padding != null) {
-      tdHorizontalTabBar = Padding(
+      myHorizontalTabBar = Padding(
         padding: widget.padding!,
-        child: tdHorizontalTabBar,
+        child: myHorizontalTabBar,
       );
     }
 
-    return tdHorizontalTabBar;
+    return myHorizontalTabBar;
   }
 }
 
@@ -1111,7 +1130,7 @@ typedef _LayoutCallback =
 class _TabBarScrollController extends ScrollController {
   _TabBarScrollController(this.tabBar);
 
-  final _TDHorizontalTabBarState tabBar;
+  final _MyHorizontalTabBarState tabBar;
 
   @override
   ScrollPosition createScrollPosition(
@@ -1140,7 +1159,7 @@ class _TabBarScrollPosition extends ScrollPositionWithSingleContext {
     required this.tabBar,
   }) : super(initialPixels: null);
 
-  final _TDHorizontalTabBarState tabBar;
+  final _MyHorizontalTabBarState tabBar;
 
   bool? _initialViewportDimensionWasZero;
 
@@ -1282,421 +1301,5 @@ class _DragAnimation extends Animation<double>
       controllerMaxValue,
     );
     return (controllerValue - index.toDouble()).abs().clamp(0.0, 1.0);
-  }
-}
-
-/// A page view that displays the widget which corresponds to the currently
-/// selected tab.
-///
-/// This widget is typically used in conjunction with a [TDHorizontalTabBar].
-///
-/// {@youtube 560 315 https://www.youtube.com/watch?v=POtoEH-5l40}
-///
-/// If a [TabController] is not provided, then there must be a [DefaultTabController]
-/// ancestor.
-///
-/// The tab controller's [TabController.length] must equal the length of the
-/// [children] list and the length of the [TDHorizontalTabBar.tabs] list.
-///
-/// To see a sample implementation, visit the [TabController] documentation.
-class TDHorizontalTabBarView extends StatefulWidget {
-  /// Creates a page view with one child per tab.
-  ///
-  /// The length of [children] must be the same as the [controller]'s length.
-  const TDHorizontalTabBarView({
-    required this.children,
-    super.key,
-    this.controller,
-    this.physics,
-    this.dragStartBehavior = DragStartBehavior.start,
-  });
-
-  /// This widget's selection and animation state.
-  ///
-  /// If [TabController] is not provided, then the value of [DefaultTabController.of]
-  /// will be used.
-  final TabController? controller;
-
-  /// One widget per tab.
-  ///
-  /// Its length must match the length of the [TDHorizontalTabBar.tabs]
-  /// list, as well as the [controller]'s [TabController.length].
-  final List<Widget> children;
-
-  /// How the page view should respond to user input.
-  ///
-  /// For example, determines how the page view continues to animate after the
-  /// user stops dragging the page view.
-  ///
-  /// The physics are modified to snap to page boundaries using
-  /// [PageScrollPhysics] prior to being used.
-  ///
-  /// Defaults to matching platform conventions.
-  final ScrollPhysics? physics;
-
-  /// {@macro flutter.widgets.scrollable.dragStartBehavior}
-  final DragStartBehavior dragStartBehavior;
-
-  @override
-  State<TDHorizontalTabBarView> createState() => _TDHorizontalTabBarViewState();
-}
-
-class _TDHorizontalTabBarViewState extends State<TDHorizontalTabBarView> {
-  TabController? _controller;
-  late PageController _pageController;
-  late List<Widget> _children;
-  late List<Widget> _childrenWithKey;
-  int? _currentIndex;
-  int _warpUnderwayCount = 0;
-
-  // If the TDHorizontalTabBarView is rebuilt with a new tab controller, the caller should
-  // dispose the old one. In that case the old controller's animation will be
-  // null and should not be accessed.
-  bool get _controllerIsValid => _controller?.animation != null;
-
-  void _updateTabController() {
-    final newController = widget.controller ?? DefaultTabController.of(context);
-
-    if (newController == _controller) return;
-
-    if (_controllerIsValid) {
-      _controller!.animation!.removeListener(_handleTabControllerAnimationTick);
-    }
-    _controller = newController;
-    if (_controller != null) {
-      _controller!.animation!.addListener(_handleTabControllerAnimationTick);
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _updateChildren();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _updateTabController();
-    _currentIndex = _controller!.index;
-    _pageController = PageController(initialPage: _currentIndex!);
-  }
-
-  @override
-  void didUpdateWidget(TDHorizontalTabBarView oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.controller != oldWidget.controller) {
-      _updateTabController();
-      _currentIndex = _controller!.index;
-      _pageController.jumpToPage(_currentIndex!);
-    }
-    if (widget.children != oldWidget.children && _warpUnderwayCount == 0) {
-      _updateChildren();
-    }
-  }
-
-  @override
-  void dispose() {
-    if (_controllerIsValid) {
-      _controller!.animation!.removeListener(_handleTabControllerAnimationTick);
-    }
-    _controller = null;
-    // We don't own the _controller Animation, so it's not disposed here.
-    super.dispose();
-  }
-
-  void _updateChildren() {
-    _children = widget.children;
-    _childrenWithKey = KeyedSubtree.ensureUniqueKeysForList(widget.children);
-  }
-
-  void _handleTabControllerAnimationTick() {
-    if (_warpUnderwayCount > 0 || !_controller!.indexIsChanging) {
-      return;
-    } // This widget is driving the controller's animation.
-
-    if (_controller!.index != _currentIndex) {
-      _currentIndex = _controller!.index;
-      unawaited(_warpToCurrentIndex());
-    }
-  }
-
-  Future<void> _warpToCurrentIndex() async {
-    if (!mounted) return Future<void>.value();
-
-    if (_pageController.page == _currentIndex!.toDouble()) {
-      return Future<void>.value();
-    }
-
-    final duration = _controller!.animationDuration;
-
-    if (duration == Duration.zero) {
-      _pageController.jumpToPage(_currentIndex!);
-      return Future<void>.value();
-    }
-
-    final previousIndex = _controller!.previousIndex;
-
-    if ((_currentIndex! - previousIndex).abs() == 1) {
-      _warpUnderwayCount += 1;
-      await _pageController.animateToPage(
-        _currentIndex!,
-        duration: duration,
-        curve: Curves.ease,
-      );
-      _warpUnderwayCount -= 1;
-      return Future<void>.value();
-    }
-
-    assert((_currentIndex! - previousIndex).abs() > 1);
-    final initialPage =
-        _currentIndex! > previousIndex
-            ? _currentIndex! - 1
-            : _currentIndex! + 1;
-    final originalChildren = _childrenWithKey;
-    setState(() {
-      _warpUnderwayCount += 1;
-
-      _childrenWithKey = List<Widget>.of(_childrenWithKey, growable: false);
-      final temp = _childrenWithKey[initialPage];
-      _childrenWithKey[initialPage] = _childrenWithKey[previousIndex];
-      _childrenWithKey[previousIndex] = temp;
-    });
-    _pageController.jumpToPage(initialPage);
-
-    await _pageController.animateToPage(
-      _currentIndex!,
-      duration: duration,
-      curve: Curves.ease,
-    );
-    if (!mounted) {
-      return Future<void>.value();
-    }
-    setState(() {
-      _warpUnderwayCount -= 1;
-      if (widget.children != _children) {
-        _updateChildren();
-      } else {
-        _childrenWithKey = originalChildren;
-      }
-    });
-  }
-
-  // Called when the PageView scrolls
-  bool _handleScrollNotification(ScrollNotification notification) {
-    if (_warpUnderwayCount > 0) return false;
-
-    if (notification.depth != 0) return false;
-
-    _warpUnderwayCount += 1;
-    if (notification is ScrollUpdateNotification &&
-        !_controller!.indexIsChanging) {
-      if ((_pageController.page! - _controller!.index).abs() > 1.0) {
-        _controller!.index = _pageController.page!.round();
-        _currentIndex = _controller!.index;
-      }
-      _controller!.offset = (_pageController.page! - _controller!.index).clamp(
-        -1.0,
-        1.0,
-      );
-    } else if (notification is ScrollEndNotification) {
-      _controller!.index = _pageController.page!.round();
-      _currentIndex = _controller!.index;
-      if (!_controller!.indexIsChanging) {
-        _controller!.offset = (_pageController.page! - _controller!.index)
-            .clamp(-1.0, 1.0);
-      }
-    }
-    _warpUnderwayCount -= 1;
-
-    return false;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    assert(() {
-      if (_controller!.length != widget.children.length) {
-        throw FlutterError(
-          "Controller's length property (${_controller!.length}) does not match the "
-          "number of tabs (${widget.children.length}) present in TDHorizontalTabBar's tabs property.",
-        );
-      }
-      return true;
-    }(), '');
-
-    return NotificationListener<ScrollNotification>(
-      onNotification: _handleScrollNotification,
-      child: PageView(
-        dragStartBehavior: widget.dragStartBehavior,
-        controller: _pageController,
-        physics:
-            widget.physics == null
-                ? const PageScrollPhysics().applyTo(
-                  const ClampingScrollPhysics(),
-                )
-                : const PageScrollPhysics().applyTo(widget.physics),
-        children: _childrenWithKey,
-      ),
-    );
-  }
-}
-
-/// Displays a single circle with the specified border and background colors.
-///
-/// Used by [TabPageSelector] to indicate the selected page.
-class TabPageSelectorIndicator extends StatelessWidget {
-  /// Creates an indicator used by [TabPageSelector].
-  ///
-  /// The [backgroundColor], [borderColor], and [size] parameters must not be null.
-  const TabPageSelectorIndicator({
-    required this.backgroundColor,
-    required this.borderColor,
-    required this.size,
-    super.key,
-  });
-
-  /// The indicator circle's background color.
-  final Color backgroundColor;
-
-  /// The indicator circle's border color.
-  final Color borderColor;
-
-  /// The indicator circle's diameter.
-  final double size;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: size,
-      height: size,
-      margin: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        border: Border.all(color: borderColor),
-        shape: BoxShape.circle,
-      ),
-    );
-  }
-}
-
-/// Displays a row of small circular indicators, one per tab.
-///
-/// The selected tab's indicator is highlighted. Often used in conjunction with
-/// a [TDHorizontalTabBarView].
-///
-/// If a [TabController] is not provided, then there must be a
-/// [DefaultTabController] ancestor.
-class TabPageSelector extends StatelessWidget {
-  /// Creates a compact widget that indicates which tab has been selected.
-  const TabPageSelector({
-    super.key,
-    this.controller,
-    this.indicatorSize = 12.0,
-    this.color,
-    this.selectedColor,
-  }) : assert(indicatorSize > 0.0);
-
-  /// This widget's selection and animation state.
-  ///
-  /// If [TabController] is not provided, then the value of
-  /// [DefaultTabController.of] will be used.
-  final TabController? controller;
-
-  /// The indicator circle's diameter (the default value is 12.0).
-  final double indicatorSize;
-
-  /// The indicator circle's fill color for unselected pages.
-  ///
-  /// If this parameter is null, then the indicator is filled with [Colors.transparent].
-  final Color? color;
-
-  /// The indicator circle's fill color for selected pages and border color
-  /// for all indicator circles.
-  ///
-  /// If this parameter is null, then the indicator is filled with the theme's
-  /// [ColorScheme.secondary].
-  final Color? selectedColor;
-
-  Widget _buildTabIndicator(
-    int tabIndex,
-    TabController tabController,
-    ColorTween selectedColorTween,
-    ColorTween previousColorTween,
-  ) {
-    final Color background;
-    if (tabController.indexIsChanging) {
-      // The selection's animation is animating from previousValue to value.
-      final t = 1.0 - _indexChangeProgress(tabController);
-      if (tabController.index == tabIndex) {
-        background = selectedColorTween.lerp(t)!;
-      } else if (tabController.previousIndex == tabIndex) {
-        background = previousColorTween.lerp(t)!;
-      } else {
-        background = selectedColorTween.begin!;
-      }
-    } else {
-      // The selection's offset reflects how far the TDHorizontalTabBarView has / been dragged
-      // to the previous page (-1.0 to 0.0) or the next page (0.0 to 1.0).
-      final offset = tabController.offset;
-      if (tabController.index == tabIndex) {
-        background = selectedColorTween.lerp(1.0 - offset.abs())!;
-      } else if (tabController.index == tabIndex - 1 && offset > 0.0) {
-        background = selectedColorTween.lerp(offset)!;
-      } else if (tabController.index == tabIndex + 1 && offset < 0.0) {
-        background = selectedColorTween.lerp(-offset)!;
-      } else {
-        background = selectedColorTween.begin!;
-      }
-    }
-    return TabPageSelectorIndicator(
-      backgroundColor: background,
-      borderColor: selectedColorTween.end!,
-      size: indicatorSize,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final fixColor = color ?? Colors.transparent;
-    final fixSelectedColor =
-        selectedColor ?? Theme.of(context).colorScheme.secondary;
-    final selectedColorTween = ColorTween(
-      begin: fixColor,
-      end: fixSelectedColor,
-    );
-    final previousColorTween = ColorTween(
-      begin: fixSelectedColor,
-      end: fixColor,
-    );
-    final tabController = controller ?? DefaultTabController.of(context);
-    final localizations = MaterialLocalizations.of(context);
-
-    final Animation<double> animation = CurvedAnimation(
-      parent: tabController!.animation!,
-      curve: Curves.fastOutSlowIn,
-    );
-    return AnimatedBuilder(
-      animation: animation,
-      builder: (BuildContext context, Widget? child) {
-        return Semantics(
-          label: localizations.tabLabel(
-            tabIndex: tabController.index + 1,
-            tabCount: tabController.length,
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children:
-                List<Widget>.generate(tabController.length, (int tabIndex) {
-                  return _buildTabIndicator(
-                    tabIndex,
-                    tabController,
-                    selectedColorTween,
-                    previousColorTween,
-                  );
-                }).toList(),
-          ),
-        );
-      },
-    );
   }
 }

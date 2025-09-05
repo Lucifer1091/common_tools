@@ -148,7 +148,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
       pageBuilder: _wrapInheritedTheme((context) => const MyBottomTabBarPage()),
     ),
     ExamplePageModel(
-      text: 'Tabs',
+      text: 'TabBar',
       name: 'tabs',
       pageBuilder: _wrapInheritedTheme((context) => const MyTabsPage()),
     ),
