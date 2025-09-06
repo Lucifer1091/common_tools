@@ -67,7 +67,6 @@ class _MyBottomTabBarPageState extends State<MyBottomTabBarPage>
           backgroundColor: context.colorScheme.background,
           indicatorColor: context.colorScheme.primary,
           indicatorWidth: 16,
-          showIndicator: true,
           tabs: _tabs.map((e) => MyTab(text: '$e')).toList(),
         ),
         Expanded(

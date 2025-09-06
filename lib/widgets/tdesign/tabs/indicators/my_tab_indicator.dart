@@ -2,25 +2,32 @@ import 'package:flutter/material.dart';
 
 import '../../../../index.dart';
 
-class MyDotIndicator extends Decoration {
-  const MyDotIndicator(
-    this.context, {
-    this.radius = 3,
+enum MyTabIndicatorPosition { center, top, bottom }
+
+// enum MyTabIndicatorSize { tiny, normal, full }
+
+enum MyTabIndicatorType { none, dot, line, material, capsule }
+
+class MyTabIndicator extends Decoration {
+  const MyTabIndicator({
+    required this.context,
+    required this.type,
     this.color,
+    this.gradient,
+    this.radius = 3,
     this.strokeWidth = 2,
     this.paintingStyle = PaintingStyle.fill,
     this.insets = EdgeInsets.zero,
     this.position = MyTabIndicatorPosition.bottom,
-    this.distanceFromCenter = 8,
   });
 
   final BuildContext context;
+  final MyTabIndicatorType type;
+  final Color? color;
+  final List<Color>? gradient;
 
   /// Radius of the dot
   final double radius;
-
-  /// Color of the dot
-  final Color? color;
 
   /// Stroke width (used if [paintingStyle] is [PaintingStyle.stroke])
   final double strokeWidth;
@@ -34,20 +41,24 @@ class MyDotIndicator extends Decoration {
   /// Dot position: center, top, or bottom
   final MyTabIndicatorPosition position;
 
-  /// Vertical offset from center (used if [position] is center)
-  final double distanceFromCenter;
-
   @override
-  MyDotIndicatorPainter createBoxPainter([VoidCallback? onChanged]) {
-    return MyDotIndicatorPainter(this, onChanged);
-  }
+  BoxPainter createBoxPainter([VoidCallback? onChanged]) => switch (type) {
+    MyTabIndicatorType.dot => _DotIndicatorPainter(this, onChanged),
+    MyTabIndicatorType.none => _NoIndicatorPainter(),
+    _ => _NoIndicatorPainter(),
+  };
 }
 
-class MyDotIndicatorPainter extends BoxPainter {
-  MyDotIndicatorPainter(this.decoration, VoidCallback? onChanged)
+class _NoIndicatorPainter extends BoxPainter {
+  @override
+  void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {}
+}
+
+class _DotIndicatorPainter extends BoxPainter {
+  _DotIndicatorPainter(this.decoration, VoidCallback? onChanged)
     : super(onChanged);
 
-  final MyDotIndicator decoration;
+  final MyTabIndicator decoration;
 
   @override
   void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
@@ -68,10 +79,7 @@ class MyDotIndicatorPainter extends BoxPainter {
       case MyTabIndicatorPosition.bottom:
         y = indicator.bottom;
       case MyTabIndicatorPosition.center:
-        y =
-            indicator.top +
-            indicator.height / 2 +
-            decoration.distanceFromCenter;
+        y = indicator.top + indicator.height / 2;
     }
 
     final Paint paint =

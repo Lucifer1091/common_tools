@@ -36,7 +36,7 @@ class _TabStyle extends AnimatedWidget {
     final tabBarTheme = TabBarTheme.of(context);
     final animation = listenable as Animation<double>;
 
-    // To enable TextStyle.lerp(style1, style2, value), both styles must have
+    // To enabled TextStyle.lerp(style1, style2, value), both styles must have
     // the same value of inherit. Force that to be inherit=true here.
     final defaultStyle = (labelStyle ??
             tabBarTheme.labelStyle ??
@@ -123,10 +123,7 @@ class MyHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
     this.enableFeedback,
     this.onTap,
     this.physics,
-    this.outlineType,
     this.backgroundColor,
-    this.selectedBgColor,
-    this.unSelectedBgColor,
     this.tabAlignment,
   }) : assert(indicator != null || (indicatorWeight > 0.0), '');
 
@@ -311,13 +308,7 @@ class MyHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
   /// Defaults to matching platform conventions.
   final ScrollPhysics? physics;
 
-  final MyTabType? outlineType;
-
   final Color? backgroundColor;
-
-  final Color? selectedBgColor;
-
-  final Color? unSelectedBgColor;
 
   final TabAlignment? tabAlignment;
 
@@ -823,55 +814,6 @@ class _MyHorizontalTabBarState extends State<MyHorizontalTabBar> {
     );
   }
 
-  BoxDecoration? _getContentDecorateInner(int index) {
-    if (widget.outlineType == MyTabType.capsule) {
-      return BoxDecoration(
-        color:
-            index == _currentIndex
-                ? (widget.selectedBgColor ?? ThemeColors.blue.shade50)
-                : (widget.unSelectedBgColor ?? ThemeColors.neutral.shade50),
-        borderRadius: BorderRadius.circular(32),
-      );
-    }
-    return null;
-  }
-
-  BoxDecoration? _getContentDecorateOuter(int index) {
-    if (widget.outlineType == MyTabType.capsule) {
-      return BoxDecoration(
-        color: widget.backgroundColor ?? context.colorScheme.background,
-      );
-    } else if (widget.outlineType == MyTabType.card) {
-      if (index == _currentIndex) {
-        return BoxDecoration(
-          color: widget.backgroundColor ?? context.colorScheme.background,
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(index + 1 < widget.tabs.length ? 9 : 0),
-            topLeft: Radius.circular(index > 0 ? 9 : 0),
-          ),
-        );
-      } else {
-        return BoxDecoration(
-          color: ThemeColors.neutral.shade50,
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(index - 1 == _currentIndex ? 9 : 0),
-            bottomRight: Radius.circular(index + 1 == _currentIndex ? 9 : 0),
-          ),
-        );
-      }
-    }
-    return null;
-  }
-
-  Color? _getBackgroundColor(int index) {
-    if (widget.outlineType == MyTabType.card) {
-      if (index == _currentIndex) {
-        return ThemeColors.neutral.shade50;
-      }
-    }
-    return null;
-  }
-
   TabAlignment get _defaults {
     return widget.isScrollable ? TabAlignment.start : TabAlignment.fill;
   }
@@ -935,33 +877,17 @@ class _MyHorizontalTabBarState extends State<MyHorizontalTabBar> {
       }
 
       EdgeInsetsGeometry? capsuleDefaultPadding;
-      if (widget.outlineType == MyTabType.capsule) {
-        capsuleDefaultPadding = const EdgeInsets.all(4);
-      }
 
-      return ColoredBox(
-        color: _getBackgroundColor(index) ?? Colors.transparent,
-        child: DecoratedBox(
-          decoration: _getContentDecorateOuter(index) ?? BoxDecoration(),
-          child: Center(
-            heightFactor: 1,
-            child: Padding(
-              padding:
-                  adjustedPadding ??
-                  widget.labelPadding ??
-                  capsuleDefaultPadding ??
-                  tabBarTheme.labelPadding ??
-                  kTabLabelPadding,
-              child: KeyedSubtree(
-                key: _tabKeys[index],
-                child: DecoratedBox(
-                  decoration:
-                      _getContentDecorateInner(index) ?? BoxDecoration(),
-                  child: widget.tabs[index],
-                ),
-              ),
-            ),
-          ),
+      return Center(
+        heightFactor: 1,
+        child: Padding(
+          padding:
+              adjustedPadding ??
+              widget.labelPadding ??
+              capsuleDefaultPadding ??
+              tabBarTheme.labelPadding ??
+              kTabLabelPadding,
+          child: KeyedSubtree(key: _tabKeys[index], child: widget.tabs[index]),
         ),
       );
     });
@@ -1033,9 +959,9 @@ class _MyHorizontalTabBarState extends State<MyHorizontalTabBar> {
 
     for (var index = 0; index < tabCount; index += 1) {
       wrappedTabs[index] = Opacity(
-        opacity: widget.tabs[index].enable ? 1.0 : 0.4,
+        opacity: widget.tabs[index].enabled ? 1.0 : 0.4,
         child: IgnorePointer(
-          ignoring: !widget.tabs[index].enable,
+          ignoring: !widget.tabs[index].enabled,
           child: InkWell(
             splashColor: Colors.transparent,
             hoverColor: Colors.transparent,
@@ -1044,11 +970,8 @@ class _MyHorizontalTabBarState extends State<MyHorizontalTabBar> {
             onTap: () => _handleTap(index),
             enableFeedback: widget.enableFeedback ?? true,
             overlayColor: widget.overlayColor,
-            child: Container(
-              padding:
-                  widget.outlineType == MyTabType.underline
-                      ? EdgeInsets.only(bottom: widget.indicatorWeight)
-                      : EdgeInsets.zero,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: widget.indicatorWeight),
               child: Stack(
                 children: <Widget>[
                   wrappedTabs[index],
@@ -1214,10 +1137,10 @@ class _TabLabelBarRenderer extends RenderFlex {
     while (child != null) {
       final childParentData = child.parentData! as FlexParentData;
       xOffsets.add(childParentData.offset.dx);
-      assert(child.parentData == childParentData);
+      assert(child.parentData == childParentData, '');
       child = childParentData.nextSibling;
     }
-    assert(textDirection != null);
+    assert(textDirection != null, '');
     switch (textDirection!) {
       case TextDirection.rtl:
         xOffsets.insert(0, size.width);
@@ -1294,7 +1217,7 @@ class _DragAnimation extends Animation<double>
 
   @override
   double get value {
-    assert(!controller.indexIsChanging);
+    assert(!controller.indexIsChanging, '');
     final controllerMaxValue = (controller.length - 1).toDouble();
     final controllerValue = controller.animation!.value.clamp(
       0.0,

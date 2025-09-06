@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+enum TabPosition { top, bottom }
+
 class MaterialIndicator extends Decoration {
   const MaterialIndicator({
     this.height = 4,
@@ -105,8 +107,8 @@ class _CustomPainter extends BoxPainter {
       '',
     );
 
-    //offset is the position from where the decoration should be drawn.
-    //configuration.size tells us about the height and width of the tab.
+    // offset is the position from where the decoration should be drawn.
+    // configuration.size tells us about the height and width of the tab.
     final Size mysize = Size(
       configuration.size!.width - (horizontalPadding * 2),
       height,
@@ -126,7 +128,7 @@ class _CustomPainter extends BoxPainter {
           ..color = color
           ..style = paintingStyle
           ..strokeWidth = strokeWidth;
-          
+
     canvas.drawRRect(
       RRect.fromRectAndCorners(
         rect,
@@ -140,4 +142,69 @@ class _CustomPainter extends BoxPainter {
   }
 }
 
-enum TabPosition { top, bottom }
+enum MyTabIndicatorSize { tiny, normal, full }
+
+class MD2Indicator extends Decoration {
+  const MD2Indicator({
+    required this.indicatorHeight,
+    required this.indicatorColor,
+    required this.indicatorSize,
+  });
+  final double indicatorHeight;
+  final Color indicatorColor;
+  final MyTabIndicatorSize indicatorSize;
+
+  @override
+  _MD2Painter createBoxPainter([VoidCallback? onChanged]) {
+    return _MD2Painter(this, onChanged);
+  }
+}
+
+class _MD2Painter extends BoxPainter {
+  _MD2Painter(this.decoration, VoidCallback? onChanged) : super(onChanged);
+
+  final MD2Indicator decoration;
+
+  @override
+  void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
+    assert(configuration.size != null, '');
+
+    Rect rect;
+    if (decoration.indicatorSize == MyTabIndicatorSize.full) {
+      rect =
+          Offset(
+            offset.dx,
+            configuration.size!.height - decoration.indicatorHeight,
+          ) &
+          Size(configuration.size!.width, decoration.indicatorHeight);
+    } else if (decoration.indicatorSize == MyTabIndicatorSize.tiny) {
+      rect =
+          Offset(
+            offset.dx + configuration.size!.width / 2 - 8,
+            configuration.size!.height - decoration.indicatorHeight,
+          ) &
+          Size(16, decoration.indicatorHeight);
+    } else {
+      rect =
+          Offset(
+            offset.dx + 6,
+            configuration.size!.height - decoration.indicatorHeight,
+          ) &
+          Size(configuration.size!.width - 12, decoration.indicatorHeight);
+    }
+
+    final Paint paint =
+        Paint()
+          ..color = decoration.indicatorColor
+          ..style = PaintingStyle.fill;
+
+    canvas.drawRRect(
+      RRect.fromRectAndCorners(
+        rect,
+        topRight: Radius.circular(8),
+        topLeft: Radius.circular(8),
+      ),
+      paint,
+    );
+  }
+}

@@ -24,12 +24,8 @@ class MyTabBar extends StatefulWidget {
     this.physics,
     this.onTap,
     this.isScrollable = false,
-    this.type = MyTabType.underline,
-    this.showIndicator = true,
     this.dividerColor,
     this.dividerHeight = 0.5,
-    this.selectedBgColor,
-    this.unSelectedBgColor,
     this.tabAlignment,
   }) : assert(
          backgroundColor == null || decoration == null,
@@ -69,23 +65,15 @@ class MyTabBar extends StatefulWidget {
 
   final Decoration? indicator;
 
-  final bool showIndicator;
-
   final ScrollPhysics? physics;
 
   final void Function(int)? onTap;
 
   final EdgeInsetsGeometry? labelPadding;
 
-  final MyTabType type;
-
   final Color? dividerColor;
 
   final double dividerHeight;
-
-  final Color? selectedBgColor;
-
-  final Color? unSelectedBgColor;
 
   final TabAlignment? tabAlignment;
 
@@ -103,23 +91,19 @@ class _MyTabBarState extends State<MyTabBar> {
       height: widget.height ?? _defaultHeight,
       decoration:
           widget.decoration ??
-          (widget.type == MyTabType.card
-              ? BoxDecoration(color: widget.backgroundColor)
-              : BoxDecoration(
-                color: widget.backgroundColor,
-                border:
-                    widget.dividerHeight <= 0
-                        ? null
-                        : Border(
-                          bottom: BorderSide(
-                            color:
-                                widget.dividerColor ??
-                                context.colorScheme.border,
-                            width: widget.dividerHeight,
-                          ),
-                        ),
-              )),
-
+          BoxDecoration(
+            color: widget.backgroundColor,
+            border:
+                widget.dividerHeight <= 0
+                    ? null
+                    : Border(
+                      bottom: BorderSide(
+                        color:
+                            widget.dividerColor ?? context.colorScheme.border,
+                        width: widget.dividerHeight,
+                      ),
+                    ),
+          ),
       child: MyHorizontalTabBar(
         physics: widget.physics,
         isScrollable: widget.isScrollable,
@@ -134,11 +118,8 @@ class _MyTabBarState extends State<MyTabBar> {
             widget.unselectedLabelStyle ?? _getUnSelectLabelStyle(context),
         tabs: widget.tabs,
         indicatorPadding: widget.indicatorPadding ?? EdgeInsets.zero,
-        outlineType: widget.type,
         controller: widget.controller,
         backgroundColor: widget.backgroundColor,
-        selectedBgColor: widget.selectedBgColor,
-        unSelectedBgColor: widget.unSelectedBgColor,
         tabAlignment: widget.tabAlignment,
         onTap: widget.onTap,
       ),
@@ -160,14 +141,12 @@ class _MyTabBarState extends State<MyTabBar> {
   }
 
   Decoration _getIndicator(BuildContext context) {
-    return widget.showIndicator
-        ? MyTabUnderlineIndicator(
-          context: context,
-          height: widget.indicatorHeight,
-          width: widget.indicatorWidth,
-          color: widget.indicatorColor,
-        )
-        : MyNoIndicator();
+    return MyTabUnderlineIndicator(
+      context: context,
+      height: widget.indicatorHeight,
+      width: widget.indicatorWidth,
+      color: widget.indicatorColor,
+    );
   }
 }
 
@@ -225,67 +204,3 @@ class _MyTabUnderlineIndicatorPainter extends BoxPainter {
   double _indicatorWidth() => decoration.width ?? _defaultIndicatorWidth;
 }
 
-class MyTabCapsuleIndicator extends Decoration {
-  const MyTabCapsuleIndicator({
-    required this.context,
-    this.height,
-    this.color,
-    this.radius,
-    this.indicatorPadding,
-  });
-
-  final BuildContext context;
-  final double? height;
-  final Color? color;
-  final double? radius;
-  final EdgeInsetsGeometry? indicatorPadding;
-
-  @override
-  BoxPainter createBoxPainter([VoidCallback? onChanged]) =>
-      _MyTabCapsuleIndicatorPainter(context, this);
-}
-
-class _MyTabCapsuleIndicatorPainter extends BoxPainter {
-  _MyTabCapsuleIndicatorPainter(this.context, this.decoration);
-
-  final MyTabCapsuleIndicator decoration;
-  final BuildContext context;
-
-  @override
-  void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
-    final indicatorHeight = decoration.height ?? 32;
-    final indicatorRadius = decoration.radius ?? indicatorHeight / 2;
-    final indicatorColor = decoration.color ?? context.colorScheme.primary;
-    final EdgeInsets padding = (decoration.indicatorPadding ??
-            decoration.padding)
-        .resolve(Directionality.of(context));
-
-    final rect =
-        Offset(
-          offset.dx + padding.left,
-          offset.dy + configuration.size!.height / 2 - indicatorHeight / 2,
-        ) &
-        Size(configuration.size!.width - padding.horizontal, indicatorHeight);
-
-    final paint =
-        Paint()
-          ..color = indicatorColor
-          ..style = PaintingStyle.fill;
-
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(rect, Radius.circular(indicatorRadius)),
-      paint,
-    );
-  }
-}
-
-class MyNoIndicator extends Decoration {
-  @override
-  BoxPainter createBoxPainter([VoidCallback? onChanged]) =>
-      _MyNoIndicatorPainter();
-}
-
-class _MyNoIndicatorPainter extends BoxPainter {
-  @override
-  void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {}
-}

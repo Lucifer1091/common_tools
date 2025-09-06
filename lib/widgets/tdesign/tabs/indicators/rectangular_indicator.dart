@@ -71,6 +71,7 @@ class _CustomPainter extends BoxPainter {
     required this.paintingStyle,
     required this.strokeWidth,
   }) : super(onChanged);
+
   final RectangularIndicator decoration;
   final double topRightRadius;
   final double topLeftRadius;
@@ -100,8 +101,8 @@ class _CustomPainter extends BoxPainter {
       '',
     );
 
-    //offset is the position from where the decoration should be drawn.
-    //configuration.size tells us about the height and width of the tab.
+    // offset is the position from where the decoration should be drawn.
+    // configuration.size tells us about the height and width of the tab.
     final Size mysize = Size(
       configuration.size!.width - (horizontalPadding * 2),
       configuration.size!.height - (2 * verticalPadding),

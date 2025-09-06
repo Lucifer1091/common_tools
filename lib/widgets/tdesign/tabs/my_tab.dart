@@ -8,8 +8,6 @@ const double _kTextAndIconTabHeight = 72;
 
 enum MyTabSize { large, small }
 
-enum MyTabType { underline, capsule, card }
-
 class MyTab extends Tab {
   @override
   const MyTab({
@@ -21,25 +19,24 @@ class MyTab extends Tab {
     this.badge,
     super.height,
     this.textMargin,
-    this.enable = true,
+    this.enabled = true,
     this.size = MyTabSize.small,
-    this.type = MyTabType.underline,
-    super.iconMargin = const EdgeInsets.only(bottom: 4, right: 4),
+    super.iconMargin = const EdgeInsets.only(bottom: 4, right: 8),
   });
 
-  final bool enable;
+  final bool enabled;
   final IconData? iconData;
   final MyBadgeConfig? badge;
   final EdgeInsetsGeometry? textMargin;
   final MyTabSize size;
-  final MyTabType type;
 
   @override
   Widget build(BuildContext context) {
     final double calculatedHeight;
     Widget label;
 
-    final Widget? icon0 = icon ?? (iconData != null ? Icon(iconData) : null);
+    final Widget? icon0 =
+        icon ?? (iconData != null ? Icon(iconData, size: _getIconSize) : null);
 
     if (icon0 == null) {
       calculatedHeight = _kTabHeight;
@@ -72,16 +69,10 @@ class MyTab extends Tab {
       );
     }
 
-    final isCapsuleOutlineType = type == MyTabType.capsule;
-
     return IgnorePointer(
-      ignoring: !enable,
+      ignoring: !enabled,
       child: Container(
         alignment: Alignment.center,
-        margin:
-            isCapsuleOutlineType
-                ? const EdgeInsets.symmetric(horizontal: 16)
-                : null,
         height: height ?? calculatedHeight,
         child: Center(widthFactor: 1, child: label),
       ),
@@ -97,15 +88,17 @@ class MyTab extends Tab {
       text!,
       softWrap: false,
       overflow: TextOverflow.fade,
-      style: context.bodyMedium.copyWith(fontSize: _getFontSize(context)),
+      style: context.bodyMedium.copyWith(fontSize: _getFontSize),
     );
   }
 
-  double _getFontSize(BuildContext context) {
-    if (size == MyTabSize.large) {
-      return 16;
-    } else {
-      return 14;
-    }
-  }
+  double get _getFontSize => switch (size) {
+    MyTabSize.large => 16,
+    MyTabSize.small => 14,
+  };
+
+  double get _getIconSize => switch (size) {
+    MyTabSize.large => 24,
+    MyTabSize.small => 20,
+  };
 }

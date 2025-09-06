@@ -12,13 +12,13 @@ enum TabIndicatorAlignVertical { center, up, down }
 //  } else if (index == 3) {
 //    return const TabIndicator(width: 4,height: 4,radius: 2,align: TabIndicatorAlignVertical.up);
 //  }else if (index == 4) {
-//    return const TabIndicator(
-//      align: TabIndicatorAlignVertical.center,
-//      height:26,
-//      radius: 13,
-//      padding: EdgeInsets.symmetric(horizontal: -12,vertical: 0),
-//      color: Color.fromARGB(100, 26, 26, 255),
-//    );
+//  return const TabIndicator(
+//    align: TabIndicatorAlignVertical.center,
+//    height:26,
+//    radius: 13,
+//    padding: EdgeInsets.symmetric(horizontal: -12,vertical: 0),
+//    color: Color.fromARGB(100, 26, 26, 255),
+//  );
 //  } else {
 //    return const TabIndicator();
 //  }
@@ -81,36 +81,38 @@ class _TabIndicatorPainter extends BoxPainter {
   TabIndicatorAlignVertical get align => decoration.align;
 
   Rect _indicatorRectFor(Rect rect, TextDirection textDirection) {
-    Rect indicator = padding.resolve(textDirection).deflateRect(rect);
+    final Rect indicator = padding.resolve(textDirection).deflateRect(rect);
 
-    double width = indicatorWidth > 0 ? indicatorWidth : indicator.width;
-    double height = indicatorHeight > 0 ? indicatorHeight : indicator.height;
-    double left = (indicator.left + indicator.right - width) * 0.5;
+    final double width = indicatorWidth > 0 ? indicatorWidth : indicator.width;
+    final double height =
+        indicatorHeight > 0 ? indicatorHeight : indicator.height;
+    final double left = (indicator.left + indicator.right - width) * 0.5;
     double top;
 
     switch (align) {
       case TabIndicatorAlignVertical.up:
         top = indicator.top;
-        break;
       case TabIndicatorAlignVertical.down:
         top = indicator.bottom - height;
-        break;
-      default:
+      case TabIndicatorAlignVertical.center:
         top = (indicator.height - height) * 0.5;
-        break;
     }
     return Rect.fromLTWH(left, top, width, height);
   }
 
   @override
   void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
-    assert(configuration.size != null);
+    assert(configuration.size != null, '');
+
     final Rect rect = offset & configuration.size!;
     final TextDirection textDirection = configuration.textDirection!;
     final Rect indicator = _indicatorRectFor(rect, textDirection);
-    final Paint paint = Paint();
-    paint.color = indicatorColor;
-    paint.style = PaintingStyle.fill;
+
+    final Paint paint =
+        Paint()
+          ..color = indicatorColor
+          ..style = PaintingStyle.fill;
+
     canvas.drawRRect(
       RRect.fromRectAndRadius(indicator, Radius.circular(indicatorRadius)),
       paint,

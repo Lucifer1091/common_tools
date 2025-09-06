@@ -66,7 +66,7 @@ class MyBadge extends StatelessWidget {
 
     return switch (size) {
       MyBadgeSize.large => context.labelMedium,
-      MyBadgeSize.small => context.labelSmall,
+      MyBadgeSize.small => context.labelSmall.copyWith(fontSize: 10.5),
     }.copyWith(color: foreground, fontWeight: FontWeight.w500);
   }
 
