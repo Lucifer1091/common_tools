@@ -13,8 +13,10 @@ class MyTabsPage extends StatefulWidget {
 
 class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
   TabController? _tabController4;
+  TabController? _tabController5;
   List<MyTab> tabs = [];
   List<Widget> tabViews = [];
+  List<Color> gradient = [Color(0xff579CFA), Color(0xff2FDEE7)];
 
   List<MyTab> _getTabs() {
     tabs = const [
@@ -70,15 +72,15 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
   }
 
   void _initTabController() {
-    _tabController4 = TabController(length: 5, vsync: this);
+    _tabController4 = TabController(length: 4, vsync: this);
+    _tabController5 = TabController(length: 5, vsync: this);
   }
 
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tdTitle(),
-      desc:
-          'A set of layered sections of content—known as tab panels—that are displayed one at a time.',
+      desc: 'A set of layered sections of content are displayed one at a time.',
       exampleCodeGroup: 'tabs',
       children: [
         ExampleModule(
@@ -103,11 +105,11 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
           title: 'Component Style',
           children: [
             ExampleItem(
-              builder: _buildItemWithSizeSmall,
+              builder: _buildSmallTabs,
               padding: const EdgeInsets.only(top: 8),
             ),
             ExampleItem(
-              builder: _buildItemWithSizeBig,
+              builder: _buildLargeTabs,
               padding: const EdgeInsets.only(top: 16),
             ),
           ],
@@ -119,13 +121,14 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
               builder: _buildIndicator,
               padding: const EdgeInsets.only(top: 16),
             ),
-
             ExampleItem(
               builder: (ctx) => _buildIndicator(
                 ctx,
-                indicator: MyDotIndicator(
+                indicator: MyTabIndicator(
                   ctx,
-                  position: MyTabIndicatorPosition.bottom,
+                  gradient: gradient,
+                  type: MyTabIndicatorType.line,
+                  size: MyTabIndicatorSize.normal,
                 ),
               ),
               padding: const EdgeInsets.only(top: 16),
@@ -133,9 +136,10 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
             ExampleItem(
               builder: (ctx) => _buildIndicator(
                 ctx,
-                indicator: MyDotIndicator(
+                indicator: MyTabIndicator(
                   ctx,
-                  position: MyTabIndicatorPosition.top,
+                  type: MyTabIndicatorType.line,
+                  size: MyTabIndicatorSize.full,
                 ),
               ),
               padding: const EdgeInsets.only(top: 16),
@@ -143,18 +147,17 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
             ExampleItem(
               builder: (ctx) => _buildIndicator(
                 ctx,
-                indicator: TabIndicator(color: context.colorScheme.primary),
+                indicator: MyTabIndicator(ctx, type: MyTabIndicatorType.dot),
               ),
               padding: const EdgeInsets.only(top: 16),
             ),
             ExampleItem(
               builder: (ctx) => _buildIndicator(
                 ctx,
-                indicator: TabIndicator(
-                  height: 3,
-                  width: 19,
-                  radius: 4,
-                  color: context.colorScheme.primary,
+                indicator: MyTabIndicator(
+                  ctx,
+                  size: MyTabIndicatorSize.full,
+                  type: MyTabIndicatorType.material,
                 ),
               ),
               padding: const EdgeInsets.only(top: 16),
@@ -162,18 +165,11 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
             ExampleItem(
               builder: (ctx) => _buildIndicator(
                 ctx,
-                indicator: const TabIndicator(width: 5, height: 5, radius: 2),
-              ),
-              padding: const EdgeInsets.only(top: 16),
-            ),
-            ExampleItem(
-              builder: (ctx) => _buildIndicator(
-                ctx,
-                indicator: const TabIndicator(
-                  width: 4,
-                  height: 4,
-                  radius: 2,
-                  align: TabIndicatorAlignVertical.up,
+                indicator: MyTabIndicator(
+                  ctx,
+                  gradient: gradient,
+                  size: MyTabIndicatorSize.normal,
+                  type: MyTabIndicatorType.material,
                 ),
               ),
               padding: const EdgeInsets.only(top: 16),
@@ -181,11 +177,20 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
             ExampleItem(
               builder: (ctx) => _buildIndicator(
                 ctx,
-                indicator: TabIndicator(
-                  align: TabIndicatorAlignVertical.center,
-                  height: 36,
-                  radius: 100,
-                  color: ctx.colorScheme.primary,
+                indicator: MyTabIndicator(
+                  ctx,
+                  size: MyTabIndicatorSize.tiny,
+                  type: MyTabIndicatorType.material,
+                ),
+              ),
+              padding: const EdgeInsets.only(top: 16),
+            ),
+            ExampleItem(
+              builder: (ctx) => _buildIndicator(
+                ctx,
+                indicator: MyTabIndicator(
+                  ctx,
+                  type: MyTabIndicatorType.capsule,
                 ),
                 labelColor: ctx.colorScheme.primaryForeground,
               ),
@@ -194,46 +199,10 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
             ExampleItem(
               builder: (ctx) => _buildIndicator(
                 ctx,
-                indicator: MyGradientTabIndicator(
-                  colors: [Color(0xff579CFA), Color(0xff2FDEE7)],
-                  indicatorWidth: 3,
-                ),
-              ),
-              padding: const EdgeInsets.only(top: 16),
-            ),
-            ExampleItem(
-              builder: (ctx) => _buildIndicator(
-                ctx,
-                indicator: MaterialIndicator(color: ctx.colorScheme.primary),
-              ),
-              padding: const EdgeInsets.only(top: 16),
-            ),
-            ExampleItem(
-              builder: (ctx) => _buildIndicator(
-                ctx,
-                indicator: RectangularIndicator(
-                  color: ctx.colorScheme.primary,
-                  bottomLeftRadius: 100,
-                  bottomRightRadius: 100,
-                  topLeftRadius: 100,
-                  topRightRadius: 100,
-                  verticalPadding: 6,
-                ),
-                labelColor: ctx.colorScheme.primaryForeground,
-              ),
-              padding: const EdgeInsets.only(top: 16),
-            ),
-            ExampleItem(
-              builder: (ctx) => _buildIndicator(
-                ctx,
-                indicator: RectangularIndicator(
-                  color: ctx.colorScheme.primary,
-                  bottomLeftRadius: 100,
-                  bottomRightRadius: 100,
-                  topLeftRadius: 100,
-                  topRightRadius: 100,
-                  paintingStyle: PaintingStyle.stroke,
-                  verticalPadding: 6,
+                indicator: MyTabIndicator(
+                  ctx,
+                  type: MyTabIndicatorType.capsule,
+                  style: PaintingStyle.stroke,
                 ),
               ),
               padding: const EdgeInsets.only(top: 16),
@@ -254,7 +223,7 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
   }
 
   Widget _buildNonScrollable(BuildContext context) {
-    return MyTabBar(tabs: subList(5), controller: _tabController4);
+    return MyTabBar(tabs: subList(5), controller: _tabController5);
   }
 
   Widget _buildScrollable(BuildContext context) {
@@ -301,17 +270,16 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
   Widget _buildTabView(BuildContext context) {
     var tabController = TabController(length: 3, vsync: this);
     return SizedBox(
-      height: 120 + 48,
+      height: 150 + 48,
       child: Column(
         children: [
           MyTabBar(
             tabs: subList(3),
             controller: tabController,
-
             isScrollable: false,
           ),
           SizedBox(
-            height: 120,
+            height: 150,
             child: MyTabView(
               controller: tabController,
               children: _getTabViews(),
@@ -334,7 +302,7 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildItemWithSizeSmall(BuildContext context) {
+  Widget _buildSmallTabs(BuildContext context) {
     var tabs = [
       const MyTab(text: 'Small size'),
       const MyTab(text: 'Tab 2'),
@@ -347,7 +315,7 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildItemWithSizeBig(BuildContext context) {
+  Widget _buildLargeTabs(BuildContext context) {
     var tabs = [
       const MyTab(text: 'Large size', size: MyTabSize.large),
       const MyTab(text: 'Tab 2', size: MyTabSize.large),
@@ -367,14 +335,10 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
   Widget _buildIndicator(
     BuildContext context, {
     Color? labelColor,
-    Decoration? indicator,
+    MyTabIndicator? indicator,
   }) {
     var tabs = const [
-      MyTab(
-        text: 'Tab 1',
-        textMargin: EdgeInsets.only(right: 10),
-        badge: MyBadgeConfig(),
-      ),
+      MyTab(text: 'Tab 1'),
       MyTab(
         text: 'Tab 2',
         textMargin: EdgeInsets.only(right: 20, top: 2, bottom: 2),
@@ -385,10 +349,17 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
     ];
     return MyTabBar(
       tabs: tabs,
-      controller: TabController(length: 4, vsync: this),
+      controller: _tabController4,
       indicator: indicator,
       labelColor: labelColor,
     );
+  }
+
+  @override
+  void dispose() {
+    _tabController4?.dispose();
+    _tabController5?.dispose();
+    super.dispose();
   }
 }
 

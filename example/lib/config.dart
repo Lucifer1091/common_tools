@@ -14,7 +14,7 @@ import 'page/sidebar/my_sidebar_page_pagination.dart';
 import 'page/td_action_sheet_page.dart';
 import 'page/td_avatar_page.dart';
 import 'page/my_badge_page.dart';
-import 'page/my_bottom_tab_bar_page.dart';
+import 'page/td_bottom_tab_bar_page.dart';
 import 'page/td_calendar_page.dart';
 import 'page/td_cascader_page.dart';
 import 'page/my_cell_page.dart';
@@ -141,12 +141,12 @@ Map<String, List<ExamplePageModel>> exampleMap = {
       name: 'steps',
       pageBuilder: _wrapInheritedTheme((context) => const MyStepsPage()),
     ),
-    ExamplePageModel(
-      text: 'TabBar',
-      name: 'tab-bar',
-      pageName: 'bottom_tab_bar',
-      pageBuilder: _wrapInheritedTheme((context) => const MyBottomTabBarPage()),
-    ),
+    // ExamplePageModel(
+    //   text: 'TabBar',
+    //   name: 'tab-bar',
+    //   pageName: 'bottom_tab_bar',
+    //   pageBuilder: _wrapInheritedTheme((context) => const MyBottomTabBarPage()),
+    // ),
     ExamplePageModel(
       text: 'TabBar',
       name: 'tabs',

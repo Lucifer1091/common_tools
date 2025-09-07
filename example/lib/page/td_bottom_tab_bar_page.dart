@@ -44,10 +44,6 @@ class _MyBottomTabBarPageState extends State<MyBottomTabBarPage>
           title: 'Component Types',
           children: [
             ExampleItem(desc: 'Plain Text Bar', builder: _textTypeTabBar4tabs),
-            ExampleItem(
-              desc: 'Icon plus text label bar',
-              builder: _iconTextTypeTabBar4tabs,
-            ),
           ],
         ),
       ],
@@ -58,25 +54,5 @@ class _MyBottomTabBarPageState extends State<MyBottomTabBarPage>
     return SizedBox.shrink();
   }
 
-  Widget _iconTextTypeTabBar4tabs(BuildContext context) {
-    return Column(
-      children: [
-        MyTabBar(
-          controller: _tabController,
-          height: 44,
-          backgroundColor: context.colorScheme.background,
-          indicatorColor: context.colorScheme.primary,
-          indicatorWidth: 16,
-          tabs: _tabs.map((e) => MyTab(text: '$e')).toList(),
-        ),
-        Expanded(
-          child: MyTabView(
-            enableSwipe: true,
-            controller: _tabController,
-            children: _tabs.map((e) => Center(child: Text('data$e'))).toList(),
-          ),
-        ),
-      ],
-    ).sizedBox(height: 700);
-  }
+
 }

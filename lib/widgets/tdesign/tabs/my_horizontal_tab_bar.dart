@@ -1,13 +1,6 @@
-import 'dart:async';
-import 'dart:math' as math;
-import 'dart:ui' show lerpDouble;
+// ignore_for_file: unused_element_parameter
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart' show DragStartBehavior;
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-
-import '../../../index.dart' hide PageScrollPhysics;
+part of 'my_tab_bar.dart';
 
 const double _kTabHeight = 46;
 const double _kTextAndIconTabHeight = 72;
@@ -85,7 +78,8 @@ class _TabStyle extends AnimatedWidget {
   }
 }
 
-class MyHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
+class _MyHorizontalTabBar extends StatefulWidget
+    implements PreferredSizeWidget {
   /// Creates a material design tab bar.
   ///
   /// The [tabs] argument must not be null and its length must match the [controller]'s
@@ -100,7 +94,7 @@ class MyHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
   ///
   /// If [indicator] is not null or provided from [TabBarTheme],
   /// then [indicatorWeight], [indicatorPadding], and [indicatorColor] are ignored.
-  const MyHorizontalTabBar({
+  const _MyHorizontalTabBar({
     required this.tabs,
     super.key,
     this.controller,
@@ -142,14 +136,14 @@ class MyHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
   /// Whether this tab bar can be scrolled horizontally.
   ///
   /// If [isScrollable] is true, then each tab is as wide as needed for its label
-  /// and the entire [MyHorizontalTabBar] is scrollable. Otherwise each tab gets an equal
+  /// and the entire [_MyHorizontalTabBar] is scrollable. Otherwise each tab gets an equal
   /// share of the available space.
   final bool isScrollable;
 
   /// The amount of space by which to inset the tab bar.
   ///
   /// When [isScrollable] is false, this will yield the same result as if you had wrapped your
-  /// [MyHorizontalTabBar] in a [Padding] widget. When [isScrollable] is true, the scrollable itself is inset,
+  /// [_MyHorizontalTabBar] in a [Padding] widget. When [isScrollable] is true, the scrollable itself is inset,
   /// allowing the padding to scroll with the tab bar, rather than enclosing it.
   final EdgeInsetsGeometry? padding;
 
@@ -289,7 +283,7 @@ class MyHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
   /// Defaults to true.
   final bool? enableFeedback;
 
-  /// An optional callback that's called when the [MyHorizontalTabBar] is tapped.
+  /// An optional callback that's called when the [_MyHorizontalTabBar] is tapped.
   ///
   /// The callback is applied to the index of the tab where the tap occurred.
   ///
@@ -300,7 +294,7 @@ class MyHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
   /// interfere with the default tap handler.
   final ValueChanged<int>? onTap;
 
-  /// How the [MyHorizontalTabBar]'s scroll view should respond to user input.
+  /// How the [_MyHorizontalTabBar]'s scroll view should respond to user input.
   ///
   /// For example, determines how the scroll view continues to animate after the
   /// user stops dragging the scroll view.
@@ -327,9 +321,9 @@ class MyHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
     return Size.fromHeight(maxHeight + indicatorWeight);
   }
 
-  /// Returns whether the [MyHorizontalTabBar] contains a tab with both text and icon.
+  /// Returns whether the [_MyHorizontalTabBar] contains a tab with both text and icon.
   ///
-  /// [MyHorizontalTabBar] uses this to give uniform padding to all tabs in cases where
+  /// [_MyHorizontalTabBar] uses this to give uniform padding to all tabs in cases where
   /// there are some tabs with both text and icon and some which contain only
   /// text or icon.
   bool get tabHasTextAndIcon {
@@ -344,7 +338,7 @@ class MyHorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
   }
 
   @override
-  State<MyHorizontalTabBar> createState() => _MyHorizontalTabBarState();
+  State<_MyHorizontalTabBar> createState() => _MyHorizontalTabBarState();
 }
 
 class _ChangeAnimation extends Animation<double>
@@ -539,7 +533,7 @@ double _indexChangeProgress(TabController controller) {
       (currentIndex - previousIndex).abs();
 }
 
-class _MyHorizontalTabBarState extends State<MyHorizontalTabBar> {
+class _MyHorizontalTabBarState extends State<_MyHorizontalTabBar> {
   ScrollController? _scrollController;
   TabController? _controller;
   _IndicatorPainter? _indicatorPainter;
@@ -591,7 +585,7 @@ class _MyHorizontalTabBarState extends State<MyHorizontalTabBar> {
     );
   }
 
-  /// If the [MyHorizontalTabBar] is rebuilt with a new tab controller, the caller should
+  /// If the [_MyHorizontalTabBar] is rebuilt with a new tab controller, the caller should
   /// dispose the old one. In that case the old controller's animation will be
   /// null and should not be accessed.
   bool get _controllerIsValid => _controller?.animation != null;
@@ -637,7 +631,7 @@ class _MyHorizontalTabBarState extends State<MyHorizontalTabBar> {
   }
 
   @override
-  void didUpdateWidget(MyHorizontalTabBar oldWidget) {
+  void didUpdateWidget(_MyHorizontalTabBar oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.controller != oldWidget.controller) {
       _updateTabController();

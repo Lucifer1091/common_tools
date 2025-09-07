@@ -98,7 +98,7 @@ class MyTab extends Tab {
   };
 
   double get _getIconSize => switch (size) {
-    MyTabSize.large => 24,
+    MyTabSize.large => 22,
     MyTabSize.small => 20,
   };
 }

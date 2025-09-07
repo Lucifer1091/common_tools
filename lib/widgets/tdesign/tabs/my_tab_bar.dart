@@ -1,28 +1,36 @@
-import 'package:flutter/material.dart';
+library;
 
-import '../../../index.dart';
+import 'dart:async';
+import 'dart:math' as math;
+import 'dart:ui' show lerpDouble;
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart' show DragStartBehavior;
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+
+import '../../../index.dart' hide PageScrollPhysics;
+
+part 'my_horizontal_tab_bar.dart';
 
 class MyTabBar extends StatefulWidget {
   const MyTabBar({
     required this.tabs,
     super.key,
     this.controller,
-    this.decoration,
-    this.backgroundColor,
-    this.indicatorColor,
-    this.indicatorWidth,
-    this.indicatorHeight,
-    this.labelColor,
-    this.unselectedLabelColor,
-    this.unselectedLabelStyle,
-    this.labelStyle,
+    this.onTap,
     this.width,
     this.height,
+    this.decoration,
+    this.backgroundColor,
+    this.labelColor,
+    this.labelStyle,
+    this.unselectedLabelColor,
+    this.unselectedLabelStyle,
+    this.indicator,
     this.indicatorPadding,
     this.labelPadding,
-    this.indicator,
     this.physics,
-    this.onTap,
     this.isScrollable = false,
     this.dividerColor,
     this.dividerHeight = 0.5,
@@ -41,12 +49,6 @@ class MyTabBar extends StatefulWidget {
 
   final Color? backgroundColor;
 
-  final Color? indicatorColor;
-
-  final double? indicatorHeight;
-
-  final double? indicatorWidth;
-
   final Color? labelColor;
 
   final Color? unselectedLabelColor;
@@ -63,7 +65,7 @@ class MyTabBar extends StatefulWidget {
 
   final EdgeInsets? indicatorPadding;
 
-  final Decoration? indicator;
+  final MyTabIndicator? indicator;
 
   final ScrollPhysics? physics;
 
@@ -104,11 +106,10 @@ class _MyTabBarState extends State<MyTabBar> {
                       ),
                     ),
           ),
-      child: MyHorizontalTabBar(
+      child: _MyHorizontalTabBar(
         physics: widget.physics,
         isScrollable: widget.isScrollable,
-        indicator: widget.indicator ?? _getIndicator(context),
-        indicatorColor: widget.indicatorColor,
+        indicator: widget.indicator ?? MyTabIndicator(context),
         unselectedLabelColor: widget.unselectedLabelColor,
         labelColor: widget.labelColor,
         indicatorSize: TabBarIndicatorSize.label,
@@ -122,6 +123,7 @@ class _MyTabBarState extends State<MyTabBar> {
         backgroundColor: widget.backgroundColor,
         tabAlignment: widget.tabAlignment,
         onTap: widget.onTap,
+        padding: EdgeInsets.zero,
       ),
     );
   }
@@ -139,68 +141,4 @@ class _MyTabBarState extends State<MyTabBar> {
       color: context.colorScheme.foreground,
     );
   }
-
-  Decoration _getIndicator(BuildContext context) {
-    return MyTabUnderlineIndicator(
-      context: context,
-      height: widget.indicatorHeight,
-      width: widget.indicatorWidth,
-      color: widget.indicatorColor,
-    );
-  }
 }
-
-class MyTabUnderlineIndicator extends Decoration {
-  const MyTabUnderlineIndicator({
-    required this.context,
-    this.width,
-    this.height,
-    this.color,
-  });
-
-  final BuildContext context;
-  final double? width;
-  final double? height;
-  final Color? color;
-
-  @override
-  BoxPainter createBoxPainter([VoidCallback? onChanged]) =>
-      _MyTabUnderlineIndicatorPainter(context, this);
-}
-
-class _MyTabUnderlineIndicatorPainter extends BoxPainter {
-  _MyTabUnderlineIndicatorPainter(this.context, this.decoration) {
-    _paint.color = decoration.color ?? context.colorScheme.primary;
-    _paint.strokeCap = StrokeCap.round;
-  }
-
-  static const double _defaultIndicatorWidth = 16;
-
-  static const double _defaultIndicatorHeight = 3;
-
-  final MyTabUnderlineIndicator decoration;
-
-  final BuildContext context;
-
-  final _paint = Paint();
-
-  @override
-  void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
-    canvas.drawLine(
-      Offset(
-        offset.dx + (configuration.size!.width - _indicatorWidth()) / 2,
-        configuration.size!.height - _indicatorHeight() / 2,
-      ),
-      Offset(
-        offset.dx + (configuration.size!.width + _indicatorWidth()) / 2,
-        configuration.size!.height - _indicatorHeight() / 2,
-      ),
-      _paint..strokeWidth = _indicatorHeight(),
-    );
-  }
-
-  double _indicatorHeight() => decoration.height ?? _defaultIndicatorHeight;
-
-  double _indicatorWidth() => decoration.width ?? _defaultIndicatorWidth;
-}
-
