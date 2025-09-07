@@ -10,5 +10,5 @@ export 'lists/index.dart';
 export 'misc/index.dart';
 export 'new/index.dart';
 export 'packages/index.dart';
-export 'tdesign/index.dart';
+export 'components/index.dart';
 export 'widgets.dart';

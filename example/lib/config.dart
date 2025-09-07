@@ -14,9 +14,6 @@ import 'page/sidebar/my_sidebar_page_pagination.dart';
 import 'page/td_action_sheet_page.dart';
 import 'page/td_avatar_page.dart';
 import 'page/my_badge_page.dart';
-import 'page/td_bottom_tab_bar_page.dart';
-import 'page/td_calendar_page.dart';
-import 'page/td_cascader_page.dart';
 import 'page/my_cell_page.dart';
 import 'page/td_checkbox_page.dart';
 import 'page/td_collapse.dart';
@@ -154,26 +151,26 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ),
   ],
   'Input': [
-    ExamplePageModel(
-      text: 'Calendar',
-      name: 'calendar',
-      pageBuilder: _wrapInheritedTheme((context) => const TDCalendarPage()),
-    ),
-    ExamplePageModel(
-      text: 'Cascader',
-      name: 'cascader',
-      pageBuilder: _wrapInheritedTheme((context) => const TDCascaderPage()),
-    ),
+    // ExamplePageModel(
+    //   text: 'Calendar',
+    //   name: 'calendar',
+    //   pageBuilder: _wrapInheritedTheme((context) => const TDCalendarPage()),
+    // ),
+    // ExamplePageModel(
+    //   text: 'Cascader',
+    //   name: 'cascader',
+    //   pageBuilder: _wrapInheritedTheme((context) => const TDCascaderPage()),
+    // ),
     ExamplePageModel(
       text: 'Checkbox',
       name: 'checkbox',
       pageBuilder: _wrapInheritedTheme((context) => const TDCheckboxPage()),
     ),
     ExamplePageModel(
-      text: 'DateTimePicker',
+      text: 'Date & Time Picker',
       name: 'date-time-picker',
       pageName: 'data_picker',
-      pageBuilder: _wrapInheritedTheme((context) => const TDDatePickerPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyDatePickerPage()),
     ),
     ExamplePageModel(
       text: 'Input',
