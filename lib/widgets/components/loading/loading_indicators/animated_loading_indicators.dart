@@ -1,14 +1,12 @@
-library animated_loading_indicators;
-
-export 'package:animated_loading_indicators/src/clock_loading.dart';
-export 'package:animated_loading_indicators/src/three_icons.dart';
-export 'package:animated_loading_indicators/src/flip_icons.dart';
-export 'package:animated_loading_indicators/src/infinity_cradle.dart';
-export 'package:animated_loading_indicators/src/pacman.dart';
-export 'package:animated_loading_indicators/src/text_loader.dart';
-export 'package:animated_loading_indicators/src/yingyang.dart';
-export 'package:animated_loading_indicators/src/updown.dart';
-export 'package:animated_loading_indicators/src/circle_loader.dart';
-export 'package:animated_loading_indicators/src/circles.dart';
-export 'package:animated_loading_indicators/src/loading_percentage.dart';
-export 'package:animated_loading_indicators/src/eye_moving.dart';
+export 'src/circle_loader.dart';
+export 'src/circles.dart';
+export 'src/clock_loading.dart';
+export 'src/eye_moving.dart';
+export 'src/flip_icons.dart';
+export 'src/infinity_cradle.dart';
+export 'src/loading_percentage.dart';
+export 'src/pacman.dart';
+export 'src/text_loader.dart';
+export 'src/three_icons.dart';
+export 'src/updown.dart';
+export 'src/yingyang.dart';

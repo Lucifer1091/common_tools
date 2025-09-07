@@ -1,31 +1,44 @@
 import 'package:flutter/widgets.dart';
-import 'package:loading_progress_indicator/progress_indicator.dart';
+
+import '../progress_indicator.dart';
 
 class LineScaleProgressIndicator extends SpinnerIndicator {
   final scaleYDoubles = [1.0, 1.0, 1.0, 1.0, 1.0];
 
   @override
-  paint(Canvas canvas, Paint? paint, Size size) {
+  void paint(Canvas canvas, Paint? paint, Size size) {
     final translateX = size.width / 11;
     final translateY = size.height / 2;
     for (int i = 0; i < 5; i++) {
-      canvas.save();
-      canvas.translate((2 + i * 2) * translateX - translateX / 2, translateY);
-      canvas.scale(1.0, scaleYDoubles[i]);
-      final rectF = RRect.fromLTRBR(-translateX / 2, -size.height / 2.5,
-          translateX / 2, size.height / 2.5, const Radius.circular(5));
-      canvas.drawRRect(rectF, paint!);
-      canvas.restore();
+      canvas
+        ..save()
+        ..translate((2 + i * 2) * translateX - translateX / 2, translateY)
+        ..scale(1, scaleYDoubles[i]);
+      final rectF = RRect.fromLTRBR(
+        -translateX / 2,
+        -size.height / 2.5,
+        translateX / 2,
+        size.height / 2.5,
+        const Radius.circular(5),
+      );
+      canvas
+        ..drawRRect(rectF, paint!)
+        ..restore();
     }
   }
 
   @override
   List<AnimationController> animation() {
-    List<AnimationController> controllers = [];
+    final List<AnimationController> controllers = [];
     for (int i = 0; i < 5; i++) {
       final sizeController = AnimationController(
-          duration: const Duration(milliseconds: 500), vsync: context);
-      final alphaTween = Tween(begin: 1.0, end: 0.4).animate(sizeController);
+        duration: const Duration(milliseconds: 500),
+        vsync: context,
+      );
+      final alphaTween = Tween<double>(
+        begin: 1,
+        end: 0.4,
+      ).animate(sizeController);
       sizeController.addListener(() {
         scaleYDoubles[i] = alphaTween.value;
         postInvalidate();
@@ -36,7 +49,7 @@ class LineScaleProgressIndicator extends SpinnerIndicator {
   }
 
   @override
-  startAnims(List<AnimationController> controllers) {
+  void startAnims(List<AnimationController> controllers) {
     final delays = [100, 200, 300, 400, 500];
     for (var i = 0; i < controllers.length; i++) {
       Future.delayed(Duration(milliseconds: delays[i]), () {

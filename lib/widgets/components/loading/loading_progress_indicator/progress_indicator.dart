@@ -1,11 +1,12 @@
 import 'package:flutter/widgets.dart';
-import 'package:loading_progress_indicator/loading_progress_indicator.dart';
+
+import 'loading_progress_indicator.dart';
 
 abstract class SpinnerIndicator {
   late LoadingProgressState context;
   List<AnimationController>? animationControllers;
 
-  paint(Canvas canvas, Paint? paint, Size size);
+  void paint(Canvas canvas, Paint? paint, Size size);
 
   List<AnimationController> animation();
 

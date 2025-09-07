@@ -1,57 +1,66 @@
 import 'package:flutter/widgets.dart';
-import 'package:loading_progress_indicator/progress_indicator.dart';
+
+import '../progress_indicator.dart';
 
 class PacmanProgressIndicator extends SpinnerIndicator {
-  var translateX = 0.0;
-  var alpha = 0;
-  var degrees1 = 0.0;
-  var degrees2 = 0.0;
+  double translateX = 0;
+  int alpha = 0;
+  double degrees1 = 0;
+  double degrees2 = 0;
 
   @override
-  paint(Canvas canvas, Paint? paint, Size size) {
+  void paint(Canvas canvas, Paint? paint, Size size) {
     final x = size.width / 2;
     final y = size.height / 2;
 
-    canvas.save();
-
-    canvas.translate(x, y);
-    canvas.rotate(degrees1);
+    canvas
+      ..save()
+      ..translate(x, y)
+      ..rotate(degrees1);
     paint!.color = paint.color.withAlpha(255);
-    Rect rectF1 = Rect.fromLTRB(-x / 1.7, -y / 1.7, x / 1.7, y / 1.7);
-    canvas.drawArc(rectF1, 0, 270, false, paint);
-
-    canvas.restore();
-
-    canvas.save();
-    canvas.translate(x, y);
-    canvas.rotate(degrees2);
+    final Rect rectF1 = Rect.fromLTRB(-x / 1.7, -y / 1.7, x / 1.7, y / 1.7);
+    canvas
+      ..drawArc(rectF1, 0, 270, false, paint)
+      ..restore()
+      ..save()
+      ..translate(x, y)
+      ..rotate(degrees2);
     paint.color = paint.color.withAlpha(255);
 
-    Rect rectF2 = Rect.fromLTRB(-x / 1.7, -y / 1.7, x / 1.7, y / 1.7);
+    final Rect rectF2 = Rect.fromLTRB(-x / 1.7, -y / 1.7, x / 1.7, y / 1.7);
 
-    canvas.drawArc(rectF2, 90, 270, false, paint);
-    canvas.restore();
+    canvas
+      ..drawArc(rectF2, 90, 270, false, paint)
+      ..restore();
 
     final radius = size.width / 11;
     paint.color = paint.color.withAlpha(alpha);
     canvas.drawCircle(
-        Offset((1 - translateX) * size.width, size.height / 2), radius, paint);
+      Offset((1 - translateX) * size.width, size.height / 2),
+      radius,
+      paint,
+    );
   }
 
   @override
   List<AnimationController> animation() {
-    List<AnimationController> controllers = [];
+    final List<AnimationController> controllers = [];
 
     final controller = AnimationController(
-        duration: const Duration(milliseconds: 325), vsync: context);
+      duration: const Duration(milliseconds: 325),
+      vsync: context,
+    );
 
-    final translateTween = Tween(begin: 0, end: 0.5).animate(controller);
+    final translateTween = Tween<double>(
+      begin: 0,
+      end: 0.5,
+    ).animate(controller);
     final alphaTween = IntTween(begin: 255, end: 122).animate(controller);
-    final rotateTween1 = Tween(begin: 0.0, end: 45.0).animate(controller);
-    final rotateTween2 = Tween(begin: 0.0, end: -45.0).animate(controller);
+    final rotateTween1 = Tween<double>(begin: 0, end: 45).animate(controller);
+    final rotateTween2 = Tween<double>(begin: 0, end: -45).animate(controller);
 
     controller.addListener(() {
-      translateX = translateTween.value as double;
+      translateX = translateTween.value;
       alpha = alphaTween.value;
       degrees1 = rotateTween1.value;
       degrees2 = rotateTween2.value;

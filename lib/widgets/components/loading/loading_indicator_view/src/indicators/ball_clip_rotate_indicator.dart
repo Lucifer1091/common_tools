@@ -2,18 +2,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-///
-/// author: Vans Z
-/// date: 2019-06-04
-///
-
 class BallClipRotateIndicator extends StatefulWidget {
-  BallClipRotateIndicator({
-    this.startAngle: -5,
-    this.minRadius: 12,
-    this.maxRadius: 20,
-    this.color: Colors.white,
-    this.duration: const Duration(milliseconds: 400),
+  const BallClipRotateIndicator({
+    super.key,
+    this.startAngle = -5,
+    this.minRadius = 12,
+    this.maxRadius = 20,
+    this.color = Colors.white,
+    this.duration = const Duration(milliseconds: 400),
   });
 
   final double startAngle;
@@ -35,30 +31,30 @@ class _BallClipRotateIndicatorState extends State<BallClipRotateIndicator>
   @override
   void initState() {
     _controller = AnimationController(duration: widget.duration, vsync: this);
-    _radius =
-        Tween<double>(begin: widget.minRadius, end: widget.maxRadius).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Interval(0, 1, curve: Curves.fastOutSlowIn),
-      ),
-    );
-    _rotate = Tween<double>(
-      begin: 0,
-      end: 360,
+    _radius = Tween<double>(
+      begin: widget.minRadius,
+      end: widget.maxRadius,
     ).animate(
       CurvedAnimation(
         parent: _controller,
         curve: Interval(0, 1, curve: Curves.fastOutSlowIn),
       ),
     );
-    _controller.addStatusListener((AnimationStatus status) {
-      if (status == AnimationStatus.completed) {
-        _controller.reverse();
-      } else if (status == AnimationStatus.dismissed) {
-        _controller.forward();
-      }
-    });
-    _controller.forward();
+    _rotate = Tween<double>(begin: 0, end: 360).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Interval(0, 1, curve: Curves.fastOutSlowIn),
+      ),
+    );
+    _controller
+      ..addStatusListener((AnimationStatus status) {
+        if (status == AnimationStatus.completed) {
+          _controller.reverse();
+        } else if (status == AnimationStatus.dismissed) {
+          _controller.forward();
+        }
+      })
+      ..forward();
     super.initState();
   }
 
@@ -93,8 +89,8 @@ class _BallClipRotateIndicatorState extends State<BallClipRotateIndicator>
   }
 }
 
-double _progress = .0;
-double _lastExtent = .0;
+double _progress = 0;
+double _lastExtent = 0;
 
 class _BallClipRotateIndicatorPainter extends CustomPainter {
   _BallClipRotateIndicatorPainter({
@@ -115,12 +111,13 @@ class _BallClipRotateIndicatorPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    var paint = Paint()
-      ..isAntiAlias = true
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2
-      ..strokeCap = StrokeCap.round
-      ..color = color;
+    final paint =
+        Paint()
+          ..isAntiAlias = true
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2
+          ..strokeCap = StrokeCap.round
+          ..color = color;
 
     _progress += (_lastExtent - angle).abs();
     _lastExtent = angle;
@@ -129,13 +126,20 @@ class _BallClipRotateIndicatorPainter extends CustomPainter {
       _lastExtent = .0;
     }
 
-    canvas.translate(size.width * .5, size.height * .5);
-    canvas.rotate((_progress + startAngle) * pi / 180);
-    var preScale = minRadius / maxRadius;
-    var scale = preScale + (radius - minRadius) / maxRadius;
+    canvas
+      ..translate(size.width * .5, size.height * .5)
+      ..rotate((_progress + startAngle) * pi / 180);
+
+    final preScale = minRadius / maxRadius;
+    final scale = preScale + (radius - minRadius) / maxRadius;
+    
     canvas.scale(scale);
-    Rect rect = Rect.fromLTWH(
-        -size.width * .5, -size.height * .5, size.width, size.height);
+    final Rect rect = Rect.fromLTWH(
+      -size.width * .5,
+      -size.height * .5,
+      size.width,
+      size.height,
+    );
     canvas.drawArc(rect, -45 * pi / 180, 270 * pi / 180, false, paint);
   }
 

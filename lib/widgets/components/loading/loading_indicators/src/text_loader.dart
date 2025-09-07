@@ -1,11 +1,7 @@
-import 'package:flutter/material.dart';
 import 'dart:math';
+import 'package:flutter/material.dart';
 
 class TextLoader extends StatefulWidget {
-  final double size;
-  final Duration duration;
-  final Color mainColor;
-  final Color secondaryColor;
   const TextLoader({
     super.key,
     this.size = 60,
@@ -14,14 +10,20 @@ class TextLoader extends StatefulWidget {
     this.secondaryColor = Colors.purple,
   });
 
+  final double size;
+  final Duration duration;
+  final Color mainColor;
+  final Color secondaryColor;
+
   @override
   State<TextLoader> createState() => _TextLoaderState();
 }
 
-class _TextLoaderState extends State<TextLoader> with SingleTickerProviderStateMixin {
+class _TextLoaderState extends State<TextLoader>
+    with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
-  late Animation animation;
-  late Animation animationOp;
+  late Animation<double> animation;
+  late Animation<double> animationOp;
 
   bool _firstAnimation = true;
 
@@ -32,30 +34,23 @@ class _TextLoaderState extends State<TextLoader> with SingleTickerProviderStateM
     _animationController = AnimationController(
       duration: widget.duration,
       vsync: this,
-    )..addStatusListener(
-        (status) {
-          if (status == AnimationStatus.completed) {
-            _firstAnimation = false;
-            _animationController.reset();
-          }
-          if (status == AnimationStatus.dismissed) {
-            _firstAnimation = true;
-            _animationController.forward();
-          }
-        },
-      );
+    )..addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _firstAnimation = false;
+        _animationController.reset();
+      }
+      if (status == AnimationStatus.dismissed) {
+        _firstAnimation = true;
+        _animationController.forward();
+      }
+    });
 
     animation = Tween<double>(
       begin: 0,
       end: 2 * pi,
-    ).animate(_animationController)
-      ..addListener(
-        () {
-          setState(
-            () {},
-          );
-        },
-      );
+    ).animate(_animationController)..addListener(() {
+      setState(() {});
+    });
 
     _animationController.forward();
   }
@@ -74,12 +69,12 @@ class _TextLoaderState extends State<TextLoader> with SingleTickerProviderStateM
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "L",
+            'L',
             style: TextStyle(
               fontSize: widget.size,
               fontWeight: FontWeight.w900,
               color: widget.mainColor,
-              fontFamily: "sans-serif",
+              fontFamily: 'sans-serif',
               fontStyle: FontStyle.normal,
             ),
           ),
@@ -90,29 +85,26 @@ class _TextLoaderState extends State<TextLoader> with SingleTickerProviderStateM
               widget.mainColor,
               widget.secondaryColor,
             ),
-            child: SizedBox(
-              height: widget.size,
-              width: widget.size,
-            ),
+            child: SizedBox(height: widget.size, width: widget.size),
           ),
           Text(
-            "ADDING",
+            'ADDING',
             style: TextStyle(
               fontSize: widget.size,
               fontWeight: FontWeight.w900,
               color: widget.mainColor,
               fontStyle: FontStyle.normal,
-              fontFamily: "sans-serif",
+              fontFamily: 'sans-serif',
             ),
           ),
           Text(
-            "...",
+            '...',
             style: TextStyle(
               fontSize: widget.size,
               fontWeight: FontWeight.w900,
               color: widget.secondaryColor,
               fontStyle: FontStyle.normal,
-              fontFamily: "sans-serif",
+              fontFamily: 'sans-serif',
             ),
           ),
         ],
@@ -122,54 +114,39 @@ class _TextLoaderState extends State<TextLoader> with SingleTickerProviderStateM
 }
 
 class TextPainter extends CustomPainter {
+  TextPainter(this.angle, this.size, this.mainColor, this.secondaryColor);
   late double size;
   late double angle;
   late Color mainColor;
   late Color secondaryColor;
 
-  TextPainter(
-    this.angle,
-    this.size,
-    this.mainColor,
-    this.secondaryColor,
-  );
-
   @override
   void paint(Canvas canvas, Size size) {
-    var painter = Paint()..style = PaintingStyle.fill;
+    final painter = Paint()..style = PaintingStyle.fill;
 
-    Offset c = Offset(
-      size.width / 2,
-      size.height / 2,
-    );
+    final Offset c = Offset(size.width / 2, size.height / 2);
 
-    canvas.drawArc(
-      Rect.fromCircle(
-        center: c,
-        radius: this.size,
-      ),
-      7 * pi / 4 + angle,
-      3 * pi / 4,
-      false,
-      painter
-        ..style = PaintingStyle.stroke
-        ..color = secondaryColor
-        ..strokeWidth = this.size / 3.5,
-    );
-
-    canvas.drawArc(
-      Rect.fromCircle(
-        center: c,
-        radius: this.size,
-      ),
-      3 * pi / 4 + angle,
-      3 * pi / 4,
-      false,
-      painter
-        ..style = PaintingStyle.stroke
-        ..color = mainColor
-        ..strokeWidth = this.size / 3.5,
-    );
+    canvas
+      ..drawArc(
+        Rect.fromCircle(center: c, radius: this.size),
+        7 * pi / 4 + angle,
+        3 * pi / 4,
+        false,
+        painter
+          ..style = PaintingStyle.stroke
+          ..color = secondaryColor
+          ..strokeWidth = this.size / 3.5,
+      )
+      ..drawArc(
+        Rect.fromCircle(center: c, radius: this.size),
+        3 * pi / 4 + angle,
+        3 * pi / 4,
+        false,
+        painter
+          ..style = PaintingStyle.stroke
+          ..color = mainColor
+          ..strokeWidth = this.size / 3.5,
+      );
   }
 
   @override

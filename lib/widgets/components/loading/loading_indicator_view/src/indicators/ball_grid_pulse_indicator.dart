@@ -1,22 +1,19 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:loading_indicator_view_plus/src/infinite_progress.dart';
 
-///
-/// author: Vans Z
-/// date: 2019-05-31
-///
+import '../infinite_progress.dart';
+
 
 class BallGridPulseIndicator extends StatefulWidget {
-  BallGridPulseIndicator({
-    this.minRadius: 3.6,
-    this.maxRadius: 7.2,
-    this.minAlpha: 51,
-    this.maxAlpha: 255,
-    this.spacing: 3,
-    this.ballColor: Colors.white,
-    this.duration: const Duration(milliseconds: 400),
+  BallGridPulseIndicator({super.key, 
+    this.minRadius= 3.6,
+    this.maxRadius= 7.2,
+    this.minAlpha= 51,
+    this.maxAlpha= 255,
+    this.spacing= 3,
+    this.ballColor= Colors.white,
+    this.duration= const Duration(milliseconds: 400),
   });
 
   final double minRadius;

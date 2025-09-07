@@ -2,19 +2,15 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-///
-/// author: Vans Z
-/// date: 2019-06-05
-///
-
 class BallClipRotatePulseIndicator extends StatefulWidget {
-  BallClipRotatePulseIndicator({
-    this.startAngle: -5,
-    this.minRadius: 10,
-    this.maxRadius: 20,
-    this.solidCircleRadius: 10,
-    this.color: Colors.white,
-    this.duration: const Duration(milliseconds: 400),
+  const BallClipRotatePulseIndicator({
+    super.key,
+    this.startAngle = -5,
+    this.minRadius = 10,
+    this.maxRadius = 20,
+    this.solidCircleRadius = 10,
+    this.color = Colors.white,
+    this.duration = const Duration(milliseconds: 400),
   });
 
   final double startAngle;
@@ -38,30 +34,30 @@ class _BallClipRotatePulseIndicatorState
   @override
   void initState() {
     _controller = AnimationController(duration: widget.duration, vsync: this);
-    _radius =
-        Tween<double>(begin: widget.minRadius, end: widget.maxRadius).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Interval(0, 1, curve: Curves.fastOutSlowIn),
-      ),
-    );
-    _rotate = Tween<double>(
-      begin: 0,
-      end: 180,
+    _radius = Tween<double>(
+      begin: widget.minRadius,
+      end: widget.maxRadius,
     ).animate(
       CurvedAnimation(
         parent: _controller,
         curve: Interval(0, 1, curve: Curves.fastOutSlowIn),
       ),
     );
-    _controller.addStatusListener((AnimationStatus status) {
-      if (status == AnimationStatus.completed) {
-        _controller.reverse();
-      } else if (status == AnimationStatus.dismissed) {
-        _controller.forward();
-      }
-    });
-    _controller.forward();
+    _rotate = Tween<double>(begin: 0, end: 180).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Interval(0, 1, curve: Curves.fastOutSlowIn),
+      ),
+    );
+    _controller
+      ..addStatusListener((AnimationStatus status) {
+        if (status == AnimationStatus.completed) {
+          _controller.reverse();
+        } else if (status == AnimationStatus.dismissed) {
+          _controller.forward();
+        }
+      })
+      ..forward();
     super.initState();
   }
 
@@ -97,8 +93,8 @@ class _BallClipRotatePulseIndicatorState
   }
 }
 
-double _progress = .0;
-double _lastExtent = .0;
+double _progress = 0;
+double _lastExtent = 0;
 
 class _BallClipRotatePulseIndicatorPainter extends CustomPainter {
   _BallClipRotatePulseIndicatorPainter({
@@ -122,11 +118,12 @@ class _BallClipRotatePulseIndicatorPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    var paint = Paint()
-      ..isAntiAlias = true
-      ..color = color
-      ..strokeWidth = 2
-      ..strokeCap = StrokeCap.round;
+    final paint =
+        Paint()
+          ..isAntiAlias = true
+          ..color = color
+          ..strokeWidth = 2
+          ..strokeCap = StrokeCap.round;
 
     _progress += (_lastExtent - angle).abs();
     _lastExtent = angle;
@@ -135,21 +132,31 @@ class _BallClipRotatePulseIndicatorPainter extends CustomPainter {
       _lastExtent = .0;
     }
 
-    var halfWidth = size.width * .5;
-    var halfHeight = size.height * .5;
+    final halfWidth = size.width * .5;
+    final halfHeight = size.height * .5;
 
-    canvas.translate(halfWidth, halfHeight);
-    canvas.rotate((_progress + startAngle) * pi / 180);
-    var preScale = minRadius / maxRadius;
-    var scale = preScale + (radius - minRadius) / maxRadius;
+    canvas
+      ..translate(halfWidth, halfHeight)
+      ..rotate((_progress + startAngle) * pi / 180);
+    final preScale = minRadius / maxRadius;
+    final scale = preScale + (radius - minRadius) / maxRadius;
     canvas.scale(scale);
 
     paint.style = PaintingStyle.stroke;
     for (var i = 0; i < startAngles.length; i++) {
-      Rect rect =
-          Rect.fromLTWH(-halfWidth, -halfHeight, size.width, size.height);
+      final Rect rect = Rect.fromLTWH(
+        -halfWidth,
+        -halfHeight,
+        size.width,
+        size.height,
+      );
       canvas.drawArc(
-          rect, startAngles[i] * pi / 180, 90 * pi / 180, false, paint);
+        rect,
+        startAngles[i] * pi / 180,
+        90 * pi / 180,
+        false,
+        paint,
+      );
     }
 
     paint.style = PaintingStyle.fill;

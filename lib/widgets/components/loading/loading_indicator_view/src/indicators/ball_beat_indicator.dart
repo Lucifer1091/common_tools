@@ -1,7 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:loading_indicator_view_plus/src/infinite_progress.dart';
+
+import '../infinite_progress.dart';
 
 ///
 /// author: Vans Z
@@ -9,14 +10,15 @@ import 'package:loading_indicator_view_plus/src/infinite_progress.dart';
 ///
 
 class BallBeatIndicator extends StatefulWidget {
-  BallBeatIndicator({
-    this.minAlpha: 51,
-    this.maxAlpha: 255,
-    this.minRadius: 5.6,
-    this.maxRadius: 7.2,
-    this.spacing: 3,
-    this.ballColor: Colors.white,
-    this.duration: const Duration(milliseconds: 400),
+  const BallBeatIndicator({
+    super.key,
+    this.minAlpha = 51,
+    this.maxAlpha = 255,
+    this.minRadius = 5.6,
+    this.maxRadius = 7.2,
+    this.spacing = 3,
+    this.ballColor = Colors.white,
+    this.duration = const Duration(milliseconds: 400),
   });
 
   final int minAlpha;
@@ -47,8 +49,8 @@ class _BallBeatIndicatorState extends State<BallBeatIndicator>
 
   @override
   Size measureSize() {
-    var width = widget.maxRadius * 2 * 3 + widget.spacing * 2;
-    var height = widget.maxRadius * 2;
+    final width = widget.maxRadius * 2 * 3 + widget.spacing * 2;
+    final height = widget.maxRadius * 2;
     return Size(width, height);
   }
 
@@ -74,8 +76,8 @@ class _BallBeatIndicatorState extends State<BallBeatIndicator>
   }
 }
 
-double progress = .0;
-double lastExtent = .0;
+double progress = 0;
+double lastExtent = 0;
 
 class _BallBeatIndicatorPainter extends CustomPainter {
   _BallBeatIndicatorPainter({
@@ -86,16 +88,16 @@ class _BallBeatIndicatorPainter extends CustomPainter {
     required this.maxAlpha,
     required this.spacing,
     required this.ballColor,
-  })  : alphaList = <double>[
-          minAlpha + (maxAlpha - minAlpha) * 0.9,
-          minAlpha + (maxAlpha - minAlpha) * 0.1,
-          minAlpha + (maxAlpha - minAlpha) * 0.9,
-        ],
-        radiusList = <double>[
-          minRadius + (maxRadius - minRadius) * 0.9,
-          minRadius + (maxRadius - minRadius) * 0.63,
-          minRadius + (maxRadius - minRadius) * 0.9,
-        ];
+  }) : alphaList = <double>[
+         minAlpha + (maxAlpha - minAlpha) * 0.9,
+         minAlpha + (maxAlpha - minAlpha) * 0.1,
+         minAlpha + (maxAlpha - minAlpha) * 0.9,
+       ],
+       radiusList = <double>[
+         minRadius + (maxRadius - minRadius) * 0.9,
+         minRadius + (maxRadius - minRadius) * 0.63,
+         minRadius + (maxRadius - minRadius) * 0.9,
+       ];
 
   final double animationValue;
   final double minRadius;
@@ -109,11 +111,12 @@ class _BallBeatIndicatorPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    var paint = Paint()
-      ..isAntiAlias = true
-      ..style = PaintingStyle.fill
-      ..strokeJoin = StrokeJoin.round
-      ..strokeCap = StrokeCap.round;
+    final paint =
+        Paint()
+          ..isAntiAlias = true
+          ..style = PaintingStyle.fill
+          ..strokeJoin = StrokeJoin.round
+          ..strokeCap = StrokeCap.round;
 
     progress += (lastExtent - animationValue).abs();
     lastExtent = animationValue;
@@ -122,21 +125,25 @@ class _BallBeatIndicatorPainter extends CustomPainter {
       lastExtent = .0;
     }
 
-    var diffAlpha = maxAlpha - minAlpha;
-    var diffRadius = maxRadius - minRadius;
+    final diffAlpha = maxAlpha - minAlpha;
+    final diffRadius = maxRadius - minRadius;
     for (int i = 0; i < radiusList.length; i++) {
-      var offsetAlpha = asin((alphaList[i] - minAlpha) / diffAlpha);
-      var beatAlpha =
+      final offsetAlpha = asin((alphaList[i] - minAlpha) / diffAlpha);
+      final beatAlpha =
           sin(progress * pi / 180 + offsetAlpha).abs() * diffAlpha + minAlpha;
       paint.color = Color.fromARGB(
-          beatAlpha.round(), ballColor.red, ballColor.green, ballColor.blue);
+        beatAlpha.round(),
+        (ballColor.r * 255.0).round() & 0xff,
+        (ballColor.g * 255.0).round() & 0xff,
+        (ballColor.b * 255.0).round() & 0xff,
+      );
 
-      var dx = maxRadius + 2 * i * maxRadius + i * spacing;
-      var offset = Offset(dx, maxRadius);
-      var offsetExtent = asin((radiusList[i] - minRadius) / diffRadius);
-      var scaleRadius =
+      final dx = maxRadius + 2 * i * maxRadius + i * spacing;
+      final offset = Offset(dx, maxRadius);
+      final offsetExtent = asin((radiusList[i] - minRadius) / diffRadius);
+      final scaleRadius =
           sin(progress * pi / 180 + offsetExtent).abs() * diffRadius +
-              minRadius;
+          minRadius;
       canvas.drawCircle(offset, scaleRadius, paint);
     }
   }

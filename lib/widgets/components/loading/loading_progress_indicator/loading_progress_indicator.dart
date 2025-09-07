@@ -1,24 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:loading_progress_indicator/progress_indicator.dart';
-import 'package:loading_progress_indicator/progress_indicator/ball_scale_progress_indicator.dart';
+
+import 'progress_indicator.dart';
+import 'progress_indicator/ball_scale_progress_indicator.dart';
 
 class LoadingProgressIndicator extends StatefulWidget {
-  SpinnerIndicator? indicator;
-  final double size;
-  final Color color;
-
   LoadingProgressIndicator({
-    Key? key,
-    this.indicator,
+    super.key,
+    SpinnerIndicator? indicator,
     this.size = 50.0,
     this.color = Colors.white,
-  }) : super(key: key) {
-    if (indicator == null) {
-      indicator = BallScaleProgressIndicator();
-    } else {
-      indicator = indicator;
-    }
-  }
+  }) : indicator = indicator ?? BallScaleProgressIndicator();
+
+  final SpinnerIndicator? indicator;
+  final double size;
+  final Color color;
 
   @override
   State<StatefulWidget> createState() {
@@ -28,10 +23,9 @@ class LoadingProgressIndicator extends StatefulWidget {
 
 class LoadingProgressState extends State<LoadingProgressIndicator>
     with TickerProviderStateMixin {
+  LoadingProgressState(this.indicator, this.size);
   SpinnerIndicator? indicator;
   double size;
-
-  LoadingProgressState(this.indicator, this.size);
 
   @override
   void initState() {
@@ -56,17 +50,18 @@ class LoadingProgressState extends State<LoadingProgressIndicator>
 }
 
 class _Painter extends CustomPainter {
+  _Painter(this.indicator, this.color) {
+    defaultPaint =
+        Paint()
+          ..strokeCap = StrokeCap.butt
+          ..style = PaintingStyle.fill
+          ..color = color
+          ..isAntiAlias = true;
+  }
+
   SpinnerIndicator? indicator;
   Color color;
   Paint? defaultPaint;
-
-  _Painter(this.indicator, this.color) {
-    defaultPaint = Paint()
-      ..strokeCap = StrokeCap.butt
-      ..style = PaintingStyle.fill
-      ..color = color
-      ..isAntiAlias = true;
-  }
 
   @override
   void paint(Canvas canvas, Size size) {
