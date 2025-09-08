@@ -4,20 +4,16 @@ import 'package:flutter/material.dart';
 
 import '../infinite_progress.dart';
 
-///
-/// author: Vans Z
-/// date: 2019-06-02
-///
-
 class BallSpinFadeLoaderIndicator extends StatefulWidget {
-  BallSpinFadeLoaderIndicator({
+  const BallSpinFadeLoaderIndicator({
+    super.key,
     this.radius = 24,
-    this.minBallRadius: 1.6,
-    this.maxBallRadius: 5,
-    this.minBallAlpha: 77,
-    this.maxBallAlpha: 255,
-    this.ballColor: Colors.white,
-    this.duration: const Duration(milliseconds: 500),
+    this.minBallRadius = 1.6,
+    this.maxBallRadius = 5,
+    this.minBallAlpha = 77,
+    this.maxBallAlpha = 255,
+    this.ballColor = Colors.white,
+    this.duration = const Duration(milliseconds: 500),
   });
 
   final double radius;
@@ -55,12 +51,13 @@ class _BallSpinFadeLoaderIndicatorState
         return CustomPaint(
           size: _measureSize(),
           painter: _BallSpinFadeLoaderIndicatorPainter(
-              animationValue: animationValue,
-              minRadius: widget.minBallRadius,
-              maxRadius: widget.maxBallRadius,
-              minAlpha: widget.minBallAlpha,
-              maxAlpha: widget.maxBallAlpha,
-              ballColor: widget.ballColor),
+            animationValue: animationValue,
+            minRadius: widget.minBallRadius,
+            maxRadius: widget.maxBallRadius,
+            minAlpha: widget.minBallAlpha,
+            maxAlpha: widget.maxBallAlpha,
+            ballColor: widget.ballColor,
+          ),
         );
       },
     );
@@ -76,8 +73,8 @@ class _BallSpinFadeLoaderIndicatorState
   }
 }
 
-double _progress = .0;
-double _lastExtent = .0;
+double _progress = 0;
+double _lastExtent = 0;
 
 class _BallSpinFadeLoaderIndicatorPainter extends CustomPainter {
   _BallSpinFadeLoaderIndicatorPainter({
@@ -98,9 +95,10 @@ class _BallSpinFadeLoaderIndicatorPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    var paint = Paint()
-      ..isAntiAlias = true
-      ..style = PaintingStyle.fill;
+    final paint =
+        Paint()
+          ..isAntiAlias = true
+          ..style = PaintingStyle.fill;
 
     _progress += (_lastExtent - animationValue).abs();
     _lastExtent = animationValue;
@@ -109,28 +107,37 @@ class _BallSpinFadeLoaderIndicatorPainter extends CustomPainter {
       _lastExtent = .0;
     }
 
-    var diffAlpha = maxAlpha - minAlpha;
-    var diffRadius = maxRadius - minRadius;
+    final diffAlpha = maxAlpha - minAlpha;
+    final diffRadius = maxRadius - minRadius;
     for (int i = 0; i < 8; i++) {
       canvas.save();
 
-      var newProgress = _progress - i * 22.5;
-      var beatAlpha = sin(newProgress * pi / 180).abs() * diffAlpha + minAlpha;
+      final newProgress = _progress - i * 22.5;
+      final beatAlpha =
+          sin(newProgress * pi / 180).abs() * diffAlpha + minAlpha;
       paint.color = Color.fromARGB(
-          beatAlpha.round(), ballColor.red, ballColor.green, ballColor.blue);
-      var scaleRadius =
+        beatAlpha.round(),
+        (ballColor.r * 255.0).round() & 0xff,
+        (ballColor.g * 255.0).round() & 0xff,
+        (ballColor.b * 255.0).round() & 0xff,
+      );
+      final scaleRadius =
           sin(newProgress * pi / 180).abs() * diffRadius + minRadius;
-      var point = _circleAt(size.width * .5, size.height * .5,
-          size.width * .5 - maxRadius, i * pi / 4);
-      canvas.drawCircle(point, scaleRadius, paint);
-
-      canvas.restore();
+      final point = _circleAt(
+        size.width * .5,
+        size.height * .5,
+        size.width * .5 - maxRadius,
+        i * pi / 4,
+      );
+      canvas
+        ..drawCircle(point, scaleRadius, paint)
+        ..restore();
     }
   }
 
   Offset _circleAt(double width, double height, double radius, double angle) {
-    var x = width + radius * (cos(angle));
-    var y = height + radius * (sin(angle));
+    final x = width + radius * (cos(angle));
+    final y = height + radius * (sin(angle));
     return Offset(x, y);
   }
 

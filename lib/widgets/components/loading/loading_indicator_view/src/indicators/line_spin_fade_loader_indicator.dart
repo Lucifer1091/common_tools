@@ -4,22 +4,18 @@ import 'package:flutter/material.dart';
 
 import '../infinite_progress.dart';
 
-///
-/// author: Vans Z
-/// date: 2019-06-02
-///
-
 class LineSpinFadeLoaderIndicator extends StatefulWidget {
-  LineSpinFadeLoaderIndicator({
+  const LineSpinFadeLoaderIndicator({
+    super.key,
     this.radius = 18,
-    this.minLineWidth: 2.4,
-    this.maxLineWidth: 4.8,
-    this.minLineHeight: 4.8,
-    this.maxLineHeight: 9.6,
-    this.minBallAlpha: 77,
-    this.maxBallAlpha: 255,
-    this.ballColor: Colors.white,
-    this.duration: const Duration(milliseconds: 500),
+    this.minLineWidth = 2.4,
+    this.maxLineWidth = 4.8,
+    this.minLineHeight = 4.8,
+    this.maxLineHeight = 9.6,
+    this.minBallAlpha = 77,
+    this.maxBallAlpha = 255,
+    this.ballColor = Colors.white,
+    this.duration = const Duration(milliseconds: 500),
   });
 
   final double radius;
@@ -59,14 +55,15 @@ class _LineSpinFadeLoaderIndicatorState
         return CustomPaint(
           size: measureSize(),
           painter: _LineSpinFadeLoaderIndicatorPainter(
-              animationValue: animationValue,
-              minLineWidth: widget.minLineWidth,
-              maxLineWidth: widget.maxLineWidth,
-              minLineHeight: widget.minLineHeight,
-              maxLineHeight: widget.maxLineHeight,
-              minAlpha: widget.minBallAlpha,
-              maxAlpha: widget.maxBallAlpha,
-              ballColor: widget.ballColor),
+            animationValue: animationValue,
+            minLineWidth: widget.minLineWidth,
+            maxLineWidth: widget.maxLineWidth,
+            minLineHeight: widget.minLineHeight,
+            maxLineHeight: widget.maxLineHeight,
+            minAlpha: widget.minBallAlpha,
+            maxAlpha: widget.maxBallAlpha,
+            ballColor: widget.ballColor,
+          ),
         );
       },
     );
@@ -78,8 +75,8 @@ class _LineSpinFadeLoaderIndicatorState
   }
 }
 
-double _progress = .0;
-double _lastExtent = .0;
+double _progress = 0;
+double _lastExtent = 0;
 
 class _LineSpinFadeLoaderIndicatorPainter extends CustomPainter {
   _LineSpinFadeLoaderIndicatorPainter({
@@ -104,9 +101,10 @@ class _LineSpinFadeLoaderIndicatorPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    var paint = Paint()
-      ..isAntiAlias = true
-      ..style = PaintingStyle.fill;
+    final paint =
+        Paint()
+          ..isAntiAlias = true
+          ..style = PaintingStyle.fill;
 
     _progress += (_lastExtent - animationValue).abs();
     _lastExtent = animationValue;
@@ -115,37 +113,51 @@ class _LineSpinFadeLoaderIndicatorPainter extends CustomPainter {
       _lastExtent = .0;
     }
 
-    var diffAlpha = maxAlpha - minAlpha;
-    var diffWidth = maxLineWidth - minLineWidth;
-    var diffHeight = maxLineHeight - minLineHeight;
+    final diffAlpha = maxAlpha - minAlpha;
+    final diffWidth = maxLineWidth - minLineWidth;
+    final diffHeight = maxLineHeight - minLineHeight;
     for (int i = 0; i < 8; i++) {
       canvas.save();
 
-      var newProgress = _progress - i * 22.5;
-      var beatAlpha = sin(newProgress * pi / 180).abs() * diffAlpha + minAlpha;
+      final newProgress = _progress - i * 22.5;
+      final beatAlpha =
+          sin(newProgress * pi / 180).abs() * diffAlpha + minAlpha;
       paint.color = Color.fromARGB(
-          beatAlpha.round(), ballColor.red, ballColor.green, ballColor.blue);
-      var scaleWidth =
+        beatAlpha.round(),
+        (ballColor.r * 255.0).round() & 0xff,
+        (ballColor.g * 255.0).round() & 0xff,
+        (ballColor.b * 255.0).round() & 0xff,
+      );
+      final scaleWidth =
           sin(newProgress * pi / 180).abs() * diffWidth + minLineWidth;
-      var scaleHeight =
+      final scaleHeight =
           sin(newProgress * pi / 180).abs() * diffHeight + minLineHeight;
-      var point = _circleAt(size.width * .5, size.height * .5,
-          size.width * .5 - maxLineWidth, i * pi / 4);
+      final point = _circleAt(
+        size.width * .5,
+        size.height * .5,
+        size.width * .5 - maxLineWidth,
+        i * pi / 4,
+      );
 
-      canvas.translate(point.dx, point.dy);
-      canvas.rotate((90 + (i * 45)) * pi / 180);
-      Rect rect = Rect.fromLTWH(
-          -scaleWidth * .5, -scaleHeight * .5, scaleWidth, scaleHeight);
-      RRect rRect = RRect.fromRectAndRadius(rect, Radius.circular(4.0));
-      canvas.drawRRect(rRect, paint);
-
-      canvas.restore();
+      canvas
+        ..translate(point.dx, point.dy)
+        ..rotate((90 + (i * 45)) * pi / 180);
+      final Rect rect = Rect.fromLTWH(
+        -scaleWidth * .5,
+        -scaleHeight * .5,
+        scaleWidth,
+        scaleHeight,
+      );
+      final RRect rRect = RRect.fromRectAndRadius(rect, Radius.circular(4));
+      canvas
+        ..drawRRect(rRect, paint)
+        ..restore();
     }
   }
 
   Offset _circleAt(double width, double height, double radius, double angle) {
-    var x = width + radius * (cos(angle));
-    var y = height + radius * (sin(angle));
+    final x = width + radius * (cos(angle));
+    final y = height + radius * (sin(angle));
     return Offset(x, y);
   }
 

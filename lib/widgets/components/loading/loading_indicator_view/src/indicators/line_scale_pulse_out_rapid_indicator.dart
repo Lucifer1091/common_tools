@@ -1,22 +1,18 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:loading_indicator_view_plus/src/infinite_progress.dart';
-
-///
-/// author: Vans Z
-/// date: 2019-06-01
-///
+import '../infinite_progress.dart';
 
 class LineScalePulseOutRapidIndicator extends StatefulWidget {
-  LineScalePulseOutRapidIndicator({
-    this.maxLength: 38,
-    this.minLength: 12,
-    this.spacing: 3.5,
-    this.lineWidth: 4,
-    this.lineNum: 5,
-    this.lineColor: Colors.white,
-    this.duration: const Duration(milliseconds: 400),
+  const LineScalePulseOutRapidIndicator({
+    super.key,
+    this.maxLength = 38,
+    this.minLength = 12,
+    this.spacing = 3.5,
+    this.lineWidth = 4,
+    this.lineNum = 5,
+    this.lineColor = Colors.white,
+    this.duration = const Duration(milliseconds: 400),
   });
 
   final double maxLength;
@@ -70,14 +66,15 @@ class _LineScalePulseOutRapidIndicatorState
 
   @override
   Size measureSize() {
-    var width = widget.lineNum * widget.lineWidth +
+    final width =
+        widget.lineNum * widget.lineWidth +
         (widget.lineNum - 1) * widget.spacing;
     return Size(width, widget.maxLength);
   }
 }
 
-double _progress = .0;
-double _lastExtent = .0;
+double _progress = 0;
+double _lastExtent = 0;
 
 class _LineScalePulseOutRapidIndicatorPainter extends CustomPainter {
   _LineScalePulseOutRapidIndicatorPainter({
@@ -89,12 +86,12 @@ class _LineScalePulseOutRapidIndicatorPainter extends CustomPainter {
     required this.lineNum,
     required this.lineColor,
   }) : offsetLength = <double>[
-          minLength + (maxLength - minLength) * .3,
-          minLength + (maxLength - minLength) * .7,
-          minLength,
-          minLength + (maxLength - minLength) * .7,
-          minLength + (maxLength - minLength) * .3,
-        ];
+         minLength + (maxLength - minLength) * .3,
+         minLength + (maxLength - minLength) * .7,
+         minLength,
+         minLength + (maxLength - minLength) * .7,
+         minLength + (maxLength - minLength) * .3,
+       ];
 
   final double animationValue;
   final double minLength;
@@ -107,12 +104,13 @@ class _LineScalePulseOutRapidIndicatorPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    var paint = Paint()
-      ..isAntiAlias = true
-      ..style = PaintingStyle.fill
-      ..color = lineColor
-      ..strokeJoin = StrokeJoin.round
-      ..strokeCap = StrokeCap.round;
+    final paint =
+        Paint()
+          ..isAntiAlias = true
+          ..style = PaintingStyle.fill
+          ..color = lineColor
+          ..strokeJoin = StrokeJoin.round
+          ..strokeCap = StrokeCap.round;
 
     _progress += (_lastExtent - animationValue).abs();
     _lastExtent = animationValue;
@@ -121,16 +119,16 @@ class _LineScalePulseOutRapidIndicatorPainter extends CustomPainter {
       _lastExtent = .0;
     }
 
-    var diffLength = maxLength - minLength;
+    final diffLength = maxLength - minLength;
     for (int i = 0; i < lineNum; i++) {
-      var offsetExtent = asin((offsetLength[i] - minLength) / diffLength);
-      var scaleLength =
+      final offsetExtent = asin((offsetLength[i] - minLength) / diffLength);
+      final scaleLength =
           sin(_progress * pi / 180 + offsetExtent).abs() * diffLength +
-              minLength;
-      var left = (lineWidth + spacing) * i;
-      var top = (maxLength - scaleLength) * .5;
-      Rect rect = Rect.fromLTWH(left, top, lineWidth, scaleLength);
-      RRect rRect = RRect.fromRectAndRadius(rect, Radius.circular(4.0));
+          minLength;
+      final left = (lineWidth + spacing) * i;
+      final top = (maxLength - scaleLength) * .5;
+      final Rect rect = Rect.fromLTWH(left, top, lineWidth, scaleLength);
+      final RRect rRect = RRect.fromRectAndRadius(rect, Radius.circular(4));
       canvas.drawRRect(rRect, paint);
     }
   }

@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 
-///
-/// author: Vans Z
-/// date: 2019-06-01
-///
-
 class BallScaleRippleMultipleIndicator extends StatefulWidget {
-  BallScaleRippleMultipleIndicator({
-    this.radius: 20,
-    this.ballColor: Colors.white,
-    this.duration: const Duration(milliseconds: 1000),
+  const BallScaleRippleMultipleIndicator({
+    super.key,
+    this.radius = 20,
+    this.ballColor = Colors.white,
+    this.duration = const Duration(milliseconds: 1000),
   });
 
   final double radius;
@@ -34,8 +30,9 @@ class _BallScaleRippleMultipleIndicatorState
     _animation = Tween<double>(begin: 0, end: widget.radius).animate(_animation)
       ..addStatusListener((AnimationStatus status) {
         if (status == AnimationStatus.completed) {
-          _controller.reset();
-          _controller.forward();
+          _controller
+            ..reset()
+            ..forward();
         }
       });
     _controller.forward();
@@ -49,7 +46,7 @@ class _BallScaleRippleMultipleIndicatorState
   }
 
   Size _measureSize() {
-    var size = 2 * widget.radius;
+    final size = 2 * widget.radius;
     return Size(size, size);
   }
 
@@ -78,8 +75,8 @@ class _BallScaleRippleMultipleIndicatorPainter extends CustomPainter {
     required this.radius,
     required this.ballColor,
     required this.duration,
-  })  : offsetList = <double>[radius, radius * .7, radius * .4],
-        strokeList = <double>[1.2, .84, 0.48];
+  }) : offsetList = <double>[radius, radius * .7, radius * .4],
+       strokeList = <double>[1.2, .84, 0.48];
 
   final double animationValue;
   final double radius;
@@ -90,20 +87,25 @@ class _BallScaleRippleMultipleIndicatorPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    var percent = animationValue / radius;
-    var paint = Paint()
-      ..isAntiAlias = true
-      ..color = Color.fromARGB((255 * percent).round(), ballColor.red,
-          ballColor.green, ballColor.blue)
-      ..style = PaintingStyle.stroke;
+    final percent = animationValue / radius;
+    final paint =
+        Paint()
+          ..isAntiAlias = true
+          ..color = Color.fromARGB(
+            (255 * percent).round(),
+            (ballColor.r * 255.0).round() & 0xff,
+            (ballColor.g * 255.0).round() & 0xff,
+            (ballColor.b * 255.0).round() & 0xff,
+          )
+          ..style = PaintingStyle.stroke;
 
-    var center = Offset(radius, radius);
+    final center = Offset(radius, radius);
 
     for (var i = 0; i < offsetList.length; i++) {
       canvas.save();
       paint.strokeWidth = strokeList[i] * percent;
-      canvas.drawCircle(center, offsetList[i] * percent, paint);
-      canvas.restore();
+      canvas..drawCircle(center, offsetList[i] * percent, paint)
+      ..restore();
     }
   }
 

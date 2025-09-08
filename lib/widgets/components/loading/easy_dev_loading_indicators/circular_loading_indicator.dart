@@ -1,8 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../../../index.dart';
-import 'circular_loading_indicator_painter.dart';
 
 enum IndicatorType { small, medium, large }
 
@@ -47,7 +48,7 @@ class CircularLoadingIndicator extends StatefulWidget {
     this.stops,
     this.lineWidth,
     this.size,
-    this.duration = const Duration(milliseconds: 1200),
+    this.duration = const Duration(milliseconds: 2000),
     this.type = IndicatorType.medium,
     this.color,
   });
@@ -93,6 +94,15 @@ class _CircularLoadingIndicatorState extends State<CircularLoadingIndicator>
   }
 
   @override
+  void didUpdateWidget(covariant CircularLoadingIndicator oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.duration != oldWidget.duration) {
+      _controller.duration = widget.duration;
+      _controller.repeat();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return RotationTransition(
       turns: Tween<double>(begin: 0, end: 1).animate(_controller),
@@ -121,34 +131,7 @@ class _CircularLoadingIndicatorState extends State<CircularLoadingIndicator>
   }
 
   Color _getColor(BuildContext context) {
-    if (widget.color != null) {
-      return widget.color!;
-    }
-
-    return context.colorScheme.primary;
-    // if (theme.brightness == Brightness.light) {
-    //   switch (widget.type) {
-    //     case IndicatorType.small:
-    //       return colorPalette.secondarySwatch ?? colorPalette.primarySwatch;
-    //     case IndicatorType.medium:
-    //       return colorPalette.tertiarySwatch ??
-    //           colorPalette.secondarySwatch ??
-    //           colorPalette.primarySwatch;
-    //     case IndicatorType.large:
-    //       return colorPalette.secondarySwatch ?? colorPalette.primarySwatch;
-    //   }
-    // }
-
-    // switch (widget.type) {
-    //   case IndicatorType.small:
-    //     return const Color(0xFFFFFFFF);
-    //   case IndicatorType.medium:
-    //     return colorPalette.tertiarySwatch ??
-    //         colorPalette.secondarySwatch ??
-    //         colorPalette.primarySwatch;
-    //   case IndicatorType.large:
-    //     return colorPalette.secondarySwatch ?? colorPalette.primarySwatch;
-    // }
+    return widget.color ?? context.colorScheme.primary;
   }
 
   List<double> _getIndicatorStops(IndicatorType type) {
@@ -182,5 +165,58 @@ class _CircularLoadingIndicatorState extends State<CircularLoadingIndicator>
       case IndicatorType.large:
         return 120;
     }
+  }
+}
+
+/// Paints circle with rounded edges with width equals to [lineWidth]
+/// and [SweepGradient] determined by [color], [surfaceColor] and [stops].
+class CircularLoadingIndicatorPainter extends CustomPainter {
+  CircularLoadingIndicatorPainter({
+    required this.color,
+    required this.surfaceColor,
+    required this.stops,
+    required this.lineWidth,
+  });
+
+  final Color color;
+  final Color surfaceColor;
+  final List<double> stops;
+  final double lineWidth;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final xCenter = size.width * 0.5;
+    final yCenter = size.height * 0.5;
+    final center = Offset(xCenter, yCenter);
+
+    final Paint paint =
+        Paint()
+          ..color = color
+          ..strokeCap = StrokeCap.round
+          ..strokeWidth = lineWidth
+          ..style = PaintingStyle.stroke
+          ..shader = SweepGradient(
+            colors: [color, surfaceColor],
+            stops: stops,
+          ).createShader(Rect.fromCircle(center: center, radius: 0));
+
+    canvas.drawArc(
+      Rect.fromCenter(
+        center: center,
+        width: size.width - lineWidth,
+        height: size.height - lineWidth,
+      ),
+      0.12 * pi,
+      1.76 * pi,
+      false,
+      paint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(CircularLoadingIndicatorPainter oldDelegate) {
+    return color != oldDelegate.color ||
+        stops != oldDelegate.stops ||
+        lineWidth != oldDelegate.lineWidth;
   }
 }

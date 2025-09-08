@@ -2,18 +2,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-///
-/// author: Vans Z
-/// date: 2019-06-07
-///
-
 class BallRotateIndicator extends StatefulWidget {
-  BallRotateIndicator({
-    this.minBallRadius: 2,
-    this.maxBallRadius: 4,
-    this.spacing: 7,
-    this.color: Colors.white,
-    this.duration: const Duration(milliseconds: 500),
+  const BallRotateIndicator({
+    super.key,
+    this.minBallRadius = 2,
+    this.maxBallRadius = 4,
+    this.spacing = 7,
+    this.color = Colors.white,
+    this.duration = const Duration(milliseconds: 500),
   });
 
   final double minBallRadius;
@@ -35,22 +31,24 @@ class _BallRotateIndicatorState extends State<BallRotateIndicator>
   @override
   void initState() {
     _controller = AnimationController(duration: widget.duration, vsync: this);
-    _radius =
-        Tween<double>(begin: widget.minBallRadius, end: widget.maxBallRadius)
-            .animate(
+    _radius = Tween<double>(
+      begin: widget.minBallRadius,
+      end: widget.maxBallRadius,
+    ).animate(
       CurvedAnimation(parent: _controller, curve: Curves.fastOutSlowIn),
     );
     _rotate = Tween<double>(begin: 0, end: 180).animate(
       CurvedAnimation(parent: _controller, curve: Curves.fastOutSlowIn),
     );
-    _controller.addStatusListener((AnimationStatus status) {
-      if (status == AnimationStatus.completed) {
-        _controller.reverse();
-      } else if (status == AnimationStatus.dismissed) {
-        _controller.forward();
-      }
-    });
-    _controller.forward();
+    _controller
+      ..addStatusListener((AnimationStatus status) {
+        if (status == AnimationStatus.completed) {
+          _controller.reverse();
+        } else if (status == AnimationStatus.dismissed) {
+          _controller.forward();
+        }
+      })
+      ..forward();
     super.initState();
   }
 
@@ -61,15 +59,16 @@ class _BallRotateIndicatorState extends State<BallRotateIndicator>
   }
 
   Size measureSize() {
-    var width = widget.maxBallRadius * 2 * 3 + widget.spacing * 2;
-    var height = widget.maxBallRadius * 2;
+    final width = widget.maxBallRadius * 2 * 3 + widget.spacing * 2;
+    final height = widget.maxBallRadius * 2;
     return Size(width, height);
   }
 
   @override
   Widget build(BuildContext context) => AnimatedBuilder(
-        animation: _controller,
-        builder: (context, child) => CustomPaint(
+    animation: _controller,
+    builder:
+        (context, child) => CustomPaint(
           size: measureSize(),
           painter: _BallRotateIndicatorPainter(
             angle: _rotate.value,
@@ -80,11 +79,11 @@ class _BallRotateIndicatorState extends State<BallRotateIndicator>
             color: widget.color,
           ),
         ),
-      );
+  );
 }
 
-double _progress = .0;
-double _lastExtent = .0;
+double _progress = 0;
+double _lastExtent = 0;
 
 class _BallRotateIndicatorPainter extends CustomPainter {
   _BallRotateIndicatorPainter({
@@ -105,10 +104,11 @@ class _BallRotateIndicatorPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    var paint = Paint()
-      ..isAntiAlias = true
-      ..style = PaintingStyle.fill
-      ..color = color;
+    final paint =
+        Paint()
+          ..isAntiAlias = true
+          ..style = PaintingStyle.fill
+          ..color = color;
 
     _progress += (_lastExtent - angle).abs();
     _lastExtent = angle;
@@ -117,15 +117,16 @@ class _BallRotateIndicatorPainter extends CustomPainter {
       _lastExtent = .0;
     }
 
-    canvas.translate(size.width * .5, size.height * .5);
-    canvas.rotate((_progress) * pi / 180);
+    canvas
+      ..translate(size.width * .5, size.height * .5)
+      ..rotate(_progress * pi / 180);
 
-    var preScale = minBallRadius / maxBallRadius;
-    var scale = preScale + (radius - minBallRadius) / maxBallRadius;
+    final preScale = minBallRadius / maxBallRadius;
+    final scale = preScale + (radius - minBallRadius) / maxBallRadius;
     canvas.scale(scale);
 
     for (var i = 0; i < 3; i++) {
-      var dx = (2 * i - 2) * maxBallRadius + (i - 1) * spacing;
+      final dx = (2 * i - 2) * maxBallRadius + (i - 1) * spacing;
       canvas.drawCircle(Offset(dx, 0), maxBallRadius, paint);
     }
   }

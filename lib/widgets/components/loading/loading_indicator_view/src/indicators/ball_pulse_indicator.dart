@@ -1,19 +1,17 @@
-import 'package:flutter/material.dart';
 import 'dart:math';
 
-import 'package:loading_indicator_view_plus/src/infinite_progress.dart';
+import 'package:flutter/material.dart';
 
-///
-/// author：Vans Z
-/// date： 2019-05-27
-///
+import '../infinite_progress.dart';
+
 class BallPulseIndicator extends StatefulWidget {
-  BallPulseIndicator({
-    this.minRadius: 2.4,
-    this.maxRadius: 7.2,
-    this.spacing: 3,
-    this.ballColor: Colors.white,
-    this.duration: const Duration(milliseconds: 400),
+  const BallPulseIndicator({
+    super.key,
+    this.minRadius = 2.4,
+    this.maxRadius = 7.2,
+    this.spacing = 3,
+    this.ballColor = Colors.white,
+    this.duration = const Duration(milliseconds: 400),
   });
 
   final double minRadius;
@@ -42,8 +40,8 @@ class _BallPulseIndicatorState extends State<BallPulseIndicator>
 
   @override
   Size measureSize() {
-    var width = widget.maxRadius * 2 * 3 + widget.spacing * 2;
-    var height = widget.maxRadius * 2;
+    final width = widget.maxRadius * 2 * 3 + widget.spacing * 2;
+    final height = widget.maxRadius * 2;
     return Size(width, height);
   }
 
@@ -78,10 +76,10 @@ class _BallPulseIndicatorPainter extends CustomPainter {
     required this.spacing,
     required this.ballColor,
   }) : radiusList = <double>[
-          minRadius + (maxRadius - minRadius) * 0.9,
-          minRadius + (maxRadius - minRadius) * 0.6,
-          minRadius + (maxRadius - minRadius) * 0.3,
-        ];
+         minRadius + (maxRadius - minRadius) * 0.9,
+         minRadius + (maxRadius - minRadius) * 0.6,
+         minRadius + (maxRadius - minRadius) * 0.3,
+       ];
 
   final double animationValue;
   final double minRadius;
@@ -92,12 +90,13 @@ class _BallPulseIndicatorPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    var paint = Paint()
-      ..isAntiAlias = true
-      ..style = PaintingStyle.fill
-      ..color = ballColor
-      ..strokeJoin = StrokeJoin.round
-      ..strokeCap = StrokeCap.round;
+    final paint =
+        Paint()
+          ..isAntiAlias = true
+          ..style = PaintingStyle.fill
+          ..color = ballColor
+          ..strokeJoin = StrokeJoin.round
+          ..strokeCap = StrokeCap.round;
 
     _progress += (_lastExtent - animationValue).abs();
     _lastExtent = animationValue;
@@ -106,15 +105,15 @@ class _BallPulseIndicatorPainter extends CustomPainter {
       _lastExtent = .0;
     }
 
-    var diffRadius = maxRadius - minRadius;
+    final diffRadius = maxRadius - minRadius;
     for (int i = 0; i < radiusList.length; i++) {
-      var dx = maxRadius + 2 * i * maxRadius + i * spacing;
-      var offset = Offset(dx, maxRadius);
+      final dx = maxRadius + 2 * i * maxRadius + i * spacing;
+      final offset = Offset(dx, maxRadius);
 
-      var offsetExtent = asin((radiusList[i] - minRadius) / diffRadius);
-      var scaleRadius =
+      final offsetExtent = asin((radiusList[i] - minRadius) / diffRadius);
+      final scaleRadius =
           sin(_progress * pi / 180 + offsetExtent).abs() * diffRadius +
-              minRadius;
+          minRadius;
       canvas.drawCircle(offset, scaleRadius, paint);
     }
   }
