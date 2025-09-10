@@ -2,8 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../loading/my_circle_indicator.dart';
-import '../text/my_text.dart';
 
 enum IconTextDirection { horizontal, vertical }
 
@@ -350,7 +348,8 @@ class _TDToastLoading extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          MyCircleIndicator(color: Colors.white, size: 26, lineWidth: 4),
+          Placeholder(),
+          // MyCircleIndicator(color: Colors.white, size: 26, lineWidth: 4),
           const SizedBox(height: 8),
           customWidget ??
               MyText(
@@ -380,7 +379,8 @@ class _TDToastLoadingWithoutText extends StatelessWidget {
         color: ThemeColors.neutral.shade900,
         borderRadius: BorderRadius.circular(6),
       ),
-      child: MyCircleIndicator(color: Colors.white, size: 26, lineWidth: 4),
+      child: Placeholder(),
+      // child: MyCircleIndicator(color: Colors.white, size: 26, lineWidth: 4),
     );
   }
 }

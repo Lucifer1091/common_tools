@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'my_loader.dart';
+import '../../../index.dart';
 
 class MyLoadingController {
   MyLoadingController._();

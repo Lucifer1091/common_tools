@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../loading/my_circle_indicator.dart';
-import '../text/my_text.dart';
-import 'td_cupertino_switch.dart';
 
 typedef OnSwitchChanged = bool Function(bool value);
 
@@ -172,10 +169,11 @@ class TDSwitchState extends State<TDSwitch> {
           ],
         );
       case TDSwitchType.loading:
-        return Container(
-          alignment: Alignment.centerLeft,
-          child: MyCircleIndicator(color: thumbContentOnColor, size: 16),
-        );
+        return Placeholder();
+        // return Container(
+        //   alignment: Alignment.centerLeft,
+        //   child: MyCircleIndicator(color: thumbContentOnColor, size: 16),
+        // );
       case TDSwitchType.icon:
         return Container(
           alignment: Alignment.centerLeft,

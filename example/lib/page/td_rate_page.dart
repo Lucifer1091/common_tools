@@ -1,4 +1,4 @@
-import 'package:common_tools/widgets/components/loading/easy_dev_loading_indicators/circular_loading_indicator.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:common_tools/index.dart';
 
@@ -36,13 +36,6 @@ class TDRatePageState extends State<TDRatePage> {
   }
 
   Widget _buildMsgRate(BuildContext context) {
-    return Column(
-      children: [
-        SpinnerLoader(),
-        ParticleVortexLoader(),
-        FractalTreeLoader(),
-        //
-      ],
-    );
+    return Placeholder();
   }
 }

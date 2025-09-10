@@ -434,11 +434,12 @@ class TDImageState extends State<TDImagePage>
             child: RotationTransition(
               turns: animation,
               alignment: Alignment.center,
-              child: MyCircleIndicator(
-                color: context.colorScheme.primary,
-                size: 18,
-                lineWidth: 3,
-              ),
+              child: Placeholder(),
+              // child: MyCircleIndicator(
+              //   color: context.colorScheme.primary,
+              //   size: 18,
+              //   lineWidth: 3,
+              // ),
             ),
           ),
         ),
