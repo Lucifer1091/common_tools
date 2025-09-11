@@ -87,6 +87,7 @@ class ShapePainter extends CustomPainter {
     this.hourColor,
     this.strokeWidth,
   );
+
   double angle;
   double angle2;
   final Color frameColor;
@@ -116,10 +117,11 @@ class ShapePainter extends CustomPainter {
           ..strokeCap = StrokeCap.round;
     final paint4 =
         Paint()
-          ..color = Colors.black
+          ..color = frameColor
           ..strokeWidth = strokeWidth * 1.5
           ..style = PaintingStyle.stroke
           ..strokeCap = StrokeCap.round;
+
     final double radius = size.height * 0.4;
     final double radius2 = size.height * 0.2;
     final Offset startingPoint = Offset(size.width / 2, size.height / 2);

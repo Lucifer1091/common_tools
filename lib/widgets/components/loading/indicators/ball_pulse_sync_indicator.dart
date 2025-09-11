@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import '../../../../index.dart';
 import 'infinite_progress.dart';
 
 class BallPulseSyncIndicator extends StatefulWidget {
@@ -9,14 +10,14 @@ class BallPulseSyncIndicator extends StatefulWidget {
     this.radius = 7.2,
     this.extent = 16,
     this.spacing = 3,
-    this.ballColor = Colors.white,
+    this.color,
     this.duration = const Duration(milliseconds: 400),
   });
 
   final double radius;
   final double extent;
   final double spacing;
-  final Color ballColor;
+  final Color? color;
   final Duration duration;
 
   @override
@@ -56,7 +57,7 @@ class _BallPulseSyncIndicatorState extends State<BallPulseSyncIndicator>
             extent: widget.extent,
             radius: widget.radius,
             spacing: widget.spacing,
-            ballColor: widget.ballColor,
+            ballColor: widget.color ?? context.colorScheme.primary,
           ),
         );
       },

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../../../../index.dart';
 import 'infinite_progress.dart';
 
 class LineSpinFadeLoaderIndicator extends StatefulWidget {
@@ -14,7 +15,7 @@ class LineSpinFadeLoaderIndicator extends StatefulWidget {
     this.maxLineHeight = 9.6,
     this.minBallAlpha = 77,
     this.maxBallAlpha = 255,
-    this.ballColor = Colors.white,
+    this.color,
     this.duration = const Duration(milliseconds: 500),
   });
 
@@ -25,7 +26,7 @@ class LineSpinFadeLoaderIndicator extends StatefulWidget {
   final double maxLineHeight;
   final double minBallAlpha;
   final double maxBallAlpha;
-  final Color ballColor;
+  final Color? color;
   final Duration duration;
 
   @override
@@ -62,7 +63,7 @@ class _LineSpinFadeLoaderIndicatorState
             maxLineHeight: widget.maxLineHeight,
             minAlpha: widget.minBallAlpha,
             maxAlpha: widget.maxBallAlpha,
-            ballColor: widget.ballColor,
+            ballColor: widget.color ?? context.colorScheme.primary,
           ),
         );
       },

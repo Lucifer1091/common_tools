@@ -106,41 +106,47 @@ class _MyLoaderPageState extends State<MyLoaderPage> {
     return Column(
       spacing: 16,
       children: [
-        MyLoader(icon: MyLoaderIcon.circle2),
-        MyLoader(icon: MyLoaderIcon.circle3),
-        CircularProgressIndicator(
-          strokeCap: StrokeCap.round,
-          backgroundColor: context.colorScheme.secondary,
-          color: context.colorScheme.primary,
-        ),
-        // MyLoader(size: MyLoaderSize.large),
-        // MyLoader(size: MyLoaderSize.large, icon: MyLoaderIcon.activity),
-        // EasyDevInfiniteProgressBar(),
-        // EasyDevProgressBar(percentage: .75),
+        // CircularProgressIndicator(
+        //   strokeCap: StrokeCap.round,
+        //   backgroundColor: context.colorScheme.secondary,
+        //   color: context.colorScheme.primary,
+        // ),
+        // Padding(
+        //   padding: const EdgeInsets.symmetric(horizontal: 16),
+        //   child: LinearProgressIndicator(
+        //     borderRadius: MyBorderRadius.round,
+        //     color: context.colorScheme.primary,
+        //     backgroundColor: context.colorScheme.secondary,
+        //     minHeight: 8,
+        //   ),
+        // ),
         // Row(
         //   spacing: 24,
         //   children: [
-        //     BallPulseSyncIndicator(),
-        //     BallSpinFadeLoaderIndicator(),
-        // LineSpinFadeLoaderIndicator(),
-        //     PacmanIndicator(),
+        //     const Gap(8),
+        //     const BallClipRotateMultipleIndicator(),
+        //     const BallClipRotatePulseIndicator(),
+        //     const BallPulseSyncIndicator(),
+        //     const BallSpinFadeLoaderIndicator(),
+        //     const LineSpinFadeLoaderIndicator(),
+        //     const PacmanIndicator(),
         //   ],
         // ),
-        // ClockLoader(
-        //   frameColor: context.colorScheme.primary,
-        //   minuteColor: context.colorScheme.primary,
-        //   hourColor: context.colorScheme.primary,
-        // ),
-        // TextLoader(),
-        // Wrap(
-        //   children: [
-        //     CardioLoader(),
-        //     SizedBox(height: 100, width: 100, child: LineWobbleLoader()),
-        //     SizedBox(height: 100, width: 100, child: ReuleauxLoaderScreen()),
-        //     SizedBox(height: 100, width: 100, child: SquareLoaderScreen()),
-        //     SizedBox(height: 100, width: 100, child: TrefoilLoader()),
-        //   ],
-        // ),
+        ClockLoader(
+          frameColor: context.colorScheme.mutedForeground,
+          minuteColor: context.colorScheme.destructive,
+          hourColor: context.colorScheme.primary,
+        ),
+        TextLoader(),
+        Wrap(
+          children: [
+            CardioLoader(),
+            SizedBox(height: 100, width: 100, child: LineWobbleLoader()),
+            SizedBox(height: 100, width: 100, child: ReuleauxLoaderScreen()),
+            SizedBox(height: 100, width: 100, child: SquareLoaderScreen()),
+            SizedBox(height: 100, width: 100, child: TrefoilLoader()),
+          ],
+        ),
       ],
     );
   }

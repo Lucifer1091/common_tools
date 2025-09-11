@@ -444,7 +444,7 @@ class _TDUploadState extends State<TDUpload> {
                 visible: file.status == TDUploadFileStatus.loading,
                 child: const MyLoader(
                   size: MyLoaderSize.large,
-                  iconColor: Colors.white,
+                  // iconColor: Colors.white,
                 ),
               ),
               Visibility(

@@ -20,7 +20,7 @@ class MyLoadingController {
     Color? textColor,
     Axis axis = Axis.vertical,
     Widget? customIcon,
-    int duration = 2000,
+    Duration duration = const Duration(milliseconds: 2000),
   }) {
     if (_isShowing) return;
 
@@ -37,7 +37,6 @@ class MyLoadingController {
                 textColor: textColor,
                 refreshWidget: refreshWidget,
                 duration: duration,
-                iconColor: iconColor,
                 axis: axis,
               ),
         );

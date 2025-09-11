@@ -1,32 +1,57 @@
-part of '../my_loader.dart';
+import 'dart:math';
+import 'package:flutter/material.dart';
 
-class _BallClipRotatePulse extends StatefulWidget {
-  const _BallClipRotatePulse({this.options = const MyLoaderOptions()});
+import '../../../../index.dart';
 
-  final MyLoaderOptions options;
+class BallClipRotatePulseIndicator extends StatefulWidget {
+  const BallClipRotatePulseIndicator({
+    super.key,
+    this.startAngle = -5,
+    this.minRadius = 10,
+    this.maxRadius = 20,
+    this.solidCircleRadius = 10,
+    this.color,
+    this.duration = const Duration(milliseconds: 400),
+  });
+
+  final double startAngle;
+  final double minRadius;
+  final double maxRadius;
+  final double solidCircleRadius;
+  final Color? color;
+  final Duration duration;
 
   @override
-  State<_BallClipRotatePulse> createState() => _BallClipRotatePulseState();
+  State<StatefulWidget> createState() => _BallClipRotatePulseIndicatorState();
 }
 
-class _BallClipRotatePulseState extends State<_BallClipRotatePulse>
+class _BallClipRotatePulseIndicatorState
+    extends State<BallClipRotatePulseIndicator>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
   late Animation<double> _radius;
   late Animation<double> _rotate;
-
-  double get radius => widget.options.size.value;
+  late AnimationController _controller;
 
   @override
   void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: widget.options.duration,
-      vsync: this,
+    _controller = AnimationController(duration: widget.duration, vsync: this);
+    _radius = Tween<double>(
+      begin: widget.minRadius,
+      end: widget.maxRadius,
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Interval(0, 1, curve: Curves.fastOutSlowIn),
+      ),
     );
-    _initAnimations();
+    _rotate = Tween<double>(begin: 0, end: 180).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Interval(0, 1, curve: Curves.fastOutSlowIn),
+      ),
+    );
     _controller
-      ..addStatusListener((status) {
+      ..addStatusListener((AnimationStatus status) {
         if (status == AnimationStatus.completed) {
           _controller.reverse();
         } else if (status == AnimationStatus.dismissed) {
@@ -34,31 +59,7 @@ class _BallClipRotatePulseState extends State<_BallClipRotatePulse>
         }
       })
       ..forward();
-  }
-
-  void _initAnimations() {
-    _radius = Tween<double>(begin: radius / 2, end: radius).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.fastOutSlowIn),
-    );
-    _rotate = Tween<double>(begin: 0, end: 180).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.fastOutSlowIn),
-    );
-  }
-
-  @override
-  void didUpdateWidget(covariant _BallClipRotatePulse oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    // Update controller duration if changed
-    if (oldWidget.options.duration != widget.options.duration) {
-      _controller.duration = widget.options.duration;
-    }
-
-    // Update animations if size or duration changed
-    if (oldWidget.options.size != widget.options.size ||
-        oldWidget.options.duration != widget.options.duration) {
-      _initAnimations();
-    }
+    super.initState();
   }
 
   @override
@@ -67,22 +68,25 @@ class _BallClipRotatePulseState extends State<_BallClipRotatePulse>
     super.dispose();
   }
 
+  Size _measureSize() {
+    return Size(widget.maxRadius * 2, widget.maxRadius * 2);
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {
         return CustomPaint(
-          size: Size.square(2 * radius),
-          painter: _BallClipRotatePulsePainter(
+          size: _measureSize(),
+          painter: _BallClipRotatePulseIndicatorPainter(
             angle: _rotate.value,
             radius: _radius.value,
-            minRadius: radius / 2,
-            maxRadius: radius,
-            solidCircleRadius: radius / 2,
-            startAngle: -5,
-            color: widget.options.color ?? context.colorScheme.primary,
-            strokeWidth: widget.options.strokeWidth ?? 2,
+            minRadius: widget.minRadius,
+            maxRadius: widget.maxRadius,
+            solidCircleRadius: widget.solidCircleRadius,
+            startAngle: widget.startAngle,
+            color: widget.color ?? context.colorScheme.primary,
           ),
         );
       },
@@ -90,8 +94,11 @@ class _BallClipRotatePulseState extends State<_BallClipRotatePulse>
   }
 }
 
-class _BallClipRotatePulsePainter extends CustomPainter {
-  _BallClipRotatePulsePainter({
+double _progress = 0;
+double _lastExtent = 0;
+
+class _BallClipRotatePulseIndicatorPainter extends CustomPainter {
+  _BallClipRotatePulseIndicatorPainter({
     required this.angle,
     required this.radius,
     required this.minRadius,
@@ -99,8 +106,7 @@ class _BallClipRotatePulsePainter extends CustomPainter {
     required this.solidCircleRadius,
     required this.startAngle,
     required this.color,
-    required this.strokeWidth,
-  });
+  }) : startAngles = <double>[225, 45];
 
   final double angle;
   final double radius;
@@ -108,10 +114,8 @@ class _BallClipRotatePulsePainter extends CustomPainter {
   final double maxRadius;
   final double solidCircleRadius;
   final double startAngle;
+  final List<double> startAngles;
   final Color color;
-  final double strokeWidth;
-
-  static const List<double> _startAngles = [225, 45];
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -119,43 +123,47 @@ class _BallClipRotatePulsePainter extends CustomPainter {
         Paint()
           ..isAntiAlias = true
           ..color = color
-          ..strokeWidth = strokeWidth
+          ..strokeWidth = 2
           ..strokeCap = StrokeCap.round;
 
-    final halfWidth = size.width * 0.5;
-    final halfHeight = size.height * 0.5;
+    _progress += (_lastExtent - angle).abs();
+    _lastExtent = angle;
+    if (_progress >= double.maxFinite) {
+      _progress = .0;
+      _lastExtent = .0;
+    }
+
+    final halfWidth = size.width * .5;
+    final halfHeight = size.height * .5;
 
     canvas
-      ..save()
       ..translate(halfWidth, halfHeight)
-      ..rotate((angle + startAngle) * pi / 180);
-
+      ..rotate((_progress + startAngle) * pi / 180);
     final preScale = minRadius / maxRadius;
     final scale = preScale + (radius - minRadius) / maxRadius;
     canvas.scale(scale);
 
     paint.style = PaintingStyle.stroke;
-    for (final start in _startAngles) {
-      final rect = Rect.fromLTWH(
+    for (var i = 0; i < startAngles.length; i++) {
+      final Rect rect = Rect.fromLTWH(
         -halfWidth,
         -halfHeight,
         size.width,
         size.height,
       );
-      canvas.drawArc(rect, start * pi / 180, 90 * pi / 180, false, paint);
+      canvas.drawArc(
+        rect,
+        startAngles[i] * pi / 180,
+        90 * pi / 180,
+        false,
+        paint,
+      );
     }
 
     paint.style = PaintingStyle.fill;
-    canvas
-      ..drawCircle(Offset.zero, solidCircleRadius, paint)
-      ..restore();
+    canvas.drawCircle(Offset(0, 0), solidCircleRadius, paint);
   }
 
   @override
-  bool shouldRepaint(covariant _BallClipRotatePulsePainter oldDelegate) {
-    return angle != oldDelegate.angle ||
-        radius != oldDelegate.radius ||
-        color != oldDelegate.color ||
-        strokeWidth != oldDelegate.strokeWidth;
-  }
+  bool shouldRepaint(CustomPainter oldDelegate) => true;
 }

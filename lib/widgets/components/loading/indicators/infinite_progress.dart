@@ -20,8 +20,6 @@ mixin InfiniteProgressMixin {
     controller.forward();
   }
 
-  Size measureSize();
-
   void closeEngine() {
     controller.dispose();
   }

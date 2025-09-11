@@ -1,19 +1,21 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
+import '../../../../index.dart';
+
 class TextLoader extends StatefulWidget {
   const TextLoader({
     super.key,
     this.size = 60,
     this.duration = const Duration(seconds: 1, milliseconds: 500),
-    this.mainColor = Colors.black,
-    this.secondaryColor = Colors.purple,
+    this.mainColor,
+    this.secondaryColor,
   });
 
   final double size;
   final Duration duration;
-  final Color mainColor;
-  final Color secondaryColor;
+  final Color? mainColor;
+  final Color? secondaryColor;
 
   @override
   State<TextLoader> createState() => _TextLoaderState();
@@ -70,11 +72,10 @@ class _TextLoaderState extends State<TextLoader>
         children: [
           Text(
             'L',
-            style: TextStyle(
+            style: context.bodyMedium.copyWith(
               fontSize: widget.size,
-              fontWeight: FontWeight.w900,
-              color: widget.mainColor,
-              fontFamily: 'sans-serif',
+              fontWeight: FontWeight.w600,
+              color: widget.mainColor ?? context.colorScheme.foreground,
               fontStyle: FontStyle.normal,
             ),
           ),
@@ -82,19 +83,18 @@ class _TextLoaderState extends State<TextLoader>
             painter: MyTextPainter(
               _firstAnimation ? animation.value : animationOp.value,
               widget.size / 2.8,
-              widget.mainColor,
-              widget.secondaryColor,
+              widget.mainColor ?? context.colorScheme.foreground,
+              widget.secondaryColor ?? context.colorScheme.primary,
             ),
             child: SizedBox(height: widget.size, width: widget.size),
           ),
           Text(
-            'ADDING',
-            style: TextStyle(
+            'ADING',
+            style: context.bodyMedium.copyWith(
               fontSize: widget.size,
-              fontWeight: FontWeight.w900,
-              color: widget.mainColor,
+              fontWeight: FontWeight.w600,
+              color: widget.mainColor ?? context.colorScheme.foreground,
               fontStyle: FontStyle.normal,
-              fontFamily: 'sans-serif',
             ),
           ),
           Text(
@@ -102,7 +102,7 @@ class _TextLoaderState extends State<TextLoader>
             style: TextStyle(
               fontSize: widget.size,
               fontWeight: FontWeight.w900,
-              color: widget.secondaryColor,
+              color: widget.secondaryColor ?? context.colorScheme.primary,
               fontStyle: FontStyle.normal,
               fontFamily: 'sans-serif',
             ),
@@ -134,6 +134,7 @@ class MyTextPainter extends CustomPainter {
         false,
         painter
           ..style = PaintingStyle.stroke
+          ..strokeCap = StrokeCap.round
           ..color = secondaryColor
           ..strokeWidth = this.size / 3.5,
       )

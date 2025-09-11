@@ -2,18 +2,20 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../../../../index.dart';
+
 class PacmanIndicator extends StatefulWidget {
   const PacmanIndicator({
     super.key,
     this.radius = 16,
     this.beanRadius = 4,
-    this.color = Colors.white,
+    this.color,
     this.duration = const Duration(milliseconds: 325),
   });
 
   final double radius;
   final double beanRadius;
-  final Color color;
+  final Color? color;
   final Duration duration;
 
   @override
@@ -73,7 +75,7 @@ class _PacmanIndicatorState extends State<PacmanIndicator>
               beanTransX: bean.value,
               radius: widget.radius,
               beanRadius: widget.beanRadius,
-              color: widget.color,
+              color: widget.color ?? context.colorScheme.primary,
             ),
           ),
     );

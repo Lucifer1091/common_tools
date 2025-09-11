@@ -1,11 +1,8 @@
-import 'dart:math';
 
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../loading/my_loader.dart';
-import '../text/my_text.dart';
 
 /// TDesign refreshes the header
 /// Combines with the EasyRefresh class to implement pull-down refresh,
@@ -150,7 +147,7 @@ class TGIconHeaderWidgetState extends State<TGIconHeaderWidget>
 
   Widget _buildLoading() => MyLoader(
     icon: widget.loadingIcon,
-    iconColor: ThemeColors.blue.shade600,
+    // iconColor: ThemeColors.blue.shade600,
     axis: Axis.horizontal,
     text: 'Refreshing',
     textColor: ThemeColors.neutral.shade700,

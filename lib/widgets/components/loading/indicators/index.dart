@@ -1,10 +1,10 @@
+export 'ball_clip_rotate_multiple.dart';
+export 'ball_clip_rotate_pulse.dart';
 export 'ball_pulse_sync_indicator.dart';
 export 'ball_spin_fade_loader_indicator.dart';
 export 'cardio_indicator_animation.dart';
 export 'clock_loading.dart';
 export 'delay_tween.dart';
-export 'easydev_infinite_progress_bar.dart';
-export 'easydev_progress_bar.dart';
 export 'infinite_progress.dart';
 export 'line_spin_fade_loader_indicator.dart';
 export 'linewobble_indicator_animation.dart';

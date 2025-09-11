@@ -1,11 +1,8 @@
-library;
-
-import 'dart:math';
 import 'package:flutter/material.dart';
 import '../../../index.dart';
 
-part 'indicators/ball_clip_rotate_multiple.dart';
-part 'indicators/ball_clip_rotate_pulse.dart';
+// part 'indicators/ball_clip_rotate_multiple.dart';
+// part 'indicators/ball_clip_rotate_pulse.dart';
 
 enum MyLoaderIcon { circle, circle2, circle3, point, activity }
 
@@ -18,7 +15,8 @@ class MyLoader extends StatelessWidget {
     this.textColor,
     this.refreshWidget,
     this.customIcon,
-    this.options = const MyLoaderOptions(),
+    this.size = MyLoaderSize.medium,
+    this.duration = const Duration(milliseconds: 1500),
   });
 
   final MyLoaderIcon? icon;
@@ -33,7 +31,9 @@ class MyLoader extends StatelessWidget {
 
   final Widget? customIcon;
 
-  final MyLoaderOptions options;
+  final MyLoaderSize size;
+
+  final Duration duration;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +41,11 @@ class MyLoader extends StatelessWidget {
   }
 
   Widget _contentWidget(BuildContext context) {
+    final MyLoaderOptions options = MyLoaderOptions(
+      size: size,
+      duration: duration,
+    );
+
     if (icon == null) {
       return textWidget(context);
     } else {
@@ -50,10 +55,10 @@ class MyLoader extends StatelessWidget {
         indicator = customIcon;
       } else {
         switch (icon!) {
-          case MyLoaderIcon.circle2:
-            return _BallClipRotateMultiple(options: options);
-          case MyLoaderIcon.circle3:
-            return _BallClipRotatePulse(options: options);
+          // case MyLoaderIcon.circle2:
+          //   return _BallClipRotateMultiple(options: options);
+          // case MyLoaderIcon.circle3:
+          //   return _BallClipRotatePulse(options: options);
           // case MyLoaderIcon.activity:
           //   indicator = MyCupertinoActivityIndicator(
           //     activeColor: iconColor,
