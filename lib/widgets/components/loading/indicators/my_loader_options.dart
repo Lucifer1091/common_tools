@@ -5,8 +5,7 @@ enum MyLoaderSize {
   small(24),
   medium(32),
   large(48),
-  extraLarge(64),
-  custom(0);
+  extraLarge(64);
 
   const MyLoaderSize(this.value);
 
@@ -25,31 +24,19 @@ class MyLoaderOptions {
     this.backgroundColor,
     this.secondaryColor,
     this.tertiaryColor,
-    this.strokeWidth ,
+    this.strokeWidth,
+    this.strokeCap,
   });
 
-  /// The primary color of the loader.
   final Color? color;
-
-  /// The size of the loader.
   final MyLoaderSize size;
-
-  /// The animation duration in milliseconds.
   final Duration duration;
-
-  /// The background color of the loader (if applicable).
   final Color? backgroundColor;
-
-  /// Secondary color for loaders that support multiple colors.
   final Color? secondaryColor;
-
-  /// Tertiary color for loaders that support multiple colors.
   final Color? tertiaryColor;
-
-  /// The stroke width for loaders that use strokes (like circle loaders).
   final double? strokeWidth;
+  final StrokeCap? strokeCap;
 
-  /// Creates a copy of this [MyLoaderOptions] with the given fields replaced by new values.
   MyLoaderOptions copyWith({
     Color? color,
     MyLoaderSize? size,
@@ -58,6 +45,7 @@ class MyLoaderOptions {
     Color? secondaryColor,
     Color? tertiaryColor,
     double? strokeWidth,
+    StrokeCap? strokeCap,
   }) {
     return MyLoaderOptions(
       color: color ?? this.color,
@@ -67,6 +55,7 @@ class MyLoaderOptions {
       secondaryColor: secondaryColor ?? this.secondaryColor,
       tertiaryColor: tertiaryColor ?? this.tertiaryColor,
       strokeWidth: strokeWidth ?? this.strokeWidth,
+      strokeCap: strokeCap ?? this.strokeCap,
     );
   }
 }

@@ -23,38 +23,34 @@ class _MyLoaderPageState extends State<MyLoaderPage> {
           'Used to indicate the loading status of a page or operation, giving users feedback while alleviating the anxiety of waiting. It consists of one or a group of feedback animations.',
       children: [
         ExampleModule(
-          title: 'Component Types',
-          children: [ExampleItem(desc: '带描述评分', builder: _buildMsgRate)],
-        ),
-        ExampleModule(
-          title: 'Component Types',
+          title: 'Basic Usage',
           children: [
-            ExampleItem(desc: 'Pure Icon', builder: _buildPureIconLoading),
+            ExampleItem(desc: 'Only Icon', builder: _buildIconLoading),
             ExampleItem(
-              desc: 'Icon + Text Horizontal',
+              desc: 'Icon + Horizontal Text',
               builder: _buildTextIconHorizontalLoading,
             ),
             ExampleItem(
-              desc: 'Icon + Text Vertical',
+              desc: 'Icon + Vertical Text',
               builder: _buildTextIconVerticalLoading,
             ),
-            ExampleItem(desc: 'Pure Text', builder: _buildPureTextLoading),
           ],
         ),
         ExampleModule(
           title: 'Component Size',
           children: [
-            ExampleItem(desc: 'Large', builder: _buildLargeLoading),
-            ExampleItem(desc: 'Medium', builder: _buildMediumLoading),
-            ExampleItem(desc: 'Small', builder: _buildSmallLoading),
+            ExampleItem(
+              builder: _buildLoadingSizes,
+              padding: EdgeInsets.symmetric(vertical: 24, horizontal: 8),
+            ),
           ],
         ),
         ExampleModule(
-          title: 'Loading Speed',
+          title: 'Component Types',
           children: [
             ExampleItem(
-              desc: 'Adjust loading speed',
-              builder: _buildCustomSpeedLoading,
+              padding: EdgeInsets.symmetric(vertical: 24, horizontal: 8),
+              builder: _buildLoaderTypes,
             ),
           ],
         ),
@@ -87,223 +83,151 @@ class _MyLoaderPageState extends State<MyLoaderPage> {
     );
   }
 
-  Widget _buildRow(List<Widget> list) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: list.fold(
-            [],
-            (previousValue, element) => [...previousValue, element, rowSpace],
-          ),
-        ),
-      ),
+  Widget _buildIconLoading(BuildContext context) {
+    return Wrap(
+      spacing: 48,
+      runSpacing: 24,
+      alignment: WrapAlignment.center,
+      children: [
+        const MyLoader(icon: MyLoaderIcon.circle),
+        const MyLoader(icon: MyLoaderIcon.activity),
+        const MyLoader(icon: MyLoaderIcon.dots),
+      ],
     );
   }
 
-  Widget _buildMsgRate(BuildContext context) {
-    return Column(
-      spacing: 16,
+  Widget _buildTextIconHorizontalLoading(BuildContext context) {
+    return Wrap(
+      spacing: 48,
+      runSpacing: 24,
+      alignment: WrapAlignment.center,
       children: [
-        // CircularProgressIndicator(
-        //   strokeCap: StrokeCap.round,
-        //   backgroundColor: context.colorScheme.secondary,
-        //   color: context.colorScheme.primary,
-        // ),
-        // Padding(
-        //   padding: const EdgeInsets.symmetric(horizontal: 16),
-        //   child: LinearProgressIndicator(
-        //     borderRadius: MyBorderRadius.round,
-        //     color: context.colorScheme.primary,
-        //     backgroundColor: context.colorScheme.secondary,
-        //     minHeight: 8,
-        //   ),
-        // ),
-        // Row(
-        //   spacing: 24,
-        //   children: [
-        //     const Gap(8),
-        //     const BallClipRotateMultipleIndicator(),
-        //     const BallClipRotatePulseIndicator(),
-        //     const BallPulseSyncIndicator(),
-        //     const BallSpinFadeLoaderIndicator(),
-        //     const LineSpinFadeLoaderIndicator(),
-        //     const PacmanIndicator(),
-        //   ],
-        // ),
-        ClockLoader(
-          frameColor: context.colorScheme.mutedForeground,
-          minuteColor: context.colorScheme.destructive,
-          hourColor: context.colorScheme.primary,
+        MyLoader(
+          icon: MyLoaderIcon.circle,
+          text: 'Loading…',
+          axis: Axis.horizontal,
         ),
-        TextLoader(),
-        Wrap(
-          children: [
-            CardioLoader(),
-            SizedBox(height: 100, width: 100, child: LineWobbleLoader()),
-            SizedBox(height: 100, width: 100, child: ReuleauxLoaderScreen()),
-            SizedBox(height: 100, width: 100, child: SquareLoaderScreen()),
-            SizedBox(height: 100, width: 100, child: TrefoilLoader()),
-          ],
+        MyLoader(
+          icon: MyLoaderIcon.circle,
+          axis: Axis.horizontal,
+          text: 'Loading failed',
+          refreshWidget: MyGestureDetector(
+            child: MyText(
+              'Refresh',
+              fontSize: context.bodyMedium.fontSize,
+              textColor: context.colorScheme.primary,
+              textAlign: TextAlign.center,
+            ),
+            onTap: () {
+              TDToast.showText('Refresh', context: context);
+            },
+          ),
         ),
       ],
     );
   }
 
-  Widget _buildPureIconLoading(BuildContext context) {
-    return _buildRow([
-      const MyLoader(icon: MyLoaderIcon.circle),
-      const MyLoader(icon: MyLoaderIcon.activity),
-      MyLoader(icon: MyLoaderIcon.point),
-    ]);
-  }
-
-  Widget _buildTextIconHorizontalLoading(BuildContext context) {
-    return _buildRow([
-      MyLoader(
-        icon: MyLoaderIcon.circle,
-        text: 'Loading…',
-        axis: Axis.horizontal,
-      ),
-      MyLoader(
-        icon: MyLoaderIcon.activity,
-        text: 'Loading…',
-        axis: Axis.horizontal,
-      ),
-      MyLoader(
-        icon: MyLoaderIcon.circle,
-        axis: Axis.horizontal,
-        text: 'Loading failed',
-        refreshWidget: GestureDetector(
-          child: MyText(
-            'Refresh',
-            fontSize: context.bodySmall.fontSize,
-            textColor: context.colorScheme.primary,
-          ),
-          onTap: () {
-            TDToast.showText('Refresh', context: context);
-          },
-        ),
-      ),
-    ]);
-  }
-
   Widget _buildTextIconVerticalLoading(BuildContext context) {
-    return _buildRow([
-      MyLoader(
-        icon: MyLoaderIcon.circle,
-        text: 'Loading…',
-        axis: Axis.vertical,
-      ),
-      MyLoader(
-        icon: MyLoaderIcon.activity,
-        text: 'Loading…',
-        axis: Axis.vertical,
-      ),
-      MyLoader(
-        icon: MyLoaderIcon.circle,
-        text: 'Loading failed',
-        refreshWidget: GestureDetector(
-          child: MyText(
-            'Refresh',
-            fontSize: context.bodySmall.fontSize,
-            textColor: context.colorScheme.primary,
-          ),
-          onTap: () {
-            TDToast.showText('Refresh', context: context);
-          },
+    return Wrap(
+      spacing: 48,
+      runSpacing: 24,
+      alignment: WrapAlignment.center,
+      children: [
+        MyLoader(
+          icon: MyLoaderIcon.circle,
+          text: 'Loading…',
+          axis: Axis.vertical,
         ),
-      ),
-    ]);
-  }
-
-  Widget _buildPureTextLoading(BuildContext context) {
-    return _buildRow([
-      const MyLoader(text: 'Loading…'),
-      MyLoader(
-        text: 'Loading failed',
-        textColor: context.colorScheme.mutedForeground,
-      ),
-      MyLoader(
-        text: 'Loading failed',
-        refreshWidget: GestureDetector(
-          child: MyText(
-            'Refresh',
-            fontSize: context.bodySmall.fontSize,
-            textColor: context.colorScheme.primary,
-          ),
-          onTap: () {
-            TDToast.showText('Refresh', context: context);
-          },
-        ),
-      ),
-    ]);
-  }
-
-  Widget _buildLargeLoading(BuildContext context) {
-    return _buildRow([
-      const MyLoader(
-        icon: MyLoaderIcon.circle,
-        text: 'Loading…',
-        axis: Axis.horizontal,
-      ),
-    ]);
-  }
-
-  Widget _buildMediumLoading(BuildContext context) {
-    return _buildRow([
-      const MyLoader(
-        icon: MyLoaderIcon.circle,
-        text: 'Loading…',
-        axis: Axis.horizontal,
-      ),
-    ]);
-  }
-
-  Widget _buildSmallLoading(BuildContext context) {
-    return _buildRow([
-      const MyLoader(
-        icon: MyLoaderIcon.circle,
-        text: 'Loading…',
-        axis: Axis.horizontal,
-      ),
-    ]);
-  }
-
-  double _currentSliderValue = 1000;
-
-  Widget _buildCustomSpeedLoading(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          MyLoader(
-            icon: MyLoaderIcon.circle,
-            axis: Axis.horizontal,
-            text: 'Loading…',
-          ),
-          TDSlider(
-            value: _currentSliderValue,
-            sliderThemeData: TDSliderThemeData(
-              context: context,
-              max: 2000,
-              min: -20,
-              divisions: 100,
-              showThumbValue: true,
-              scaleFormatter: (value) => value.toInt().toString(),
+        MyLoader(
+          icon: MyLoaderIcon.wobble,
+          text: 'Loading…',
+          axis: Axis.vertical,
+        ).sizedBox(width: 100),
+        MyLoader(
+          icon: MyLoaderIcon.circle,
+          text: 'Loading failed',
+          refreshWidget: MyGestureDetector(
+            child: MyText(
+              'Refresh',
+              fontSize: context.bodyMedium.fontSize,
+              textColor: context.colorScheme.primary,
+              textAlign: TextAlign.center,
             ),
-            onChanged: (double value) {
-              setState(() {
-                _currentSliderValue = value;
-              });
+            onTap: () {
+              TDToast.showText('Refresh', context: context);
             },
           ),
-        ],
-      ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLoadingSizes(BuildContext context) {
+    return Wrap(
+      alignment: WrapAlignment.center,
+      runSpacing: 16,
+      spacing: 32,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        const MyLoader(
+          size: MyLoaderSize.extraLarge,
+          text: 'Extra Large…',
+          axis: Axis.horizontal,
+        ),
+        const MyLoader(
+          size: MyLoaderSize.large,
+          text: 'Large…',
+          axis: Axis.horizontal,
+        ),
+        const MyLoader(
+          size: MyLoaderSize.medium,
+          text: 'Medium…',
+          axis: Axis.horizontal,
+        ),
+        const MyLoader(
+          icon: MyCircleLoader(
+            options: MyLoaderOptions(size: MyLoaderSize.small, strokeWidth: 3),
+          ),
+          text: 'Small…',
+          axis: Axis.horizontal,
+        ),
+        MyLoader(
+          icon: MyCircleLoader(
+            options: MyLoaderOptions(
+              size: MyLoaderSize.extraSmall,
+              strokeWidth: 2,
+            ),
+          ),
+          text: 'Extra Small…',
+          axis: Axis.horizontal,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLoaderTypes(BuildContext context) {
+    return Wrap(
+      spacing: 48,
+      runSpacing: 24,
+      alignment: WrapAlignment.center,
+      children: [
+        const MyLoader(text: 'Circle'),
+        const MyLoader(
+          text: 'Line',
+          icon: MyLoaderIcon.line,
+        ).padding(horizontal: 16),
+        const MyLoader(text: 'Dots', icon: MyLoaderIcon.dots),
+        const MyLoader(text: 'Spin', icon: MyLoaderIcon.spin),
+        const MyLoader(text: 'Cardio', icon: MyLoaderIcon.cardio),
+        const MyLoader(text: 'Clock', icon: MyClockLoader(size: 50)),
+        const MyLoader(text: 'Activity', icon: MyLoaderIcon.activity),
+        const MyLoader(text: 'Wobble', icon: MyLoaderIcon.wobble),
+        const MyLoader(text: 'Pacman', icon: MyLoaderIcon.pacman),
+        const MyLoader(text: 'Triangle', icon: MyLoaderIcon.triangle),
+        const MyLoader(text: 'Square', icon: MyLoaderIcon.square),
+        const MyLoader(text: 'Text', icon: MyLoaderIcon.text),
+        const MyLoader(text: 'Trefoil', icon: MyLoaderIcon.trefoil),
+      ],
     );
   }
 }

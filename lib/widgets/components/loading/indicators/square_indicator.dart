@@ -1,13 +1,16 @@
-import 'package:flutter/material.dart';
-import 'dart:ui';
-import 'dart:math' as math;
+part of 'my_loader_icon.dart';
 
-class SquareLoaderScreen extends StatefulWidget {
+class _SquareIndicator extends StatefulWidget {
+  const _SquareIndicator({required this.options, this.size});
+
+  final double? size;
+  final MyLoaderOptions options;
+
   @override
-  _SquareLoaderScreenState createState() => _SquareLoaderScreenState();
+  _SquareIndicatorState createState() => _SquareIndicatorState();
 }
 
-class _SquareLoaderScreenState extends State<SquareLoaderScreen>
+class _SquareIndicatorState extends State<_SquareIndicator>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
@@ -16,7 +19,7 @@ class _SquareLoaderScreenState extends State<SquareLoaderScreen>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 1500),
+      duration: widget.options.duration,
     )..repeat();
   }
 
@@ -28,43 +31,51 @@ class _SquareLoaderScreenState extends State<SquareLoaderScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: AnimatedBuilder(
-          animation: _controller,
-          builder: (context, child) {
-            return CustomPaint(
-              size: Size(40, 40),
-              painter: SquareLoaderPainter(_controller.value),
-            );
-          },
-        ),
-      ),
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return CustomPaint(
+          size: Size.square(widget.size ?? widget.options.size.value),
+          painter: _SquareLoaderPainter(
+            _controller.value,
+            widget.options.backgroundColor ?? context.colorScheme.secondary,
+            widget.options.color ?? context.colorScheme.primary,
+            widget.options.strokeWidth,
+          ),
+        );
+      },
     );
   }
 }
 
-class SquareLoaderPainter extends CustomPainter {
+class _SquareLoaderPainter extends CustomPainter {
+  _SquareLoaderPainter(
+    this.animationValue,
+    this.background,
+    this.color,
+    this.strokeWidth,
+  );
+
+  final Color background, color;
   final double animationValue;
-  SquareLoaderPainter(this.animationValue);
+  final double? strokeWidth;
 
   @override
   void paint(Canvas canvas, Size size) {
     final Paint trackPaint =
         Paint()
-          ..color = Colors.black.withOpacity(0.1)
-          ..strokeWidth = 5
+          ..color = background
+          ..strokeWidth = strokeWidth ?? 5
           ..style = PaintingStyle.stroke;
 
     final Paint carPaint =
         Paint()
-          ..color = Colors.black
-          ..strokeWidth = 5
+          ..color = color
+          ..strokeWidth = strokeWidth ?? 5
           ..style = PaintingStyle.stroke
           ..strokeCap = StrokeCap.round;
 
-    Path path =
+    final Path path =
         Path()
           ..moveTo(2.5, 2.5)
           ..lineTo(size.width - 2.5, 2.5)

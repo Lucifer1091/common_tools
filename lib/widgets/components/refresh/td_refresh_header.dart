@@ -1,4 +1,3 @@
-
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +22,7 @@ class TDRefreshHeader extends Header {
     this.enableInfiniteRefresh = false,
     bool? infiniteHitOver,
     this.overScroll = true,
-    this.loadingIcon = MyLoaderIcon.circle,
+    this.loadingIcon,
     this.backgroundColor,
     super.spring,
     super.horizontalSpring,
@@ -74,7 +73,7 @@ class TDRefreshHeader extends Header {
 
   final Key? key;
 
-  final MyLoaderIcon loadingIcon;
+  final MyLoaderIcon? loadingIcon;
 
   final Color? backgroundColor;
 
@@ -106,7 +105,7 @@ class TDRefreshHeader extends Header {
     );
     return TGIconHeaderWidget(
       key: key,
-      loadingIcon: loadingIcon,
+      loadingIcon: loadingIcon ?? MyLoaderIcon.circle,
       backgroundColor: backgroundColor,
       state: state,
       refreshIndicatorExtent: extent ?? state.triggerOffset,

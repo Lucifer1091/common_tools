@@ -1,44 +1,47 @@
-import 'dart:math';
+part of 'my_loader_icon.dart';
 
-import 'package:flutter/material.dart';
-
-import '../../../../index.dart';
-
-class PacmanIndicator extends StatefulWidget {
-  const PacmanIndicator({
-    super.key,
-    this.radius = 16,
-    this.beanRadius = 4,
-    this.color,
-    this.duration = const Duration(milliseconds: 325),
+class _PacmanIndicator extends StatefulWidget {
+  const _PacmanIndicator({
+    required this.options,
+    this.radius,
+    this.beanRadius,
   });
 
-  final double radius;
-  final double beanRadius;
-  final Color? color;
-  final Duration duration;
+  final double? radius;
+  final double? beanRadius;
+  final MyLoaderOptions options;
 
   @override
   State<StatefulWidget> createState() => _PacmanIndicatorState();
 }
 
-class _PacmanIndicatorState extends State<PacmanIndicator>
+class _PacmanIndicatorState extends State<_PacmanIndicator>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> pacman;
   late Animation<double> bean;
 
+  double _progress = 0.0;
+  double _lastExtent = 0.0;
+
+  double get _radius => widget.radius ?? 16;
+  double get _beanRadius => widget.beanRadius ?? 4;
+
   @override
   void initState() {
-    _controller = AnimationController(vsync: this, duration: widget.duration);
+    _controller = AnimationController(
+      vsync: this,
+      duration: widget.options.duration,
+    );
     pacman = Tween<double>(
       begin: 0,
       end: 90,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.linear));
     bean = Tween<double>(
       begin: 0,
-      end: widget.radius * .5,
+      end: _radius * .5,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.linear));
+
     _controller
       ..addStatusListener((AnimationStatus status) {
         if (status == AnimationStatus.completed) {
@@ -48,6 +51,7 @@ class _PacmanIndicatorState extends State<PacmanIndicator>
         }
       })
       ..forward();
+
     super.initState();
   }
 
@@ -58,8 +62,8 @@ class _PacmanIndicatorState extends State<PacmanIndicator>
   }
 
   Size _measureSize() {
-    final width = (widget.radius + widget.beanRadius) * 2;
-    final height = widget.radius * 2;
+    final width = (_radius + _beanRadius) * 2;
+    final height = _radius * 2;
     return Size(width, height);
   }
 
@@ -67,23 +71,25 @@ class _PacmanIndicatorState extends State<PacmanIndicator>
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _controller,
-      builder:
-          (context, child) => CustomPaint(
-            size: _measureSize(),
-            painter: _PacmanIndicatorPainter(
-              pacmanAngle: pacman.value,
-              beanTransX: bean.value,
-              radius: widget.radius,
-              beanRadius: widget.beanRadius,
-              color: widget.color ?? context.colorScheme.primary,
-            ),
-          ),
+      builder: (context, child) => CustomPaint(
+        size: _measureSize(),
+        painter: _PacmanIndicatorPainter(
+          pacmanAngle: pacman.value,
+          beanTransX: bean.value,
+          radius: _radius,
+          beanRadius: _beanRadius,
+          color: widget.options.color ?? context.colorScheme.primary,
+          progress: _progress,
+          lastExtent: _lastExtent,
+          onUpdate: (newProgress, newLastExtent) {
+            _progress = newProgress;
+            _lastExtent = newLastExtent;
+          },
+        ),
+      ),
     );
   }
 }
-
-double _progress = 0;
-double _lastExtent = 0;
 
 class _PacmanIndicatorPainter extends CustomPainter {
   _PacmanIndicatorPainter({
@@ -92,6 +98,9 @@ class _PacmanIndicatorPainter extends CustomPainter {
     required this.radius,
     required this.beanRadius,
     required this.color,
+    required this.progress,
+    required this.lastExtent,
+    required this.onUpdate,
   });
 
   final double pacmanAngle;
@@ -99,19 +108,23 @@ class _PacmanIndicatorPainter extends CustomPainter {
   final double radius;
   final double beanRadius;
   final Color color;
+  double progress;
+  double lastExtent;
+  final void Function(double, double) onUpdate;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint =
-        Paint()
-          ..isAntiAlias = true
-          ..style = PaintingStyle.fill
-          ..color = color;
+    final paint = Paint()
+      ..isAntiAlias = true
+      ..style = PaintingStyle.fill
+      ..color = color;
 
     final width = radius * 2;
     final height = radius * 2;
     final radian = pi / 180;
     final Rect rect = Rect.fromLTWH(0, 0, width, height);
+
+    // Pacman mouth
     canvas.drawArc(
       rect,
       (0 + pacmanAngle * .5) * radian,
@@ -120,14 +133,17 @@ class _PacmanIndicatorPainter extends CustomPainter {
       paint,
     );
 
-    _progress += (_lastExtent - beanTransX).abs();
-    _lastExtent = beanTransX;
-    if (_progress >= radius) {
-      _progress = .0;
-      _lastExtent = .0;
+    // Update bean progress
+    progress += (lastExtent - beanTransX).abs();
+    lastExtent = beanTransX;
+    if (progress >= radius) {
+      progress = .0;
+      lastExtent = .0;
     }
+    onUpdate(progress, lastExtent);
 
-    final beanAlpha = 255 - (122.5 * _progress / radius);
+    // Bean fading effect
+    final beanAlpha = 255 - (122.5 * progress / radius);
     paint.color = Color.fromARGB(
       beanAlpha.round(),
       (color.r * 255.0).round() & 0xff,
@@ -135,9 +151,10 @@ class _PacmanIndicatorPainter extends CustomPainter {
       (color.b * 255.0).round() & 0xff,
     );
 
+    // Bean position
     final cx = width + beanRadius;
     final cy = size.height * .5;
-    canvas.drawCircle(Offset(cx - _progress, cy), beanRadius, paint);
+    canvas.drawCircle(Offset(cx - progress, cy), beanRadius, paint);
   }
 
   @override

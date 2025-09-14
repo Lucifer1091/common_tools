@@ -452,8 +452,14 @@ class MyButtonPage extends StatelessWidget {
     return MyButton(
       text: 'Loading',
       iconWidget: MyLoader(
-        // size: MyLoaderSize.small,
-        icon: MyLoaderIcon.circle,
+        icon: MyCircleLoader(
+          options: MyLoaderOptions(
+            size: MyLoaderSize.extraSmall,
+            strokeWidth: 2.5,
+            color: context.colorScheme.primaryForeground,
+            backgroundColor: context.colorScheme.primary,
+          ),
+        ),
         // iconColor: context.colorScheme.primaryForeground,
       ),
       size: MyButtonSize.large,

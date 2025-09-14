@@ -57,7 +57,7 @@ class MyGestureDetector extends StatelessWidget {
   const MyGestureDetector({
     required this.child,
     super.key,
-    this.cursor = MouseCursor.defer,
+    this.cursor = SystemMouseCursors.click,
     this.hoverStrategies,
     this.behavior,
     this.onHover,

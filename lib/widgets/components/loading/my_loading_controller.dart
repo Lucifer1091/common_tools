@@ -13,14 +13,11 @@ class MyLoadingController {
     BuildContext context, {
     Widget? child,
     MyLoaderSize size = MyLoaderSize.medium,
-    MyLoaderIcon? icon = MyLoaderIcon.circle,
-    Color? iconColor,
+    MyLoaderIcon? icon,
     String? text,
     Widget? refreshWidget,
     Color? textColor,
     Axis axis = Axis.vertical,
-    Widget? customIcon,
-    Duration duration = const Duration(milliseconds: 2000),
   }) {
     if (_isShowing) return;
 
@@ -31,12 +28,10 @@ class MyLoadingController {
               child ??
               MyLoader(
                 size: size,
-                icon: icon,
-                customIcon: customIcon,
+                icon: icon ?? MyLoaderIcon.circle,
                 text: text ?? 'Loading',
                 textColor: textColor,
                 refreshWidget: refreshWidget,
-                duration: duration,
                 axis: axis,
               ),
         );

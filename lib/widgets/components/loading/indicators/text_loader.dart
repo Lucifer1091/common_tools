@@ -1,27 +1,17 @@
-import 'dart:math';
-import 'package:flutter/material.dart';
+part of 'my_loader_icon.dart';
 
-import '../../../../index.dart';
+class _TextLoader extends StatefulWidget {
+  const _TextLoader({required this.options, this.size, this.style});
 
-class TextLoader extends StatefulWidget {
-  const TextLoader({
-    super.key,
-    this.size = 60,
-    this.duration = const Duration(seconds: 1, milliseconds: 500),
-    this.mainColor,
-    this.secondaryColor,
-  });
-
-  final double size;
-  final Duration duration;
-  final Color? mainColor;
-  final Color? secondaryColor;
+  final double? size;
+  final TextStyle? style;
+  final MyLoaderOptions options;
 
   @override
-  State<TextLoader> createState() => _TextLoaderState();
+  State<_TextLoader> createState() => _TextLoaderState();
 }
 
-class _TextLoaderState extends State<TextLoader>
+class _TextLoaderState extends State<_TextLoader>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> animation;
@@ -34,7 +24,7 @@ class _TextLoaderState extends State<TextLoader>
     super.initState();
 
     _animationController = AnimationController(
-      duration: widget.duration,
+      duration: widget.options.duration,
       vsync: this,
     )..addStatusListener((status) {
       if (status == AnimationStatus.completed) {
@@ -63,48 +53,71 @@ class _TextLoaderState extends State<TextLoader>
     super.dispose();
   }
 
+  Color get main => widget.options.color ?? context.colorScheme.foreground;
+  Color get secondary =>
+      widget.options.secondaryColor ?? context.colorScheme.primary;
+
+  double get size => widget.size ?? widget.options.size.value;
+
   @override
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.ltr,
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             'L',
-            style: context.bodyMedium.copyWith(
-              fontSize: widget.size,
-              fontWeight: FontWeight.w600,
-              color: widget.mainColor ?? context.colorScheme.foreground,
-              fontStyle: FontStyle.normal,
+            style:
+                widget.style ??
+                context.bodyMedium.copyWith(
+                  fontSize: size,
+                  fontWeight: FontWeight.w600,
+                  color: main,
+                  fontStyle: FontStyle.normal,
+                ),
+            textHeightBehavior: TextHeightBehavior(
+              applyHeightToFirstAscent: false,
+              applyHeightToLastDescent: false,
             ),
           ),
           CustomPaint(
-            painter: MyTextPainter(
+            size: Size.square(size),
+            painter: _TextLoaderPainter(
               _firstAnimation ? animation.value : animationOp.value,
-              widget.size / 2.8,
-              widget.mainColor ?? context.colorScheme.foreground,
-              widget.secondaryColor ?? context.colorScheme.primary,
+              size / 2.9,
+              main,
+              secondary,
             ),
-            child: SizedBox(height: widget.size, width: widget.size),
           ),
           Text(
             'ADING',
-            style: context.bodyMedium.copyWith(
-              fontSize: widget.size,
-              fontWeight: FontWeight.w600,
-              color: widget.mainColor ?? context.colorScheme.foreground,
-              fontStyle: FontStyle.normal,
+            style:
+                widget.style ??
+                context.bodyMedium.copyWith(
+                  fontSize: size,
+                  fontWeight: FontWeight.w600,
+                  color: main,
+                  fontStyle: FontStyle.normal,
+                ),
+            textHeightBehavior: TextHeightBehavior(
+              applyHeightToFirstAscent: false,
+              applyHeightToLastDescent: false,
             ),
           ),
           Text(
             '...',
             style: TextStyle(
-              fontSize: widget.size,
+              fontSize: size,
               fontWeight: FontWeight.w900,
-              color: widget.secondaryColor ?? context.colorScheme.primary,
+              color: secondary,
               fontStyle: FontStyle.normal,
               fontFamily: 'sans-serif',
+            ),
+            textHeightBehavior: TextHeightBehavior(
+              applyHeightToFirstAscent: false,
+              applyHeightToLastDescent: false,
             ),
           ),
         ],
@@ -113,8 +126,13 @@ class _TextLoaderState extends State<TextLoader>
   }
 }
 
-class MyTextPainter extends CustomPainter {
-  MyTextPainter(this.angle, this.size, this.mainColor, this.secondaryColor);
+class _TextLoaderPainter extends CustomPainter {
+  _TextLoaderPainter(
+    this.angle,
+    this.size,
+    this.mainColor,
+    this.secondaryColor,
+  );
   late double size;
   late double angle;
   late Color mainColor;
@@ -145,6 +163,7 @@ class MyTextPainter extends CustomPainter {
         false,
         painter
           ..style = PaintingStyle.stroke
+          ..strokeCap = StrokeCap.round
           ..color = mainColor
           ..strokeWidth = this.size / 3.5,
       );
