@@ -24,7 +24,7 @@ class _BallPulseSyncState extends State<_BallPulseSync>
 
   @override
   void initState() {
-    startEngine(this, widget.options.duration);
+    startEngine(this, widget.options.duration!);
     super.initState();
   }
 
@@ -34,8 +34,8 @@ class _BallPulseSyncState extends State<_BallPulseSync>
     super.dispose();
   }
 
-  double get _radius => widget.radius ?? widget.options.size.value / 6.5;
-  double get _extent => widget.extent ?? widget.options.size.value / 3;
+  double get _radius => widget.radius ?? widget.options.size!.value / 6.5;
+  double get _extent => widget.extent ?? widget.options.size!.value / 3;
   double get _spacing => widget.spacing ?? 3;
 
   @override

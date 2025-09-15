@@ -46,7 +46,7 @@ class _ClockIndicatorState extends State<_ClockIndicator>
     super.dispose();
   }
 
-  double get _size => widget.size ?? widget.options.size.value;
+  double get _size => widget.size ?? widget.options.size!.value;
 
   @override
   Widget build(BuildContext context) {

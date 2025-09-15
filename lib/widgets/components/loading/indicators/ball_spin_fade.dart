@@ -28,7 +28,7 @@ class _BallSpinFadeState extends State<_BallSpinFade>
 
   @override
   void initState() {
-    startEngine(this, widget.options.duration);
+    startEngine(this, widget.options.duration!);
     super.initState();
   }
 

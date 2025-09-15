@@ -35,7 +35,7 @@ class _TrefoilLoaderState extends State<_TrefoilLoader>
       animation: _controller,
       builder: (context, child) {
         return CustomPaint(
-          size: Size.square(widget.size ?? widget.options.size.value),
+          size: Size.square(widget.size ?? widget.options.size!.value),
           painter: _TrefoilPainter(
             progress: _controller.value,
             color: widget.options.color ?? context.colorScheme.primary,

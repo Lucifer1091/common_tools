@@ -19,8 +19,8 @@ enum MyLoaderSize {
 class MyLoaderOptions {
   const MyLoaderOptions({
     this.color,
-    this.size = MyLoaderSize.medium,
-    this.duration = const Duration(milliseconds: 1500),
+    this.size ,
+    this.duration,
     this.backgroundColor,
     this.secondaryColor,
     this.tertiaryColor,
@@ -29,8 +29,8 @@ class MyLoaderOptions {
   });
 
   final Color? color;
-  final MyLoaderSize size;
-  final Duration duration;
+  final MyLoaderSize? size;
+  final Duration? duration;
   final Color? backgroundColor;
   final Color? secondaryColor;
   final Color? tertiaryColor;
@@ -56,6 +56,19 @@ class MyLoaderOptions {
       tertiaryColor: tertiaryColor ?? this.tertiaryColor,
       strokeWidth: strokeWidth ?? this.strokeWidth,
       strokeCap: strokeCap ?? this.strokeCap,
+    );
+  }
+
+  MyLoaderOptions merge(MyLoaderOptions? options) {
+    return MyLoaderOptions(
+      color: options?.color ?? color,
+      size: options?.size ?? size,
+      duration: options?.duration?? duration,
+      backgroundColor: options?.backgroundColor ?? backgroundColor,
+      secondaryColor: options?.secondaryColor ?? secondaryColor,
+      tertiaryColor: options?.tertiaryColor ?? tertiaryColor,
+      strokeWidth: options?.strokeWidth ?? strokeWidth,
+      strokeCap: options?.strokeCap ?? strokeCap,
     );
   }
 }

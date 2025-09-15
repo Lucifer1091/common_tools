@@ -57,7 +57,7 @@ class _TextLoaderState extends State<_TextLoader>
   Color get secondary =>
       widget.options.secondaryColor ?? context.colorScheme.primary;
 
-  double get size => widget.size ?? widget.options.size.value;
+  double get size => widget.size ?? widget.options.size!.value;
 
   @override
   Widget build(BuildContext context) {

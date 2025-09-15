@@ -10,7 +10,7 @@ class _MyCircleIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return CircularProgressIndicator(
       constraints: BoxConstraints.tight(
-        Size.square(size ?? options.size.value),
+        Size.square(size ?? options.size!.value),
       ),
       color: options.color ?? context.colorScheme.primary,
       backgroundColor: options.backgroundColor ?? context.colorScheme.secondary,

@@ -41,7 +41,7 @@ class _MyLoaderPageState extends State<MyLoaderPage> {
           children: [
             ExampleItem(
               builder: _buildLoadingSizes,
-              padding: EdgeInsets.symmetric(vertical: 24, horizontal: 8),
+              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
             ),
           ],
         ),
@@ -165,43 +165,24 @@ class _MyLoaderPageState extends State<MyLoaderPage> {
   Widget _buildLoadingSizes(BuildContext context) {
     return Wrap(
       alignment: WrapAlignment.center,
-      runSpacing: 16,
-      spacing: 32,
+      runSpacing: 24,
+      spacing: 54,
       crossAxisAlignment: WrapCrossAlignment.center,
-      children: [
-        const MyLoader(
-          size: MyLoaderSize.extraLarge,
-          text: 'Extra Large…',
-          axis: Axis.horizontal,
-        ),
-        const MyLoader(
-          size: MyLoaderSize.large,
-          text: 'Large…',
-          axis: Axis.horizontal,
-        ),
-        const MyLoader(
-          size: MyLoaderSize.medium,
-          text: 'Medium…',
-          axis: Axis.horizontal,
-        ),
-        const MyLoader(
-          icon: MyCircleLoader(
-            options: MyLoaderOptions(size: MyLoaderSize.small, strokeWidth: 3),
+      children: MyLoaderSize.values.map((size) {
+        return MyLoader(
+          icon: MyLoaderIcon.circle,
+          size: size,
+          options: MyLoaderOptions(
+            strokeWidth: size == MyLoaderSize.small
+                ? 3
+                : size == MyLoaderSize.extraSmall
+                ? 2
+                : null,
           ),
-          text: 'Small…',
+          text: '${size.name.sentenceCase}…',
           axis: Axis.horizontal,
-        ),
-        MyLoader(
-          icon: MyCircleLoader(
-            options: MyLoaderOptions(
-              size: MyLoaderSize.extraSmall,
-              strokeWidth: 2,
-            ),
-          ),
-          text: 'Extra Small…',
-          axis: Axis.horizontal,
-        ),
-      ],
+        );
+      }).toList(),
     );
   }
 

@@ -35,7 +35,7 @@ class _SquareIndicatorState extends State<_SquareIndicator>
       animation: _controller,
       builder: (context, child) {
         return CustomPaint(
-          size: Size.square(widget.size ?? widget.options.size.value),
+          size: Size.square(widget.size ?? widget.options.size!.value),
           painter: _SquareLoaderPainter(
             _controller.value,
             widget.options.backgroundColor ?? context.colorScheme.secondary,

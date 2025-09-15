@@ -12,6 +12,7 @@ class MyLoader extends StatelessWidget {
     this.textColor,
     this.refreshWidget,
     this.size = MyLoaderSize.medium,
+    this.options,
   });
 
   final MyLoaderIcon? icon;
@@ -22,6 +23,7 @@ class MyLoader extends StatelessWidget {
   final Widget? refreshWidget;
   final Axis axis;
   final MyLoaderSize size;
+  final MyLoaderOptions? options;
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +35,11 @@ class MyLoader extends StatelessWidget {
   }
 
   Widget _contentWidget(BuildContext context) {
-    final MyLoaderIcon icon0 = icon ?? MyCircleLoader(size: size.value);
-    final Widget indicator = icon0.buildIcon(context);
+    final MyLoaderIcon icon0 = icon ?? MyCircleLoader();
+    final Widget indicator = icon0.buildIcon(
+      context,
+      options?.copyWith(size: size) ?? MyLoaderOptions(size: size),
+    );
 
     if (text == null) {
       return indicator;
@@ -57,8 +62,8 @@ class MyLoader extends StatelessWidget {
           MyLoaderSize.extraLarge => 12,
           MyLoaderSize.large => 12,
           MyLoaderSize.medium => 12,
-          MyLoaderSize.small => 6,
-          MyLoaderSize.extraSmall => 4,
+          MyLoaderSize.small => 8,
+          MyLoaderSize.extraSmall => 6,
         };
   }
 

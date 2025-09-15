@@ -23,7 +23,7 @@ abstract class MyLoaderIcon {
 
   final MyLoaderOptions options;
 
-  Widget buildIcon(BuildContext context);
+  Widget buildIcon(BuildContext context, MyLoaderOptions? options);
 
   static const MyLoaderIcon circle = MyCircleLoader();
   static const MyLoaderIcon dots = MyDotsLoader();
@@ -46,8 +46,8 @@ class MyCircleLoader extends MyLoaderIcon {
   final double? size;
 
   @override
-  Widget buildIcon(BuildContext context) =>
-      _MyCircleIndicator(size: size, options: options);
+  Widget buildIcon(BuildContext context, MyLoaderOptions? defaults) =>
+      _MyCircleIndicator(size: size, options: options.merge(defaults));
 }
 
 class MyDotsLoader extends MyLoaderIcon {
@@ -65,12 +65,13 @@ class MyDotsLoader extends MyLoaderIcon {
   final double? spacing;
 
   @override
-  Widget buildIcon(BuildContext context) => _BallPulseSync(
-    radius: radius,
-    extent: extent,
-    spacing: spacing,
-    options: options,
-  );
+  Widget buildIcon(BuildContext context, MyLoaderOptions? defaults) =>
+      _BallPulseSync(
+        radius: radius,
+        extent: extent,
+        spacing: spacing,
+        options: options.merge(defaults),
+      );
 }
 
 class MyTriangleLoader extends MyLoaderIcon {
@@ -79,8 +80,8 @@ class MyTriangleLoader extends MyLoaderIcon {
   final double? size;
 
   @override
-  Widget buildIcon(BuildContext context) =>
-      _TriangleIndicator(size: size, options: options);
+  Widget buildIcon(BuildContext context, MyLoaderOptions? defaults) =>
+      _TriangleIndicator(size: size, options: options.merge(defaults));
 }
 
 class MySquareLoader extends MyLoaderIcon {
@@ -89,8 +90,8 @@ class MySquareLoader extends MyLoaderIcon {
   final double? size;
 
   @override
-  Widget buildIcon(BuildContext context) =>
-      _SquareIndicator(size: size, options: options);
+  Widget buildIcon(BuildContext context, MyLoaderOptions? defaults) =>
+      _SquareIndicator(size: size, options: options.merge(defaults));
 }
 
 class MyLineLoader extends MyLoaderIcon {
@@ -100,11 +101,12 @@ class MyLineLoader extends MyLoaderIcon {
   final BorderRadius? borderRadius;
 
   @override
-  Widget buildIcon(BuildContext context) => _MyLinearIndicator(
-    height: height,
-    borderRadius: borderRadius,
-    options: options,
-  );
+  Widget buildIcon(BuildContext context, MyLoaderOptions? defaults) =>
+      _MyLinearIndicator(
+        height: height,
+        borderRadius: borderRadius,
+        options: options.merge(defaults),
+      );
 }
 
 class MySpinLoader extends MyLoaderIcon {
@@ -126,14 +128,15 @@ class MySpinLoader extends MyLoaderIcon {
   final double? maxBallAlpha;
 
   @override
-  Widget buildIcon(BuildContext context) => _BallSpinFade(
-    radius: radius,
-    minBallRadius: minBallRadius,
-    maxBallRadius: maxBallRadius,
-    minBallAlpha: minBallAlpha,
-    maxBallAlpha: maxBallAlpha,
-    options: options,
-  );
+  Widget buildIcon(BuildContext context, MyLoaderOptions? defaults) =>
+      _BallSpinFade(
+        radius: radius,
+        minBallRadius: minBallRadius,
+        maxBallRadius: maxBallRadius,
+        minBallAlpha: minBallAlpha,
+        maxBallAlpha: maxBallAlpha,
+        options: options.merge(defaults),
+      );
 }
 
 class MyCardioLoader extends MyLoaderIcon {
@@ -147,8 +150,8 @@ class MyCardioLoader extends MyLoaderIcon {
   final double? size;
 
   @override
-  Widget buildIcon(BuildContext context) =>
-      _CardioLoader(size: size, options: options);
+  Widget buildIcon(BuildContext context, MyLoaderOptions? defaults) =>
+      _CardioLoader(size: size, options: options.merge(defaults));
 }
 
 class MyClockLoader extends MyLoaderIcon {
@@ -162,8 +165,8 @@ class MyClockLoader extends MyLoaderIcon {
   final double? size;
 
   @override
-  Widget buildIcon(BuildContext context) =>
-      _ClockIndicator(size: size, options: options);
+  Widget buildIcon(BuildContext context, MyLoaderOptions? defaults) =>
+      _ClockIndicator(size: size, options: options.merge(defaults));
 }
 
 class MyActivityLoader extends MyLoaderIcon {
@@ -189,16 +192,17 @@ class MyActivityLoader extends MyLoaderIcon {
   final double? maxBallAlpha;
 
   @override
-  Widget buildIcon(BuildContext context) => _ActivityIndicator(
-    radius: radius,
-    minLineWidth: minLineWidth,
-    maxLineWidth: maxLineWidth,
-    minLineHeight: minLineHeight,
-    maxLineHeight: maxLineHeight,
-    minBallAlpha: minBallAlpha,
-    maxBallAlpha: maxBallAlpha,
-    options: options,
-  );
+  Widget buildIcon(BuildContext context, MyLoaderOptions? defaults) =>
+      _ActivityIndicator(
+        radius: radius,
+        minLineWidth: minLineWidth,
+        maxLineWidth: maxLineWidth,
+        minLineHeight: minLineHeight,
+        maxLineHeight: maxLineHeight,
+        minBallAlpha: minBallAlpha,
+        maxBallAlpha: maxBallAlpha,
+        options: options.merge(defaults),
+      );
 }
 
 class MyWobbleLoader extends MyLoaderIcon {
@@ -214,8 +218,12 @@ class MyWobbleLoader extends MyLoaderIcon {
   final double? width;
 
   @override
-  Widget buildIcon(BuildContext context) =>
-      _LineWobbleIndicator(height: height, width: width, options: options);
+  Widget buildIcon(BuildContext context, MyLoaderOptions? defaults) =>
+      _LineWobbleIndicator(
+        height: height,
+        width: width,
+        options: options.merge(defaults),
+      );
 }
 
 class MyPacmanLoader extends MyLoaderIcon {
@@ -231,11 +239,12 @@ class MyPacmanLoader extends MyLoaderIcon {
   final double? beanRadius;
 
   @override
-  Widget buildIcon(BuildContext context) => _PacmanIndicator(
-    radius: radius,
-    beanRadius: beanRadius,
-    options: options,
-  );
+  Widget buildIcon(BuildContext context, MyLoaderOptions? defaults) =>
+      _PacmanIndicator(
+        radius: radius,
+        beanRadius: beanRadius,
+        options: options.merge(defaults),
+      );
 }
 
 class MyTextLoader extends MyLoaderIcon {
@@ -245,8 +254,8 @@ class MyTextLoader extends MyLoaderIcon {
   final TextStyle? style;
 
   @override
-  Widget buildIcon(BuildContext context) =>
-      _TextLoader(size: size, style: style, options: options);
+  Widget buildIcon(BuildContext context, MyLoaderOptions? defaults) =>
+      _TextLoader(size: size, style: style, options: options.merge(defaults));
 }
 
 class MyTrefoilLoader extends MyLoaderIcon {
@@ -258,6 +267,6 @@ class MyTrefoilLoader extends MyLoaderIcon {
   final double? size;
 
   @override
-  Widget buildIcon(BuildContext context) =>
-      _TrefoilLoader(size: size, options: options);
+  Widget buildIcon(BuildContext context, MyLoaderOptions? defaults) =>
+      _TrefoilLoader(size: size, options: options.merge(defaults));
 }

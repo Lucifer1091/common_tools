@@ -35,7 +35,7 @@ class _TriangleIndicatorState extends State<_TriangleIndicator>
       animation: _controller,
       builder: (context, child) {
         return CustomPaint(
-          size: Size.square(widget.size ?? widget.options.size.value),
+          size: Size.square(widget.size ?? widget.options.size!.value),
           painter: _TriangleIndicatorPainter(
             _controller.value,
             widget.options.backgroundColor ?? context.colorScheme.secondary,

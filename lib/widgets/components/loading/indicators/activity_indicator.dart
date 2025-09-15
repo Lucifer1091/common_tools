@@ -29,7 +29,7 @@ class _ActivityIndicatorState extends State<_ActivityIndicator>
     with SingleTickerProviderStateMixin, InfiniteProgressMixin {
   @override
   void initState() {
-    startEngine(this, widget.options.duration);
+    startEngine(this, widget.options.duration!);
     super.initState();
   }
 
