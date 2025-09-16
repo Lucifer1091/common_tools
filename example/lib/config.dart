@@ -15,7 +15,7 @@ import 'page/td_action_sheet_page.dart';
 import 'page/td_avatar_page.dart';
 import 'page/my_badge_page.dart';
 import 'page/my_cell_page.dart';
-import 'page/td_checkbox_page.dart';
+import 'page/my_checkbox_page.dart';
 import 'page/td_collapse.dart';
 import 'page/td_date_picker_page.dart';
 import 'page/td_dialog_page.dart';
@@ -164,7 +164,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'Checkbox',
       name: 'checkbox',
-      pageBuilder: _wrapInheritedTheme((context) => const TDCheckboxPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyCheckboxPage()),
     ),
     ExamplePageModel(
       text: 'Date & Time Picker',

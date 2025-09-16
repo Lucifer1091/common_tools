@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../../layout/no_widget.dart';
-import '../divider/my_divider.dart';
-import '../text/my_text.dart';
-import 'td_check_box_group.dart';
 
-enum TDCheckboxStyle { circle, square, check }
+enum MyCheckboxStyle { circle, square, check }
 
-enum TDContentDirection { left, right }
+enum MyContentDirection { left, right }
 
-enum TDCheckBoxSize { large, small }
+enum MyCheckboxSize { large, small }
 
 typedef IconBuilder = Widget? Function(BuildContext context, bool checked);
 
@@ -19,8 +15,8 @@ typedef ContentBuilder =
 
 typedef OnCheckValueChanged = void Function(bool selected);
 
-class TDCheckbox extends StatefulWidget {
-  const TDCheckbox({
+class MyCheckbox extends StatefulWidget {
+  const MyCheckbox({
     this.id,
     super.key,
     this.title,
@@ -39,17 +35,17 @@ class TDCheckbox extends StatefulWidget {
     this.backgroundColor,
     this.selectColor,
     this.disableColor,
-    this.size = TDCheckBoxSize.small,
+    this.size = MyCheckboxSize.small,
     this.cardMode = false,
     this.showDivider = true,
-    this.contentDirection = TDContentDirection.right,
+    this.contentDirection = MyContentDirection.right,
     this.onCheckBoxChanged,
     this.titleColor,
     this.subTitleColor,
     this.checkBoxLeftSpace,
   });
 
-  /// When [TDCheckbox] is embedded in [TDCheckboxGroup], this value needs to
+  /// When [MyCheckbox] is embedded in [MyCheckboxGroup], this value needs to
   /// be assigned, otherwise it will not be included in the Group management
   final String? id;
 
@@ -77,15 +73,15 @@ class TDCheckbox extends StatefulWidget {
 
   final double? spacing;
 
-  final TDCheckboxStyle? style;
+  final MyCheckboxStyle? style;
 
-  final TDCheckBoxSize size;
+  final MyCheckboxSize size;
 
   final bool cardMode;
 
   final bool showDivider;
 
-  final TDContentDirection contentDirection;
+  final MyContentDirection contentDirection;
 
   final OnCheckValueChanged? onCheckBoxChanged;
 
@@ -102,30 +98,30 @@ class TDCheckbox extends StatefulWidget {
   final double? checkBoxLeftSpace;
 
   @override
-  State createState() => TDCheckboxState();
+  State createState() => MyCheckboxState();
 
   Widget buildDefaultIcon(
     BuildContext context,
-    TDCheckboxGroupState? groupState,
+    MyCheckboxGroupState? groupState,
     bool isChecked,
   ) {
     if (cardMode) return const NoWidget();
 
     final size = 24.0;
     final style =
-        this.style ?? groupState?.widget.style ?? TDCheckboxStyle.circle;
+        this.style ?? groupState?.widget.style ?? MyCheckboxStyle.circle;
 
     final unselectedColor =
-        style == TDCheckboxStyle.check
+        style == MyCheckboxStyle.check
             ? Colors.transparent
             : ThemeColors.neutral.shade300;
 
     return Icon(
-      style == TDCheckboxStyle.circle
+      style == MyCheckboxStyle.circle
           ? isChecked
               ? Icons.check_circle
               : Icons.circle_outlined
-          : style == TDCheckboxStyle.square
+          : style == MyCheckboxStyle.square
           ? isChecked
               ? Icons.check_box_rounded
               : Icons.check_box_outline_blank_rounded
@@ -145,7 +141,7 @@ class TDCheckbox extends StatefulWidget {
   }
 }
 
-class TDCheckboxState extends State<TDCheckbox> {
+class MyCheckboxState extends State<MyCheckbox> {
   bool checked = false;
   bool _pressed = false;
 
@@ -159,23 +155,23 @@ class TDCheckboxState extends State<TDCheckbox> {
   }
 
   @override
-  void didUpdateWidget(TDCheckbox oldWidget) {
+  void didUpdateWidget(MyCheckbox oldWidget) {
     checked = widget.checked;
     super.didUpdateWidget(oldWidget);
   }
 
-  double _spacing(TDCheckboxGroupState? groupState) {
+  double _spacing(MyCheckboxGroupState? groupState) {
     return widget.spacing ?? groupState?.widget.spacing ?? 8;
   }
 
-  EdgeInsets _getPadding(TDCheckBoxSize size) {
+  EdgeInsets _getPadding(MyCheckboxSize size) {
     if (widget.cardMode) {
       return const EdgeInsets.only(top: 16);
     }
     switch (size) {
-      case TDCheckBoxSize.small:
+      case MyCheckboxSize.small:
         return const EdgeInsets.only(top: 12, bottom: 12);
-      case TDCheckBoxSize.large:
+      case MyCheckboxSize.large:
         return const EdgeInsets.only(top: 16, bottom: 16);
     }
   }
@@ -183,7 +179,7 @@ class TDCheckboxState extends State<TDCheckbox> {
   @override
   Widget build(BuildContext context) {
     // Checks if it is contained in a TDCheckboxGroup. If so, the state is managed by the Group.
-    final groupState = TDCheckboxGroupInherited.of(context)?.state;
+    final groupState = MyCheckboxGroupInherited.of(context)?.state;
     final id = widget.id;
     //  Only CheckBox with id set will be included in Group management
     if (groupState != null && id != null) {
@@ -215,7 +211,7 @@ class TDCheckboxState extends State<TDCheckbox> {
         final contentDirection =
             groupState?.widget.contentDirection ?? widget.contentDirection;
         switch (contentDirection) {
-          case TDContentDirection.left:
+          case MyContentDirection.left:
             current = Stack(
               alignment: Alignment.bottomCenter,
               children: [
@@ -274,7 +270,7 @@ class TDCheckboxState extends State<TDCheckbox> {
                 ),
               ],
             );
-          case TDContentDirection.right:
+          case MyContentDirection.right:
             current = Stack(
               alignment: Alignment.bottomCenter,
               children: [
@@ -406,7 +402,7 @@ class TDCheckboxState extends State<TDCheckbox> {
     setState(() {});
   }
 
-  void onValueChange(String? id, bool value, TDCheckboxGroupState? groupState) {
+  void onValueChange(String? id, bool value, MyCheckboxGroupState? groupState) {
     if (!widget.enable) return;
 
     setState(() {
@@ -420,7 +416,7 @@ class TDCheckboxState extends State<TDCheckbox> {
 
   Widget? _buildContent(
     BuildContext context,
-    TDCheckboxGroupState? groupState,
+    MyCheckboxGroupState? groupState,
     bool checked,
   ) {
     final title = widget.title;
@@ -454,7 +450,7 @@ class TDCheckboxState extends State<TDCheckbox> {
 
   Widget? _buildCheckboxIcon(
     BuildContext context,
-    TDCheckboxGroupState? groupState,
+    MyCheckboxGroupState? groupState,
     bool isCheck,
   ) {
     final iconBuilder =

@@ -3,27 +3,24 @@ import 'package:common_tools/index.dart';
 
 import '../../base/example_widget.dart';
 
-///
-/// TDCheckbox演示
-///
-class TDCheckboxPage extends StatefulWidget {
-  const TDCheckboxPage({Key? key}) : super(key: key);
+class MyCheckboxPage extends StatefulWidget {
+  const MyCheckboxPage({super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return TDCheckboxPageState();
+    return MyCheckboxPageState();
   }
 }
 
-class TDCheckboxPageState extends State<TDCheckboxPage> {
+class MyCheckboxPageState extends State<MyCheckboxPage> {
   List<String>? checkIds = ['index:1', 'index:2', 'index:3'];
 
-  TDCheckboxGroupController? controller;
+  MyCheckboxGroupController? controller;
 
   @override
   void initState() {
     super.initState();
-    controller = TDCheckboxGroupController();
+    controller = MyCheckboxGroupController();
   }
 
   @override
@@ -70,7 +67,7 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
   }
 
   Widget _verticalCheckbox(BuildContext context) {
-    return TDCheckboxGroupContainer(
+    return MyCheckboxGroupContainer(
       selectIds: const ['index:1'],
       child: ListView.builder(
         padding: EdgeInsets.zero,
@@ -85,7 +82,7 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
           if (index == 3) {
             subTitle = '描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息';
           }
-          return TDCheckbox(
+          return MyCheckbox(
             id: 'index:$index',
             title: title,
             titleMaxLine: 2,
@@ -99,28 +96,28 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
   }
 
   Widget _horizontalCheckbox(BuildContext context) {
-    return TDCheckboxGroupContainer(
+    return MyCheckboxGroupContainer(
       selectIds: const ['1'],
       direction: Axis.horizontal,
       directionalTdCheckboxes: const [
-        TDCheckbox(
+        MyCheckbox(
           id: '0',
           title: '多选Title',
-          style: TDCheckboxStyle.circle,
+          style: MyCheckboxStyle.circle,
           insetSpacing: 12,
           showDivider: false,
         ),
-        TDCheckbox(
+        MyCheckbox(
           id: '1',
           title: '多选Title',
-          style: TDCheckboxStyle.circle,
+          style: MyCheckboxStyle.circle,
           insetSpacing: 12,
           showDivider: false,
         ),
-        TDCheckbox(
+        MyCheckbox(
           id: '2',
           title: '上限四字',
-          style: TDCheckboxStyle.circle,
+          style: MyCheckboxStyle.circle,
           insetSpacing: 12,
           showDivider: false,
         ),
@@ -130,7 +127,7 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
 
   Widget _checkAllSelected(BuildContext context) {
     const itemCount = 4;
-    return TDCheckboxGroupContainer(
+    return MyCheckboxGroupContainer(
       selectIds: checkIds,
       passThrough: false,
       controller: controller,
@@ -144,7 +141,7 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
             title = '全选';
             return SizedBox(
               height: 56,
-              child: TDCheckbox(
+              child: MyCheckbox(
                 id: 'index:$index',
                 title: title,
                 customIconBuilder: (context, checked) {
@@ -168,7 +165,7 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
           } else {
             return SizedBox(
               height: index == itemCount - 1 ? null : 56,
-              child: TDCheckbox(
+              child: MyCheckbox(
                 id: 'index:$index',
                 title: title,
                 subTitle: index == itemCount - 1
@@ -195,21 +192,21 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
   }
 
   Widget _checkboxStatus(BuildContext context) {
-    return TDCheckboxGroupContainer(
-      contentDirection: TDContentDirection.right,
+    return MyCheckboxGroupContainer(
+      contentDirection: MyContentDirection.right,
       selectIds: const ['0'],
       child: const Column(
         children: [
-          TDCheckbox(
+          MyCheckbox(
             id: '0',
             title: 'Options禁用-已选',
-            style: TDCheckboxStyle.circle,
+            style: MyCheckboxStyle.circle,
             enable: false,
           ),
-          TDCheckbox(
+          MyCheckbox(
             id: '1',
             title: 'Options禁用-默认',
-            style: TDCheckboxStyle.circle,
+            style: MyCheckboxStyle.circle,
             enable: false,
           ),
         ],
@@ -220,16 +217,16 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
   Widget _checkStyle(BuildContext context) {
     return Column(
       children: [
-        TDCheckboxGroupContainer(
-          style: TDCheckboxStyle.check,
+        MyCheckboxGroupContainer(
+          style: MyCheckboxStyle.check,
           selectIds: const ['index:0'],
-          child: const TDCheckbox(id: 'index:0', title: '多选'),
+          child: const MyCheckbox(id: 'index:0', title: '多选'),
         ),
         const SizedBox(height: 17),
-        TDCheckboxGroupContainer(
-          style: TDCheckboxStyle.square,
+        MyCheckboxGroupContainer(
+          style: MyCheckboxStyle.square,
           selectIds: const ['index:0'],
-          child: const TDCheckbox(id: 'index:0', title: '多选'),
+          child: const MyCheckbox(id: 'index:0', title: '多选'),
         ),
       ],
     );
@@ -238,22 +235,22 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
   Widget _checkPosition(BuildContext context) {
     return Column(
       children: [
-        TDCheckboxGroupContainer(
-          contentDirection: TDContentDirection.right,
+        MyCheckboxGroupContainer(
+          contentDirection: MyContentDirection.right,
           selectIds: const ['index:0'],
-          child: const TDCheckbox(id: 'index:0', title: '多选'),
+          child: const MyCheckbox(id: 'index:0', title: '多选'),
         ),
-        TDCheckboxGroupContainer(
-          contentDirection: TDContentDirection.left,
+        MyCheckboxGroupContainer(
+          contentDirection: MyContentDirection.left,
           selectIds: const ['index:0'],
-          child: const TDCheckbox(id: 'index:0', title: '多选'),
+          child: const MyCheckbox(id: 'index:0', title: '多选'),
         ),
       ],
     );
   }
 
   Widget _passThroughStyle(BuildContext context) {
-    return TDCheckboxGroupContainer(
+    return MyCheckboxGroupContainer(
       selectIds: const ['index:0'],
       passThrough: true,
       child: ListView.builder(
@@ -262,10 +259,10 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
           var title = '多选';
-          return TDCheckbox(
+          return MyCheckbox(
             id: 'index:$index',
             title: title,
-            size: TDCheckBoxSize.large,
+            size: MyCheckboxSize.large,
           );
         },
         itemCount: 4,
@@ -274,12 +271,12 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
   }
 
   Widget _verticalCardStyle(BuildContext context) {
-    return TDCheckboxGroupContainer(
+    return MyCheckboxGroupContainer(
       selectIds: const ['index:1'],
       cardMode: true,
       direction: Axis.vertical,
       directionalTdCheckboxes: const [
-        TDCheckbox(
+        MyCheckbox(
           id: 'index:0',
           title: '多选',
           titleMaxLine: 2,
@@ -287,7 +284,7 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
           subTitle: '描述信息',
           cardMode: true,
         ),
-        TDCheckbox(
+        MyCheckbox(
           id: 'index:1',
           title: '多选',
           titleMaxLine: 2,
@@ -295,7 +292,7 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
           subTitle: '描述信息',
           cardMode: true,
         ),
-        TDCheckbox(
+        MyCheckbox(
           id: 'index:2',
           title: '多选',
           titleMaxLine: 2,
@@ -303,7 +300,7 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
           subTitle: '描述信息',
           cardMode: true,
         ),
-        TDCheckbox(
+        MyCheckbox(
           id: 'index:3',
           title: '多选',
           titleMaxLine: 2,
@@ -316,25 +313,25 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
   }
 
   Widget _horizontalCardStyle(BuildContext context) {
-    return TDCheckboxGroupContainer(
+    return MyCheckboxGroupContainer(
       selectIds: const ['index:1'],
       cardMode: true,
       direction: Axis.horizontal,
       directionalTdCheckboxes: const [
-        TDCheckbox(id: 'index:0', title: '多选', cardMode: true),
-        TDCheckbox(id: 'index:1', title: '多选', cardMode: true),
-        TDCheckbox(id: 'index:2', title: '多选', cardMode: true),
+        MyCheckbox(id: 'index:0', title: '多选', cardMode: true),
+        MyCheckbox(id: 'index:1', title: '多选', cardMode: true),
+        MyCheckbox(id: 'index:2', title: '多选', cardMode: true),
       ],
     );
   }
 
   Widget _customIconBuildStyle(BuildContext context) {
-    return TDCheckboxGroupContainer(
+    return MyCheckboxGroupContainer(
       selectIds: const ['index:1'],
       cardMode: true,
       direction: Axis.vertical,
       directionalTdCheckboxes: [
-        TDCheckbox(
+        MyCheckbox(
           id: 'index:0',
           title: '多选',
           subTitle: '描述信息',
@@ -350,28 +347,28 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
   }
 
   Widget _customColor(BuildContext context) {
-    return TDCheckboxGroupContainer(
-      contentDirection: TDContentDirection.right,
+    return MyCheckboxGroupContainer(
+      contentDirection: MyContentDirection.right,
       selectIds: const ['0'],
       child: Column(
         children: [
-          TDCheckbox(
+          MyCheckbox(
             selectColor: ThemeColors.error.shade200,
             disableColor: ThemeColors.error.shade50,
             id: '0',
             title: 'Options禁用-已选',
-            style: TDCheckboxStyle.circle,
+            style: MyCheckboxStyle.circle,
             enable: false,
           ),
-          TDCheckbox(
+          MyCheckbox(
             selectColor: ThemeColors.error.shade200,
             disableColor: ThemeColors.error.shade50,
             id: '1',
             title: 'Options禁用-默认',
-            style: TDCheckboxStyle.circle,
+            style: MyCheckboxStyle.circle,
           ),
 
-          TDCheckbox(
+          MyCheckbox(
             selectColor: ThemeColors.error.shade200,
             disableColor: ThemeColors.error.shade50,
             id: 'index:0',
@@ -382,7 +379,7 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
             cardMode: true,
           ),
 
-          TDCheckbox(
+          MyCheckbox(
             selectColor: ThemeColors.error.shade200,
             id: 'index:1',
             title: '多选',
@@ -399,26 +396,26 @@ class TDCheckboxPageState extends State<TDCheckboxPage> {
   }
 
   Widget _customFont(BuildContext context) {
-    return TDCheckboxGroupContainer(
-      contentDirection: TDContentDirection.right,
+    return MyCheckboxGroupContainer(
+      contentDirection: MyContentDirection.right,
       selectIds: const ['0'],
       child: Column(
         children: [
-          TDCheckbox(
+          MyCheckbox(
             id: '0',
             title: 'Options禁用-已选',
             subTitle: '描述文本',
-            style: TDCheckboxStyle.circle,
+            style: MyCheckboxStyle.circle,
             enable: false,
           ),
-          TDCheckbox(
+          MyCheckbox(
             id: '1',
             title: 'Options禁用-默认',
             subTitle: '描述文本',
-            style: TDCheckboxStyle.circle,
+            style: MyCheckboxStyle.circle,
           ),
 
-          TDCheckbox(
+          MyCheckbox(
             id: 'index:0',
             title: '多选',
             subTitle: '描述信息',

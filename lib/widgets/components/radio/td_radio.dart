@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../../layout/no_widget.dart';
-import '../checkbox/td_check_box.dart';
-import '../checkbox/td_check_box_group.dart';
-import '../divider/my_divider.dart';
 
 enum TDRadioStyle { circle, square, check, hollowCircle }
 
 /// Radio button, inherited from TDCheckbox, the field meaning is consistent with the parent class
-class TDRadio extends TDCheckbox {
+class TDRadio extends MyCheckbox {
   const TDRadio({
     super.id,
     super.key,
@@ -41,7 +37,7 @@ class TDRadio extends TDCheckbox {
   @override
   Widget buildDefaultIcon(
     BuildContext context,
-    TDCheckboxGroupState? groupState,
+    MyCheckboxGroupState? groupState,
     bool isSelected,
   ) {
     if (cardMode) return const NoWidget();
@@ -112,11 +108,11 @@ class TDRadio extends TDCheckbox {
   }
 }
 
-class TDRadioState extends TDCheckboxState {
+class TDRadioState extends MyCheckboxState {
   @override
   Widget build(BuildContext context) {
     // Check if it is contained in TDCheckboxGroup, if so, the state is managed by the Group
-    final groupState = TDCheckboxGroupInherited.of(context)?.state;
+    final groupState = MyCheckboxGroupInherited.of(context)?.state;
     if (groupState is TDRadioGroupState) {
       final strictMode = (groupState.widget as TDRadioGroup).strictMode;
       // In strict mode, you cannot cancel the option, you can only switch it
@@ -154,7 +150,7 @@ class HollowCircle extends CustomPainter {
 ///
 /// cardMode: Use the card style, need to be used with direction and directionalTdRadios,
 /// Combine into horizontal and vertical cards, and set the cardMode parameter on each TDRadio.
-class TDRadioGroup extends TDCheckboxGroup {
+class TDRadioGroup extends MyCheckboxGroup {
   TDRadioGroup({
     super.key,
     Widget? child, // 使用child 则请勿设置direction
@@ -361,7 +357,7 @@ class TDRadioGroup extends TDCheckboxGroup {
   }
 }
 
-class TDRadioGroupState extends TDCheckboxGroupState {
+class TDRadioGroupState extends MyCheckboxGroupState {
   @override
   bool toggle(String id, bool check, [bool notify = false]) {
     checkBoxStates.forEach((key, value) {

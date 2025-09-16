@@ -1,53 +1,30 @@
 import 'package:flutter/cupertino.dart';
 
 import '../../../index.dart';
-import 'td_check_box.dart';
 
-///
-/// CheckBoxGroup变化监听器
-///
 typedef OnGroupChange = void Function(List<String> checkedIds);
 
-///
-/// 控制CheckBoxGroup
-///
-class TDCheckboxGroupController {
-  TDCheckboxGroupState? _state;
+class MyCheckboxGroupController {
+  MyCheckboxGroupState? _state;
 
-  ///
-  /// 选择全部
-  /// 这个方法会忽略最大可够选数
-  ///
   void toggleAll(bool check) {
     _state?.toggleAll(check);
   }
 
-  ///
-  /// 反选
-  ///
   void reverseAll() {
     _state?._reverseAll();
   }
 
-  ///
-  /// 选中某一个Options
-  ///
   void toggle(String id, bool check) {
     _state?.toggle(id, check, true);
   }
 
-  ///
-  /// 打勾的Options
-  ///
   List<String> allChecked() {
     return MapScrewdriver(
       _state?.checkBoxStates ?? <String, bool>{},
     ).where((k, v) => v).keys.toList();
   }
 
-  ///
-  /// 某一项的选中状态
-  ///
   bool checked(String id) {
     final list = allChecked();
     return list.contains(id);
@@ -76,8 +53,8 @@ class TDCheckboxGroupController {
 /// ```
 ///
 ///
-class TDCheckboxGroup extends StatefulWidget {
-  const TDCheckboxGroup({
+class MyCheckboxGroup extends StatefulWidget {
+  const MyCheckboxGroup({
     required this.child,
     super.key,
     this.onChangeGroup,
@@ -111,7 +88,7 @@ class TDCheckboxGroup extends StatefulWidget {
   final OnGroupChange? onChangeGroup;
 
   /// 可以通过控制器操作勾选状态
-  final TDCheckboxGroupController? controller;
+  final MyCheckboxGroupController? controller;
 
   /// 最多可以勾选多少
   final int? maxChecked;
@@ -132,21 +109,21 @@ class TDCheckboxGroup extends StatefulWidget {
   final double? spacing;
 
   /// CheckBox复选框样式：圆形或方形
-  final TDCheckboxStyle? style;
+  final MyCheckboxStyle? style;
 
   /// 文字相对icon的方位
-  final TDContentDirection? contentDirection;
+  final MyContentDirection? contentDirection;
 
   /// 自定义选择icon的样式
   final IconBuilder? customIconBuilder;
 
   @override
   State<StatefulWidget> createState() {
-    return TDCheckboxGroupState();
+    return MyCheckboxGroupState();
   }
 }
 
-class TDCheckboxGroupState extends State<TDCheckboxGroup> {
+class MyCheckboxGroupState extends State<MyCheckboxGroup> {
   ///
   /// 管理所有子CheckBox的状态
   ///
@@ -170,7 +147,7 @@ class TDCheckboxGroupState extends State<TDCheckboxGroup> {
   }
 
   @override
-  void didUpdateWidget(TDCheckboxGroup oldWidget) {
+  void didUpdateWidget(MyCheckboxGroup oldWidget) {
     super.didUpdateWidget(oldWidget);
     final oldCheckIds = oldWidget.checkedIds;
     final newCheckIds = widget.checkedIds;
@@ -258,36 +235,36 @@ class TDCheckboxGroupState extends State<TDCheckboxGroup> {
 
   @override
   Widget build(BuildContext context) {
-    return TDCheckboxGroupInherited(this, widget.child);
+    return MyCheckboxGroupInherited(this, widget.child);
   }
 }
 
-class TDCheckboxGroupInherited extends InheritedWidget {
-  const TDCheckboxGroupInherited(this.state, Widget child, {super.key})
+class MyCheckboxGroupInherited extends InheritedWidget {
+  const MyCheckboxGroupInherited(this.state, Widget child, {super.key})
     : super(child: child);
 
-  final TDCheckboxGroupState state;
+  final MyCheckboxGroupState state;
 
   ///
   /// 获取树上的Group节点
   ///
-  static TDCheckboxGroupInherited? of(BuildContext context) {
+  static MyCheckboxGroupInherited? of(BuildContext context) {
     return context
-        .dependOnInheritedWidgetOfExactType<TDCheckboxGroupInherited>();
+        .dependOnInheritedWidgetOfExactType<MyCheckboxGroupInherited>();
   }
 
   @override
-  bool updateShouldNotify(covariant TDCheckboxGroupInherited oldWidget) {
+  bool updateShouldNotify(covariant MyCheckboxGroupInherited oldWidget) {
     return true;
   }
 }
 
-class TDCheckboxGroupContainer extends TDCheckboxGroup {
-  TDCheckboxGroupContainer({
+class MyCheckboxGroupContainer extends MyCheckboxGroup {
+  MyCheckboxGroupContainer({
     super.key,
     Widget? child, // 使用child 则请勿设置direction
     Axis? direction, // direction 对 directionalTdRadios 起作用
-    List<TDCheckbox>? directionalTdCheckboxes,
+    List<MyCheckbox>? directionalTdCheckboxes,
     List<String>? selectIds, // 默认选择项的id组
     bool? passThrough, // 非通栏单选样式 用于使用child 或 direction == Axis.vertical 场景
     bool cardMode = false,
@@ -449,10 +426,10 @@ class TDCheckboxGroupContainer extends TDCheckboxGroup {
 
   @override
   State<StatefulWidget> createState() {
-    return TDCheckboxGroupContainerState();
+    return MyCheckboxGroupContainerState();
   }
 }
 
-class TDCheckboxGroupContainerState extends TDCheckboxGroupState {}
+class MyCheckboxGroupContainerState extends MyCheckboxGroupState {}
 
 typedef OnCheckBoxGroupChange = void Function(List<String> ids);

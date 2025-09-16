@@ -281,7 +281,7 @@ class TDTableState extends State<TDTable> {
     if ((col.selection ?? false) && col.cellBuilder == null) {
       final enable = col.selectable?.call(index, widget.data?[index]) ?? true;
 
-      var checkBox = TDCheckbox(
+      var checkBox = MyCheckbox(
         id: 'index:$index',
         checked: _checkedList[index],
         enable: enable,
@@ -324,7 +324,7 @@ class TDTableState extends State<TDTable> {
       );
 
       if (isHeader) {
-        checkBox = TDCheckbox(
+        checkBox = MyCheckbox(
           id: 'header',
           checked: _hasChecked == _totalSelectable,
           customIconBuilder: (context, checked) {
@@ -703,7 +703,7 @@ class TDTableState extends State<TDTable> {
           : halfSelected
           ? Icons.indeterminate_check_box_rounded
           : Icons.circle,
-          // checked ? TDIcons.check_rectangle_filled : halfSelected ? TDIcons.minus_rectangle_filled : TDIcons.check_rectangle,
+      // checked ? TDIcons.check_rectangle_filled : halfSelected ? TDIcons.minus_rectangle_filled : TDIcons.check_rectangle,
       size: 16,
       color:
           (checked || halfSelected)

@@ -113,7 +113,7 @@ class TDRadioPageState extends State<TDRadioPage> {
 
   Widget _radioStatus(BuildContext context) {
     return TDRadioGroup(
-      contentDirection: TDContentDirection.right,
+      contentDirection: MyContentDirection.right,
       selectId: '0',
       child: const Column(
         children: [
@@ -156,12 +156,12 @@ class TDRadioPageState extends State<TDRadioPage> {
     return Column(
       children: [
         TDRadioGroup(
-          contentDirection: TDContentDirection.right,
+          contentDirection: MyContentDirection.right,
           selectId: 'index:0',
           child: const TDRadio(id: 'index:0', title: '单选'),
         ),
         TDRadioGroup(
-          contentDirection: TDContentDirection.left,
+          contentDirection: MyContentDirection.left,
           selectId: 'index:0',
           child: const TDRadio(id: 'index:0', title: '单选', showDivider: false),
         ),
@@ -182,7 +182,7 @@ class TDRadioPageState extends State<TDRadioPage> {
           return TDRadio(
             id: 'index:$index',
             title: title,
-            size: TDCheckBoxSize.large,
+            size: MyCheckboxSize.large,
           );
         },
         itemCount: 4,
@@ -371,7 +371,7 @@ class TDRadioPageState extends State<TDRadioPage> {
 
   Widget _customDisableColorAndFont(BuildContext context) {
     return TDRadioGroup(
-      contentDirection: TDContentDirection.right,
+      contentDirection: MyContentDirection.right,
       selectId: '0',
       child: Column(
         children: [
