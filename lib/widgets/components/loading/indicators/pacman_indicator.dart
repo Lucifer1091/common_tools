@@ -1,11 +1,7 @@
 part of 'my_loader_icon.dart';
 
 class _PacmanIndicator extends StatefulWidget {
-  const _PacmanIndicator({
-    required this.options,
-    this.radius,
-    this.beanRadius,
-  });
+  const _PacmanIndicator({required this.options, this.radius, this.beanRadius});
 
   final double? radius;
   final double? beanRadius;
@@ -21,11 +17,11 @@ class _PacmanIndicatorState extends State<_PacmanIndicator>
   late Animation<double> pacman;
   late Animation<double> bean;
 
-  double _progress = 0.0;
-  double _lastExtent = 0.0;
+  double _progress = 0;
+  double _lastExtent = 0;
 
-  double get _radius => widget.radius ?? 16;
-  double get _beanRadius => widget.beanRadius ?? 4;
+  double get _radius => widget.radius ?? widget.options.size!.value / 2;
+  double get _beanRadius => widget.beanRadius ?? widget.options.size!.value / 8;
 
   @override
   void initState() {
@@ -71,22 +67,23 @@ class _PacmanIndicatorState extends State<_PacmanIndicator>
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _controller,
-      builder: (context, child) => CustomPaint(
-        size: _measureSize(),
-        painter: _PacmanIndicatorPainter(
-          pacmanAngle: pacman.value,
-          beanTransX: bean.value,
-          radius: _radius,
-          beanRadius: _beanRadius,
-          color: widget.options.color ?? context.colorScheme.primary,
-          progress: _progress,
-          lastExtent: _lastExtent,
-          onUpdate: (newProgress, newLastExtent) {
-            _progress = newProgress;
-            _lastExtent = newLastExtent;
-          },
-        ),
-      ),
+      builder:
+          (context, child) => CustomPaint(
+            size: _measureSize(),
+            painter: _PacmanIndicatorPainter(
+              pacmanAngle: pacman.value,
+              beanTransX: bean.value,
+              radius: _radius,
+              beanRadius: _beanRadius,
+              color: widget.options.color ?? context.colorScheme.primary,
+              progress: _progress,
+              lastExtent: _lastExtent,
+              onUpdate: (newProgress, newLastExtent) {
+                _progress = newProgress;
+                _lastExtent = newLastExtent;
+              },
+            ),
+          ),
     );
   }
 }
@@ -114,10 +111,11 @@ class _PacmanIndicatorPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..isAntiAlias = true
-      ..style = PaintingStyle.fill
-      ..color = color;
+    final paint =
+        Paint()
+          ..isAntiAlias = true
+          ..style = PaintingStyle.fill
+          ..color = color;
 
     final width = radius * 2;
     final height = radius * 2;

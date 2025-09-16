@@ -40,7 +40,7 @@ class _SquareIndicatorState extends State<_SquareIndicator>
             _controller.value,
             widget.options.backgroundColor ?? context.colorScheme.secondary,
             widget.options.color ?? context.colorScheme.primary,
-            widget.options.strokeWidth,
+            widget.options.strokeWidth ?? widget.options.size!.value / 9.5,
           ),
         );
       },

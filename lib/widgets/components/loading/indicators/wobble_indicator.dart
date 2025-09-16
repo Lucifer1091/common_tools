@@ -38,7 +38,10 @@ class _LineWobbleIndicatorState extends State<_LineWobbleIndicator>
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      size: Size(widget.width ?? 80, widget.height ?? 5),
+      size: Size(
+        widget.width ?? 80,
+        widget.height ?? widget.options.size!.value / 6.4,
+      ),
       painter: LineWobblePainter(
         _animation,
         widget.options.backgroundColor ?? context.colorScheme.secondary,

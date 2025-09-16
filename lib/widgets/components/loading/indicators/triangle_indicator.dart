@@ -5,7 +5,7 @@ class _TriangleIndicator extends StatefulWidget {
 
   final double? size;
   final MyLoaderOptions options;
-  
+
   @override
   _TriangleIndicatorState createState() => _TriangleIndicatorState();
 }
@@ -40,7 +40,7 @@ class _TriangleIndicatorState extends State<_TriangleIndicator>
             _controller.value,
             widget.options.backgroundColor ?? context.colorScheme.secondary,
             widget.options.color ?? context.colorScheme.primary,
-            widget.options.strokeWidth,
+            widget.options.strokeWidth ?? widget.options.size!.value / 9.5,
           ),
         );
       },

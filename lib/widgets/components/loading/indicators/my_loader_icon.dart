@@ -75,7 +75,12 @@ class MyDotsLoader extends MyLoaderIcon {
 }
 
 class MyTriangleLoader extends MyLoaderIcon {
-  const MyTriangleLoader({super.options, this.size});
+  const MyTriangleLoader({
+    super.options = const MyLoaderOptions(
+      duration: Duration(milliseconds: 1500),
+    ),
+    this.size,
+  });
 
   final double? size;
 
@@ -85,7 +90,12 @@ class MyTriangleLoader extends MyLoaderIcon {
 }
 
 class MySquareLoader extends MyLoaderIcon {
-  const MySquareLoader({super.options, this.size});
+  const MySquareLoader({
+    super.options = const MyLoaderOptions(
+      duration: Duration(milliseconds: 1500),
+    ),
+    this.size,
+  });
 
   final double? size;
 
@@ -248,7 +258,13 @@ class MyPacmanLoader extends MyLoaderIcon {
 }
 
 class MyTextLoader extends MyLoaderIcon {
-  const MyTextLoader({super.options, this.size, this.style});
+  const MyTextLoader({
+    super.options = const MyLoaderOptions(
+      duration: Duration(milliseconds: 1500),
+    ),
+    this.size,
+    this.style,
+  });
 
   final double? size;
   final TextStyle? style;

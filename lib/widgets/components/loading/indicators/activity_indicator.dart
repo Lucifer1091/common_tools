@@ -39,11 +39,15 @@ class _ActivityIndicatorState extends State<_ActivityIndicator>
     super.dispose();
   }
 
-  double get _radius => widget.radius ?? 18;
-  double get _minLineWidth => widget.minLineWidth ?? 2.4;
-  double get _maxLineWidth => widget.maxLineWidth ?? 4.8;
-  double get _minLineHeight => widget.minLineHeight ?? 4.8;
-  double get _maxLineHeight => widget.maxLineHeight ?? 9.6;
+  double get _radius => widget.radius ?? widget.options.size!.value / 1.77;
+  double get _minLineWidth =>
+      widget.minLineWidth ?? widget.options.size!.value / 13.3;
+  double get _maxLineWidth =>
+      widget.maxLineWidth ?? widget.options.size!.value / 6.65;
+  double get _minLineHeight =>
+      widget.minLineHeight ?? widget.options.size!.value / 13.3;
+  double get _maxLineHeight =>
+      widget.maxLineHeight ?? widget.options.size!.value / 3.3;
   double get _minBallAlpha => widget.minBallAlpha ?? 77;
   double get _maxBallAlpha => widget.maxBallAlpha ?? 255;
 
@@ -67,7 +71,6 @@ class _ActivityIndicatorState extends State<_ActivityIndicator>
           size: measureSize(),
           painter: _ActivityIndicatorPainter(
             progress: _progress,
-            // animationValue: animationValue,
             minLineWidth: _minLineWidth,
             maxLineWidth: _maxLineWidth,
             minLineHeight: _minLineHeight,
@@ -171,9 +174,7 @@ class _ActivityIndicatorPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(
-    covariant _ActivityIndicatorPainter oldDelegate,
-  ) {
+  bool shouldRepaint(covariant _ActivityIndicatorPainter oldDelegate) {
     return oldDelegate.progress != progress ||
         oldDelegate.ballColor != ballColor;
   }

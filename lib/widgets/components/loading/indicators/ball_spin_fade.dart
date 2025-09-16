@@ -38,9 +38,11 @@ class _BallSpinFadeState extends State<_BallSpinFade>
     super.dispose();
   }
 
-  double get _radius => widget.radius ?? 24;
-  double get _minBallRadius => widget.minBallRadius ?? 1.6;
-  double get _maxBallRadius => widget.maxBallRadius ?? 5;
+  double get _radius => widget.radius ?? widget.options.size!.value / 2;
+  double get _minBallRadius =>
+      widget.minBallRadius ?? widget.options.size!.value / 30;
+  double get _maxBallRadius =>
+      widget.maxBallRadius ?? widget.options.size!.value / 9.5;
   double get _minBallAlpha => widget.minBallAlpha ?? 77;
   double get _maxBallAlpha => widget.maxBallAlpha ?? 255;
 

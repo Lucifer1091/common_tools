@@ -54,30 +54,56 @@ class _MyLoaderPageState extends State<MyLoaderPage> {
             ),
           ],
         ),
-      ],
-      test: [
-        ExampleItem(
-          desc: 'Show/Hide Loading',
-          ignoreCode: true,
-          builder: (_) {
-            var list = [
-              MyButton(
-                text: 'Show Loading',
-                onTap: () {
-                  MyLoadingController.show(context);
-                },
-              ),
-              const SizedBox(width: 24),
-              const MyButton(
-                text: 'Hide Loading',
-                onTap: MyLoadingController.dismiss,
-              ),
-            ];
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(children: list),
-            );
-          },
+        ExampleModule(
+          title: 'Loading Overlay Types',
+          children: [
+            ExampleItem(
+              desc: 'Async Loading',
+              builder: (_) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: MyButton(
+                    text: 'Show Loading',
+                    onTap: () {
+                      MyLoadingOverlay.async(
+                        context,
+                        size: MyLoaderSize.extraLarge,
+                        text:
+                            'This loader will be shown for 5 seconds\n'
+                            'then it will dismiss automatically.',
+                        future: () async {
+                          await 5.seconds.delay();
+                        },
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+            ExampleItem(
+              desc: 'Show/Hide Loading',
+              builder: (_) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: MyButton(
+                    text: 'Show Loading',
+                    onTap: () {
+                      MyLoadingOverlay.show(
+                        context,
+                        icon: MyLoaderIcon.text,
+                        size: MyLoaderSize.extraLarge,
+                        text: 'Hide Loading Manually',
+                        refreshWidget: MyButton(
+                          text: 'Dismiss',
+                          onTap: MyLoadingOverlay.dismiss,
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+          ],
         ),
       ],
     );
@@ -170,7 +196,6 @@ class _MyLoaderPageState extends State<MyLoaderPage> {
       crossAxisAlignment: WrapCrossAlignment.center,
       children: MyLoaderSize.values.map((size) {
         return MyLoader(
-          icon: MyLoaderIcon.circle,
           size: size,
           options: MyLoaderOptions(
             strokeWidth: size == MyLoaderSize.small
