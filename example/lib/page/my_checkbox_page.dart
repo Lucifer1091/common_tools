@@ -17,6 +17,8 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
 
   MyCheckboxGroupController? controller;
 
+  bool value = false;
+
   @override
   void initState() {
     super.initState();
@@ -27,41 +29,75 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
   Widget build(BuildContext context) {
     return ExamplePage(
       title: tdTitle(),
-      desc: '用于预设的一组Options中执行多项选择，并呈现选择结果。',
+      desc:
+          'Used to perform multiple selections in a preset set of Options and present the selection results.',
       exampleCodeGroup: 'checkbox',
       children: [
         ExampleModule(
           title: 'Component Types',
           children: [
-            ExampleItem(desc: '纵向多选框', builder: _verticalCheckbox),
-            ExampleItem(desc: '横向多选框', builder: _horizontalCheckbox),
-            ExampleItem(desc: '带全选多选框', builder: _checkAllSelected),
+            ExampleItem(
+              desc: 'Default.',
+              builder: (context) {
+                return Checkbox(
+                  value: value,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      this.value = value ?? false;
+                    });
+                  },
+                );
+              },
+            ),
+            ExampleItem(
+              desc: 'The vertical multi-select box now selects the result.',
+              builder: _verticalCheckbox,
+            ),
+            ExampleItem(
+              desc: 'Horizontal multiple-select box',
+              builder: _horizontalCheckbox,
+            ),
+            ExampleItem(
+              desc: 'Multiple-choice box with select all',
+              builder: _checkAllSelected,
+            ),
           ],
         ),
         ExampleModule(
           title: 'Component State',
-          children: [ExampleItem(desc: '多选框状态', builder: _checkboxStatus)],
+          children: [
+            ExampleItem(desc: 'Checkbox status', builder: _checkboxStatus),
+          ],
         ),
         ExampleModule(
           title: 'Component Style',
           children: [
-            ExampleItem(desc: '勾选样式', builder: _checkStyle),
-            ExampleItem(desc: '勾选显示位置', builder: _checkPosition),
-            ExampleItem(desc: '非通栏多选样式', builder: _passThroughStyle),
+            ExampleItem(desc: 'Check style', builder: _checkStyle),
+            ExampleItem(desc: 'Check Show Location', builder: _checkPosition),
+            ExampleItem(
+              desc: 'Non-full-width multiple-selection style',
+              builder: _passThroughStyle,
+            ),
           ],
         ),
         ExampleModule(
-          title: '特殊样式',
+          title: 'Special style',
           children: [
-            ExampleItem(desc: '纵向卡片单选框', builder: _verticalCardStyle),
-            ExampleItem(desc: '横向卡片单选框', builder: _horizontalCardStyle),
+            ExampleItem(
+              desc: 'Vertical card radio button',
+              builder: _verticalCardStyle,
+            ),
+            ExampleItem(
+              desc: 'Horizontal card radio button',
+              builder: _horizontalCardStyle,
+            ),
           ],
         ),
       ],
       test: [
-        ExampleItem(desc: '自定义Icon', builder: _customIconBuildStyle),
-        ExampleItem(desc: '自定义颜色', builder: _customColor),
-        ExampleItem(desc: '自定义字体尺寸', builder: _customFont),
+        ExampleItem(desc: 'Custom Icon', builder: _customIconBuildStyle),
+        ExampleItem(desc: 'Custom color', builder: _customColor),
+        ExampleItem(desc: 'Custom font size', builder: _customFont),
       ],
     );
   }
@@ -74,13 +110,15 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
-          var title = '多选';
+          var title = 'Multiple Choice';
           var subTitle = '';
           if (index == 2) {
-            title = '多选Title多行多选Title多行多选Title多行多选Title多行多选Title多行多选Title多行';
+            title =
+                'Multiple selections of Title, multiple lines, multiple selections of Title, multiple lines, multiple selections of Title, multiple lines, multiple selections of Title, multiple lines, multiple selections of Title, multiple lines, multiple selections of Title';
           }
           if (index == 3) {
-            subTitle = '描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息';
+            subTitle =
+                'Description information description information description information description information description information description information description information description information';
           }
           return MyCheckbox(
             id: 'index:$index',
@@ -102,21 +140,21 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
       directionalTdCheckboxes: const [
         MyCheckbox(
           id: '0',
-          title: '多选Title',
+          title: 'Multiple-select Title',
           style: MyCheckboxStyle.circle,
           insetSpacing: 12,
           showDivider: false,
         ),
         MyCheckbox(
           id: '1',
-          title: '多选Title',
+          title: 'Multiple-select Title',
           style: MyCheckboxStyle.circle,
           insetSpacing: 12,
           showDivider: false,
         ),
         MyCheckbox(
           id: '2',
-          title: '上限四字',
+          title: 'Upper limit of four characters',
           style: MyCheckboxStyle.circle,
           insetSpacing: 12,
           showDivider: false,
@@ -136,9 +174,9 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
-          var title = '多选';
+          var title = 'Multiple-select ';
           if (index == 0) {
-            title = '全选';
+            title = 'Select all';
             return SizedBox(
               height: 56,
               child: MyCheckbox(
@@ -169,7 +207,7 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
                 id: 'index:$index',
                 title: title,
                 subTitle: index == itemCount - 1
-                    ? '描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息'
+                    ? 'Description information description information description information description information description information description information description information description information'
                     : null,
                 subTitleMaxLine: 2,
                 onCheckBoxChanged: (checked) {
@@ -199,13 +237,13 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
         children: [
           MyCheckbox(
             id: '0',
-            title: 'Options禁用-已选',
+            title: 'Options Disable-Selected',
             style: MyCheckboxStyle.circle,
             enable: false,
           ),
           MyCheckbox(
             id: '1',
-            title: 'Options禁用-默认',
+            title: 'Options Disabled - Default',
             style: MyCheckboxStyle.circle,
             enable: false,
           ),
@@ -220,13 +258,13 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
         MyCheckboxGroupContainer(
           style: MyCheckboxStyle.check,
           selectIds: const ['index:0'],
-          child: const MyCheckbox(id: 'index:0', title: '多选'),
+          child: const MyCheckbox(id: 'index:0', title: 'Multiple-select '),
         ),
         const SizedBox(height: 17),
         MyCheckboxGroupContainer(
           style: MyCheckboxStyle.square,
           selectIds: const ['index:0'],
-          child: const MyCheckbox(id: 'index:0', title: '多选'),
+          child: const MyCheckbox(id: 'index:0', title: 'Multiple-select '),
         ),
       ],
     );
@@ -238,12 +276,12 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
         MyCheckboxGroupContainer(
           contentDirection: MyContentDirection.right,
           selectIds: const ['index:0'],
-          child: const MyCheckbox(id: 'index:0', title: '多选'),
+          child: const MyCheckbox(id: 'index:0', title: 'Multiple-select '),
         ),
         MyCheckboxGroupContainer(
           contentDirection: MyContentDirection.left,
           selectIds: const ['index:0'],
-          child: const MyCheckbox(id: 'index:0', title: '多选'),
+          child: const MyCheckbox(id: 'index:0', title: 'Multiple-select '),
         ),
       ],
     );
@@ -258,7 +296,7 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
-          var title = '多选';
+          var title = 'Multiple-select ';
           return MyCheckbox(
             id: 'index:$index',
             title: title,
@@ -278,34 +316,34 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
       directionalTdCheckboxes: const [
         MyCheckbox(
           id: 'index:0',
-          title: '多选',
+          title: 'Multiple-select ',
           titleMaxLine: 2,
           subTitleMaxLine: 2,
-          subTitle: '描述信息',
+          subTitle: 'Description information',
           cardMode: true,
         ),
         MyCheckbox(
           id: 'index:1',
-          title: '多选',
+          title: 'Multiple-select ',
           titleMaxLine: 2,
           subTitleMaxLine: 2,
-          subTitle: '描述信息',
+          subTitle: 'Description information',
           cardMode: true,
         ),
         MyCheckbox(
           id: 'index:2',
-          title: '多选',
+          title: 'Multiple-select ',
           titleMaxLine: 2,
           subTitleMaxLine: 2,
-          subTitle: '描述信息',
+          subTitle: 'Description information',
           cardMode: true,
         ),
         MyCheckbox(
           id: 'index:3',
-          title: '多选',
+          title: 'Multiple-select ',
           titleMaxLine: 2,
           subTitleMaxLine: 2,
-          subTitle: '描述信息',
+          subTitle: 'Description information',
           cardMode: true,
         ),
       ],
@@ -318,9 +356,9 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
       cardMode: true,
       direction: Axis.horizontal,
       directionalTdCheckboxes: const [
-        MyCheckbox(id: 'index:0', title: '多选', cardMode: true),
-        MyCheckbox(id: 'index:1', title: '多选', cardMode: true),
-        MyCheckbox(id: 'index:2', title: '多选', cardMode: true),
+        MyCheckbox(id: 'index:0', title: 'Multiple-select ', cardMode: true),
+        MyCheckbox(id: 'index:1', title: 'Multiple-select ', cardMode: true),
+        MyCheckbox(id: 'index:2', title: 'Multiple-select ', cardMode: true),
       ],
     );
   }
@@ -333,8 +371,8 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
       directionalTdCheckboxes: [
         MyCheckbox(
           id: 'index:0',
-          title: '多选',
-          subTitle: '描述信息',
+          title: 'Multiple-select ',
+          subTitle: 'Description information',
           titleMaxLine: 2,
           subTitleMaxLine: 2,
           cardMode: true,
@@ -356,7 +394,7 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
             selectColor: ThemeColors.error.shade200,
             disableColor: ThemeColors.error.shade50,
             id: '0',
-            title: 'Options禁用-已选',
+            title: 'Options Disable-Selected',
             style: MyCheckboxStyle.circle,
             enable: false,
           ),
@@ -364,7 +402,7 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
             selectColor: ThemeColors.error.shade200,
             disableColor: ThemeColors.error.shade50,
             id: '1',
-            title: 'Options禁用-默认',
+            title: 'Options Disabled - Default',
             style: MyCheckboxStyle.circle,
           ),
 
@@ -372,8 +410,8 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
             selectColor: ThemeColors.error.shade200,
             disableColor: ThemeColors.error.shade50,
             id: 'index:0',
-            title: '多选',
-            subTitle: '描述信息',
+            title: 'Multiple-select ',
+            subTitle: 'Description information',
             titleMaxLine: 2,
             subTitleMaxLine: 2,
             cardMode: true,
@@ -382,9 +420,9 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
           MyCheckbox(
             selectColor: ThemeColors.error.shade200,
             id: 'index:1',
-            title: '多选',
+            title: 'Multiple-select ',
             titleColor: Colors.green,
-            subTitle: '描述信息',
+            subTitle: 'Description information',
             subTitleColor: Colors.blue,
             titleMaxLine: 2,
             subTitleMaxLine: 2,
@@ -403,22 +441,22 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
         children: [
           MyCheckbox(
             id: '0',
-            title: 'Options禁用-已选',
-            subTitle: '描述文本',
+            title: 'Options Disable-Selected',
+            subTitle: 'description text',
             style: MyCheckboxStyle.circle,
             enable: false,
           ),
           MyCheckbox(
             id: '1',
-            title: 'Options禁用-默认',
-            subTitle: '描述文本',
+            title: 'Options Disabled - Default',
+            subTitle: 'description text',
             style: MyCheckboxStyle.circle,
           ),
 
           MyCheckbox(
             id: 'index:0',
-            title: '多选',
-            subTitle: '描述信息',
+            title: 'Multiple-select ',
+            subTitle: 'Description information',
             titleMaxLine: 2,
             subTitleMaxLine: 2,
             cardMode: true,

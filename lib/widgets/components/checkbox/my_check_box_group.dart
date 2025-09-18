@@ -282,16 +282,15 @@ class MyCheckboxGroupContainer extends MyCheckboxGroup {
          // 使用direction属性则必须配合directionalTdCheckboxes，child字段无效
          if (direction != null && directionalTdCheckboxes == null) {
            throw FlutterError(
-             '[TDCheckboxGroupContainer] direction and directionalTdCheckboxes must set at the same time',
+             '[MyCheckboxGroupContainer] direction and directionalTdCheckboxes must set at the same time',
            );
          }
          // 未使用direction则必须设置child
          if (direction == null && child == null) {
            throw FlutterError(
-             '[TDCheckboxGroupContainer] direction means use child as the exact one, but child is null',
+             '[MyCheckboxGroupContainer] direction means use child as the exact one, but child is null',
            );
          }
-         // 横向单选框 每个Options有字数限制
          if (direction == Axis.horizontal && directionalTdCheckboxes != null) {
            for (final element in directionalTdCheckboxes) {
              if (element.subTitle != null) {
@@ -302,25 +301,25 @@ class MyCheckboxGroupContainer extends MyCheckboxGroup {
              }
            }
            var maxWordCount = 2;
-           final tips =
-               '[TDCheckboxGroupContainer] checkbox title please not exceed $maxWordCount words.\n'
-               '2tabs: 7words maximum\n'
-               '3tabs: 4words maximum\n'
-               '4tabs: 2words maximum';
-           if (directionalTdCheckboxes.length == 2) {
-             maxWordCount = 7;
-           }
-           if (directionalTdCheckboxes.length == 3) {
-             maxWordCount = 4;
-           }
-           if (directionalTdCheckboxes.length == 4) {
-             maxWordCount = 2;
-           }
-           for (final checkbox in directionalTdCheckboxes) {
-             if ((checkbox.title?.length ?? 0) > maxWordCount) {
-               throw FlutterError(tips);
-             }
-           }
+          //  final tips =
+          //      '[MyCheckboxGroupContainer] checkbox title please not exceed $maxWordCount words.\n'
+          //      '2tabs: 7words maximum\n'
+          //      '3tabs: 4words maximum\n'
+          //      '4tabs: 2words maximum';
+          //  if (directionalTdCheckboxes.length == 2) {
+          //    maxWordCount = 7;
+          //  }
+          //  if (directionalTdCheckboxes.length == 3) {
+          //    maxWordCount = 4;
+          //  }
+          //  if (directionalTdCheckboxes.length == 4) {
+          //    maxWordCount = 2;
+          //  }
+          //  for (final checkbox in directionalTdCheckboxes) {
+          //    if ((checkbox.title?.length ?? 0) > maxWordCount) {
+          //      throw FlutterError(tips);
+          //    }
+          //  }
          }
          // 卡片模式要求每个TDRadio必须设置cardMode属性为true，且不能有子Title（空间不够）
          if (cardMode) {
@@ -330,7 +329,7 @@ class MyCheckboxGroupContainer extends MyCheckboxGroup {
              // set it's own carMode to true.
              if (!element.cardMode) {
                throw FlutterError(
-                 'if use cardMode at TDCheckboxGroupContainer, then every '
+                 'if use cardMode at MyCheckboxGroupContainer, then every '
                  "TDCheckbox should set it's own carMode to true.",
                );
              }
