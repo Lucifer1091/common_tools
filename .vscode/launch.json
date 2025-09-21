@@ -26,11 +26,6 @@
             "cwd": "example",
             "request": "launch",
             "type": "dart",
-            "args": [
-                "-d",
-                "chrome",
-                "--web-experimental-hot-reload",
-            ]
         },
         {
             "name": "example (profile mode)",

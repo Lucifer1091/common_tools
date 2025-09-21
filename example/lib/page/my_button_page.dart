@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:common_tools/index.dart';
+import 'package:flutter/material.dart';
 
 import '../../base/example_widget.dart';
 
@@ -452,15 +452,12 @@ class MyButtonPage extends StatelessWidget {
     return MyButton(
       text: 'Loading',
       iconWidget: MyLoader(
-        icon: MyCircleLoader(
-          options: MyLoaderOptions(
-            size: MyLoaderSize.extraSmall,
-            strokeWidth: 2.5,
-            color: context.colorScheme.primaryForeground,
-            backgroundColor: context.colorScheme.primary,
-          ),
+        options: MyLoaderOptions(
+          size: MyLoaderSize.extraSmall,
+          strokeWidth: 2,
+          color: context.colorScheme.primaryForeground,
+          backgroundColor: context.colorScheme.primary,
         ),
-        // iconColor: context.colorScheme.primaryForeground,
       ),
       size: MyButtonSize.large,
       type: MyButtonType.primary,
@@ -539,13 +536,13 @@ class MyButtonPage extends StatelessWidget {
   Widget _buildCombinationButtons(BuildContext context) {
     return const Row(
       children: [
-        SizedBox(width: 100),
+        Spacer(),
         Expanded(
           child: MyButton(text: 'Cancel', type: MyButtonType.outline),
         ),
         SizedBox(width: 16),
         Expanded(child: MyButton(text: 'Confirm')),
-        SizedBox(width: 100),
+        Spacer(),
       ],
     ).constrained();
   }

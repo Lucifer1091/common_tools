@@ -33,7 +33,7 @@ class _TextLoaderState extends State<_TextLoader>
       }
       if (status == AnimationStatus.dismissed) {
         _firstAnimation = true;
-        _animationController.forward();
+        unawaited(_animationController.forward());
       }
     });
 
@@ -44,7 +44,7 @@ class _TextLoaderState extends State<_TextLoader>
       setState(() {});
     });
 
-    _animationController.forward();
+    unawaited(_animationController.forward());
   }
 
   @override
@@ -109,8 +109,8 @@ class _TextLoaderState extends State<_TextLoader>
           Text(
             '...',
             style: TextStyle(
-              fontSize: size,
-              fontWeight: FontWeight.w900,
+              fontSize: size * 0.85,
+              fontWeight: FontWeight.w700,
               color: secondary,
               fontStyle: FontStyle.normal,
               fontFamily: 'sans-serif',

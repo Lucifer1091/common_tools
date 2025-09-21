@@ -10,14 +10,14 @@ class TDRadio extends MyCheckbox {
     super.id,
     super.key,
     super.title,
-    super.enable,
+    super.enabled,
     super.titleStyle,
     super.subTitle,
     super.subTitleStyle,
     int super.subTitleMaxLine,
     int super.titleMaxLine = 1,
-    super.selectColor,
-    super.disableColor,
+    super.selectedColor,
+    super.disabledColor,
     super.customContentBuilder,
     super.spacing,
     bool? cardMode,
@@ -57,12 +57,12 @@ class TDRadio extends MyCheckbox {
         height: size,
         child: CustomPaint(
           painter: HollowCircle(
-            !enable
+            !enabled
                 ? (isSelected
                     ? ThemeColors.blue.shade200
                     : ThemeColors.neutral.shade300)
                 : isSelected
-                ? selectColor ?? ThemeColors.blue.shade600
+                ? selectedColor ?? ThemeColors.blue.shade600
                 : ThemeColors.neutral.shade300,
           ),
         ),
@@ -89,12 +89,12 @@ class TDRadio extends MyCheckbox {
         iconData,
         size: size,
         color:
-            !enable
+            !enabled
                 ? (isSelected
-                    ? (disableColor ?? ThemeColors.blue.shade200)
+                    ? (disabledColor ?? ThemeColors.blue.shade200)
                     : ThemeColors.neutral.shade300)
                 : isSelected
-                ? selectColor ?? ThemeColors.blue.shade600
+                ? selectedColor ?? ThemeColors.blue.shade600
                 : ThemeColors.neutral.shade300,
       );
     } else {
@@ -337,7 +337,7 @@ class TDRadioGroup extends MyCheckboxGroup {
          controller: null,
          checkedIds: selectId != null ? [selectId] : null,
          maxChecked: 1,
-         style: null,
+         shape: null,
        );
 
   /// In strict mode, users cannot uncheck a selection, they can only toggle the selection.

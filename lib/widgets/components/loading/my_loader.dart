@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../index.dart';
 
 class MyLoader extends StatelessWidget {
@@ -35,11 +36,9 @@ class MyLoader extends StatelessWidget {
   }
 
   Widget _contentWidget(BuildContext context) {
-    final MyLoaderIcon icon0 = icon ?? MyCircleLoader();
-    final Widget indicator = icon0.buildIcon(
-      context,
-      options?.copyWith(size: size) ?? MyLoaderOptions(size: size),
-    );
+    final options0 = options ?? MyLoaderOptions(size: size);
+    final MyLoaderIcon icon0 = icon ?? MyCircleLoader(options: options0);
+    final Widget indicator = icon0.buildIcon(context, options0);
 
     if (text == null) {
       return indicator;
@@ -67,7 +66,7 @@ class MyLoader extends StatelessWidget {
         };
   }
 
-  TextStyle _getStlye(BuildContext context) {
+  TextStyle _getStyle(BuildContext context) {
     return style ??
         switch (size) {
           MyLoaderSize.extraLarge => context.titleLarge,
@@ -82,7 +81,7 @@ class MyLoader extends StatelessWidget {
     Widget result = MyText(
       text,
       fontWeight: FontWeight.w400,
-      style: _getStlye(context).copyWith(
+      style: _getStyle(context).copyWith(
         color: textColor ?? context.colorScheme.foreground,
         fontWeight: FontWeight.w400,
       ),

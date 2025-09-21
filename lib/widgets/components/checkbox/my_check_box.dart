@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../../index.dart';
 
-enum MyCheckboxStyle { circle, square, check }
+enum MyCheckboxShape { circle, square, check }
+
+enum MyCheckboxStyle { stroke, fillScaleColor, fillScaleCheck, fillFade }
 
 enum MyContentDirection { left, right }
 
@@ -20,28 +22,30 @@ class MyCheckbox extends StatefulWidget {
     this.id,
     super.key,
     this.title,
-    this.subTitle,
+    this.titleColor,
     this.titleStyle,
-    this.subTitleStyle,
-    this.enable = true,
-    this.checked = false,
     this.titleMaxLine,
+    this.subTitle,
+    this.subTitleColor,
+    this.subTitleStyle,
     this.subTitleMaxLine = 1,
+    this.enabled = true,
+    this.checked = false,
     this.customIconBuilder,
     this.customContentBuilder,
     this.insetSpacing = 16,
-    this.style,
+    this.shape,
+    this.style = MyCheckboxStyle.fillScaleCheck,
     this.spacing,
+    this.duration,
     this.backgroundColor,
-    this.selectColor,
-    this.disableColor,
+    this.selectedColor,
+    this.disabledColor,
     this.size = MyCheckboxSize.small,
     this.cardMode = false,
     this.showDivider = true,
     this.contentDirection = MyContentDirection.right,
-    this.onCheckBoxChanged,
-    this.titleColor,
-    this.subTitleColor,
+    this.onChanged,
     this.checkBoxLeftSpace,
   });
 
@@ -50,51 +54,36 @@ class MyCheckbox extends StatefulWidget {
   final String? id;
 
   final String? title;
-
   final Color? titleColor;
-
   final TextStyle? titleStyle;
-
-  final String? subTitle;
-
-  final Color? subTitleColor;
-
-  final TextStyle? subTitleStyle;
-
-  final bool enable;
-
-  final bool checked;
-
   final int? titleMaxLine;
 
+  final String? subTitle;
+  final Color? subTitleColor;
+  final TextStyle? subTitleStyle;
   final int? subTitleMaxLine;
 
-  final double? insetSpacing;
-
-  final double? spacing;
-
-  final MyCheckboxStyle? style;
-
-  final MyCheckboxSize size;
-
+  final bool enabled;
+  final bool checked;
   final bool cardMode;
-
   final bool showDivider;
 
+  final double? insetSpacing;
+  final double? spacing;
+
+  final MyCheckboxShape? shape;
+  final MyCheckboxStyle style;
+  final MyCheckboxSize size;
+
   final MyContentDirection contentDirection;
-
-  final OnCheckValueChanged? onCheckBoxChanged;
-
+  final OnCheckValueChanged? onChanged;
   final IconBuilder? customIconBuilder;
-
   final ContentBuilder? customContentBuilder;
 
+  final Duration? duration;
   final Color? backgroundColor;
-
-  final Color? selectColor;
-
-  final Color? disableColor;
-
+  final Color? selectedColor;
+  final Color? disabledColor;
   final double? checkBoxLeftSpace;
 
   @override
@@ -107,36 +96,27 @@ class MyCheckbox extends StatefulWidget {
   ) {
     if (cardMode) return const NoWidget();
 
-    final size = 24.0;
-    final style =
-        this.style ?? groupState?.widget.style ?? MyCheckboxStyle.circle;
+    final size = this.size == MyCheckboxSize.small ? 18.0 : 24.0;
+    final shape =
+        this.shape ?? groupState?.widget.shape ?? MyCheckboxShape.circle;
 
     final unselectedColor =
-        style == MyCheckboxStyle.check
+        shape == MyCheckboxShape.check
             ? Colors.transparent
-            : ThemeColors.neutral.shade300;
+            : context.colorScheme.border;
 
-    return Icon(
-      style == MyCheckboxStyle.circle
-          ? isChecked
-              ? Icons.check_circle
-              : Icons.circle_outlined
-          : style == MyCheckboxStyle.square
-          ? isChecked
-              ? Icons.check_box_rounded
-              : Icons.check_box_outline_blank_rounded
-          : isChecked
-          ? Icons.check
-          : Icons.check,
+    return MyCheckboxIcon(
+      value: isChecked,
       size: size,
-      color:
-          !enable
-              ? (isChecked
-                  ? (disableColor ?? const Color.fromARGB(255, 17, 98, 141))
-                  : unselectedColor)
-              : isChecked
-              ? selectColor ?? ThemeColors.blue.shade600
-              : unselectedColor,
+      shape: shape,
+      style: style,
+      disabled: !enabled,
+      duration: duration,
+      colors: MyCheckboxColors.fromCheckedUncheckedDisabled(
+        checkedColor: selectedColor,
+        uncheckedColor: unselectedColor,
+        disabledColor: disabledColor ?? context.colorScheme.muted,
+      ),
     );
   }
 }
@@ -178,9 +158,10 @@ class MyCheckboxState extends State<MyCheckbox> {
 
   @override
   Widget build(BuildContext context) {
-    // Checks if it is contained in a TDCheckboxGroup. If so, the state is managed by the Group.
+    // Checks if it is contained in a MyCheckboxGroup. If so, the state is managed by the Group.
     final groupState = MyCheckboxGroupInherited.of(context)?.state;
     final id = widget.id;
+
     //  Only CheckBox with id set will be included in Group management
     if (groupState != null && id != null) {
       // The priority of obtaining the checked state of the CheckBox embedded in the CheckBoxGroup:
@@ -253,7 +234,7 @@ class MyCheckboxState extends State<MyCheckbox> {
 
                             style: context.bodyMedium?.copyWith(
                               color:
-                                  widget.enable
+                                  widget.enabled
                                       ? (widget.subTitleColor ??
                                           ThemeColors.neutral.shade700)
                                       : ThemeColors.neutral.shade600,
@@ -315,7 +296,7 @@ class MyCheckboxState extends State<MyCheckbox> {
                             style: (widget.subTitleStyle ?? context.bodyMedium)
                                 ?.copyWith(
                                   color:
-                                      widget.enable
+                                      widget.enabled
                                           ? (widget.subTitleColor ??
                                               ThemeColors.neutral.shade700)
                                           : ThemeColors.neutral.shade600,
@@ -362,13 +343,14 @@ class MyCheckboxState extends State<MyCheckbox> {
     return Container(
       clipBehavior: widget.cardMode ? Clip.hardEdge : Clip.none,
       decoration: BoxDecoration(
-        color: widget.backgroundColor ?? Colors.white,
+        color: widget.backgroundColor ?? context.colorScheme.background,
         border:
             widget.cardMode
                 ? checked
                     ? Border.all(
                       width: 1.5,
-                      color: widget.selectColor ?? ThemeColors.blue.shade600,
+                      color:
+                          widget.selectedColor ?? context.colorScheme.primary,
                     )
                     : Border.all(width: 1.5, color: Colors.transparent)
                 : null,
@@ -386,7 +368,8 @@ class MyCheckboxState extends State<MyCheckbox> {
               child: RadioCornerIcon(
                 length: 28,
                 radius: 4,
-                selectColor: widget.selectColor,
+                selectColor:
+                    widget.selectedColor ?? context.colorScheme.primary,
               ),
             ),
           ),
@@ -396,21 +379,21 @@ class MyCheckboxState extends State<MyCheckbox> {
   }
 
   void _pressState(bool pressed) {
-    if (!widget.enable) return;
+    if (!widget.enabled) return;
 
     _pressed = pressed;
     setState(() {});
   }
 
   void onValueChange(String? id, bool value, MyCheckboxGroupState? groupState) {
-    if (!widget.enable) return;
+    if (!widget.enabled) return;
 
     setState(() {
       checked = value;
       if (groupState != null && id != null) {
         groupState.toggle(id, checked);
       }
-      widget.onCheckBoxChanged?.call(checked);
+      widget.onChanged?.call(checked);
     });
   }
 
@@ -432,12 +415,12 @@ class MyCheckboxState extends State<MyCheckbox> {
           maxLines: widget.titleMaxLine ?? groupState?.widget.titleMaxLine,
           overflow: TextOverflow.ellipsis,
           textColor:
-              widget.enable
+              widget.enabled
                   ? (widget.titleColor ?? ThemeColors.neutral.shade900)
                   : ThemeColors.neutral.shade600,
           style: (widget.titleStyle ?? context.bodyLarge)?.copyWith(
             color:
-                widget.enable
+                widget.enabled
                     ? (widget.titleColor ?? ThemeColors.neutral.shade900)
                     : ThemeColors.neutral.shade600,
           ),

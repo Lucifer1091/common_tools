@@ -284,7 +284,7 @@ class TDTableState extends State<TDTable> {
       var checkBox = MyCheckbox(
         id: 'index:$index',
         checked: _checkedList[index],
-        enable: enable,
+        enabled: enable,
         customIconBuilder: (context, checked) {
           if (checked) {
             return Icon(
@@ -302,7 +302,7 @@ class TDTableState extends State<TDTable> {
                     : ThemeColors.neutral.shade700,
           );
         },
-        onCheckBoxChanged: (checked) {
+        onChanged: (checked) {
           setState(() {
             _checkedList[index] = checked;
             if (checked) {
@@ -340,7 +340,7 @@ class TDTableState extends State<TDTable> {
                 _hasChecked > 0 && _hasChecked < widget.data!.length;
             return getAllIcon(allCheck, halfSelected);
           },
-          onCheckBoxChanged: (checked) {
+          onChanged: (checked) {
             setState(() {
               _hasChecked = checked ? _totalSelectable : 0;
               for (var i = 0; i < widget.data!.length; i++) {

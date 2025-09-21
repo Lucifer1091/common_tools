@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-class Check extends StatelessWidget {
-  final double size;
-  final double fillPercentage;
-  final double strokeWidth;
-  final Color color;
-
-  const Check({
-    Key? key,
+class MyCheck extends StatelessWidget {
+  const MyCheck({
     required this.size,
     required this.fillPercentage,
     required this.strokeWidth,
     required this.color,
-  }) : super(key: key);
+    super.key,
+  });
+
+  final double size;
+  final double fillPercentage;
+  final double strokeWidth;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -28,15 +28,15 @@ class Check extends StatelessWidget {
 }
 
 class _CheckPainter extends CustomPainter {
-  final double fillPercentage;
-  final double strokeWidth;
-  final Color color;
-
   _CheckPainter({
     required this.fillPercentage,
     required this.strokeWidth,
     required this.color,
   });
+
+  final double fillPercentage;
+  final double strokeWidth;
+  final Color color;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -79,6 +79,8 @@ class _CheckPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _CheckPainter oldDelegate) {
-    return fillPercentage != oldDelegate.fillPercentage;
+    return color != oldDelegate.color ||
+        strokeWidth != oldDelegate.strokeWidth ||
+        fillPercentage != oldDelegate.fillPercentage;
   }
 }

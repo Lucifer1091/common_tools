@@ -64,7 +64,7 @@ class MyCheckboxGroup extends StatefulWidget {
     this.titleMaxLine,
     this.customContentBuilder,
     this.contentDirection,
-    this.style,
+    this.shape,
     this.spacing,
     this.customIconBuilder,
     this.onOverloadChecked,
@@ -109,7 +109,7 @@ class MyCheckboxGroup extends StatefulWidget {
   final double? spacing;
 
   /// CheckBox复选框样式：圆形或方形
-  final MyCheckboxStyle? style;
+  final MyCheckboxShape? shape;
 
   /// 文字相对icon的方位
   final MyContentDirection? contentDirection;
@@ -270,7 +270,7 @@ class MyCheckboxGroupContainer extends MyCheckboxGroup {
     bool cardMode = false,
     super.titleMaxLine, // item的行数
     int? maxSelected, // 最大勾选数
-    super.style, // 勾选样式
+    super.shape, // 勾选样式
     super.controller,
     super.customIconBuilder,
     super.customContentBuilder,
@@ -301,25 +301,25 @@ class MyCheckboxGroupContainer extends MyCheckboxGroup {
              }
            }
            var maxWordCount = 2;
-          //  final tips =
-          //      '[MyCheckboxGroupContainer] checkbox title please not exceed $maxWordCount words.\n'
-          //      '2tabs: 7words maximum\n'
-          //      '3tabs: 4words maximum\n'
-          //      '4tabs: 2words maximum';
-          //  if (directionalTdCheckboxes.length == 2) {
-          //    maxWordCount = 7;
-          //  }
-          //  if (directionalTdCheckboxes.length == 3) {
-          //    maxWordCount = 4;
-          //  }
-          //  if (directionalTdCheckboxes.length == 4) {
-          //    maxWordCount = 2;
-          //  }
-          //  for (final checkbox in directionalTdCheckboxes) {
-          //    if ((checkbox.title?.length ?? 0) > maxWordCount) {
-          //      throw FlutterError(tips);
-          //    }
-          //  }
+           //  final tips =
+           //      '[MyCheckboxGroupContainer] checkbox title please not exceed $maxWordCount words.\n'
+           //      '2tabs: 7words maximum\n'
+           //      '3tabs: 4words maximum\n'
+           //      '4tabs: 2words maximum';
+           //  if (directionalTdCheckboxes.length == 2) {
+           //    maxWordCount = 7;
+           //  }
+           //  if (directionalTdCheckboxes.length == 3) {
+           //    maxWordCount = 4;
+           //  }
+           //  if (directionalTdCheckboxes.length == 4) {
+           //    maxWordCount = 2;
+           //  }
+           //  for (final checkbox in directionalTdCheckboxes) {
+           //    if ((checkbox.title?.length ?? 0) > maxWordCount) {
+           //      throw FlutterError(tips);
+           //    }
+           //  }
          }
          // 卡片模式要求每个TDRadio必须设置cardMode属性为true，且不能有子Title（空间不够）
          if (cardMode) {

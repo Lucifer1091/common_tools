@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 import 'dart:ui' show PathMetric, Tangent;
 
@@ -5,18 +6,18 @@ import 'package:flutter/material.dart';
 
 import '../../../../index.dart';
 
-part 'basic_indicators.dart';
+part 'activity_indicator.dart';
 part 'ball_pulse_sync.dart';
 part 'ball_spin_fade.dart';
+part 'basic_indicators.dart';
 part 'cardio_indicator.dart';
 part 'clock_indicator.dart';
-part 'activity_indicator.dart';
-part 'wobble_indicator.dart';
 part 'pacman_indicator.dart';
-part 'triangle_indicator.dart';
 part 'square_indicator.dart';
 part 'text_loader.dart';
 part 'trefoil_indicator.dart';
+part 'triangle_indicator.dart';
+part 'wobble_indicator.dart';
 
 abstract class MyLoaderIcon {
   const MyLoaderIcon({this.options = const MyLoaderOptions()});

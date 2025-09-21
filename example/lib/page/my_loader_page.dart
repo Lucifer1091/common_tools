@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:common_tools/index.dart';
+import 'package:flutter/material.dart';
 
 import '../../base/example_widget.dart';
 
@@ -198,6 +198,7 @@ class _MyLoaderPageState extends State<MyLoaderPage> {
         return MyLoader(
           size: size,
           options: MyLoaderOptions(
+            size: size,
             strokeWidth: size == MyLoaderSize.small
                 ? 3
                 : size == MyLoaderSize.extraSmall

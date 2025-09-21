@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:common_tools/index.dart';
+import 'package:flutter/material.dart';
 
 import '../base/example_widget.dart';
 
@@ -61,7 +61,7 @@ class TDRadioPageState extends State<TDRadioPage> {
         ExampleItem(desc: '横向单选框-自定义颜色和字体尺寸', builder: _customColorAndFont),
         ExampleItem(
           desc: '横向单选框-自定义禁用字体颜色',
-          builder: _customDisableColorAndFont,
+          builder: _customdisabledColorAndFont,
         ),
         ExampleItem(desc: '横向单选框-自定义选框左侧间距', builder: _customRadioLeftSpace),
       ],
@@ -121,13 +121,13 @@ class TDRadioPageState extends State<TDRadioPage> {
             id: '0',
             title: 'Options禁用-已选',
             radioStyle: TDRadioStyle.circle,
-            enable: false,
+            enabled: false,
           ),
           TDRadio(
             id: '1',
             title: 'Options禁用-默认',
             radioStyle: TDRadioStyle.circle,
-            enable: false,
+            enabled: false,
           ),
         ],
       ),
@@ -317,7 +317,7 @@ class TDRadioPageState extends State<TDRadioPage> {
             title: '单选',
             titleMaxLine: 2,
             subTitleMaxLine: 2,
-            selectColor: ThemeColors.error.shade200,
+            selectedColor: ThemeColors.error.shade200,
           ),
           TDRadio(
             id: 'index:2',
@@ -325,7 +325,7 @@ class TDRadioPageState extends State<TDRadioPage> {
             titleMaxLine: 2,
             subTitleMaxLine: 2,
             subTitle: '单选Title多行单选Title多行单选Title多行单选Title多行单选Title多行单选Title多行',
-            selectColor: ThemeColors.error.shade200,
+            selectedColor: ThemeColors.error.shade200,
           ),
           TDRadio(
             id: 'index:3',
@@ -333,7 +333,7 @@ class TDRadioPageState extends State<TDRadioPage> {
             titleMaxLine: 2,
             subTitleMaxLine: 2,
             subTitle: '描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息',
-            selectColor: ThemeColors.error.shade200,
+            selectedColor: ThemeColors.error.shade200,
           ),
           TDRadio(
             id: 'index:4',
@@ -341,7 +341,7 @@ class TDRadioPageState extends State<TDRadioPage> {
             titleMaxLine: 2,
             subTitleMaxLine: 2,
             subTitle: '单选Title多行单选Title多行单选Title多行单选Title多行单选Title多行单选Title多行',
-            selectColor: ThemeColors.error.shade200,
+            selectedColor: ThemeColors.error.shade200,
             radioStyle: TDRadioStyle.hollowCircle,
           ),
           TDRadio(
@@ -352,7 +352,7 @@ class TDRadioPageState extends State<TDRadioPage> {
             subTitleMaxLine: 2,
             subTitle: '我是蓝色并且有灰色背景',
             subTitleColor: Colors.blue,
-            selectColor: ThemeColors.error.shade200,
+            selectedColor: ThemeColors.error.shade200,
             backgroundColor: ThemeColors.neutral.shade100,
           ),
           TDRadio(
@@ -361,7 +361,7 @@ class TDRadioPageState extends State<TDRadioPage> {
             titleMaxLine: 2,
             subTitleMaxLine: 2,
             subTitle: '描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息',
-            selectColor: ThemeColors.error.shade200,
+            selectedColor: ThemeColors.error.shade200,
             cardMode: true,
           ),
         ],
@@ -369,7 +369,7 @@ class TDRadioPageState extends State<TDRadioPage> {
     );
   }
 
-  Widget _customDisableColorAndFont(BuildContext context) {
+  Widget _customdisabledColorAndFont(BuildContext context) {
     return TDRadioGroup(
       contentDirection: MyContentDirection.right,
       selectId: '0',
@@ -380,15 +380,15 @@ class TDRadioPageState extends State<TDRadioPage> {
             title: 'Options禁用-已选',
             subTitle: '描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息',
             radioStyle: TDRadioStyle.circle,
-            enable: false,
-            disableColor: ThemeColors.error.shade50,
+            enabled: false,
+            disabledColor: ThemeColors.error.shade50,
           ),
           TDRadio(
             id: '1',
             title: 'Options禁用-默认',
             radioStyle: TDRadioStyle.circle,
-            enable: false,
-            disableColor: ThemeColors.error.shade50,
+            enabled: false,
+            disabledColor: ThemeColors.error.shade50,
           ),
         ],
       ),
@@ -402,7 +402,7 @@ class TDRadioPageState extends State<TDRadioPage> {
       subTitle: '描述信息',
       radioStyle: TDRadioStyle.circle,
       checkBoxLeftSpace: 0,
-      disableColor: ThemeColors.error.shade50,
+      disabledColor: ThemeColors.error.shade50,
     );
   }
 }
