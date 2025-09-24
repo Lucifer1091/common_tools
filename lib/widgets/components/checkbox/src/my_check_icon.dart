@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 
 import '../../../../index.dart';
 
-
 part 'my_check_icon_base.dart';
 
 ///
@@ -90,28 +89,30 @@ class _MSHCheckboxState extends State<MyCheckboxIcon>
       context: context,
       disabled: widget.disabled,
       style: widget.style,
+      shape: widget.shape,
     );
 
     return Stack(
       alignment: Alignment.center,
       children: [
-        SizedBox(
-          height: widget.size + _strokeWidth,
-          width: widget.size + _strokeWidth,
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: radius,
-              shape:
-                  widget.shape == MyCheckboxShape.circle
-                      ? BoxShape.circle
-                      : BoxShape.rectangle,
-              border: Border.all(
-                color: widget.colors.borderColor(state),
-                width: _strokeWidth,
+        if (widget.shape != MyCheckboxShape.check)
+          SizedBox(
+            height: widget.size + _strokeWidth,
+            width: widget.size + _strokeWidth,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: radius,
+                shape:
+                    widget.shape == MyCheckboxShape.circle
+                        ? BoxShape.circle
+                        : BoxShape.rectangle,
+                border: Border.all(
+                  color: widget.colors.borderColor(state),
+                  width: _strokeWidth,
+                ),
               ),
             ),
           ),
-        ),
         ConstrainedBox(
           constraints: BoxConstraints(
             minHeight: widget.size,

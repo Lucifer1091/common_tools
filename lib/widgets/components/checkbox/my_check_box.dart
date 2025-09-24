@@ -96,7 +96,16 @@ class MyCheckbox extends StatefulWidget {
   ) {
     if (cardMode) return const NoWidget();
 
-    final size = this.size == MyCheckboxSize.small ? 18.0 : 24.0;
+    final isCheck = this.shape == MyCheckboxShape.check;
+    final size =
+        this.size == MyCheckboxSize.small
+            ? isCheck
+                ? 15.0
+                : 18.0
+            : isCheck
+            ? 20.0
+            : 24.0;
+
     final shape =
         this.shape ?? groupState?.widget.shape ?? MyCheckboxShape.circle;
 
@@ -231,13 +240,12 @@ class MyCheckboxState extends State<MyCheckbox> {
                             widget.subTitle ?? '',
                             maxLines: widget.subTitleMaxLine,
                             overflow: TextOverflow.ellipsis,
-
-                            style: context.bodyMedium?.copyWith(
+                            style: context.bodyMedium.copyWith(
                               color:
                                   widget.enabled
                                       ? (widget.subTitleColor ??
-                                          ThemeColors.neutral.shade700)
-                                      : ThemeColors.neutral.shade600,
+                                          context.colorScheme.mutedForeground)
+                                      : context.colorScheme.muted,
                             ),
                           ),
                         ),
@@ -294,12 +302,14 @@ class MyCheckboxState extends State<MyCheckbox> {
                             maxLines: widget.subTitleMaxLine,
                             overflow: TextOverflow.ellipsis,
                             style: (widget.subTitleStyle ?? context.bodyMedium)
-                                ?.copyWith(
+                                .copyWith(
                                   color:
                                       widget.enabled
                                           ? (widget.subTitleColor ??
-                                              ThemeColors.neutral.shade700)
-                                          : ThemeColors.neutral.shade600,
+                                              context
+                                                  .colorScheme
+                                                  .mutedForeground)
+                                          : context.colorScheme.muted,
                                 ),
                           ),
                         ),
@@ -414,15 +424,11 @@ class MyCheckboxState extends State<MyCheckbox> {
           title,
           maxLines: widget.titleMaxLine ?? groupState?.widget.titleMaxLine,
           overflow: TextOverflow.ellipsis,
-          textColor:
-              widget.enabled
-                  ? (widget.titleColor ?? ThemeColors.neutral.shade900)
-                  : ThemeColors.neutral.shade600,
-          style: (widget.titleStyle ?? context.bodyLarge)?.copyWith(
+          style: (widget.titleStyle ?? context.bodyLarge).copyWith(
             color:
                 widget.enabled
-                    ? (widget.titleColor ?? ThemeColors.neutral.shade900)
-                    : ThemeColors.neutral.shade600,
+                    ? (widget.titleColor ?? context.colorScheme.foreground)
+                    : context.colorScheme.muted,
           ),
         );
       }

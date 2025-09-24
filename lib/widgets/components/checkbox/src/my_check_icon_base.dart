@@ -23,11 +23,19 @@ class _MyCheckboxIconBase extends StatelessWidget {
   final MyCheckboxShape shape;
   final BorderRadius? borderRadius;
 
-  MyCheckboxIconState get state =>
-      MyCheckboxIconState(context: context, disabled: disabled, style: style);
+  MyCheckboxIconState get state => MyCheckboxIconState(
+    context: context,
+    disabled: disabled,
+    style: style,
+    shape: shape,
+  );
 
   @override
   Widget build(BuildContext context) {
+    if (shape == MyCheckboxShape.check) {
+      return _CheckMarkCheckbox(parent: this);
+    }
+
     switch (style) {
       case MyCheckboxStyle.stroke:
         return _StrokeCheckbox(parent: this);
@@ -47,6 +55,30 @@ class _MyCheckboxIconBase extends StatelessWidget {
   Color tintColor() => colors.tintColor(state);
 
   double get checkStroke => size / 12;
+}
+
+class _CheckMarkCheckbox extends StatelessWidget {
+  const _CheckMarkCheckbox({required this.parent});
+
+  final _MyCheckboxIconBase parent;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: parent.animation,
+      builder: (context, child) {
+        return MyCheck(
+          color: parent.checkColor(),
+          size: parent.size,
+          strokeWidth: parent.checkStroke,
+          fillPercentage:
+              parent.animation
+                  .drive(CurveTween(curve: Curves.easeInOutCubic))
+                  .value,
+        );
+      },
+    );
+  }
 }
 
 class _FillFadeCheckbox extends StatelessWidget {
@@ -295,7 +327,8 @@ class MyCheckboxColors {
                   ? disable(state)
                   : (checkedColor ?? _defaultToggleableColor(state)),
       checkColor: (state) {
-        if (state.style == MyCheckboxStyle.stroke) {
+        if (state.style == MyCheckboxStyle.stroke ||
+            state.shape == MyCheckboxShape.check) {
           return state.disabled
               ? disable(state)
               : (checkedColor ?? _defaultToggleableColor(state));
@@ -348,9 +381,11 @@ class MyCheckboxIconState {
     required this.context,
     required this.disabled,
     required this.style,
+    required this.shape,
   });
 
   final BuildContext context;
   final bool disabled;
   final MyCheckboxStyle style;
+  final MyCheckboxShape shape;
 }

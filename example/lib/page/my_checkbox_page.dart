@@ -37,6 +37,61 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
           title: 'Component Types',
           children: [
             ExampleItem(
+              desc: 'Check',
+              builder: (context) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    MyCheckbox(
+                      checked: value,
+                      style: MyCheckboxStyle.stroke,
+                      size: MyCheckboxSize.large,
+                      shape: MyCheckboxShape.check,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          this.value = value ?? false;
+                        });
+                      },
+                    ),
+                    MyCheckbox(
+                      checked: value,
+                      style: MyCheckboxStyle.fillScaleColor,
+                      size: MyCheckboxSize.large,
+                      shape: MyCheckboxShape.check,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          this.value = value ?? false;
+                        });
+                      },
+                    ),
+                    MyCheckbox(
+                      checked: value,
+                      style: MyCheckboxStyle.fillScaleCheck,
+                      size: MyCheckboxSize.large,
+                      shape: MyCheckboxShape.check,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          this.value = value ?? false;
+                        });
+                      },
+                    ),
+                    MyCheckbox(
+                      checked: value,
+                      style: MyCheckboxStyle.fillFade,
+                      size: MyCheckboxSize.large,
+                      shape: MyCheckboxShape.check,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          this.value = value ?? false;
+                        });
+                      },
+                    ),
+                  ],
+                );
+              },
+            ),
+
+            ExampleItem(
               desc: 'Circle',
               builder: (context) {
                 return Row(
