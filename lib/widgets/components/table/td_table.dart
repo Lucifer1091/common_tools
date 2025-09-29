@@ -285,40 +285,40 @@ class TDTableState extends State<TDTable> {
         id: 'index:$index',
         checked: _checkedList[index],
         enabled: enable,
-        customIconBuilder: (context, checked) {
-          if (checked) {
-            return Icon(
-              Icons.check_box_rounded,
-              size: 16,
-              color: ThemeColors.blue.shade600,
-            );
-          }
-          return Icon(
-            Icons.check_box_outline_blank_rounded,
-            size: 16,
-            color:
-                enable
-                    ? ThemeColors.neutral.shade900
-                    : ThemeColors.neutral.shade700,
-          );
-        },
+        // customIconBuilder: (context, checked) {
+        //   if (checked) {
+        //     return Icon(
+        //       Icons.check_box_rounded,
+        //       size: 16,
+        //       color: ThemeColors.blue.shade600,
+        //     );
+        //   }
+        //   return Icon(
+        //     Icons.check_box_outline_blank_rounded,
+        //     size: 16,
+        //     color:
+        //         enable
+        //             ? ThemeColors.neutral.shade900
+        //             : ThemeColors.neutral.shade700,
+        //   );
+        // },
         onChanged: (checked) {
           setState(() {
-            _checkedList[index] = checked;
-            if (checked) {
-              _hasChecked += 1;
-            } else {
-              _hasChecked -= 1;
-            }
-            final selectList = <Json>[];
-            for (var i = 0; i < _checkedList.length; i++) {
-              if (_checkedList[i]) {
-                selectList.add(widget.data![i]);
-              }
-            }
-            widget.onSelect?.call(selectList);
-            widget.onRowSelect?.call(index, checked);
-            print('!!!!::::${_hasChecked}');
+            // _checkedList[index] = checked;
+            // if (checked) {
+            //   _hasChecked += 1;
+            // } else {
+            //   _hasChecked -= 1;
+            // }
+            // final selectList = <Json>[];
+            // for (var i = 0; i < _checkedList.length; i++) {
+            //   if (_checkedList[i]) {
+            //     selectList.add(widget.data![i]);
+            //   }
+            // }
+            // widget.onSelect?.call(selectList);
+            // widget.onRowSelect?.call(index, checked);
+            // print('!!!!::::${_hasChecked}');
           });
         },
       );
@@ -341,17 +341,17 @@ class TDTableState extends State<TDTable> {
             return getAllIcon(allCheck, halfSelected);
           },
           onChanged: (checked) {
-            setState(() {
-              _hasChecked = checked ? _totalSelectable : 0;
-              for (var i = 0; i < widget.data!.length; i++) {
-                _checkedList[i] = checked;
-                // Unselect rows where selectable == false
-                if (_selectableCol.selectable!(i, widget.data![i])) {
-                  _checkedList[i] = checked;
-                }
-              }
-              widget.onSelect?.call(checked ? widget.data : []);
-            });
+            // setState(() {
+            //   _hasChecked = checked ? _totalSelectable : 0;
+            //   for (var i = 0; i < widget.data!.length; i++) {
+            //     _checkedList[i] = checked;
+            //     // Unselect rows where selectable == false
+            //     if (_selectableCol.selectable!(i, widget.data![i])) {
+            //       _checkedList[i] = checked;
+            //     }
+            //   }
+            //   widget.onSelect?.call(checked ? widget.data : []);
+            // });
           },
         );
       }

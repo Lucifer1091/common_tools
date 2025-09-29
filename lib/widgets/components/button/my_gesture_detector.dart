@@ -55,7 +55,7 @@ enum MyHoverStrategy {
 /// [MouseRegion] will be used instead.
 class MyGestureDetector extends StatelessWidget {
   const MyGestureDetector({
-    required this.child,
+     this.child,
     super.key,
     this.cursor = SystemMouseCursors.click,
     this.hoverStrategies,
@@ -93,7 +93,7 @@ class MyGestureDetector extends StatelessWidget {
   final MyHoverStrategies? hoverStrategies;
   final ValueChanged<bool>? onHover;
   final MouseCursor cursor;
-  final Widget child;
+  final Widget? child;
   final VoidCallback? onTap;
   final ValueChanged<TapDownDetails>? onTapDown;
   final ValueChanged<TapUpDetails>? onTapUp;

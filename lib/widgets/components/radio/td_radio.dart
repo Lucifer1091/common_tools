@@ -38,7 +38,7 @@ class TDRadio extends MyCheckbox {
   Widget buildDefaultIcon(
     BuildContext context,
     MyCheckboxGroupState? groupState,
-    bool isSelected,
+    bool? isSelected,
   ) {
     if (cardMode) return const NoWidget();
 
@@ -51,6 +51,8 @@ class TDRadio extends MyCheckbox {
 
     final size = 24.0;
 
+    final selected = isSelected ?? false;
+
     if (style == TDRadioStyle.hollowCircle) {
       return SizedBox(
         width: size,
@@ -58,10 +60,10 @@ class TDRadio extends MyCheckbox {
         child: CustomPaint(
           painter: HollowCircle(
             !enabled
-                ? (isSelected
+                ? (selected
                     ? ThemeColors.blue.shade200
                     : ThemeColors.neutral.shade300)
-                : isSelected
+                : selected
                 ? selectedColor ?? ThemeColors.blue.shade600
                 : ThemeColors.neutral.shade300,
           ),
@@ -73,15 +75,15 @@ class TDRadio extends MyCheckbox {
 
     switch (style) {
       case TDRadioStyle.check:
-        iconData = isSelected ? Icons.check : null;
+        iconData = selected ? Icons.check : null;
       case TDRadioStyle.square:
         iconData =
-            isSelected
+            selected
                 ? Icons.check_box_rounded
                 : Icons.check_box_outline_blank_rounded;
       case TDRadioStyle.circle:
       case TDRadioStyle.hollowCircle:
-        iconData = isSelected ? Icons.check_circle : Icons.circle_outlined;
+        iconData = selected ? Icons.check_circle : Icons.circle_outlined;
     }
 
     if (iconData != null) {
@@ -90,10 +92,10 @@ class TDRadio extends MyCheckbox {
         size: size,
         color:
             !enabled
-                ? (isSelected
+                ? (selected
                     ? (disabledColor ?? ThemeColors.blue.shade200)
                     : ThemeColors.neutral.shade300)
-                : isSelected
+                : selected
                 ? selectedColor ?? ThemeColors.blue.shade600
                 : ThemeColors.neutral.shade300,
       );
@@ -359,11 +361,11 @@ class TDRadioGroup extends MyCheckboxGroup {
 
 class TDRadioGroupState extends MyCheckboxGroupState {
   @override
-  bool toggle(String id, bool check, [bool notify = false]) {
+  bool toggle(String id, bool? check, [bool notify = false]) {
     checkBoxStates.forEach((key, value) {
       checkBoxStates[key] = false;
     });
-    return super.toggle(id, check, true);
+    return super.toggle(id, check ?? false, true);
   }
 }
 

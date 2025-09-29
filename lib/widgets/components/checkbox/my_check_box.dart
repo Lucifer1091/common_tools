@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../index.dart';
 
-enum MyCheckboxShape { circle, square, check }
+part 'my_check_icon.dart';
 
-enum MyCheckboxStyle { stroke, fillScaleColor, fillScaleCheck, fillFade }
+enum MyCheckboxShape { circle, square, check }
 
 enum MyContentDirection { left, right }
 
 enum MyCheckboxSize { large, small }
 
-typedef IconBuilder = Widget? Function(BuildContext context, bool checked);
+typedef IconBuilder = Widget? Function(BuildContext context, bool? checked);
 
 typedef ContentBuilder =
-    Widget Function(BuildContext context, bool checked, String? content);
-
-typedef OnCheckValueChanged = void Function(bool selected);
+    Widget Function(BuildContext context, bool? checked, String? content);
 
 class MyCheckbox extends StatefulWidget {
   const MyCheckbox({
     this.id,
     super.key,
+    this.checked,
     this.title,
     this.titleColor,
     this.titleStyle,
@@ -30,12 +30,11 @@ class MyCheckbox extends StatefulWidget {
     this.subTitleStyle,
     this.subTitleMaxLine = 1,
     this.enabled = true,
-    this.checked = false,
+    this.tristate = false,
     this.customIconBuilder,
     this.customContentBuilder,
     this.insetSpacing = 16,
     this.shape,
-    this.style = MyCheckboxStyle.fillScaleCheck,
     this.spacing,
     this.duration,
     this.backgroundColor,
@@ -64,7 +63,8 @@ class MyCheckbox extends StatefulWidget {
   final int? subTitleMaxLine;
 
   final bool enabled;
-  final bool checked;
+  final bool? checked;
+  final bool tristate;
   final bool cardMode;
   final bool showDivider;
 
@@ -72,11 +72,10 @@ class MyCheckbox extends StatefulWidget {
   final double? spacing;
 
   final MyCheckboxShape? shape;
-  final MyCheckboxStyle style;
   final MyCheckboxSize size;
 
   final MyContentDirection contentDirection;
-  final OnCheckValueChanged? onChanged;
+  final ValueChanged<bool?>? onChanged;
   final IconBuilder? customIconBuilder;
   final ContentBuilder? customContentBuilder;
 
@@ -92,11 +91,15 @@ class MyCheckbox extends StatefulWidget {
   Widget buildDefaultIcon(
     BuildContext context,
     MyCheckboxGroupState? groupState,
-    bool isChecked,
+    bool? isChecked,
   ) {
     if (cardMode) return const NoWidget();
 
-    final isCheck = this.shape == MyCheckboxShape.check;
+    final shape =
+        this.shape ?? groupState?.widget.shape ?? MyCheckboxShape.circle;
+
+    final isCheck = shape == MyCheckboxShape.check;
+
     final size =
         this.size == MyCheckboxSize.small
             ? isCheck
@@ -106,32 +109,20 @@ class MyCheckbox extends StatefulWidget {
             ? 20.0
             : 24.0;
 
-    final shape =
-        this.shape ?? groupState?.widget.shape ?? MyCheckboxShape.circle;
-
-    final unselectedColor =
-        shape == MyCheckboxShape.check
-            ? Colors.transparent
-            : context.colorScheme.border;
-
-    return MyCheckboxIcon(
-      value: isChecked,
+    return _MyCheckboxIcon(
+      value: tristate ? isChecked : isChecked ?? false,
       size: size,
       shape: shape,
-      style: style,
-      disabled: !enabled,
-      duration: duration,
-      colors: MyCheckboxColors.fromCheckedUncheckedDisabled(
-        checkedColor: selectedColor,
-        uncheckedColor: unselectedColor,
-        disabledColor: disabledColor ?? context.colorScheme.muted,
-      ),
+      enabled: enabled,
+      fillColor: selectedColor,
+      checkColor: selectedColor,
+      disabledColor: disabledColor,
     );
   }
 }
 
 class MyCheckboxState extends State<MyCheckbox> {
-  bool checked = false;
+  bool? checked = false;
   bool _pressed = false;
 
   /// Cannot be unchecked. In strict mode of radioButton, you can only toggle but not uncheck.
@@ -154,9 +145,8 @@ class MyCheckboxState extends State<MyCheckbox> {
   }
 
   EdgeInsets _getPadding(MyCheckboxSize size) {
-    if (widget.cardMode) {
-      return const EdgeInsets.only(top: 16);
-    }
+    if (widget.cardMode) return const EdgeInsets.only(top: 16);
+
     switch (size) {
       case MyCheckboxSize.small:
         return const EdgeInsets.only(top: 12, bottom: 12);
@@ -200,6 +190,7 @@ class MyCheckboxState extends State<MyCheckbox> {
         final spacing = _spacing(groupState);
         final contentDirection =
             groupState?.widget.contentDirection ?? widget.contentDirection;
+
         switch (contentDirection) {
           case MyContentDirection.left:
             current = Stack(
@@ -221,7 +212,7 @@ class MyCheckboxState extends State<MyCheckbox> {
                               child: content,
                             ),
                           ),
-                          SizedBox(width: spacing),
+                          Gap(spacing),
                           Padding(
                             padding: const EdgeInsets.only(right: 16),
                             child: icon,
@@ -245,7 +236,8 @@ class MyCheckboxState extends State<MyCheckbox> {
                                   widget.enabled
                                       ? (widget.subTitleColor ??
                                           context.colorScheme.mutedForeground)
-                                      : context.colorScheme.muted,
+                                      : context.colorScheme.mutedForeground
+                                          .withValues(alpha: 0.8),
                             ),
                           ),
                         ),
@@ -294,7 +286,7 @@ class MyCheckboxState extends State<MyCheckbox> {
                         child: Padding(
                           padding: EdgeInsets.only(
                             top: widget.cardMode ? 4 : 0,
-                            left: widget.cardMode ? 16 : 48,
+                            left: widget.cardMode ? 16 : 44,
                             right: widget.insetSpacing ?? 16,
                           ),
                           child: MyText(
@@ -309,7 +301,8 @@ class MyCheckboxState extends State<MyCheckbox> {
                                               context
                                                   .colorScheme
                                                   .mutedForeground)
-                                          : context.colorScheme.muted,
+                                          : context.colorScheme.mutedForeground
+                                              .withValues(alpha: 0.8),
                                 ),
                           ),
                         ),
@@ -327,12 +320,12 @@ class MyCheckboxState extends State<MyCheckbox> {
       }
     }
 
-    if (!(canNotCancel && checked)) {
+    if (!(canNotCancel && (checked ?? false))) {
       if (_pressed) {
         current = Opacity(opacity: 0.68, child: current);
       }
 
-      current = GestureDetector(
+      current = MyGestureDetector(
         behavior: HitTestBehavior.translucent,
         onTapDown: (detail) {
           _pressState(true);
@@ -344,7 +337,7 @@ class MyCheckboxState extends State<MyCheckbox> {
           _pressState(false);
         },
         onTap: () {
-          onValueChange(id, !checked, groupState);
+          onValueChange(id, !(checked ?? false), groupState);
         },
         child: current,
       );
@@ -356,7 +349,7 @@ class MyCheckboxState extends State<MyCheckbox> {
         color: widget.backgroundColor ?? context.colorScheme.background,
         border:
             widget.cardMode
-                ? checked
+                ? checked ?? false
                     ? Border.all(
                       width: 1.5,
                       color:
@@ -364,17 +357,16 @@ class MyCheckboxState extends State<MyCheckbox> {
                     )
                     : Border.all(width: 1.5, color: Colors.transparent)
                 : null,
-        borderRadius:
-            widget.cardMode ? const BorderRadius.all(Radius.circular(6)) : null,
+        borderRadius: widget.cardMode ? MyBorderRadius.medium : null,
       ),
       child: Stack(
         children: [
-          current ?? const NoWidget(),
+          if (current != null) current,
           Positioned(
             top: 0,
             left: 0,
             child: Visibility(
-              visible: widget.cardMode && checked,
+              visible: widget.cardMode && (checked ?? false),
               child: RadioCornerIcon(
                 length: 28,
                 radius: 4,
@@ -395,7 +387,11 @@ class MyCheckboxState extends State<MyCheckbox> {
     setState(() {});
   }
 
-  void onValueChange(String? id, bool value, MyCheckboxGroupState? groupState) {
+  void onValueChange(
+    String? id,
+    bool? value,
+    MyCheckboxGroupState? groupState,
+  ) {
     if (!widget.enabled) return;
 
     setState(() {
@@ -410,7 +406,7 @@ class MyCheckboxState extends State<MyCheckbox> {
   Widget? _buildContent(
     BuildContext context,
     MyCheckboxGroupState? groupState,
-    bool checked,
+    bool? checked,
   ) {
     final title = widget.title;
     final customContent =
@@ -428,7 +424,7 @@ class MyCheckboxState extends State<MyCheckbox> {
             color:
                 widget.enabled
                     ? (widget.titleColor ?? context.colorScheme.foreground)
-                    : context.colorScheme.muted,
+                    : context.colorScheme.mutedForeground,
           ),
         );
       }
@@ -440,7 +436,7 @@ class MyCheckboxState extends State<MyCheckbox> {
   Widget? _buildCheckboxIcon(
     BuildContext context,
     MyCheckboxGroupState? groupState,
-    bool isCheck,
+    bool? isCheck,
   ) {
     final iconBuilder =
         widget.customIconBuilder ?? groupState?.widget.customIconBuilder;
@@ -475,13 +471,17 @@ class RadioCornerIcon extends StatelessWidget {
             painter: RadioCorner(
               length: length,
               radius: radius,
-              fillColor: selectColor ?? ThemeColors.blue.shade600,
+              fillColor: selectColor ?? context.colorScheme.primary,
             ),
           ),
-          const Positioned(
+          Positioned(
             top: 3,
             left: 2,
-            child: Icon(Icons.check_rounded, size: 14, color: Colors.white),
+            child: Icon(
+              Icons.check_rounded,
+              size: 14,
+              color: context.colorScheme.foreground,
+            ),
           ),
         ],
       ),
@@ -508,10 +508,12 @@ class RadioCorner extends CustomPainter {
           ..strokeWidth = 1
           ..color = fillColor
           ..style = PaintingStyle.fill;
+
     final rect = Rect.fromCircle(
       center: Offset(radius, radius),
       radius: radius,
     );
+
     final pi = 3.1415;
 
     final path =

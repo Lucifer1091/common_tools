@@ -4,13 +4,9 @@ class MyRadius {
   MyRadius._();
 
   static const double small = 3;
-
   static const double medium = 6;
-
   static const double large = 9;
-
   static const double extraLarge = 12;
-
   static const double round = 9999;
 }
 
@@ -25,11 +21,11 @@ class MyRadi {
 }
 
 class MyBorderRadius {
-  MyBorderRadius._();
+  const MyBorderRadius._();
 
-  static final small = BorderRadius.circular(MyRadius.small);
-  static final medium = BorderRadius.circular(MyRadius.medium);
-  static final large = BorderRadius.circular(MyRadius.large);
-  static final extraLarge = BorderRadius.circular(MyRadius.extraLarge);
-  static final round = BorderRadius.circular(MyRadius.round);
+  static const small = BorderRadius.all(MyRadi.small);
+  static const medium = BorderRadius.all(MyRadi.medium);
+  static const large = BorderRadius.all(MyRadi.large);
+  static const extraLarge = BorderRadius.all(MyRadi.extraLarge);
+  static const round = BorderRadius.all(MyRadi.round);
 }

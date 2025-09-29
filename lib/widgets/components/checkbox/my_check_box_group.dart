@@ -15,14 +15,32 @@ class MyCheckboxGroupController {
     _state?._reverseAll();
   }
 
-  void toggle(String id, bool check) {
+  void toggle(String id, bool? check) {
     _state?.toggle(id, check, true);
+  }
+
+  bool? state(int total) {
+    final list = allChecked();
+
+    var length = list.length - (checked('index:0') ? 1 : 0);
+    var allCheck = total - 1 == length;
+
+    if (list.isEmpty) return false;
+
+    if (allCheck) return true;
+
+    return null;
   }
 
   List<String> allChecked() {
     return MapScrewdriver(
-      _state?.checkBoxStates ?? <String, bool>{},
-    ).where((k, v) => v).keys.toList();
+      _state?.checkBoxStates ?? <String, bool?>{},
+    ).where((k, v) => v ?? false).keys.toList();
+  }
+
+  bool hasUnchecked(int total) {
+    final list = allChecked();
+    return list.length != total;
   }
 
   bool checked(String id) {
@@ -125,20 +143,20 @@ class MyCheckboxGroup extends StatefulWidget {
 
 class MyCheckboxGroupState extends State<MyCheckboxGroup> {
   ///
-  /// 管理所有子CheckBox的状态
+  /// Manage the status of all child CheckBoxes
   ///
-  Map<String, bool> checkBoxStates = {};
+  Map<String, bool?> checkBoxStates = {};
 
   @override
   void initState() {
     super.initState();
-    // 如果有controller的话，把state设置给controller
+    // If there is a controller, set the state to the controller
     widget.controller?._state = this;
 
     _syncCheckState(widget.checkedIds);
   }
 
-  /// 把group中配置的默认选中id，同步到状态中
+  /// Synchronize the default selected id configured in the group to the status
   void _syncCheckState(List<String>? checkIds) {
     checkBoxStates.clear();
     checkIds?.forEach((element) {
@@ -157,41 +175,43 @@ class MyCheckboxGroupState extends State<MyCheckboxGroup> {
   }
 
   ///
-  /// 根据id获取CheckBox的勾选状态
+  /// Get the check status of a CheckBox based on its ID
   ///
   ///
-  bool getCheckBoxStateById(String id, bool checked) {
+  bool? getCheckBoxStateById(String id, bool? checked) {
     if (checkBoxStates[id] == null) {
-      // checkBox本身的状态
+      //The state of the checkBox itself
       checkBoxStates[id] = checked;
     }
-    return checkBoxStates[id]!;
+    return checkBoxStates[id];
   }
 
-  /// 勾选单个CheckBox
-  bool toggle(String id, bool check, [bool notify = false]) {
-    // 检查是否超过用户设置的最大可勾选数
-    if (widget.maxChecked != null && check) {
-      if (checkBoxStates.count((k, v) => v) >= widget.maxChecked!) {
+  /// Check a single Checkbox
+  bool toggle(String id, bool? check, [bool notify = false]) {
+    // Check whether the maximum number of check boxes set by the user is exceeded
+    if (widget.maxChecked != null && (check ?? false)) {
+      if (checkBoxStates.count((k, v) => v ?? false) >= widget.maxChecked!) {
         widget.onOverloadChecked?.call();
         return false;
       }
     }
+
     checkBoxStates[id] = check;
-    if (notify) {
-      setState(() {});
-    }
+
+    if (notify) setState(() {});
+
     _notifyChange();
+
     return true;
   }
 
-  /// 操作所有CheckBox
+  /// Operate all CheckBox
   void toggleAll(bool check, [bool notify = true]) {
     var isChanged = false;
     checkBoxStates.forEachCanBreak((k, v) {
       if (check) {
         if (!toggle(k, check)) {
-          // 勾选失败，退出循环
+          // Check failed, exit the loop
           return true;
         }
       } else {
@@ -210,7 +230,7 @@ class MyCheckboxGroupState extends State<MyCheckboxGroup> {
   /// 反选
   void _reverseAll() {
     final reverseValue = checkBoxStates.map(
-      (key, value) => MapEntry(key, !value),
+      (key, value) => MapEntry(key, !(value ?? false)),
     );
     checkBoxStates
       ..forEach((key, value) {
@@ -220,6 +240,7 @@ class MyCheckboxGroupState extends State<MyCheckboxGroup> {
         final check = reverseValue[k] ?? false;
         toggle(k, check);
       });
+
     setState(() {});
     _notifyChange();
   }
@@ -228,7 +249,9 @@ class MyCheckboxGroupState extends State<MyCheckboxGroup> {
     final change = widget.onChangeGroup;
     if (change != null) {
       final checkedIds =
-          MapScrewdriver(checkBoxStates).where((k, v) => v).keys.toList();
+          MapScrewdriver(
+            checkBoxStates,
+          ).where((k, v) => v ?? false).keys.toList();
       change.call(checkedIds);
     }
   }

@@ -17,7 +17,7 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
 
   MyCheckboxGroupController? controller;
 
-  bool value = false;
+  bool? value;
 
   @override
   void initState() {
@@ -44,150 +44,34 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
                   children: [
                     MyCheckbox(
                       checked: value,
-                      style: MyCheckboxStyle.stroke,
                       size: MyCheckboxSize.large,
                       shape: MyCheckboxShape.check,
+                      tristate: true,
                       onChanged: (bool? value) {
                         setState(() {
-                          this.value = value ?? false;
+                          this.value = value == true ? null : value;
                         });
                       },
                     ),
                     MyCheckbox(
                       checked: value,
-                      style: MyCheckboxStyle.fillScaleColor,
                       size: MyCheckboxSize.large,
-                      shape: MyCheckboxShape.check,
+                      shape: MyCheckboxShape.circle,
+                      tristate: true,
                       onChanged: (bool? value) {
                         setState(() {
-                          this.value = value ?? false;
+                          this.value = value;
                         });
                       },
                     ),
                     MyCheckbox(
                       checked: value,
-                      style: MyCheckboxStyle.fillScaleCheck,
-                      size: MyCheckboxSize.large,
-                      shape: MyCheckboxShape.check,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          this.value = value ?? false;
-                        });
-                      },
-                    ),
-                    MyCheckbox(
-                      checked: value,
-                      style: MyCheckboxStyle.fillFade,
-                      size: MyCheckboxSize.large,
-                      shape: MyCheckboxShape.check,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          this.value = value ?? false;
-                        });
-                      },
-                    ),
-                  ],
-                );
-              },
-            ),
-
-            ExampleItem(
-              desc: 'Circle',
-              builder: (context) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    MyCheckbox(
-                      checked: value,
-                      style: MyCheckboxStyle.stroke,
-                      size: MyCheckboxSize.large,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          this.value = value ?? false;
-                        });
-                      },
-                    ),
-                    MyCheckbox(
-                      checked: value,
-                      style: MyCheckboxStyle.fillScaleColor,
-                      size: MyCheckboxSize.large,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          this.value = value ?? false;
-                        });
-                      },
-                    ),
-                    MyCheckbox(
-                      checked: value,
-                      style: MyCheckboxStyle.fillScaleCheck,
-                      size: MyCheckboxSize.large,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          this.value = value ?? false;
-                        });
-                      },
-                    ),
-                    MyCheckbox(
-                      checked: value,
-                      style: MyCheckboxStyle.fillFade,
-                      size: MyCheckboxSize.large,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          this.value = value ?? false;
-                        });
-                      },
-                    ),
-                  ],
-                );
-              },
-            ),
-            ExampleItem(
-              desc: 'Square',
-              builder: (context) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    MyCheckbox(
-                      checked: value,
-                      style: MyCheckboxStyle.stroke,
                       size: MyCheckboxSize.large,
                       shape: MyCheckboxShape.square,
+                      tristate: true,
                       onChanged: (bool? value) {
                         setState(() {
-                          this.value = value ?? false;
-                        });
-                      },
-                    ),
-                    MyCheckbox(
-                      checked: value,
-                      style: MyCheckboxStyle.fillScaleColor,
-                      size: MyCheckboxSize.large,
-                      shape: MyCheckboxShape.square,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          this.value = value ?? false;
-                        });
-                      },
-                    ),
-                    MyCheckbox(
-                      checked: value,
-                      style: MyCheckboxStyle.fillScaleCheck,
-                      size: MyCheckboxSize.large,
-                      shape: MyCheckboxShape.square,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          this.value = value ?? false;
-                        });
-                      },
-                    ),
-                    MyCheckbox(
-                      checked: value,
-                      style: MyCheckboxStyle.fillFade,
-                      size: MyCheckboxSize.large,
-                      shape: MyCheckboxShape.square,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          this.value = value ?? false;
+                          this.value = value;
                         });
                       },
                     ),
@@ -320,7 +204,7 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
-          var title = 'Multiple-select ';
+          var title = 'Multiple-select';
           if (index == 0) {
             title = 'Select all';
             return SizedBox(
@@ -328,17 +212,10 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
               child: MyCheckbox(
                 id: 'index:$index',
                 title: title,
-                customIconBuilder: (context, checked) {
-                  var length =
-                      controller!.allChecked().length -
-                      (controller!.checked('index:0') ? 1 : 0);
-                  var allCheck = itemCount - 1 == length;
-                  var halfSelected =
-                      controller != null && !allCheck && length > 0;
-                  return getAllIcon(allCheck, halfSelected);
-                },
+                tristate: true,
+                checked: controller?.state(itemCount),
                 onChanged: (checked) {
-                  if (checked) {
+                  if (checked ?? false) {
                     controller?.toggleAll(true);
                   } else {
                     controller?.toggleAll(false);
@@ -357,14 +234,8 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
                     : null,
                 subTitleMaxLine: 2,
                 onChanged: (checked) {
-                  var length =
-                      controller!.allChecked().length -
-                      (controller!.checked('index:0') ? 1 : 0);
-                  var allCheck = itemCount - 1 == length;
-                  var halfSelected =
-                      controller != null && !allCheck && length > 0;
-                  controller!.toggle('index:0', allCheck);
-                  getAllIcon(allCheck, halfSelected);
+                  controller!.toggle('index:0', controller?.state(itemCount));
+                  setState(() {});
                 },
               ),
             );
@@ -598,7 +469,6 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
             subTitle: 'description text',
             shape: MyCheckboxShape.circle,
           ),
-
           MyCheckbox(
             id: 'index:0',
             title: 'Multiple-select ',
