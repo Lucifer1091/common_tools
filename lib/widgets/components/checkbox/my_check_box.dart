@@ -122,7 +122,7 @@ class MyCheckbox extends StatefulWidget {
 }
 
 class MyCheckboxState extends State<MyCheckbox> {
-  bool? checked = false;
+  bool? checked;
   bool _pressed = false;
 
   /// Cannot be unchecked. In strict mode of radioButton, you can only toggle but not uncheck.
@@ -137,6 +137,7 @@ class MyCheckboxState extends State<MyCheckbox> {
   @override
   void didUpdateWidget(MyCheckbox oldWidget) {
     checked = widget.checked;
+    if (mounted) setState(() {});
     super.didUpdateWidget(oldWidget);
   }
 
@@ -321,9 +322,7 @@ class MyCheckboxState extends State<MyCheckbox> {
     }
 
     if (!(canNotCancel && (checked ?? false))) {
-      if (_pressed) {
-        current = Opacity(opacity: 0.68, child: current);
-      }
+      if (_pressed) current = Opacity(opacity: 0.68, child: current);
 
       current = MyGestureDetector(
         behavior: HitTestBehavior.translucent,
@@ -480,7 +479,7 @@ class RadioCornerIcon extends StatelessWidget {
             child: Icon(
               Icons.check_rounded,
               size: 14,
-              color: context.colorScheme.foreground,
+              color: context.colorScheme.primaryForeground,
             ),
           ),
         ],

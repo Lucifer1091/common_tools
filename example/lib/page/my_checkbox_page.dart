@@ -15,7 +15,7 @@ class MyCheckboxPage extends StatefulWidget {
 class MyCheckboxPageState extends State<MyCheckboxPage> {
   List<String>? checkIds = ['index:1', 'index:2', 'index:3'];
 
-  MyCheckboxGroupController? controller;
+  late MyCheckboxGroupController controller;
 
   bool? value;
 
@@ -207,37 +207,30 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
           var title = 'Multiple-select';
           if (index == 0) {
             title = 'Select all';
-            return SizedBox(
-              height: 56,
-              child: MyCheckbox(
-                id: 'index:$index',
-                title: title,
-                tristate: true,
-                checked: controller?.state(itemCount),
-                onChanged: (checked) {
-                  if (checked ?? false) {
-                    controller?.toggleAll(true);
-                  } else {
-                    controller?.toggleAll(false);
-                  }
-                },
-              ),
+            return MyCheckbox(
+              id: 'index:$index',
+              title: title,
+              tristate: true,
+              checked: controller.state(itemCount),
+              onChanged: (checked) {
+                if (checked ?? false) {
+                  controller.toggleAll(true);
+                } else {
+                  controller.toggleAll(false);
+                }
+              },
             );
           } else {
-            return SizedBox(
-              height: index == itemCount - 1 ? null : 56,
-              child: MyCheckbox(
-                id: 'index:$index',
-                title: title,
-                subTitle: index == itemCount - 1
-                    ? 'Description information description information description information description information description information description information description information description information'
-                    : null,
-                subTitleMaxLine: 2,
-                onChanged: (checked) {
-                  controller!.toggle('index:0', controller?.state(itemCount));
-                  setState(() {});
-                },
-              ),
+            return MyCheckbox(
+              id: 'index:$index',
+              title: title,
+              subTitle: index == itemCount - 1
+                  ? 'Description information description information description information description information description information description information description information description information'
+                  : null,
+              subTitleMaxLine: 2,
+              onChanged: (checked) {
+                controller.toggle('index:0', controller.state(itemCount));
+              },
             );
           }
         },

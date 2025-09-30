@@ -22,8 +22,8 @@ class MyCheckboxGroupController {
   bool? state(int total) {
     final list = allChecked();
 
-    var length = list.length - (checked('index:0') ? 1 : 0);
-    var allCheck = total - 1 == length;
+    final length = list.length - (checked('index:0') ? 1 : 0);
+    final allCheck = total - 1 == length;
 
     if (list.isEmpty) return false;
 
@@ -50,17 +50,17 @@ class MyCheckboxGroupController {
 }
 
 ///
-/// CheckBox组，可以通过控制器控制组内的多个CheckBox的选择状态
+/// CheckBox group, you can use a controller to control the selection state of multiple CheckBoxes within the group.
 ///
-/// child的属性可以是任意包含TDCheckBox的容器组件，例如：
+/// The child property can be any container component that contains a TDCheckBox. For example:
 /// ```dart
-/// TDCheckboxGroup(
+/// MyCheckboxGroup(
 ///   child: Row(
 ///     children: [
-///       TDCheckBox(),
+///       MyCheckBox(),
 ///       Column(
 ///         children: [
-///           TDCheckBox()
+///           MyCheckBox()
 ///           ...
 ///         ]
 ///       )
@@ -89,12 +89,12 @@ class MyCheckboxGroup extends StatefulWidget {
   });
 
   ///
-  /// 可以是任意包含TDCheckBox的容器，比如：
+  /// It can be any container containing MyCheckbox, for example:
   /// ```dart
   /// Row(
   ///   children: [
-  ///     TDCheckBox(),
-  ///     TDCheckBox(),
+  ///     MyCheckBox(),
+  ///     MyCheckBox(),
   ///     ...
   ///   ]
   /// )
@@ -102,37 +102,26 @@ class MyCheckboxGroup extends StatefulWidget {
   ///
   final Widget child;
 
-  /// 状态变化监听器
   final OnGroupChange? onChangeGroup;
 
-  /// 可以通过控制器操作勾选状态
   final MyCheckboxGroupController? controller;
 
-  /// 最多可以勾选多少
   final int? maxChecked;
 
-  /// 勾选的CheckBox id列表
   final List<String>? checkedIds;
 
-  /// 超过最大可勾选的个数
   final VoidCallback? onOverloadChecked;
 
-  /// CheckBoxTitle的行数
   final int? titleMaxLine;
 
-  /// CheckBox完全自定义内容
   final ContentBuilder? customContentBuilder;
 
-  /// CheckBoxicon和文字的距离
   final double? spacing;
 
-  /// CheckBox复选框样式：圆形或方形
   final MyCheckboxShape? shape;
 
-  /// 文字相对icon的方位
   final MyContentDirection? contentDirection;
 
-  /// 自定义选择icon的样式
   final IconBuilder? customIconBuilder;
 
   @override
@@ -179,10 +168,8 @@ class MyCheckboxGroupState extends State<MyCheckboxGroup> {
   ///
   ///
   bool? getCheckBoxStateById(String id, bool? checked) {
-    if (checkBoxStates[id] == null) {
-      //The state of the checkBox itself
-      checkBoxStates[id] = checked;
-    }
+    if (!checkBoxStates.containsKey(id)) checkBoxStates[id] = checked;
+
     return checkBoxStates[id];
   }
 
@@ -205,15 +192,13 @@ class MyCheckboxGroupState extends State<MyCheckboxGroup> {
     return true;
   }
 
-  /// Operate all CheckBox
+  /// Toggle all CheckBox
   void toggleAll(bool check, [bool notify = true]) {
     var isChanged = false;
     checkBoxStates.forEachCanBreak((k, v) {
       if (check) {
-        if (!toggle(k, check)) {
-          // Check failed, exit the loop
-          return true;
-        }
+        // Check failed, exit the loop
+        if (!toggle(k, check)) return true;
       } else {
         toggle(k, check);
       }
@@ -227,7 +212,7 @@ class MyCheckboxGroupState extends State<MyCheckboxGroup> {
     }
   }
 
-  /// 反选
+  /// Invert selection
   void _reverseAll() {
     final reverseValue = checkBoxStates.map(
       (key, value) => MapEntry(key, !(value ?? false)),
@@ -269,7 +254,7 @@ class MyCheckboxGroupInherited extends InheritedWidget {
   final MyCheckboxGroupState state;
 
   ///
-  /// 获取树上的Group节点
+  /// Get the Group node on the tree
   ///
   static MyCheckboxGroupInherited? of(BuildContext context) {
     return context
@@ -285,30 +270,32 @@ class MyCheckboxGroupInherited extends InheritedWidget {
 class MyCheckboxGroupContainer extends MyCheckboxGroup {
   MyCheckboxGroupContainer({
     super.key,
-    Widget? child, // 使用child 则请勿设置direction
-    Axis? direction, // direction 对 directionalTdRadios 起作用
+    Widget? child, // If you use child, do not set direction
+    Axis? direction, // direction works on directional MyRadios
     List<MyCheckbox>? directionalTdCheckboxes,
-    List<String>? selectIds, // 默认选择项的id组
-    bool? passThrough, // 非通栏单选样式 用于使用child 或 direction == Axis.vertical 场景
+    List<String>? selectIds, // Default selection id group
+    bool?
+    passThrough, // Non-full-bar radio selection style for use with child or direction == Axis.vertical scenarios
     bool cardMode = false,
-    super.titleMaxLine, // item的行数
-    int? maxSelected, // 最大勾选数
-    super.shape, // 勾选样式
+    super.titleMaxLine,
+    int? maxSelected,
+    // Maximum number of checkboxes
+    super.shape,
     super.controller,
     super.customIconBuilder,
     super.customContentBuilder,
-    super.spacing, // icon和文字距离
+    super.spacing, // The distance between icon and text
     super.contentDirection,
     OnCheckBoxGroupChange? onCheckBoxGroupChange,
     super.onOverloadChecked,
   }) : assert(() {
-         // 使用direction属性则必须配合directionalTdCheckboxes，child字段无效
+         // If you use the direction attribute, you must use directional MyCheckboxes, and the child field is invalid.
          if (direction != null && directionalTdCheckboxes == null) {
            throw FlutterError(
              '[MyCheckboxGroupContainer] direction and directionalTdCheckboxes must set at the same time',
            );
          }
-         // 未使用direction则必须设置child
+         // If direction is not used, child must be set
          if (direction == null && child == null) {
            throw FlutterError(
              '[MyCheckboxGroupContainer] direction means use child as the exact one, but child is null',
@@ -323,32 +310,12 @@ class MyCheckboxGroupContainer extends MyCheckboxGroup {
                );
              }
            }
-           var maxWordCount = 2;
-           //  final tips =
-           //      '[MyCheckboxGroupContainer] checkbox title please not exceed $maxWordCount words.\n'
-           //      '2tabs: 7words maximum\n'
-           //      '3tabs: 4words maximum\n'
-           //      '4tabs: 2words maximum';
-           //  if (directionalTdCheckboxes.length == 2) {
-           //    maxWordCount = 7;
-           //  }
-           //  if (directionalTdCheckboxes.length == 3) {
-           //    maxWordCount = 4;
-           //  }
-           //  if (directionalTdCheckboxes.length == 4) {
-           //    maxWordCount = 2;
-           //  }
-           //  for (final checkbox in directionalTdCheckboxes) {
-           //    if ((checkbox.title?.length ?? 0) > maxWordCount) {
-           //      throw FlutterError(tips);
-           //    }
-           //  }
          }
-         // 卡片模式要求每个TDRadio必须设置cardMode属性为true，且不能有子Title（空间不够）
+         // Card mode requires that each MyRadio must set the cardMode property to true and cannot have a subtitle (insufficient space)
          if (cardMode) {
            assert(direction != null && directionalTdCheckboxes != null, '');
            for (final element in directionalTdCheckboxes!) {
-             // if use cardMode at TDRadioGroup, then every TDRadio should
+             // if use cardMode at MyRadioGroup, then every MyRadio should
              // set it's own carMode to true.
              if (!element.cardMode) {
                throw FlutterError(

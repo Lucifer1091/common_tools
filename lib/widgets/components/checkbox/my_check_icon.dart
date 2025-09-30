@@ -25,7 +25,9 @@ class _MyCheckboxIcon extends StatelessWidget {
             ? (value ?? true
                 ? fillColor ?? context.colorScheme.primary
                 : Colors.transparent)
-            : disabled;
+            : value ?? false
+            ? disabled
+            : Colors.transparent;
     final border =
         enabled
             ? (value ?? true)
@@ -72,7 +74,7 @@ class _MyCheckboxIcon extends StatelessWidget {
           null => LucideIcons.minus,
         },
         color: check,
-        size: shape == MyCheckboxShape.check ? null : size * 0.55,
+        size: shape == MyCheckboxShape.check ? null : size * 0.6,
       ),
     );
   }
