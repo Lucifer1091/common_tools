@@ -1,4 +1,4 @@
-export 'disabled.dart';
+export 'my_disabled.dart';
 export 'dismiss_keyboard.dart';
 export 'double_press_back_widget.dart';
 export 'drag_component.dart';

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../index.dart';
@@ -39,13 +40,14 @@ class MyCheckbox extends StatefulWidget {
     this.duration,
     this.backgroundColor,
     this.selectedColor,
-    this.disabledColor,
+    this.checkColor,
     this.size = MyCheckboxSize.small,
     this.cardMode = false,
     this.showDivider = true,
     this.contentDirection = MyContentDirection.right,
     this.onChanged,
     this.checkBoxLeftSpace,
+    this.focus = const MyFocusableParams(),
   });
 
   /// When [MyCheckbox] is embedded in [MyCheckboxGroup], this value needs to
@@ -82,8 +84,9 @@ class MyCheckbox extends StatefulWidget {
   final Duration? duration;
   final Color? backgroundColor;
   final Color? selectedColor;
-  final Color? disabledColor;
+  final Color? checkColor;
   final double? checkBoxLeftSpace;
+  final MyFocusableParams focus;
 
   @override
   State createState() => MyCheckboxState();
@@ -98,32 +101,24 @@ class MyCheckbox extends StatefulWidget {
     final shape =
         this.shape ?? groupState?.widget.shape ?? MyCheckboxShape.circle;
 
-    final isCheck = shape == MyCheckboxShape.check;
-
-    final size =
-        this.size == MyCheckboxSize.small
-            ? isCheck
-                ? 15.0
-                : 18.0
-            : isCheck
-            ? 20.0
-            : 24.0;
+    final size = this.size == MyCheckboxSize.small ? 20.0 : 24.0;
 
     return _MyCheckboxIcon(
       value: tristate ? isChecked : isChecked ?? false,
       size: size,
       shape: shape,
-      enabled: enabled,
       fillColor: selectedColor,
-      checkColor: selectedColor,
-      disabledColor: disabledColor,
+      checkColor: checkColor,
     );
   }
 }
 
 class MyCheckboxState extends State<MyCheckbox> {
+  FocusNode? _focusNode;
+
+  FocusNode get focusNode => widget.focus.focusNode ?? _focusNode!;
+
   bool? checked;
-  bool _pressed = false;
 
   /// Cannot be unchecked. In strict mode of radioButton, you can only toggle but not uncheck.
   bool canNotCancel = false;
@@ -132,28 +127,19 @@ class MyCheckboxState extends State<MyCheckbox> {
   void initState() {
     checked = widget.checked;
     super.initState();
+    if (widget.focus.focusNode == null) _focusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _focusNode?.dispose();
+    super.dispose();
   }
 
   @override
   void didUpdateWidget(MyCheckbox oldWidget) {
     checked = widget.checked;
-    if (mounted) setState(() {});
     super.didUpdateWidget(oldWidget);
-  }
-
-  double _spacing(MyCheckboxGroupState? groupState) {
-    return widget.spacing ?? groupState?.widget.spacing ?? 8;
-  }
-
-  EdgeInsets _getPadding(MyCheckboxSize size) {
-    if (widget.cardMode) return const EdgeInsets.only(top: 16);
-
-    switch (size) {
-      case MyCheckboxSize.small:
-        return const EdgeInsets.only(top: 12, bottom: 12);
-      case MyCheckboxSize.large:
-        return const EdgeInsets.only(top: 16, bottom: 16);
-    }
   }
 
   @override
@@ -172,7 +158,46 @@ class MyCheckboxState extends State<MyCheckbox> {
       checked = groupState.getCheckBoxStateById(id, checked);
     }
 
-    final icon = _buildCheckboxIcon(context, groupState, checked);
+    final shape =
+        widget.shape ?? groupState?.widget.shape ?? MyCheckboxShape.circle;
+
+    final check = _buildCheckboxIcon(context, groupState, checked);
+
+    Widget buildFocus(Widget child, [BorderRadius? radius]) {
+      return Semantics(
+        checked: widget.checked,
+        focusable: widget.enabled,
+        enabled: widget.enabled,
+        child: CallbackShortcuts(
+          bindings: {
+            const SingleActivator(LogicalKeyboardKey.enter): () {
+              onValueChange(id, !(checked ?? false), groupState);
+            },
+          },
+          child:
+              widget.enabled
+                  ? MyFocusable(
+                    params: widget.focus.copyWith(focusNode: focusNode),
+                    builder: (_, focused, child) {
+                      final radius0 =
+                          shape == MyCheckboxShape.circle
+                              ? MyBorderRadius.round
+                              : MyBorderRadius.small;
+
+                      return MyFocusOutline(
+                        focused: focused,
+                        radius: radius ?? radius0,
+                        child: child,
+                      );
+                    },
+                    child: child,
+                  )
+                  : child,
+        ),
+      );
+    }
+
+    final icon = check != null && !widget.cardMode ? buildFocus(check) : check;
 
     final content = _buildContent(context, groupState, checked);
 
@@ -234,11 +259,8 @@ class MyCheckboxState extends State<MyCheckbox> {
                             overflow: TextOverflow.ellipsis,
                             style: context.bodyMedium.copyWith(
                               color:
-                                  widget.enabled
-                                      ? (widget.subTitleColor ??
-                                          context.colorScheme.mutedForeground)
-                                      : context.colorScheme.mutedForeground
-                                          .withValues(alpha: 0.8),
+                                  widget.subTitleColor ??
+                                  context.colorScheme.mutedForeground,
                             ),
                           ),
                         ),
@@ -287,7 +309,7 @@ class MyCheckboxState extends State<MyCheckbox> {
                         child: Padding(
                           padding: EdgeInsets.only(
                             top: widget.cardMode ? 4 : 0,
-                            left: widget.cardMode ? 16 : 44,
+                            left: widget.cardMode ? 16 : 48,
                             right: widget.insetSpacing ?? 16,
                           ),
                           child: MyText(
@@ -297,13 +319,8 @@ class MyCheckboxState extends State<MyCheckbox> {
                             style: (widget.subTitleStyle ?? context.bodyMedium)
                                 .copyWith(
                                   color:
-                                      widget.enabled
-                                          ? (widget.subTitleColor ??
-                                              context
-                                                  .colorScheme
-                                                  .mutedForeground)
-                                          : context.colorScheme.mutedForeground
-                                              .withValues(alpha: 0.8),
+                                      widget.subTitleColor ??
+                                      context.colorScheme.mutedForeground,
                                 ),
                           ),
                         ),
@@ -322,27 +339,37 @@ class MyCheckboxState extends State<MyCheckbox> {
     }
 
     if (!(canNotCancel && (checked ?? false))) {
-      if (_pressed) current = Opacity(opacity: 0.68, child: current);
-
-      current = MyGestureDetector(
-        behavior: HitTestBehavior.translucent,
-        onTapDown: (detail) {
-          _pressState(true);
-        },
-        onTapUp: (detail) {
-          _pressState(false);
-        },
-        onTapCancel: () {
-          _pressState(false);
-        },
-        onTap: () {
-          onValueChange(id, !(checked ?? false), groupState);
-        },
-        child: current,
+      current = MyDisabled(
+        showForbiddenCursor: true,
+        disabled: !widget.enabled,
+        child: MyGestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () => onValueChange(id, !(checked ?? false), groupState),
+          child: current,
+        ),
       );
     }
 
-    return Container(
+    final child =
+        widget.cardMode && (checked ?? false)
+            ? Stack(
+              children: [
+                if (current != null) current,
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  child: RadioCornerIcon(
+                    length: 30,
+                    radius: 4,
+                    selectColor:
+                        widget.selectedColor ?? context.colorScheme.primary,
+                  ),
+                ),
+              ],
+            )
+            : current;
+
+    final container = Container(
       clipBehavior: widget.cardMode ? Clip.hardEdge : Clip.none,
       decoration: BoxDecoration(
         color: widget.backgroundColor ?? context.colorScheme.background,
@@ -358,32 +385,12 @@ class MyCheckboxState extends State<MyCheckbox> {
                 : null,
         borderRadius: widget.cardMode ? MyBorderRadius.medium : null,
       ),
-      child: Stack(
-        children: [
-          if (current != null) current,
-          Positioned(
-            top: 0,
-            left: 0,
-            child: Visibility(
-              visible: widget.cardMode && (checked ?? false),
-              child: RadioCornerIcon(
-                length: 28,
-                radius: 4,
-                selectColor:
-                    widget.selectedColor ?? context.colorScheme.primary,
-              ),
-            ),
-          ),
-        ],
-      ),
+      child: child,
     );
-  }
 
-  void _pressState(bool pressed) {
-    if (!widget.enabled) return;
-
-    _pressed = pressed;
-    setState(() {});
+    return widget.cardMode
+        ? buildFocus(container, MyBorderRadius.medium)
+        : container;
   }
 
   void onValueChange(
@@ -398,8 +405,11 @@ class MyCheckboxState extends State<MyCheckbox> {
       if (groupState != null && id != null) {
         groupState.toggle(id, checked);
       }
-      widget.onChanged?.call(checked);
     });
+
+    widget.onChanged?.call(checked);
+
+    if (!focusNode.hasFocus) FocusScope.of(context).unfocus();
   }
 
   Widget? _buildContent(
@@ -444,6 +454,21 @@ class MyCheckboxState extends State<MyCheckbox> {
     }
     return widget.buildDefaultIcon(context, groupState, isCheck);
   }
+
+  double _spacing(MyCheckboxGroupState? groupState) {
+    return widget.spacing ?? groupState?.widget.spacing ?? 12;
+  }
+
+  EdgeInsets _getPadding(MyCheckboxSize size) {
+    if (widget.cardMode) return const EdgeInsets.only(top: 16);
+
+    switch (size) {
+      case MyCheckboxSize.small:
+        return const EdgeInsets.only(top: 12, bottom: 12);
+      case MyCheckboxSize.large:
+        return const EdgeInsets.only(top: 16, bottom: 16);
+    }
+  }
 }
 
 class RadioCornerIcon extends StatelessWidget {
@@ -465,19 +490,25 @@ class RadioCornerIcon extends StatelessWidget {
       height: length,
       child: Stack(
         alignment: Alignment.topLeft,
+        clipBehavior: Clip.none,
         children: [
-          CustomPaint(
-            painter: RadioCorner(
-              length: length,
-              radius: radius,
-              fillColor: selectColor ?? context.colorScheme.primary,
+          Positioned(
+            top: -1,
+            left: -1,
+            child: CustomPaint(
+              size: Size(length, length),
+              painter: RadioCorner(
+                length: length,
+                radius: radius,
+                fillColor: selectColor ?? context.colorScheme.primary,
+              ),
             ),
           ),
           Positioned(
             top: 3,
             left: 2,
             child: Icon(
-              Icons.check_rounded,
+              LucideIcons.check,
               size: 14,
               color: context.colorScheme.primaryForeground,
             ),

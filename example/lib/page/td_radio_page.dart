@@ -381,14 +381,14 @@ class TDRadioPageState extends State<TDRadioPage> {
             subTitle: '描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息',
             radioStyle: TDRadioStyle.circle,
             enabled: false,
-            disabledColor: ThemeColors.error.shade50,
+            // disabledColor: ThemeColors.error.shade50,
           ),
           TDRadio(
             id: '1',
             title: 'Options禁用-默认',
             radioStyle: TDRadioStyle.circle,
             enabled: false,
-            disabledColor: ThemeColors.error.shade50,
+            // disabledColor: ThemeColors.error.shade50,
           ),
         ],
       ),
@@ -402,7 +402,7 @@ class TDRadioPageState extends State<TDRadioPage> {
       subTitle: '描述信息',
       radioStyle: TDRadioStyle.circle,
       checkBoxLeftSpace: 0,
-      disabledColor: ThemeColors.error.shade50,
+      // disabledColor: ThemeColors.error.shade50,
     );
   }
 }

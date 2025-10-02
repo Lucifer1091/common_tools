@@ -17,7 +17,7 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
 
   late MyCheckboxGroupController controller;
 
-  bool? value;
+  // bool? value;
 
   @override
   void initState() {
@@ -36,49 +36,49 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
         ExampleModule(
           title: 'Component Types',
           children: [
-            ExampleItem(
-              desc: 'Check',
-              builder: (context) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    MyCheckbox(
-                      checked: value,
-                      size: MyCheckboxSize.large,
-                      shape: MyCheckboxShape.check,
-                      tristate: true,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          this.value = value == true ? null : value;
-                        });
-                      },
-                    ),
-                    MyCheckbox(
-                      checked: value,
-                      size: MyCheckboxSize.large,
-                      shape: MyCheckboxShape.circle,
-                      tristate: true,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          this.value = value;
-                        });
-                      },
-                    ),
-                    MyCheckbox(
-                      checked: value,
-                      size: MyCheckboxSize.large,
-                      shape: MyCheckboxShape.square,
-                      tristate: true,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          this.value = value;
-                        });
-                      },
-                    ),
-                  ],
-                );
-              },
-            ),
+            // ExampleItem(
+            //   desc: 'Check',
+            //   builder: (context) {
+            //     return Row(
+            //       mainAxisAlignment: MainAxisAlignment.spaceAround,
+            //       children: [
+            //         MyCheckbox(
+            //           checked: value,
+            //           size: MyCheckboxSize.large,
+            //           shape: MyCheckboxShape.check,
+            //           tristate: true,
+            //           onChanged: (bool? value) {
+            //             setState(() {
+            //               this.value = value;
+            //             });
+            //           },
+            //         ),
+            //         MyCheckbox(
+            //           checked: value,
+            //           size: MyCheckboxSize.large,
+            //           shape: MyCheckboxShape.circle,
+            //           tristate: true,
+            //           onChanged: (bool? value) {
+            //             setState(() {
+            //               this.value = value;
+            //             });
+            //           },
+            //         ),
+            //         MyCheckbox(
+            //           checked: value,
+            //           size: MyCheckboxSize.large,
+            //           shape: MyCheckboxShape.square,
+            //           tristate: true,
+            //           onChanged: (bool? value) {
+            //             setState(() {
+            //               this.value = value;
+            //             });
+            //           },
+            //         ),
+            //       ],
+            //     );
+            //   },
+            // ),
             ExampleItem(
               desc: 'The vertical multi-select box now selects the result.',
               builder: _verticalCheckbox,
@@ -124,11 +124,6 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
           ],
         ),
       ],
-      test: [
-        ExampleItem(desc: 'Custom Icon', builder: _customIconBuildshape),
-        ExampleItem(desc: 'Custom color', builder: _customColor),
-        ExampleItem(desc: 'Custom font size', builder: _customFont),
-      ],
     );
   }
 
@@ -167,7 +162,7 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
     return MyCheckboxGroupContainer(
       selectIds: const ['1'],
       direction: Axis.horizontal,
-      directionalTdCheckboxes: const [
+      directionalMyCheckboxes: const [
         MyCheckbox(
           id: '0',
           title: 'Multiple-select Title',
@@ -195,6 +190,20 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
 
   Widget _checkAllSelected(BuildContext context) {
     const itemCount = 4;
+
+    bool? state(int total) {
+      final list = controller.allChecked();
+
+      final length = list.length - (controller.checked('index:0') ? 1 : 0);
+      final allCheck = total - 1 == length;
+
+      if (list.isEmpty) return false;
+
+      if (allCheck) return true;
+
+      return null;
+    }
+
     return MyCheckboxGroupContainer(
       selectIds: checkIds,
       passThrough: false,
@@ -211,7 +220,7 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
               id: 'index:$index',
               title: title,
               tristate: true,
-              checked: controller.state(itemCount),
+              checked: state(itemCount),
               onChanged: (checked) {
                 if (checked ?? false) {
                   controller.toggleAll(true);
@@ -229,7 +238,7 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
                   : null,
               subTitleMaxLine: 2,
               onChanged: (checked) {
-                controller.toggle('index:0', controller.state(itemCount));
+                controller.toggle('index:0', state(itemCount));
               },
             );
           }
@@ -270,7 +279,7 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
           selectIds: const ['index:0'],
           child: const MyCheckbox(id: 'index:0', title: 'Multiple-select '),
         ),
-        const SizedBox(height: 17),
+        const Gap(17),
         MyCheckboxGroupContainer(
           shape: MyCheckboxShape.square,
           selectIds: const ['index:0'],
@@ -311,6 +320,9 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
             id: 'index:$index',
             title: title,
             size: MyCheckboxSize.large,
+            backgroundColor: context.colorScheme.secondary.withValues(
+              alpha: 0.5,
+            ),
           );
         },
         itemCount: 4,
@@ -323,7 +335,7 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
       selectIds: const ['index:1'],
       cardMode: true,
       direction: Axis.vertical,
-      directionalTdCheckboxes: const [
+      directionalMyCheckboxes: const [
         MyCheckbox(
           id: 'index:0',
           title: 'Multiple-select ',
@@ -365,127 +377,11 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
       selectIds: const ['index:1'],
       cardMode: true,
       direction: Axis.horizontal,
-      directionalTdCheckboxes: const [
+      directionalMyCheckboxes: const [
         MyCheckbox(id: 'index:0', title: 'Multiple-select ', cardMode: true),
         MyCheckbox(id: 'index:1', title: 'Multiple-select ', cardMode: true),
         MyCheckbox(id: 'index:2', title: 'Multiple-select ', cardMode: true),
       ],
-    );
-  }
-
-  Widget _customIconBuildshape(BuildContext context) {
-    return MyCheckboxGroupContainer(
-      selectIds: const ['index:1'],
-      cardMode: true,
-      direction: Axis.vertical,
-      directionalTdCheckboxes: [
-        MyCheckbox(
-          id: 'index:0',
-          title: 'Multiple-select ',
-          subTitle: 'Description information',
-          titleMaxLine: 2,
-          subTitleMaxLine: 2,
-          cardMode: true,
-          customIconBuilder: (context, checked) {
-            return const Icon(Icons.dashboard_rounded, size: 12);
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget _customColor(BuildContext context) {
-    return MyCheckboxGroupContainer(
-      contentDirection: MyContentDirection.right,
-      selectIds: const ['0'],
-      child: Column(
-        children: [
-          MyCheckbox(
-            selectedColor: ThemeColors.error.shade200,
-            disabledColor: ThemeColors.error.shade50,
-            id: '0',
-            title: 'Options Disable-Selected',
-            shape: MyCheckboxShape.circle,
-            enabled: false,
-          ),
-          MyCheckbox(
-            selectedColor: ThemeColors.error.shade200,
-            disabledColor: ThemeColors.error.shade50,
-            id: '1',
-            title: 'Options Disabled - Default',
-            shape: MyCheckboxShape.circle,
-          ),
-
-          MyCheckbox(
-            selectedColor: ThemeColors.error.shade200,
-            disabledColor: ThemeColors.error.shade50,
-            id: 'index:0',
-            title: 'Multiple-select ',
-            subTitle: 'Description information',
-            titleMaxLine: 2,
-            subTitleMaxLine: 2,
-            cardMode: true,
-          ),
-
-          MyCheckbox(
-            selectedColor: ThemeColors.error.shade200,
-            id: 'index:1',
-            title: 'Multiple-select ',
-            titleColor: Colors.green,
-            subTitle: 'Description information',
-            subTitleColor: Colors.blue,
-            titleMaxLine: 2,
-            subTitleMaxLine: 2,
-            cardMode: true,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _customFont(BuildContext context) {
-    return MyCheckboxGroupContainer(
-      contentDirection: MyContentDirection.right,
-      selectIds: const ['0'],
-      child: Column(
-        children: [
-          MyCheckbox(
-            id: '0',
-            title: 'Options Disable-Selected',
-            subTitle: 'description text',
-            shape: MyCheckboxShape.circle,
-            enabled: false,
-          ),
-          MyCheckbox(
-            id: '1',
-            title: 'Options Disabled - Default',
-            subTitle: 'description text',
-            shape: MyCheckboxShape.circle,
-          ),
-          MyCheckbox(
-            id: 'index:0',
-            title: 'Multiple-select ',
-            subTitle: 'Description information',
-            titleMaxLine: 2,
-            subTitleMaxLine: 2,
-            cardMode: true,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget getAllIcon(bool checked, bool halfSelected) {
-    return Icon(
-      checked
-          ? Icons.check_circle_rounded
-          : halfSelected
-          ? Icons.remove_circle_rounded
-          : Icons.circle,
-      size: 24,
-      color: (checked || halfSelected)
-          ? context.colorScheme.primary
-          : ThemeColors.neutral.shade300,
     );
   }
 }

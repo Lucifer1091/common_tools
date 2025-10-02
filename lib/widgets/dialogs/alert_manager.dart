@@ -1,5 +1,7 @@
 // ignore_for_file: unused_element
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../animations/react_on_tap.dart';
@@ -122,7 +124,7 @@ class AlertManagerState extends State<AlertManager>
 
   /// Dismisses the current alert
   void dismiss() {
-    _animationController.animateTo(1, duration: Duration.zero);
+    unawaited(_animationController.animateTo(1, duration: Duration.zero));
   }
 
   void _removeFirst() {
@@ -142,12 +144,12 @@ class AlertManagerState extends State<AlertManager>
   }
 
   /// Adds a new alert.
-  void alert({
+  Future<void> alert({
     required String msg,
     AlertType? type,
     String? id,
     Duration? duration,
-  }) {
+  }) async {
     setState(() {
       _alerts
         ..removeWhere((element) => element.id == id)

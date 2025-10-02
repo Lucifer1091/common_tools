@@ -5,48 +5,29 @@ class _MyCheckboxIcon extends StatelessWidget {
     required this.size,
     required this.shape,
     this.value,
-    this.enabled = true,
     this.fillColor,
     this.checkColor,
-    this.disabledColor,
   });
 
   final bool? value;
-  final bool enabled;
   final double size;
   final MyCheckboxShape shape;
-  final Color? fillColor, checkColor, disabledColor;
+  final Color? fillColor, checkColor;
 
   @override
   Widget build(BuildContext context) {
-    final disabled = disabledColor ?? context.colorScheme.muted;
     final fill =
-        enabled
-            ? (value ?? true
-                ? fillColor ?? context.colorScheme.primary
-                : Colors.transparent)
-            : value ?? false
-            ? disabled
-            : Colors.transparent;
-    final border =
-        enabled
-            ? (value ?? true)
-                ? fill
-                : context.colorScheme.border
-            : disabled;
+        (value ?? true
+            ? fillColor ?? context.colorScheme.primary
+            : Colors.transparent);
+    final border = (value ?? true) ? fill : context.colorScheme.border;
 
     final Color check;
 
     if (shape == MyCheckboxShape.check) {
-      check =
-          enabled
-              ? (checkColor ?? context.colorScheme.primary)
-              : context.colorScheme.mutedForeground;
+      check = checkColor ?? context.colorScheme.primary;
     } else {
-      check =
-          enabled
-              ? checkColor ?? context.colorScheme.primaryForeground
-              : context.colorScheme.mutedForeground;
+      check = checkColor ?? context.colorScheme.primaryForeground;
     }
 
     final radius =
@@ -61,12 +42,13 @@ class _MyCheckboxIcon extends StatelessWidget {
         border:
             shape == MyCheckboxShape.check
                 ? null
-                : Border.all(color: border, width: 1.5),
+                : Border.all(color: border, width: 2),
         shape:
             shape == MyCheckboxShape.circle
                 ? BoxShape.circle
                 : BoxShape.rectangle,
       ),
+      alignment: Alignment.center,
       child: Icon(
         switch (value) {
           true => LucideIcons.check,
@@ -74,7 +56,8 @@ class _MyCheckboxIcon extends StatelessWidget {
           null => LucideIcons.minus,
         },
         color: check,
-        size: shape == MyCheckboxShape.check ? null : size * 0.6,
+        size: shape == MyCheckboxShape.check ? size * 0.95 : size * 0.5,
+        fontWeight: FontWeight.w900,
       ),
     );
   }

@@ -17,7 +17,6 @@ class TDRadio extends MyCheckbox {
     int super.subTitleMaxLine,
     int super.titleMaxLine = 1,
     super.selectedColor,
-    super.disabledColor,
     super.customContentBuilder,
     super.spacing,
     bool? cardMode,
@@ -90,14 +89,14 @@ class TDRadio extends MyCheckbox {
       return Icon(
         iconData,
         size: size,
-        color:
-            !enabled
-                ? (selected
-                    ? (disabledColor ?? ThemeColors.blue.shade200)
-                    : ThemeColors.neutral.shade300)
-                : selected
-                ? selectedColor ?? ThemeColors.blue.shade600
-                : ThemeColors.neutral.shade300,
+        // color:
+            // !enabled
+            //     ? (selected
+            //         ? (disabledColor ?? ThemeColors.blue.shade200)
+            //         : ThemeColors.neutral.shade300)
+            //     : selected
+            //     ? selectedColor ?? ThemeColors.blue.shade600
+            //     : ThemeColors.neutral.shade300,
       );
     } else {
       return SizedBox(width: size, height: size);

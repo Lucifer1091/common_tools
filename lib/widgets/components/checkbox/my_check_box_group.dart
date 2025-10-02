@@ -7,29 +7,28 @@ typedef OnGroupChange = void Function(List<String> checkedIds);
 class MyCheckboxGroupController {
   MyCheckboxGroupState? _state;
 
-  void toggleAll(bool check) {
-    _state?.toggleAll(check);
-  }
-
-  void reverseAll() {
-    _state?._reverseAll();
-  }
-
   void toggle(String id, bool? check) {
     _state?.toggle(id, check, true);
   }
 
-  bool? state(int total) {
-    final list = allChecked();
+  void toggleAll(bool check) {
+    _state?.toggleAll(check);
+  }
 
-    final length = list.length - (checked('index:0') ? 1 : 0);
-    final allCheck = total - 1 == length;
+  void selectWhere(List<String> ids) {
+    for (final id in ids) {
+      toggle(id, true);
+    }
+  }
 
-    if (list.isEmpty) return false;
+  void deselectWhere(List<String> ids) {
+    for (final id in ids) {
+      toggle(id, false);
+    }
+  }
 
-    if (allCheck) return true;
-
-    return null;
+  void reverseAll() {
+    _state?._reverseAll();
   }
 
   List<String> allChecked() {
@@ -38,14 +37,19 @@ class MyCheckboxGroupController {
     ).where((k, v) => v ?? false).keys.toList();
   }
 
+  List<String> allUnChecked() {
+    return MapScrewdriver(
+      _state?.checkBoxStates ?? <String, bool?>{},
+    ).where((k, v) => v == false).keys.toList();
+  }
+
   bool hasUnchecked(int total) {
     final list = allChecked();
     return list.length != total;
   }
 
   bool checked(String id) {
-    final list = allChecked();
-    return list.contains(id);
+    return allChecked().contains(id);
   }
 }
 
@@ -272,10 +276,10 @@ class MyCheckboxGroupContainer extends MyCheckboxGroup {
     super.key,
     Widget? child, // If you use child, do not set direction
     Axis? direction, // direction works on directional MyRadios
-    List<MyCheckbox>? directionalTdCheckboxes,
+    List<MyCheckbox>? directionalMyCheckboxes,
     List<String>? selectIds, // Default selection id group
-    bool?
-    passThrough, // Non-full-bar radio selection style for use with child or direction == Axis.vertical scenarios
+    // Non-full-bar radio selection style for use with child or direction == Axis.vertical scenarios
+    bool? passThrough,
     bool cardMode = false,
     super.titleMaxLine,
     int? maxSelected,
@@ -290,9 +294,9 @@ class MyCheckboxGroupContainer extends MyCheckboxGroup {
     super.onOverloadChecked,
   }) : assert(() {
          // If you use the direction attribute, you must use directional MyCheckboxes, and the child field is invalid.
-         if (direction != null && directionalTdCheckboxes == null) {
+         if (direction != null && directionalMyCheckboxes == null) {
            throw FlutterError(
-             '[MyCheckboxGroupContainer] direction and directionalTdCheckboxes must set at the same time',
+             '[MyCheckboxGroupContainer] direction and directionalMyCheckboxes must set at the same time',
            );
          }
          // If direction is not used, child must be set
@@ -301,8 +305,8 @@ class MyCheckboxGroupContainer extends MyCheckboxGroup {
              '[MyCheckboxGroupContainer] direction means use child as the exact one, but child is null',
            );
          }
-         if (direction == Axis.horizontal && directionalTdCheckboxes != null) {
-           for (final element in directionalTdCheckboxes) {
+         if (direction == Axis.horizontal && directionalMyCheckboxes != null) {
+           for (final element in directionalMyCheckboxes) {
              if (element.subTitle != null) {
                throw FlutterError(
                  'horizontal checkbox style should not have subTilte, '
@@ -313,8 +317,8 @@ class MyCheckboxGroupContainer extends MyCheckboxGroup {
          }
          // Card mode requires that each MyRadio must set the cardMode property to true and cannot have a subtitle (insufficient space)
          if (cardMode) {
-           assert(direction != null && directionalTdCheckboxes != null, '');
-           for (final element in directionalTdCheckboxes!) {
+           assert(direction != null && directionalMyCheckboxes != null, '');
+           for (final element in directionalMyCheckboxes!) {
              // if use cardMode at MyRadioGroup, then every MyRadio should
              // set it's own carMode to true.
              if (!element.cardMode) {
@@ -364,10 +368,10 @@ class MyCheckboxGroupContainer extends MyCheckboxGroup {
                                      )
                                      : null,
                              height: cardMode ? 82 : null,
-                             child: directionalTdCheckboxes[index],
+                             child: directionalMyCheckboxes[index],
                            );
                          },
-                         itemCount: directionalTdCheckboxes!.length,
+                         itemCount: directionalMyCheckboxes!.length,
                          separatorBuilder: (BuildContext context, int index) {
                            if (cardMode) {
                              return const SizedBox(height: 12);
@@ -388,7 +392,7 @@ class MyCheckboxGroupContainer extends MyCheckboxGroup {
                                    runSpacing: 12,
                                    runAlignment: WrapAlignment.spaceEvenly,
                                    children:
-                                       directionalTdCheckboxes!.map((element) {
+                                       directionalMyCheckboxes!.map((element) {
                                          return SizedBox(
                                            width: 106.3,
                                            height: 56,
@@ -399,7 +403,7 @@ class MyCheckboxGroupContainer extends MyCheckboxGroup {
                                  : Row(
                                    mainAxisSize: MainAxisSize.min,
                                    children:
-                                       directionalTdCheckboxes!
+                                       directionalMyCheckboxes!
                                            .map((e) => Expanded(child: e))
                                            .toList(),
                                  ),
