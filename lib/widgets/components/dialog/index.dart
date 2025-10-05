@@ -1,5 +1,5 @@
 export 'my_alert_dialog.dart';
-export 'my_confirm_dialog.dart';
+export 'my_info_dialog.dart';
 export 'my_dialog.dart';
 export 'my_dialog_config.dart';
 export 'my_dialog_widget.dart';

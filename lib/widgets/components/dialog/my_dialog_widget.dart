@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../index.dart';
 
@@ -6,18 +7,20 @@ class MyDialogScaffold extends StatelessWidget {
   const MyDialogScaffold({
     required this.body,
     super.key,
+    this.height,
+    this.width,
+    this.margin,
     this.showCloseButton,
-    this.backgroundColor = Colors.white,
-    this.radius = 12.0,
+    this.backgroundColor,
+    this.radius,
   });
 
   final Widget body;
-
+  final double? height, width;
+  final EdgeInsetsGeometry? margin;
   final bool? showCloseButton;
-
-  final Color backgroundColor;
-
-  final double radius;
+  final Color? backgroundColor;
+  final BorderRadius? radius;
 
   @override
   Widget build(BuildContext context) {
@@ -25,37 +28,36 @@ class MyDialogScaffold extends StatelessWidget {
       child: Material(
         type: MaterialType.transparency,
         child: Container(
-          width: 311,
+          width: width ?? 320,
+          height: height,
+          margin: margin ?? const EdgeInsets.all(24),
           decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.all(Radius.circular(radius)),
+            color: backgroundColor ?? context.colorScheme.popover,
+            borderRadius: radius ?? MyBorderRadius.large,
+            border: Border.all(color: context.colorScheme.border),
           ),
           child: Stack(
             children: [
               body,
               if (showCloseButton ?? false)
                 Positioned(
-                  top: 0,
-                  right: 0,
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
+                  top: 6,
+                  right: 6,
+                  child: MyGestureDetector(
+                    onTap: () => Navigator.pop(context),
                     child: SizedBox(
                       width: 38,
                       height: 38,
                       child: Center(
                         child: Icon(
-                          Icons.close_rounded,
+                          LucideIcons.x,
                           size: 22,
-                          color: ThemeColors.neutral.shade700,
+                          color: context.colorScheme.popoverForeground,
                         ),
                       ),
                     ),
                   ),
-                )
-              else
-                Container(height: 0),
+                ),
             ],
           ),
         ),
@@ -65,10 +67,9 @@ class MyDialogScaffold extends StatelessWidget {
 }
 
 class MyDialogTitle extends StatelessWidget {
-  const MyDialogTitle({super.key, this.title, this.titleColor = Colors.black});
+  const MyDialogTitle({super.key, this.title, this.titleColor});
 
-  final Color titleColor;
-
+  final Color? titleColor;
   final String? title;
 
   @override
@@ -77,7 +78,7 @@ class MyDialogTitle extends StatelessWidget {
       title,
       textColor: titleColor,
       fontWeight: FontWeight.w600,
-      style: TextStyle(fontSize: 16, height: 24, color: titleColor),
+      fontSize: 16,
       textAlign: TextAlign.center,
     );
   }
@@ -87,11 +88,12 @@ class MyDialogContent extends StatelessWidget {
   const MyDialogContent({
     super.key,
     this.content,
-    this.contentColor = const Color(0x99000000),
+    this.contentColor,
+    this.contentAlignment,
   });
 
-  final Color contentColor;
-
+  final AlignmentGeometry? contentAlignment;
+  final Color? contentColor;
   final String? content;
 
   @override
@@ -99,8 +101,12 @@ class MyDialogContent extends StatelessWidget {
     return MyText(
       content,
       textColor: contentColor,
-      style: TextStyle(fontSize: 16, height: 24, color: contentColor),
-      textAlign: TextAlign.center,
+      fontSize: 16,
+      textAlign: switch (contentAlignment) {
+        Alignment.centerLeft => TextAlign.left,
+        Alignment.centerRight => TextAlign.right,
+        _ => TextAlign.center,
+      },
     );
   }
 }
@@ -109,36 +115,31 @@ class MyDialogInfoWidget extends StatelessWidget {
   const MyDialogInfoWidget({
     super.key,
     this.title,
-    this.titleColor = Colors.black,
+    this.titleColor,
     this.titleAlignment,
+    this.contentAlignment,
     this.contentWidget,
     this.content,
     this.contentColor,
     this.contentMaxHeight = 0,
-    this.padding = const EdgeInsets.fromLTRB(24, 32, 24, 0),
+    this.padding,
   });
 
   final String? title;
-
-  final Color titleColor;
-
-  final AlignmentGeometry? titleAlignment;
-
-  final Widget? contentWidget;
-
+  final Color? titleColor;
+  final AlignmentGeometry? titleAlignment, contentAlignment;
   final String? content;
-
   final Color? contentColor;
-
+  final Widget? contentWidget;
   final double contentMaxHeight;
-
   final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context) {
     assert((title != null || content != null || contentWidget != null), '');
-    return Container(
-      padding: padding,
+
+    return Padding(
+      padding: padding ?? const EdgeInsets.fromLTRB(24, 32, 24, 0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -147,9 +148,9 @@ class MyDialogInfoWidget extends StatelessWidget {
               alignment: titleAlignment ?? Alignment.center,
               child: MyText(
                 title,
-                textColor: titleColor,
+                textColor: titleColor ?? context.colorScheme.popoverForeground,
+                fontSize: 18,
                 fontWeight: FontWeight.w600,
-                style: TextStyle(fontSize: 18, height: 26, color: titleColor),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -167,11 +168,15 @@ class MyDialogInfoWidget extends StatelessWidget {
                       : null,
               child:
                   contentWidget ??
-                  Scrollbar(
-                    child: SingleChildScrollView(
+                  SingleChildScrollView(
+                    child: Align(
+                      alignment: contentAlignment ?? Alignment.center,
                       child: MyDialogContent(
                         content: content,
-                        contentColor: contentColor ?? const Color(0x99000000),
+                        contentAlignment: contentAlignment,
+                        contentColor:
+                            contentColor ??
+                            context.colorScheme.popoverForeground,
                       ),
                     ),
                   ),
@@ -182,8 +187,68 @@ class MyDialogInfoWidget extends StatelessWidget {
   }
 }
 
-class HorizontalNormalButtons extends StatelessWidget {
-  const HorizontalNormalButtons({
+class MyDialogShrinkButtons extends StatelessWidget {
+  const MyDialogShrinkButtons({
+    required this.rightBtn,
+    this.leftBtn,
+    super.key,
+  });
+
+  final MyDialogButtonOptions? leftBtn;
+
+  final MyDialogButtonOptions rightBtn;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          if (leftBtn != null)
+            MyDialogButton(
+              buttonText: leftBtn!.title,
+              buttonTextColor: leftBtn!.titleColor,
+              buttonTextSize: leftBtn!.titleSize,
+              buttonStyle: leftBtn!.style,
+              buttonType: leftBtn!.type,
+              height: leftBtn!.height,
+              buttonTextFontWeight: leftBtn!.fontWeight ?? FontWeight.w600,
+              isExpanded: false,
+              onPressed: () {
+                if (leftBtn!.action != null) {
+                  leftBtn!.action!();
+                } else {
+                  Navigator.pop(context);
+                }
+              },
+            ),
+          const Gap(12),
+          MyDialogButton(
+            buttonText: rightBtn.title,
+            buttonTextColor: rightBtn.titleColor,
+            buttonTextSize: rightBtn.titleSize,
+            buttonStyle: rightBtn.style,
+            buttonType: rightBtn.type,
+            height: rightBtn.height,
+            buttonTextFontWeight: rightBtn.fontWeight ?? FontWeight.w600,
+            isExpanded: false,
+            onPressed: () {
+              if (rightBtn.action != null) {
+                rightBtn.action!();
+              } else {
+                Navigator.pop(context);
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class MyDialogExpandedButtons extends StatelessWidget {
+  const MyDialogExpandedButtons({
     required this.leftBtn,
     required this.rightBtn,
     super.key,
@@ -195,7 +260,7 @@ class HorizontalNormalButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Padding(
       padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -218,7 +283,7 @@ class HorizontalNormalButtons extends StatelessWidget {
               },
             ),
           ),
-          const MyDivider(thickness: 12, color: Colors.transparent),
+          const Gap(12),
           Expanded(
             child: MyDialogButton(
               buttonText: rightBtn.title,
@@ -243,70 +308,6 @@ class HorizontalNormalButtons extends StatelessWidget {
   }
 }
 
-class HorizontalTextButtons extends StatelessWidget {
-  const HorizontalTextButtons({
-    required this.leftBtn,
-    required this.rightBtn,
-    super.key,
-  });
-
-  final MyDialogButtonOptions leftBtn;
-
-  final MyDialogButtonOptions rightBtn;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const MyDivider(height: 1),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: MyDialogButton(
-                buttonText: leftBtn.title,
-                buttonTextColor: leftBtn.titleColor,
-                buttonTextSize: leftBtn.titleSize,
-                buttonStyle: leftBtn.style,
-                buttonType: leftBtn.type ?? MyButtonType.text,
-                // fix： The button height does not fill the container.
-                height: 56,
-                buttonTextFontWeight: leftBtn.fontWeight,
-                onPressed: () {
-                  if (leftBtn.action != null) {
-                    leftBtn.action!();
-                  } else {
-                    Navigator.pop(context);
-                  }
-                },
-              ),
-            ),
-            const MyDivider(thickness: 1, height: 56),
-            Expanded(
-              child: MyDialogButton(
-                buttonText: rightBtn.title,
-                buttonTextColor: rightBtn.titleColor,
-                buttonTextSize: rightBtn.titleSize,
-                buttonStyle: rightBtn.style,
-                buttonType: rightBtn.type ?? MyButtonType.text,
-                height: 56,
-                buttonTextFontWeight: rightBtn.fontWeight ?? FontWeight.w600,
-                onPressed: () {
-                  if (rightBtn.action != null) {
-                    rightBtn.action!();
-                  } else {
-                    Navigator.pop(context);
-                  }
-                },
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
 class MyDialogButton extends StatelessWidget {
   const MyDialogButton({
     required this.onPressed,
@@ -317,29 +318,20 @@ class MyDialogButton extends StatelessWidget {
     this.buttonTextFontWeight = FontWeight.w600,
     this.buttonStyle,
     this.buttonType,
-    this.height = 40.0,
+    this.height,
     this.width,
-    this.isBlock = true,
+    this.isExpanded = true,
   });
 
   final String? buttonText;
-
   final Color? buttonTextColor;
-
   final double? buttonTextSize;
-
   final FontWeight? buttonTextFontWeight;
-
   final MyButtonStyle? buttonStyle;
-
   final MyButtonType? buttonType;
-
   final double? width;
-
   final double? height;
-
-  final bool isBlock;
-
+  final bool isExpanded;
   final VoidCallback onPressed;
 
   @override
@@ -355,8 +347,8 @@ class MyDialogButton extends StatelessWidget {
         fontSize: buttonTextSize,
       ),
       width: width,
-      height: height,
-      isExpanded: isBlock,
+      height: height ?? 40,
+      isExpanded: isExpanded,
       margin: EdgeInsets.zero,
     );
   }

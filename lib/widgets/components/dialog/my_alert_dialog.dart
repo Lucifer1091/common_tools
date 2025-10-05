@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../button/my_button.dart';
-import '../divider/my_divider.dart';
-import 'my_dialog_config.dart';
-import 'my_dialog_widget.dart';
+import '../../../index.dart';
 
 /// Pop-up Control
 ///
@@ -16,13 +13,16 @@ class MyAlertDialog extends StatelessWidget {
   ///  style will be applied: a weak button on the left and a strong button on the right.
   const MyAlertDialog({
     super.key,
-    this.backgroundColor = Colors.white,
-    this.radius = 12.0,
+    this.height,
+    this.width,
+    this.backgroundColor,
+    this.radius,
     this.title,
-    this.titleColor = const Color(0xE6000000),
+    this.titleColor,
     this.content,
     this.contentColor,
     this.titleAlignment,
+    this.contentAlignment,
     this.contentWidget,
     this.contentMaxHeight = 0,
     this.leftBtn,
@@ -30,69 +30,59 @@ class MyAlertDialog extends StatelessWidget {
     this.leftBtnAction,
     this.rightBtnAction,
     this.showCloseButton,
-    MyDialogButtonStyle buttonStyle = MyDialogButtonStyle.normal,
-    this.padding = const EdgeInsets.fromLTRB(24, 32, 24, 0),
+    this.padding,
+    this.margin,
     this.buttonWidget,
   }) : assert((title != null || content != null || contentWidget != null), ''),
        _vertical = false,
-       _buttons = null,
-       _buttonStyle = buttonStyle;
+       _buttons = null;
 
   /// Dialog box with vertical button arrangement
   ///
-  /// The [buttons] parameter is required. The default style for vertical
-  /// buttons is [MyButtonTheme.primary].
+  /// The [buttons] parameter is required.
   const MyAlertDialog.vertical({
     required List<MyDialogButtonOptions> buttons,
     super.key,
-    this.backgroundColor = Colors.white,
-    this.radius = 12.0,
+    this.height,
+    this.width,
+    this.backgroundColor,
+    this.radius,
     this.title,
-    this.titleColor = Colors.black,
+    this.titleColor,
     this.titleAlignment,
+    this.contentAlignment,
     this.contentWidget,
     this.content,
     this.contentColor,
     this.contentMaxHeight = 0,
     this.showCloseButton,
-    this.padding = const EdgeInsets.fromLTRB(24, 32, 24, 0),
+    this.padding,
+    this.margin,
     this.buttonWidget,
-  }) : _vertical = true,
+  }) : assert((title != null || content != null || contentWidget != null), ''),
+       _vertical = true,
        leftBtn = null,
        rightBtn = null,
        _buttons = buttons,
-       _buttonStyle = MyDialogButtonStyle.normal,
        leftBtnAction = null,
        rightBtnAction = null;
 
-  final Color backgroundColor;
-
-  final double radius;
-
+  final double? height, width;
+  final Color? backgroundColor;
+  final BorderRadius? radius;
   final String? title;
-
-  final Color titleColor;
-
-  final AlignmentGeometry? titleAlignment;
-
+  final Color? titleColor;
+  final AlignmentGeometry? titleAlignment, contentAlignment;
   final Widget? contentWidget;
-
   final String? content;
-
   final Color? contentColor;
 
   /// The maximum height of the content, the default is 0, which means there is no height limit
   final double contentMaxHeight;
-
   final MyDialogButtonOptions? leftBtn;
-
   final MyDialogButtonOptions? rightBtn;
-
   final VoidCallback? leftBtnAction;
-
   final VoidCallback? rightBtnAction;
-
-  /// Display the close button in the upper right corner
   final bool? showCloseButton;
 
   /// Whether the option is arranged vertically, the default is left and right
@@ -101,21 +91,16 @@ class MyAlertDialog extends StatelessWidget {
   /// Vertically arranged button list
   final List<MyDialogButtonOptions>? _buttons;
 
-  /// Button style
-  ///
-  /// Supports both standard and text buttons
-  /// Text buttons only support horizontal layout
-  /// The styles in [leftBtn] and [rightBtn] override this setting.
-  final MyDialogButtonStyle _buttonStyle;
-
-  final EdgeInsets? padding;
-
+  final EdgeInsetsGeometry? padding;
+  final EdgeInsetsGeometry? margin;
   final Widget? buttonWidget;
 
   @override
   Widget build(BuildContext context) {
-    // Title and content cannot be empty at the same time
     return MyDialogScaffold(
+      height: height,
+      width: width,
+      margin: margin,
       showCloseButton: showCloseButton,
       backgroundColor: backgroundColor,
       radius: radius,
@@ -126,13 +111,14 @@ class MyAlertDialog extends StatelessWidget {
             title: title,
             titleColor: titleColor,
             titleAlignment: titleAlignment,
+            contentAlignment: contentAlignment,
             contentWidget: contentWidget,
             content: content,
             contentColor: contentColor,
             contentMaxHeight: contentMaxHeight,
             padding: padding,
           ),
-          const MyDivider(height: 24, color: Colors.transparent),
+          const Gap(24),
           if (_vertical)
             _verticalButtons(context)
           else
@@ -155,10 +141,13 @@ class MyAlertDialog extends StatelessWidget {
 
     final right =
         rightBtn ??
-        MyDialogButtonOptions(title: 'Confirm', action: rightBtnAction);
-    return _buttonStyle == MyDialogButtonStyle.text
-        ? HorizontalTextButtons(leftBtn: left, rightBtn: right)
-        : HorizontalNormalButtons(leftBtn: left, rightBtn: right);
+        MyDialogButtonOptions(
+          title: 'Confirm',
+          titleColor: context.colorScheme.primaryForeground,
+          action: rightBtnAction,
+        );
+
+    return MyDialogExpandedButtons(leftBtn: left, rightBtn: right);
   }
 
   Widget _verticalButtons(BuildContext context) {
@@ -184,11 +173,11 @@ class MyAlertDialog extends StatelessWidget {
 
       widgets.add(btn);
       if (index < _buttons.length - 1) {
-        widgets.add(const MyDivider(height: 12, color: Colors.transparent));
+        widgets.add(const Gap(12));
       }
     });
 
-    return Container(
+    return Padding(
       padding: const EdgeInsets.only(left: 24, right: 24, bottom: 24),
       child: Column(children: widgets),
     );

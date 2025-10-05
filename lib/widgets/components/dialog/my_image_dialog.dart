@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../button/my_button.dart';
-import '../divider/my_divider.dart';
-import 'my_dialog_config.dart';
-import 'my_dialog_widget.dart';
+import '../../../index.dart';
 
 enum MyDialogImagePosition { top, middle }
 
@@ -11,55 +8,51 @@ class MyImageDialog extends StatelessWidget {
   const MyImageDialog({
     required this.image,
     super.key,
+    this.height,
+    this.width,
     this.imagePosition = MyDialogImagePosition.top,
-    this.backgroundColor = Colors.white,
-    this.radius = 12.0,
+    this.backgroundColor,
+    this.radius,
     this.title,
-    this.titleColor = const Color(0xE6000000),
+    this.titleColor,
     this.titleAlignment,
+    this.contentAlignment,
     this.contentWidget,
     this.content,
     this.contentColor,
     this.leftBtn,
     this.rightBtn,
+    this.leftBtnAction,
+    this.rightBtnAction,
     this.showCloseButton,
     this.padding,
+    this.margin,
     this.buttonWidget,
   });
 
-  final Color backgroundColor;
-
-  final double radius;
-
+  final double? height, width;
+  final Color? backgroundColor;
+  final BorderRadius? radius;
   final String? title;
-
-  final Color titleColor;
-
-  final AlignmentGeometry? titleAlignment;
-
+  final Color? titleColor;
+  final AlignmentGeometry? titleAlignment, contentAlignment;
   final Widget? contentWidget;
-
   final String? content;
-
   final Color? contentColor;
-
   final MyDialogButtonOptions? leftBtn;
-
   final MyDialogButtonOptions? rightBtn;
-
   final Image image;
-
   final MyDialogImagePosition? imagePosition;
-
   final bool? showCloseButton;
-
   final EdgeInsets? padding;
-
+  final EdgeInsetsGeometry? margin;
   final Widget? buttonWidget;
+  final VoidCallback? leftBtnAction;
+  final VoidCallback? rightBtnAction;
 
   Widget _buildImage(BuildContext context) {
     return SizedBox(
-      width: 311,
+      width: width ?? 320,
       height: 160,
       child: FittedBox(fit: BoxFit.cover, child: image),
     );
@@ -70,10 +63,12 @@ class MyImageDialog extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(radius),
-            topRight: Radius.circular(radius),
-          ),
+          borderRadius:
+              radius ??
+              BorderRadius.only(
+                topLeft: Radius.circular(MyRadius.large),
+                topRight: Radius.circular(MyRadius.large),
+              ),
           child: _buildImage(context),
         ),
         MyDialogInfoWidget(
@@ -81,11 +76,12 @@ class MyImageDialog extends StatelessWidget {
           padding: padding ?? const EdgeInsets.fromLTRB(24, 24, 24, 0),
           titleColor: titleColor,
           titleAlignment: titleAlignment,
+          contentAlignment: contentAlignment,
           contentWidget: contentWidget,
           content: content,
           contentColor: contentColor,
         ),
-        const MyDivider(height: 24, color: Colors.transparent),
+        const Gap(24),
         _horizontalButtons(context),
       ],
     );
@@ -108,7 +104,7 @@ class MyImageDialog extends StatelessWidget {
           padding: const EdgeInsets.only(top: 24),
           child: ClipRRect(child: _buildImage(context)),
         ),
-        const MyDivider(height: 24, color: Colors.transparent),
+        const Gap(24),
         _horizontalButtons(context),
       ],
     );
@@ -119,13 +115,15 @@ class MyImageDialog extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(radius),
-            topRight: Radius.circular(radius),
-          ),
+          borderRadius:
+              radius ??
+              BorderRadius.only(
+                topLeft: Radius.circular(MyRadius.large),
+                topRight: Radius.circular(MyRadius.large),
+              ),
           child: _buildImage(context),
         ),
-        const MyDivider(height: 24, color: Colors.transparent),
+        const Gap(24),
         _horizontalButtons(context),
       ],
     );
@@ -144,6 +142,9 @@ class MyImageDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MyDialogScaffold(
+      height: height,
+      width: width,
+      margin: margin,
       showCloseButton: showCloseButton,
       backgroundColor: backgroundColor,
       radius: radius,
@@ -152,18 +153,24 @@ class MyImageDialog extends StatelessWidget {
   }
 
   Widget _horizontalButtons(BuildContext context) {
-    if (buttonWidget != null) {
-      return buttonWidget!;
-    }
+    if (buttonWidget != null) return buttonWidget!;
+
     final left =
         leftBtn ??
         MyDialogButtonOptions(
           title: 'Cancel',
           type: MyButtonType.outline,
-          action: null,
+          action: leftBtnAction,
         );
+
     final right =
-        rightBtn ?? MyDialogButtonOptions(title: 'Confirm', action: null);
-    return HorizontalNormalButtons(leftBtn: left, rightBtn: right);
+        rightBtn ??
+        MyDialogButtonOptions(
+          title: 'Confirm',
+          titleColor: context.colorScheme.primaryForeground,
+          action: rightBtnAction,
+        );
+
+    return MyDialogExpandedButtons(leftBtn: left, rightBtn: right);
   }
 }

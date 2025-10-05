@@ -14,7 +14,7 @@ class MyDialog {
     required WidgetBuilder builder,
     Duration? duration,
     Alignment? alignment,
-    bool fullscreen = true,
+    bool fullscreen = false,
     bool draggable = false,
     bool hideSoftKeyboard = true,
     bool barrierDismissible = true,
