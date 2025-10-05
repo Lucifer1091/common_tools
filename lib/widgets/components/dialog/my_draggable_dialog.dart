@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
-class FloatingDialog extends StatefulWidget {
-  const FloatingDialog({
+class MyDraggableDialog extends StatefulWidget {
+  const MyDraggableDialog({
     super.key,
     this.onDrag,
     this.autoCenter = true,
@@ -26,10 +26,10 @@ class FloatingDialog extends StatefulWidget {
   final double? elevation;
 
   @override
-  FloatingDialogState createState() => FloatingDialogState();
+  MyDraggableDialogState createState() => MyDraggableDialogState();
 }
 
-class FloatingDialogState extends State<FloatingDialog> {
+class MyDraggableDialogState extends State<MyDraggableDialog> {
   bool _dragging = false;
   double _xOffset = -1;
   double _yOffset = -1;
@@ -52,9 +52,7 @@ class FloatingDialogState extends State<FloatingDialog> {
       if (r != null) {
         // we detected the widget size, let's set and build again
         _rect = r;
-        if (mounted) {
-          setState(() {});
-        }
+        if (mounted) setState(() {});
       }
     }
   }
@@ -86,9 +84,8 @@ class FloatingDialogState extends State<FloatingDialog> {
                 }
               },
               onPanUpdate: (details) {
-                if (!mounted) {
-                  return;
-                }
+                if (!mounted) return;
+
                 _xOffset += details.delta.dx;
                 _yOffset += details.delta.dy;
 

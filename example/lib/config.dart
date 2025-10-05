@@ -18,7 +18,7 @@ import 'page/my_cell_page.dart';
 import 'page/my_checkbox_page.dart';
 import 'page/td_collapse.dart';
 import 'page/td_date_picker_page.dart';
-import 'page/td_dialog_page.dart';
+import 'page/my_dialog_page.dart';
 import 'page/my_divider_page.dart';
 import 'page/my_drawer_page.dart';
 import 'page/td_dropdown_menu_page.dart';
@@ -329,7 +329,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'Dialog',
       name: 'dialog',
-      pageBuilder: _wrapInheritedTheme((context) => const TDDialogPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyDialogPage()),
     ),
     ExamplePageModel(
       text: 'DropdownMenu',

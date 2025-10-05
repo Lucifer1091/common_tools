@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'td_dialog.dart';
-import 'td_dialog_widget.dart';
+import 'my_dialog_config.dart';
+import 'my_dialog_widget.dart';
 
-class TDInputDialog extends StatelessWidget {
-  const TDInputDialog({
+class MyInputDialog extends StatelessWidget {
+  const MyInputDialog({
     required this.textEditingController,
     super.key,
     this.backgroundColor = Colors.white,
@@ -22,7 +22,7 @@ class TDInputDialog extends StatelessWidget {
     this.padding = const EdgeInsets.fromLTRB(24, 32, 24, 0),
     this.buttonWidget,
     this.customInputWidget,
-  }) : assert((title != null || content != null || contentWidget != null));
+  }) : assert((title != null || content != null || contentWidget != null), '');
 
   final Color backgroundColor;
 
@@ -44,9 +44,9 @@ class TDInputDialog extends StatelessWidget {
 
   final TextEditingController textEditingController;
 
-  final TDDialogButtonOptions? leftBtn;
+  final MyDialogButtonOptions? leftBtn;
 
-  final TDDialogButtonOptions? rightBtn;
+  final MyDialogButtonOptions? rightBtn;
 
   final bool? showCloseButton;
 
@@ -58,7 +58,7 @@ class TDInputDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TDDialogScaffold(
+    return MyDialogScaffold(
       showCloseButton: showCloseButton,
       backgroundColor: backgroundColor,
       radius: radius,
@@ -68,7 +68,7 @@ class TDInputDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TDDialogInfoWidget(
+            MyDialogInfoWidget(
               title: title,
               titleColor: titleColor,
               titleAlignment: titleAlignment,
@@ -123,7 +123,7 @@ class TDInputDialog extends StatelessWidget {
     }
     final left =
         leftBtn ??
-        TDDialogButtonOptions(
+        MyDialogButtonOptions(
           title: 'Cancel',
           titleColor: const Color(0xE6000000),
           fontWeight: FontWeight.normal,
@@ -132,7 +132,7 @@ class TDInputDialog extends StatelessWidget {
         );
     final right =
         rightBtn ??
-        TDDialogButtonOptions(
+        MyDialogButtonOptions(
           title: 'Confirm',
           action: null,
           fontWeight: FontWeight.w600,

@@ -40,14 +40,15 @@ class BottomSheets {
           topRight: Radius.circular(30),
         ),
       ),
-      builder: (context) => buildBottomSheetContent(
-        context,
-        title: title,
-        header: header,
-        showDivider: showDivider,
-        bottomSheet: bottomSheet,
-        showTopBar: showTopBar,
-      ),
+      builder:
+          (context) => buildBottomSheetContent(
+            context,
+            title: title,
+            header: header,
+            showDivider: showDivider,
+            bottomSheet: bottomSheet,
+            showTopBar: showTopBar,
+          ),
     );
   }
 
@@ -58,55 +59,54 @@ class BottomSheets {
     String? title,
     bool showDivider = true,
     bool showTopBar = true,
-  }) =>
-      ClipRRect(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
-        ),
-        child: ColoredBox(
-          color: Colors.white,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(height: 8),
-              if (showTopBar)
-                Container(
-                  margin: const EdgeInsets.only(bottom: 10, top: 2),
-                  height: 4,
-                  width: 50,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF958F8F),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                ),
-              header ?? const SizedBox(),
-              if (title != null)
-                Text(title, style: context.titleLarge)
-              else
-                const SizedBox(),
-              if (showDivider) ...[
-                const SizedBox(height: 12),
-                const Divider(color: Color(0xFFEFEFEF), height: 1),
-              ],
-              Expanded(child: bottomSheet),
-            ],
-          ),
-        ),
-      );
+  }) => ClipRRect(
+    borderRadius: const BorderRadius.only(
+      topLeft: Radius.circular(30),
+      topRight: Radius.circular(30),
+    ),
+    child: ColoredBox(
+      color: Colors.white,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(height: 8),
+          if (showTopBar)
+            Container(
+              margin: const EdgeInsets.only(bottom: 10, top: 2),
+              height: 4,
+              width: 50,
+              decoration: BoxDecoration(
+                color: const Color(0xFF958F8F),
+                borderRadius: BorderRadius.circular(30),
+              ),
+            ),
+          header ?? const SizedBox(),
+          if (title != null)
+            Text(title, style: context.titleLarge)
+          else
+            const SizedBox(),
+          if (showDivider) ...[
+            const SizedBox(height: 12),
+            const Divider(color: Color(0xFFEFEFEF), height: 1),
+          ],
+          Expanded(child: bottomSheet),
+        ],
+      ),
+    ),
+  );
 
   /// Shows a bottom sheet or a dialog based on the specified type.
-  static Future<dynamic> showBottomSheetOrDialog<T>(
-    BuildContext context, {
+  Future<dynamic> showBottomSheetOrDialog({
+    required BuildContext context,
     required Widget child,
     BottomSheetDialog bottomSheetDialog = BottomSheetDialog.dialog,
   }) {
     if (bottomSheetDialog == BottomSheetDialog.bottomSheet) {
       // Show a bottom sheet.
-      return showModalBottomSheet<T>(context: context, builder: (_) => child);
+      return showModalBottomSheet(context: context, builder: (_) => child);
     } else {
       // Show a dialog.
-      return Dialogs.show<T>(context, content: child);
+      return MyDialog.show(context, builder: (_) => child);
     }
   }
 }

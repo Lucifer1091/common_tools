@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 
 import '../button/my_button.dart';
 import '../divider/my_divider.dart';
-import 'td_dialog.dart';
-import 'td_dialog_widget.dart';
+import 'my_dialog_config.dart';
+import 'my_dialog_widget.dart';
 
 /// Pop-up Control
 ///
 /// Supports horizontal or vertical button placement
 /// Maximum of two buttons can be placed horizontally
-class TDAlertDialog extends StatelessWidget {
+class MyAlertDialog extends StatelessWidget {
   /// Dialog box with horizontal button arrangement
   ///
   /// If you don't pass a style parameter to [leftBtn] and [rightBtn], the default
   ///  style will be applied: a weak button on the left and a strong button on the right.
-  const TDAlertDialog({
+  const MyAlertDialog({
     super.key,
     this.backgroundColor = Colors.white,
     this.radius = 12.0,
@@ -30,7 +30,7 @@ class TDAlertDialog extends StatelessWidget {
     this.leftBtnAction,
     this.rightBtnAction,
     this.showCloseButton,
-    TDDialogButtonStyle buttonStyle = TDDialogButtonStyle.normal,
+    MyDialogButtonStyle buttonStyle = MyDialogButtonStyle.normal,
     this.padding = const EdgeInsets.fromLTRB(24, 32, 24, 0),
     this.buttonWidget,
   }) : assert((title != null || content != null || contentWidget != null), ''),
@@ -42,8 +42,8 @@ class TDAlertDialog extends StatelessWidget {
   ///
   /// The [buttons] parameter is required. The default style for vertical
   /// buttons is [MyButtonTheme.primary].
-  const TDAlertDialog.vertical({
-    required List<TDDialogButtonOptions> buttons,
+  const MyAlertDialog.vertical({
+    required List<MyDialogButtonOptions> buttons,
     super.key,
     this.backgroundColor = Colors.white,
     this.radius = 12.0,
@@ -61,7 +61,7 @@ class TDAlertDialog extends StatelessWidget {
        leftBtn = null,
        rightBtn = null,
        _buttons = buttons,
-       _buttonStyle = TDDialogButtonStyle.normal,
+       _buttonStyle = MyDialogButtonStyle.normal,
        leftBtnAction = null,
        rightBtnAction = null;
 
@@ -84,9 +84,9 @@ class TDAlertDialog extends StatelessWidget {
   /// The maximum height of the content, the default is 0, which means there is no height limit
   final double contentMaxHeight;
 
-  final TDDialogButtonOptions? leftBtn;
+  final MyDialogButtonOptions? leftBtn;
 
-  final TDDialogButtonOptions? rightBtn;
+  final MyDialogButtonOptions? rightBtn;
 
   final VoidCallback? leftBtnAction;
 
@@ -99,14 +99,14 @@ class TDAlertDialog extends StatelessWidget {
   final bool _vertical;
 
   /// Vertically arranged button list
-  final List<TDDialogButtonOptions>? _buttons;
+  final List<MyDialogButtonOptions>? _buttons;
 
   /// Button style
   ///
   /// Supports both standard and text buttons
   /// Text buttons only support horizontal layout
   /// The styles in [leftBtn] and [rightBtn] override this setting.
-  final TDDialogButtonStyle _buttonStyle;
+  final MyDialogButtonStyle _buttonStyle;
 
   final EdgeInsets? padding;
 
@@ -115,14 +115,14 @@ class TDAlertDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Title and content cannot be empty at the same time
-    return TDDialogScaffold(
+    return MyDialogScaffold(
       showCloseButton: showCloseButton,
       backgroundColor: backgroundColor,
       radius: radius,
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          TDDialogInfoWidget(
+          MyDialogInfoWidget(
             title: title,
             titleColor: titleColor,
             titleAlignment: titleAlignment,
@@ -147,7 +147,7 @@ class TDAlertDialog extends StatelessWidget {
 
     final left =
         leftBtn ??
-        TDDialogButtonOptions(
+        MyDialogButtonOptions(
           title: 'Cancel',
           type: MyButtonType.outline,
           action: leftBtnAction,
@@ -155,8 +155,8 @@ class TDAlertDialog extends StatelessWidget {
 
     final right =
         rightBtn ??
-        TDDialogButtonOptions(title: 'Confirm', action: rightBtnAction);
-    return _buttonStyle == TDDialogButtonStyle.text
+        MyDialogButtonOptions(title: 'Confirm', action: rightBtnAction);
+    return _buttonStyle == MyDialogButtonStyle.text
         ? HorizontalTextButtons(leftBtn: left, rightBtn: right)
         : HorizontalNormalButtons(leftBtn: left, rightBtn: right);
   }
@@ -165,7 +165,7 @@ class TDAlertDialog extends StatelessWidget {
     final widgets = <Widget>[];
 
     _buttons!.asMap().forEach((index, value) {
-      final Widget btn = TDDialogButton(
+      final Widget btn = MyDialogButton(
         buttonText: value.title,
         buttonTextColor: value.titleColor,
         buttonTextSize: value.titleSize,

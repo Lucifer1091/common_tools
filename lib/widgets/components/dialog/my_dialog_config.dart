@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../button/my_button.dart';
-import '../button/my_button_style.dart';
-
-export 'td_alert_dialog.dart';
-export 'td_confirm_dialog.dart';
-export 'td_image_dialog.dart';
-export 'td_input_dialog.dart';
+import '../../../index.dart';
 
 /// Dialog Button Styles
 ///
 /// Used to configure button styles at the Dialog level.
 /// Supports configurable styles for each button within the Dialog.
-enum TDDialogButtonStyle { normal, text }
+enum MyDialogButtonStyle { normal, text }
 
-class TDDialogButtonOptions {
-  TDDialogButtonOptions({
+class MyDialogButtonOptions {
+  MyDialogButtonOptions({
     required this.title,
     required this.action,
     this.titleColor,

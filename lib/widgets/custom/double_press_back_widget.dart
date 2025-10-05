@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../dialogs/alert_manager.dart';
-
 /// A widget that handles double press back navigation.
 ///
 /// This widget allows users to navigate back by pressing the back button
@@ -46,9 +44,6 @@ class _DoublePressBackWidgetState extends State<DoublePressBackWidget> {
 
         _currentBackPressTime = DateTime.now();
         setState(() {});
-
-        final alertManager = AlertManager.maybeOf(context);
-        alertManager?.alert(msg: widget.message ?? 'Press back again to exit');
 
         // Start a timer to reset state after 2 seconds
         Future.delayed(const Duration(seconds: 2), () {

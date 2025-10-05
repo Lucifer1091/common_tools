@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 
 import '../button/my_button.dart';
 import '../divider/my_divider.dart';
-import 'td_dialog.dart';
-import 'td_dialog_widget.dart';
+import 'my_dialog_config.dart';
+import 'my_dialog_widget.dart';
 
-enum TDDialogImagePosition { top, middle }
+enum MyDialogImagePosition { top, middle }
 
-class TDImageDialog extends StatelessWidget {
-  const TDImageDialog({
+class MyImageDialog extends StatelessWidget {
+  const MyImageDialog({
     required this.image,
     super.key,
-    this.imagePosition = TDDialogImagePosition.top,
+    this.imagePosition = MyDialogImagePosition.top,
     this.backgroundColor = Colors.white,
     this.radius = 12.0,
     this.title,
@@ -43,13 +43,13 @@ class TDImageDialog extends StatelessWidget {
 
   final Color? contentColor;
 
-  final TDDialogButtonOptions? leftBtn;
+  final MyDialogButtonOptions? leftBtn;
 
-  final TDDialogButtonOptions? rightBtn;
+  final MyDialogButtonOptions? rightBtn;
 
   final Image image;
 
-  final TDDialogImagePosition? imagePosition;
+  final MyDialogImagePosition? imagePosition;
 
   final bool? showCloseButton;
 
@@ -76,7 +76,7 @@ class TDImageDialog extends StatelessWidget {
           ),
           child: _buildImage(context),
         ),
-        TDDialogInfoWidget(
+        MyDialogInfoWidget(
           title: title,
           padding: padding ?? const EdgeInsets.fromLTRB(24, 24, 24, 0),
           titleColor: titleColor,
@@ -95,7 +95,7 @@ class TDImageDialog extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        TDDialogInfoWidget(
+        MyDialogInfoWidget(
           padding: padding ?? const EdgeInsets.fromLTRB(24, 24, 24, 0),
           title: title,
           titleColor: titleColor,
@@ -134,7 +134,7 @@ class TDImageDialog extends StatelessWidget {
   Widget _buildBody(BuildContext context) {
     if (title == null && content == null) {
       return _buildOnlyImage(context);
-    } else if (imagePosition == TDDialogImagePosition.middle) {
+    } else if (imagePosition == MyDialogImagePosition.middle) {
       return _buildMiddleImage(context);
     } else {
       return _buildTopImage(context);
@@ -143,7 +143,7 @@ class TDImageDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TDDialogScaffold(
+    return MyDialogScaffold(
       showCloseButton: showCloseButton,
       backgroundColor: backgroundColor,
       radius: radius,
@@ -157,13 +157,13 @@ class TDImageDialog extends StatelessWidget {
     }
     final left =
         leftBtn ??
-        TDDialogButtonOptions(
+        MyDialogButtonOptions(
           title: 'Cancel',
           type: MyButtonType.outline,
           action: null,
         );
     final right =
-        rightBtn ?? TDDialogButtonOptions(title: 'Confirm', action: null);
+        rightBtn ?? MyDialogButtonOptions(title: 'Confirm', action: null);
     return HorizontalNormalButtons(leftBtn: left, rightBtn: right);
   }
 }

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../index.dart';
 
-class TDDialogScaffold extends StatelessWidget {
-  const TDDialogScaffold({
+class MyDialogScaffold extends StatelessWidget {
+  const MyDialogScaffold({
     required this.body,
     super.key,
     this.showCloseButton,
@@ -64,8 +64,8 @@ class TDDialogScaffold extends StatelessWidget {
   }
 }
 
-class TDDialogTitle extends StatelessWidget {
-  const TDDialogTitle({super.key, this.title, this.titleColor = Colors.black});
+class MyDialogTitle extends StatelessWidget {
+  const MyDialogTitle({super.key, this.title, this.titleColor = Colors.black});
 
   final Color titleColor;
 
@@ -83,8 +83,8 @@ class TDDialogTitle extends StatelessWidget {
   }
 }
 
-class TDDialogContent extends StatelessWidget {
-  const TDDialogContent({
+class MyDialogContent extends StatelessWidget {
+  const MyDialogContent({
     super.key,
     this.content,
     this.contentColor = const Color(0x99000000),
@@ -105,8 +105,8 @@ class TDDialogContent extends StatelessWidget {
   }
 }
 
-class TDDialogInfoWidget extends StatelessWidget {
-  const TDDialogInfoWidget({
+class MyDialogInfoWidget extends StatelessWidget {
+  const MyDialogInfoWidget({
     super.key,
     this.title,
     this.titleColor = Colors.black,
@@ -169,7 +169,7 @@ class TDDialogInfoWidget extends StatelessWidget {
                   contentWidget ??
                   Scrollbar(
                     child: SingleChildScrollView(
-                      child: TDDialogContent(
+                      child: MyDialogContent(
                         content: content,
                         contentColor: contentColor ?? const Color(0x99000000),
                       ),
@@ -189,9 +189,9 @@ class HorizontalNormalButtons extends StatelessWidget {
     super.key,
   });
 
-  final TDDialogButtonOptions leftBtn;
+  final MyDialogButtonOptions leftBtn;
 
-  final TDDialogButtonOptions rightBtn;
+  final MyDialogButtonOptions rightBtn;
 
   @override
   Widget build(BuildContext context) {
@@ -201,7 +201,7 @@ class HorizontalNormalButtons extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
-            child: TDDialogButton(
+            child: MyDialogButton(
               buttonText: leftBtn.title,
               buttonTextColor: leftBtn.titleColor,
               buttonTextSize: leftBtn.titleSize,
@@ -220,7 +220,7 @@ class HorizontalNormalButtons extends StatelessWidget {
           ),
           const MyDivider(thickness: 12, color: Colors.transparent),
           Expanded(
-            child: TDDialogButton(
+            child: MyDialogButton(
               buttonText: rightBtn.title,
               buttonTextColor: rightBtn.titleColor,
               buttonTextSize: rightBtn.titleSize,
@@ -250,9 +250,9 @@ class HorizontalTextButtons extends StatelessWidget {
     super.key,
   });
 
-  final TDDialogButtonOptions leftBtn;
+  final MyDialogButtonOptions leftBtn;
 
-  final TDDialogButtonOptions rightBtn;
+  final MyDialogButtonOptions rightBtn;
 
   @override
   Widget build(BuildContext context) {
@@ -263,7 +263,7 @@ class HorizontalTextButtons extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: TDDialogButton(
+              child: MyDialogButton(
                 buttonText: leftBtn.title,
                 buttonTextColor: leftBtn.titleColor,
                 buttonTextSize: leftBtn.titleSize,
@@ -283,7 +283,7 @@ class HorizontalTextButtons extends StatelessWidget {
             ),
             const MyDivider(thickness: 1, height: 56),
             Expanded(
-              child: TDDialogButton(
+              child: MyDialogButton(
                 buttonText: rightBtn.title,
                 buttonTextColor: rightBtn.titleColor,
                 buttonTextSize: rightBtn.titleSize,
@@ -307,8 +307,8 @@ class HorizontalTextButtons extends StatelessWidget {
   }
 }
 
-class TDDialogButton extends StatelessWidget {
-  const TDDialogButton({
+class MyDialogButton extends StatelessWidget {
+  const MyDialogButton({
     required this.onPressed,
     super.key,
     this.buttonText,

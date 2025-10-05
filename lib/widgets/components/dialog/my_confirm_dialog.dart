@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../button/my_button.dart';
 import '../divider/my_divider.dart';
-import 'td_dialog.dart';
-import 'td_dialog_widget.dart';
+import 'my_dialog_config.dart';
+import 'my_dialog_widget.dart';
 
 /// A popup control with only one button
 ///
 /// Button styles support plain and text
-class TDConfirmDialog extends StatelessWidget {
-  const TDConfirmDialog({
+class MyConfirmDialog extends StatelessWidget {
+  const MyConfirmDialog({
     super.key,
     this.action,
     this.backgroundColor = Colors.white,
@@ -23,7 +23,7 @@ class TDConfirmDialog extends StatelessWidget {
     this.contentMaxHeight = 0,
     this.buttonText,
     this.buttonTextColor,
-    this.buttonStyle = TDDialogButtonStyle.normal,
+    this.buttonStyle = MyDialogButtonStyle.normal,
     this.showCloseButton,
     this.padding = const EdgeInsets.fromLTRB(24, 32, 24, 0),
     this.buttonWidget,
@@ -52,7 +52,7 @@ class TDConfirmDialog extends StatelessWidget {
 
   final Color backgroundColor;
 
-  final TDDialogButtonStyle buttonStyle;
+  final MyDialogButtonStyle buttonStyle;
 
   final double radius;
 
@@ -66,13 +66,13 @@ class TDConfirmDialog extends StatelessWidget {
   Widget _buildButton(BuildContext context) {
     if (buttonWidget != null) return buttonWidget!;
 
-    if (buttonStyle == TDDialogButtonStyle.text) {
+    if (buttonStyle == MyDialogButtonStyle.text) {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           const MyDivider(height: 23, color: Colors.transparent),
           const MyDivider(height: 1),
-          TDDialogButton(
+          MyDialogButton(
             buttonText: buttonText ?? 'Ok',
             buttonTextColor: buttonTextColor,
             buttonType: MyButtonType.text,
@@ -90,7 +90,7 @@ class TDConfirmDialog extends StatelessWidget {
     } else {
       return Container(
         padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
-        child: TDDialogButton(
+        child: MyDialogButton(
           buttonText: buttonText ?? 'Ok',
           buttonTextColor: buttonTextColor,
           onPressed: () {
@@ -112,7 +112,7 @@ class TDConfirmDialog extends StatelessWidget {
       '// Title and content cannot be empty at the same time',
     );
 
-    return TDDialogScaffold(
+    return MyDialogScaffold(
       showCloseButton: showCloseButton,
       backgroundColor: backgroundColor,
       radius: radius,
@@ -124,7 +124,7 @@ class TDConfirmDialog extends StatelessWidget {
               Flexible(
                 child: SingleChildScrollView(
                   physics: const ClampingScrollPhysics(),
-                  child: TDDialogInfoWidget(
+                  child: MyDialogInfoWidget(
                     title: title,
                     titleColor: titleColor,
                     titleAlignment: titleAlignment,

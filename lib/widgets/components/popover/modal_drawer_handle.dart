@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../index.dart';
+
 /// {@template modalDrawerHandle}
 /// A customizable 'handle' intended for use with modal [BottomSheet] widgets.
 /// {@endtemplate}
@@ -48,7 +50,7 @@ class ModalDrawerHandle extends StatelessWidget {
           height: height,
           width: width,
           decoration: BoxDecoration(
-            color: color ?? Colors.grey.shade300,
+            color: color ?? context.colorScheme.border,
             borderRadius: borderRadius,
           ),
         ),

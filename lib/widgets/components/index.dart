@@ -6,6 +6,7 @@ export 'button/index.dart';
 export 'cell/index.dart';
 export 'checkbox/index.dart';
 export 'collapse/index.dart';
+export 'date_time_picker/index.dart';
 export 'dialog/index.dart';
 export 'divider/index.dart';
 export 'drawer/index.dart';

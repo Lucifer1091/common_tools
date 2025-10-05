@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../index.dart';
-import '../widgets.dart';
 
 class AutoRefreshBuilder extends StatefulWidget {
   const AutoRefreshBuilder({
