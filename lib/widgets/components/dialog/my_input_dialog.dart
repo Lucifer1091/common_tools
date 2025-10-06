@@ -85,6 +85,7 @@ class MyInputDialog extends StatelessWidget {
               child: TextField(
                 controller: textEditingController,
                 autofocus: true,
+                cursorColor: context.colorScheme.primary,
                 style: TextStyle(
                   color: context.colorScheme.secondaryForeground,
                 ),
@@ -118,7 +119,6 @@ class MyInputDialog extends StatelessWidget {
           title: 'Cancel',
           type: MyButtonType.outline,
           titleColor: context.colorScheme.popoverForeground,
-          fontWeight: FontWeight.normal,
           action: leftBtnAction,
         );
 
@@ -127,7 +127,6 @@ class MyInputDialog extends StatelessWidget {
         MyDialogButtonOptions(
           title: 'Confirm',
           titleColor: context.colorScheme.primaryForeground,
-          fontWeight: FontWeight.w600,
           action: rightBtnAction,
         );
 

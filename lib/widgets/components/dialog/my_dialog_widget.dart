@@ -101,7 +101,7 @@ class MyDialogContent extends StatelessWidget {
     return MyText(
       content,
       textColor: contentColor,
-      fontSize: 16,
+      fontSize: 14,
       textAlign: switch (contentAlignment) {
         Alignment.centerLeft => TextAlign.left,
         Alignment.centerRight => TextAlign.right,
@@ -139,7 +139,7 @@ class MyDialogInfoWidget extends StatelessWidget {
     assert((title != null || content != null || contentWidget != null), '');
 
     return Padding(
-      padding: padding ?? const EdgeInsets.fromLTRB(24, 32, 24, 0),
+      padding: padding ?? const EdgeInsets.fromLTRB(24, 24, 24, 0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -175,8 +175,7 @@ class MyDialogInfoWidget extends StatelessWidget {
                         content: content,
                         contentAlignment: contentAlignment,
                         contentColor:
-                            contentColor ??
-                            context.colorScheme.popoverForeground,
+                            contentColor ?? context.colorScheme.mutedForeground,
                       ),
                     ),
                   ),
@@ -213,7 +212,7 @@ class MyDialogShrinkButtons extends StatelessWidget {
               buttonStyle: leftBtn!.style,
               buttonType: leftBtn!.type,
               height: leftBtn!.height,
-              buttonTextFontWeight: leftBtn!.fontWeight ?? FontWeight.w600,
+              buttonTextFontWeight: leftBtn!.fontWeight,
               isExpanded: false,
               onPressed: () {
                 if (leftBtn!.action != null) {
@@ -231,7 +230,7 @@ class MyDialogShrinkButtons extends StatelessWidget {
             buttonStyle: rightBtn.style,
             buttonType: rightBtn.type,
             height: rightBtn.height,
-            buttonTextFontWeight: rightBtn.fontWeight ?? FontWeight.w600,
+            buttonTextFontWeight: rightBtn.fontWeight,
             isExpanded: false,
             onPressed: () {
               if (rightBtn.action != null) {
@@ -273,7 +272,7 @@ class MyDialogExpandedButtons extends StatelessWidget {
               buttonStyle: leftBtn.style,
               buttonType: leftBtn.type,
               height: leftBtn.height,
-              buttonTextFontWeight: leftBtn.fontWeight ?? FontWeight.w600,
+              buttonTextFontWeight: leftBtn.fontWeight,
               onPressed: () {
                 if (leftBtn.action != null) {
                   leftBtn.action!();
@@ -292,7 +291,7 @@ class MyDialogExpandedButtons extends StatelessWidget {
               buttonStyle: rightBtn.style,
               buttonType: rightBtn.type,
               height: rightBtn.height,
-              buttonTextFontWeight: rightBtn.fontWeight ?? FontWeight.w600,
+              buttonTextFontWeight: rightBtn.fontWeight,
               onPressed: () {
                 if (rightBtn.action != null) {
                   rightBtn.action!();
@@ -315,7 +314,7 @@ class MyDialogButton extends StatelessWidget {
     this.buttonText,
     this.buttonTextColor,
     this.buttonTextSize,
-    this.buttonTextFontWeight = FontWeight.w600,
+    this.buttonTextFontWeight,
     this.buttonStyle,
     this.buttonType,
     this.height,
@@ -342,12 +341,12 @@ class MyDialogButton extends StatelessWidget {
       type: buttonType ?? MyButtonType.primary,
       text: buttonText,
       textStyle: TextStyle(
-        fontWeight: buttonTextFontWeight,
+        fontWeight: buttonTextFontWeight ?? FontWeight.w400,
         color: buttonTextColor,
-        fontSize: buttonTextSize,
+        fontSize: buttonTextSize ?? 16,
       ),
       width: width,
-      height: height ?? 40,
+      height: height ?? 36,
       isExpanded: isExpanded,
       margin: EdgeInsets.zero,
     );

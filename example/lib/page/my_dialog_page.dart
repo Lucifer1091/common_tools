@@ -118,7 +118,7 @@ class _MyDialogPageState extends State<MyDialogPage> {
                 builder: (context) {
                   return MyInfoDialog(
                     width: 500,
-                    title: 'Are you sure ?',
+                    title: 'You have been kicked out of session.',
                     titleAlignment: Alignment.centerLeft,
                     contentAlignment: Alignment.centerLeft,
                     content: Faker.generateLoremIpsumWords(15),
@@ -159,7 +159,7 @@ class _MyDialogPageState extends State<MyDialogPage> {
                 builder: (context) {
                   return MyAlertDialog(
                     width: 500,
-                    title: 'Are you sure ?',
+                    title: 'Are you absolutely sure ?',
                     titleAlignment: Alignment.centerLeft,
                     contentAlignment: Alignment.centerLeft,
                     content: Faker.generateLoremIpsumWords(15),
@@ -208,6 +208,25 @@ class _MyDialogPageState extends State<MyDialogPage> {
                     image: _demoImage,
                     title: _dialogTitle,
                     content: _commonContent,
+                  );
+                },
+              );
+            },
+          ),
+          MyButton(
+            text: 'Draggable Dialog',
+            size: MyButtonSize.large,
+            type: MyButtonType.outline,
+            onTap: () {
+              MyDialog.show(
+                context,
+                draggable: true,
+                builder: (context) {
+                  return MyInputDialog(
+                    textEditingController: TextEditingController(),
+                    title: _dialogTitle,
+                    content: _commonContent,
+                    hintText: _inputHint,
                   );
                 },
               );

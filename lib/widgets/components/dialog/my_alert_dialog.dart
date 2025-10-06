@@ -159,7 +159,7 @@ class MyAlertDialog extends StatelessWidget {
         buttonTextColor: value.titleColor,
         buttonTextSize: value.titleSize,
         height: value.height,
-        buttonTextFontWeight: value.fontWeight ?? FontWeight.w600,
+        buttonTextFontWeight: value.fontWeight,
         buttonStyle: value.style,
         buttonType: value.type,
         onPressed: () {
