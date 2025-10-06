@@ -13,7 +13,6 @@ class MyDialog {
     BuildContext context, {
     required WidgetBuilder builder,
     Duration? duration,
-    Alignment? alignment,
     bool fullscreen = false,
     bool draggable = false,
     bool hideSoftKeyboard = true,
@@ -30,21 +29,19 @@ class MyDialog {
       barrierColor: const Color.fromRGBO(0, 0, 0, 0.8),
       transitionDuration: duration ?? animationDuration,
       transitionBuilder: (context, animation, _, child) {
-        final animate = dialogAnimatedWrapperWidget(
-          animation: animation,
-          dialogAnimation: dialogAnimation,
-          child: child,
-        );
+        Widget? animate;
 
-        Align? align;
-
-        if (!fullscreen && alignment != null) {
-          align = Align(alignment: alignment, child: animate);
+        if (dialogAnimation != MyDialogAnimation.none) {
+          animate = dialogAnimatedWrapperWidget(
+            animation: animation,
+            dialogAnimation: dialogAnimation,
+            child: child,
+          );
         }
 
         return FocusScope(
           canRequestFocus: animation.value == 1,
-          child: align ?? animate,
+          child: animate ?? child,
         );
       },
       pageBuilder: (_, _, child) {
@@ -150,12 +147,15 @@ class MyDialog {
       // Default fade animation.
       case MyDialogAnimation.fadeIn:
         return FadeTransition(opacity: animation, child: child);
+      case MyDialogAnimation.none:
+        return child;
     }
   }
 }
 
 /// Enum for Dialog Animation
 enum MyDialogAnimation {
+  none,
   scale,
   fadeIn,
   rotate,

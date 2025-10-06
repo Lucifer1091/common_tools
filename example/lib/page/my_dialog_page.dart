@@ -232,6 +232,23 @@ class _MyDialogPageState extends State<MyDialogPage> {
               );
             },
           ),
+          MyButton(
+            text: 'Fullscreen Dialog',
+            size: MyButtonSize.large,
+            type: MyButtonType.outline,
+            onTap: () {
+              MyDialog.show(
+                context,
+                fullscreen: true,
+                builder: (context) {
+                  return FancyDateRangePickerDialog(
+                    firstDate: DateTime(2020),
+                    lastDate: DateTime(2050),
+                  );
+                },
+              );
+            },
+          ),
         ],
       ),
     );
