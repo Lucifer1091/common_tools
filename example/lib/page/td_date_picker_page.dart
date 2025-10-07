@@ -1,5 +1,6 @@
 import 'package:common_tools/widgets/components/button/index.dart';
 import 'package:common_tools/widgets/components/date_time_picker/date_time_form_fields/date_time_field/date_field.dart';
+import 'package:common_tools/widgets/components/index.dart';
 import 'package:flutter/material.dart';
 
 import '../../base/example_widget.dart';
@@ -28,6 +29,7 @@ class _MyDatePickerPageState extends State<MyDatePickerPage> {
           title: 'Default Pickers',
           children: [
             ExampleItem(
+              padding: EdgeInsets.only(top: 16),
               builder: (context) {
                 return Wrap(
                   spacing: 16,
@@ -62,6 +64,12 @@ class _MyDatePickerPageState extends State<MyDatePickerPage> {
                         );
                       },
                     ),
+                    MyButton(
+                      text: 'Duration Picker',
+                      onTap: () {
+                        MyDatePicker.duration(context: context);
+                      },
+                    ),
                   ],
                 );
               },
@@ -72,6 +80,7 @@ class _MyDatePickerPageState extends State<MyDatePickerPage> {
           title: 'Custom Pickers',
           children: [
             ExampleItem(
+              padding: EdgeInsets.only(top: 16),
               builder: (context) {
                 return Wrap(
                   spacing: 16,
