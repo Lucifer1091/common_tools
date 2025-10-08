@@ -688,7 +688,7 @@ class _MyDurationPickerDialogState extends State<MyDurationPickerDialog> {
     );
 
     final right = MyDialogButtonOptions(
-      title: 'Select',
+      title: 'OK',
       titleColor: context.colorScheme.primaryForeground,
       action: _handleOk,
     );

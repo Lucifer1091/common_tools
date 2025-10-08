@@ -9,8 +9,8 @@ class MyDialog {
 
   static const Duration animationDuration = Duration(milliseconds: 150);
 
-  static Future<T?> show<T>(
-    BuildContext context, {
+  static Future<T?> show<T>({
+    required BuildContext context,
     required WidgetBuilder builder,
     Duration? duration,
     bool fullscreen = false,

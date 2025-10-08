@@ -106,7 +106,7 @@ class BottomSheets {
       return showModalBottomSheet(context: context, builder: (_) => child);
     } else {
       // Show a dialog.
-      return MyDialog.show(context, builder: (_) => child);
+      return MyDialog.show(context: context, builder: (_) => child);
     }
   }
 }

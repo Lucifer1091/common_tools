@@ -343,7 +343,7 @@ class MyDialogButton extends StatelessWidget {
       textStyle: TextStyle(
         fontWeight: buttonTextFontWeight ?? FontWeight.w400,
         color: buttonTextColor,
-        fontSize: buttonTextSize ?? 16,
+        fontSize: buttonTextSize ?? 14,
       ),
       width: width,
       height: height ?? 36,

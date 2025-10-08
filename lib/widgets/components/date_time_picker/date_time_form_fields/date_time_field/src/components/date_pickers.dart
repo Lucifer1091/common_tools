@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../../../../index.dart';
+import '../../../../../../../index.dart' hide TimePickerEntryMode;
 import '../index.dart';
 
 class DatePickers {

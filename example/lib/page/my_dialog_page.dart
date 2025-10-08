@@ -81,7 +81,7 @@ class _MyDialogPageState extends State<MyDialogPage> {
             type: MyButtonType.outline,
             onTap: () {
               MyDialog.show(
-                context,
+                context: context,
                 builder: (context) {
                   return MyInfoDialog(
                     title: _dialogTitle,
@@ -97,7 +97,7 @@ class _MyDialogPageState extends State<MyDialogPage> {
             type: MyButtonType.outline,
             onTap: () {
               MyDialog.show(
-                context,
+                context: context,
                 builder: (context) {
                   return MyInfoDialog(
                     title: _dialogTitle,
@@ -114,7 +114,7 @@ class _MyDialogPageState extends State<MyDialogPage> {
             type: MyButtonType.outline,
             onTap: () {
               MyDialog.show(
-                context,
+                context: context,
                 builder: (context) {
                   return MyInfoDialog(
                     width: 500,
@@ -139,7 +139,7 @@ class _MyDialogPageState extends State<MyDialogPage> {
             type: MyButtonType.outline,
             onTap: () {
               MyDialog.show(
-                context,
+                context: context,
                 builder: (context) {
                   return MyAlertDialog(
                     title: _dialogTitle,
@@ -155,7 +155,7 @@ class _MyDialogPageState extends State<MyDialogPage> {
             type: MyButtonType.outline,
             onTap: () {
               MyDialog.show(
-                context,
+                context: context,
                 builder: (context) {
                   return MyAlertDialog(
                     width: 500,
@@ -184,7 +184,7 @@ class _MyDialogPageState extends State<MyDialogPage> {
             type: MyButtonType.outline,
             onTap: () {
               MyDialog.show(
-                context,
+                context: context,
                 builder: (context) {
                   return MyInputDialog(
                     textEditingController: TextEditingController(),
@@ -202,7 +202,7 @@ class _MyDialogPageState extends State<MyDialogPage> {
             type: MyButtonType.outline,
             onTap: () {
               MyDialog.show(
-                context,
+                context: context,
                 builder: (context) {
                   return MyImageDialog(
                     image: _demoImage,
@@ -219,7 +219,7 @@ class _MyDialogPageState extends State<MyDialogPage> {
             type: MyButtonType.outline,
             onTap: () {
               MyDialog.show(
-                context,
+                context: context,
                 draggable: true,
                 builder: (context) {
                   return MyInputDialog(
@@ -238,7 +238,7 @@ class _MyDialogPageState extends State<MyDialogPage> {
             type: MyButtonType.outline,
             onTap: () {
               MyDialog.show(
-                context,
+                context: context,
                 fullscreen: true,
                 builder: (context) {
                   return FancyDateRangePickerDialog(
@@ -261,7 +261,7 @@ class _MyDialogPageState extends State<MyDialogPage> {
       type: MyButtonType.outline,
       onTap: () {
         MyDialog.show(
-          context,
+          context: context,
           builder: (context) {
             return MyInfoDialog(title: _dialogTitle, content: _commonContent);
           },
@@ -277,7 +277,7 @@ class _MyDialogPageState extends State<MyDialogPage> {
       type: MyButtonType.outline,
       onTap: () {
         MyDialog.show(
-          context,
+          context: context,
           builder: (context) {
             return MyAlertDialog(title: _dialogTitle, content: _commonContent);
           },
@@ -293,7 +293,7 @@ class _MyDialogPageState extends State<MyDialogPage> {
       type: MyButtonType.outline,
       onTap: () {
         MyDialog.show(
-          context,
+          context: context,
           builder: (context) {
             return MyAlertDialog.vertical(
               title: _dialogTitle,
@@ -328,7 +328,7 @@ class _MyDialogPageState extends State<MyDialogPage> {
       type: MyButtonType.outline,
       onTap: () {
         MyDialog.show(
-          context,
+          context: context,
           builder: (context) {
             return MyInfoDialog(
               title: _dialogTitle,
