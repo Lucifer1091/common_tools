@@ -1,13 +1,13 @@
+import 'package:flutter/material.dart';
+
 import 'operators.dart';
 
 extension DateTimeGetters on DateTime {
   /// Creates a new [DateTime] instance that is a copy of this instance.
   ///
   /// Returns a new [DateTime] instance.
-  DateTime get clone => DateTime.fromMicrosecondsSinceEpoch(
-        microsecondsSinceEpoch,
-        isUtc: isUtc,
-      );
+  DateTime get clone =>
+      DateTime.fromMicrosecondsSinceEpoch(microsecondsSinceEpoch, isUtc: isUtc);
 
   /// Returns the starting [DateTime] of the current year.
   ///
@@ -87,14 +87,16 @@ extension DateTimeGetters on DateTime {
   DateTime get previousDay => addDays(-1);
 
   /// Returns the Monday of this week
-  DateTime get firstDayOfWeek => isUtc
-      ? DateTime.utc(year, month, day + 1 - weekday)
-      : DateTime(year, month, day + 1 - weekday);
+  DateTime get firstDayOfWeek =>
+      isUtc
+          ? DateTime.utc(year, month, day + 1 - weekday)
+          : DateTime(year, month, day + 1 - weekday);
 
   /// Returns the Sunday of this week
-  DateTime get lastDayOfWeek => isUtc
-      ? DateTime.utc(year, month, day + 7 - weekday)
-      : DateTime(year, month, day + 7 - weekday);
+  DateTime get lastDayOfWeek =>
+      isUtc
+          ? DateTime.utc(year, month, day + 7 - weekday)
+          : DateTime(year, month, day + 7 - weekday);
 
   /// Returns the first day of this month
   DateTime get firstDayOfMonth =>
@@ -112,15 +114,12 @@ extension DateTimeGetters on DateTime {
       isUtc ? DateTime.utc(year, 12, 31) : DateTime(year, 12, 31);
 
   /// Get UTC [DateTime] from this [DateTime]
-  DateTime get utc => DateTime.fromMicrosecondsSinceEpoch(
-        microsecondsSinceEpoch,
-        isUtc: true,
-      );
+  DateTime get utc =>
+      DateTime.fromMicrosecondsSinceEpoch(microsecondsSinceEpoch, isUtc: true);
 
   /// Get Local [DateTime] from this [DateTime]
-  DateTime get local => DateTime.fromMicrosecondsSinceEpoch(
-        microsecondsSinceEpoch,
-      );
+  DateTime get local =>
+      DateTime.fromMicrosecondsSinceEpoch(microsecondsSinceEpoch);
 }
 
 extension DateTimeSetters on DateTime {
@@ -139,25 +138,38 @@ extension DateTimeSetters on DateTime {
   }) =>
       isUtc
           ? DateTime.utc(
-              year ?? this.year,
-              month ?? this.month,
-              day ?? this.day,
-              hour ?? this.hour,
-              minute ?? this.minute,
-              second ?? this.second,
-              millisecond ?? this.millisecond,
-              microsecond ?? this.microsecond,
-            )
+            year ?? this.year,
+            month ?? this.month,
+            day ?? this.day,
+            hour ?? this.hour,
+            minute ?? this.minute,
+            second ?? this.second,
+            millisecond ?? this.millisecond,
+            microsecond ?? this.microsecond,
+          )
           : DateTime(
-              year ?? this.year,
-              month ?? this.month,
-              day ?? this.day,
-              hour ?? this.hour,
-              minute ?? this.minute,
-              second ?? this.second,
-              millisecond ?? this.millisecond,
-              microsecond ?? this.microsecond,
-            );
+            year ?? this.year,
+            month ?? this.month,
+            day ?? this.day,
+            hour ?? this.hour,
+            minute ?? this.minute,
+            second ?? this.second,
+            millisecond ?? this.millisecond,
+            microsecond ?? this.microsecond,
+          );
+
+  DateTime copyTime([TimeOfDay? time]) {
+    return (isUtc ? DateTime.utc : DateTime.new)(
+      year,
+      month,
+      day,
+      time?.hour ?? hour,
+      time?.minute ?? minute,
+      second,
+      millisecond,
+      microsecond,
+    );
+  }
 
   /// Returns [DateTime] with only information that is passed to the method.
   /// In contrast to [copyWith] method, this method does not copy
@@ -202,17 +214,16 @@ extension DateTimeSetters on DateTime {
     int? second,
     int? millisecond,
     int? microsecond,
-  ]) =>
-      DateTime(
-        year,
-        month ?? this.month,
-        day ?? this.day,
-        hour ?? this.hour,
-        minute ?? this.minute,
-        second ?? this.second,
-        millisecond ?? this.millisecond,
-        microsecond ?? this.microsecond,
-      );
+  ]) => DateTime(
+    year,
+    month ?? this.month,
+    day ?? this.day,
+    hour ?? this.hour,
+    minute ?? this.minute,
+    second ?? this.second,
+    millisecond ?? this.millisecond,
+    microsecond ?? this.microsecond,
+  );
 
   /// Change [month] of this date
   ///
@@ -230,17 +241,16 @@ extension DateTimeSetters on DateTime {
     int? second,
     int? millisecond,
     int? microsecond,
-  ]) =>
-      DateTime(
-        year,
-        month,
-        day ?? this.day,
-        hour ?? this.hour,
-        minute ?? this.minute,
-        second ?? this.second,
-        millisecond ?? this.millisecond,
-        microsecond ?? this.microsecond,
-      );
+  ]) => DateTime(
+    year,
+    month,
+    day ?? this.day,
+    hour ?? this.hour,
+    minute ?? this.minute,
+    second ?? this.second,
+    millisecond ?? this.millisecond,
+    microsecond ?? this.microsecond,
+  );
 
   /// Change [weekday] of this date
   ///
@@ -251,10 +261,11 @@ extension DateTimeSetters on DateTime {
     final reminder = weekday % daysPerWeek;
     final dayIndex = (reminder + daysPerWeek) % daysPerWeek;
     final delta = daysPerWeek - weekStartsOn;
-    final diff = weekday < 0 || weekday > 6
-        ? weekday - ((currentDay + delta) % daysPerWeek)
-        : ((dayIndex + delta) % daysPerWeek) -
-            ((currentDay + delta) % daysPerWeek);
+    final diff =
+        weekday < 0 || weekday > 6
+            ? weekday - ((currentDay + delta) % daysPerWeek)
+            : ((dayIndex + delta) % daysPerWeek) -
+                ((currentDay + delta) % daysPerWeek);
 
     return addDays(diff);
   }
@@ -273,17 +284,16 @@ extension DateTimeSetters on DateTime {
     int? second,
     int? millisecond,
     int? microsecond,
-  ]) =>
-      DateTime(
-        year,
-        month,
-        day,
-        hour ?? this.hour,
-        minute ?? this.minute,
-        second ?? this.second,
-        millisecond ?? this.millisecond,
-        microsecond ?? this.microsecond,
-      );
+  ]) => DateTime(
+    year,
+    month,
+    day,
+    hour ?? this.hour,
+    minute ?? this.minute,
+    second ?? this.second,
+    millisecond ?? this.millisecond,
+    microsecond ?? this.microsecond,
+  );
 
   /// Sets the hour, minute, second, millisecond, and microsecond of this [DateTime].
   ///
@@ -294,17 +304,16 @@ extension DateTimeSetters on DateTime {
     int? second,
     int? millisecond,
     int? microsecond,
-  ]) =>
-      DateTime(
-        year,
-        month,
-        day,
-        hour,
-        minute ?? this.minute,
-        second ?? this.second,
-        millisecond ?? this.millisecond,
-        microsecond ?? this.microsecond,
-      );
+  ]) => DateTime(
+    year,
+    month,
+    day,
+    hour,
+    minute ?? this.minute,
+    second ?? this.second,
+    millisecond ?? this.millisecond,
+    microsecond ?? this.microsecond,
+  );
 
   /// Change [minute] of this date
   ///
@@ -316,27 +325,22 @@ extension DateTimeSetters on DateTime {
     int? second,
     int? millisecond,
     int? microsecond,
-  ]) =>
-      DateTime(
-        year,
-        month,
-        day,
-        hour,
-        minute,
-        second ?? this.second,
-        millisecond ?? this.millisecond,
-        microsecond ?? this.microsecond,
-      );
+  ]) => DateTime(
+    year,
+    month,
+    day,
+    hour,
+    minute,
+    second ?? this.second,
+    millisecond ?? this.millisecond,
+    microsecond ?? this.microsecond,
+  );
 
   /// Change [second] of this date
   ///
   /// set [millisecond] if you want to change it as well, to skip an change other optional field set it as null
   /// set [microsecond] if you want to change it as well
-  DateTime setSecond(
-    int second, [
-    int? millisecond,
-    int? microsecond,
-  ]) =>
+  DateTime setSecond(int second, [int? millisecond, int? microsecond]) =>
       DateTime(
         year,
         month,
@@ -351,35 +355,28 @@ extension DateTimeSetters on DateTime {
   /// Change [millisecond] of this date
   ///
   /// set [microsecond] if you want to change it as well
-  DateTime setMillisecond(
-    int millisecond, [
-    int? microsecond,
-  ]) =>
-      DateTime(
-        year,
-        month,
-        day,
-        hour,
-        minute,
-        second,
-        millisecond,
-        microsecond ?? this.microsecond,
-      );
+  DateTime setMillisecond(int millisecond, [int? microsecond]) => DateTime(
+    year,
+    month,
+    day,
+    hour,
+    minute,
+    second,
+    millisecond,
+    microsecond ?? this.microsecond,
+  );
 
   /// Change [microsecond] of this date
-  DateTime setMicrosecond(
-    int microsecond,
-  ) =>
-      DateTime(
-        year,
-        month,
-        day,
-        hour,
-        minute,
-        second,
-        millisecond,
-        microsecond,
-      );
+  DateTime setMicrosecond(int microsecond) => DateTime(
+    year,
+    month,
+    day,
+    hour,
+    minute,
+    second,
+    millisecond,
+    microsecond,
+  );
 
   /// Returns new [DateTime] instance of nearest `n`th weekday in the future
   ///

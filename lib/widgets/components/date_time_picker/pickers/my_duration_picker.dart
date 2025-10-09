@@ -673,7 +673,7 @@ class _MyDurationPickerDialogState extends State<MyDurationPickerDialog> {
             titleAlignment: Alignment.centerLeft,
             contentWidget: picker,
           ),
-          const Gap(24),
+          const Gap(16),
           _horizontalButtons(context),
         ],
       ),

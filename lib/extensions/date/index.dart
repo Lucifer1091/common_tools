@@ -1,4 +1,5 @@
 export 'converters.dart';
+export 'iterable.dart';
 export 'misc.dart';
 export 'operators.dart';
 export 'range.dart';

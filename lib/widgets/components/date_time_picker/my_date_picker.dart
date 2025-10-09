@@ -5,51 +5,75 @@ import '../../../index.dart';
 class MyDatePicker {
   MyDatePicker._();
 
-  /// {@tool snippet} Show a dialog with time unconditionally displayed in 24 hour
-  /// format.
-  ///
-  /// ```dart
-  /// Future<TimeOfDay?> selectedTime24Hour = MyDatePicker.time(
-  ///   context: context,
-  ///   initialTime: const TimeOfDay(hour: 10, minute: 47),
-  ///   builder: (BuildContext context, Widget? child) {
-  ///     return MediaQuery(
-  ///       data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-  ///       child: child!,
-  ///     );
-  ///   },
-  /// );
-  /// ```
-  /// {@end-tool}
-  ///
   static Future<TimeOfDay?> time({
     required BuildContext context,
-    required TimeOfDay initialTime,
-    TransitionBuilder? builder,
+    required TimeOfDay initial,
+    bool use24HrFormat = false,
     bool barrierDismissible = true,
-    String? cancelText,
-    String? confirmText,
-    String? helpText,
-    String? errorInvalidText,
-    String? hourLabelText,
-    String? minuteLabelText,
   }) async {
     assert(debugCheckHasMaterialLocalizations(context), '');
 
-    final Widget dialog = MyTimePickerDialog(
-      initialTime: initialTime,
-      cancelText: cancelText,
-      confirmText: confirmText,
-      helpText: helpText,
-      errorInvalidText: errorInvalidText,
-      hourLabelText: hourLabelText,
-      minuteLabelText: minuteLabelText,
-    );
+    final Widget dialog = MyTimePickerDialog(initialTime: initial);
+
     return MyDialog.show<TimeOfDay>(
       context: context,
       barrierDismissible: barrierDismissible,
       builder: (BuildContext context) {
-        return builder == null ? dialog : builder(context, dialog);
+        return use24HrFormat
+            ? MediaQuery(
+              data: MediaQuery.of(
+                context,
+              ).copyWith(alwaysUse24HourFormat: true),
+              child: dialog,
+            )
+            : dialog;
+      },
+    );
+  }
+
+  static Future<TimeRange?> timeRange({
+    required BuildContext context,
+    TimeOfDay? startTime,
+    TimeOfDay? endTime,
+    bool? autoAdjust,
+    bool? unSelectedEmpty,
+    TimeRangeViewType? timeRangeViewType,
+    ValueChanged<TimeOfDay>? onStartTimeChange,
+    ValueChanged<TimeOfDay>? onEndTimeChange,
+    VoidCallback? onCancel,
+    bool use24HrFormat = false,
+    bool barrierDismissible = true,
+  }) {
+    assert(debugCheckHasMaterialLocalizations(context), '');
+
+    final Widget dialog = MyTimeRangeDialog(
+      okLabel: 'OK',
+      cancelLabel: 'CANCEL',
+      unSelectedEmpty: unSelectedEmpty ?? false,
+      headerDefaultStartLabel: 'START',
+      headerDefaultEndLabel: 'END',
+      autoAdjust: autoAdjust ?? true,
+      timeRangeViewType: timeRangeViewType ?? TimeRangeViewType.start,
+      onStartTimeChange: onStartTimeChange,
+      onEndTimeChange: onEndTimeChange,
+      startTime: startTime,
+      endTime: endTime,
+      onSubmitted: (_) {},
+      onCancel: onCancel,
+    );
+
+    return MyDialog.show<TimeRange>(
+      context: context,
+      barrierDismissible: barrierDismissible,
+      builder: (BuildContext context) {
+        return use24HrFormat
+            ? MediaQuery(
+              data: MediaQuery.of(
+                context,
+              ).copyWith(alwaysUse24HourFormat: true),
+              child: dialog,
+            )
+            : dialog;
       },
     );
   }
