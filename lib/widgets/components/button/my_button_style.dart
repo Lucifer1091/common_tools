@@ -132,4 +132,22 @@ class MyButtonStyle {
   TextDecoration? decoration;
   double? borderWidth;
   BorderRadius? radius;
+
+  MyButtonStyle copyWith({
+    Color? backgroundColor,
+    Color? borderColor,
+    Color? textColor,
+    TextDecoration? decoration,
+    double? borderWidth,
+    BorderRadius? radius,
+  }) {
+    return MyButtonStyle(
+      backgroundColor: backgroundColor ?? this.backgroundColor,
+      borderColor: borderColor ?? this.borderColor,
+      textColor: textColor ?? this.textColor,
+      decoration: decoration ?? this.decoration,
+      borderWidth: borderWidth ?? this.borderWidth,
+      radius: radius ?? this.radius,
+    );
+  }
 }

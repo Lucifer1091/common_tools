@@ -66,7 +66,7 @@ class MyButton extends StatefulWidget {
 
   final MyButtonShape shape;
 
-  final MyButtonStyle? style;
+  final Transformer<Set<WidgetState>,MyButtonStyle>? style;
 
   final TextStyle? textStyle;
 
@@ -189,7 +189,7 @@ class _MyButtonState extends State<MyButton> {
           final enabled = !states.contains(WidgetState.disabled);
 
           final MyButtonStyle style =
-              widget.style ?? _generateInnerStyle(states);
+              widget.style?.call(states) ?? _generateInnerStyle(states);
 
           final Widget display = Container(
             width: _width,

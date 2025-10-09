@@ -38,19 +38,15 @@ class _MyDatePickerPageState extends State<MyDatePickerPage> {
                     MyButton(
                       text: 'Date Picker',
                       onTap: () {
-                        showDatePicker(
-                          context: context,
-                          firstDate: DateTime(1990),
-                          lastDate: DateTime(2099),
-                        );
+                        MyDatePicker.date(context: context);
                       },
                     ),
                     MyButton(
-                      text: 'Date Picker2',
+                      text: 'Year Picker',
                       onTap: () {
-                        showTimePicker(
+                        MyDatePicker.date(
                           context: context,
-                          initialTime: TimeOfDay.now(),
+                          viewType: CalendarViewType.year,
                         );
                       },
                     ),

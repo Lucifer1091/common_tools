@@ -23,7 +23,6 @@ class MyFavoriteButton extends StatefulWidget {
     this.size = MyButtonSize.medium,
     this.type = MyButtonType.ghost,
     this.shape = MyButtonShape.circle,
-    this.style,
     this.padding,
   });
 
@@ -61,8 +60,6 @@ class MyFavoriteButton extends StatefulWidget {
 
   final MyButtonShape shape;
 
-  final MyButtonStyle? style;
-
   final EdgeInsetsGeometry? padding;
 
   final MyFocusableParams focus;
@@ -97,7 +94,6 @@ class _MyFavoriteButtonState extends State<MyFavoriteButton> {
       size: widget.size,
       type: widget.type,
       shape: widget.shape,
-      style: widget.style,
       padding: widget.padding,
       onTap: _onChange,
       iconWidget: AnimatedSwitcher(

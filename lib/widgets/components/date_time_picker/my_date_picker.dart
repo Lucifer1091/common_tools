@@ -5,6 +5,32 @@ import '../../../index.dart';
 class MyDatePicker {
   MyDatePicker._();
 
+  static Future<DateTime?> date({
+    required BuildContext context,
+    DateTime? initial,
+    CalendarViewType viewType = CalendarViewType.date,
+    CalendarSelectionMode selectionMode = CalendarSelectionMode.single,
+    bool barrierDismissible = true,
+    DateState Function(DateTime)? stateBuilder,
+  }) async {
+    assert(debugCheckHasMaterialLocalizations(context), '');
+
+    final Widget dialog = MyCalendarPickerDialog(
+      initial: CalendarValue.single(initial ?? DateTime.now()),
+      viewType: viewType,
+      selectionMode: selectionMode,
+      stateBuilder: stateBuilder,
+    );
+
+    return MyDialog.show<DateTime>(
+      context: context,
+      barrierDismissible: barrierDismissible,
+      builder: (BuildContext context) {
+        return dialog;
+      },
+    );
+  }
+
   static Future<TimeOfDay?> time({
     required BuildContext context,
     required TimeOfDay initial,
