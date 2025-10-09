@@ -55,6 +55,16 @@ class _MyDatePickerPageState extends State<MyDatePickerPage> {
                       },
                     ),
                     MyButton(
+                      text: 'Date Range Picker',
+                      onTap: () {
+                        showDateRangePicker(
+                          context: context,
+                          firstDate: DateTime(1990),
+                          lastDate: DateTime(2099),
+                        );
+                      },
+                    ),
+                    MyButton(
                       text: 'Time Picker',
                       onTap: () {
                         MyDatePicker.time(
@@ -66,23 +76,10 @@ class _MyDatePickerPageState extends State<MyDatePickerPage> {
                     MyButton(
                       text: 'Time Range Picker',
                       onTap: () {
-                        MyDatePicker.timeRange(
-                          context: context,
-                          startTime: TimeOfDay.now(),
-                          endTime: TimeOfDay(hour: 12, minute: 0),
-                        );
+                        MyDatePicker.timeRange(context: context);
                       },
                     ),
-                    MyButton(
-                      text: 'Range Picker',
-                      onTap: () {
-                        showDateRangePicker(
-                          context: context,
-                          firstDate: DateTime(1990),
-                          lastDate: DateTime(2099),
-                        );
-                      },
-                    ),
+
                     MyButton(
                       text: 'Duration Picker',
                       onTap: () {

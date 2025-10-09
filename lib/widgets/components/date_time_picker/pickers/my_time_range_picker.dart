@@ -1,46 +1,21 @@
-import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:flutter/material.dart';
-
-import '../../../../index.dart';
+part of 'my_time_picker.dart';
 
 enum TimeRangeViewType { start, end }
 
 class MyTimeRangeDialog extends StatefulWidget {
   const MyTimeRangeDialog({
-    required this.okLabel,
-    required this.cancelLabel,
-    required this.headerDefaultStartLabel,
-    required this.headerDefaultEndLabel,
     required this.autoAdjust,
-    required this.unSelectedEmpty,
-    super.key,
     this.startTime,
     this.endTime,
-    this.timeRangeViewType = TimeRangeViewType.start,
-    this.onStartTimeChange,
-    this.onEndTimeChange,
-    this.onSubmitted,
-    this.onCancel,
+    super.key,
   });
 
-  final String okLabel;
-  final String cancelLabel;
-  final String headerDefaultStartLabel;
-  final String headerDefaultEndLabel;
-  final ValueChanged<TimeOfDay>? onStartTimeChange;
-  final ValueChanged<TimeOfDay>? onEndTimeChange;
   final bool autoAdjust;
-  final bool unSelectedEmpty;
   final TimeOfDay? startTime;
   final TimeOfDay? endTime;
-  final TimeRangeViewType timeRangeViewType;
-  final ValueChanged<TimeRange>? onSubmitted;
-  final VoidCallback? onCancel;
 
   @override
-  State createState() {
-    return _MyTimeRangeDialogState();
-  }
+  State createState() => _MyTimeRangeDialogState();
 }
 
 class _MyTimeRangeDialogState extends State<MyTimeRangeDialog>
@@ -50,26 +25,15 @@ class _MyTimeRangeDialogState extends State<MyTimeRangeDialog>
   TimeOfDay? _endTime;
   TimeOfDay? _startDefaultTime;
   TimeOfDay? _endDefaultTime;
-  Orientation? _orientation;
-  final double _kTimePickerWidthPortrait = 328;
-  final double _kTimePickerWidthLandscape = 528;
-  final double _kTimePickerHeightPortrait = 434;
-  final double _kTimePickerHeightLandscape = kIsWeb ? 350 : 316.0;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(
-      vsync: this,
-      length: 2,
-      initialIndex: widget.timeRangeViewType == TimeRangeViewType.start ? 0 : 1,
-    );
+    _tabController = TabController(vsync: this, length: 2);
     _startTime = widget.startTime;
     _endTime = widget.endTime;
-    _startDefaultTime =
-        _startTime ?? (widget.unSelectedEmpty ? null : TimeOfDay.now());
-    _endDefaultTime =
-        _endTime ?? (widget.unSelectedEmpty ? null : TimeOfDay.now());
+    _startDefaultTime = _startTime ?? TimeOfDay.now();
+    _endDefaultTime = _endTime ?? TimeOfDay.now();
   }
 
   @override
@@ -80,50 +44,24 @@ class _MyTimeRangeDialogState extends State<MyTimeRangeDialog>
 
   @override
   Widget build(BuildContext context) {
-    _orientation = MediaQuery.of(context).orientation;
-    return AlertDialog(
-      contentPadding: EdgeInsets.all(0),
-      content: SizedBox(
-        width:
-            _orientation == Orientation.portrait
-                ? _kTimePickerWidthPortrait
-                : _kTimePickerWidthLandscape,
-        height:
-            _orientation == Orientation.portrait
-                ? _kTimePickerHeightPortrait
-                : _kTimePickerHeightLandscape,
-        child: Scaffold(
-          appBar: TabBar(
-            labelColor: Theme.of(context).textTheme.bodyLarge!.color,
-            controller: _tabController,
-            tabs: [
-              Tab(
-                text: _formatTime(_startTime) ?? widget.headerDefaultStartLabel,
-              ),
-              Tab(text: _formatTime(_endTime) ?? widget.headerDefaultEndLabel),
-            ],
-          ),
-          body: TabBarView(
-            physics: NeverScrollableScrollPhysics(),
-            controller: _tabController,
-            children: [_startTimePicker(), _endTimePicker()],
-          ),
+    return MyDialogScaffold(
+      body: MyDialogInfoWidget(
+        title: 'Select Time Range',
+        titleAlignment: Alignment.centerLeft,
+        contentWidget: Column(
+          children: [
+            MyTabBar(
+              indicator: MyTabIndicator(context),
+              controller: _tabController,
+              tabs: [MyTab(text: 'From'), MyTab(text: 'To')],
+            ).preferredSize,
+            MyTabView(
+              controller: _tabController,
+              children: [_startTimePicker(), _endTimePicker()],
+            ).sizedBox(height: 460),
+          ],
         ),
       ),
-    );
-  }
-
-  String? _formatTime(TimeOfDay? time) {
-    if (time == null) return null;
-    
-    final bool alwaysUse24HourFormat =
-        MediaQuery.of(context).alwaysUse24HourFormat;
-    final MaterialLocalizations localizations = MaterialLocalizations.of(
-      context,
-    );
-    return localizations.formatTimeOfDay(
-      time,
-      alwaysUse24HourFormat: alwaysUse24HourFormat,
     );
   }
 
@@ -158,38 +96,91 @@ class _MyTimeRangeDialogState extends State<MyTimeRangeDialog>
   }
 
   Widget _startTimePicker() {
-    return _picker(_startTime, (value) {
-      _updateTime(startTime: value);
-      widget.onStartTimeChange?.call(value);
-    });
+    final left = MyDialogButtonOptions(
+      title: 'Cancel',
+      type: MyButtonType.outline,
+      action: _handleCancel,
+    );
+
+    final right = MyDialogButtonOptions(
+      title: 'Next',
+      titleColor: context.colorScheme.primaryForeground,
+      action: _handleNext,
+    );
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        _TimePicker(
+          time: _startTime ?? TimeOfDay.now(),
+          onTimeChanged: (start) => _updateTime(startTime: start),
+          restorationId: 'start_time_picker',
+        ),
+        const Gap(24),
+        MyDialogShrinkButtons(
+          leftBtn: left,
+          rightBtn: right,
+          padding: EdgeInsets.zero,
+        ),
+        const Gap(24),
+      ],
+    );
   }
 
   Widget _endTimePicker() {
-    return _picker(_endTime, (value) {
-      _updateTime(endTime: value);
-      widget.onEndTimeChange?.call(value);
-    });
+    final left = MyDialogButtonOptions(
+      title: 'Back',
+      type: MyButtonType.outline,
+      action: _handleBack,
+    );
+
+    final right = MyDialogButtonOptions(
+      title: 'OK',
+      titleColor: context.colorScheme.primaryForeground,
+      action: _handleOk,
+    );
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        _TimePicker(
+          time: _endTime ?? TimeOfDay.now(),
+          onTimeChanged: (end) => _updateTime(endTime: end),
+          restorationId: 'end_time_picker',
+        ),
+        const Gap(24),
+        MyDialogShrinkButtons(
+          leftBtn: left,
+          rightBtn: right,
+          padding: EdgeInsets.zero,
+        ),
+        const Gap(24),
+      ],
+    );
   }
 
-  Widget _picker(TimeOfDay? initialTime, ValueChanged<TimeOfDay> onTimeChange) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          TimeSinglePicker(
-            initialTime: initialTime ?? TimeOfDay.now(),
-            cancelText: widget.cancelLabel,
-            confirmText: widget.okLabel,
-            onTimeChange: onTimeChange,
-            onSubmitted:
-                (value) => widget.onSubmitted?.call(
-                  TimeRange(
-                    start: _startTime ?? _startDefaultTime ?? TimeOfDay.now(),
-                    end: _endTime ?? _endDefaultTime ?? TimeOfDay.now(),
-                  ),
-                ),
-            onCancel: widget.onCancel,
-          ),
-        ],
+  void _handleCancel() {
+    Navigator.pop(context);
+  }
+
+  void _handleBack() {
+    _tabController.animateTo(0);
+  }
+
+  void _handleNext() {
+    _tabController.animateTo(1);
+  }
+
+  void _handleOk() {
+    Navigator.pop(
+      context,
+      TimeRange(
+        start: _startTime ?? _startDefaultTime ?? TimeOfDay.now(),
+        end: _endTime ?? _endDefaultTime ?? TimeOfDay.now(),
       ),
     );
   }

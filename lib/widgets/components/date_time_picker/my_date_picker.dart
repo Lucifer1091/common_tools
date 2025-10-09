@@ -36,30 +36,15 @@ class MyDatePicker {
     TimeOfDay? startTime,
     TimeOfDay? endTime,
     bool? autoAdjust,
-    bool? unSelectedEmpty,
-    TimeRangeViewType? timeRangeViewType,
-    ValueChanged<TimeOfDay>? onStartTimeChange,
-    ValueChanged<TimeOfDay>? onEndTimeChange,
-    VoidCallback? onCancel,
     bool use24HrFormat = false,
     bool barrierDismissible = true,
   }) {
     assert(debugCheckHasMaterialLocalizations(context), '');
 
     final Widget dialog = MyTimeRangeDialog(
-      okLabel: 'OK',
-      cancelLabel: 'CANCEL',
-      unSelectedEmpty: unSelectedEmpty ?? false,
-      headerDefaultStartLabel: 'START',
-      headerDefaultEndLabel: 'END',
       autoAdjust: autoAdjust ?? true,
-      timeRangeViewType: timeRangeViewType ?? TimeRangeViewType.start,
-      onStartTimeChange: onStartTimeChange,
-      onEndTimeChange: onEndTimeChange,
       startTime: startTime,
       endTime: endTime,
-      onSubmitted: (_) {},
-      onCancel: onCancel,
     );
 
     return MyDialog.show<TimeRange>(

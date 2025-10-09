@@ -190,17 +190,18 @@ class MyDialogShrinkButtons extends StatelessWidget {
   const MyDialogShrinkButtons({
     required this.rightBtn,
     this.leftBtn,
+    this.padding,
     super.key,
   });
 
   final MyDialogButtonOptions? leftBtn;
-
   final MyDialogButtonOptions rightBtn;
+  final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+      padding: padding ?? const EdgeInsets.fromLTRB(24, 0, 24, 24),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [

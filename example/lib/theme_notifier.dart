@@ -5,7 +5,7 @@ class ThemeState {
   final ThemeMode mode;
   final String color;
 
-  const ThemeState({this.mode = ThemeMode.light, this.color = 'violet'});
+  const ThemeState({this.mode = ThemeMode.dark, this.color = 'red'});
 
   ThemeState copyWith({ThemeMode? mode, String? color}) {
     return ThemeState(mode: mode ?? this.mode, color: color ?? this.color);

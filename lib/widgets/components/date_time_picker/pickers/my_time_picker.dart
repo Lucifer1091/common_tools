@@ -9,6 +9,8 @@ import 'package:flutter/services.dart';
 
 import '../../../../index.dart';
 
+part 'my_time_range_picker.dart';
+
 const Duration _kDialAnimateDuration = Duration(milliseconds: 200);
 const double _kTwoPi = 2 * math.pi;
 const Duration _kVibrateCommitDelay = Duration(milliseconds: 100);
@@ -1630,10 +1632,14 @@ class _MyTimePickerDialogState extends State<MyTimePickerDialog>
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          _TimePicker(
-            time: widget.initialTime,
-            onTimeChanged: _handleTimeChanged,
-            restorationId: 'time_picker',
+          MyDialogInfoWidget(
+            title: 'Select Time',
+            titleAlignment: Alignment.centerLeft,
+            contentWidget: _TimePicker(
+              time: widget.initialTime,
+              onTimeChanged: _handleTimeChanged,
+              restorationId: 'time_picker',
+            ),
           ),
           const Gap(24),
           MyDialogShrinkButtons(leftBtn: left, rightBtn: right),
@@ -1789,10 +1795,7 @@ class _TimePickerState extends State<_TimePicker> with RestorationMixin {
       HourFormat.h => _HourDialType.twelveHour,
     };
 
-    final String helpText;
     final Widget picker;
-
-    helpText = localizations.timePickerDialHelpText;
 
     final EdgeInsetsGeometry dialPadding = const EdgeInsets.only(
       left: 12,
@@ -1827,14 +1830,10 @@ class _TimePickerState extends State<_TimePicker> with RestorationMixin {
       ),
     );
 
-    picker = MyDialogInfoWidget(
-      title: helpText,
-      titleAlignment: Alignment.centerLeft,
-      contentWidget: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[const Gap(16), _TimePickerHeader(), dial],
-      ),
+    picker = Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[const Gap(16), _TimePickerHeader(), dial],
     );
 
     return _TimePickerModel(
@@ -1880,8 +1879,6 @@ abstract class _TimePickerDefaults extends TimePickerThemeData {
   @override
   Color get dialHandColor;
 
-  // Sizes that are generated from the tokens, but these aren't ones we're ready
-  // to expose in the theme.
   Size get dialSize;
   double get handWidth;
   double get dotRadius;
@@ -1914,7 +1911,6 @@ class _TimePickerDefaultsM3 extends _TimePickerDefaults {
 
   final BuildContext context;
 
-
   late final MyColorScheme _colors = context.colorScheme;
   late final MyTypography _textTheme = context.textTheme;
 
@@ -1934,9 +1930,6 @@ class _TimePickerDefaultsM3 extends _TimePickerDefaults {
       if (states.contains(WidgetState.selected)) {
         return _colors.primary;
       }
-      // The unselected day period should match the overall picker dialog color.
-      // Making it transparent enables that without being redundant and allows
-      // the optional elevation overlay for dark mode to be visible.
       return Colors.transparent;
     });
   }
