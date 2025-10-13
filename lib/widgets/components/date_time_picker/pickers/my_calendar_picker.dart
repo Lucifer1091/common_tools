@@ -4,16 +4,16 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../../index.dart';
 
-enum CalendarViewType { date, month, year }
+enum MyCalendarViewType { date, month, year }
 
-enum CalendarSelectionMode { none, single, multi }
+enum MyCalendarSelectionMode { none, single, multi }
 
-enum DateState { disabled, enabled }
+enum MyDateState { disabled, enabled }
 
-typedef DateStateBuilder = DateState Function(DateTime date);
+typedef MyDateStateBuilder = MyDateState Function(DateTime date);
 
-class YearPickerDialog extends StatefulWidget {
-  const YearPickerDialog({
+class MyYearPickerDialog extends StatefulWidget {
+  const MyYearPickerDialog({
     required this.initialYear,
     super.key,
     this.firstDate,
@@ -24,13 +24,13 @@ class YearPickerDialog extends StatefulWidget {
   final int initialYear;
   final DateTime? firstDate;
   final DateTime? lastDate;
-  final DateStateBuilder? stateBuilder;
+  final MyDateStateBuilder? stateBuilder;
 
   @override
-  State<YearPickerDialog> createState() => _YearPickerDialogState();
+  State<MyYearPickerDialog> createState() => _MyYearPickerDialogState();
 }
 
-class _YearPickerDialogState extends State<YearPickerDialog> {
+class _MyYearPickerDialogState extends State<MyYearPickerDialog> {
   late int _yearSelectStart;
   late int _focusYear;
 
@@ -102,8 +102,9 @@ class _YearPickerDialogState extends State<YearPickerDialog> {
                   ],
                 ),
                 const Gap(16),
-                YearCalendar(
+                _YearCalendar(
                   value: _focusYear,
+                  now: DateTime.now(),
                   calendarValue: DateTime(_focusYear).toCalendarValue(),
                   firstDate: widget.firstDate,
                   lastDate: widget.lastDate,
@@ -135,8 +136,8 @@ class _YearPickerDialogState extends State<YearPickerDialog> {
   }
 }
 
-class MonthPickerDialog extends StatefulWidget {
-  const MonthPickerDialog({
+class MyMonthPickerDialog extends StatefulWidget {
+  const MyMonthPickerDialog({
     required this.initialMonth,
     super.key,
     this.firstDate,
@@ -147,14 +148,14 @@ class MonthPickerDialog extends StatefulWidget {
   final DateTime initialMonth;
   final DateTime? firstDate;
   final DateTime? lastDate;
-  final DateStateBuilder? stateBuilder;
+  final MyDateStateBuilder? stateBuilder;
 
   @override
-  State<MonthPickerDialog> createState() => _MonthPickerDialogState();
+  State<MyMonthPickerDialog> createState() => _MyMonthPickerDialogState();
 }
 
-class _MonthPickerDialogState extends State<MonthPickerDialog> {
-  late CalendarView _view;
+class _MyMonthPickerDialogState extends State<MyMonthPickerDialog> {
+  late _CalendarView _view;
 
   bool get _atFirstYear =>
       widget.firstDate != null && _view.year <= widget.firstDate!.year;
@@ -165,7 +166,7 @@ class _MonthPickerDialogState extends State<MonthPickerDialog> {
   @override
   void initState() {
     super.initState();
-    _view = CalendarView(widget.initialMonth.year, widget.initialMonth.month);
+    _view = _CalendarView(widget.initialMonth.year, widget.initialMonth.month);
   }
 
   void _prev() {
@@ -217,14 +218,15 @@ class _MonthPickerDialogState extends State<MonthPickerDialog> {
                   ],
                 ),
                 const Gap(16),
-                MonthCalendar(
+                _MonthCalendar(
                   value: _view,
                   calendarValue:
                       DateTime(_view.year, _view.month).toCalendarValue(),
+                  now: DateTime.now(),
                   stateBuilder: widget.stateBuilder,
                   firstDate: widget.firstDate,
                   lastDate: widget.lastDate,
-                  onChanged: (CalendarView nextView) {
+                  onChanged: (_CalendarView nextView) {
                     setState(() => _view = nextView);
                   },
                 ),
@@ -268,10 +270,10 @@ class MyCalendarPickerDialog extends StatefulWidget {
     this.showOutsideDays = true,
   });
 
-  final CalendarSelectionMode selectionMode;
+  final MyCalendarSelectionMode selectionMode;
   final CalendarValue? initial;
   final ValueChanged<CalendarValue?>? onChanged;
-  final DateStateBuilder? stateBuilder;
+  final MyDateStateBuilder? stateBuilder;
   final int? min;
   final int? max;
   final DateTime? firstDate;
@@ -363,9 +365,9 @@ class _DatePickerDialog extends StatefulWidget {
   });
 
   final CalendarValue? initialValue;
-  final CalendarSelectionMode selectionMode;
+  final MyCalendarSelectionMode selectionMode;
   final ValueChanged<CalendarValue?>? onChanged;
-  final DateStateBuilder? stateBuilder;
+  final MyDateStateBuilder? stateBuilder;
   final int? min;
   final int? max;
   final DateTime? firstDate;
@@ -377,45 +379,45 @@ class _DatePickerDialog extends StatefulWidget {
 }
 
 class _DatePickerDialogState extends State<_DatePickerDialog> {
-  late CalendarView _view;
+  late _CalendarView _view;
   late CalendarValue? _value;
-  late CalendarViewType _viewType;
+  late MyCalendarViewType _viewType;
   late int _yearSelectStart;
 
   @override
   void initState() {
     super.initState();
-    _view = widget.initialValue?.view ?? CalendarView.now();
+    _view = widget.initialValue?.view ?? _CalendarView.now();
     _value = widget.initialValue;
-    _viewType = CalendarViewType.date;
+    _viewType = MyCalendarViewType.date;
     _yearSelectStart = (_view.year ~/ 16) * 16; // 4x4 year pages
     // Clamp starting view within first/lastDate for sanity
     if (widget.firstDate != null &&
         _view.asDate().isBeforeMonth(widget.firstDate!)) {
-      _view = CalendarView(widget.firstDate!.year, widget.firstDate!.month);
+      _view = _CalendarView(widget.firstDate!.year, widget.firstDate!.month);
     }
     if (widget.lastDate != null &&
         _view.asDate().isAfterMonth(widget.lastDate!)) {
-      _view = CalendarView(widget.lastDate!.year, widget.lastDate!.month);
+      _view = _CalendarView(widget.lastDate!.year, widget.lastDate!.month);
     }
   }
 
-  String _headerLabel(CalendarView v, CalendarViewType t) => switch (t) {
-    CalendarViewType.date => '${v.month.toMonth()} ${v.year}',
-    CalendarViewType.month => '${v.year}',
-    CalendarViewType.year => '',
+  String _headerLabel(_CalendarView v, MyCalendarViewType t) => switch (t) {
+    MyCalendarViewType.date => '${v.month.toMonth()} ${v.year}',
+    MyCalendarViewType.month => '${v.year}',
+    MyCalendarViewType.year => '',
   };
 
   bool get _atFirstMonth =>
       widget.firstDate != null &&
-      !CalendarView(
+      !_CalendarView(
         widget.firstDate!.year,
         widget.firstDate!.month,
       ).isBeforeOrSameMonth(_view);
 
   bool get _atLastMonth =>
       widget.lastDate != null &&
-      !CalendarView(
+      !_CalendarView(
         widget.lastDate!.year,
         widget.lastDate!.month,
       ).isAfterOrSameMonth(_view);
@@ -423,15 +425,15 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
   void _goPrev() {
     setState(() {
       switch (_viewType) {
-        case CalendarViewType.date:
+        case MyCalendarViewType.date:
           if (_atFirstMonth) return;
           _view = _view.previous;
-        case CalendarViewType.month:
+        case MyCalendarViewType.month:
           if (widget.firstDate != null) {
             if (_view.year - 1 < widget.firstDate!.year) return;
           }
           _view = _view.previousYear;
-        case CalendarViewType.year:
+        case MyCalendarViewType.year:
           // move the 16-year window back, but respect firstDate if present
           if (widget.firstDate != null) {
             if (_yearSelectStart - 16 < (widget.firstDate!.year ~/ 16) * 16) {
@@ -450,15 +452,15 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
   void _goNext() {
     setState(() {
       switch (_viewType) {
-        case CalendarViewType.date:
+        case MyCalendarViewType.date:
           if (_atLastMonth) return;
           _view = _view.next;
-        case CalendarViewType.month:
+        case MyCalendarViewType.month:
           if (widget.lastDate != null) {
             if (_view.year + 1 > widget.lastDate!.year) return;
           }
           _view = _view.nextYear;
-        case CalendarViewType.year:
+        case MyCalendarViewType.year:
           if (widget.lastDate != null) {
             if (_yearSelectStart + 16 > (widget.lastDate!.year ~/ 16) * 16) {
               if (_yearSelectStart < (widget.lastDate!.year ~/ 16) * 16) {
@@ -473,12 +475,12 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
   }
 
   void _promoteView() {
-    if (_viewType == CalendarViewType.year) return;
+    if (_viewType == MyCalendarViewType.year) return;
     setState(() {
       _viewType =
-          _viewType == CalendarViewType.date
-              ? CalendarViewType.month
-              : CalendarViewType.year;
+          _viewType == MyCalendarViewType.date
+              ? MyCalendarViewType.month
+              : MyCalendarViewType.year;
     });
   }
 
@@ -504,7 +506,7 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
             const Gap(16),
             Expanded(
               child: MyButton(
-                enabled: _viewType != CalendarViewType.year,
+                enabled: _viewType != MyCalendarViewType.year,
                 type: MyButtonType.ghost,
                 onTap: _promoteView,
                 text: _headerLabel(_view, _viewType),
@@ -530,12 +532,12 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
             setState(() {
               _view = value;
               switch (_viewType) {
-                case CalendarViewType.date:
+                case MyCalendarViewType.date:
                   break;
-                case CalendarViewType.month:
-                  _viewType = CalendarViewType.date;
-                case CalendarViewType.year:
-                  _viewType = CalendarViewType.month;
+                case MyCalendarViewType.month:
+                  _viewType = MyCalendarViewType.date;
+                case MyCalendarViewType.year:
+                  _viewType = MyCalendarViewType.month;
               }
             });
           },
@@ -546,15 +548,16 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
 
   Widget _buildView({
     required int yearSelectStart,
-    required CalendarView view,
-    required CalendarViewType viewType,
-    required CalendarSelectionMode selectionMode,
-    required ValueChanged<CalendarView> onViewChanged,
+    required _CalendarView view,
+    required MyCalendarViewType viewType,
+    required MyCalendarSelectionMode selectionMode,
+    required ValueChanged<_CalendarView> onViewChanged,
   }) {
-    if (viewType == CalendarViewType.year) {
-      return YearCalendar(
+    if (viewType == MyCalendarViewType.year) {
+      return _YearCalendar(
         value: view.year,
         calendarValue: _value,
+        now: DateTime.now(),
         yearSelectStart: yearSelectStart,
         stateBuilder: widget.stateBuilder,
         firstDate: widget.firstDate,
@@ -567,10 +570,11 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
       );
     }
 
-    if (viewType == CalendarViewType.month) {
-      return MonthCalendar(
+    if (viewType == MyCalendarViewType.month) {
+      return _MonthCalendar(
         value: view,
         calendarValue: _value,
+        now: DateTime.now(),
         stateBuilder: widget.stateBuilder,
         onChanged: onViewChanged,
         firstDate: widget.firstDate,
@@ -578,9 +582,10 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
       );
     }
 
-    return Calendar(
+    return _Calendar(
       value: _value,
       view: view,
+      now: DateTime.now(),
       onChanged: _handleCalendarChanged,
       selectionMode: selectionMode,
       stateBuilder: widget.stateBuilder,
@@ -596,7 +601,7 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
 abstract class CalendarValue {
   const CalendarValue();
 
-  CalendarValueLookup lookup(int year, [int? month = 1, int? day = 1]);
+  _CalendarValueLookup lookup(int year, [int? month = 1, int? day = 1]);
 
   static SingleCalendarValue single(DateTime date) {
     return SingleCalendarValue(date);
@@ -609,7 +614,7 @@ abstract class CalendarValue {
   SingleCalendarValue toSingle();
   MultiCalendarValue toMulti();
 
-  CalendarView get view;
+  _CalendarView get view;
 }
 
 DateTime _convertNecessary(DateTime from, int year, [int? month, int? date]) {
@@ -625,16 +630,16 @@ class SingleCalendarValue extends CalendarValue {
   final DateTime date;
 
   @override
-  CalendarValueLookup lookup(int year, [int? month, int? day]) {
+  _CalendarValueLookup lookup(int year, [int? month, int? day]) {
     final DateTime current = _convertNecessary(date, year, month, day);
     if (current.isAtSameMomentAs(DateTime(year, month ?? 1, day ?? 1))) {
-      return CalendarValueLookup.selected;
+      return _CalendarValueLookup.selected;
     }
-    return CalendarValueLookup.none;
+    return _CalendarValueLookup.none;
   }
 
   @override
-  CalendarView get view => date.toCalendarView();
+  _CalendarView get view => date.toCalendarView();
 
   @override
   String toString() {
@@ -668,7 +673,7 @@ class MultiCalendarValue extends CalendarValue {
   final List<DateTime> dates;
 
   @override
-  CalendarValueLookup lookup(int year, [int? month, int? day]) {
+  _CalendarValueLookup lookup(int year, [int? month, int? day]) {
     final DateTime current = DateTime(year, month ?? 1, day ?? 1);
     if (dates.any(
       (element) => _convertNecessary(
@@ -678,14 +683,14 @@ class MultiCalendarValue extends CalendarValue {
         day,
       ).isAtSameMomentAs(current),
     )) {
-      return CalendarValueLookup.selected;
+      return _CalendarValueLookup.selected;
     }
-    return CalendarValueLookup.none;
+    return _CalendarValueLookup.none;
   }
 
   @override
-  CalendarView get view =>
-      dates.firstOrNull?.toCalendarView() ?? CalendarView.now();
+  _CalendarView get view =>
+      dates.firstOrNull?.toCalendarView() ?? _CalendarView.now();
 
   @override
   String toString() {
@@ -713,43 +718,43 @@ class MultiCalendarValue extends CalendarValue {
   }
 }
 
-enum CalendarValueLookup { none, selected }
+enum _CalendarValueLookup { none, selected }
 
-class CalendarView {
-  CalendarView(this.year, this.month)
+class _CalendarView {
+  _CalendarView(this.year, this.month)
     : assert(month >= 1 && month <= 12, 'Month must be between 1 and 12');
 
-  factory CalendarView.now() {
+  factory _CalendarView.now() {
     final now = DateTime.now();
-    return CalendarView(now.year, now.month);
+    return _CalendarView(now.year, now.month);
   }
 
-  factory CalendarView.fromDateTime(DateTime date) =>
-      CalendarView(date.year, date.month);
+  factory _CalendarView.fromDateTime(DateTime date) =>
+      _CalendarView(date.year, date.month);
 
   final int year;
   final int month;
 
-  CalendarView get next {
+  _CalendarView get next {
     if (month == 12) {
-      return CalendarView(year + 1, 1);
+      return _CalendarView(year + 1, 1);
     }
-    return CalendarView(year, month + 1);
+    return _CalendarView(year, month + 1);
   }
 
-  CalendarView get previous {
+  _CalendarView get previous {
     if (month == 1) {
-      return CalendarView(year - 1, 12);
+      return _CalendarView(year - 1, 12);
     }
-    return CalendarView(year, month - 1);
+    return _CalendarView(year, month - 1);
   }
 
-  CalendarView get nextYear {
-    return CalendarView(year + 1, month);
+  _CalendarView get nextYear {
+    return _CalendarView(year + 1, month);
   }
 
-  CalendarView get previousYear {
-    return CalendarView(year - 1, month);
+  _CalendarView get previousYear {
+    return _CalendarView(year - 1, month);
   }
 
   @override
@@ -758,26 +763,26 @@ class CalendarView {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is CalendarView && other.year == year && other.month == month);
+      (other is _CalendarView && other.year == year && other.month == month);
 
   @override
   int get hashCode => year.hashCode ^ month.hashCode;
 
-  CalendarView copyWith({ValueGetter<int>? year, ValueGetter<int>? month}) =>
-      CalendarView(
+  _CalendarView copyWith({ValueGetter<int>? year, ValueGetter<int>? month}) =>
+      _CalendarView(
         year == null ? this.year : year(),
         month == null ? this.month : month(),
       );
 
   DateTime asDate() => DateTime(year, month);
 
-  bool isBeforeOrSameMonth(CalendarView other) {
+  bool isBeforeOrSameMonth(_CalendarView other) {
     if (year < other.year) return true;
     if (year > other.year) return false;
     return month <= other.month;
   }
 
-  bool isAfterOrSameMonth(CalendarView other) {
+  bool isAfterOrSameMonth(_CalendarView other) {
     if (year > other.year) return true;
     if (year < other.year) return false;
     return month >= other.month;
@@ -785,7 +790,7 @@ class CalendarView {
 }
 
 extension _DateHelpers on DateTime {
-  CalendarView toCalendarView() => CalendarView.fromDateTime(this);
+  _CalendarView toCalendarView() => _CalendarView.fromDateTime(this);
   CalendarValue toCalendarValue() => CalendarValue.single(this);
 
   bool isBeforeMonth(DateTime other) =>
@@ -810,28 +815,27 @@ extension _DateHelpers on DateTime {
   }
 }
 
-class Calendar extends StatefulWidget {
-  const Calendar({
+class _Calendar extends StatefulWidget {
+  const _Calendar({
     required this.view,
     required this.selectionMode,
-    super.key,
-    this.now,
     this.value,
     this.onChanged,
     this.stateBuilder,
     this.min,
     this.max,
+    this.now,
     this.firstDate,
     this.lastDate,
     this.showOutsideDays = true,
   });
 
-  final DateTime? now;
   final CalendarValue? value;
-  final CalendarView view;
-  final CalendarSelectionMode selectionMode;
+  final _CalendarView view;
+  final DateTime? now;
+  final MyCalendarSelectionMode selectionMode;
   final ValueChanged<CalendarValue?>? onChanged;
-  final DateStateBuilder? stateBuilder;
+  final MyDateStateBuilder? stateBuilder;
   final int? min;
   final int? max;
   final DateTime? firstDate;
@@ -839,16 +843,16 @@ class Calendar extends StatefulWidget {
   final bool showOutsideDays;
 
   @override
-  State<Calendar> createState() => _CalendarState();
+  State<_Calendar> createState() => _CalendarState();
 }
 
-class _CalendarState extends State<Calendar> {
-  late CalendarGridData _gridData;
+class _CalendarState extends State<_Calendar> {
+  late _CalendarGridData _gridData;
 
   @override
   void initState() {
     super.initState();
-    _gridData = CalendarGridData(
+    _gridData = _CalendarGridData(
       month: widget.view.month,
       year: widget.view.year,
       showOutsideDays: widget.showOutsideDays,
@@ -856,12 +860,12 @@ class _CalendarState extends State<Calendar> {
   }
 
   @override
-  void didUpdateWidget(covariant Calendar oldWidget) {
+  void didUpdateWidget(covariant _Calendar oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.view.year != widget.view.year ||
         oldWidget.view.month != widget.view.month ||
         oldWidget.showOutsideDays != widget.showOutsideDays) {
-      _gridData = CalendarGridData(
+      _gridData = _CalendarGridData(
         month: widget.view.month,
         year: widget.view.year,
         showOutsideDays: widget.showOutsideDays,
@@ -877,10 +881,11 @@ class _CalendarState extends State<Calendar> {
 
   bool _enabled(DateTime date) {
     if (!_withinBounds(date)) return false;
-    final state = widget.stateBuilder?.call(date) ?? DateState.enabled;
-    if (state == DateState.disabled) return false;
+    final state = widget.stateBuilder?.call(date) ?? MyDateState.enabled;
+    if (state == MyDateState.disabled) return false;
+
     // MULTI: cap logic – if at cap, only allow toggling already selected.
-    if (widget.selectionMode == CalendarSelectionMode.multi &&
+    if (widget.selectionMode == MyCalendarSelectionMode.multi &&
         widget.max != null &&
         widget.value is MultiCalendarValue) {
       final multi = widget.value!.toMulti();
@@ -905,9 +910,9 @@ class _CalendarState extends State<Calendar> {
 
   void _handleTap(DateTime date) {
     final calendarValue = widget.value;
-    if (widget.selectionMode == CalendarSelectionMode.none) return;
+    if (widget.selectionMode == MyCalendarSelectionMode.none) return;
 
-    if (widget.selectionMode == CalendarSelectionMode.single) {
+    if (widget.selectionMode == MyCalendarSelectionMode.single) {
       if (!_enabled(date)) return;
 
       if (calendarValue is SingleCalendarValue &&
@@ -919,7 +924,7 @@ class _CalendarState extends State<Calendar> {
       return;
     }
 
-    if (widget.selectionMode == CalendarSelectionMode.multi) {
+    if (widget.selectionMode == MyCalendarSelectionMode.multi) {
       if (calendarValue == null) {
         widget.onChanged?.call(CalendarValue.single(date));
         return;
@@ -927,7 +932,7 @@ class _CalendarState extends State<Calendar> {
 
       final lookup = calendarValue.lookup(date.year, date.month, date.day);
 
-      if (lookup == CalendarValueLookup.none) {
+      if (lookup == _CalendarValueLookup.none) {
         if (!_enabled(date)) return;
 
         final multi = calendarValue.toMulti();
@@ -960,7 +965,7 @@ class _CalendarState extends State<Calendar> {
 
   @override
   Widget build(BuildContext context) {
-    return CalendarGrid(
+    return _CalendarGrid(
       data: _gridData,
       itemBuilder: (item) {
         final date = item.date;
@@ -968,26 +973,31 @@ class _CalendarState extends State<Calendar> {
         final inBounds = _withinBounds(date);
         final lookup =
             widget.value?.lookup(date.year, date.month, date.day) ??
-            CalendarValueLookup.none;
+            _CalendarValueLookup.none;
 
-        CalendarItemType type = CalendarItemType.none;
+        _CalendarItemType type = _CalendarItemType.none;
         switch (lookup) {
-          case CalendarValueLookup.none:
-            if (widget.now != null && widget.now!.isAtSameMomentAs(date)) {
-              type = CalendarItemType.today;
+          case _CalendarValueLookup.none:
+            if (widget.now != null &&
+                DateTime(
+                  widget.now!.year,
+                  widget.now!.month,
+                  widget.now!.day,
+                ).isAtSameMomentAs(date)) {
+              type = _CalendarItemType.today;
             }
-          case CalendarValueLookup.selected:
-            type = CalendarItemType.selected;
+          case _CalendarValueLookup.selected:
+            type = _CalendarItemType.selected;
         }
 
         final enabled = _enabled(date) && inBounds;
 
-        final calendarItem = CalendarItem(
+        final calendarItem = _CalendarItem(
           type: type,
           indexAtRow: item.indexInRow,
           rowCount: 7,
           onTap: enabled ? () => _handleTap(date) : null,
-          state: enabled ? DateState.enabled : DateState.disabled,
+          state: enabled ? MyDateState.enabled : MyDateState.disabled,
           text: '${date.day}',
         );
 
@@ -1005,11 +1015,10 @@ class _CalendarState extends State<Calendar> {
   }
 }
 
-class MonthCalendar extends StatelessWidget {
-  const MonthCalendar({
+class _MonthCalendar extends StatelessWidget {
+  const _MonthCalendar({
     required this.value,
     required this.onChanged,
-    super.key,
     this.now,
     this.calendarValue,
     this.stateBuilder,
@@ -1017,11 +1026,11 @@ class MonthCalendar extends StatelessWidget {
     this.lastDate,
   });
 
-  final CalendarView value;
-  final ValueChanged<CalendarView> onChanged;
+  final _CalendarView value;
+  final ValueChanged<_CalendarView> onChanged;
   final DateTime? now;
   final CalendarValue? calendarValue;
-  final DateStateBuilder? stateBuilder;
+  final MyDateStateBuilder? stateBuilder;
   final DateTime? firstDate;
   final DateTime? lastDate;
 
@@ -1034,8 +1043,8 @@ class MonthCalendar extends StatelessWidget {
 
   bool _enabled(DateTime date) {
     if (!_monthWithinBounds(date)) return false;
-    final state = stateBuilder?.call(date) ?? DateState.enabled;
-    if (state == DateState.disabled) return false;
+    final state = stateBuilder?.call(date) ?? MyDateState.enabled;
+    if (state == MyDateState.disabled) return false;
 
     return true;
   }
@@ -1048,29 +1057,29 @@ class MonthCalendar extends StatelessWidget {
     for (int i = 1; i <= 12; i++) {
       final date = DateTime(value.year, i);
 
-      CalendarItemType type = CalendarItemType.none;
+      _CalendarItemType type = _CalendarItemType.none;
       if (calendarValue != null) {
         final lookup = calendarValue!.lookup(date.year, date.month);
         switch (lookup) {
-          case CalendarValueLookup.none:
+          case _CalendarValueLookup.none:
             if (now != null &&
                 DateTime(now!.year, now!.month).isAtSameMomentAs(date)) {
-              type = CalendarItemType.today;
+              type = _CalendarItemType.today;
             }
-          case CalendarValueLookup.selected:
-            type = CalendarItemType.selected;
+          case _CalendarValueLookup.selected:
+            type = _CalendarItemType.selected;
         }
       } else {
         if (now != null &&
             DateTime(now!.year, now!.month).isAtSameMomentAs(date)) {
-          type = CalendarItemType.today;
+          type = _CalendarItemType.today;
         }
       }
 
       final enabled = _enabled(date);
 
       months.add(
-        CalendarItem(
+        _CalendarItem(
           key: ValueKey(date),
           type: type,
           indexAtRow: (i - 1) % 4,
@@ -1081,7 +1090,7 @@ class MonthCalendar extends StatelessWidget {
                     onChanged(value.copyWith(month: () => i));
                   }
                   : null,
-          state: enabled ? DateState.enabled : DateState.disabled,
+          state: enabled ? MyDateState.enabled : MyDateState.disabled,
           text: i.toMonth(style: Abbreviation.semi),
         ),
       );
@@ -1101,12 +1110,11 @@ class MonthCalendar extends StatelessWidget {
   }
 }
 
-class YearCalendar extends StatelessWidget {
-  const YearCalendar({
+class _YearCalendar extends StatelessWidget {
+  const _YearCalendar({
     required this.value,
     required this.yearSelectStart,
     required this.onChanged,
-    super.key,
     this.now,
     this.calendarValue,
     this.stateBuilder,
@@ -1119,7 +1127,7 @@ class YearCalendar extends StatelessWidget {
   final DateTime? now;
   final ValueChanged<int> onChanged;
   final CalendarValue? calendarValue;
-  final DateStateBuilder? stateBuilder;
+  final MyDateStateBuilder? stateBuilder;
   final DateTime? firstDate;
   final DateTime? lastDate;
 
@@ -1132,8 +1140,8 @@ class YearCalendar extends StatelessWidget {
 
   bool _enabled(DateTime date) {
     if (!_yearWithinBounds(date.year)) return false;
-    final state = stateBuilder?.call(date) ?? DateState.enabled;
-    return state != DateState.disabled;
+    final state = stateBuilder?.call(date) ?? MyDateState.enabled;
+    return state != MyDateState.disabled;
   }
 
   @override
@@ -1144,34 +1152,34 @@ class YearCalendar extends StatelessWidget {
     for (int i = yearSelectStart; i < yearSelectStart + 16; i++) {
       final date = DateTime(i);
 
-      CalendarItemType type = CalendarItemType.none;
+      _CalendarItemType type = _CalendarItemType.none;
 
       if (calendarValue != null) {
         final lookup = calendarValue!.lookup(date.year);
         switch (lookup) {
-          case CalendarValueLookup.none:
+          case _CalendarValueLookup.none:
             if (now != null && now!.year == date.year) {
-              type = CalendarItemType.today;
+              type = _CalendarItemType.today;
             }
-          case CalendarValueLookup.selected:
-            type = CalendarItemType.selected;
+          case _CalendarValueLookup.selected:
+            type = _CalendarItemType.selected;
         }
       } else {
         if (now != null && now!.year == date.year) {
-          type = CalendarItemType.today;
+          type = _CalendarItemType.today;
         }
       }
 
       final enabled = _enabled(date);
 
       years.add(
-        CalendarItem(
+        _CalendarItem(
           key: ValueKey(date),
           type: type,
           indexAtRow: (i - yearSelectStart) % 4,
           rowCount: 4,
           onTap: enabled ? () => onChanged(date.year) : null,
-          state: enabled ? DateState.enabled : DateState.disabled,
+          state: enabled ? MyDateState.enabled : MyDateState.disabled,
           text: '$i',
         ),
       );
@@ -1191,10 +1199,10 @@ class YearCalendar extends StatelessWidget {
   }
 }
 
-enum CalendarItemType { none, today, selected }
+enum _CalendarItemType { none, today, selected }
 
-class CalendarItem extends StatelessWidget {
-  const CalendarItem({
+class _CalendarItem extends StatelessWidget {
+  const _CalendarItem({
     required this.text,
     required this.type,
     required this.indexAtRow,
@@ -1205,42 +1213,31 @@ class CalendarItem extends StatelessWidget {
   });
 
   final String text;
-  final CalendarItemType type;
+  final _CalendarItemType type;
   final VoidCallback? onTap;
   final int indexAtRow;
   final int rowCount;
-  final DateState state;
+  final MyDateState state;
 
   @override
   Widget build(BuildContext context) {
-    final common = MyButton(
-      enabled: state == DateState.enabled,
+    return MyButton(
+      type: switch (type) {
+        _CalendarItemType.none => MyButtonType.ghost,
+        _CalendarItemType.selected => MyButtonType.primary,
+        _CalendarItemType.today => MyButtonType.outline,
+      },
+      enabled: state == MyDateState.enabled,
       shape: MyButtonShape.square,
       onTap: onTap,
       text: text,
       width: rowCount < 5 ? 260 / rowCount : null,
     );
-
-    switch (type) {
-      case CalendarItemType.none:
-        return MyButton(
-          type: MyButtonType.ghost,
-          enabled: state == DateState.enabled,
-          shape: MyButtonShape.square,
-          onTap: onTap,
-          text: text,
-          width: rowCount < 5 ? 260 / rowCount : null,
-        );
-      case CalendarItemType.today:
-        return common;
-      case CalendarItemType.selected:
-        return common;
-    }
   }
 }
 
-class CalendarGridData {
-  factory CalendarGridData({
+class _CalendarGridData {
+  factory _CalendarGridData({
     required int month,
     required int year,
     required bool showOutsideDays,
@@ -1251,7 +1248,7 @@ class CalendarGridData {
     final leading = firstDayOfMonth.weekday;
     final prevMonthLastDay = firstDayOfMonth.subtract(Duration(days: leading));
 
-    final items = <CalendarGridItem>[];
+    final items = <_CalendarGridItem>[];
     var itemCount = 0;
 
     if (showOutsideDays) {
@@ -1259,7 +1256,7 @@ class CalendarGridData {
         for (int i = 0; i < leading; i++) {
           final idx = itemCount++;
           items.add(
-            CalendarGridItem(
+            _CalendarGridItem(
               prevMonthLastDay.add(Duration(days: i)),
               idx % 7,
               true,
@@ -1272,7 +1269,7 @@ class CalendarGridData {
       if (leading < 7) {
         for (int i = 0; i < leading; i++) {
           final idx = itemCount++;
-          items.add(CalendarGridItem.placeholder(idx % 7, idx ~/ 7));
+          items.add(_CalendarGridItem.placeholder(idx % 7, idx ~/ 7));
         }
       }
     }
@@ -1280,7 +1277,7 @@ class CalendarGridData {
     for (int i = 0; i < daysInMonth; i++) {
       final idx = itemCount++;
       final day = DateTime(year, month, i + 1);
-      items.add(CalendarGridItem(day, idx % 7, false, idx ~/ 7));
+      items.add(_CalendarGridItem(day, idx % 7, false, idx ~/ 7));
     }
 
     final remaining = (7 - (items.length % 7)) % 7;
@@ -1291,7 +1288,7 @@ class CalendarGridData {
         for (int i = 0; i < remaining; i++) {
           final idx = itemCount++;
           items.add(
-            CalendarGridItem(
+            _CalendarGridItem(
               nextMonthFirstDay.add(Duration(days: i)),
               idx % 7,
               true,
@@ -1304,24 +1301,24 @@ class CalendarGridData {
       if (remaining < 7) {
         for (int i = 0; i < remaining; i++) {
           final idx = itemCount++;
-          items.add(CalendarGridItem.placeholder(idx % 7, idx ~/ 7));
+          items.add(_CalendarGridItem.placeholder(idx % 7, idx ~/ 7));
         }
       }
     }
 
-    return CalendarGridData._(month, year, items);
+    return _CalendarGridData._(month, year, items);
   }
 
-  CalendarGridData._(this.month, this.year, this.items);
+  _CalendarGridData._(this.month, this.year, this.items);
 
   final int month;
   final int year;
-  final List<CalendarGridItem> items;
+  final List<_CalendarGridItem> items;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is CalendarGridData &&
+      (other is _CalendarGridData &&
           other.month == month &&
           other.year == year &&
           listEquals(other.items, items));
@@ -1330,15 +1327,15 @@ class CalendarGridData {
   int get hashCode => Object.hash(month, year, items);
 }
 
-class CalendarGridItem {
-  CalendarGridItem(
+class _CalendarGridItem {
+  _CalendarGridItem(
     this.date,
     this.indexInRow,
     this.fromAnotherMonth,
     this.rowIndex,
   ) : placeholder = false;
 
-  CalendarGridItem.placeholder(this.indexInRow, this.rowIndex)
+  _CalendarGridItem.placeholder(this.indexInRow, this.rowIndex)
     : date = DateTime(0),
       fromAnotherMonth = true,
       placeholder = true;
@@ -1360,7 +1357,7 @@ class CalendarGridItem {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is CalendarGridItem &&
+      (other is _CalendarGridItem &&
           (placeholder && other.placeholder ||
               (!placeholder &&
                   !other.placeholder &&
@@ -1378,15 +1375,11 @@ class CalendarGridItem {
   );
 }
 
-class CalendarGrid extends StatelessWidget {
-  const CalendarGrid({
-    required this.data,
-    required this.itemBuilder,
-    super.key,
-  });
+class _CalendarGrid extends StatelessWidget {
+  const _CalendarGrid({required this.data, required this.itemBuilder});
 
-  final CalendarGridData data;
-  final Widget Function(CalendarGridItem item) itemBuilder;
+  final _CalendarGridData data;
+  final Widget Function(_CalendarGridItem item) itemBuilder;
 
   @override
   Widget build(BuildContext context) {

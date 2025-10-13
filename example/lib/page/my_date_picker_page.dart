@@ -70,10 +70,7 @@ class _MyDatePickerPageState extends State<MyDatePickerPage> {
                     MyButton(
                       text: 'Time Picker',
                       onTap: () {
-                        MyDatePicker.time(
-                          context: context,
-                          initial: TimeOfDay.now(),
-                        );
+                        MyDatePicker.time(context: context);
                       },
                     ),
                     MyButton(

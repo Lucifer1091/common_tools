@@ -12,12 +12,12 @@ class MyDatePicker {
     DateTime? firstDate,
     DateTime? lastDate,
     bool showOutsideDays = true,
-    DateStateBuilder? stateBuilder,
+    MyDateStateBuilder? stateBuilder,
   }) async {
     assert(debugCheckHasMaterialLocalizations(context), '');
 
     final dialog = MyCalendarPickerDialog(
-      selectionMode: CalendarSelectionMode.single,
+      selectionMode: MyCalendarSelectionMode.single,
       initial: CalendarValue.single(initial ?? DateTime.now()),
       firstDate: firstDate,
       lastDate: lastDate,
@@ -47,12 +47,12 @@ class MyDatePicker {
     DateTime? firstDate,
     DateTime? lastDate,
     bool showOutsideDays = true,
-    DateStateBuilder? stateBuilder,
+    MyDateStateBuilder? stateBuilder,
   }) async {
     assert(debugCheckHasMaterialLocalizations(context), '');
 
     final dialog = MyCalendarPickerDialog(
-      selectionMode: CalendarSelectionMode.multi,
+      selectionMode: MyCalendarSelectionMode.multi,
       initial: CalendarValue.multi(List<DateTime>.from(initial ?? const [])),
       min: min,
       max: max,
@@ -79,7 +79,7 @@ class MyDatePicker {
     DateTime? firstDate,
     DateTime? lastDate,
     bool barrierDismissible = true,
-    DateStateBuilder? stateBuilder,
+    MyDateStateBuilder? stateBuilder,
   }) async {
     DateTime init = initialMonth ?? DateTime.now();
 
@@ -99,7 +99,7 @@ class MyDatePicker {
       context: context,
       barrierDismissible: barrierDismissible,
       builder:
-          (_) => MonthPickerDialog(
+          (_) => MyMonthPickerDialog(
             initialMonth: init,
             firstDate: firstDate,
             lastDate: lastDate,
@@ -114,7 +114,7 @@ class MyDatePicker {
     DateTime? firstDate,
     DateTime? lastDate,
     bool barrierDismissible = true,
-    DateStateBuilder? stateBuilder,
+    MyDateStateBuilder? stateBuilder,
   }) async {
     final int initYear =
         initialYear ??
@@ -127,7 +127,7 @@ class MyDatePicker {
       context: context,
       barrierDismissible: barrierDismissible,
       builder:
-          (_) => YearPickerDialog(
+          (_) => MyYearPickerDialog(
             initialYear: initYear,
             firstDate: firstDate,
             lastDate: lastDate,
@@ -138,13 +138,15 @@ class MyDatePicker {
 
   static Future<TimeOfDay?> time({
     required BuildContext context,
-    required TimeOfDay initial,
+    TimeOfDay? initial,
     bool use24HrFormat = false,
     bool barrierDismissible = true,
   }) async {
     assert(debugCheckHasMaterialLocalizations(context), '');
 
-    final Widget dialog = MyTimePickerDialog(initialTime: initial);
+    final Widget dialog = MyTimePickerDialog(
+      initialTime: initial ?? TimeOfDay.now(),
+    );
 
     return MyDialog.show<TimeOfDay>(
       context: context,
