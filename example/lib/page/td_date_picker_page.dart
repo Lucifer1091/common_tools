@@ -1,5 +1,3 @@
-import 'package:common_tools/widgets/components/button/index.dart';
-import 'package:common_tools/widgets/components/date_time_picker/date_time_form_fields/date_time_field/date_field.dart';
 import 'package:common_tools/widgets/components/index.dart';
 import 'package:flutter/material.dart';
 
@@ -42,12 +40,21 @@ class _MyDatePickerPageState extends State<MyDatePickerPage> {
                       },
                     ),
                     MyButton(
+                      text: 'Month Picker',
+                      onTap: () {
+                        MyDatePicker.month(context: context);
+                      },
+                    ),
+                    MyButton(
                       text: 'Year Picker',
                       onTap: () {
-                        MyDatePicker.date(
-                          context: context,
-                          viewType: CalendarViewType.year,
-                        );
+                        MyDatePicker.year(context: context);
+                      },
+                    ),
+                    MyButton(
+                      text: 'Multi Dates Picker',
+                      onTap: () {
+                        MyDatePicker.dates(context: context);
                       },
                     ),
                     MyButton(
