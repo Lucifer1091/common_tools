@@ -18,14 +18,12 @@ class YearPickerDialog extends StatefulWidget {
     super.key,
     this.firstDate,
     this.lastDate,
-    this.hideNavigation = false,
     this.stateBuilder,
   });
 
   final int initialYear;
   final DateTime? firstDate;
   final DateTime? lastDate;
-  final bool hideNavigation;
   final DateStateBuilder? stateBuilder;
 
   @override
@@ -33,7 +31,7 @@ class YearPickerDialog extends StatefulWidget {
 }
 
 class _YearPickerDialogState extends State<YearPickerDialog> {
-  late int _yearSelectStart; // 4x4 page start (multiple of 16)
+  late int _yearSelectStart;
   late int _focusYear;
 
   bool get _canPrevPage {
@@ -67,8 +65,6 @@ class _YearPickerDialogState extends State<YearPickerDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final showNav = !widget.hideNavigation;
-
     return MyDialogScaffold(
       body: Column(
         mainAxisSize: MainAxisSize.min,
@@ -82,14 +78,13 @@ class _YearPickerDialogState extends State<YearPickerDialog> {
                 const Gap(16),
                 Row(
                   children: [
-                    if (showNav)
-                      MyButton(
-                        type: MyButtonType.secondary,
-                        shape: MyButtonShape.square,
-                        icon: LucideIcons.arrowLeft,
-                        onTap: _prev,
-                      ),
-                    if (showNav) const Gap(16),
+                    MyButton(
+                      type: MyButtonType.secondary,
+                      shape: MyButtonShape.square,
+                      icon: LucideIcons.arrowLeft,
+                      onTap: _prev,
+                    ),
+                    const Gap(16),
                     Expanded(
                       child: MyButton(
                         type: MyButtonType.ghost,
@@ -97,14 +92,13 @@ class _YearPickerDialogState extends State<YearPickerDialog> {
                         text: '$_yearSelectStart – ${_yearSelectStart + 15}',
                       ),
                     ),
-                    if (showNav) const Gap(16),
-                    if (showNav)
-                      MyButton(
-                        type: MyButtonType.secondary,
-                        shape: MyButtonShape.square,
-                        icon: LucideIcons.arrowRight,
-                        onTap: _next,
-                      ),
+                    const Gap(16),
+                    MyButton(
+                      type: MyButtonType.secondary,
+                      shape: MyButtonShape.square,
+                      icon: LucideIcons.arrowRight,
+                      onTap: _next,
+                    ),
                   ],
                 ),
                 const Gap(16),
@@ -147,14 +141,12 @@ class MonthPickerDialog extends StatefulWidget {
     super.key,
     this.firstDate,
     this.lastDate,
-    this.hideNavigation = false,
     this.stateBuilder,
   });
 
   final DateTime initialMonth;
   final DateTime? firstDate;
   final DateTime? lastDate;
-  final bool hideNavigation;
   final DateStateBuilder? stateBuilder;
 
   @override
@@ -188,8 +180,6 @@ class _MonthPickerDialogState extends State<MonthPickerDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final showNav = !widget.hideNavigation;
-
     return MyDialogScaffold(
       body: Column(
         mainAxisSize: MainAxisSize.min,
@@ -203,14 +193,13 @@ class _MonthPickerDialogState extends State<MonthPickerDialog> {
                 const Gap(16),
                 Row(
                   children: [
-                    if (showNav)
-                      MyButton(
-                        type: MyButtonType.secondary,
-                        shape: MyButtonShape.square,
-                        icon: LucideIcons.arrowLeft,
-                        onTap: _prev,
-                      ),
-                    if (showNav) const Gap(16),
+                    MyButton(
+                      type: MyButtonType.secondary,
+                      shape: MyButtonShape.square,
+                      icon: LucideIcons.arrowLeft,
+                      onTap: _prev,
+                    ),
+                    const Gap(16),
                     Expanded(
                       child: MyButton(
                         type: MyButtonType.ghost,
@@ -218,20 +207,18 @@ class _MonthPickerDialogState extends State<MonthPickerDialog> {
                         text: '${_view.year}',
                       ),
                     ),
-                    if (showNav) const Gap(16),
-                    if (showNav)
-                      MyButton(
-                        type: MyButtonType.secondary,
-                        shape: MyButtonShape.square,
-                        icon: LucideIcons.arrowRight,
-                        onTap: _next,
-                      ),
+                    const Gap(16),
+                    MyButton(
+                      type: MyButtonType.secondary,
+                      shape: MyButtonShape.square,
+                      icon: LucideIcons.arrowRight,
+                      onTap: _next,
+                    ),
                   ],
                 ),
                 const Gap(16),
                 MonthCalendar(
                   value: _view,
-                  // now: DateTime.now(),
                   calendarValue:
                       DateTime(_view.year, _view.month).toCalendarValue(),
                   stateBuilder: widget.stateBuilder,
@@ -279,7 +266,6 @@ class MyCalendarPickerDialog extends StatefulWidget {
     this.firstDate,
     this.lastDate,
     this.showOutsideDays = true,
-    this.hideNavigation = false,
   });
 
   final CalendarSelectionMode selectionMode;
@@ -291,7 +277,6 @@ class MyCalendarPickerDialog extends StatefulWidget {
   final DateTime? firstDate;
   final DateTime? lastDate;
   final bool showOutsideDays;
-  final bool hideNavigation;
 
   @override
   State<MyCalendarPickerDialog> createState() => _MyCalendarPickerDialogState();
@@ -328,7 +313,6 @@ class _MyCalendarPickerDialogState extends State<MyCalendarPickerDialog> {
         firstDate: widget.firstDate,
         lastDate: widget.lastDate,
         showOutsideDays: widget.showOutsideDays,
-        hideNavigation: widget.hideNavigation,
       ),
     );
 
@@ -376,7 +360,6 @@ class _DatePickerDialog extends StatefulWidget {
     this.firstDate,
     this.lastDate,
     this.showOutsideDays = true,
-    this.hideNavigation = false,
   });
 
   final CalendarValue? initialValue;
@@ -388,7 +371,6 @@ class _DatePickerDialog extends StatefulWidget {
   final DateTime? firstDate;
   final DateTime? lastDate;
   final bool showOutsideDays;
-  final bool hideNavigation;
 
   @override
   State<_DatePickerDialog> createState() => _DatePickerDialogState();
@@ -507,22 +489,19 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final showNav = !widget.hideNavigation;
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Row(
           children: [
-            if (showNav)
-              MyButton(
-                type: MyButtonType.secondary,
-                onTap: _goPrev,
-                icon: LucideIcons.arrowLeft,
-                shape: MyButtonShape.square,
-              ),
-            if (showNav) const Gap(16),
+            MyButton(
+              type: MyButtonType.secondary,
+              onTap: _goPrev,
+              icon: LucideIcons.arrowLeft,
+              shape: MyButtonShape.square,
+            ),
+            const Gap(16),
             Expanded(
               child: MyButton(
                 enabled: _viewType != CalendarViewType.year,
@@ -532,14 +511,13 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
                 textStyle: context.bodyLarge,
               ),
             ),
-            if (showNav) const Gap(16),
-            if (showNav)
-              MyButton(
-                type: MyButtonType.secondary,
-                onTap: _goNext,
-                icon: LucideIcons.arrowRight,
-                shape: MyButtonShape.square,
-              ),
+            const Gap(16),
+            MyButton(
+              type: MyButtonType.secondary,
+              onTap: _goNext,
+              icon: LucideIcons.arrowRight,
+              shape: MyButtonShape.square,
+            ),
           ],
         ),
         const Gap(16),
@@ -1014,7 +992,7 @@ class _CalendarState extends State<Calendar> {
         );
 
         if (item.fromAnotherMonth && !widget.showOutsideDays) {
-          return const NoWidget();
+          return const SizedBox.shrink();
         }
 
         if (item.fromAnotherMonth) {
@@ -1112,7 +1090,12 @@ class MonthCalendar extends StatelessWidget {
     for (int i = 0; i < months.length; i += 4) {
       rows
         ..add(const Gap(8))
-        ..add(Row(children: months.sublist(i, i + 4)));
+        ..add(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: months.sublist(i, i + 4),
+          ),
+        );
     }
     return Column(mainAxisSize: MainAxisSize.min, children: rows);
   }
@@ -1197,7 +1180,12 @@ class YearCalendar extends StatelessWidget {
     for (int i = 0; i < years.length; i += 4) {
       rows
         ..add(const Gap(8))
-        ..add(Row(children: years.sublist(i, i + 4)));
+        ..add(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: years.sublist(i, i + 4),
+          ),
+        );
     }
     return Column(mainAxisSize: MainAxisSize.min, children: rows);
   }
@@ -1230,7 +1218,7 @@ class CalendarItem extends StatelessWidget {
       shape: MyButtonShape.square,
       onTap: onTap,
       text: text,
-      width: rowCount < 5 ? 265 / rowCount : null,
+      width: rowCount < 5 ? 260 / rowCount : null,
     );
 
     switch (type) {
@@ -1241,7 +1229,7 @@ class CalendarItem extends StatelessWidget {
           shape: MyButtonShape.square,
           onTap: onTap,
           text: text,
-          width: rowCount < 5 ? 265 / rowCount : null,
+          width: rowCount < 5 ? 260 / rowCount : null,
         );
       case CalendarItemType.today:
         return common;
@@ -1260,8 +1248,7 @@ class CalendarGridData {
     final firstDayOfMonth = DateTime(year, month);
     final daysInMonth = DateTime(year, month == 12 ? 1 : month + 1, 0).day;
 
-    // weekday: Mon=1..Sun=7; we build leading blanks from previous month
-    final leading = firstDayOfMonth.weekday; // 1..7
+    final leading = firstDayOfMonth.weekday;
     final prevMonthLastDay = firstDayOfMonth.subtract(Duration(days: leading));
 
     final items = <CalendarGridItem>[];
@@ -1282,7 +1269,6 @@ class CalendarGridData {
         }
       }
     } else {
-      // If not showing outside days, insert placeholders for alignment.
       if (leading < 7) {
         for (int i = 0; i < leading; i++) {
           final idx = itemCount++;
@@ -1436,7 +1422,9 @@ class CalendarGrid extends StatelessWidget {
                   .sublist(i, i + 7)
                   .map(
                     (item) =>
-                        item.placeholder ? const NoWidget() : itemBuilder(item),
+                        item.placeholder
+                            ? SizedBox(width: 1300 / data.items.length)
+                            : itemBuilder(item),
                   )
                   .toList(),
         ),

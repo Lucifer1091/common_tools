@@ -12,7 +12,6 @@ class MyDatePicker {
     DateTime? firstDate,
     DateTime? lastDate,
     bool showOutsideDays = true,
-    bool hideNavigation = false,
     DateStateBuilder? stateBuilder,
   }) async {
     assert(debugCheckHasMaterialLocalizations(context), '');
@@ -23,7 +22,6 @@ class MyDatePicker {
       firstDate: firstDate,
       lastDate: lastDate,
       showOutsideDays: showOutsideDays,
-      hideNavigation: hideNavigation,
       stateBuilder: stateBuilder,
     );
 
@@ -43,14 +41,12 @@ class MyDatePicker {
   static Future<List<DateTime>?> dates({
     required BuildContext context,
     List<DateTime>? initial,
-    CalendarViewType viewType = CalendarViewType.date,
     bool barrierDismissible = true,
     int? min,
     int? max,
     DateTime? firstDate,
     DateTime? lastDate,
     bool showOutsideDays = true,
-    bool hideNavigation = false,
     DateStateBuilder? stateBuilder,
   }) async {
     assert(debugCheckHasMaterialLocalizations(context), '');
@@ -63,7 +59,6 @@ class MyDatePicker {
       firstDate: firstDate,
       lastDate: lastDate,
       showOutsideDays: showOutsideDays,
-      hideNavigation: hideNavigation,
       stateBuilder: stateBuilder,
     );
 
@@ -75,21 +70,17 @@ class MyDatePicker {
 
     if (result == null) return null;
     final multi = result.toMulti();
-    // Return a copy to avoid exposing internal list
     return List<DateTime>.from(multi.dates);
   }
 
-  /// Pick a month, return the selected month as a DateTime (day=1), or null if cancelled.
   static Future<DateTime?> month({
     required BuildContext context,
     DateTime? initialMonth,
     DateTime? firstDate,
     DateTime? lastDate,
-    bool hideNavigation = false,
     bool barrierDismissible = true,
     DateStateBuilder? stateBuilder,
   }) async {
-    // Coerce initial inside bounds if provided
     DateTime init = initialMonth ?? DateTime.now();
 
     if (firstDate != null &&
@@ -112,19 +103,16 @@ class MyDatePicker {
             initialMonth: init,
             firstDate: firstDate,
             lastDate: lastDate,
-            hideNavigation: hideNavigation,
             stateBuilder: stateBuilder,
           ),
     );
   }
 
-  /// Pick a year, return the selected year as an int, or null if cancelled.
   static Future<int?> year({
     required BuildContext context,
     int? initialYear,
     DateTime? firstDate,
     DateTime? lastDate,
-    bool hideNavigation = false,
     bool barrierDismissible = true,
     DateStateBuilder? stateBuilder,
   }) async {
@@ -143,7 +131,6 @@ class MyDatePicker {
             initialYear: initYear,
             firstDate: firstDate,
             lastDate: lastDate,
-            hideNavigation: hideNavigation,
             stateBuilder: stateBuilder,
           ),
     );
