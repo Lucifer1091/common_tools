@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../components/fancy_date_range_picker.dart';
+import '../components/my_date_range_picker.dart';
 
 /// A [DateRangeField] which extends a [FormField].
 ///

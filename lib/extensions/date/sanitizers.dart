@@ -165,9 +165,6 @@ extension DateTimeSetters on DateTime {
       day,
       time?.hour ?? hour,
       time?.minute ?? minute,
-      second,
-      millisecond,
-      microsecond,
     );
   }
 

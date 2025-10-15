@@ -241,7 +241,7 @@ class _MyDialogPageState extends State<MyDialogPage> {
                 context: context,
                 fullscreen: true,
                 builder: (context) {
-                  return FancyDateRangePickerDialog(
+                  return MyDateRangePickerDialog(
                     firstDate: DateTime(2020),
                     lastDate: DateTime(2050),
                   );

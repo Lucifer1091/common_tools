@@ -36,7 +36,7 @@ class MyDatePicker {
     return single.date;
   }
 
-  /// Opens a dialog that lets the user pick multiple dates (or months/years if you change [viewType]).
+  /// Opens a dialog that lets the user pick multiple dates.
   /// Returns the full set as a [List<DateTime>], or null if cancelled.
   static Future<List<DateTime>?> dates({
     required BuildContext context,
@@ -81,30 +81,17 @@ class MyDatePicker {
     bool barrierDismissible = true,
     MyDateStateBuilder? stateBuilder,
   }) async {
-    DateTime init = initialMonth ?? DateTime.now();
-
-    if (firstDate != null &&
-        (init.year < firstDate.year ||
-            (init.year == firstDate.year && init.month < firstDate.month))) {
-      init = DateTime(firstDate.year, firstDate.month);
-    }
-
-    if (lastDate != null &&
-        (init.year > lastDate.year ||
-            (init.year == lastDate.year && init.month > lastDate.month))) {
-      init = DateTime(lastDate.year, lastDate.month);
-    }
-
     return MyDialog.show<DateTime?>(
       context: context,
       barrierDismissible: barrierDismissible,
-      builder:
-          (_) => MyMonthPickerDialog(
-            initialMonth: init,
-            firstDate: firstDate,
-            lastDate: lastDate,
-            stateBuilder: stateBuilder,
-          ),
+      builder: (_) {
+        return MyMonthPickerDialog(
+          initialMonth: initialMonth ?? DateTime.now(),
+          firstDate: firstDate,
+          lastDate: lastDate,
+          stateBuilder: stateBuilder,
+        );
+      },
     );
   }
 
@@ -116,23 +103,84 @@ class MyDatePicker {
     bool barrierDismissible = true,
     MyDateStateBuilder? stateBuilder,
   }) async {
-    final int initYear =
-        initialYear ??
-        DateTime.now().year.clamp(
-          firstDate?.year ?? -999999,
-          lastDate?.year ?? 999999,
-        );
-
     return MyDialog.show<int?>(
       context: context,
       barrierDismissible: barrierDismissible,
-      builder:
-          (_) => MyYearPickerDialog(
-            initialYear: initYear,
-            firstDate: firstDate,
-            lastDate: lastDate,
-            stateBuilder: stateBuilder,
-          ),
+      builder: (_) {
+        return MyYearPickerDialog(
+          initialYear: initialYear ?? DateTime.now().year,
+          firstDate: firstDate,
+          lastDate: lastDate,
+          stateBuilder: stateBuilder,
+        );
+      },
+    );
+  }
+
+  static Future<DateTime?> dateTime({
+    required BuildContext context,
+    DateTime? initial,
+    DateTime? firstDate,
+    DateTime? lastDate,
+    bool showOutsideDays = true,
+    bool use24HrFormat = false,
+    MyDateStateBuilder? stateBuilder,
+    bool barrierDismissible = true,
+  }) async {
+    TimeOfDay? time;
+
+    final date = await MyDatePicker.date(
+      context: context,
+      initial: initial,
+      firstDate: firstDate,
+      lastDate: lastDate,
+      barrierDismissible: barrierDismissible,
+      showOutsideDays: showOutsideDays,
+      stateBuilder: stateBuilder,
+    ).then((date) async {
+      if (date != null) {
+        final initialTime = TimeOfDay(
+          hour: initial?.hour ?? 0,
+          minute: initial?.minute ?? 0,
+        );
+        if (context.mounted) {
+          time = await MyDatePicker.time(
+            context: context,
+            initial: initialTime,
+            barrierDismissible: barrierDismissible,
+            use24HrFormat: use24HrFormat,
+          );
+        }
+      }
+      return date;
+    });
+
+    return date?.copyTime(time);
+  }
+
+  static Future<DateTimeRange?> range(
+    {
+      required  BuildContext context,
+    DateTimeRange? initialDateRange,
+    DateTime? firstDate,
+    DateTime? lastDate,
+    List<MyQuickDateRange>? ranges,
+  }) async {
+    if (initialDateRange != null) {
+      if (firstDate != null && initialDateRange.start.isBefore(firstDate)) {
+        firstDate = initialDateRange.start;
+      }
+      if (lastDate != null && initialDateRange.end.isAfter(lastDate)) {
+        lastDate = initialDateRange.end;
+      }
+    }
+
+    return showFancyDateRangePicker(
+      context: context,
+      initialDateRange: initialDateRange,
+      firstDate: firstDate ?? kDefaultFirstSelectableDate,
+      lastDate: lastDate ?? kDefaultLastSelectableDate,
+      initialEntryMode: DatePickerEntryMode.calendarOnly,
     );
   }
 
@@ -205,7 +253,7 @@ class MyDatePicker {
   ///
   /// ```dart
   /// MyDatePicker.duration(
-  ///   initial: new Duration.now(),
+  ///   initial: Duration.zero,
   ///   context: context,
   /// );
   /// ```
@@ -232,4 +280,98 @@ class MyDatePicker {
       },
     );
   }
+
+  //  static Future<DateTime?> show({
+  //     required BuildContext context,
+  //     required DateTimeFieldPickerMode mode,
+  //     DateTime? initialDate,
+  //     DateTime? firstDate,
+  //     DateTime? lastDate,
+  //     OnDateTimeSelect? onDateTimeSelect,
+  //     DatePickerMode? initialDatePickerMode,
+  //   }) async {
+  //     DateTime? selectedDateTime = initialDate ?? DateTime.now();
+
+  //     selectedDateTime = _getInitialDate(
+  //       initialDate,
+  //       firstDate ?? kDefaultFirstSelectableDate,
+  //       lastDate ?? kDefaultLastSelectableDate,
+  //     );
+
+  //     switch (mode) {
+  //       // TODO : Break Month and Year Pickers in Separate Cases
+  //       case DateTimeFieldPickerMode.year:
+  //         final date = await getYear(
+  //           context,
+  //           initialDate: selectedDateTime,
+  //           firstDate: firstDate,
+  //           lastDate: lastDate,
+  //         );
+  //         onDateTimeSelect?.call(date, null);
+  //         return date;
+  //       case DateTimeFieldPickerMode.month:
+  //       case DateTimeFieldPickerMode.monthYear:
+  //         final date = await getMonthYear(
+  //           context,
+  //           initialDate: selectedDateTime,
+  //           firstDate: firstDate,
+  //           lastDate: lastDate,
+  //           // initialMonthPickerMode: initialMonthPickerMode,
+  //         );
+  //         onDateTimeSelect?.call(date, null);
+  //         return date;
+
+  //       case DateTimeFieldPickerMode.date:
+  //         final date = await getDate(
+  //           context,
+  //           initialDate: selectedDateTime,
+  //           firstDate: firstDate,
+  //           lastDate: lastDate,
+  //           initialDatePickerMode: initialDatePickerMode,
+  //         );
+  //         onDateTimeSelect?.call(date, null);
+  //         return date;
+
+  //       case DateTimeFieldPickerMode.time:
+  //         DateTime date0 = _getInitialTime(
+  //           initialDate,
+  //           firstDate ?? kDefaultFirstSelectableDate,
+  //           lastDate ?? kDefaultLastSelectableDate,
+  //         );
+
+  //         final timeOfDay = await getTime(
+  //           context,
+  //           initialTime: TimeOfDay.fromDateTime(date0),
+  //         );
+  //         onDateTimeSelect?.call(null, timeOfDay);
+  //         return convert(timeOfDay);
+
+  //       case DateTimeFieldPickerMode.dateTime:
+  //         TimeOfDay? timeOfDay;
+
+  //         final date = await getDate(
+  //           context,
+  //           initialDate: selectedDateTime,
+  //           firstDate: firstDate,
+  //           lastDate: lastDate,
+  //           initialDatePickerMode: initialDatePickerMode,
+  //         ).then((date) async {
+  //           if (date != null) {
+  //             DateTime date0 = _getInitialTime(
+  //               initialDate,
+  //               firstDate ?? kDefaultFirstSelectableDate,
+  //               lastDate ?? kDefaultLastSelectableDate,
+  //             );
+
+  //             timeOfDay = await getTime(
+  //               context,
+  //               initialTime: TimeOfDay.fromDateTime(date0),
+  //             );
+  //           }
+  //           return date;
+  //         });
+  //         onDateTimeSelect?.call(combine(date, timeOfDay), timeOfDay);
+  //         return combine(date, timeOfDay);
+  //     }
+  //   }
 }

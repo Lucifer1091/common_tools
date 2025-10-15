@@ -5,16 +5,16 @@ import '../../../../../../../index.dart';
 /// A model that represents a quick selection dateRange in the quick selection widget.
 /// The date range is required but can be null. If null, the quick selection
 /// will reset the selected date range.
-class QuickDateRange {
-  const QuickDateRange({required this.range, required this.label});
+class MyQuickDateRange {
+  const MyQuickDateRange({required this.range, required this.label});
 
   final DateTimeRange? range;
   final String label;
 }
 
 /// A widget that displays a list of quick dateRanges that can be selected.
-class QuickSelectorWidget extends StatelessWidget {
-  const QuickSelectorWidget({
+class MyQuickSelectorWidget extends StatelessWidget {
+  const MyQuickSelectorWidget({
     required this.selected,
     required this.ranges,
     required this.onChanged,
@@ -29,7 +29,7 @@ class QuickSelectorWidget extends StatelessWidget {
   final DateTimeRange? selected;
 
   /// The list of quick dateRanges to display.
-  final List<QuickDateRange> ranges;
+  final List<MyQuickDateRange> ranges;
 
   /// Called when a quick dateRange is selected.
   final ValueChanged<DateTimeRange?> onChanged;
@@ -56,7 +56,7 @@ class QuickSelectorWidget extends StatelessWidget {
       children: [
         for (final range in ranges.sublist(1))
           InputChip(
-            label: Text(
+            label: MyText(
               range.label,
               style:
                   style ??
@@ -67,7 +67,7 @@ class QuickSelectorWidget extends StatelessWidget {
             checkmarkColor: context.colorScheme.primary,
             color: WidgetStatePropertyAll(
               range.range == null
-                  ? Colors.red
+                  ? context.colorScheme.destructive
                   : selected == range.range
                   ? selectedColor ?? context.colorScheme.primary
                   : Colors.transparent,
@@ -119,7 +119,7 @@ class QuickSelectorWidget extends StatelessWidget {
     );
   }
 
-  InkWell buildInkWell(BuildContext context, QuickDateRange range) {
+  InkWell buildInkWell(BuildContext context, MyQuickDateRange range) {
     return InkWell(
       borderRadius: BorderRadius.circular(8),
       onTap: () => onChanged(range.range),
@@ -127,21 +127,24 @@ class QuickSelectorWidget extends StatelessWidget {
         decoration: BoxDecoration(
           color:
               range.range == null
-                  ? Colors.red
+                  ? context.colorScheme.destructive
                   : selected == range.range
                   ? selectedColor ?? (context.colorScheme.primary)
                   : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
+          padding: const EdgeInsets.all(8),
+          child: MyText(
             range.label,
             textAlign: TextAlign.left,
             style:
                 style ??
                 context.bodyMedium.copyWith(
-                  color: range.range == null ? Colors.white : null,
+                  color:
+                      range.range == null
+                          ? context.colorScheme.destructiveForeground
+                          : null,
                 ),
           ),
         ),

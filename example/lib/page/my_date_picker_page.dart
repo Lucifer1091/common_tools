@@ -60,7 +60,7 @@ class _MyDatePickerPageState extends State<MyDatePickerPage> {
                     MyButton(
                       text: 'Date Range Picker',
                       onTap: () {
-                        showDateRangePicker(
+                        MyDatePicker.range(
                           context: context,
                           firstDate: DateTime(1990),
                           lastDate: DateTime(2099),
@@ -79,103 +79,16 @@ class _MyDatePickerPageState extends State<MyDatePickerPage> {
                         MyDatePicker.timeRange(context: context);
                       },
                     ),
-
+                    MyButton(
+                      text: 'Date & Time Picker',
+                      onTap: () {
+                        MyDatePicker.dateTime(context: context);
+                      },
+                    ),
                     MyButton(
                       text: 'Duration Picker',
                       onTap: () {
                         MyDatePicker.duration(context: context);
-                      },
-                    ),
-                  ],
-                );
-              },
-            ),
-          ],
-        ),
-        ExampleModule(
-          title: 'Custom Pickers',
-          children: [
-            ExampleItem(
-              padding: EdgeInsets.only(top: 16),
-              builder: (context) {
-                return Wrap(
-                  spacing: 16,
-                  runSpacing: 16,
-                  children: [
-                    MyButton(
-                      text: 'Date Picker',
-                      onTap: () {
-                        DatePickers.show(
-                          context: context,
-                          mode: DateTimeFieldPickerMode.date,
-                          firstDate: DateTime(1990),
-                          lastDate: DateTime(2099),
-                        );
-                      },
-                    ),
-                    MyButton(
-                      text: 'Time Picker',
-                      onTap: () {
-                        DatePickers.show(
-                          context: context,
-                          mode: DateTimeFieldPickerMode.time,
-                          firstDate: DateTime(1990),
-                          lastDate: DateTime(2099),
-                        );
-                      },
-                    ),
-                    MyButton(
-                      text: 'Date & time Picker',
-                      onTap: () {
-                        DatePickers.show(
-                          context: context,
-                          mode: DateTimeFieldPickerMode.dateTime,
-                          firstDate: DateTime(1990),
-                          lastDate: DateTime(2099),
-                        );
-                      },
-                    ),
-                    MyButton(
-                      text: 'Month Picker',
-                      onTap: () {
-                        DatePickers.show(
-                          context: context,
-                          mode: DateTimeFieldPickerMode.month,
-                          firstDate: DateTime(1990),
-                          lastDate: DateTime(2099),
-                        );
-                      },
-                    ),
-                    MyButton(
-                      text: 'Year Picker',
-                      onTap: () {
-                        DatePickers.show(
-                          context: context,
-                          mode: DateTimeFieldPickerMode.year,
-                          firstDate: DateTime(1990),
-                          lastDate: DateTime(2099),
-                        );
-                      },
-                    ),
-                    MyButton(
-                      text: 'Month / Year Picker',
-                      onTap: () {
-                        DatePickers.show(
-                          context: context,
-                          mode: DateTimeFieldPickerMode.monthYear,
-                          firstDate: DateTime(1990),
-                          lastDate: DateTime(2099),
-                        );
-                      },
-                    ),
-                    MyButton(
-                      text: 'Range Picker',
-                      onTap: () {
-                        DatePickers.getDateRange(
-                          context,
-                          firstDate: DateTime(1990),
-                          lastDate: DateTime(2099),
-                        );
                       },
                     ),
                   ],

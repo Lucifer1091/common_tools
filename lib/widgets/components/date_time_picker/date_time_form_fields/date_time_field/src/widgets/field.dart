@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../index.dart';
-import '../components/date_pickers.dart';
 import '../constants.dart';
 
 part 'form_field.dart';
@@ -321,15 +320,17 @@ class _DateTimeFieldState extends State<DateTimeField> {
     widget.onTap?.call();
 
     // DateTime? selected;
-    final DateTime? selected = await DatePickers.show(
-      context: context,
-      mode: widget.mode,
-      firstDate: widget.firstDate,
-      lastDate: widget.lastDate,
-      initialDate: widget.value ?? widget.initialPickerDateTime,
-      onDateTimeSelect: widget.onChanged,
-      initialDatePickerMode: widget.initialDatePickerMode,
-    );
+    final DateTime? selected = DateTime.now();
+    //  =
+    // await DatePickers.show(
+    //   context: context,
+    //   mode: widget.mode,
+    //   firstDate: widget.firstDate,
+    //   lastDate: widget.lastDate,
+    //   initialDate: widget.value ?? widget.initialPickerDateTime,
+    //   onDateTimeSelect: widget.onChanged,
+    //   initialDatePickerMode: widget.initialDatePickerMode,
+    // );
 
     if (mounted) {
       _isSelecting = false;
