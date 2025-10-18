@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import 'td_item_widget.dart';
-import 'td_multi_picker.dart';
 
-class TDPicker {
-  TDPicker._();
+class MyPicker {
+  MyPicker._();
 
   static Future<T?> showMultiPicker<T>(
     BuildContext context, {
@@ -34,7 +32,7 @@ class TDPicker {
       barrierColor:
           barrierColor ?? ThemeColors.neutral.shade800.withValues(alpha: 0.6),
       builder: (context) {
-        return TDMultiPicker(
+        return MyMultiPicker(
           title: title,
           onConfirm: onConfirm,
           onCancel: onCancel,
@@ -83,7 +81,7 @@ class TDPicker {
       barrierColor:
           barrierColor ?? ThemeColors.neutral.shade800.withValues(alpha: 0.6),
       builder: (context) {
-        return TDMultiLinkedPicker(
+        return MyMultiLinkedPicker(
           title: title,
           onConfirm: onConfirm,
           onCancel: onCancel,

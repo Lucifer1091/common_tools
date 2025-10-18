@@ -34,7 +34,7 @@ import 'page/my_loader_page.dart';
 import 'page/td_message_page.dart';
 import 'page/td_navbar_page.dart';
 import 'page/td_notice_bar_page.dart';
-import 'page/td_picker_page.dart';
+import 'page/my_picker_page.dart';
 import 'page/td_popover_page.dart';
 import 'page/td_popup_page.dart';
 import 'page/td_progress_page.dart';
@@ -180,7 +180,9 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'Picker',
       name: 'picker',
-      pageBuilder: _wrapInheritedTheme((context) => const TDPickerPage()),
+      pageBuilder: _wrapInheritedTheme(
+        (context) => const MyPickerPage(),
+      ),
     ),
     ExamplePageModel(
       text: 'Radio',

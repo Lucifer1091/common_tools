@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../../index.dart';
-import '../text/my_text.dart';
 
 typedef ItemBuilderType =
     Widget? Function(
@@ -127,6 +126,6 @@ class ItemDistanceCalculator {
   }
 
   double calculateFont(BuildContext context, double distance) {
-    return context.bodyLarge!.fontSize ?? 14;
+    return context.bodyLarge.fontSize ?? 14;
   }
 }

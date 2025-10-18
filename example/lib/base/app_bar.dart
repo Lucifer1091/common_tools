@@ -24,9 +24,7 @@ class MyAppBar extends ConsumerWidget implements PreferredSizeWidget {
         color: context.colorScheme.primaryForeground,
       ),
       title: titleWidget ?? Text(title!),
-      iconTheme: IconThemeData(
-        color: context.colorScheme.primaryForeground,
-      ),
+      iconTheme: IconThemeData(color: context.colorScheme.primaryForeground),
       actions: [
         Padding(
           padding: const EdgeInsets.only(right: 8),
@@ -48,7 +46,7 @@ class MyAppBar extends ConsumerWidget implements PreferredSizeWidget {
           padding: const EdgeInsets.only(right: 8),
           child: MyButton(
             onTap: () {
-              TDPicker.showMultiPicker(
+              MyPicker.showMultiPicker(
                 context,
                 title: 'Select Color',
                 onConfirm: (selected) {

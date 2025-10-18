@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 
 import '../../../index.dart';
 
-typedef MultiPickerCallback = void Function(List selected);
+typedef MultiPickerCallback<T> = void Function(List<T> selected);
 
-class TDMultiPicker extends StatelessWidget {
-  const TDMultiPicker({
+class MyMultiPicker<T> extends StatelessWidget {
+  const MyMultiPicker({
     required this.title,
     required this.onConfirm,
     required this.data,
@@ -35,51 +35,28 @@ class TDMultiPicker extends StatelessWidget {
   });
 
   final String? title;
-
-  final MultiPickerCallback? onConfirm;
-
-  final MultiPickerCallback? onCancel;
-
+  final MultiPickerCallback<T>? onConfirm;
+  final MultiPickerCallback<T>? onCancel;
   final List<List<String>> data;
-
   final double pickerHeight;
-
   final int pickerItemCount;
-
   final Widget? customSelectWidget;
-
   final String? rightText;
-
   final String? leftText;
-
   final TextStyle? leftTextStyle;
-
   final TextStyle? rightTextStyle;
-
   final TextStyle? centerTextStyle;
-
   final double? titleHeight;
-
   final double? topPadding;
-
   final double? leftPadding;
-
   final double? rightPadding;
-
   final Color? titleDividerColor;
-
   final Color? backgroundColor;
-
   final double? topRadius;
-
   final ItemDistanceCalculator? itemDistanceCalculator;
-
   final EdgeInsets? padding;
-
   final List<int>? initialIndexes;
-
   final ItemBuilderType? itemBuilder;
-
   static const _pickerTitleHeight = 56.0;
 
   @override
@@ -97,7 +74,7 @@ class TDMultiPicker extends StatelessWidget {
           padding ??
           EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
       decoration: BoxDecoration(
-        color: backgroundColor ?? Colors.white,
+        color: backgroundColor ?? context.colorScheme.popover,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(topRadius ?? 12),
           topRight: Radius.circular(topRadius ?? 12),
@@ -117,7 +94,7 @@ class TDMultiPicker extends StatelessWidget {
                     Container(
                       height: 40,
                       decoration: BoxDecoration(
-                        color: ThemeColors.neutral.shade50,
+                        color: ThemeColors.neutral.shade900,
                         borderRadius: BorderRadius.all(Radius.circular(6)),
                       ),
                     ),
@@ -207,7 +184,7 @@ class TDMultiPicker extends StatelessWidget {
               if (onCancel != null) {
                 onCancel!([
                   for (var i = 0; i < controllers.length; i++)
-                    controllers[i].selectedItem,
+                    controllers[i].selectedItem as T,
                 ]);
               } else {
                 Navigator.of(context).pop();
@@ -218,7 +195,7 @@ class TDMultiPicker extends StatelessWidget {
               leftText ?? 'Cancel',
               style:
                   leftTextStyle ??
-                  context.bodyLarge?.copyWith(
+                  context.bodyLarge.copyWith(
                     color: ThemeColors.neutral.shade800,
                   ),
             ),
@@ -234,7 +211,7 @@ class TDMultiPicker extends StatelessWidget {
                         title,
                         style:
                             centerTextStyle ??
-                            context.titleLarge?.copyWith(
+                            context.titleLarge.copyWith(
                               color: ThemeColors.neutral.shade900,
                             ),
                       ),
@@ -245,7 +222,7 @@ class TDMultiPicker extends StatelessWidget {
             onTap: () {
               onConfirm?.call([
                 for (var i = 0; i < controllers.length; i++)
-                  controllers[i].selectedItem,
+                  controllers[i].selectedItem as T,
               ]);
             },
             behavior: HitTestBehavior.opaque,
@@ -253,7 +230,7 @@ class TDMultiPicker extends StatelessWidget {
               rightText ?? 'Confirm',
               style:
                   rightTextStyle ??
-                  context.bodyLarge?.copyWith(color: ThemeColors.blue.shade600),
+                  context.bodyLarge.copyWith(color: ThemeColors.blue.shade600),
             ),
           ),
         ],
@@ -306,8 +283,8 @@ class TDMultiPicker extends StatelessWidget {
   }
 }
 
-class TDMultiLinkedPicker extends StatefulWidget {
-  const TDMultiLinkedPicker({
+class MyMultiLinkedPicker extends StatefulWidget {
+  const MyMultiLinkedPicker({
     required this.onConfirm,
     required this.selectedData,
     required this.data,
@@ -384,10 +361,10 @@ class TDMultiLinkedPicker extends StatefulWidget {
   final ItemBuilderType? itemBuilder;
 
   @override
-  State<StatefulWidget> createState() => _TDMultiLinkedPickerState();
+  State<StatefulWidget> createState() => _MyMultiLinkedPickerState();
 }
 
-class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
+class _MyMultiLinkedPickerState extends State<MyMultiLinkedPicker> {
   late MultiLinkedPickerModel model;
 
   double pickerHeight = 0;
@@ -578,7 +555,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
               widget.leftText ?? 'Cancel',
               style:
                   widget.leftTextStyle ??
-                  context.bodyLarge?.copyWith(
+                  context.bodyLarge.copyWith(
                     color: ThemeColors.neutral.shade800,
                   ),
             ),
@@ -593,7 +570,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
                         widget.title,
                         style:
                             widget.centerTextStyle ??
-                            context.titleLarge?.copyWith(
+                            context.titleLarge.copyWith(
                               color: ThemeColors.neutral.shade900,
                             ),
                       ),
@@ -608,7 +585,7 @@ class _TDMultiLinkedPickerState extends State<TDMultiLinkedPicker> {
               widget.rightText ?? 'Confirm',
               style:
                   widget.rightTextStyle ??
-                  context.bodyLarge?.copyWith(color: ThemeColors.blue.shade600),
+                  context.bodyLarge.copyWith(color: ThemeColors.blue.shade600),
             ),
           ),
         ],

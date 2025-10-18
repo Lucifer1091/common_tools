@@ -3,14 +3,14 @@ import 'package:common_tools/index.dart';
 
 import '../../base/example_widget.dart';
 
-class TDPickerPage extends StatefulWidget {
-  const TDPickerPage({Key? key}) : super(key: key);
+class MyPickerPage extends StatefulWidget {
+  const MyPickerPage({super.key});
 
   @override
-  State<StatefulWidget> createState() => _TDPickerPageState();
+  State<StatefulWidget> createState() => _MyPickerPageState();
 }
 
-class _TDPickerPageState extends State<TDPickerPage> {
+class _MyPickerPageState extends State<MyPickerPage> {
   String selected_1 = '';
   List<String> data_1 = ['广州市', '韶关市', '深圳市', '珠海区', '汕头市'];
   String selected_2 = '';
@@ -83,7 +83,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
   Widget buildArea(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        TDPicker.showMultiPicker(
+        MyPicker.showMultiPicker(
           context,
           title: '选择地区',
           onConfirm: (selected) {
@@ -102,7 +102,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
   Widget buildTime(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        TDPicker.showMultiPicker(
+        MyPicker.showMultiPicker(
           context,
           title: '选择时间',
           onConfirm: (selected) {
@@ -122,7 +122,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
   Widget buildMultiArea(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        TDPicker.showMultiLinkedPicker(
+        MyPicker.showMultiLinkedPicker(
           context,
           title: '选择地区',
           onConfirm: (selected) {
@@ -143,7 +143,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
   Widget buildAreaWithTitle(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        TDPicker.showMultiPicker(
+        MyPicker.showMultiPicker(
           context,
           title: '选择地区',
           onConfirm: (selected) {
@@ -162,7 +162,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
   Widget buildAreaWithoutTitle(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        TDPicker.showMultiPicker(
+        MyPicker.showMultiPicker(
           context,
           title: '',
           onConfirm: (selected) {
@@ -183,7 +183,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
       children: [
         GestureDetector(
           onTap: () {
-            TDPicker.showMultiPicker(
+            MyPicker.showMultiPicker(
               context,
               leftText: '自定义取消',
               rightText: '自定义确认',
@@ -201,7 +201,7 @@ class _TDPickerPageState extends State<TDPickerPage> {
         ),
         GestureDetector(
           onTap: () {
-            TDPicker.showMultiLinkedPicker(
+            MyPicker.showMultiLinkedPicker(
               context,
               leftText: '自定义取消',
               rightText: '自定义确认',
