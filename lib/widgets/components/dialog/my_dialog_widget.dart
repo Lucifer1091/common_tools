@@ -123,6 +123,7 @@ class MyDialogInfoWidget extends StatelessWidget {
     this.contentColor,
     this.contentMaxHeight = 0,
     this.padding,
+    this.fullscreen = false,
   });
 
   final String? title;
@@ -133,6 +134,7 @@ class MyDialogInfoWidget extends StatelessWidget {
   final Widget? contentWidget;
   final double contentMaxHeight;
   final EdgeInsetsGeometry? padding;
+  final bool fullscreen;
 
   @override
   Widget build(BuildContext context) {
@@ -179,7 +181,7 @@ class MyDialogInfoWidget extends StatelessWidget {
                       ),
                     ),
                   ),
-            ),
+            ).expanded(enabled: fullscreen),
         ],
       ),
     );

@@ -64,7 +64,7 @@ class DateRangeField extends FormField<DateTimeRange> {
            /// This is the dialog to select the date range.
            Future<void> selectDateRange() async {
              DateTimeRange? picked =
-                 await showFancyDateRangePicker(
+                 await showDateRangePicker(
                    context: state.context,
                    initialDateRange: initialValue,
                    firstDate: firstDate ?? DateTime.now(),
@@ -81,9 +81,9 @@ class DateRangeField extends FormField<DateTimeRange> {
                    fieldEndHintText: fieldEndHintText ?? 'End Date',
                    fieldStartLabelText: fieldStartLabelText ?? 'Start Date',
                    fieldEndLabelText: fieldEndLabelText ?? 'End Date',
-                   minRangeDays: minRangeDays,
-                   maxRangeDays: maxRangeDays,
-                   showQuickSelector: showQuickSelector,
+                  //  minRangeDays: minRangeDays,
+                  //  maxRangeDays: maxRangeDays,
+                  //  showQuickSelector: showQuickSelector,
                  ) ??
                  state.value;
 

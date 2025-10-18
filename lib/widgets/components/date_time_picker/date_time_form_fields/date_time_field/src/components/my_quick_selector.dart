@@ -88,30 +88,16 @@ class MyQuickSelectorWidget extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 16),
               children: [
                 for (final range in ranges.sublist(1))
-                  Row(
-                    children: [
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4),
-                          child: buildInkWell(context, range),
-                        ),
-                      ),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    child: _buildButton(context, range),
                   ),
               ],
             ),
           ),
-          Row(
-            children: [
-              const SizedBox(width: 16),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: buildInkWell(context, ranges.first),
-                ),
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: _buildButton(context, ranges.first),
           ),
           const Gap(16),
         ],
@@ -119,36 +105,22 @@ class MyQuickSelectorWidget extends StatelessWidget {
     );
   }
 
-  InkWell buildInkWell(BuildContext context, MyQuickDateRange range) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(8),
+  Widget _buildButton(BuildContext context, MyQuickDateRange range) {
+    final bool isSelected = selected == range.range;
+    final bool isClear = range.range == null;
+
+    final MyButtonType type =
+        isClear
+            ? MyButtonType.destructive
+            : isSelected
+            ? MyButtonType.primary
+            : MyButtonType.ghost;
+
+    return MyButton(
+      type: type,
+      text: range.label,
+      width: double.maxFinite,
       onTap: () => onChanged(range.range),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color:
-              range.range == null
-                  ? context.colorScheme.destructive
-                  : selected == range.range
-                  ? selectedColor ?? (context.colorScheme.primary)
-                  : Colors.transparent,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: MyText(
-            range.label,
-            textAlign: TextAlign.left,
-            style:
-                style ??
-                context.bodyMedium.copyWith(
-                  color:
-                      range.range == null
-                          ? context.colorScheme.destructiveForeground
-                          : null,
-                ),
-          ),
-        ),
-      ),
     );
   }
 }

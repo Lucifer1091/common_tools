@@ -140,8 +140,8 @@ class MyDatePicker {
     ).then((date) async {
       if (date != null) {
         final initialTime = TimeOfDay(
-          hour: initial?.hour ?? 0,
-          minute: initial?.minute ?? 0,
+          hour: initial?.hour ?? DateTime.now().hour,
+          minute: initial?.minute ?? DateTime.now().minute,
         );
         if (context.mounted) {
           time = await MyDatePicker.time(
@@ -158,30 +158,87 @@ class MyDatePicker {
     return date?.copyTime(time);
   }
 
-  static Future<DateTimeRange?> range(
-    {
-      required  BuildContext context,
-    DateTimeRange? initialDateRange,
+  static Future<DateTimeRange?> range({
+    required BuildContext context,
     DateTime? firstDate,
     DateTime? lastDate,
+    DateTimeRange? initialDateRange,
+    DateTime? currentDate,
+    bool barrierDismissible = true,
+    SelectableDayForRangePredicate? selectableDayPredicate,
+    bool? showQuickSelector,
+    int? minRangeDays,
+    int? maxRangeDays,
     List<MyQuickDateRange>? ranges,
   }) async {
-    if (initialDateRange != null) {
-      if (firstDate != null && initialDateRange.start.isBefore(firstDate)) {
-        firstDate = initialDateRange.start;
-      }
-      if (lastDate != null && initialDateRange.end.isAfter(lastDate)) {
-        lastDate = initialDateRange.end;
+    firstDate ??= DateTime(1960);
+    lastDate ??= DateTime(2099);
+
+    assert(debugCheckHasMaterialLocalizations(context), '');
+
+    initialDateRange =
+        initialDateRange == null ? null : DateUtils.datesOnly(initialDateRange);
+    firstDate = DateUtils.dateOnly(firstDate);
+    lastDate = DateUtils.dateOnly(lastDate);
+
+    currentDate = DateUtils.dateOnly(currentDate ?? Date.now());
+
+    SelectableDayForRangePredicate? combinedSelectable;
+
+    if (selectableDayPredicate != null ||
+        minRangeDays != null ||
+        maxRangeDays != null) {
+      combinedSelectable = (DateTime day, DateTime? start, DateTime? end) {
+        final bool baseOk =
+            selectableDayPredicate?.call(day, start, end) ?? true;
+        if (!baseOk) return false;
+
+        if (start != null && end == null && !DateUtils.isSameDay(day, start)) {
+          if (minRangeDays != null) {
+            final earliestAllowedEnd = start.add(
+              Duration(days: minRangeDays - 1),
+            );
+            if (day.isBefore(earliestAllowedEnd)) return false;
+          }
+          if (maxRangeDays != null) {
+            final latestAllowedEnd = start.add(
+              Duration(days: maxRangeDays - 1),
+            );
+            if (day.isAfter(latestAllowedEnd)) return false;
+          }
+        }
+
+        return true;
+      };
+    }
+
+    final Widget dialog = MyDateRangePickerDialog(
+      initialDateRange: initialDateRange,
+      firstDate: firstDate,
+      lastDate: lastDate,
+      currentDate: currentDate,
+      selectableDayPredicate: combinedSelectable ?? selectableDayPredicate,
+      showQuickSelector: showQuickSelector,
+    );
+
+    final DateTimeRange? picked = await MyDialog.show<DateTimeRange>(
+      context: context,
+      barrierDismissible: barrierDismissible,
+      builder: (BuildContext context) {
+        return dialog;
+      },
+    );
+
+    // Final safety check (in case the dialog allows confirming outside the predicate)
+    if (picked != null && (minRangeDays != null || maxRangeDays != null)) {
+      final selLen = picked.end.difference(picked.start).inDays + 1;
+      if ((minRangeDays != null && selLen < minRangeDays) ||
+          (maxRangeDays != null && selLen > maxRangeDays)) {
+        return null;
       }
     }
 
-    return showFancyDateRangePicker(
-      context: context,
-      initialDateRange: initialDateRange,
-      firstDate: firstDate ?? kDefaultFirstSelectableDate,
-      lastDate: lastDate ?? kDefaultLastSelectableDate,
-      initialEntryMode: DatePickerEntryMode.calendarOnly,
-    );
+    return picked;
   }
 
   static Future<TimeOfDay?> time({
@@ -280,98 +337,4 @@ class MyDatePicker {
       },
     );
   }
-
-  //  static Future<DateTime?> show({
-  //     required BuildContext context,
-  //     required DateTimeFieldPickerMode mode,
-  //     DateTime? initialDate,
-  //     DateTime? firstDate,
-  //     DateTime? lastDate,
-  //     OnDateTimeSelect? onDateTimeSelect,
-  //     DatePickerMode? initialDatePickerMode,
-  //   }) async {
-  //     DateTime? selectedDateTime = initialDate ?? DateTime.now();
-
-  //     selectedDateTime = _getInitialDate(
-  //       initialDate,
-  //       firstDate ?? kDefaultFirstSelectableDate,
-  //       lastDate ?? kDefaultLastSelectableDate,
-  //     );
-
-  //     switch (mode) {
-  //       // TODO : Break Month and Year Pickers in Separate Cases
-  //       case DateTimeFieldPickerMode.year:
-  //         final date = await getYear(
-  //           context,
-  //           initialDate: selectedDateTime,
-  //           firstDate: firstDate,
-  //           lastDate: lastDate,
-  //         );
-  //         onDateTimeSelect?.call(date, null);
-  //         return date;
-  //       case DateTimeFieldPickerMode.month:
-  //       case DateTimeFieldPickerMode.monthYear:
-  //         final date = await getMonthYear(
-  //           context,
-  //           initialDate: selectedDateTime,
-  //           firstDate: firstDate,
-  //           lastDate: lastDate,
-  //           // initialMonthPickerMode: initialMonthPickerMode,
-  //         );
-  //         onDateTimeSelect?.call(date, null);
-  //         return date;
-
-  //       case DateTimeFieldPickerMode.date:
-  //         final date = await getDate(
-  //           context,
-  //           initialDate: selectedDateTime,
-  //           firstDate: firstDate,
-  //           lastDate: lastDate,
-  //           initialDatePickerMode: initialDatePickerMode,
-  //         );
-  //         onDateTimeSelect?.call(date, null);
-  //         return date;
-
-  //       case DateTimeFieldPickerMode.time:
-  //         DateTime date0 = _getInitialTime(
-  //           initialDate,
-  //           firstDate ?? kDefaultFirstSelectableDate,
-  //           lastDate ?? kDefaultLastSelectableDate,
-  //         );
-
-  //         final timeOfDay = await getTime(
-  //           context,
-  //           initialTime: TimeOfDay.fromDateTime(date0),
-  //         );
-  //         onDateTimeSelect?.call(null, timeOfDay);
-  //         return convert(timeOfDay);
-
-  //       case DateTimeFieldPickerMode.dateTime:
-  //         TimeOfDay? timeOfDay;
-
-  //         final date = await getDate(
-  //           context,
-  //           initialDate: selectedDateTime,
-  //           firstDate: firstDate,
-  //           lastDate: lastDate,
-  //           initialDatePickerMode: initialDatePickerMode,
-  //         ).then((date) async {
-  //           if (date != null) {
-  //             DateTime date0 = _getInitialTime(
-  //               initialDate,
-  //               firstDate ?? kDefaultFirstSelectableDate,
-  //               lastDate ?? kDefaultLastSelectableDate,
-  //             );
-
-  //             timeOfDay = await getTime(
-  //               context,
-  //               initialTime: TimeOfDay.fromDateTime(date0),
-  //             );
-  //           }
-  //           return date;
-  //         });
-  //         onDateTimeSelect?.call(combine(date, timeOfDay), timeOfDay);
-  //         return combine(date, timeOfDay);
-  //     }
-  //   }
 }
