@@ -25,6 +25,7 @@ export 'popover/index.dart';
 export 'popup/index.dart';
 export 'progress/index.dart';
 export 'radio/index.dart';
+export 'rating_bar/index.dart';
 export 'refresh/index.dart';
 export 'result/index.dart';
 export 'sidebar/index.dart';

@@ -40,7 +40,7 @@ import 'page/td_popup_page.dart';
 import 'page/td_progress_page.dart';
 import 'page/my_radio_page.dart';
 import 'page/td_radius_page.dart';
-import 'page/td_rate_page.dart';
+import 'page/my_rating_page.dart';
 import 'page/td_refresh_page.dart';
 import 'page/td_result_page.dart';
 import 'page/td_search_bar_page.dart';
@@ -190,7 +190,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'Rate',
       name: 'rate',
-      pageBuilder: _wrapInheritedTheme((context) => const TDRatePage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyRatingBarPage()),
     ),
     ExamplePageModel(
       text: 'Search',

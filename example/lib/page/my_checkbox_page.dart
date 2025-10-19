@@ -323,6 +323,7 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
             backgroundColor: context.colorScheme.secondary.withValues(
               alpha: 0.5,
             ),
+            showDivider: index != 3,
           );
         },
         itemCount: 4,
@@ -335,7 +336,7 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
       selectIds: const ['index:1'],
       cardMode: true,
       direction: Axis.vertical,
-      directionalMyCheckboxes: const [
+      directionalMyCheckboxes: [
         MyCheckbox(
           id: 'index:0',
           title: 'Multiple-select ',
@@ -343,6 +344,7 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
           subTitleMaxLine: 2,
           subTitle: 'Description information',
           cardMode: true,
+          backgroundColor: context.colorScheme.secondary.withValues(alpha: 0.5),
         ),
         MyCheckbox(
           id: 'index:1',
@@ -351,6 +353,7 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
           subTitleMaxLine: 2,
           subTitle: 'Description information',
           cardMode: true,
+          backgroundColor: context.colorScheme.secondary.withValues(alpha: 0.5),
         ),
         MyCheckbox(
           id: 'index:2',
@@ -359,6 +362,7 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
           subTitleMaxLine: 2,
           subTitle: 'Description information',
           cardMode: true,
+          backgroundColor: context.colorScheme.secondary.withValues(alpha: 0.5),
         ),
         MyCheckbox(
           id: 'index:3',
@@ -367,6 +371,7 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
           subTitleMaxLine: 2,
           subTitle: 'Description information',
           cardMode: true,
+          backgroundColor: context.colorScheme.secondary.withValues(alpha: 0.5),
         ),
       ],
     );
@@ -377,10 +382,25 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
       selectIds: const ['index:1'],
       cardMode: true,
       direction: Axis.horizontal,
-      directionalMyCheckboxes: const [
-        MyCheckbox(id: 'index:0', title: 'Multiple-select ', cardMode: true),
-        MyCheckbox(id: 'index:1', title: 'Multiple-select ', cardMode: true),
-        MyCheckbox(id: 'index:2', title: 'Multiple-select ', cardMode: true),
+      directionalMyCheckboxes: [
+        MyCheckbox(
+          id: 'index:0',
+          title: 'Multiple-select ',
+          cardMode: true,
+          backgroundColor: context.colorScheme.secondary.withValues(alpha: 0.5),
+        ),
+        MyCheckbox(
+          id: 'index:1',
+          title: 'Multiple-select ',
+          cardMode: true,
+          backgroundColor: context.colorScheme.secondary.withValues(alpha: 0.5),
+        ),
+        MyCheckbox(
+          id: 'index:2',
+          title: 'Multiple-select ',
+          cardMode: true,
+          backgroundColor: context.colorScheme.secondary.withValues(alpha: 0.5),
+        ),
       ],
     );
   }

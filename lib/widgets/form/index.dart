@@ -3,7 +3,6 @@ export 'controllers/index.dart';
 export 'custom_dropdown.dart';
 export 'custom_pin_field.dart';
 export 'custom_radio_tile.dart';
-export 'custom_rating_bar.dart';
 export 'date_range_field.dart';
 export 'datetime_field.dart';
 export 'multi_select_popup.dart';

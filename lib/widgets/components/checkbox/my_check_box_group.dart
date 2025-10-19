@@ -345,7 +345,7 @@ class MyCheckboxGroupContainer extends MyCheckboxGroup {
                    : Clip.none,
            decoration:
                (passThrough ?? false) && direction != Axis.horizontal
-                   ? BoxDecoration(borderRadius: BorderRadius.circular(10))
+                   ? BoxDecoration(borderRadius: MyBorderRadius.large)
                    : null,
            margin:
                (passThrough ?? false) && direction != Axis.horizontal

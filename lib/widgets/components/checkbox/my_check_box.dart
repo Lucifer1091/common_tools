@@ -171,7 +171,9 @@ class MyCheckboxState extends State<MyCheckbox> {
         child: CallbackShortcuts(
           bindings: {
             const SingleActivator(LogicalKeyboardKey.enter): () {
-              onValueChange(id, !(checked ?? false), groupState);
+              if (!(canNotCancel && (checked ?? false))) {
+                onValueChange(id, !(checked ?? false), groupState);
+              }
             },
           },
           child:

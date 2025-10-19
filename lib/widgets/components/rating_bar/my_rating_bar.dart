@@ -1,16 +1,20 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
-class CustomRatingBar extends StatefulWidget {
-  const CustomRatingBar({
+import '../../../index.dart';
+
+class MyRatingBar extends StatefulWidget {
+  const MyRatingBar({
     super.key,
     this.initialRating = 0.0,
     this.maxRating = 5,
     this.iconSize = 24.0,
     this.onRatingChanged,
-    this.activeIcon = Icons.star,
-    this.inactiveIcon = Icons.star_border,
-    this.activeColor = Colors.amber,
-    this.inactiveColor = Colors.grey,
+    this.activeIcon = Icons.star_rounded,
+    this.inactiveIcon = Icons.star_border_rounded,
+    this.activeColor,
+    this.inactiveColor,
     this.spacing = 4.0,
     this.allowHalfRating = true,
     this.isInteractive = true,
@@ -40,10 +44,10 @@ class CustomRatingBar extends StatefulWidget {
   final IconData inactiveIcon;
 
   /// Color of the active rating icons
-  final Color activeColor;
+  final Color? activeColor;
 
   /// Color of the inactive rating icons
-  final Color inactiveColor;
+  final Color? inactiveColor;
 
   /// Spacing between icons
   final double spacing;
@@ -70,10 +74,10 @@ class CustomRatingBar extends StatefulWidget {
   final Axis direction;
 
   @override
-  State<CustomRatingBar> createState() => _CustomRatingBarState();
+  State<MyRatingBar> createState() => _MyRatingBarState();
 }
 
-class _CustomRatingBarState extends State<CustomRatingBar>
+class _MyRatingBarState extends State<MyRatingBar>
     with SingleTickerProviderStateMixin {
   late double _rating;
   late AnimationController _controller;
@@ -95,7 +99,7 @@ class _CustomRatingBarState extends State<CustomRatingBar>
       end: _rating,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
-    _controller.forward();
+    unawaited(_controller.forward());
 
     // Initialize star keys
     _updateStarKeys();
@@ -109,7 +113,7 @@ class _CustomRatingBarState extends State<CustomRatingBar>
   }
 
   @override
-  void didUpdateWidget(CustomRatingBar oldWidget) {
+  void didUpdateWidget(MyRatingBar oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.maxRating != widget.maxRating) {
@@ -122,7 +126,7 @@ class _CustomRatingBarState extends State<CustomRatingBar>
         begin: _animation.value,
         end: _rating,
       ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
-      _controller.forward(from: 0);
+      unawaited(_controller.forward(from: 0));
     }
   }
 
@@ -238,7 +242,7 @@ class _CustomRatingBarState extends State<CustomRatingBar>
         ).animate(
           CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
         );
-        _controller.forward(from: 0);
+        unawaited(_controller.forward(from: 0));
       });
 
       widget.onRatingChanged?.call(_rating);
@@ -324,13 +328,11 @@ class _CustomRatingBarState extends State<CustomRatingBar>
             if (widget.showRatingText)
               Padding(
                 padding: const EdgeInsets.only(top: 8),
-                child: Text(
+                child: MyText(
                   _animation.value.toStringAsFixed(
                     widget.allowHalfRating ? 1 : 0,
                   ),
-                  style:
-                      widget.ratingTextStyle ??
-                      Theme.of(context).textTheme.bodyLarge,
+                  style: widget.ratingTextStyle ?? context.textTheme.bodyLarge,
                 ),
               ),
           ],
@@ -363,14 +365,14 @@ class _CustomRatingBarState extends State<CustomRatingBar>
           Icon(
             widget.inactiveIcon,
             size: widget.iconSize,
-            color: widget.inactiveColor,
+            color: widget.inactiveColor ?? context.colorScheme.border,
           ),
           ClipRect(
             clipper: _RatingClipper(fillLevel, widget.direction),
             child: Icon(
               widget.activeIcon,
               size: widget.iconSize,
-              color: widget.activeColor,
+              color: widget.activeColor ?? Colors.amber,
             ),
           ),
         ],
