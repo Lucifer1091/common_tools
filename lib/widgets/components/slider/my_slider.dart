@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../extensions/index.dart';
-import 'my_slider_theme.dart';
+import '../../../index.dart';
 
 enum Position { start, end }
 
@@ -20,23 +19,14 @@ class MySlider extends StatefulWidget {
   });
 
   final double value;
-
   final Decoration? boxDecoration;
-
   final String? leftLabel;
-
   final String? rightLabel;
-
   final ValueChanged<double>? onChanged;
-
   final ValueChanged<double>? onChangeStart;
-
   final ValueChanged<double>? onChangeEnd;
-
-  final TDSliderThemeData? sliderThemeData;
-
+  final MySliderThemeData? sliderThemeData;
   final void Function(Offset offset, double value)? onTap;
-
   final void Function(Offset offset, double value)? onThumbTextTap;
 
   @override
@@ -63,42 +53,47 @@ class MySliderState extends State<MySlider> {
 
   bool get enabled => widget.onChanged != null;
 
-  TextStyle get labelTextStyle => TextStyle(
+  TextStyle get labelTextStyle => context.bodyMedium.copyWith(
     fontSize: 16,
-    color: enabled ? const Color(0xE6000000) : const Color(0x42000000),
+    color:
+        enabled
+            ? context.colorScheme.foreground
+            : context.colorScheme.mutedForeground,
   );
 
   Widget get leftLabel =>
       widget.leftLabel.isNotBlank
           ? Padding(
             padding: const EdgeInsets.only(left: 16),
-            child: Text(widget.leftLabel!, style: labelTextStyle),
+            child: MyText(widget.leftLabel, style: labelTextStyle),
           )
-          : Container();
+          : const SizedBox.shrink();
 
   Widget get rightLabel =>
       widget.rightLabel.isNotBlank
           ? Padding(
             padding: const EdgeInsets.only(right: 16),
-            child: Text(widget.rightLabel!, style: labelTextStyle),
+            child: MyText(widget.rightLabel, style: labelTextStyle),
           )
-          : Container();
+          : const SizedBox.shrink();
 
   @override
   Widget build(BuildContext context) {
-    final tdSliderThemeData = widget.sliderThemeData ?? TDSliderThemeData();
+    final mySliderThemeData =
+        widget.sliderThemeData ?? MySliderThemeData(context: context);
     return Listener(
       onPointerDown: (event) {
         final sliderBox =
             _sliderKey.currentContext?.findRenderObject() as RenderBox?;
         if (sliderBox == null ||
             widget.onThumbTextTap == null ||
-            !tdSliderThemeData.showThumbValue) {
+            !mySliderThemeData.showThumbValue) {
           return;
         }
 
         final localOffset = sliderBox.globalToLocal(event.position);
-        final themeData = widget.sliderThemeData ?? TDSliderThemeData();
+        final themeData =
+            widget.sliderThemeData ?? MySliderThemeData(context: context);
         final textRect = themeData.sliderMeasureData.thumbTextRect;
 
         if (textRect != null && textRect.contains(localOffset)) {
@@ -108,15 +103,16 @@ class MySliderState extends State<MySlider> {
       child: Container(
         padding: EdgeInsets.only(
           top:
-              (tdSliderThemeData.showScaleValue ||
-                      tdSliderThemeData.showThumbValue
+              (mySliderThemeData.showScaleValue ||
+                      mySliderThemeData.showThumbValue
                   ? 16
                   : 0) +
               8,
           bottom: 8,
         ),
         decoration:
-            widget.boxDecoration ?? const BoxDecoration(color: Colors.white),
+            widget.boxDecoration ??
+            BoxDecoration(color: context.colorScheme.background),
         child: Row(
           children: [
             leftLabel,
@@ -139,13 +135,13 @@ class MySliderState extends State<MySlider> {
                   widget.onTap?.call(tapOffset, value);
                 },
                 child: SliderTheme(
-                  data: tdSliderThemeData.sliderThemeData,
+                  data: mySliderThemeData.sliderThemeData,
                   child: Slider(
                     key: _sliderKey,
                     value: value,
-                    min: tdSliderThemeData.min,
-                    max: tdSliderThemeData.max,
-                    divisions: tdSliderThemeData.divisions,
+                    min: mySliderThemeData.min,
+                    max: mySliderThemeData.max,
+                    divisions: mySliderThemeData.divisions,
                     onChangeStart: widget.onChangeStart,
                     onChangeEnd: widget.onChangeEnd,
                     onChanged:
@@ -170,8 +166,8 @@ class MySliderState extends State<MySlider> {
   }
 }
 
-class TDRangeSlider extends StatefulWidget {
-  const TDRangeSlider({
+class MyRangeSlider extends StatefulWidget {
+  const MyRangeSlider({
     required this.value,
     super.key,
     this.boxDecoration,
@@ -186,33 +182,24 @@ class TDRangeSlider extends StatefulWidget {
   });
 
   final RangeValues value;
-
   final Decoration? boxDecoration;
-
   final String? leftLabel;
-
   final String? rightLabel;
-
   final ValueChanged<RangeValues>? onChanged;
-
   final ValueChanged<RangeValues>? onChangeStart;
-
   final ValueChanged<RangeValues>? onChangeEnd;
-
-  final TDSliderThemeData? sliderThemeData;
-
+  final MySliderThemeData? sliderThemeData;
   final void Function(Position position, Offset offset, double value)? onTap;
-
   final void Function(Position position, Offset offset, double value)?
   onThumbTextTap;
 
   @override
   State<StatefulWidget> createState() {
-    return _TDRangeSliderState();
+    return _MyRangeSliderState();
   }
 }
 
-class _TDRangeSliderState extends State<TDRangeSlider> {
+class _MyRangeSliderState extends State<MyRangeSlider> {
   RangeValues rangeValues = const RangeValues(0, 100);
   final GlobalKey _sliderRangeKey = GlobalKey();
 
@@ -223,37 +210,41 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
   }
 
   @override
-  void didUpdateWidget(covariant TDRangeSlider oldWidget) {
+  void didUpdateWidget(covariant MyRangeSlider oldWidget) {
     super.didUpdateWidget(oldWidget);
     rangeValues = widget.value;
   }
 
   bool get enabled => widget.onChanged != null;
 
-  TextStyle get labelTextStyle => TextStyle(
+  TextStyle get labelTextStyle => context.bodyMedium.copyWith(
     fontSize: 16,
-    color: enabled ? const Color(0xE6000000) : const Color(0x42000000),
+    color:
+        enabled
+            ? context.colorScheme.foreground
+            : context.colorScheme.mutedForeground,
   );
 
   Widget get leftLabel =>
       widget.leftLabel.isNotBlank
           ? Padding(
             padding: const EdgeInsets.only(left: 16),
-            child: Text(widget.leftLabel!, style: labelTextStyle),
+            child: MyText(widget.leftLabel, style: labelTextStyle),
           )
-          : Container();
+          : const SizedBox.shrink();
 
   Widget get rightLabel =>
       widget.rightLabel.isNotBlank
           ? Padding(
             padding: const EdgeInsets.only(right: 16),
-            child: Text(widget.rightLabel!, style: labelTextStyle),
+            child: MyText(widget.rightLabel, style: labelTextStyle),
           )
-          : Container();
+          : const SizedBox.shrink();
 
   @override
   Widget build(BuildContext context) {
-    final tdSliderThemeData = widget.sliderThemeData ?? TDSliderThemeData();
+    final mySliderThemeData =
+        widget.sliderThemeData ?? MySliderThemeData(context: context);
 
     return Listener(
       onPointerDown: (event) {
@@ -264,11 +255,12 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
 
         if (sliderBox == null ||
             widget.onThumbTextTap == null ||
-            !tdSliderThemeData.showThumbValue) {
+            !mySliderThemeData.showThumbValue) {
           return;
         }
 
-        final themeData = widget.sliderThemeData ?? TDSliderThemeData();
+        final themeData =
+            widget.sliderThemeData ?? MySliderThemeData(context: context);
         final startTextRect =
             themeData.sliderMeasureData.startRangeThumbTextRect;
         final endTextRect = themeData.sliderMeasureData.endRangeThumbTextRect;
@@ -291,15 +283,16 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
       child: Container(
         padding: EdgeInsets.only(
           top:
-              (tdSliderThemeData.showScaleValue ||
-                      tdSliderThemeData.showThumbValue
+              (mySliderThemeData.showScaleValue ||
+                      mySliderThemeData.showThumbValue
                   ? 16
                   : 0) +
               8,
           bottom: 8,
         ),
         decoration:
-            widget.boxDecoration ?? const BoxDecoration(color: Colors.white),
+            widget.boxDecoration ??
+            BoxDecoration(color: context.colorScheme.background),
         child: Row(
           children: [
             leftLabel,
@@ -371,13 +364,13 @@ class _TDRangeSliderState extends State<TDRangeSlider> {
                   widget.onTap?.call(position, tapOffset, tappedValue);
                 },
                 child: SliderTheme(
-                  data: tdSliderThemeData.sliderThemeData,
+                  data: mySliderThemeData.sliderThemeData,
                   child: RangeSlider(
                     key: _sliderRangeKey,
                     values: rangeValues,
-                    min: tdSliderThemeData.min,
-                    max: tdSliderThemeData.max,
-                    divisions: tdSliderThemeData.divisions,
+                    min: mySliderThemeData.min,
+                    max: mySliderThemeData.max,
+                    divisions: mySliderThemeData.divisions,
                     onChanged:
                         widget.onChanged == null
                             ? null

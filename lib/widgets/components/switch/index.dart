@@ -1,3 +1,3 @@
-export 'td_cupertino_switch.dart';
-export 'td_loading_paint.dart';
-export 'td_switch.dart';
+export 'my_cupertino_switch.dart';
+export 'my_loading_paint.dart';
+export 'my_switch.dart';

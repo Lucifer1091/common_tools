@@ -1,17 +1,19 @@
+// ignore_for_file: prefer_asserts_with_message
+
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
 
-typedef ScaleFormatter = String Function(double value);
+typedef MyScaleFormatter = String Function(double value);
 
 typedef OnSliderThemeDataUpdate =
     SliderThemeData Function(SliderThemeData sliderThemeData);
 
-class TDSliderThemeData {
-  TDSliderThemeData({
-    this.context,
+class MySliderThemeData {
+  MySliderThemeData({
+    required this.context,
     this.showScaleValue = false,
     this.showThumbValue = false,
     this.divisions,
@@ -27,21 +29,33 @@ class TDSliderThemeData {
     SliderThemeData? sliderThemeData,
   }) : scaleTextStyle =
            scaleTextStyle ??
-           TextStyle(fontSize: 14, color: ThemeColors.neutral.shade900),
+           context.bodyMedium.copyWith(
+             fontSize: 14,
+             color: context.colorScheme.foreground,
+           ),
        disabledScaleTextStyle =
            disabledScaleTextStyle ??
-           TextStyle(fontSize: 14, color: ThemeColors.neutral.shade600),
+           context.bodyMedium.copyWith(
+             fontSize: 14,
+             color: context.colorScheme.mutedForeground,
+           ),
        thumbTextStyle =
            thumbTextStyle ??
-           TextStyle(fontSize: 14, color: ThemeColors.neutral.shade900),
+           context.bodyMedium.copyWith(
+             fontSize: 14,
+             color: context.colorScheme.foreground,
+           ),
        disabledThumbTextStyle =
            disabledThumbTextStyle ??
-           TextStyle(fontSize: 14, color: ThemeColors.neutral.shade600),
+           context.bodyMedium.copyWith(
+             fontSize: 14,
+             color: context.colorScheme.mutedForeground,
+           ),
        _sliderThemeData = sliderThemeData,
        _capsule = false;
 
-  TDSliderThemeData.capsule({
-    this.context,
+  MySliderThemeData.capsule({
+    required this.context,
     this.showScaleValue = false,
     this.showThumbValue = false,
     this.divisions,
@@ -57,49 +71,47 @@ class TDSliderThemeData {
     SliderThemeData? sliderThemeData,
   }) : scaleTextStyle =
            scaleTextStyle ??
-           TextStyle(fontSize: 14, color: ThemeColors.neutral.shade900),
+           context.bodyMedium.copyWith(
+             fontSize: 14,
+             color: context.colorScheme.foreground,
+           ),
        disabledScaleTextStyle =
            disabledScaleTextStyle ??
-           TextStyle(fontSize: 14, color: ThemeColors.neutral.shade600),
+           context.bodyMedium.copyWith(
+             fontSize: 14,
+             color: context.colorScheme.mutedForeground,
+           ),
        thumbTextStyle =
            thumbTextStyle ??
-           TextStyle(fontSize: 14, color: ThemeColors.neutral.shade900),
+           context.bodyMedium.copyWith(
+             fontSize: 14,
+             color: context.colorScheme.foreground,
+           ),
        disabledThumbTextStyle =
            disabledThumbTextStyle ??
-           TextStyle(fontSize: 14, color: ThemeColors.neutral.shade600),
+           context.bodyMedium.copyWith(
+             fontSize: 14,
+             color: context.colorScheme.mutedForeground,
+           ),
        _sliderThemeData = sliderThemeData,
        _capsule = true;
 
   final bool showThumbValue;
-
   final TextStyle? thumbTextStyle;
-
   final TextStyle disabledThumbTextStyle;
-
   final bool showScaleValue;
-
-  final ScaleFormatter? scaleFormatter;
-
+  final MyScaleFormatter? scaleFormatter;
   final TextStyle? scaleTextStyle;
-
   final TextStyle disabledScaleTextStyle;
-
   final int? divisions;
-
   final double min;
-
   final double max;
 
   final SliderMeasureData sliderMeasureData = SliderMeasureData();
-
   SliderThemeData? _sliderThemeData;
-
-  final BuildContext? context;
-
+  final BuildContext context;
   final bool _capsule;
-
   final Color? activeTrackColor;
-
   final Color? inactiveTrackColor;
 
   SliderThemeData get sliderThemeData {
@@ -114,52 +126,72 @@ class TDSliderThemeData {
   SliderThemeData normal() {
     return SliderThemeData(
       trackHeight: 4,
-      activeTrackColor: activeTrackColor ?? ThemeColors.blue.shade600,
-      inactiveTrackColor: inactiveTrackColor ?? ThemeColors.neutral.shade300,
-      disabledActiveTrackColor: ThemeColors.blue.shade200,
-      disabledInactiveTrackColor: ThemeColors.neutral.shade100,
-      activeTickMarkColor: ThemeColors.blue.shade600,
-      inactiveTickMarkColor: ThemeColors.neutral.shade300,
-      disabledActiveTickMarkColor: ThemeColors.blue.shade200,
-      disabledInactiveTickMarkColor: ThemeColors.neutral.shade100,
-      thumbColor: Colors.white,
-      disabledThumbColor: Colors.white,
-      overlayShape: const TDNoOverlayShape(),
-      tickMarkShape: TDRoundSliderTickMarkShape(themeData: this),
-      thumbShape: TDRoundSliderThumbShape(themeData: this),
-      trackShape: TDRoundedRectSliderTrackShape(themeData: this),
-      rangeTickMarkShape: TDRoundRangeSliderTickMarkShape(themeData: this),
-      rangeThumbShape: TDRoundRangeSliderThumbShape(themeData: this),
-      rangeTrackShape: TDRoundedRectRangeSliderTrackShape(themeData: this),
+      activeTrackColor: activeTrackColor ?? context.colorScheme.primary,
+      inactiveTrackColor: inactiveTrackColor ?? context.colorScheme.secondary,
+      disabledActiveTrackColor: context.colorScheme.primary.withValues(
+        alpha: 0.5,
+      ),
+      disabledInactiveTrackColor: context.colorScheme.muted,
+      activeTickMarkColor: context.colorScheme.primary,
+      inactiveTickMarkColor: context.colorScheme.border,
+      disabledActiveTickMarkColor: context.colorScheme.primary.withValues(
+        alpha: 0.3,
+      ),
+      disabledInactiveTickMarkColor: context.colorScheme.muted,
+      thumbColor: context.colorScheme.background,
+      disabledThumbColor: context.colorScheme.muted,
+      overlayShape: const MyNoOverlayShape(),
+      tickMarkShape: MyRoundSliderTickMarkShape(themeData: this),
+      thumbShape: MyRoundSliderThumbShape(context: context, themeData: this),
+      trackShape: MyRoundedRectSliderTrackShape(themeData: this),
+      rangeTickMarkShape: MyRoundRangeSliderTickMarkShape(themeData: this),
+      rangeThumbShape: MyRoundRangeSliderThumbShape(
+        context: context,
+        themeData: this,
+      ),
+      rangeTrackShape: MyRoundedRectRangeSliderTrackShape(themeData: this),
       showValueIndicator: ShowValueIndicator.never,
     );
   }
 
   SliderThemeData capsule() {
     return SliderThemeData(
-      trackShape: TDCapsuleRectSliderTrackShape(themeData: this),
-      tickMarkShape: TDCapsuleSliderTickMarkShape(themeData: this),
-      thumbShape: TDCapsuleSliderThumbShape(themeData: this),
-      rangeTrackShape: TDCapsuleRectRangeSliderTrackShape(themeData: this),
-      rangeTickMarkShape: TDCapsuleRangeSliderTickMarkShape(themeData: this),
-      rangeThumbShape: TDCapsuleRangeSliderThumbShape(themeData: this),
-      activeTickMarkColor: ThemeColors.neutral.shade200,
-      inactiveTickMarkColor: ThemeColors.neutral.shade200,
-      disabledActiveTickMarkColor: ThemeColors.neutral.shade200,
-      disabledInactiveTickMarkColor: ThemeColors.neutral.shade200,
-      thumbColor: Colors.white,
-      disabledThumbColor: Colors.white,
+      trackShape: MyCapsuleRectSliderTrackShape(
+        themeData: this,
+        trackColorWhenShowScale: context.colorScheme.secondary,
+      ),
+      tickMarkShape: MyCapsuleSliderTickMarkShape(themeData: this),
+      thumbShape: MyCapsuleSliderThumbShape(context: context, themeData: this),
+      rangeTrackShape: MyCapsuleRectRangeSliderTrackShape(
+        themeData: this,
+        trackColorWhenShowScale: context.colorScheme.secondary,
+      ),
+      rangeTickMarkShape: MyCapsuleRangeSliderTickMarkShape(themeData: this),
+      rangeThumbShape: MyCapsuleRangeSliderThumbShape(
+        context: context,
+        themeData: this,
+      ),
+      activeTickMarkColor: context.colorScheme.background,
+      inactiveTickMarkColor: context.colorScheme.border,
+      disabledActiveTickMarkColor: context.colorScheme.primary.withValues(
+        alpha: 0.3,
+      ),
+      disabledInactiveTickMarkColor: context.colorScheme.muted,
+      thumbColor: context.colorScheme.background,
+      disabledThumbColor: context.colorScheme.muted,
       trackHeight: 24,
-      activeTrackColor: activeTrackColor ?? ThemeColors.blue.shade600,
-      inactiveTrackColor: inactiveTrackColor ?? ThemeColors.neutral.shade300,
-      disabledActiveTrackColor: ThemeColors.blue.shade200,
-      disabledInactiveTrackColor: ThemeColors.neutral.shade100,
-      overlayShape: const TDNoOverlayShape(),
+      activeTrackColor: activeTrackColor ?? context.colorScheme.primary,
+      inactiveTrackColor: inactiveTrackColor ?? context.colorScheme.secondary,
+      disabledActiveTrackColor: context.colorScheme.primary.withValues(
+        alpha: 0.5,
+      ),
+      disabledInactiveTrackColor: context.colorScheme.muted,
+      overlayShape: const MyNoOverlayShape(),
       showValueIndicator: ShowValueIndicator.never,
     );
   }
 
-  TDSliderThemeData copyWith({
+  MySliderThemeData copyWith({
     SliderThemeData? themeData,
     bool? showScaleValue,
     bool? showThumbValue,
@@ -170,11 +202,12 @@ class TDSliderThemeData {
     int? divisions,
     double? min,
     double? max,
-    ScaleFormatter? scaleFormatter,
+    MyScaleFormatter? scaleFormatter,
     Color? activeTrackColor,
     Color? inactiveTrackColor,
   }) {
-    return TDSliderThemeData(
+    return MySliderThemeData(
+      context: context,
       showScaleValue: showScaleValue ?? this.showScaleValue,
       showThumbValue: showThumbValue ?? this.showThumbValue,
       disabledScaleTextStyle:
@@ -201,12 +234,12 @@ class SliderMeasureData {
   Rect? endRangeThumbTextRect;
 }
 
-class TDRoundedRectSliderTrackShape extends SliderTrackShape
+class MyRoundedRectSliderTrackShape extends SliderTrackShape
     with BaseSliderTrackShape {
   /// Create a slider track that draws two rectangles with rounded outer edges.
-  const TDRoundedRectSliderTrackShape({required this.themeData});
+  const MyRoundedRectSliderTrackShape({required this.themeData});
 
-  final TDSliderThemeData themeData;
+  final MySliderThemeData themeData;
 
   @override
   void paint(
@@ -321,15 +354,18 @@ class TDRoundedRectSliderTrackShape extends SliderTrackShape
   }
 }
 
-class TDRoundSliderThumbShape extends SliderComponentShape {
+class MyRoundSliderThumbShape extends SliderComponentShape {
   /// Create a slider thumb that draws a circle.
-  const TDRoundSliderThumbShape({
+  const MyRoundSliderThumbShape({
+    required this.context,
     required this.themeData,
     this.enabledThumbRadius = 10.0,
     this.disabledThumbRadius,
     this.elevation = 4.0,
     this.pressedElevation = 4.0,
   });
+
+  final BuildContext context;
 
   /// The preferred radius of the round thumb shape when the slider is enabled.
   ///
@@ -361,7 +397,7 @@ class TDRoundSliderThumbShape extends SliderComponentShape {
   /// example, a value of 12 will create a very large shadow.
   final double pressedElevation;
 
-  final TDSliderThemeData themeData;
+  final MySliderThemeData themeData;
 
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) {
@@ -478,16 +514,16 @@ class TDRoundSliderThumbShape extends SliderComponentShape {
         false,
         Paint()
           ..style = PaintingStyle.stroke
-          ..strokeWidth = 1
-          ..color = ThemeColors.neutral.shade400,
+          ..strokeWidth = 2
+          ..color = this.context.colorScheme.primary,
       );
   }
 }
 
 /// The system is used to draw Overlay. No drawing is done here, only the width
 /// and height calculation of the slider is done
-class TDNoOverlayShape extends SliderComponentShape {
-  const TDNoOverlayShape();
+class MyNoOverlayShape extends SliderComponentShape {
+  const MyNoOverlayShape();
 
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) {
@@ -511,9 +547,9 @@ class TDNoOverlayShape extends SliderComponentShape {
   }) {}
 }
 
-class TDRoundSliderTickMarkShape extends SliderTickMarkShape {
+class MyRoundSliderTickMarkShape extends SliderTickMarkShape {
   /// Create a slider tick mark that draws a circle.
-  const TDRoundSliderTickMarkShape({
+  const MyRoundSliderTickMarkShape({
     required this.themeData,
     this.tickMarkRadius,
   });
@@ -523,7 +559,7 @@ class TDRoundSliderTickMarkShape extends SliderTickMarkShape {
   /// If it is not provided, then 1/4 of the [SliderThemeData.trackHeight] is used.
   final double? tickMarkRadius;
 
-  final TDSliderThemeData themeData;
+  final MySliderThemeData themeData;
 
   @override
   Size getPreferredSize({
@@ -700,7 +736,7 @@ mixin TDBaseRangeSliderTrackShape {
   }
 }
 
-/// The default shape of a [TDRangeSlider]'s track.
+/// The default shape of a [MyRangeSlider]'s track.
 ///
 /// It paints a solid colored rectangle with rounded edges, vertically centered
 /// in the `parentBox`. The track rectangle extends to the bounds of the
@@ -727,15 +763,15 @@ mixin TDBaseRangeSliderTrackShape {
 ///  * [RangeSliderTrackShape], which can be used to create custom shapes for
 ///    the [RangeSlider]'s track.
 ///  * [RectangularRangeSliderTrackShape], for a similar track with sharp edges.
-class TDRoundedRectRangeSliderTrackShape extends RangeSliderTrackShape
+class MyRoundedRectRangeSliderTrackShape extends RangeSliderTrackShape
     with TDBaseRangeSliderTrackShape {
   /// Create a slider track with rounded outer edges.
   ///
   /// The middle track segment is the selected range and is active, and the two
   /// outer track segments are inactive.
-  const TDRoundedRectRangeSliderTrackShape({required this.themeData});
+  const MyRoundedRectRangeSliderTrackShape({required this.themeData});
 
-  final TDSliderThemeData themeData;
+  final MySliderThemeData themeData;
 
   @override
   void paint(
@@ -850,15 +886,18 @@ class TDRoundedRectRangeSliderTrackShape extends RangeSliderTrackShape
 ///  * [RangeSlider], which includes thumbs defined by this shape.
 ///  * [SliderTheme], which can be used to configure the thumb shapes of all
 ///    range sliders in a widget subtree.
-class TDRoundRangeSliderThumbShape extends RangeSliderThumbShape {
+class MyRoundRangeSliderThumbShape extends RangeSliderThumbShape {
   /// Create a slider thumb that draws a circle.
-  const TDRoundRangeSliderThumbShape({
+  const MyRoundRangeSliderThumbShape({
+    required this.context,
     required this.themeData,
     this.enabledThumbRadius = 10.0,
     this.disabledThumbRadius,
     this.elevation = 3.0,
     this.pressedElevation = 3.0,
   });
+
+  final BuildContext context;
 
   /// The preferred radius of the round thumb shape when the slider is enabled.
   ///
@@ -883,7 +922,7 @@ class TDRoundRangeSliderThumbShape extends RangeSliderThumbShape {
   /// The default is 6.
   final double pressedElevation;
 
-  final TDSliderThemeData themeData;
+  final MySliderThemeData themeData;
 
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) {
@@ -964,14 +1003,14 @@ class TDRoundRangeSliderThumbShape extends RangeSliderThumbShape {
       final ratio =
           (center.dx - trackerRect.left) /
           (trackerRect.right - trackerRect.left);
-      //计算滑块的值
+
       final value = (themeData.max - themeData.min) * ratio + themeData.min;
-      //格式化显示
+
       final formatterValue =
           themeData.scaleFormatter == null
               ? value.toStringAsFixed(2)
               : themeData.scaleFormatter!(value);
-      //绘制数值
+
       final painter = TextPainter(
         text: TextSpan(
           text: formatterValue,
@@ -1004,8 +1043,19 @@ class TDRoundRangeSliderThumbShape extends RangeSliderThumbShape {
         );
       }
     }
-    //绘制游标
-    canvas.drawCircle(center, radius, Paint()..color = color);
+
+    canvas
+      ..drawCircle(center, radius, Paint()..color = color)
+      ..drawArc(
+        Rect.fromCircle(center: center, radius: radius),
+        0,
+        2 * math.pi,
+        false,
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2
+          ..color = this.context.colorScheme.primary,
+      );
   }
 }
 
@@ -1030,9 +1080,9 @@ class TDRoundRangeSliderThumbShape extends RangeSliderThumbShape {
 ///  * [RangeSlider], which includes tick marks defined by this shape.
 ///  * [SliderTheme], which can be used to configure the tick mark shape of all
 ///    sliders in a widget subtree.
-class TDRoundRangeSliderTickMarkShape extends RangeSliderTickMarkShape {
+class MyRoundRangeSliderTickMarkShape extends RangeSliderTickMarkShape {
   /// Create a range slider tick mark that draws a circle.
-  const TDRoundRangeSliderTickMarkShape({
+  const MyRoundRangeSliderTickMarkShape({
     required this.themeData,
     this.tickMarkRadius,
   });
@@ -1042,7 +1092,7 @@ class TDRoundRangeSliderTickMarkShape extends RangeSliderTickMarkShape {
   /// If it is not provided, then 1/4 of the [SliderThemeData.trackHeight] is used.
   final double? tickMarkRadius;
 
-  final TDSliderThemeData themeData;
+  final MySliderThemeData themeData;
 
   @override
   Size getPreferredSize({
@@ -1161,7 +1211,7 @@ mixin TDCapsuleTrackShape {
 
 abstract interface class TDCapsuleRectThemeData {
   TDCapsuleRectThemeData({required this.themeData});
-  final TDSliderThemeData themeData;
+  final MySliderThemeData themeData;
 }
 
 mixin TDCapsuleRectAdjustment implements TDCapsuleRectThemeData {
@@ -1182,10 +1232,10 @@ mixin TDCapsuleRectAdjustment implements TDCapsuleRectThemeData {
   }
 }
 
-class TDCapsuleRectSliderTrackShape extends SliderTrackShape
+class MyCapsuleRectSliderTrackShape extends SliderTrackShape
     with BaseSliderTrackShape, TDCapsuleTrackShape, TDCapsuleRectAdjustment {
   /// Create a slider track that draws two rectangles with rounded outer edges.
-  const TDCapsuleRectSliderTrackShape({
+  const MyCapsuleRectSliderTrackShape({
     required this.themeData,
     this.trackColorWhenShowScale = const Color(0xFFE7E7E7),
   });
@@ -1193,7 +1243,7 @@ class TDCapsuleRectSliderTrackShape extends SliderTrackShape
   final Color trackColorWhenShowScale;
 
   @override
-  final TDSliderThemeData themeData;
+  final MySliderThemeData themeData;
 
   @override
   Rect getPreferredRect({
@@ -1329,19 +1379,19 @@ class TDCapsuleRectSliderTrackShape extends SliderTrackShape
   }
 }
 
-///
-///游标的绘制
-///
-class TDCapsuleSliderThumbShape extends SliderComponentShape
+class MyCapsuleSliderThumbShape extends SliderComponentShape
     with TDCapsuleRectAdjustment {
   /// Create a slider thumb that draws a circle.
-  const TDCapsuleSliderThumbShape({
+  const MyCapsuleSliderThumbShape({
+    required this.context,
     required this.themeData,
     this.enabledThumbRadius = 10.0,
     this.disabledThumbRadius,
     this.elevation = 4.0,
     this.pressedElevation = 4.0,
   });
+
+  final BuildContext context;
 
   /// The preferred radius of the round thumb shape when the slider is enabled.
   ///
@@ -1374,7 +1424,7 @@ class TDCapsuleSliderThumbShape extends SliderComponentShape
   final double pressedElevation;
 
   @override
-  final TDSliderThemeData themeData;
+  final MySliderThemeData themeData;
 
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) {
@@ -1485,18 +1535,15 @@ class TDCapsuleSliderThumbShape extends SliderComponentShape
         false,
         Paint()
           ..style = PaintingStyle.stroke
-          ..strokeWidth = 1
-          ..color = ThemeColors.neutral.shade50,
+          ..strokeWidth = 2
+          ..color = this.context.colorScheme.primary,
       );
   }
 }
 
-///
-/// 刻度绘制
-///
-class TDCapsuleSliderTickMarkShape extends SliderTickMarkShape {
+class MyCapsuleSliderTickMarkShape extends SliderTickMarkShape {
   /// Create a slider tick mark that draws a circle.
-  const TDCapsuleSliderTickMarkShape({
+  const MyCapsuleSliderTickMarkShape({
     required this.themeData,
     this.tickMarkRadius,
   });
@@ -1506,7 +1553,7 @@ class TDCapsuleSliderTickMarkShape extends SliderTickMarkShape {
   /// If it is not provided, then 1/4 of the [SliderThemeData.trackHeight] is used.
   final double? tickMarkRadius;
 
-  final TDSliderThemeData themeData;
+  final MySliderThemeData themeData;
 
   @override
   Size getPreferredSize({
@@ -1573,7 +1620,7 @@ class TDCapsuleSliderTickMarkShape extends SliderTickMarkShape {
         //修正x坐标
         dx =
             rect.left +
-            index * (((rect.right - rect.left) / themeData.divisions!));
+            index * ((rect.right - rect.left) / themeData.divisions!);
         //格式化数值
         final valueFormatter =
             themeData.scaleFormatter != null
@@ -1627,7 +1674,7 @@ class TDCapsuleSliderTickMarkShape extends SliderTickMarkShape {
   }
 }
 
-/// The default shape of a [TDRangeSlider]'s track.
+/// The default shape of a [MyRangeSlider]'s track.
 ///
 /// It paints a solid colored rectangle with rounded edges, vertically centered
 /// in the `parentBox`. The track rectangle extends to the bounds of the
@@ -1654,20 +1701,20 @@ class TDCapsuleSliderTickMarkShape extends SliderTickMarkShape {
 ///  * [RangeSliderTrackShape], which can be used to create custom shapes for
 ///    the [RangeSlider]'s track.
 ///  * [RectangularRangeSliderTrackShape], for a similar track with sharp edges.
-class TDCapsuleRectRangeSliderTrackShape extends RangeSliderTrackShape
+class MyCapsuleRectRangeSliderTrackShape extends RangeSliderTrackShape
     with TDBaseRangeSliderTrackShape, TDCapsuleRectAdjustment {
   /// Create a slider track with rounded outer edges.
   ///
   /// The middle track segment is the selected range and is active, and the two
   /// outer track segments are inactive.
-  const TDCapsuleRectRangeSliderTrackShape({
+  const MyCapsuleRectRangeSliderTrackShape({
     required this.themeData,
     this.trackColorWhenShowScale = const Color(0xFFE7E7E7),
   });
   final Color trackColorWhenShowScale;
 
   @override
-  final TDSliderThemeData themeData;
+  final MySliderThemeData themeData;
 
   @override
   Rect getPreferredRect({
@@ -1829,16 +1876,19 @@ class TDCapsuleRectRangeSliderTrackShape extends RangeSliderTrackShape
 ///  * [RangeSlider], which includes thumbs defined by this shape.
 ///  * [SliderTheme], which can be used to configure the thumb shapes of all
 ///    range sliders in a widget subtree.
-class TDCapsuleRangeSliderThumbShape extends RangeSliderThumbShape
+class MyCapsuleRangeSliderThumbShape extends RangeSliderThumbShape
     with TDCapsuleRectAdjustment {
   /// Create a slider thumb that draws a circle.
-  const TDCapsuleRangeSliderThumbShape({
+  const MyCapsuleRangeSliderThumbShape({
+    required this.context,
     required this.themeData,
     this.enabledThumbRadius = 10.0,
     this.disabledThumbRadius,
     this.elevation = 3.0,
     this.pressedElevation = 3.0,
   });
+
+  final BuildContext context;
 
   /// The preferred radius of the round thumb shape when the slider is enabled.
   ///
@@ -1864,7 +1914,7 @@ class TDCapsuleRangeSliderThumbShape extends RangeSliderThumbShape
   final double pressedElevation;
 
   @override
-  final TDSliderThemeData themeData;
+  final MySliderThemeData themeData;
 
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) {
@@ -1968,8 +2018,18 @@ class TDCapsuleRangeSliderThumbShape extends RangeSliderThumbShape
       );
     }
 
-    //绘制游标
-    canvas.drawCircle(center, radius, Paint()..color = color);
+    canvas
+      ..drawCircle(center, radius, Paint()..color = color)
+      ..drawArc(
+        Rect.fromCircle(center: center, radius: radius),
+        0,
+        2 * math.pi,
+        false,
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2
+          ..color = this.context.colorScheme.primary,
+      );
   }
 }
 
@@ -1994,9 +2054,9 @@ class TDCapsuleRangeSliderThumbShape extends RangeSliderThumbShape
 ///  * [RangeSlider], which includes tick marks defined by this shape.
 ///  * [SliderTheme], which can be used to configure the tick mark shape of all
 ///    sliders in a widget subtree.
-class TDCapsuleRangeSliderTickMarkShape extends RangeSliderTickMarkShape {
+class MyCapsuleRangeSliderTickMarkShape extends RangeSliderTickMarkShape {
   /// Create a range slider tick mark that draws a circle.
-  const TDCapsuleRangeSliderTickMarkShape({
+  const MyCapsuleRangeSliderTickMarkShape({
     required this.themeData,
     this.tickMarkRadius,
   });
@@ -2006,7 +2066,7 @@ class TDCapsuleRangeSliderTickMarkShape extends RangeSliderTickMarkShape {
   /// If it is not provided, then 1/4 of the [SliderThemeData.trackHeight] is used.
   final double? tickMarkRadius;
 
-  final TDSliderThemeData themeData;
+  final MySliderThemeData themeData;
 
   @override
   Size getPreferredSize({
@@ -2068,7 +2128,7 @@ class TDCapsuleRangeSliderTickMarkShape extends RangeSliderTickMarkShape {
         //修正x坐标
         dx =
             rect.left +
-            index * (((rect.right - rect.left) / themeData.divisions!));
+            index * ((rect.right - rect.left) / themeData.divisions!);
         //绘制刻度的值
         final painter = TextPainter(
           text: TextSpan(

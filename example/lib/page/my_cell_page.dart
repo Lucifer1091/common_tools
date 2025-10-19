@@ -101,7 +101,7 @@ Widget _buildSimple(BuildContext context) {
       const MyCell(
         arrow: false,
         title: 'Single Row Title',
-        rightIconWidget: TDSwitch(isOn: true),
+        rightIconWidget: MySwitch(isOn: true),
       ),
       const MyCell(
         arrow: true,
@@ -142,7 +142,7 @@ Widget _buildDesSimple(BuildContext context) {
         arrow: false,
         title: 'Single Row Title',
         description: 'A long piece of content text',
-        rightIconWidget: TDSwitch(isOn: true),
+        rightIconWidget: MySwitch(isOn: true),
       ),
       MyCell(
         arrow: true,

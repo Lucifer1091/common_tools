@@ -68,7 +68,7 @@ class _MyBackTopPageState extends State<MyBackTopPage> {
             ExampleItem(
               desc: 'Toggle Button Text',
               builder: (context) {
-                return TDSwitch(
+                return MySwitch(
                   isOn: showText,
                   onChanged: (value) {
                     setState(() {

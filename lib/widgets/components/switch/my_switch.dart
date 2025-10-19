@@ -4,17 +4,17 @@ import '../../../index.dart';
 
 typedef OnSwitchChanged = bool Function(bool value);
 
-enum TDSwitchSize { large, medium, small }
+enum MySwitchSize { large, medium, small }
 
-enum TDSwitchType { fill, text, loading, icon }
+enum MySwitchType { fill, text, loading, icon }
 
-class TDSwitch extends StatefulWidget {
-  const TDSwitch({
+class MySwitch extends StatefulWidget {
+  const MySwitch({
     super.key,
     this.enable = true,
     this.isOn = false,
-    this.size = TDSwitchSize.medium,
-    this.type = TDSwitchType.fill,
+    this.size = MySwitchSize.medium,
+    this.type = MySwitchType.fill,
     this.trackOnColor,
     this.trackOffColor,
     this.thumbContentOnColor,
@@ -42,9 +42,9 @@ class TDSwitch extends StatefulWidget {
 
   final TextStyle? thumbContentOffFont;
 
-  final TDSwitchSize? size;
+  final MySwitchSize? size;
 
-  final TDSwitchType? type;
+  final MySwitchType? type;
 
   final OnSwitchChanged? onChanged;
 
@@ -54,11 +54,11 @@ class TDSwitch extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return TDSwitchState();
+    return MySwitchState();
   }
 }
 
-class TDSwitchState extends State<TDSwitch> {
+class MySwitchState extends State<MySwitch> {
   bool isOn = false;
 
   @override
@@ -68,14 +68,14 @@ class TDSwitchState extends State<TDSwitch> {
   }
 
   @override
-  void didUpdateWidget(covariant TDSwitch oldWidget) {
+  void didUpdateWidget(covariant MySwitch oldWidget) {
     super.didUpdateWidget(oldWidget);
     isOn = widget.isOn;
   }
 
   @override
   Widget build(BuildContext context) {
-    final switchEnable = widget.enable && widget.type != TDSwitchType.loading;
+    final switchEnable = widget.enable && widget.type != MySwitchType.loading;
     final trackOnColor = widget.trackOnColor ?? ThemeColors.blue.shade600;
     final trackOffColor = widget.trackOffColor ?? ThemeColors.neutral.shade300;
     final thumbContentOnColor =
@@ -122,24 +122,24 @@ class TDSwitchState extends State<TDSwitch> {
 
   double _getWidth() {
     switch (widget.size) {
-      case TDSwitchSize.large:
+      case MySwitchSize.large:
         return 52;
-      case TDSwitchSize.medium:
+      case MySwitchSize.medium:
       case null:
         return 45;
-      case TDSwitchSize.small:
+      case MySwitchSize.small:
         return 39;
     }
   }
 
   double _getHeight() {
     switch (widget.size) {
-      case TDSwitchSize.large:
+      case MySwitchSize.large:
         return 32;
-      case TDSwitchSize.medium:
+      case MySwitchSize.medium:
       case null:
         return 28;
-      case TDSwitchSize.small:
+      case MySwitchSize.small:
         return 24;
     }
   }
@@ -151,7 +151,7 @@ class TDSwitchState extends State<TDSwitch> {
     TextStyle thumbContentOffFont,
   ) {
     switch (widget.type) {
-      case TDSwitchType.text:
+      case MySwitchType.text:
         return Stack(
           children: [
             Container(
@@ -168,13 +168,13 @@ class TDSwitchState extends State<TDSwitch> {
             ),
           ],
         );
-      case TDSwitchType.loading:
+      case MySwitchType.loading:
         return Placeholder();
-        // return Container(
-        //   alignment: Alignment.centerLeft,
-        //   child: MyCircleIndicator(color: thumbContentOnColor, size: 16),
-        // );
-      case TDSwitchType.icon:
+      // return Container(
+      //   alignment: Alignment.centerLeft,
+      //   child: MyCircleIndicator(color: thumbContentOnColor, size: 16),
+      // );
+      case MySwitchType.icon:
         return Container(
           alignment: Alignment.centerLeft,
           child: Icon(
@@ -183,7 +183,7 @@ class TDSwitchState extends State<TDSwitch> {
             color: isOn ? thumbContentOnColor : thumbContentOffColor,
           ),
         );
-      case TDSwitchType.fill:
+      case MySwitchType.fill:
       case null:
         return null;
     }

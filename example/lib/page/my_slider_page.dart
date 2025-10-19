@@ -27,37 +27,52 @@ class _MySliderPageState extends State<MySliderPage> {
   Widget build(BuildContext context) {
     return ExamplePage(
       title: myTitle(),
-      desc: '用于选择横轴上的数值、区间、档位。',
+      desc: 'Used to select the value, range, and gear on the horizontal axis.',
       exampleCodeGroup: 'slider',
       padding: const EdgeInsets.only(top: 8, bottom: 8),
       children: [
         ExampleModule(
           title: 'Component Types',
           children: [
-            ExampleItem(desc: '单游标滑块', builder: _buildSingleHandle),
-            ExampleItem(desc: '双游标滑块', builder: _buildDoubleHandle),
             ExampleItem(
-              desc: '带数值单游标滑块 ',
+              desc: 'Single Cursor Slider',
+              builder: _buildSingleHandle,
+            ),
+            ExampleItem(
+              desc: 'Dual Cursor Slider',
+              builder: _buildDoubleHandle,
+            ),
+            ExampleItem(
+              desc: 'Single Cursor Slider with Numeric Value',
               builder: _buildSingleHandleWithNumber,
             ),
             ExampleItem(
-              desc: '带数值双游标滑块',
+              desc: 'Dual Cursor Slider with Numeric Value',
               builder: _buildDoubleHandleWithNumber,
             ),
-            ExampleItem(desc: '带刻度单游标滑块', builder: _buildSingleHandleWithScale),
-            ExampleItem(desc: '带刻度双游标滑块', builder: _buildDoubleHandleWithScale),
+            ExampleItem(
+              desc: 'Single Cursor Slider with Scale',
+              builder: _buildSingleHandleWithScale,
+            ),
+            ExampleItem(
+              desc: 'Dual Cursor Slider with Scale',
+              builder: _buildDoubleHandleWithScale,
+            ),
           ],
         ),
         ExampleModule(
           title: 'Component State',
           children: [
-            ExampleItem(desc: '禁用状态', builder: _buildDisableSingleHandle),
+            ExampleItem(
+              desc: 'Disabled State',
+              builder: _buildDisableSingleHandle,
+            ),
             ExampleItem(builder: _buildDisableDoubleHandleWithNumber),
             ExampleItem(builder: _buildDisableDoubleHandleWithScale),
           ],
         ),
         ExampleModule(
-          title: '组件事件',
+          title: 'Component Events',
           children: [
             ExampleItem(desc: 'onTap', builder: _buildOnTapSingleHandle),
             ExampleItem(builder: _buildOnTapDoubleHandle),
@@ -69,10 +84,10 @@ class _MySliderPageState extends State<MySliderPage> {
           ],
         ),
         ExampleModule(
-          title: '特殊样式',
+          title: 'Special Style',
           children: [
             ExampleItem(
-              desc: '胶囊型滑块',
+              desc: 'Capsule Slider',
               builder: _buildCapsuleSingleHandleWithNumber,
             ),
             ExampleItem(builder: _buildCapsuleDoubleHandle),
@@ -80,9 +95,15 @@ class _MySliderPageState extends State<MySliderPage> {
             ExampleItem(builder: _buildCapsuleDoubleHandleWithNumber),
             ExampleItem(builder: _buildCapsuleSingleHandleWithScale),
             ExampleItem(builder: _buildCapsuleDoubleHandleWithScale),
-            ExampleItem(desc: '胶囊型滑块', builder: _buildCapsule),
-            ExampleItem(desc: '自定义盒子样式', builder: _buildCustomDecoration),
-            ExampleItem(desc: '自定义滑轨颜色', builder: _buildCustomActiveColor),
+            ExampleItem(desc: 'Capsule Slider', builder: _buildCapsule),
+            ExampleItem(
+              desc: 'Custom Box Style',
+              builder: _buildCustomDecoration,
+            ),
+            ExampleItem(
+              desc: 'Custom Slide Track Color',
+              builder: _buildCustomActiveColor,
+            ),
           ],
         ),
       ],
@@ -91,15 +112,15 @@ class _MySliderPageState extends State<MySliderPage> {
 
   Widget _buildSingleHandle(BuildContext context) {
     return MySlider(
-      sliderThemeData: TDSliderThemeData(context: context, min: 0, max: 100),
+      sliderThemeData: MySliderThemeData(context: context, min: 0, max: 100),
       value: 10,
       onChanged: (value) {},
     );
   }
 
   Widget _buildDoubleHandle(BuildContext context) {
-    return TDRangeSlider(
-      sliderThemeData: TDSliderThemeData(context: context, min: 0, max: 100),
+    return MyRangeSlider(
+      sliderThemeData: MySliderThemeData(context: context, min: 0, max: 100),
       value: const RangeValues(10, 60),
       onChanged: (value) {},
     );
@@ -107,7 +128,7 @@ class _MySliderPageState extends State<MySliderPage> {
 
   Widget _buildSingleHandleWithNumber(BuildContext context) {
     return MySlider(
-      sliderThemeData: TDSliderThemeData(
+      sliderThemeData: MySliderThemeData(
         context: context,
         showThumbValue: true,
         scaleFormatter: (value) => value.toInt().toString(),
@@ -122,8 +143,8 @@ class _MySliderPageState extends State<MySliderPage> {
   }
 
   Widget _buildDoubleHandleWithNumber(BuildContext context) {
-    return TDRangeSlider(
-      sliderThemeData: TDSliderThemeData(
+    return MyRangeSlider(
+      sliderThemeData: MySliderThemeData(
         context: context,
         showThumbValue: true,
         min: 0,
@@ -139,7 +160,7 @@ class _MySliderPageState extends State<MySliderPage> {
 
   Widget _buildSingleHandleWithScale(BuildContext context) {
     return MySlider(
-      sliderThemeData: TDSliderThemeData(
+      sliderThemeData: MySliderThemeData(
         context: context,
         showScaleValue: true,
         divisions: 5,
@@ -153,8 +174,8 @@ class _MySliderPageState extends State<MySliderPage> {
   }
 
   Widget _buildDoubleHandleWithScale(BuildContext context) {
-    return TDRangeSlider(
-      sliderThemeData: TDSliderThemeData(
+    return MyRangeSlider(
+      sliderThemeData: MySliderThemeData(
         context: context,
         showScaleValue: true,
         divisions: 5,
@@ -169,7 +190,7 @@ class _MySliderPageState extends State<MySliderPage> {
 
   Widget _buildDisableSingleHandle(BuildContext context) {
     return MySlider(
-      sliderThemeData: TDSliderThemeData(context: context, min: 0, max: 100),
+      sliderThemeData: MySliderThemeData(context: context, min: 0, max: 100),
       leftLabel: '0',
       rightLabel: '100',
       value: 40,
@@ -177,8 +198,8 @@ class _MySliderPageState extends State<MySliderPage> {
   }
 
   Widget _buildDisableDoubleHandleWithNumber(BuildContext context) {
-    return TDRangeSlider(
-      sliderThemeData: TDSliderThemeData(
+    return MyRangeSlider(
+      sliderThemeData: MySliderThemeData(
         context: context,
         showThumbValue: true,
         min: 0,
@@ -192,8 +213,8 @@ class _MySliderPageState extends State<MySliderPage> {
   }
 
   Widget _buildDisableDoubleHandleWithScale(BuildContext context) {
-    return TDRangeSlider(
-      sliderThemeData: TDSliderThemeData(
+    return MyRangeSlider(
+      sliderThemeData: MySliderThemeData(
         context: context,
         showScaleValue: true,
         divisions: 5,
@@ -217,16 +238,16 @@ class _MySliderPageState extends State<MySliderPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Value: ${currentValue.toStringAsFixed(1)}'),
+                MyText('Value: ${currentValue.toStringAsFixed(1)}'),
                 const SizedBox(width: 10),
                 if (tapOffset != null)
-                  Text(
+                  MyText(
                     'Tap at (${tapOffset!.dx.toStringAsFixed(0)}, ${tapOffset!.dy.toStringAsFixed(0)})',
                   ),
               ],
             ),
             MySlider(
-              sliderThemeData: TDSliderThemeData(
+              sliderThemeData: MySliderThemeData(
                 context: context,
                 min: 0,
                 max: 100,
@@ -268,12 +289,12 @@ class _MySliderPageState extends State<MySliderPage> {
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Position: ${data.currentPosition}'),
+                MyText('Position: ${data.currentPosition}'),
                 const SizedBox(width: 10),
-                Text('Value: ${data.currentTapValue.toStringAsFixed(1)}'),
+                MyText('Value: ${data.currentTapValue.toStringAsFixed(1)}'),
                 const SizedBox(width: 10),
                 if (data.tapOffset != null)
-                  Text(
+                  MyText(
                     'Tap at (${data.tapOffset!.dx.toStringAsFixed(0)}, ${data.tapOffset!.dy.toStringAsFixed(0)})',
                   ),
               ],
@@ -281,8 +302,8 @@ class _MySliderPageState extends State<MySliderPage> {
           },
         ),
         const SizedBox(height: 10),
-        TDRangeSlider(
-          sliderThemeData: TDSliderThemeData(
+        MyRangeSlider(
+          sliderThemeData: MySliderThemeData(
             context: context,
             min: 0,
             max: 100,
@@ -317,16 +338,16 @@ class _MySliderPageState extends State<MySliderPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Value: ${currentValue.toStringAsFixed(1)}'),
+                MyText('Value: ${currentValue.toStringAsFixed(1)}'),
                 const SizedBox(width: 10),
                 if (tapOffset != null)
-                  Text(
+                  MyText(
                     'Tap at (${tapOffset!.dx.toStringAsFixed(0)}, ${tapOffset!.dy.toStringAsFixed(0)})',
                   ),
               ],
             ),
             MySlider(
-              sliderThemeData: TDSliderThemeData(
+              sliderThemeData: MySliderThemeData(
                 context: context,
                 min: 0,
                 max: 100,
@@ -368,12 +389,12 @@ class _MySliderPageState extends State<MySliderPage> {
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Position: ${data.currentPosition}'),
+                MyText('Position: ${data.currentPosition}'),
                 const SizedBox(width: 10),
-                Text('Value: ${data.currentTapValue.toStringAsFixed(1)}'),
+                MyText('Value: ${data.currentTapValue.toStringAsFixed(1)}'),
                 const SizedBox(width: 10),
                 if (data.tapOffset != null)
-                  Text(
+                  MyText(
                     'Tap at (${data.tapOffset!.dx.toStringAsFixed(0)}, ${data.tapOffset!.dy.toStringAsFixed(0)})',
                   ),
               ],
@@ -381,8 +402,8 @@ class _MySliderPageState extends State<MySliderPage> {
           },
         ),
         const SizedBox(height: 10),
-        TDRangeSlider(
-          sliderThemeData: TDSliderThemeData(
+        MyRangeSlider(
+          sliderThemeData: MySliderThemeData(
             context: context,
             min: 0,
             max: 100,
@@ -407,7 +428,7 @@ class _MySliderPageState extends State<MySliderPage> {
 
   Widget _buildCapsuleSingleHandleWithNumber(BuildContext context) {
     return MySlider(
-      sliderThemeData: TDSliderThemeData.capsule(
+      sliderThemeData: MySliderThemeData.capsule(
         context: context,
         showThumbValue: true,
         min: 0,
@@ -420,8 +441,8 @@ class _MySliderPageState extends State<MySliderPage> {
   }
 
   Widget _buildCapsuleDoubleHandle(BuildContext context) {
-    return TDRangeSlider(
-      sliderThemeData: TDSliderThemeData.capsule(
+    return MyRangeSlider(
+      sliderThemeData: MySliderThemeData.capsule(
         context: context,
         min: 0,
         max: 100,
@@ -434,7 +455,7 @@ class _MySliderPageState extends State<MySliderPage> {
 
   Widget _buildCapsuleSingleHandle(BuildContext context) {
     return MySlider(
-      sliderThemeData: TDSliderThemeData.capsule(
+      sliderThemeData: MySliderThemeData.capsule(
         context: context,
         min: 0,
         max: 100,
@@ -448,8 +469,8 @@ class _MySliderPageState extends State<MySliderPage> {
   }
 
   Widget _buildCapsuleDoubleHandleWithNumber(BuildContext context) {
-    return TDRangeSlider(
-      sliderThemeData: TDSliderThemeData.capsule(
+    return MyRangeSlider(
+      sliderThemeData: MySliderThemeData.capsule(
         context: context,
         showThumbValue: true,
         min: 0,
@@ -465,20 +486,14 @@ class _MySliderPageState extends State<MySliderPage> {
 
   Widget _buildCapsuleSingleHandleWithScale(BuildContext context) {
     return MySlider(
-      sliderThemeData:
-          TDSliderThemeData.capsule(
-            context: context,
-            showScaleValue: true,
-            divisions: 5,
-            min: 0,
-            max: 100,
-            scaleFormatter: (value) => value.toInt().toString(),
-          )..updateSliderThemeData(
-            (data) => data.copyWith(
-              activeTickMarkColor: const Color(0xFFE7E7E7),
-              inactiveTickMarkColor: const Color(0xFFE7E7E7),
-            ),
-          ),
+      sliderThemeData: MySliderThemeData.capsule(
+        context: context,
+        showScaleValue: true,
+        divisions: 5,
+        min: 0,
+        max: 100,
+        scaleFormatter: (value) => value.toInt().toString(),
+      ),
       value: 60,
       onChanged: (value) {},
     );
@@ -488,7 +503,7 @@ class _MySliderPageState extends State<MySliderPage> {
     return Column(
       children: [
         MySlider(
-          sliderThemeData: TDSliderThemeData.capsule(
+          sliderThemeData: MySliderThemeData.capsule(
             context: context,
             showThumbValue: true,
             min: 0,
@@ -500,8 +515,8 @@ class _MySliderPageState extends State<MySliderPage> {
           onChanged: (value) {},
         ),
         const SizedBox(height: 16),
-        TDRangeSlider(
-          sliderThemeData: TDSliderThemeData.capsule(
+        MyRangeSlider(
+          sliderThemeData: MySliderThemeData.capsule(
             context: context,
             min: 0,
             max: 100,
@@ -513,7 +528,7 @@ class _MySliderPageState extends State<MySliderPage> {
         ),
         const SizedBox(height: 16),
         MySlider(
-          sliderThemeData: TDSliderThemeData.capsule(
+          sliderThemeData: MySliderThemeData.capsule(
             context: context,
             min: 0,
             max: 100,
@@ -526,8 +541,8 @@ class _MySliderPageState extends State<MySliderPage> {
           onChanged: (value) {},
         ),
         const SizedBox(height: 16),
-        TDRangeSlider(
-          sliderThemeData: TDSliderThemeData.capsule(
+        MyRangeSlider(
+          sliderThemeData: MySliderThemeData.capsule(
             context: context,
             min: 0,
             max: 100,
@@ -542,40 +557,28 @@ class _MySliderPageState extends State<MySliderPage> {
         ),
         const SizedBox(height: 16),
         MySlider(
-          sliderThemeData:
-              TDSliderThemeData.capsule(
-                context: context,
-                showScaleValue: true,
-                divisions: 5,
-                min: 0,
-                max: 100,
-                scaleFormatter: (value) => value.toInt().toString(),
-              )..updateSliderThemeData(
-                (data) => data.copyWith(
-                  activeTickMarkColor: const Color(0xFFE7E7E7),
-                  inactiveTickMarkColor: const Color(0xFFE7E7E7),
-                ),
-              ),
+          sliderThemeData: MySliderThemeData.capsule(
+            context: context,
+            showScaleValue: true,
+            divisions: 5,
+            min: 0,
+            max: 100,
+            scaleFormatter: (value) => value.toInt().toString(),
+          ),
           value: 60,
           // divisions: 5,
           onChanged: (value) {},
         ),
         const SizedBox(height: 16),
-        TDRangeSlider(
-          sliderThemeData:
-              TDSliderThemeData.capsule(
-                context: context,
-                showScaleValue: true,
-                divisions: 5,
-                min: 0,
-                max: 100,
-                scaleFormatter: (value) => value.toInt().toString(),
-              )..updateSliderThemeData(
-                (data) => data.copyWith(
-                  activeTickMarkColor: const Color(0xFFE7E7E7),
-                  inactiveTickMarkColor: const Color(0xFFE7E7E7),
-                ),
-              ),
+        MyRangeSlider(
+          sliderThemeData: MySliderThemeData.capsule(
+            context: context,
+            showScaleValue: true,
+            divisions: 5,
+            min: 0,
+            max: 100,
+            scaleFormatter: (value) => value.toInt().toString(),
+          ),
           value: const RangeValues(20, 60),
           // divisions: 5,
           onChanged: (value) {},
@@ -588,7 +591,7 @@ class _MySliderPageState extends State<MySliderPage> {
     return Column(
       children: [
         MySlider(
-          sliderThemeData: TDSliderThemeData(
+          sliderThemeData: MySliderThemeData(
             context: context,
             min: 0,
             max: 100,
@@ -599,8 +602,8 @@ class _MySliderPageState extends State<MySliderPage> {
           onChanged: (value) {},
         ),
         const SizedBox(height: 16),
-        TDRangeSlider(
-          sliderThemeData: TDSliderThemeData.capsule(
+        MyRangeSlider(
+          sliderThemeData: MySliderThemeData.capsule(
             context: context,
             min: 0,
             max: 100,
@@ -615,21 +618,15 @@ class _MySliderPageState extends State<MySliderPage> {
   }
 
   Widget _buildCapsuleDoubleHandleWithScale(BuildContext context) {
-    return TDRangeSlider(
-      sliderThemeData:
-          TDSliderThemeData.capsule(
-            context: context,
-            showScaleValue: true,
-            divisions: 5,
-            min: 0,
-            max: 100,
-            scaleFormatter: (value) => value.toInt().toString(),
-          )..updateSliderThemeData(
-            (data) => data.copyWith(
-              activeTickMarkColor: const Color(0xFFE7E7E7),
-              inactiveTickMarkColor: const Color(0xFFE7E7E7),
-            ),
-          ),
+    return MyRangeSlider(
+      sliderThemeData: MySliderThemeData.capsule(
+        context: context,
+        showScaleValue: true,
+        divisions: 5,
+        min: 0,
+        max: 100,
+        scaleFormatter: (value) => value.toInt().toString(),
+      ),
       value: const RangeValues(20, 60),
       onChanged: (value) {},
     );
@@ -639,7 +636,7 @@ class _MySliderPageState extends State<MySliderPage> {
     return Column(
       children: [
         MySlider(
-          sliderThemeData: TDSliderThemeData(
+          sliderThemeData: MySliderThemeData(
             activeTrackColor: Colors.red,
             inactiveTrackColor: Colors.green,
             context: context,
@@ -651,8 +648,8 @@ class _MySliderPageState extends State<MySliderPage> {
           onChanged: (value) {},
         ),
         const SizedBox(height: 16),
-        TDRangeSlider(
-          sliderThemeData: TDSliderThemeData.capsule(
+        MyRangeSlider(
+          sliderThemeData: MySliderThemeData.capsule(
             activeTrackColor: Colors.green,
             inactiveTrackColor: Colors.red,
             context: context,
