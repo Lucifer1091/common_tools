@@ -23,40 +23,24 @@ class MySwitchPageState extends State<MySwitchPage> {
         ExampleModule(
           title: 'Component Types',
           children: [
-            ExampleItem(desc: 'Basic switch', builder: _buildSwitchWithBase),
-            ExampleItem(
-              desc: 'Switch with description',
-              builder: _buildSwitchWithText,
-            ),
+            ExampleItem(builder: _buildSwitchWithBase),
             ExampleItem(builder: _buildSwitchWithIcon),
-            ExampleItem(
-              desc: 'Custom color switch',
-              builder: _buildSwitchWithColor,
-            ),
+            ExampleItem(builder: _buildSwitchWithColor),
           ],
         ),
         ExampleModule(
           title: 'Component State',
           children: [
-            ExampleItem(
-              desc: 'Loading Status',
-              builder: _buildSwitchWithLoadingOff,
-            ),
+            ExampleItem(builder: _buildSwitchWithLoadingOff),
             ExampleItem(builder: _buildSwitchWithLoadingOn),
-            ExampleItem(
-              desc: 'Disabled State',
-              builder: _buildSwitchWithDisableOff,
-            ),
+            ExampleItem(builder: _buildSwitchWithDisableOff),
             ExampleItem(builder: _buildSwitchWithDisableOn),
           ],
         ),
         ExampleModule(
           title: 'Component Style',
           children: [
-            ExampleItem(
-              desc: 'Switch size',
-              builder: _buildSwitchWithSizeLarge,
-            ),
+            ExampleItem(builder: _buildSwitchWithSizeLarge),
             ExampleItem(builder: _buildSwitchWithSizeMed),
             ExampleItem(builder: _buildSwitchWithSizeSmall),
           ],
@@ -68,10 +52,7 @@ class MySwitchPageState extends State<MySwitchPage> {
               'Custom switch text - usually only supports one character, any text exceeding this character cannot be displayed',
           builder: _customText,
         ),
-        ExampleItem(
-          desc: 'Customize the font size of the text switch',
-          builder: _customTextFont,
-        ),
+        ExampleItem(builder: _customTextFont),
       ],
     );
     return current;
@@ -124,8 +105,6 @@ class MySwitchPageState extends State<MySwitchPage> {
     return current;
   }
 
-  /// 每一项的封装
-
   Widget _buildItem(
     BuildContext context,
     Widget switchItem, {
@@ -134,19 +113,17 @@ class MySwitchPageState extends State<MySwitchPage> {
   }) {
     Widget current = Row(
       children: [
-        Expanded(
-          child: MyText(title ?? '', textColor: ThemeColors.neutral.shade900),
-        ),
-        MyText(desc ?? '', textColor: ThemeColors.neutral.shade500),
-        SizedBox(child: switchItem),
+        Expanded(child: MyText(title ?? '')),
+        MyText(desc ?? ''),
+        switchItem,
       ],
     );
     current = Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: SizedBox(
-        height: 56,
+        height: 40,
         child: Container(
-          color: Colors.white,
+          color: context.colorScheme.background,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: current,
@@ -158,22 +135,14 @@ class MySwitchPageState extends State<MySwitchPage> {
   }
 
   Widget _buildSwitchWithBase(BuildContext context) {
-    return _buildItem(context, const MySwitch(), title: '基础开关');
-  }
-
-  Widget _buildSwitchWithText(BuildContext context) {
-    return _buildItem(
-      context,
-      const MySwitch(isOn: true, type: MySwitchType.text),
-      title: '带文字开关',
-    );
+    return _buildItem(context, const MySwitch(), title: 'Basic Switch');
   }
 
   Widget _buildSwitchWithIcon(BuildContext context) {
     return _buildItem(
       context,
       const MySwitch(isOn: true, type: MySwitchType.icon),
-      title: '带图标开关',
+      title: 'Switch with icon',
     );
   }
 
@@ -181,7 +150,7 @@ class MySwitchPageState extends State<MySwitchPage> {
     return _buildItem(
       context,
       const MySwitch(isOn: true, trackOnColor: Colors.green),
-      title: '自定义颜色开关',
+      title: 'Custom color switch',
     );
   }
 
@@ -189,7 +158,7 @@ class MySwitchPageState extends State<MySwitchPage> {
     return _buildItem(
       context,
       const MySwitch(isOn: false, type: MySwitchType.loading),
-      title: '加载状态',
+      title: 'Loading Status',
     );
   }
 
@@ -197,7 +166,7 @@ class MySwitchPageState extends State<MySwitchPage> {
     return _buildItem(
       context,
       const MySwitch(isOn: true, type: MySwitchType.loading),
-      title: '加载状态',
+      title: 'Loading Status',
     );
   }
 
@@ -205,7 +174,7 @@ class MySwitchPageState extends State<MySwitchPage> {
     return _buildItem(
       context,
       const MySwitch(enable: false, isOn: false),
-      title: '禁用状态',
+      title: 'Disabled State',
     );
   }
 
@@ -213,7 +182,7 @@ class MySwitchPageState extends State<MySwitchPage> {
     return _buildItem(
       context,
       const MySwitch(enable: false, isOn: true),
-      title: '禁用状态',
+      title: 'Disabled State',
     );
   }
 
@@ -221,7 +190,7 @@ class MySwitchPageState extends State<MySwitchPage> {
     return _buildItem(
       context,
       const MySwitch(isOn: true, size: MySwitchSize.large),
-      title: '大尺寸32',
+      title: 'Large size 32',
     );
   }
 
@@ -229,7 +198,7 @@ class MySwitchPageState extends State<MySwitchPage> {
     return _buildItem(
       context,
       const MySwitch(isOn: true, size: MySwitchSize.medium),
-      title: '中尺寸28',
+      title: 'Medium size 28',
     );
   }
 
@@ -237,7 +206,7 @@ class MySwitchPageState extends State<MySwitchPage> {
     return _buildItem(
       context,
       const MySwitch(isOn: true, size: MySwitchSize.small),
-      title: '小尺寸24',
+      title: 'Small size 24',
     );
   }
 
@@ -267,7 +236,7 @@ class MySwitchPageState extends State<MySwitchPage> {
     return _buildItem(
       context,
       const MySwitch(type: MySwitchType.text, openText: '1111', closeText: '—'),
-      title: '基础开关',
+      title: 'Basic Switch',
     );
   }
 
@@ -276,14 +245,14 @@ class MySwitchPageState extends State<MySwitchPage> {
       context,
       const MySwitch(
         type: MySwitchType.text,
-        openText: '开',
-        closeText: '关',
+        openText: 'Open',
+        closeText: 'Close',
         thumbContentOffColor: Colors.red,
         thumbContentOnColor: Colors.green,
         thumbContentOnFont: TextStyle(fontSize: 18),
         thumbContentOffFont: TextStyle(fontSize: 12),
       ),
-      title: '基础开关',
+      title: 'Basic Switch',
     );
   }
 }

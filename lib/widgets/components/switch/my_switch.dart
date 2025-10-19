@@ -27,29 +27,17 @@ class MySwitch extends StatefulWidget {
   });
 
   final bool enable;
-
   final bool isOn;
-
   final Color? trackOnColor;
-
   final Color? trackOffColor;
-
   final Color? thumbContentOnColor;
-
   final Color? thumbContentOffColor;
-
   final TextStyle? thumbContentOnFont;
-
   final TextStyle? thumbContentOffFont;
-
   final MySwitchSize? size;
-
   final MySwitchType? type;
-
   final OnSwitchChanged? onChanged;
-
   final String? openText;
-
   final String? closeText;
 
   @override
@@ -76,20 +64,21 @@ class MySwitchState extends State<MySwitch> {
   @override
   Widget build(BuildContext context) {
     final switchEnable = widget.enable && widget.type != MySwitchType.loading;
-    final trackOnColor = widget.trackOnColor ?? ThemeColors.blue.shade600;
-    final trackOffColor = widget.trackOffColor ?? ThemeColors.neutral.shade300;
+    final trackOnColor = widget.trackOnColor ?? context.colorScheme.primary;
+    final trackOffColor = widget.trackOffColor ?? context.colorScheme.secondary;
     final thumbContentOnColor =
-        widget.thumbContentOnColor ?? ThemeColors.blue.shade600;
+        widget.thumbContentOnColor ?? context.colorScheme.primary;
     final thumbContentOffColor =
-        widget.thumbContentOffColor ?? ThemeColors.neutral.shade600;
+        widget.thumbContentOffColor ?? context.colorScheme.destructive;
     final thumbContentOnFont =
         widget.thumbContentOnFont ?? const TextStyle(fontSize: 14);
     final thumbContentOffFont =
         widget.thumbContentOffFont ?? const TextStyle(fontSize: 14);
-    Widget current = TDCupertinoSwitch(
+    Widget current = MyCupertinoSwitch(
       value: isOn,
       activeColor: trackOnColor,
       trackColor: trackOffColor,
+      thumbColor: context.colorScheme.background,
       onChanged: (value) {
         final process = widget.onChanged?.call(value) ?? false;
         // If the external has not been processed, you need to customize the
@@ -169,11 +158,16 @@ class MySwitchState extends State<MySwitch> {
           ],
         );
       case MySwitchType.loading:
-        return Placeholder();
-      // return Container(
-      //   alignment: Alignment.centerLeft,
-      //   child: MyCircleIndicator(color: thumbContentOnColor, size: 16),
-      // );
+        return Align(
+          alignment: Alignment.centerLeft,
+          child: MyLoader(
+            options: MyLoaderOptions(
+              color: thumbContentOnColor,
+              strokeWidth: 2,
+              size: MyLoaderSize.extraSmall,
+            ),
+          ),
+        );
       case MySwitchType.icon:
         return Container(
           alignment: Alignment.centerLeft,
