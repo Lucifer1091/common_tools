@@ -24,7 +24,7 @@ class _TdPullDownRefreshPageState extends State<TdPullDownRefreshPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: myTitle(),
       exampleCodeGroup: 'refresh',
       desc: '用于快速刷新页面信息，刷新可以是整页刷新也可以是页面的局部刷新。',
       showSingleChild: true,

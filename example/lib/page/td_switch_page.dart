@@ -19,7 +19,7 @@ class TDSwitchPageState extends State<TDSwitchPage> {
   @override
   Widget build(BuildContext context) {
     var current = ExamplePage(
-      title: tdTitle(),
+      title: myTitle(),
       exampleCodeGroup: 'switch',
       desc: '用于控制某个功能的开启和关闭。',
       children: [

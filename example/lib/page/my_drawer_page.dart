@@ -43,7 +43,7 @@ class MyDrawerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(context),
+      title: myTitle(context),
       desc:
           'Used as a switcher for a set of parallel pages/contents, it can display more options on the same screen than Tab.',
       exampleCodeGroup: 'drawer',

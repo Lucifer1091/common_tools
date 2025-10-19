@@ -29,7 +29,7 @@ class _MyDialogPageState extends State<MyDialogPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: myTitle(),
       desc:
           'Used to display important prompts or request users to perform important'
           'operations, a modal view that interrupts the current operation. ',

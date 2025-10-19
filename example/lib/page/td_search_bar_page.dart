@@ -18,7 +18,7 @@ class _TDSearchBarPageState extends State<TDSearchBarPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: myTitle(),
       desc: '用于一组预设数据中的选择。',
       exampleCodeGroup: 'search',
       backgroundColor: ThemeColors.neutral.shade100,

@@ -24,7 +24,7 @@ class TDPopupPageState extends State<TDPopupPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: myTitle(),
       padding: const EdgeInsets.only(top: 16),
       backgroundColor: Colors.white,
       exampleCodeGroup: 'popup',

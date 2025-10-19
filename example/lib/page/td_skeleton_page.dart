@@ -15,7 +15,7 @@ class _TDSkeletonPageState extends State<TDSkeletonPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: myTitle(),
       desc: '当网络较慢时，在页面真实数据加载之前，给用户展示出页面的大致结构。',
       exampleCodeGroup: 'skeleton',
       backgroundColor: context.colorScheme.primaryForeground,

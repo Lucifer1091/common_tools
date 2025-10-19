@@ -28,7 +28,7 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: myTitle(),
       desc:
           'Used to perform multiple selections in a preset set of Options and present the selection results.',
       exampleCodeGroup: 'checkbox',

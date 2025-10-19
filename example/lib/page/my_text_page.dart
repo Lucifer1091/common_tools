@@ -14,7 +14,7 @@ class MyTextPage extends StatelessWidget {
     // debugPaintBaselinesEnabled = true;
     return ExamplePage(
       padding: const EdgeInsets.all(8),
-      title: tdTitle(context),
+      title: myTitle(context),
       exampleCodeGroup: 'text',
       desc: 'Use to display text with various styles using exposed properties.',
       children: [

@@ -50,10 +50,12 @@ class MyAppBar extends ConsumerWidget implements PreferredSizeWidget {
                 context,
                 title: 'Select Color',
                 onConfirm: (selected) {
-                  notifier.setColor(MyColorScheme.schemes[selected.first]);
+                  notifier.setColor(
+                    MyColorScheme.schemes[selected.first].lowercase!,
+                  );
                   Navigator.of(context).pop();
                 },
-                data: [MyColorScheme.schemes],
+                data: [MyColorScheme.schemes.mapList((e) => e.capitalize!)],
               );
             },
             type: MyButtonType.primary,

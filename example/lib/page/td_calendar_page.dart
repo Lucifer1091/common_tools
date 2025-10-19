@@ -10,7 +10,7 @@ class TDCalendarPage extends StatelessWidget {
     return Container(
       color: ThemeColors.neutral.shade100,
       child: ExamplePage(
-        title: tdTitle(context),
+        title: myTitle(context),
         desc: '按照日历形式展示数据或日期的容器。',
         exampleCodeGroup: 'calendar',
         children: [],

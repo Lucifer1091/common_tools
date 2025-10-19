@@ -1,12 +1,14 @@
+// ignore_for_file: strict_raw_type, avoid_dynamic_calls
+
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
 
-typedef MultiPickerCallback<T> = void Function(List<T> selected);
+typedef MultiPickerCallback = void Function(List selected);
 
-class MyMultiPicker<T> extends StatelessWidget {
+class MyMultiPicker extends StatelessWidget {
   const MyMultiPicker({
     required this.title,
     required this.onConfirm,
@@ -17,8 +19,6 @@ class MyMultiPicker<T> extends StatelessWidget {
     this.initialIndexes,
     this.rightText,
     this.leftText,
-    this.leftTextStyle,
-    this.rightTextStyle,
     this.centerTextStyle,
     this.titleHeight,
     this.topPadding,
@@ -35,16 +35,14 @@ class MyMultiPicker<T> extends StatelessWidget {
   });
 
   final String? title;
-  final MultiPickerCallback<T>? onConfirm;
-  final MultiPickerCallback<T>? onCancel;
+  final MultiPickerCallback? onConfirm;
+  final MultiPickerCallback? onCancel;
   final List<List<String>> data;
   final double pickerHeight;
   final int pickerItemCount;
   final Widget? customSelectWidget;
   final String? rightText;
   final String? leftText;
-  final TextStyle? leftTextStyle;
-  final TextStyle? rightTextStyle;
   final TextStyle? centerTextStyle;
   final double? titleHeight;
   final double? topPadding;
@@ -56,7 +54,7 @@ class MyMultiPicker<T> extends StatelessWidget {
   final ItemDistanceCalculator? itemDistanceCalculator;
   final EdgeInsets? padding;
   final List<int>? initialIndexes;
-  final ItemBuilderType? itemBuilder;
+  final MyPickerItemBuilder? itemBuilder;
   static const _pickerTitleHeight = 56.0;
 
   @override
@@ -83,7 +81,7 @@ class MyMultiPicker<T> extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          buildTitle(context, controllers),
+          _buildHeader(context, controllers),
           Stack(
             alignment: Alignment.center,
             children: [
@@ -94,12 +92,11 @@ class MyMultiPicker<T> extends StatelessWidget {
                     Container(
                       height: 40,
                       decoration: BoxDecoration(
-                        color: ThemeColors.neutral.shade900,
-                        borderRadius: BorderRadius.all(Radius.circular(6)),
+                        color: context.colorScheme.secondary,
+                        borderRadius: MyBorderRadius.medium,
                       ),
                     ),
               ),
-              // 列表
               Container(
                 padding: const EdgeInsets.only(left: 32, right: 32),
                 height: pickerHeight,
@@ -107,11 +104,10 @@ class MyMultiPicker<T> extends StatelessWidget {
                 child: Row(
                   children: [
                     for (var i = 0; i < data.length; i++)
-                      Expanded(child: buildList(context, i, controllers)),
+                      Expanded(child: _buildList(context, i, controllers)),
                   ],
                 ),
               ),
-              // 蒙层
               Positioned(
                 top: 0,
                 child: IgnorePointer(
@@ -123,8 +119,8 @@ class MyMultiPicker<T> extends StatelessWidget {
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
-                          Colors.white,
-                          Colors.white.withValues(alpha: 0),
+                          context.colorScheme.popover,
+                          context.colorScheme.popover.withValues(alpha: 0),
                         ],
                       ),
                     ),
@@ -142,8 +138,8 @@ class MyMultiPicker<T> extends StatelessWidget {
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,
                         colors: [
-                          Colors.white,
-                          Colors.white.withValues(alpha: 0),
+                          context.colorScheme.popover,
+                          context.colorScheme.popover.withValues(alpha: 0),
                         ],
                       ),
                     ),
@@ -157,90 +153,73 @@ class MyMultiPicker<T> extends StatelessWidget {
     );
   }
 
-  Widget buildTitle(
+  Widget _buildHeader(
     BuildContext context,
     List<FixedExtentScrollController> controllers,
   ) {
     return Container(
       padding: EdgeInsets.only(
-        left: leftPadding ?? 16,
-        right: rightPadding ?? 16,
-        top: topPadding ?? 16,
+        left: leftPadding ?? 12,
+        right: rightPadding ?? 12,
+        top: topPadding ?? 0,
       ),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
             width: 0.5,
-            color: titleDividerColor ?? Colors.transparent,
+            color: titleDividerColor ?? context.colorScheme.border,
           ),
         ),
       ),
-      height: getTitleHeight(),
+      height: _getTitleHeight(),
       child: Row(
         children: [
-          // 左边按钮
-          GestureDetector(
+          MyButton(
+            type: MyButtonType.ghost,
+            text: leftText ?? 'Cancel',
             onTap: () {
               if (onCancel != null) {
                 onCancel!([
                   for (var i = 0; i < controllers.length; i++)
-                    controllers[i].selectedItem as T,
+                    controllers[i].selectedItem,
                 ]);
               } else {
                 Navigator.of(context).pop();
               }
             },
-            behavior: HitTestBehavior.opaque,
-            child: MyText(
-              leftText ?? 'Cancel',
-              style:
-                  leftTextStyle ??
-                  context.bodyLarge.copyWith(
-                    color: ThemeColors.neutral.shade800,
-                  ),
-            ),
           ),
-
-          // 中间title
           Expanded(
             child:
                 title == null
-                    ? Container()
+                    ? const NoWidget()
                     : Center(
                       child: MyText(
                         title,
-                        style:
-                            centerTextStyle ??
-                            context.titleLarge.copyWith(
-                              color: ThemeColors.neutral.shade900,
-                            ),
+                        style: centerTextStyle ?? context.titleMedium,
                       ),
                     ),
           ),
-
-          GestureDetector(
+          MyButton(
+            type: MyButtonType.ghost,
+            text: rightText ?? 'Confirm',
+            textStyle: context.titleSmall.copyWith(
+              color: context.colorScheme.primary,
+            ),
             onTap: () {
               onConfirm?.call([
                 for (var i = 0; i < controllers.length; i++)
-                  controllers[i].selectedItem as T,
+                  controllers[i].selectedItem,
               ]);
             },
-            behavior: HitTestBehavior.opaque,
-            child: MyText(
-              rightText ?? 'Confirm',
-              style:
-                  rightTextStyle ??
-                  context.bodyLarge.copyWith(color: ThemeColors.blue.shade600),
-            ),
           ),
         ],
       ),
     );
   }
 
-  double getTitleHeight() => titleHeight ?? _pickerTitleHeight;
+  double _getTitleHeight() => titleHeight ?? _pickerTitleHeight;
 
-  Widget buildList(
+  Widget _buildList(
     BuildContext context,
     int position,
     List<FixedExtentScrollController> controllers,
@@ -264,7 +243,7 @@ class MyMultiPicker<T> extends StatelessWidget {
                 alignment: Alignment.center,
                 height: pickerHeight / pickerItemCount,
                 width: maxWidth,
-                child: TDItemWidget(
+                child: MyPickerItem(
                   colIndex: position,
                   index: index,
                   key: UniqueKey(),
@@ -296,8 +275,6 @@ class MyMultiLinkedPicker extends StatefulWidget {
     this.customSelectWidget,
     this.rightText,
     this.leftText,
-    this.leftTextStyle,
-    this.rightTextStyle,
     this.centerTextStyle,
     this.titleHeight,
     this.topPadding,
@@ -313,52 +290,27 @@ class MyMultiLinkedPicker extends StatefulWidget {
   });
 
   final String? title;
-
   final MultiPickerCallback? onConfirm;
-
   final MultiPickerCallback? onCancel;
-
   final List selectedData;
-
   final Map data;
-
   final int columnNum;
-
   final double pickerHeight;
-
   final int pickerItemCount;
-
   final Widget? customSelectWidget;
-
   final String? rightText;
-
   final String? leftText;
-
-  final TextStyle? leftTextStyle;
-
-  final TextStyle? rightTextStyle;
-
   final TextStyle? centerTextStyle;
-
   final EdgeInsets? padding;
-
   final double? titleHeight;
-
   final double? topPadding;
-
   final double? leftPadding;
-
   final double? rightPadding;
-
   final Color? titleDividerColor;
-
   final Color? backgroundColor;
-
   final double? topRadius;
-
   final ItemDistanceCalculator? itemDistanceCalculator;
-
-  final ItemBuilderType? itemBuilder;
+  final MyPickerItemBuilder? itemBuilder;
 
   @override
   State<StatefulWidget> createState() => _MyMultiLinkedPickerState();
@@ -391,7 +343,7 @@ class _MyMultiLinkedPickerState extends State<MyMultiLinkedPicker> {
           widget.padding ??
           EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
       decoration: BoxDecoration(
-        color: widget.backgroundColor ?? Colors.white,
+        color: widget.backgroundColor ?? context.colorScheme.popover,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(widget.topRadius ?? 12),
           topRight: Radius.circular(widget.topRadius ?? 12),
@@ -400,7 +352,7 @@ class _MyMultiLinkedPickerState extends State<MyMultiLinkedPicker> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          buildTitle(context),
+          _buildHeader(context),
           SizedBox(
             height: widget.pickerHeight,
             child: Stack(
@@ -413,13 +365,11 @@ class _MyMultiLinkedPickerState extends State<MyMultiLinkedPicker> {
                       Container(
                         height: 40,
                         decoration: BoxDecoration(
-                          color: ThemeColors.neutral.shade50,
-                          borderRadius: BorderRadius.all(Radius.circular(6)),
+                          color: context.colorScheme.secondary,
+                          borderRadius: MyBorderRadius.medium,
                         ),
                       ),
                 ),
-
-                // 列表
                 Container(
                   padding: const EdgeInsets.only(left: 32, right: 32),
                   height: pickerHeight,
@@ -427,7 +377,7 @@ class _MyMultiLinkedPickerState extends State<MyMultiLinkedPicker> {
                   child: Row(
                     children: [
                       for (var i = 0; i < widget.columnNum; i++)
-                        Expanded(child: buildList(context, i)),
+                        Expanded(child: _buildList(context, i)),
                     ],
                   ),
                 ),
@@ -442,8 +392,8 @@ class _MyMultiLinkedPickerState extends State<MyMultiLinkedPicker> {
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                           colors: [
-                            Colors.white,
-                            Colors.white.withValues(alpha: 0),
+                            context.colorScheme.popover,
+                            context.colorScheme.popover.withValues(alpha: 0),
                           ],
                         ),
                       ),
@@ -461,8 +411,8 @@ class _MyMultiLinkedPickerState extends State<MyMultiLinkedPicker> {
                           begin: Alignment.bottomCenter,
                           end: Alignment.topCenter,
                           colors: [
-                            Colors.white,
-                            Colors.white.withValues(alpha: 0),
+                            context.colorScheme.popover,
+                            context.colorScheme.popover.withValues(alpha: 0),
                           ],
                         ),
                       ),
@@ -477,7 +427,7 @@ class _MyMultiLinkedPickerState extends State<MyMultiLinkedPicker> {
     );
   }
 
-  Widget buildList(BuildContext context, int position) {
+  Widget _buildList(BuildContext context, int position) {
     final maxWidth = MediaQuery.of(context).size.width;
     return MediaQuery.removePadding(
       context: context,
@@ -507,7 +457,7 @@ class _MyMultiLinkedPickerState extends State<MyMultiLinkedPicker> {
                 alignment: Alignment.center,
                 height: pickerHeight / widget.pickerItemCount,
                 width: maxWidth,
-                child: TDItemWidget(
+                child: MyPickerItem(
                   colIndex: position,
                   index: index,
                   itemHeight: pickerHeight / widget.pickerItemCount,
@@ -524,25 +474,27 @@ class _MyMultiLinkedPickerState extends State<MyMultiLinkedPicker> {
     );
   }
 
-  Widget buildTitle(BuildContext context) {
+  Widget _buildHeader(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(
-        left: widget.leftPadding ?? 16,
-        right: widget.rightPadding ?? 16,
-        top: widget.topPadding ?? 16,
+        left: widget.leftPadding ?? 12,
+        right: widget.rightPadding ?? 12,
+        top: widget.topPadding ?? 0,
       ),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
             width: 0.5,
-            color: widget.titleDividerColor ?? Colors.transparent,
+            color: widget.titleDividerColor ?? context.colorScheme.border,
           ),
         ),
       ),
-      height: getTitleHeight() - 0.5,
+      height: _getTitleHeight() - 0.5,
       child: Row(
         children: [
-          GestureDetector(
+          MyButton(
+            type: MyButtonType.ghost,
+            text: widget.leftText ?? 'Cancel',
             onTap: () {
               if (widget.onCancel != null) {
                 widget.onCancel!(model.selectedData);
@@ -550,17 +502,7 @@ class _MyMultiLinkedPickerState extends State<MyMultiLinkedPicker> {
                 Navigator.of(context).pop();
               }
             },
-            behavior: HitTestBehavior.opaque,
-            child: MyText(
-              widget.leftText ?? 'Cancel',
-              style:
-                  widget.leftTextStyle ??
-                  context.bodyLarge.copyWith(
-                    color: ThemeColors.neutral.shade800,
-                  ),
-            ),
           ),
-
           Expanded(
             child:
                 widget.title == null
@@ -568,32 +510,26 @@ class _MyMultiLinkedPickerState extends State<MyMultiLinkedPicker> {
                     : Center(
                       child: MyText(
                         widget.title,
-                        style:
-                            widget.centerTextStyle ??
-                            context.titleLarge.copyWith(
-                              color: ThemeColors.neutral.shade900,
-                            ),
+                        style: widget.centerTextStyle ?? context.titleMedium,
                       ),
                     ),
           ),
-          GestureDetector(
+          MyButton(
+            type: MyButtonType.ghost,
+            text: widget.rightText ?? 'Confirm',
+            textStyle: context.titleSmall.copyWith(
+              color: context.colorScheme.primary,
+            ),
             onTap: () {
               widget.onConfirm?.call(model.selectedData);
             },
-            behavior: HitTestBehavior.opaque,
-            child: MyText(
-              widget.rightText ?? 'Confirm',
-              style:
-                  widget.rightTextStyle ??
-                  context.bodyLarge.copyWith(color: ThemeColors.blue.shade600),
-            ),
           ),
         ],
       ),
     );
   }
 
-  double getTitleHeight() => widget.titleHeight ?? _pickerTitleHeight;
+  double _getTitleHeight() => widget.titleHeight ?? _pickerTitleHeight;
 }
 
 class MultiLinkedPickerModel {
@@ -616,17 +552,11 @@ class MultiLinkedPickerModel {
   }
 
   static const placeData = '';
-
   late Map data;
-
   late List<int> selectedIndexes;
-
   late int columnNum;
-
   late List selectedData;
-
   late List<FixedExtentScrollController> controllers = [];
-
   late List<List> presentData = [];
 
   void _init(List initialData) {

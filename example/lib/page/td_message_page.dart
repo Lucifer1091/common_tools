@@ -16,7 +16,7 @@ class _TDMessagePageState extends State<TDMessagePage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: myTitle(),
       backgroundColor: Colors.white,
       desc: '用于轻量级反馈或提示，不会打断用户操作。',
       exampleCodeGroup: 'message',

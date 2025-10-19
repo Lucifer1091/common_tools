@@ -37,7 +37,7 @@ extension CollectionsExtensions<T> on Iterable<T> {
   /// Returns a set containing all elements that are contained
   /// by both this set and the specified collection.
   Set<T> intersect(Iterable<T> other) {
-    final set = this.toMutableSet()..addAll(other);
+    final set = toMutableSet()..addAll(other);
     return set;
   }
 

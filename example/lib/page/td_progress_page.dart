@@ -28,7 +28,7 @@ class _TDProgressPageState extends State<TDProgressPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: myTitle(),
       desc: '用于展示任务当前的进度',
       exampleCodeGroup: 'progress',
       backgroundColor: Colors.white,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:common_tools/index.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../base/example_widget.dart';
 
@@ -12,26 +13,42 @@ class MyPickerPage extends StatefulWidget {
 
 class _MyPickerPageState extends State<MyPickerPage> {
   String selected_1 = '';
-  List<String> data_1 = ['广州市', '韶关市', '深圳市', '珠海区', '汕头市'];
+  List<String> data_1 = [
+    'Guangzhou',
+    'Shaoguan',
+    'Shenzhen',
+    'Zhuhai',
+    'Shantou',
+  ];
   String selected_2 = '';
   String selected_3 = '';
   List<List<String>> data_2 = [];
   String selected_4 = '';
   Map data_3 = {
-    '广东省': {
-      '深圳市': ['南山区南山区南山区南山区南山区', '宝安区', '罗湖区', '福田区'],
-      '佛山市': [''],
-      '广州市广州市广州市广州市广州市广州市广州市广州市广州市广州市广州市': ['花都区'],
+    'Guangdong Province': {
+      'Shenzhen City': [
+        'Nanshan District',
+        "Bao'an District",
+        'Luohu District',
+        'Futian District',
+      ],
+      'Foshan City': [''],
+      'Guangzhou City': ['Huadu District'],
     },
-    '重庆市': {
-      '重庆市重庆市重庆市重庆市重庆市重庆市重庆市': ['九龙坡区', '江北区'],
+    'Chongqing': {
+      'Chongqing': ['Jiulongpo District', 'Jiangbei District'],
     },
-    '浙江省浙江省浙江省浙江省浙江省浙江省浙江省浙江省': {
-      '杭州市': ['西湖区', '余杭区', '萧山区'],
-      '宁波市': ['江东区', '北仑区', '奉化市'],
+    'Zhejiang Province': {
+      'Hangzhou': ['Xihu District', 'Yuhang District', 'Xiaoshan District'],
+      'Ningbo': ['Jiangdong District', 'Beilun District', 'Fenghua City'],
     },
-    '香港': {
-      '香港': ['九龙城区', '黄大仙区', '离岛区', '湾仔区'],
+    'Hong Kong': {
+      'Hong Kong': [
+        'Kowloon City District',
+        'Wong Tai Sin District',
+        'Islands District',
+        'Wan Chai District',
+      ],
     },
   };
 
@@ -41,70 +58,70 @@ class _MyPickerPageState extends State<MyPickerPage> {
   void initState() {
     var list = <String>[];
     for (var i = 2022; i >= 2000; i--) {
-      list.add('${i}年');
+      list.add('Year $i');
     }
     data_2.add(list);
-    data_2.add(['春', '夏', '秋', '冬']);
+    data_2.add(['Spring', 'Summer', 'Autumn', 'Winter']);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
-      desc: '用于一组预设数据中的选择。',
+      title: myTitle(),
+      desc: 'For selection from a set of preset data.',
       exampleCodeGroup: 'picker',
       children: [
         ExampleModule(
           title: 'Component Types',
           children: [
-            ExampleItem(desc: '基础选择器--地区', builder: buildArea),
-            ExampleItem(desc: '基础选择器--时间', builder: buildTime),
-            ExampleItem(desc: '基础选择器--地区--联动', builder: buildMultiArea),
+            ExampleItem(desc: 'Basic Picker - Region', builder: _buildArea),
+            ExampleItem(desc: 'Basic Picker - Time', builder: _buildTime),
+            ExampleItem(
+              desc: 'Basic Picker - Region - Linkage',
+              builder: _buildMultiArea,
+            ),
           ],
         ),
         ExampleModule(
           title: 'Component Style',
           children: [
-            ExampleItem(desc: '带Title选择器', builder: buildAreaWithTitle),
-            ExampleItem(desc: '无Title选择器', builder: buildAreaWithoutTitle),
+            ExampleItem(desc: 'With Title Picker', builder: _buildAreaWithTitle),
+            ExampleItem(
+              desc: 'Without Title Picker',
+              builder: _buildAreaWithoutTitle,
+            ),
           ],
-        ),
-      ],
-      test: [
-        ExampleItem(
-          desc: '自定义left/right text',
-          builder: buildCustomLeftRightText,
         ),
       ],
     );
   }
 
-  Widget buildArea(BuildContext context) {
+  Widget _buildArea(BuildContext context) {
     return GestureDetector(
       onTap: () {
         MyPicker.showMultiPicker(
           context,
-          title: '选择地区',
+          title: 'Select Region',
           onConfirm: (selected) {
             setState(() {
-              selected_1 = '${data_1[selected[0]]}';
+              selected_1 = data_1[selected[0]];
             });
             Navigator.of(context).pop();
           },
           data: [data_1],
         );
       },
-      child: buildSelectRow(context, selected_1, '选择地区'),
+      child: _buildPickerRow(context, selected_1, 'Select Region'),
     );
   }
 
-  Widget buildTime(BuildContext context) {
+  Widget _buildTime(BuildContext context) {
     return GestureDetector(
       onTap: () {
         MyPicker.showMultiPicker(
           context,
-          title: '选择时间',
+          title: 'Select time',
           onConfirm: (selected) {
             setState(() {
               selected_2 =
@@ -115,16 +132,16 @@ class _MyPickerPageState extends State<MyPickerPage> {
           data: data_2,
         );
       },
-      child: buildSelectRow(context, selected_2, '选择时间'),
+      child: _buildPickerRow(context, selected_2, 'Select time'),
     );
   }
 
-  Widget buildMultiArea(BuildContext context) {
+  Widget _buildMultiArea(BuildContext context) {
     return GestureDetector(
       onTap: () {
         MyPicker.showMultiLinkedPicker(
           context,
-          title: '选择地区',
+          title: 'Select Region',
           onConfirm: (selected) {
             setState(() {
               selected_3 = '${selected[0]} ${selected[1]} ${selected[2]}';
@@ -133,33 +150,37 @@ class _MyPickerPageState extends State<MyPickerPage> {
           },
           data: data_3,
           columnNum: 3,
-          initialData: ['浙江省', '杭州市', '西湖区'],
+          initialData: [
+            'Zhejiang Province',
+            'Hangzhou City',
+            'West Lake District',
+          ],
         );
       },
-      child: buildSelectRow(context, selected_3, '选择地区'),
+      child: _buildPickerRow(context, selected_3, 'Select Region'),
     );
   }
 
-  Widget buildAreaWithTitle(BuildContext context) {
+  Widget _buildAreaWithTitle(BuildContext context) {
     return GestureDetector(
       onTap: () {
         MyPicker.showMultiPicker(
           context,
-          title: '选择地区',
+          title: 'Select Region',
           onConfirm: (selected) {
             setState(() {
-              selected_4 = '${data_1[selected[0]]}';
+              selected_4 = data_1[selected[0]];
             });
             Navigator.of(context).pop();
           },
           data: [data_1],
         );
       },
-      child: buildSelectRow(context, selected_4, '带Title选择器'),
+      child: _buildPickerRow(context, selected_4, 'With Title'),
     );
   }
 
-  Widget buildAreaWithoutTitle(BuildContext context) {
+  Widget _buildAreaWithoutTitle(BuildContext context) {
     return GestureDetector(
       onTap: () {
         MyPicker.showMultiPicker(
@@ -167,103 +188,53 @@ class _MyPickerPageState extends State<MyPickerPage> {
           title: '',
           onConfirm: (selected) {
             setState(() {
-              selected_5 = '${data_1[selected[0]]}';
+              selected_5 = data_1[selected[0]];
             });
             Navigator.of(context).pop();
           },
           data: [data_1],
         );
       },
-      child: buildSelectRow(context, selected_5, '无Title选择器'),
+      child: _buildPickerRow(context, selected_5, 'Without Title'),
     );
   }
 
-  Widget buildCustomLeftRightText(BuildContext context) {
-    return Column(
-      children: [
-        GestureDetector(
-          onTap: () {
-            MyPicker.showMultiPicker(
-              context,
-              leftText: '自定义取消',
-              rightText: '自定义确认',
-              title: '基础选择器',
-              onConfirm: (selected) {
-                setState(() {
-                  selected_5 = '${data_1[selected[0]]}';
-                });
-                Navigator.of(context).pop();
-              },
-              data: [data_1],
-            );
-          },
-          child: buildSelectRow(context, selected_5, '基础选择器'),
-        ),
-        GestureDetector(
-          onTap: () {
-            MyPicker.showMultiLinkedPicker(
-              context,
-              leftText: '自定义取消',
-              rightText: '自定义确认',
-              title: '联动选择器',
-              onConfirm: (selected) {
-                setState(() {
-                  selected_3 = '${selected[0]} ${selected[1]} ${selected[2]}';
-                });
-                Navigator.of(context).pop();
-              },
-              data: data_3,
-              columnNum: 3,
-              initialData: ['浙江省', '杭州市', '西湖区'],
-            );
-          },
-          child: buildSelectRow(context, selected_3, '联动选择器'),
-        ),
-      ],
-    );
-  }
-
-  Widget buildSelectRow(BuildContext context, String output, String title) {
+  Widget _buildPickerRow(BuildContext context, String output, String title) {
     return Container(
-      color: context.colorScheme.primaryForeground,
       height: 56,
-      child: Stack(
-        alignment: Alignment.bottomCenter,
+      color: context.colorScheme.secondary,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16),
-                child: MyText(title),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 16, left: 16),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: MyText(
-                          output,
-                          textColor: ThemeColors.neutral.shade200,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 2),
-                        child: Icon(
-                          Icons.chevron_right,
-                          color: ThemeColors.neutral.shade200,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16),
+            child: MyText(title),
           ),
-          const MyDivider(margin: EdgeInsets.only(left: 16)),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(right: 16, left: 16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: MyText(
+                      output,
+                      textColor: context.colorScheme.foreground,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 2),
+                    child: Icon(
+                      LucideIcons.chevronRight,
+                      size: 18,
+                      color: context.colorScheme.secondaryForeground,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );

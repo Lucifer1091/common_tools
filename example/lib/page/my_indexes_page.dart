@@ -137,7 +137,7 @@ class MyIndexesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(context),
+      title: myTitle(context),
       desc:
           'Used for quick retrieval of information on a page, you can quickly find the required content based on the page number in the directory. ',
       exampleCodeGroup: 'indexes',

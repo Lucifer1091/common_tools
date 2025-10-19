@@ -16,7 +16,7 @@ class _TDCascaderPageState extends State<TDCascaderPage> {
     return Container(
       color: context.colorScheme.primaryForeground,
       child: ExamplePage(
-        title: tdTitle(),
+        title: myTitle(),
         exampleCodeGroup: 'cascader',
         desc: '用于多层级数据的逐级选择',
         children: [],

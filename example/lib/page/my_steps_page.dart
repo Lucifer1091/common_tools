@@ -23,7 +23,7 @@ class _MyStepsPageState extends State<MyStepsPage> {
   Widget build(BuildContext context) {
     return ExamplePage(
       backgroundColor: context.colorScheme.primaryForeground,
-      title: tdTitle(),
+      title: myTitle(),
       exampleCodeGroup: 'steps',
       desc:
           'A stepper is a fundamental part of material design guidelines. Steps convey progress through numbered steps.',

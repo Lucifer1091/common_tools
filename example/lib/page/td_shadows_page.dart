@@ -11,7 +11,7 @@ class TDShadowsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ExamplePage(
       backgroundColor: context.colorScheme.primaryForeground,
-      title: tdTitle(context),
+      title: myTitle(context),
       exampleCodeGroup: 'shadows',
       children: [
         ExampleModule(

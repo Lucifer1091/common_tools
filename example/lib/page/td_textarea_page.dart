@@ -33,7 +33,7 @@ class _TDTextareaPageState extends State<TDTextareaPage> {
   Widget build(BuildContext context) {
     return ExamplePage(
       backgroundColor: const Color(0xFFF0F2F5),
-      title: tdTitle(),
+      title: myTitle(),
       desc: '用于多行文本信息输入。',
       exampleCodeGroup: 'textarea',
       children: [],

@@ -14,7 +14,7 @@ class _TDPopoverPage extends State<TDPopoverPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: myTitle(),
       desc: '用于文字提示的气泡框。',
       exampleCodeGroup: 'popover',
       backgroundColor: context.colorScheme.primaryForeground,

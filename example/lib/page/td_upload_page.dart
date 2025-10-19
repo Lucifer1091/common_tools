@@ -99,7 +99,7 @@ class TDUploadState extends State<TDUploadPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: myTitle(),
       exampleCodeGroup: 'upload',
       desc:
           '用于相册读取或拉起拍照的图片上传功能。${MyPlatform.isWeb ? "Web端不支持读取本地图片,请前往移动端体验。" : ""}',

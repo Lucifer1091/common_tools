@@ -22,7 +22,7 @@ class _TDTreeSelectPageState extends State<TDTreeSelectPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: myTitle(),
       desc: '适用于选择树形的数据结构',
       exampleCodeGroup: 'tree',
       backgroundColor: ThemeColors.neutral.shade100,

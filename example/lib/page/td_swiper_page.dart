@@ -9,7 +9,7 @@ class TDSwiperPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(context),
+      title: myTitle(context),
       exampleCodeGroup: 'swiper',
       children: [
         ExampleModule(

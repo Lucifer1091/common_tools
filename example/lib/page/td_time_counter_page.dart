@@ -10,7 +10,7 @@ class TDTimeCounterPage extends StatelessWidget {
     return Container(
       color: ThemeColors.neutral.shade100,
       child: ExamplePage(
-        title: tdTitle(context),
+        title: myTitle(context),
         desc: '用于实时展示计时数值。',
         exampleCodeGroup: 'timeCounter',
         children: [

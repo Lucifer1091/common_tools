@@ -28,7 +28,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: myTitle(),
       desc: '用于选择横轴上的数值、区间、档位。',
       exampleCodeGroup: 'slider',
       padding: const EdgeInsets.only(top: 8, bottom: 8),

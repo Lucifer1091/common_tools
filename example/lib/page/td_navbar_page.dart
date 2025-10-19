@@ -17,7 +17,7 @@ class _MyNavBarPageState extends State<MyNavBarPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: myTitle(),
       exampleCodeGroup: 'navbar',
       desc: 'A widget that displays a bar with navigation buttons and labels.',
       bottomNavigationBar: MyNavBar(

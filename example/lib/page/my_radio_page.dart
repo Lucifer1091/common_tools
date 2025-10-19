@@ -3,19 +3,16 @@ import 'package:flutter/material.dart';
 
 import '../base/example_widget.dart';
 
-///
-/// TDRadio演示
-///
-class TDRadioPage extends StatefulWidget {
-  const TDRadioPage({super.key});
+class MyRadioPage extends StatefulWidget {
+  const MyRadioPage({super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return TDRadioPageState();
+    return MyRadioPageState();
   }
 }
 
-class TDRadioPageState extends State<TDRadioPage> {
+class MyRadioPageState extends State<MyRadioPage> {
   @override
   void initState() {
     super.initState();
@@ -24,7 +21,7 @@ class TDRadioPageState extends State<TDRadioPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: myTitle(),
       exampleCodeGroup: 'radio',
       backgroundColor: const Color(0xfff6f6f6),
       children: [
@@ -77,8 +74,8 @@ class TDRadioPageState extends State<TDRadioPage> {
         selectId: '0',
         direction: Axis.horizontal,
         directionalTdRadios: const [
-          TDRadio(id: '0', title: '单选Title0', showDivider: false),
-          TDRadio(id: '1', title: '单选Title1', showDivider: false),
+          MyRadio(id: '0', title: '单选Title0', showDivider: false),
+          MyRadio(id: '1', title: '单选Title1', showDivider: false),
         ],
       ),
     );
@@ -89,22 +86,22 @@ class TDRadioPageState extends State<TDRadioPage> {
       selectId: 'index:1',
       direction: Axis.horizontal,
       directionalTdRadios: const [
-        TDRadio(
+        MyRadio(
           id: '0',
           title: '单选Title',
-          radioStyle: TDRadioStyle.circle,
+          radioStyle: MyRadioStyle.circle,
           showDivider: false,
         ),
-        TDRadio(
+        MyRadio(
           id: '1',
           title: '单选Title',
-          radioStyle: TDRadioStyle.circle,
+          radioStyle: MyRadioStyle.circle,
           showDivider: false,
         ),
-        TDRadio(
+        MyRadio(
           id: '2',
           title: '上限四字',
-          radioStyle: TDRadioStyle.circle,
+          radioStyle: MyRadioStyle.circle,
           showDivider: false,
         ),
       ],
@@ -117,16 +114,16 @@ class TDRadioPageState extends State<TDRadioPage> {
       selectId: '0',
       child: const Column(
         children: [
-          TDRadio(
+          MyRadio(
             id: '0',
             title: 'Options禁用-已选',
-            radioStyle: TDRadioStyle.circle,
+            radioStyle: MyRadioStyle.circle,
             enabled: false,
           ),
-          TDRadio(
+          MyRadio(
             id: '1',
             title: 'Options禁用-默认',
-            radioStyle: TDRadioStyle.circle,
+            radioStyle: MyRadioStyle.circle,
             enabled: false,
           ),
         ],
@@ -138,15 +135,15 @@ class TDRadioPageState extends State<TDRadioPage> {
     return Column(
       children: [
         TDRadioGroup(
-          radioCheckStyle: TDRadioStyle.check,
+          radioCheckStyle: MyRadioStyle.check,
           selectId: 'index:0',
-          child: const TDRadio(id: 'index:0', title: '单选'),
+          child: const MyRadio(id: 'index:0', title: '单选'),
         ),
         const SizedBox(height: 17),
         TDRadioGroup(
-          radioCheckStyle: TDRadioStyle.hollowCircle,
+          radioCheckStyle: MyRadioStyle.hollowCircle,
           selectId: 'index:0',
-          child: const TDRadio(id: 'index:0', title: '单选'),
+          child: const MyRadio(id: 'index:0', title: '单选'),
         ),
       ],
     );
@@ -158,12 +155,12 @@ class TDRadioPageState extends State<TDRadioPage> {
         TDRadioGroup(
           contentDirection: MyContentDirection.right,
           selectId: 'index:0',
-          child: const TDRadio(id: 'index:0', title: '单选'),
+          child: const MyRadio(id: 'index:0', title: '单选'),
         ),
         TDRadioGroup(
           contentDirection: MyContentDirection.left,
           selectId: 'index:0',
-          child: const TDRadio(id: 'index:0', title: '单选', showDivider: false),
+          child: const MyRadio(id: 'index:0', title: '单选', showDivider: false),
         ),
       ],
     );
@@ -179,7 +176,7 @@ class TDRadioPageState extends State<TDRadioPage> {
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
           var title = '单选';
-          return TDRadio(
+          return MyRadio(
             id: 'index:$index',
             title: title,
             size: MyCheckboxSize.large,
@@ -196,7 +193,7 @@ class TDRadioPageState extends State<TDRadioPage> {
       cardMode: true,
       direction: Axis.vertical,
       directionalTdRadios: const [
-        TDRadio(
+        MyRadio(
           id: 'index:0',
           title: '单选',
           titleMaxLine: 2,
@@ -204,7 +201,7 @@ class TDRadioPageState extends State<TDRadioPage> {
           subTitle: '描述信息',
           cardMode: true,
         ),
-        TDRadio(
+        MyRadio(
           id: 'index:1',
           title: '单选',
           titleMaxLine: 2,
@@ -212,7 +209,7 @@ class TDRadioPageState extends State<TDRadioPage> {
           subTitle: '描述信息',
           cardMode: true,
         ),
-        TDRadio(
+        MyRadio(
           id: 'index:2',
           title: '单选',
           titleMaxLine: 2,
@@ -220,7 +217,7 @@ class TDRadioPageState extends State<TDRadioPage> {
           subTitle: '描述信息',
           cardMode: true,
         ),
-        TDRadio(
+        MyRadio(
           id: 'index:3',
           title: '单选',
           titleMaxLine: 2,
@@ -239,10 +236,10 @@ class TDRadioPageState extends State<TDRadioPage> {
       direction: Axis.horizontal,
       rowCount: 2,
       directionalTdRadios: const [
-        TDRadio(id: 'index:0', title: '单选', cardMode: true),
-        TDRadio(id: 'index:1', title: '单选', cardMode: true),
-        TDRadio(id: 'index:2', title: '单选', cardMode: true),
-        TDRadio(id: 'index:3', title: '单选', cardMode: true),
+        MyRadio(id: 'index:0', title: '单选', cardMode: true),
+        MyRadio(id: 'index:1', title: '单选', cardMode: true),
+        MyRadio(id: 'index:2', title: '单选', cardMode: true),
+        MyRadio(id: 'index:3', title: '单选', cardMode: true),
       ],
     );
   }
@@ -253,22 +250,22 @@ class TDRadioPageState extends State<TDRadioPage> {
       direction: Axis.horizontal,
       showDivider: true,
       directionalTdRadios: const [
-        TDRadio(
+        MyRadio(
           id: '0',
           title: '单选Title',
-          radioStyle: TDRadioStyle.circle,
+          radioStyle: MyRadioStyle.circle,
           showDivider: false,
         ),
-        TDRadio(
+        MyRadio(
           id: '1',
           title: '单选Title',
-          radioStyle: TDRadioStyle.circle,
+          radioStyle: MyRadioStyle.circle,
           showDivider: false,
         ),
-        TDRadio(
+        MyRadio(
           id: '2',
           title: '上限四字',
-          radioStyle: TDRadioStyle.circle,
+          radioStyle: MyRadioStyle.circle,
           showDivider: false,
         ),
       ],
@@ -282,22 +279,22 @@ class TDRadioPageState extends State<TDRadioPage> {
       showDivider: true,
       divider: const MyDivider(height: 20, color: Colors.red),
       directionalTdRadios: const [
-        TDRadio(
+        MyRadio(
           id: '0',
           title: '单选Title',
-          radioStyle: TDRadioStyle.circle,
+          radioStyle: MyRadioStyle.circle,
           showDivider: false,
         ),
-        TDRadio(
+        MyRadio(
           id: '1',
           title: '单选Title',
-          radioStyle: TDRadioStyle.circle,
+          radioStyle: MyRadioStyle.circle,
           showDivider: false,
         ),
-        TDRadio(
+        MyRadio(
           id: '2',
           title: '上限四字',
-          radioStyle: TDRadioStyle.circle,
+          radioStyle: MyRadioStyle.circle,
           showDivider: false,
         ),
       ],
@@ -312,14 +309,14 @@ class TDRadioPageState extends State<TDRadioPage> {
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         children: [
-          TDRadio(
+          MyRadio(
             id: 'index:1',
             title: '单选',
             titleMaxLine: 2,
             subTitleMaxLine: 2,
             selectedColor: ThemeColors.error.shade200,
           ),
-          TDRadio(
+          MyRadio(
             id: 'index:2',
             title: '单选',
             titleMaxLine: 2,
@@ -327,7 +324,7 @@ class TDRadioPageState extends State<TDRadioPage> {
             subTitle: '单选Title多行单选Title多行单选Title多行单选Title多行单选Title多行单选Title多行',
             selectedColor: ThemeColors.error.shade200,
           ),
-          TDRadio(
+          MyRadio(
             id: 'index:3',
             title: '单选',
             titleMaxLine: 2,
@@ -335,16 +332,16 @@ class TDRadioPageState extends State<TDRadioPage> {
             subTitle: '描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息',
             selectedColor: ThemeColors.error.shade200,
           ),
-          TDRadio(
+          MyRadio(
             id: 'index:4',
             title: '单选',
             titleMaxLine: 2,
             subTitleMaxLine: 2,
             subTitle: '单选Title多行单选Title多行单选Title多行单选Title多行单选Title多行单选Title多行',
             selectedColor: ThemeColors.error.shade200,
-            radioStyle: TDRadioStyle.hollowCircle,
+            radioStyle: MyRadioStyle.hollowCircle,
           ),
-          TDRadio(
+          MyRadio(
             id: 'index:6',
             title: '绿色',
             titleColor: Colors.green,
@@ -355,7 +352,7 @@ class TDRadioPageState extends State<TDRadioPage> {
             selectedColor: ThemeColors.error.shade200,
             backgroundColor: ThemeColors.neutral.shade100,
           ),
-          TDRadio(
+          MyRadio(
             id: 'index:5',
             title: '单选',
             titleMaxLine: 2,
@@ -375,18 +372,18 @@ class TDRadioPageState extends State<TDRadioPage> {
       selectId: '0',
       child: Column(
         children: [
-          TDRadio(
+          MyRadio(
             id: '0',
             title: 'Options禁用-已选',
             subTitle: '描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息',
-            radioStyle: TDRadioStyle.circle,
+            radioStyle: MyRadioStyle.circle,
             enabled: false,
             // disabledColor: ThemeColors.error.shade50,
           ),
-          TDRadio(
+          MyRadio(
             id: '1',
             title: 'Options禁用-默认',
-            radioStyle: TDRadioStyle.circle,
+            radioStyle: MyRadioStyle.circle,
             enabled: false,
             // disabledColor: ThemeColors.error.shade50,
           ),
@@ -396,11 +393,11 @@ class TDRadioPageState extends State<TDRadioPage> {
   }
 
   Widget _customRadioLeftSpace(BuildContext context) {
-    return TDRadio(
+    return MyRadio(
       id: '0',
       title: 'Options禁用-已选',
       subTitle: '描述信息',
-      radioStyle: TDRadioStyle.circle,
+      radioStyle: MyRadioStyle.circle,
       checkBoxLeftSpace: 0,
       // disabledColor: ThemeColors.error.shade50,
     );

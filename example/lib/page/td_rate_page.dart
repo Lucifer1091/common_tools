@@ -22,7 +22,7 @@ class TDRatePageState extends State<TDRatePage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: myTitle(),
       desc: '用于对某行为/事物进行打分。',
       exampleCodeGroup: 'rate',
       backgroundColor: ThemeColors.neutral.shade100,

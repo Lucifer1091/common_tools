@@ -9,7 +9,7 @@ class TDSwipeCellPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(context),
+      title: myTitle(context),
       exampleCodeGroup: 'swipecell',
       desc: '用于承载列表中的更多操作，通过左右滑动来展示，按钮的宽度固定高度根据列表高度而变化。',
       children: [

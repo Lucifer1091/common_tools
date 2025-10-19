@@ -38,7 +38,7 @@ import 'page/my_picker_page.dart';
 import 'page/td_popover_page.dart';
 import 'page/td_popup_page.dart';
 import 'page/td_progress_page.dart';
-import 'page/td_radio_page.dart';
+import 'page/my_radio_page.dart';
 import 'page/td_radius_page.dart';
 import 'page/td_rate_page.dart';
 import 'page/td_refresh_page.dart';
@@ -180,14 +180,12 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'Picker',
       name: 'picker',
-      pageBuilder: _wrapInheritedTheme(
-        (context) => const MyPickerPage(),
-      ),
+      pageBuilder: _wrapInheritedTheme((context) => const MyPickerPage()),
     ),
     ExamplePageModel(
       text: 'Radio',
       name: 'radio',
-      pageBuilder: _wrapInheritedTheme((context) => const TDRadioPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyRadioPage()),
     ),
     ExamplePageModel(
       text: 'Rate',

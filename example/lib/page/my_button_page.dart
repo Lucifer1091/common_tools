@@ -11,7 +11,7 @@ class MyButtonPage extends StatelessWidget {
     return Container(
       color: context.colorScheme.background,
       child: ExamplePage(
-        title: tdTitle(context),
+        title: myTitle(context),
         desc:
             'Used to start a closed-loop operation task, such as "delete" an object, "purchase" a product, etc. ',
         exampleCodeGroup: 'button',

@@ -9,7 +9,7 @@ class MyDividerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(context),
+      title: myTitle(context),
       desc:
           'Used to segment, organize, and refine logically organized element content and page structure.',
       exampleCodeGroup: 'divider',

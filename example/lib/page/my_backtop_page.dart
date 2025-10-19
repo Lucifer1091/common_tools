@@ -34,7 +34,7 @@ class _MyBackTopPageState extends State<MyBackTopPage> {
   Widget build(BuildContext context) {
     return ExamplePage(
       scrollController: controller,
-      title: tdTitle(),
+      title: myTitle(),
       desc:
           'Used to help users quickly return to the top of the page when the page is too long and slides down.',
       exampleCodeGroup: 'backtop',

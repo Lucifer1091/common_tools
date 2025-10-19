@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../index.dart';
 
-typedef ItemBuilderType =
+typedef MyPickerItemBuilder =
     Widget? Function(
       /// Context
       BuildContext context,
@@ -23,8 +23,8 @@ typedef ItemBuilderType =
     );
 
 /// All selector subcomponents
-class TDItemWidget extends StatefulWidget {
-  const TDItemWidget({
+class MyPickerItem extends StatefulWidget {
+  const MyPickerItem({
     required this.fixedExtentScrollController,
     required this.colIndex,
     required this.index,
@@ -41,13 +41,13 @@ class TDItemWidget extends StatefulWidget {
   final int index;
   final double itemHeight;
   final ItemDistanceCalculator? itemDistanceCalculator;
-  final ItemBuilderType? itemBuilder;
+  final MyPickerItemBuilder? itemBuilder;
 
   @override
-  _TDItemWidgetState createState() => _TDItemWidgetState();
+  _MyPickerItemState createState() => _MyPickerItemState();
 }
 
-class _TDItemWidgetState extends State<TDItemWidget> {
+class _MyPickerItemState extends State<MyPickerItem> {
   /// The child item listens to scrolling to refresh its own color
   VoidCallback? listener;
   ItemDistanceCalculator? _itemDistanceCalculator;
@@ -111,9 +111,9 @@ class ItemDistanceCalculator {
   Color calculateColor(BuildContext context, double distance) {
     /// Linear interpolation
     if (distance < 0.5) {
-      return ThemeColors.neutral.shade900;
+      return context.colorScheme.popoverForeground;
     } else {
-      return ThemeColors.neutral.shade600;
+      return context.colorScheme.popoverForeground.withValues(alpha: 0.5);
     }
   }
 

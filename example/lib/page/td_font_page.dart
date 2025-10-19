@@ -12,7 +12,7 @@ class TDFontPage extends StatelessWidget {
     // debugPaintBaselinesEnabled = true;
     return ExamplePage(
       padding: const EdgeInsets.all(8),
-      title: tdTitle(context),
+      title: myTitle(context),
       exampleCodeGroup: 'fonts',
       children: [],
     );

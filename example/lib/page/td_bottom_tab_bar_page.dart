@@ -35,7 +35,7 @@ class _MyBottomTabBarPageState extends State<MyBottomTabBarPage>
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: myTitle(),
       desc:
           'Used to quickly switch between different functional modules, located at the bottom of the page.',
       exampleCodeGroup: 'bottomTabBar',
@@ -53,6 +53,4 @@ class _MyBottomTabBarPageState extends State<MyBottomTabBarPage>
   Widget _textTypeTabBar4tabs(BuildContext context) {
     return SizedBox.shrink();
   }
-
-
 }

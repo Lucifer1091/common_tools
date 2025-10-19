@@ -9,7 +9,7 @@ class MyLinkPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(context),
+      title: myTitle(context),
       desc:
           'When the function can be clearly expressed by an icon, you can use a pure icon floating button, such as: add, publish.',
       exampleCodeGroup: 'link',

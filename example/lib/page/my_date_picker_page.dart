@@ -20,7 +20,7 @@ class _MyDatePickerPageState extends State<MyDatePickerPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: myTitle(),
       desc: 'A widget that lets users select dates and date ranges.',
       exampleCodeGroup: 'datetimePicker',
       children: [

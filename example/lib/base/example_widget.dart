@@ -25,29 +25,17 @@ class ExamplePage extends StatefulWidget {
   });
 
   final String title;
-
   final bool showSingleChild;
-
   final WidgetBuilder? singleChild;
-
   final List<ExampleModule> children;
-
   final String desc;
-
   final EdgeInsetsGeometry? padding;
-
   final Color? backgroundColor;
-
   final String exampleCodeGroup;
-
   final List<ExampleItem> test;
-
   final ScrollController? scrollController;
-
   final Widget? floatingActionButton;
-
   final Widget? bottomNavigationBar;
-
   final GlobalKey? navBarKey;
 
   @override
@@ -314,7 +302,7 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
 }
 
 extension MyStateExs on State {
-  String tdTitle() {
+  String myTitle() {
     var modelTheme = context
         .dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
     return modelTheme?.model.text ?? '';
@@ -322,7 +310,7 @@ extension MyStateExs on State {
 }
 
 extension MyWidgetExs on StatelessWidget {
-  String tdTitle(BuildContext context) {
+  String myTitle(BuildContext context) {
     var modelTheme = context
         .dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
     return modelTheme?.model.text ?? '';

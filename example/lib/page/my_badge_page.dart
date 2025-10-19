@@ -14,7 +14,7 @@ class _MyBadgePageState extends State<MyBadgePage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: myTitle(),
       desc:
           'Used to inform users of the status changes of the area or the number of pending tasks. ',
       exampleCodeGroup: 'badge',

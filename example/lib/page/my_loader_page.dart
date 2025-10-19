@@ -16,7 +16,7 @@ class _MyLoaderPageState extends State<MyLoaderPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: myTitle(),
       backgroundColor: context.colorScheme.primaryForeground,
       exampleCodeGroup: 'loading',
       desc:

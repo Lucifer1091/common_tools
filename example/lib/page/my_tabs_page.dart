@@ -79,7 +79,7 @@ class _MyTabsPageState extends State<MyTabsPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: myTitle(),
       desc: 'A set of layered sections of content are displayed one at a time.',
       exampleCodeGroup: 'tabs',
       children: [

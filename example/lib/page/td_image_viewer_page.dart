@@ -15,7 +15,7 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
   Widget build(BuildContext context) {
     return ExamplePage(
       backgroundColor: const Color(0xFFF0F2F5),
-      title: tdTitle(),
+      title: myTitle(),
       desc: '用于图片内容的缩略展示与查看。',
       exampleCodeGroup: 'image_viewer',
       children: [

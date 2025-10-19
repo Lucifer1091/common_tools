@@ -8,7 +8,7 @@ class MyCellPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(context),
+      title: myTitle(context),
       desc:
           'A vertical arrangement of a row of content/functions. The left side of a row of items is the main content display area, and more operational content can be added on the right side.',
       exampleCodeGroup: 'cell',

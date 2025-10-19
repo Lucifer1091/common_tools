@@ -22,7 +22,7 @@ class MySideBarPageState extends State<MySideBarPage> {
 
   Widget buildWidget(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: myTitle(),
       exampleCodeGroup: 'sideBar',
       desc: 'Used for display switching after content classification.',
       children: [

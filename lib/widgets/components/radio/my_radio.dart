@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../../../index.dart';
 
-enum TDRadioStyle { circle, square, check, hollowCircle }
+enum MyRadioStyle { circle, square, check, hollowCircle }
 
 /// Radio button, inherited from TDCheckbox, the field meaning is consistent with the parent class
-class TDRadio extends MyCheckbox {
-  const TDRadio({
+class MyRadio extends MyCheckbox {
+  const MyRadio({
     super.id,
     super.key,
     super.title,
@@ -22,7 +22,7 @@ class TDRadio extends MyCheckbox {
     bool? cardMode,
     bool? showDivider,
     super.size,
-    this.radioStyle = TDRadioStyle.circle,
+    this.radioStyle = MyRadioStyle.circle,
     super.contentDirection,
     super.customIconBuilder,
     super.titleColor,
@@ -31,7 +31,7 @@ class TDRadio extends MyCheckbox {
     super.checkBoxLeftSpace,
   }) : super(cardMode: cardMode ?? false, showDivider: showDivider ?? true);
 
-  final TDRadioStyle radioStyle;
+  final MyRadioStyle radioStyle;
 
   @override
   Widget buildDefaultIcon(
@@ -41,7 +41,7 @@ class TDRadio extends MyCheckbox {
   ) {
     if (cardMode) return const NoWidget();
 
-    TDRadioStyle? style;
+    MyRadioStyle? style;
     if (groupState is TDRadioGroupState) {
       style = (groupState.widget as TDRadioGroup).radioCheckStyle;
     }
@@ -52,7 +52,7 @@ class TDRadio extends MyCheckbox {
 
     final selected = isSelected ?? false;
 
-    if (style == TDRadioStyle.hollowCircle) {
+    if (style == MyRadioStyle.hollowCircle) {
       return SizedBox(
         width: size,
         height: size,
@@ -73,15 +73,15 @@ class TDRadio extends MyCheckbox {
     IconData? iconData;
 
     switch (style) {
-      case TDRadioStyle.check:
+      case MyRadioStyle.check:
         iconData = selected ? Icons.check : null;
-      case TDRadioStyle.square:
+      case MyRadioStyle.square:
         iconData =
             selected
                 ? Icons.check_box_rounded
                 : Icons.check_box_outline_blank_rounded;
-      case TDRadioStyle.circle:
-      case TDRadioStyle.hollowCircle:
+      case MyRadioStyle.circle:
+      case MyRadioStyle.hollowCircle:
         iconData = selected ? Icons.check_circle : Icons.circle_outlined;
     }
 
@@ -90,13 +90,13 @@ class TDRadio extends MyCheckbox {
         iconData,
         size: size,
         // color:
-            // !enabled
-            //     ? (selected
-            //         ? (disabledColor ?? ThemeColors.blue.shade200)
-            //         : ThemeColors.neutral.shade300)
-            //     : selected
-            //     ? selectedColor ?? ThemeColors.blue.shade600
-            //     : ThemeColors.neutral.shade300,
+        // !enabled
+        //     ? (selected
+        //         ? (disabledColor ?? ThemeColors.blue.shade200)
+        //         : ThemeColors.neutral.shade300)
+        //     : selected
+        //     ? selectedColor ?? ThemeColors.blue.shade600
+        //     : ThemeColors.neutral.shade300,
       );
     } else {
       return SizedBox(width: size, height: size);
@@ -156,7 +156,7 @@ class TDRadioGroup extends MyCheckboxGroup {
     super.key,
     Widget? child, // 使用child 则请勿设置direction
     Axis? direction, // direction 对 directionalTdRadios 起作用
-    List<TDRadio>? directionalTdRadios,
+    List<MyRadio>? directionalTdRadios,
     String? selectId, // 默认选择项的id
     bool? passThrough, // 非通栏单选样式 用于使用child 或 direction == Axis.vertical 场景
     bool cardMode = false,
@@ -344,7 +344,7 @@ class TDRadioGroup extends MyCheckboxGroup {
   /// In strict mode, users cannot uncheck a selection, they can only toggle the selection.
   final bool strictMode;
 
-  final TDRadioStyle? radioCheckStyle;
+  final MyRadioStyle? radioCheckStyle;
 
   final bool showDivider;
 

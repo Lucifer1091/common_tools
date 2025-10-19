@@ -1,3 +1,5 @@
+// ignore_for_file: strict_raw_type
+
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
@@ -17,20 +19,17 @@ class MyPicker {
     double pickerHeight = 200,
     String? rightText,
     String? leftText,
-    TextStyle? leftTextStyle,
     TextStyle? centerTextStyle,
-    TextStyle? rightTextStyle,
     Color? titleDividerColor,
     double? topPadding,
     int pickerItemCount = 5,
     Widget? customSelectWidget,
-    ItemBuilderType? itemBuilder,
+    MyPickerItemBuilder? itemBuilder,
   }) {
     return showModalBottomSheet<T>(
       context: context,
       backgroundColor: Colors.transparent,
-      barrierColor:
-          barrierColor ?? ThemeColors.neutral.shade800.withValues(alpha: 0.6),
+      barrierColor: barrierColor ?? const Color.fromRGBO(0, 0, 0, 0.5),
       builder: (context) {
         return MyMultiPicker(
           title: title,
@@ -39,9 +38,7 @@ class MyPicker {
           data: data,
           rightText: rightText,
           leftText: leftText,
-          leftTextStyle: leftTextStyle,
           centerTextStyle: centerTextStyle,
-          rightTextStyle: rightTextStyle,
           initialIndexes: initialIndexes,
           pickerHeight: pickerHeight,
           pickerItemCount: pickerItemCount,
@@ -54,7 +51,7 @@ class MyPicker {
     );
   }
 
-  static Future<void> showMultiLinkedPicker<T>(
+  static Future<void> showMultiLinkedPicker(
     BuildContext context, {
     required MultiPickerCallback? onConfirm,
     required Map data,
@@ -66,20 +63,17 @@ class MyPicker {
     Color? barrierColor,
     String? rightText,
     String? leftText,
-    TextStyle? leftTextStyle,
     TextStyle? centerTextStyle,
-    TextStyle? rightTextStyle,
     double pickerHeight = 200,
     Color? titleDividerColor,
     Widget? customSelectWidget,
     double? topPadding,
     int pickerItemCount = 5,
   }) {
-    return showModalBottomSheet<T>(
+    return showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
-      barrierColor:
-          barrierColor ?? ThemeColors.neutral.shade800.withValues(alpha: 0.6),
+      barrierColor: barrierColor ?? const Color.fromRGBO(0, 0, 0, 0.5),
       builder: (context) {
         return MyMultiLinkedPicker(
           title: title,
@@ -88,9 +82,7 @@ class MyPicker {
           data: data,
           rightText: rightText,
           leftText: leftText,
-          leftTextStyle: leftTextStyle,
           centerTextStyle: centerTextStyle,
-          rightTextStyle: rightTextStyle,
           pickerHeight: pickerHeight,
           pickerItemCount: pickerItemCount,
           columnNum: columnNum,

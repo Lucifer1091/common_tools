@@ -15,7 +15,7 @@ class _TDFabPageState extends State<TDFabPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: tdTitle(),
+      title: myTitle(),
       exampleCodeGroup: 'fab',
       children: [
         ExampleModule(title: 'Component types', children: [
