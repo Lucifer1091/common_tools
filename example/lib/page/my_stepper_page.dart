@@ -4,14 +4,14 @@ import 'package:common_tools/index.dart';
 
 import '../base/example_widget.dart';
 
-class TDStepperPage extends StatefulWidget {
-  const TDStepperPage({super.key});
+class MyStepperPage extends StatefulWidget {
+  const MyStepperPage({super.key});
 
   @override
-  State<TDStepperPage> createState() => _TDStepperPageState();
+  State<MyStepperPage> createState() => _MyStepperPageState();
 }
 
-class _TDStepperPageState extends State<TDStepperPage> {
+class _MyStepperPageState extends State<MyStepperPage> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -25,24 +25,24 @@ class _TDStepperPageState extends State<TDStepperPage> {
       },
       child: ExamplePage(
         title: myTitle(),
-        desc: '用于数量的增减。',
+        desc: 'Used for increasing or decreasing quantity.',
         exampleCodeGroup: 'stepper',
         children: [
           ExampleModule(
             title: 'Component Types',
             children: [
-              ExampleItem(desc: '基础步进器', builder: _buildStepperWithBase),
+              ExampleItem(desc: 'Base Stepper', builder: _buildStepperWithBase),
             ],
           ),
           ExampleModule(
             title: 'Component State',
             children: [
               ExampleItem(
-                desc: '最大最小状态',
+                desc: 'Maximum and Minimum Status',
                 builder: _buildStepperWithMaxMinStatus,
               ),
               ExampleItem(
-                desc: '禁用状态',
+                desc: 'Disabled Status',
                 builder: _buildStepperWithDisableStatus,
               ),
             ],
@@ -50,56 +50,61 @@ class _TDStepperPageState extends State<TDStepperPage> {
           ExampleModule(
             title: 'Component Style',
             children: [
-              ExampleItem(desc: '步进器样式', builder: _buildStepperWithTheme),
-              ExampleItem(desc: '步进器尺寸', builder: _buildStepperWithSize),
+              ExampleItem(
+                desc: 'Stepper Style',
+                builder: _buildStepperWithTheme,
+              ),
+              ExampleItem(desc: 'Stepper Size', builder: _buildStepperWithSize),
             ],
           ),
         ],
-        test: [ExampleItem(desc: '自定义stepValue', builder: _customStepperValue)],
+        test: [
+          ExampleItem(desc: 'Custom stepValue', builder: _customStepperValue),
+        ],
       ),
     );
   }
 
   Widget _buildStepperWithBase(BuildContext context) {
-    return _buildRow(context, [const TDStepper(theme: TDStepperTheme.filled)]);
+    return _buildRow(context, [const MyStepper(theme: MyStepperTheme.filled)]);
   }
 
   Widget _buildStepperWithMaxMinStatus(BuildContext context) {
     return _buildRow(context, [
-      const TDStepper(theme: TDStepperTheme.filled, value: 0, min: 0),
-      const TDStepper(theme: TDStepperTheme.filled, value: 999, max: 999),
+      const MyStepper(theme: MyStepperTheme.filled, value: 0, min: 0),
+      const MyStepper(theme: MyStepperTheme.filled, value: 999, max: 999),
     ]);
   }
 
   Widget _buildStepperWithDisableStatus(BuildContext context) {
     return _buildRow(context, [
-      const TDStepper(theme: TDStepperTheme.filled, disabled: true),
+      const MyStepper(theme: MyStepperTheme.filled, disabled: true),
     ]);
   }
 
   Widget _buildStepperWithTheme(BuildContext context) {
     return _buildRow(context, [
-      const TDStepper(theme: TDStepperTheme.filled, value: 3),
-      const TDStepper(theme: TDStepperTheme.outline, value: 3),
-      const TDStepper(theme: TDStepperTheme.normal, value: 3),
+      const MyStepper(theme: MyStepperTheme.filled, value: 3),
+      const MyStepper(theme: MyStepperTheme.outline, value: 3),
+      const MyStepper(theme: MyStepperTheme.normal, value: 3),
     ]);
   }
 
   Widget _buildStepperWithSize(BuildContext context) {
     return _buildRow(context, [
-      const TDStepper(
-        size: TDStepperSize.large,
-        theme: TDStepperTheme.filled,
+      const MyStepper(
+        size: MyStepperSize.large,
+        theme: MyStepperTheme.filled,
         value: 3,
       ),
-      const TDStepper(
-        size: TDStepperSize.medium,
-        theme: TDStepperTheme.filled,
+      const MyStepper(
+        size: MyStepperSize.medium,
+        theme: MyStepperTheme.filled,
         value: 3,
       ),
-      const TDStepper(
-        size: TDStepperSize.small,
-        theme: TDStepperTheme.filled,
+      const MyStepper(
+        size: MyStepperSize.small,
+        theme: MyStepperTheme.filled,
         value: 3,
       ),
     ]);
@@ -107,7 +112,7 @@ class _TDStepperPageState extends State<TDStepperPage> {
 
   Widget _buildRow(BuildContext context, List<Widget> stepperItems) {
     return Container(
-      decoration: BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(color: context.colorScheme.background),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Row(
@@ -125,12 +130,13 @@ class _TDStepperPageState extends State<TDStepperPage> {
     );
   }
 
-  var controller = TDStepperController()..value = 1;
+  var controller = MyStepperController()..value = 1;
+  
   Widget _customStepperValue(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        TDStepper(theme: TDStepperTheme.filled, controller: controller),
+        MyStepper(theme: MyStepperTheme.filled, controller: controller),
         MyButton(
           text: 'value * 2',
           onTap: () {

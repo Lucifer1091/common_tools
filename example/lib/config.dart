@@ -46,8 +46,8 @@ import 'page/td_result_page.dart';
 import 'page/td_search_bar_page.dart';
 import 'page/td_shadows_page.dart';
 import 'page/td_skeleton_page.dart';
-import 'page/td_slider_page.dart';
-import 'page/td_stepper_page.dart';
+import 'page/my_slider_page.dart';
+import 'page/my_stepper_page.dart';
 import 'page/td_swipe_cell_page.dart';
 import 'page/td_swiper_page.dart';
 import 'page/td_switch_page.dart';
@@ -200,12 +200,12 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'Slider',
       name: 'slider',
-      pageBuilder: _wrapInheritedTheme((context) => const TDSliderPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MySliderPage()),
     ),
     ExamplePageModel(
       text: 'Stepper',
       name: 'stepper',
-      pageBuilder: _wrapInheritedTheme((context) => const TDStepperPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyStepperPage()),
     ),
     ExamplePageModel(
       text: 'Switch',

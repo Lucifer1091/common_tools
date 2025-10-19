@@ -3,7 +3,6 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import 'td_slider.dart';
 
 typedef ScaleFormatter = String Function(double value);
 

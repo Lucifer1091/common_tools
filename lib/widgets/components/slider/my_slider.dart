@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import '../../../extensions/index.dart';
-import 'td_slider_theme.dart';
+import 'my_slider_theme.dart';
 
 enum Position { start, end }
 
-class TDSlider extends StatefulWidget {
-  const TDSlider({
+class MySlider extends StatefulWidget {
+  const MySlider({
     required this.value,
     super.key,
     this.boxDecoration,
@@ -41,11 +41,11 @@ class TDSlider extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return TDSliderState();
+    return MySliderState();
   }
 }
 
-class TDSliderState extends State<TDSlider> {
+class MySliderState extends State<MySlider> {
   final GlobalKey _sliderKey = GlobalKey();
   double value = 0;
 
@@ -56,7 +56,7 @@ class TDSliderState extends State<TDSlider> {
   }
 
   @override
-  void didUpdateWidget(covariant TDSlider oldWidget) {
+  void didUpdateWidget(covariant MySlider oldWidget) {
     super.didUpdateWidget(oldWidget);
     value = widget.value;
   }

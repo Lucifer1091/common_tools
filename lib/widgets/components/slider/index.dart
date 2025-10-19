@@ -1,2 +1,2 @@
-export 'td_slider.dart';
-export 'td_slider_theme.dart';
+export 'my_slider.dart';
+export 'my_slider_theme.dart';

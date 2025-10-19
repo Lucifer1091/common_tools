@@ -1,22 +1,20 @@
-///
-///  Created by arvinwli@tencent.com on 4/24/23.
-///
 import 'package:flutter/material.dart';
 import 'package:common_tools/index.dart';
 
 import '../../base/example_widget.dart';
 
-class TDSliderPage extends StatefulWidget {
-  const TDSliderPage({Key? key}) : super(key: key);
+class MySliderPage extends StatefulWidget {
+  const MySliderPage({super.key});
 
   @override
-  State<StatefulWidget> createState() => _TDSliderPageState();
+  State<StatefulWidget> createState() => _MySliderPageState();
 }
 
 class DisplayRangeData {
   final Position currentPosition;
   final double currentTapValue;
   final Offset? tapOffset;
+
   DisplayRangeData({
     required this.currentPosition,
     required this.currentTapValue,
@@ -24,7 +22,7 @@ class DisplayRangeData {
   });
 }
 
-class _TDSliderPageState extends State<TDSliderPage> {
+class _MySliderPageState extends State<MySliderPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
@@ -92,7 +90,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   }
 
   Widget _buildSingleHandle(BuildContext context) {
-    return TDSlider(
+    return MySlider(
       sliderThemeData: TDSliderThemeData(context: context, min: 0, max: 100),
       value: 10,
       onChanged: (value) {},
@@ -108,7 +106,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   }
 
   Widget _buildSingleHandleWithNumber(BuildContext context) {
-    return TDSlider(
+    return MySlider(
       sliderThemeData: TDSliderThemeData(
         context: context,
         showThumbValue: true,
@@ -140,7 +138,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   }
 
   Widget _buildSingleHandleWithScale(BuildContext context) {
-    return TDSlider(
+    return MySlider(
       sliderThemeData: TDSliderThemeData(
         context: context,
         showScaleValue: true,
@@ -170,7 +168,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   }
 
   Widget _buildDisableSingleHandle(BuildContext context) {
-    return TDSlider(
+    return MySlider(
       sliderThemeData: TDSliderThemeData(context: context, min: 0, max: 100),
       leftLabel: '0',
       rightLabel: '100',
@@ -227,7 +225,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
                   ),
               ],
             ),
-            TDSlider(
+            MySlider(
               sliderThemeData: TDSliderThemeData(
                 context: context,
                 min: 0,
@@ -327,7 +325,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
                   ),
               ],
             ),
-            TDSlider(
+            MySlider(
               sliderThemeData: TDSliderThemeData(
                 context: context,
                 min: 0,
@@ -408,7 +406,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   }
 
   Widget _buildCapsuleSingleHandleWithNumber(BuildContext context) {
-    return TDSlider(
+    return MySlider(
       sliderThemeData: TDSliderThemeData.capsule(
         context: context,
         showThumbValue: true,
@@ -435,7 +433,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   }
 
   Widget _buildCapsuleSingleHandle(BuildContext context) {
-    return TDSlider(
+    return MySlider(
       sliderThemeData: TDSliderThemeData.capsule(
         context: context,
         min: 0,
@@ -466,7 +464,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   }
 
   Widget _buildCapsuleSingleHandleWithScale(BuildContext context) {
-    return TDSlider(
+    return MySlider(
       sliderThemeData:
           TDSliderThemeData.capsule(
             context: context,
@@ -489,7 +487,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildCapsule(BuildContext context) {
     return Column(
       children: [
-        TDSlider(
+        MySlider(
           sliderThemeData: TDSliderThemeData.capsule(
             context: context,
             showThumbValue: true,
@@ -514,7 +512,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
           onChanged: (value) {},
         ),
         const SizedBox(height: 16),
-        TDSlider(
+        MySlider(
           sliderThemeData: TDSliderThemeData.capsule(
             context: context,
             min: 0,
@@ -543,7 +541,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
           onChanged: (value) {},
         ),
         const SizedBox(height: 16),
-        TDSlider(
+        MySlider(
           sliderThemeData:
               TDSliderThemeData.capsule(
                 context: context,
@@ -589,7 +587,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildCustomDecoration(BuildContext context) {
     return Column(
       children: [
-        TDSlider(
+        MySlider(
           sliderThemeData: TDSliderThemeData(
             context: context,
             min: 0,
@@ -640,7 +638,7 @@ class _TDSliderPageState extends State<TDSliderPage> {
   Widget _buildCustomActiveColor(BuildContext context) {
     return Column(
       children: [
-        TDSlider(
+        MySlider(
           sliderThemeData: TDSliderThemeData(
             activeTrackColor: Colors.red,
             inactiveTrackColor: Colors.green,
