@@ -122,7 +122,6 @@ class MyFocusOutline extends StatelessWidget {
     this.enabled = true,
     this.child,
     this.focused = false,
-    this.padding,
     this.borderWidth,
     this.offset,
     this.radius,
@@ -136,9 +135,6 @@ class MyFocusOutline extends StatelessWidget {
 
   /// Whether to show border around the child, defaults to true.
   final bool enabled;
-
-  /// The padding around the child, defaults to 1.0.
-  final double? padding;
 
   /// The width of the border around the child, defaults to 1.0.
   final double? borderWidth;

@@ -7,6 +7,7 @@ typedef Json = Map<String, dynamic>;
 typedef DynamicJson = Map<dynamic, dynamic>;
 
 typedef Predicate<T> = bool Function(T value);
+typedef FuturePredicate<T> = FutureOr<bool> Function(T? value);
 typedef SearchPredicate<T> = double Function(T value, String query);
 
 typedef IsEqual<T> = bool Function(T a, T b);
