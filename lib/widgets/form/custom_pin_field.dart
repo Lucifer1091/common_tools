@@ -4,7 +4,6 @@ import 'package:pinput/pinput.dart';
 
 import '../../index.dart';
 import '../layout/spaces.dart';
-import 'text_form_field.dart';
 
 class CustomPinField extends StatelessWidget {
   const CustomPinField({
@@ -113,7 +112,6 @@ class CustomPinField extends StatelessWidget {
           textInputAction: textInputAction,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           errorTextStyle: errorTextStyle,
-          keyboardType: KeyBoardType.number,
           validator: (value) {
             if (!isRequired) {
               return null;

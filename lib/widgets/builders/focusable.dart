@@ -1,7 +1,5 @@
 import 'package:flutter/widgets.dart';
 
-import '../../index.dart';
-
 class MyFocusableParams {
   const MyFocusableParams({
     this.autofocus = false,
@@ -113,101 +111,5 @@ class _MyFocusableState extends State<MyFocusable> {
         child: widget.child,
       ),
     );
-  }
-}
-
-class MyFocusOutline extends StatelessWidget {
-  const MyFocusOutline({
-    super.key,
-    this.enabled = true,
-    this.child,
-    this.focused = false,
-    this.borderWidth,
-    this.offset,
-    this.radius,
-  });
-
-  /// The child to decorate.
-  final Widget? child;
-
-  /// Whether the child has focus, defaults to false.
-  final bool focused;
-
-  /// Whether to show border around the child, defaults to true.
-  final bool enabled;
-
-  /// The width of the border around the child, defaults to 1.0.
-  final double? borderWidth;
-
-  /// The offset of the border around the child, defaults to 0.0.
-  final double? offset;
-
-  /// The radius of the border around the child, defaults to 0.0.
-  final BorderRadius? radius;
-
-  @override
-  Widget build(BuildContext context) {
-    final textDirection = Directionality.of(context);
-    final enableFocusOutline = context.enableFocusOutline;
-
-    if (enableFocusOutline && enabled) {
-      return CustomPaint(
-        foregroundPainter: _MyOutwardBorderPainter(
-          border:
-              focused
-                  ? Border.all(
-                    color: context.colorScheme.ring,
-                    width: borderWidth ?? 2,
-                  )
-                  : Border(),
-          offset: offset ?? 3.5,
-          radius: radius != null ? radius! * 1.5 : BorderRadius.zero,
-          textDirection: textDirection,
-        ),
-        child: child,
-      );
-    }
-
-    return child ?? const NoWidget();
-  }
-}
-
-/// A [CustomPainter] that paints a border outward from the given rectangle.
-class _MyOutwardBorderPainter extends CustomPainter {
-  const _MyOutwardBorderPainter({
-    required this.border,
-    required this.offset,
-    required this.radius,
-    required this.textDirection,
-  });
-
-  /// The border to paint.
-  final Border border;
-
-  /// The offset to inflate the border by.
-  final double offset;
-
-  /// The radius of the border.
-  final BorderRadius? radius;
-
-  /// The text direction to use when painting the border.
-  final TextDirection? textDirection;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    border.paint(
-      canvas,
-      (Offset.zero & size).inflate(offset),
-      borderRadius: radius,
-      textDirection: textDirection,
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant _MyOutwardBorderPainter oldDelegate) {
-    return border != oldDelegate.border ||
-        offset != oldDelegate.offset ||
-        radius != oldDelegate.radius ||
-        textDirection != oldDelegate.textDirection;
   }
 }

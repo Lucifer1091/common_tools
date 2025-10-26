@@ -1,5 +1,6 @@
 export 'animations/index.dart';
 export 'builders/index.dart';
+export 'common/index.dart';
 export 'components/index.dart';
 export 'custom/index.dart';
 export 'display/index.dart';

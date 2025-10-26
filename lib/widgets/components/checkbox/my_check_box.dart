@@ -186,7 +186,7 @@ class MyCheckboxState extends State<MyCheckbox> {
                               ? MyBorderRadius.round
                               : MyBorderRadius.small;
 
-                      return MyFocusOutline(
+                      return MyDecorator(
                         focused: focused,
                         radius: radius ?? radius0,
                         child: child,

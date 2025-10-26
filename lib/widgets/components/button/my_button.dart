@@ -66,7 +66,7 @@ class MyButton extends StatefulWidget {
 
   final MyButtonShape shape;
 
-  final Transformer<Set<WidgetState>,MyButtonStyle>? style;
+  final Transformer<Set<WidgetState>, MyButtonStyle>? style;
 
   final TextStyle? textStyle;
 
@@ -220,7 +220,7 @@ class _MyButtonState extends State<MyButton> {
               child: MyFocusable(
                 params: widget.focus.copyWith(focusNode: focusNode),
                 builder:
-                    (_, focused, child) => MyFocusOutline(
+                    (_, focused, child) => MyDecorator(
                       focused: focused,
                       radius: _getRadius(style),
                       child: child,
