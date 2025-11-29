@@ -106,8 +106,9 @@ class _MyFocusableState extends State<MyFocusable> {
       debugLabel: widget.debugLabel,
       child: ValueListenableBuilder(
         valueListenable: isFocused,
-        builder:
-            (context, value, child) => widget.builder(context, value, child),
+        builder: (context, value, child) {
+          return widget.builder(context, value, child);
+        },
         child: widget.child,
       ),
     );

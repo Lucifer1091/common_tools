@@ -51,49 +51,27 @@ class MyButton extends StatefulWidget {
   });
 
   final bool enabled;
-
   final Widget? child;
-
   final String? text;
-
   final double? width;
-
   final double? height;
-
   final MyButtonSize size;
-
   final MyButtonType type;
-
   final MyButtonShape shape;
-
   final Transformer<Set<WidgetState>, MyButtonStyle>? style;
-
   final TextStyle? textStyle;
-
   final List<BoxShadow>? shadows;
-
   final Gradient? gradient;
-
   final VoidCallback? onTap;
-
   final VoidCallback? onLongPress;
-
   final IconData? icon;
-
   final Widget? iconWidget;
-
   final double? iconTextSpacing;
-
   final MyButtonIconPosition? iconPosition;
-
   final EdgeInsetsGeometry? padding;
-
   final EdgeInsetsGeometry? margin;
-
   final bool isExpanded;
-
   final bool isFloating;
-
   final MyFocusableParams focus;
 
   @override
@@ -127,6 +105,7 @@ class _MyButtonState extends State<MyButton> {
     if (oldWidget.focus.focusNode != null && widget.focus.focusNode == null) {
       oldWidget.focus.focusNode!.removeListener(onFocusChange);
       _focusNode?.dispose();
+      _focusNode = null;
       _focusNode = FocusNode();
       focusNode.addListener(onFocusChange);
     }
@@ -211,37 +190,37 @@ class _MyButtonState extends State<MyButton> {
           if (!widget.enabled) return display;
 
           return Semantics(
-            container: true,
             button: true,
+            container: true,
             focusable: enabled,
             enabled: enabled,
-            child: Padding(
-              padding: _margin ?? EdgeInsets.zero,
-              child: MyFocusable(
-                params: widget.focus.copyWith(focusNode: focusNode),
-                builder:
-                    (_, focused, child) => MyDecorator(
-                      focused: focused,
-                      radius: _getRadius(style),
-                      child: child,
-                    ),
-                child: MyGestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  cursor: _getCursor(states),
-                  onTap: widget.onTap != null ? _onTap : null,
-                  onLongPress: widget.onLongPress,
-                  onHover: (bool value) {
-                    _state.update(WidgetState.hovered, value);
-                  },
-                  onTapDown: (TapDownDetails details) {
-                    _state.update(WidgetState.pressed, true);
-                  },
-                  onTapUp: (TapUpDetails details) {
-                    _state.update(WidgetState.pressed, false);
-                  },
-                  onTapCancel: () {
-                    _state.update(WidgetState.pressed, false);
-                  },
+            child: MyGestureDetector(
+              behavior: HitTestBehavior.opaque,
+              cursor: _getCursor(states),
+              onTap: widget.onTap != null ? _onTap : null,
+              onLongPress: widget.onLongPress,
+              onHover: (bool value) {
+                _state.update(WidgetState.hovered, value);
+              },
+              onTapDown: (TapDownDetails details) {
+                _state.update(WidgetState.pressed, true);
+              },
+              onTapUp: (TapUpDetails details) {
+                _state.update(WidgetState.pressed, false);
+              },
+              onTapCancel: () {
+                _state.update(WidgetState.pressed, false);
+              },
+              child: Padding(
+                padding: _margin ?? EdgeInsets.zero,
+                child: MyFocusable(
+                  params: widget.focus.copyWith(focusNode: focusNode),
+                  builder:
+                      (_, focused, child) => MyDecorator(
+                        focused: focused,
+                        radius: _getRadius(style),
+                        child: child,
+                      ),
                   child: display,
                 ),
               ),

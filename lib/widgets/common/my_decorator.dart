@@ -118,7 +118,9 @@ class MyDecorator extends StatelessWidget {
       child: child,
     );
 
-    if (secondaryBorder != null && !effectiveDisableSecondaryBorder) {
+    if (enabled &&
+        secondaryBorder != null &&
+        !effectiveDisableSecondaryBorder) {
       decorated = Padding(
         padding: secondaryBorder.padding ?? EdgeInsets.zero,
         child: CustomPaint(

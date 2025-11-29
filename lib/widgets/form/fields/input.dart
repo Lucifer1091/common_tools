@@ -1,5 +1,3 @@
-import 'dart:ui' as ui;
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -30,11 +28,7 @@ class MyInputFormField extends MyFormBuilderField<String> {
     MyDecoration? decoration,
 
     /// {@macro MyInput.placeholder}
-    Widget? placeholder,
-
-    /// {@macro MyInput.magnifierConfiguration}
-    TextMagnifierConfiguration magnifierConfiguration =
-        TextMagnifierConfiguration.disabled,
+    String? placeholder,
 
     /// {@macro MyInput.keyboardType}
     TextInputType? keyboardType,
@@ -48,9 +42,6 @@ class MyInputFormField extends MyFormBuilderField<String> {
     /// {@macro MyInput.style}
     TextStyle? style,
 
-    /// {@macro MyInput.strutStyle}
-    StrutStyle? strutStyle,
-
     /// {@macro MyInput.textAlign}
     TextAlign textAlign = TextAlign.start,
 
@@ -61,19 +52,13 @@ class MyInputFormField extends MyFormBuilderField<String> {
     bool autofocus = false,
 
     /// {@macro MyInput.obscuringCharacter}
-    String obscuringCharacter = '*',
+    String obscuringCharacter = '•',
 
     /// {@macro MyInput.obscureText}
     bool obscureText = false,
 
     /// {@macro MyInput.autocorrect}
     bool autocorrect = true,
-
-    /// {@macro MyInput.smartDashesType}
-    SmartDashesType? smartDashesType,
-
-    /// {@macro MyInput.smartQuotesType}
-    SmartQuotesType? smartQuotesType,
 
     /// {@macro MyInput.enableSuggestions}
     bool enableSuggestions = true,
@@ -89,9 +74,6 @@ class MyInputFormField extends MyFormBuilderField<String> {
 
     /// {@macro MyFormBuilderField.readOnly}
     super.readOnly,
-
-    /// {@macro MyInput.showCursor}
-    bool? showCursor,
 
     /// {@macro MyInput.maxLength}
     int? maxLength,
@@ -111,35 +93,14 @@ class MyInputFormField extends MyFormBuilderField<String> {
     /// {@macro MyInput.inputFormatters}
     List<TextInputFormatter>? inputFormatters,
 
-    /// {@macro MyInput.cursorWidth}
-    double? cursorWidth,
-
-    /// {@macro MyInput.cursorHeight}
-    double? cursorHeight,
-
-    /// {@macro MyInput.cursorRadius}
-    Radius? cursorRadius,
-
-    /// {@macro MyInput.cursorOpacityAnimates}
-    bool? cursorOpacityAnimates,
-
-    /// {@macro MyInput.cursorColor}
-    Color? cursorColor,
-
-    /// {@macro MyInput.selectionHeightStyle}
-    ui.BoxHeightStyle selectionHeightStyle = ui.BoxHeightStyle.tight,
-
-    /// {@macro MyInput.selectionWidthStyle}
-    ui.BoxWidthStyle selectionWidthStyle = ui.BoxWidthStyle.tight,
-
-    /// {@macro MyInput.keyboardAppearance}
-    Brightness? keyboardAppearance,
-
     /// {@macro MyInput.scrollPadding}
     EdgeInsets scrollPadding = const EdgeInsets.all(20),
 
     /// {@macro MyInput.enableInteractiveSelection}
     bool? enableInteractiveSelection,
+
+    /// {@macro flutter.widgets.editableText.selectAllOnFocus}
+    bool? selectAllOnFocus,
 
     /// {@macro MyInput.selectionControls}
     TextSelectionControls? selectionControls,
@@ -147,14 +108,14 @@ class MyInputFormField extends MyFormBuilderField<String> {
     /// {@macro MyInput.dragStartBehavior}
     DragStartBehavior dragStartBehavior = DragStartBehavior.start,
 
-    /// {@macro MyInput.onPressed}
-    GestureTapCallback? onPressed,
+    /// {@macro MyInput.onTap}
+    GestureTapCallback? onTap,
 
-    /// {@macro MyInput.onPressedAlwaysCalled}
-    bool onPressedAlwaysCalled = false,
+    /// {@macro MyInput.onTapAlwaysCalled}
+    bool onTapAlwaysCalled = false,
 
-    /// {@macro MyInput.onPressedOutside}
-    TapRegionCallback? onPressedOutside,
+    /// {@macro MyInput.onTapOutside}
+    TapRegionCallback? onTapOutside,
 
     /// {@macro MyInput.mouseCursor}
     MouseCursor? mouseCursor,
@@ -189,41 +150,14 @@ class MyInputFormField extends MyFormBuilderField<String> {
     /// {@macro MyInput.spellCheckConfiguration}
     SpellCheckConfiguration? spellCheckConfiguration,
 
-    /// {@macro MyInput.selectionColor}
-    Color? selectionColor,
-
-    /// {@macro MyInput.padding}
-    EdgeInsetsGeometry? padding,
-
     /// {@macro MyInput.leading}
     Widget? leading,
 
     /// {@macro MyInput.trailing}
     Widget? trailing,
 
-    /// {@macro MyInput.mainAxisAlignment}
-    MainAxisAlignment? mainAxisAlignment,
-
-    /// {@macro MyInput.crossAxisAlignment}
-    CrossAxisAlignment? crossAxisAlignment,
-
     /// {@macro MyInput.placeholderStyle}
     TextStyle? placeholderStyle,
-
-    /// {@macro MyInput.alignment}
-    AlignmentGeometry? alignment,
-
-    /// {@macro MyInput.placeholderAlignment}
-    AlignmentGeometry? placeholderAlignment,
-
-    /// {@macro MyInput.inputPadding}
-    EdgeInsetsGeometry? inputPadding,
-
-    /// {@macro MyInput.gap}
-    double? gap,
-
-    /// {@macro MyInput.constraints}
-    BoxConstraints? constraints,
 
     /// {@macro flutter.widgets.editableText.groupId}
     Object? groupId,
@@ -237,7 +171,7 @@ class MyInputFormField extends MyFormBuilderField<String> {
          decorationBuilder:
              (context) => MyDecoration(
                border: MyBorder.all(
-                 width: 1,
+                 width: 1.5,
                  radius: MyBorderRadius.medium,
                  color: context.colorScheme.border,
                ),
@@ -252,17 +186,12 @@ class MyInputFormField extends MyFormBuilderField<String> {
              focusNode: state.focusNode,
              decoration: state.decoration,
              style: style,
-             cursorColor: cursorColor,
-             selectionColor: selectionColor,
              keyboardType: keyboardType,
              textInputAction: textInputAction,
              textCapitalization: textCapitalization,
              autofocus: autofocus,
              obscureText: obscureText,
              autocorrect: autocorrect,
-             magnifierConfiguration: magnifierConfiguration,
-             smartDashesType: smartDashesType,
-             smartQuotesType: smartQuotesType,
              enableSuggestions: enableSuggestions,
              maxLines: maxLines,
              minLines: minLines,
@@ -271,11 +200,6 @@ class MyInputFormField extends MyFormBuilderField<String> {
              onSubmitted: onSubmitted,
              onAppPrivateCommand: onAppPrivateCommand,
              inputFormatters: inputFormatters,
-             cursorWidth: cursorWidth,
-             cursorHeight: cursorHeight,
-             cursorRadius: cursorRadius,
-             selectionHeightStyle: selectionHeightStyle,
-             selectionWidthStyle: selectionWidthStyle,
              scrollPadding: scrollPadding,
              dragStartBehavior: dragStartBehavior,
              scrollController: scrollController,
@@ -286,37 +210,26 @@ class MyInputFormField extends MyFormBuilderField<String> {
              enableIMEPersonalizedLearning: enableIMEPersonalizedLearning,
              contentInsertionConfiguration: contentInsertionConfiguration,
              contextMenuBuilder: contextMenuBuilder,
+             selectAllOnFocus: selectAllOnFocus,
              selectionControls: selectionControls,
              mouseCursor: mouseCursor,
              enableInteractiveSelection: enableInteractiveSelection,
              undoController: undoController,
              spellCheckConfiguration: spellCheckConfiguration,
              placeholder: placeholder,
-             onPressed: onPressed,
-             onPressedAlwaysCalled: onPressedAlwaysCalled,
-             onPressedOutside: onPressedOutside,
-             keyboardAppearance: keyboardAppearance,
-             cursorOpacityAnimates: cursorOpacityAnimates,
+             onTap: onTap,
+             onTapAlwaysCalled: onTapAlwaysCalled,
+             onTapOutside: onTapOutside,
              readOnly: readOnly,
-             strutStyle: strutStyle,
              textAlign: textAlign,
              textDirection: textDirection,
              obscuringCharacter: obscuringCharacter,
-             showCursor: showCursor,
              maxLength: maxLength,
              maxLengthEnforcement: maxLengthEnforcement,
-             padding: padding,
              leading: leading,
              trailing: trailing,
-             mainAxisAlignment: mainAxisAlignment,
-             crossAxisAlignment: crossAxisAlignment,
-             alignment: alignment,
              placeholderStyle: placeholderStyle,
-             placeholderAlignment: placeholderAlignment,
-             inputPadding: inputPadding,
-             gap: gap,
-             constraints: constraints,
-             groupId: groupId,
+             groupId: groupId ?? EditableText,
              keyboardToolbarBuilder: keyboardToolbarBuilder,
            );
          },

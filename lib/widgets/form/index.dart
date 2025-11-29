@@ -8,7 +8,6 @@ export 'datetime_field.dart';
 export 'field.dart';
 export 'fields/index.dart';
 export 'form.dart';
-export '../common/input_decorator.dart';
 export 'keyboard_toolbar.dart';
 export 'multi_select_popup.dart';
 export 'multi_selection.dart';

@@ -13,9 +13,12 @@ class MyInputViewPage extends StatefulWidget {
 
 class _MyInputViewPageState extends State<MyInputViewPage> {
   var controller = [];
+  late final GlobalKey<MyFormState> _formKey;
 
   @override
   void initState() {
+    _formKey = GlobalKey<MyFormState>();
+
     for (var i = 0; i < 28; i++) {
       controller.add(TextEditingController());
     }
@@ -34,7 +37,8 @@ class _MyInputViewPageState extends State<MyInputViewPage> {
   Widget build(BuildContext context) {
     return ExamplePage(
       title: myTitle(),
-      desc: '用于在预设的一组Options中执行单项选择，并呈现选择结果。',
+      desc:
+          'Displays a form input field or a component that looks like an input field.',
       exampleCodeGroup: 'input',
       children: [
         ExampleModule(
@@ -45,53 +49,71 @@ class _MyInputViewPageState extends State<MyInputViewPage> {
               builder: (context) {
                 return MyInputFormField(
                   label: Text('Email'),
-                  placeholder: Text('abs@gmail.com'),
+                  placeholder: 'abs@gmail.com',
                   controller: TextEditController(),
-                ).padding(all: 16);
+                ).padding(horizontal: 16);
               },
             ),
             ExampleItem(
-              desc: 'Text Form Field',
+              desc: 'With leading and trailing',
               builder: (context) {
                 return Column(
-                  spacing: 8,
+                  spacing: 16,
                   children: [
-                    MySwitch(
-                      // label: 'Enabled',
-                      isOn: enabled,
-                      onChanged: (value) {
-                        setState(() => enabled = value);
-                        return value;
-                      },
-                    ),
-                    MySwitch(
-                      // label: 'Obscure',
-                      isOn: obscure,
-                      onChanged: (value) {
-                        setState(() => obscure = value);
-                        return value;
-                      },
+                    Row(
+                      children: [
+                        MyCell(
+                          title: 'Enabled',
+                          hover: false,
+                          rightIconWidget: MySwitch(
+                            isOn: enabled,
+                            onChanged: (value) {
+                              setState(() => enabled = value);
+                              return value;
+                            },
+                          ),
+                        ).expanded(),
+                        Gap(16),
+                        MyCell(
+                          title: 'Obscure',
+                          hover: false,
+                          rightIconWidget: MySwitch(
+                            isOn: obscure,
+                            onChanged: (value) {
+                              setState(() => obscure = value);
+                              return value;
+                            },
+                          ),
+                        ).expanded(),
+                      ],
                     ),
                     MyInput(
-                      placeholder: const Text('Email'),
                       enabled: enabled,
+                      leading: Icon(
+                        LucideIcons.mail,
+                        color: context.colorScheme.mutedForeground,
+                        size: 18,
+                      ),
+                      placeholder: 'Email',
                       keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.next,
                     ),
-                    Space.h8(),
                     MyInput(
                       enabled: enabled,
                       obscureText: obscure,
-                      placeholder: const Text('Password'),
+                      placeholder: 'Password',
                       leading: Icon(
                         LucideIcons.lock,
                         color: context.colorScheme.mutedForeground,
                         size: 18,
                       ),
                       trailing: MyButton(
-                        // height: 18,
-                        // width: 18,
-                        // padding: EdgeInsets.zero,
-                        type: MyButtonType.ghost,
+                        enabled: enabled,
+                        height: 20,
+                        width: 20,
+                        padding: EdgeInsets.zero,
+                        focus: MyFocusableParams(canRequestFocus: false),
+                        type: MyButtonType.text,
                         shape: MyButtonShape.square,
                         icon: obscure ? LucideIcons.eyeOff : LucideIcons.eye,
                         onTap: () {
@@ -100,7 +122,41 @@ class _MyInputViewPageState extends State<MyInputViewPage> {
                       ),
                     ),
                   ],
-                ).padding(all: 16);
+                ).padding(horizontal: 16);
+              },
+            ),
+            ExampleItem(
+              desc: 'Text Form Field',
+              builder: (context) {
+                return MyForm(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 16,
+                    children: [
+                      MyInputFormField(
+                        id: 'username',
+                        label: const Text('Username'),
+                        // placeholder: 'Enter your username',
+                        description: const Text(
+                          'This is your public display name.',
+                        ),
+                        validator: (v) {
+                          if (v.length < 2) {
+                            return 'Username must be at least 2 characters.';
+                          }
+                          return null;
+                        },
+                      ),
+                      MyButton(
+                        text: 'Submit',
+                        onTap: () {
+                          _formKey.currentState?.validate();
+                        },
+                      ),
+                    ],
+                  ).padding(horizontal: 16),
+                );
               },
             ),
           ],

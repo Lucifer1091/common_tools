@@ -146,6 +146,10 @@ class MyFormBuilderFieldState<F extends MyFormBuilderField<T>, T>
   /// The effective focus node, either provided or internally managed.
   FocusNode get focusNode => widget.focusNode ?? _focusNode!;
 
+  bool get _isEnabled => widget.enabled;
+
+  bool get _canRequestFocus => !widget.readOnly && _isEnabled;
+
   /// The decoration applied to the field, reflecting error state.
   MyDecoration get decoration =>
       (widget.decorationBuilder?.call(context) ?? const MyDecoration())
@@ -183,7 +187,7 @@ class MyFormBuilderFieldState<F extends MyFormBuilderField<T>, T>
   void initState() {
     super.initState();
     if (widget.focusNode == null) {
-      _focusNode = FocusNode(canRequestFocus: !widget.readOnly);
+      _focusNode = FocusNode(canRequestFocus: _canRequestFocus);
     }
     // Register this field when there is a parent MyForm
     _parentForm = MyForm.maybeOf(context);
@@ -201,11 +205,11 @@ class MyFormBuilderFieldState<F extends MyFormBuilderField<T>, T>
     }
 
     if (oldWidget.focusNode != null && widget.focusNode == null) {
-      _focusNode ??= FocusNode(canRequestFocus: !widget.readOnly);
+      _focusNode ??= FocusNode(canRequestFocus: _canRequestFocus);
     }
 
     if (widget.readOnly != oldWidget.readOnly) {
-      _focusNode?.canRequestFocus = widget.readOnly;
+      _focusNode?.canRequestFocus = _canRequestFocus;
     }
   }
 
