@@ -12,7 +12,7 @@ class MyInputViewPage extends StatefulWidget {
 }
 
 class _MyInputViewPageState extends State<MyInputViewPage> {
-  var controller = [];
+  var controller = <TextEditingController>[];
   late final GlobalKey<MyFormState> _formKey;
 
   @override
@@ -27,6 +27,9 @@ class _MyInputViewPageState extends State<MyInputViewPage> {
 
   @override
   void dispose() {
+    for (var e in controller) {
+      e.dispose();
+    }
     super.dispose();
   }
 

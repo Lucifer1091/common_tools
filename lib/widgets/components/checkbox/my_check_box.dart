@@ -26,17 +26,19 @@ class MyCheckbox extends StatefulWidget {
     this.titleColor,
     this.titleStyle,
     this.titleMaxLine,
-    this.subTitle,
-    this.subTitleColor,
-    this.subTitleStyle,
-    this.subTitleMaxLine = 1,
+    this.subtitle,
+    this.subtitleColor,
+    this.subtitleStyle,
+    this.subtitleMaxLine = 1,
     this.enabled = true,
     this.tristate = false,
     this.customIconBuilder,
     this.customContentBuilder,
+    this.margin,
     this.insetSpacing = 16,
     this.shape,
     this.spacing,
+    this.subtitlePadding,
     this.duration,
     this.backgroundColor,
     this.selectedColor,
@@ -59,10 +61,10 @@ class MyCheckbox extends StatefulWidget {
   final TextStyle? titleStyle;
   final int? titleMaxLine;
 
-  final String? subTitle;
-  final Color? subTitleColor;
-  final TextStyle? subTitleStyle;
-  final int? subTitleMaxLine;
+  final String? subtitle;
+  final Color? subtitleColor;
+  final TextStyle? subtitleStyle;
+  final int? subtitleMaxLine;
 
   final bool enabled;
   final bool? checked;
@@ -70,8 +72,10 @@ class MyCheckbox extends StatefulWidget {
   final bool cardMode;
   final bool showDivider;
 
+  final EdgeInsets? margin;
   final double? insetSpacing;
   final double? spacing;
+  final EdgeInsets? subtitlePadding;
 
   final MyCheckboxShape? shape;
   final MyCheckboxSize size;
@@ -249,19 +253,19 @@ class MyCheckboxState extends State<MyCheckbox> {
                       ),
                       Visibility(
                         visible:
-                            widget.subTitle != null && widget.subTitle != '',
+                            widget.subtitle != null && widget.subtitle != '',
                         child: Padding(
                           padding: EdgeInsets.only(
                             left: widget.insetSpacing ?? 16,
                             right: 16,
                           ),
                           child: MyText(
-                            widget.subTitle ?? '',
-                            maxLines: widget.subTitleMaxLine,
+                            widget.subtitle ?? '',
+                            maxLines: widget.subtitleMaxLine,
                             overflow: TextOverflow.ellipsis,
                             style: context.bodyMedium.copyWith(
                               color:
-                                  widget.subTitleColor ??
+                                  widget.subtitleColor ??
                                   context.colorScheme.mutedForeground,
                             ),
                           ),
@@ -307,21 +311,23 @@ class MyCheckboxState extends State<MyCheckbox> {
                       ),
                       Visibility(
                         visible:
-                            widget.subTitle != null && widget.subTitle != '',
+                            widget.subtitle != null && widget.subtitle != '',
                         child: Padding(
-                          padding: EdgeInsets.only(
-                            top: widget.cardMode ? 4 : 0,
-                            left: widget.cardMode ? 16 : 48,
-                            right: widget.insetSpacing ?? 16,
-                          ),
+                          padding:
+                              widget.subtitlePadding ??
+                              EdgeInsets.only(
+                                top: widget.cardMode ? 4 : 0,
+                                left: widget.cardMode ? 16 : 48,
+                                right: widget.insetSpacing ?? 16,
+                              ),
                           child: MyText(
-                            widget.subTitle ?? '',
-                            maxLines: widget.subTitleMaxLine,
+                            widget.subtitle ?? '',
+                            maxLines: widget.subtitleMaxLine,
                             overflow: TextOverflow.ellipsis,
-                            style: (widget.subTitleStyle ?? context.bodyMedium)
+                            style: (widget.subtitleStyle ?? context.bodyMedium)
                                 .copyWith(
                                   color:
-                                      widget.subTitleColor ??
+                                      widget.subtitleColor ??
                                       context.colorScheme.mutedForeground,
                                 ),
                           ),
@@ -462,6 +468,8 @@ class MyCheckboxState extends State<MyCheckbox> {
   }
 
   EdgeInsets _getPadding(MyCheckboxSize size) {
+    if (widget.margin != null) return widget.margin!;
+
     if (widget.cardMode) return const EdgeInsets.only(top: 16);
 
     switch (size) {

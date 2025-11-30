@@ -47,8 +47,8 @@ class MyRadioPageState extends State<MyRadioPage> {
         ExampleModule(
           title: 'Component Style',
           children: [
-            ExampleItem(desc: 'Check style', builder: _checkStyle),
-            ExampleItem(desc: 'Check Show Location', builder: _checkPosition),
+            ExampleItem(desc: 'Radio Style', builder: _radioStyle),
+            ExampleItem(desc: 'Radio Location', builder: _radioPosition),
             ExampleItem(
               desc: 'Non-full-width radio button style',
               builder: _passThroughStyle,
@@ -138,7 +138,7 @@ class MyRadioPageState extends State<MyRadioPage> {
     );
   }
 
-  Widget _checkStyle(BuildContext context) {
+  Widget _radioStyle(BuildContext context) {
     return Column(
       children: [
         MyRadioGroup(
@@ -156,7 +156,7 @@ class MyRadioPageState extends State<MyRadioPage> {
     );
   }
 
-  Widget _checkPosition(BuildContext context) {
+  Widget _radioPosition(BuildContext context) {
     return Column(
       children: [
         MyRadioGroup(
@@ -212,8 +212,8 @@ class MyRadioPageState extends State<MyRadioPage> {
           id: 'index:0',
           title: 'Single choice',
           titleMaxLine: 2,
-          subTitleMaxLine: 2,
-          subTitle: 'Description information',
+          subtitleMaxLine: 2,
+          subtitle: 'Description information',
           cardMode: true,
           backgroundColor: context.colorScheme.secondary.withValues(alpha: 0.5),
         ),
@@ -221,8 +221,8 @@ class MyRadioPageState extends State<MyRadioPage> {
           id: 'index:1',
           title: 'Single choice',
           titleMaxLine: 2,
-          subTitleMaxLine: 2,
-          subTitle: 'Description information',
+          subtitleMaxLine: 2,
+          subtitle: 'Description information',
           cardMode: true,
           backgroundColor: context.colorScheme.secondary.withValues(alpha: 0.5),
         ),
@@ -230,8 +230,8 @@ class MyRadioPageState extends State<MyRadioPage> {
           id: 'index:2',
           title: 'Single choice',
           titleMaxLine: 2,
-          subTitleMaxLine: 2,
-          subTitle: 'Description information',
+          subtitleMaxLine: 2,
+          subtitle: 'Description information',
           cardMode: true,
           backgroundColor: context.colorScheme.secondary.withValues(alpha: 0.5),
         ),
@@ -239,8 +239,8 @@ class MyRadioPageState extends State<MyRadioPage> {
           id: 'index:3',
           title: 'Single choice',
           titleMaxLine: 2,
-          subTitleMaxLine: 2,
-          subTitle: 'Description information',
+          subtitleMaxLine: 2,
+          subtitle: 'Description information',
           cardMode: true,
           backgroundColor: context.colorScheme.secondary.withValues(alpha: 0.5),
         ),

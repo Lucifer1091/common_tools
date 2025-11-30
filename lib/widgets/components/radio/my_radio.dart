@@ -12,9 +12,9 @@ class MyRadio extends MyCheckbox {
     super.title,
     super.enabled,
     super.titleStyle,
-    super.subTitle,
-    super.subTitleStyle,
-    int super.subTitleMaxLine,
+    super.subtitle,
+    super.subtitleStyle,
+    int super.subtitleMaxLine,
     int super.titleMaxLine = 1,
     super.selectedColor,
     super.customContentBuilder,
@@ -26,7 +26,7 @@ class MyRadio extends MyCheckbox {
     super.contentDirection,
     super.customIconBuilder,
     super.titleColor,
-    super.subTitleColor,
+    super.subtitleColor,
     super.backgroundColor,
     super.checkBoxLeftSpace,
   }) : super(cardMode: cardMode ?? false, showDivider: showDivider ?? true);
@@ -144,7 +144,7 @@ class MyRadioGroup extends MyCheckboxGroup {
          // Horizontal radio buttons. Each option has a character limit.
          if (direction == Axis.horizontal && directionalTdRadios != null) {
            for (final element in directionalTdRadios) {
-             if (element.subTitle != null) {
+             if (element.subtitle != null) {
                throw FlutterError(
                  'Horizontal radio style should not have subTitle, '
                  'because there is no room for it',
@@ -165,7 +165,7 @@ class MyRadioGroup extends MyCheckboxGroup {
                  "TDRadio should set it's own carMode to true.",
                );
              }
-             if (element.subTitle != null && direction == Axis.horizontal) {
+             if (element.subtitle != null && direction == Axis.horizontal) {
                throw FlutterError(
                  'horizontal card style should not have subTilte, '
                  'because there left no room for it',

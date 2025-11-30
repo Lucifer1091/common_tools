@@ -13,6 +13,8 @@ class MyCheckboxPage extends StatefulWidget {
 }
 
 class MyCheckboxPageState extends State<MyCheckboxPage> {
+  late final GlobalKey<MyFormState> _formKey;
+
   List<String>? checkIds = ['index:1', 'index:2', 'index:3'];
 
   late MyCheckboxGroupController controller;
@@ -22,6 +24,7 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
   @override
   void initState() {
     super.initState();
+    _formKey = GlobalKey<MyFormState>();
     controller = MyCheckboxGroupController();
   }
 
@@ -36,49 +39,6 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
         ExampleModule(
           title: 'Component Types',
           children: [
-            // ExampleItem(
-            //   desc: 'Check',
-            //   builder: (context) {
-            //     return Row(
-            //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-            //       children: [
-            //         MyCheckbox(
-            //           checked: value,
-            //           size: MyCheckboxSize.large,
-            //           shape: MyCheckboxShape.check,
-            //           tristate: true,
-            //           onChanged: (bool? value) {
-            //             setState(() {
-            //               this.value = value;
-            //             });
-            //           },
-            //         ),
-            //         MyCheckbox(
-            //           checked: value,
-            //           size: MyCheckboxSize.large,
-            //           shape: MyCheckboxShape.circle,
-            //           tristate: true,
-            //           onChanged: (bool? value) {
-            //             setState(() {
-            //               this.value = value;
-            //             });
-            //           },
-            //         ),
-            //         MyCheckbox(
-            //           checked: value,
-            //           size: MyCheckboxSize.large,
-            //           shape: MyCheckboxShape.square,
-            //           tristate: true,
-            //           onChanged: (bool? value) {
-            //             setState(() {
-            //               this.value = value;
-            //             });
-            //           },
-            //         ),
-            //       ],
-            //     );
-            //   },
-            // ),
             ExampleItem(
               desc: 'The vertical multi-select box now selects the result.',
               builder: _verticalCheckbox,
@@ -97,6 +57,7 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
           title: 'Component State',
           children: [
             ExampleItem(desc: 'Checkbox status', builder: _checkboxStatus),
+            ExampleItem(desc: 'Check Box Form Field', builder: _formField),
           ],
         ),
         ExampleModule(
@@ -149,8 +110,8 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
             id: 'index:$index',
             title: title,
             titleMaxLine: 2,
-            subTitleMaxLine: 2,
-            subTitle: subTitle,
+            subtitleMaxLine: 2,
+            subtitle: subTitle,
           );
         },
         itemCount: 4,
@@ -233,10 +194,10 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
             return MyCheckbox(
               id: 'index:$index',
               title: title,
-              subTitle: index == itemCount - 1
+              subtitle: index == itemCount - 1
                   ? 'Description information description information description information description information description information description information description information description information'
                   : null,
-              subTitleMaxLine: 2,
+              subtitleMaxLine: 2,
               onChanged: (checked) {
                 controller.toggle('index:0', state(itemCount));
               },
@@ -341,8 +302,8 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
           id: 'index:0',
           title: 'Multiple-select ',
           titleMaxLine: 2,
-          subTitleMaxLine: 2,
-          subTitle: 'Description information',
+          subtitleMaxLine: 2,
+          subtitle: 'Description information',
           cardMode: true,
           backgroundColor: context.colorScheme.secondary.withValues(alpha: 0.5),
         ),
@@ -350,8 +311,8 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
           id: 'index:1',
           title: 'Multiple-select ',
           titleMaxLine: 2,
-          subTitleMaxLine: 2,
-          subTitle: 'Description information',
+          subtitleMaxLine: 2,
+          subtitle: 'Description information',
           cardMode: true,
           backgroundColor: context.colorScheme.secondary.withValues(alpha: 0.5),
         ),
@@ -359,8 +320,8 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
           id: 'index:2',
           title: 'Multiple-select ',
           titleMaxLine: 2,
-          subTitleMaxLine: 2,
-          subTitle: 'Description information',
+          subtitleMaxLine: 2,
+          subtitle: 'Description information',
           cardMode: true,
           backgroundColor: context.colorScheme.secondary.withValues(alpha: 0.5),
         ),
@@ -368,8 +329,8 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
           id: 'index:3',
           title: 'Multiple-select ',
           titleMaxLine: 2,
-          subTitleMaxLine: 2,
-          subTitle: 'Description information',
+          subtitleMaxLine: 2,
+          subtitle: 'Description information',
           cardMode: true,
           backgroundColor: context.colorScheme.secondary.withValues(alpha: 0.5),
         ),
@@ -402,6 +363,35 @@ class MyCheckboxPageState extends State<MyCheckboxPage> {
           backgroundColor: context.colorScheme.secondary.withValues(alpha: 0.5),
         ),
       ],
+    );
+  }
+
+  Widget _formField(BuildContext context) {
+    return MyForm(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 16,
+        children: [
+          MyCheckboxFormField(
+            initialValue: false,
+            title: 'Accept terms and conditions',
+            subtitle: 'You agree to our Terms of Service and Privacy Policy.',
+            validator: (v) {
+              if (!v) {
+                return 'You must accept the terms and conditions';
+              }
+              return null;
+            },
+          ),
+          MyButton(
+            text: 'Submit',
+            onTap: () {
+              _formKey.currentState?.validate();
+            },
+          ),
+        ],
+      ).padding(horizontal: 16),
     );
   }
 }

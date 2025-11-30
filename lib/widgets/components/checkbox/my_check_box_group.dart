@@ -307,7 +307,7 @@ class MyCheckboxGroupContainer extends MyCheckboxGroup {
          }
          if (direction == Axis.horizontal && directionalMyCheckboxes != null) {
            for (final element in directionalMyCheckboxes) {
-             if (element.subTitle != null) {
+             if (element.subtitle != null) {
                throw FlutterError(
                  'horizontal checkbox style should not have subTilte, '
                  'because there left no room for it',
@@ -327,7 +327,7 @@ class MyCheckboxGroupContainer extends MyCheckboxGroup {
                  "TDCheckbox should set it's own carMode to true.",
                );
              }
-             if (element.subTitle != null && direction == Axis.horizontal) {
+             if (element.subtitle != null && direction == Axis.horizontal) {
                throw FlutterError(
                  'horizontal card style should not have subTilte, '
                  'because there left no room for it',
