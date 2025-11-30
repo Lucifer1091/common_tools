@@ -29,74 +29,118 @@ class _MyDatePickerPageState extends State<MyDatePickerPage> {
           children: [
             ExampleItem(
               padding: EdgeInsets.only(top: 16),
-              builder: (context) {
-                return Wrap(
-                  spacing: 16,
-                  runSpacing: 16,
-                  children: [
-                    MyButton(
-                      text: 'Date Picker',
-                      onTap: () {
-                        MyDatePicker.date(context: context);
-                      },
-                    ),
-                    MyButton(
-                      text: 'Month Picker',
-                      onTap: () {
-                        MyDatePicker.month(context: context);
-                      },
-                    ),
-                    MyButton(
-                      text: 'Year Picker',
-                      onTap: () {
-                        MyDatePicker.year(context: context);
-                      },
-                    ),
-                    MyButton(
-                      text: 'Multi Dates Picker',
-                      onTap: () {
-                        MyDatePicker.dates(context: context);
-                      },
-                    ),
-                    MyButton(
-                      text: 'Date Range Picker',
-                      onTap: () {
-                        MyDatePicker.range(
-                          context: context,
-                          firstDate: DateTime(1990),
-                          lastDate: DateTime(2099),
-                        );
-                      },
-                    ),
-                    MyButton(
-                      text: 'Time Picker',
-                      onTap: () {
-                        MyDatePicker.time(context: context);
-                      },
-                    ),
-                    MyButton(
-                      text: 'Time Range Picker',
-                      onTap: () {
-                        MyDatePicker.timeRange(context: context);
-                      },
-                    ),
-                    MyButton(
-                      text: 'Date & Time Picker',
-                      onTap: () {
-                        MyDatePicker.dateTime(context: context);
-                      },
-                    ),
-                    MyButton(
-                      text: 'Duration Picker',
-                      onTap: () {
-                        MyDatePicker.duration(context: context);
-                      },
-                    ),
-                  ],
-                );
-              },
+              builder: _defaultPickers,
             ),
           ],
+        ),
+        ExampleModule(
+          title: 'Date & Time Fields',
+          children: [
+            ExampleItem(desc: 'Date Time Field', builder: _dateField),
+            ExampleItem(desc: 'Date Time Form Field', builder: _dateFormField),
+            ExampleItem(desc: 'Date Range Field', builder: _dateRangeField),
+            ExampleItem(
+              desc: 'Date Range Form Field',
+              builder: _dateRangeFormField,
+            ),
+            ExampleItem(desc: 'Time Field', builder: _timeField),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _dateField(BuildContext context) {
+    return MyDateField(margin: EdgeInsets.symmetric(horizontal: 16));
+  }
+
+  Widget _dateFormField(BuildContext context) {
+    return MyDateField(margin: EdgeInsets.symmetric(horizontal: 16));
+  }
+
+  Widget _dateRangeField(BuildContext context) {
+    return MyDateField(
+      margin: EdgeInsets.symmetric(horizontal: 16),
+      variant: DateTimeFieldPickerMode.range,
+    );
+  }
+
+  Widget _dateRangeFormField(BuildContext context) {
+    return MyDateField(
+      margin: EdgeInsets.symmetric(horizontal: 16),
+      variant: DateTimeFieldPickerMode.range,
+    );
+  }
+
+  Widget _timeField(BuildContext context) {
+    return MyDateField(
+      margin: EdgeInsets.symmetric(horizontal: 16),
+      variant: DateTimeFieldPickerMode.time,
+    );
+  }
+
+  Wrap _defaultPickers(BuildContext context) {
+    return Wrap(
+      spacing: 16,
+      runSpacing: 16,
+      children: [
+        MyButton(
+          text: 'Date Picker',
+          onTap: () {
+            MyDatePicker.date(context: context);
+          },
+        ),
+        MyButton(
+          text: 'Month Picker',
+          onTap: () {
+            MyDatePicker.month(context: context);
+          },
+        ),
+        MyButton(
+          text: 'Year Picker',
+          onTap: () {
+            MyDatePicker.year(context: context);
+          },
+        ),
+        MyButton(
+          text: 'Multi Dates Picker',
+          onTap: () {
+            MyDatePicker.dates(context: context);
+          },
+        ),
+        MyButton(
+          text: 'Date Range Picker',
+          onTap: () {
+            MyDatePicker.range(
+              context: context,
+              firstDate: DateTime(1990),
+              lastDate: DateTime(2099),
+            );
+          },
+        ),
+        MyButton(
+          text: 'Time Picker',
+          onTap: () {
+            MyDatePicker.time(context: context);
+          },
+        ),
+        MyButton(
+          text: 'Time Range Picker',
+          onTap: () {
+            MyDatePicker.timeRange(context: context);
+          },
+        ),
+        MyButton(
+          text: 'Date & Time Picker',
+          onTap: () {
+            MyDatePicker.dateTime(context: context);
+          },
+        ),
+        MyButton(
+          text: 'Duration Picker',
+          onTap: () {
+            MyDatePicker.duration(context: context);
+          },
         ),
       ],
     );

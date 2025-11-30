@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../../index.dart';
+import '../../../../index.dart';
 
 /// A model that represents a quick selection dateRange in the quick selection widget.
 /// The date range is required but can be null. If null, the quick selection

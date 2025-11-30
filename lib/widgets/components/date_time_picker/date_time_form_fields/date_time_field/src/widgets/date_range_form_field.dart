@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../components/my_date_range_picker.dart';
-
 /// A [DateRangeField] which extends a [FormField].
 ///
 /// The use of a [Form] ancestor is not required, however it makes it easier to
@@ -81,9 +79,9 @@ class DateRangeField extends FormField<DateTimeRange> {
                    fieldEndHintText: fieldEndHintText ?? 'End Date',
                    fieldStartLabelText: fieldStartLabelText ?? 'Start Date',
                    fieldEndLabelText: fieldEndLabelText ?? 'End Date',
-                  //  minRangeDays: minRangeDays,
-                  //  maxRangeDays: maxRangeDays,
-                  //  showQuickSelector: showQuickSelector,
+                   //  minRangeDays: minRangeDays,
+                   //  maxRangeDays: maxRangeDays,
+                   //  showQuickSelector: showQuickSelector,
                  ) ??
                  state.value;
 

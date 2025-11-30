@@ -140,7 +140,6 @@ class _MyInputViewPageState extends State<MyInputViewPage> {
                       MyInputFormField(
                         id: 'username',
                         label: const Text('Username'),
-                        // placeholder: 'Enter your username',
                         description: const Text(
                           'This is your public display name.',
                         ),
