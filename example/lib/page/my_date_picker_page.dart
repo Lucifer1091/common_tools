@@ -1,6 +1,6 @@
 import 'package:common_tools/index.dart';
-import 'package:common_tools/widgets/components/index.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../base/example_widget.dart';
 
@@ -51,7 +51,15 @@ class _MyDatePickerPageState extends State<MyDatePickerPage> {
   }
 
   Widget _dateField(BuildContext context) {
-    return MyDateField(margin: EdgeInsets.symmetric(horizontal: 16));
+    return MyDateField(
+      margin: EdgeInsets.symmetric(horizontal: 16),
+      leading: Icon(
+        LucideIcons.calendar,
+        color: context.colorScheme.mutedForeground,
+        size: 18,
+      ),
+      mode: DateTimeFieldPickerMode.time,
+    );
   }
 
   Widget _dateFormField(BuildContext context) {
@@ -61,21 +69,26 @@ class _MyDatePickerPageState extends State<MyDatePickerPage> {
   Widget _dateRangeField(BuildContext context) {
     return MyDateField(
       margin: EdgeInsets.symmetric(horizontal: 16),
-      variant: DateTimeFieldPickerMode.range,
+      mode: DateTimeFieldPickerMode.range,
     );
   }
 
   Widget _dateRangeFormField(BuildContext context) {
     return MyDateField(
       margin: EdgeInsets.symmetric(horizontal: 16),
-      variant: DateTimeFieldPickerMode.range,
+      mode: DateTimeFieldPickerMode.range,
     );
   }
 
   Widget _timeField(BuildContext context) {
     return MyDateField(
       margin: EdgeInsets.symmetric(horizontal: 16),
-      variant: DateTimeFieldPickerMode.time,
+      mode: DateTimeFieldPickerMode.time,
+      leading: Icon(
+        LucideIcons.clock,
+        color: context.colorScheme.mutedForeground,
+        size: 18,
+      ),
     );
   }
 
