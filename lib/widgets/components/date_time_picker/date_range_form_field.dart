@@ -4,8 +4,8 @@ import '../../../index.dart';
 
 /// A form field that wraps [MyDateField], integrating it with the form
 /// infrastructure (MyFormBuilderField).
-class MyDateFormField extends MyFormBuilderField<DateTime?> {
-  MyDateFormField({
+class MyDateRangeFormField extends MyFormBuilderField<DateTimeRange?> {
+  MyDateRangeFormField({
     super.initialValue,
     super.id,
     super.key,
@@ -22,10 +22,9 @@ class MyDateFormField extends MyFormBuilderField<DateTime?> {
     super.focusNode,
 
     // MyDateField params
-    DateTimeFieldPickerMode mode = DateTimeFieldPickerMode.date,
     String? placeholder,
-    ValueChanged<DateTime?>? onChanged,
-    String Function(DateTime)? formatDate,
+    ValueChanged<DateTimeRange?>? onChanged,
+    String Function(DateTimeRange)? formatDateRange,
     bool? showOutsideDays,
     DateTime? firstDate,
     DateTime? lastDate,
@@ -53,22 +52,26 @@ class MyDateFormField extends MyFormBuilderField<DateTime?> {
     bool? expands,
     TextStyle? textStyle,
 
-    String? Function(DateTime?)? validator,
+    String? Function(DateTimeRange?)? validator,
   }) : super(
          onChanged: onChanged == null ? null : (v) => onChanged(v),
          validator: validator == null ? null : (v) => validator(v),
          builder: (field) {
            // field is the FormFieldState created by MyFormBuilderField.
            final state =
-               field as MyFormBuilderFieldState<MyDateFormField, DateTime?>;
+               field
+                   as MyFormBuilderFieldState<
+                     MyDateRangeFormField,
+                     DateTimeRange?
+                   >;
 
            return MyDateField(
-             mode: mode,
+             mode: DateTimeFieldPickerMode.range,
              placeholder: placeholder,
              // selected value comes from the form field state
-             selected: state.value,
-             formatDate: formatDate,
-             onChanged: state.didChange,
+             selectedRange: state.value,
+             formatDateRange: formatDateRange,
+             onRangeChanged: state.didChange,
              showOutsideDays: showOutsideDays,
              firstDate: firstDate,
              lastDate: lastDate,
@@ -102,9 +105,9 @@ class MyDateFormField extends MyFormBuilderField<DateTime?> {
        );
 
   @override
-  MyFormBuilderFieldState<MyDateFormField, DateTime?> createState() =>
+  MyFormBuilderFieldState<MyDateRangeFormField, DateTimeRange?> createState() =>
       _MyFormBuilderDateFieldState();
 }
 
 class _MyFormBuilderDateFieldState
-    extends MyFormBuilderFieldState<MyDateFormField, DateTime?> {}
+    extends MyFormBuilderFieldState<MyDateRangeFormField, DateTimeRange?> {}

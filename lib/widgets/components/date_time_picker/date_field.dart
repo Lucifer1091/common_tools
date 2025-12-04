@@ -325,7 +325,7 @@ class _MyDateFieldState extends State<MyDateField> {
       case DateTimeFieldPickerMode.date:
         if (!mounted) return;
 
-        selected = await MyDatePicker.date(
+        final date = await MyDatePicker.date(
           context: context,
           firstDate: widget.firstDate,
           lastDate: widget.lastDate,
@@ -333,45 +333,52 @@ class _MyDateFieldState extends State<MyDateField> {
           showOutsideDays: widget.showOutsideDays ?? true,
         );
 
-        setState(() {});
-        widget.onChanged?.call(selected);
+        if (date != null) {
+          setState(() => selected = date);
+          widget.onChanged?.call(selected);
+        }
       case DateTimeFieldPickerMode.time:
         if (!mounted) return;
 
-        selected =
+        final date =
             (await MyDatePicker.time(
               context: context,
               initial: widget.selected?.timeOfDay,
             )).toDateTime();
 
-        setState(() {});
-        widget.onChanged?.call(selected);
+        if (date != null) {
+          setState(() => selected = date);
+          widget.onChanged?.call(selected);
+        }
 
       case DateTimeFieldPickerMode.dateTime:
         if (!mounted) return;
 
-        selected = await MyDatePicker.dateTime(
+        final date = await MyDatePicker.dateTime(
           context: context,
           firstDate: widget.firstDate,
           lastDate: widget.lastDate,
           initial: widget.selected,
           showOutsideDays: widget.showOutsideDays ?? true,
         );
-
-        setState(() {});
-        widget.onChanged?.call(selected);
+        if (date != null) {
+          setState(() => selected = date);
+          widget.onChanged?.call(selected);
+        }
       case DateTimeFieldPickerMode.month:
         if (!mounted) return;
 
-        selected = await MyDatePicker.month(
+        final date = await MyDatePicker.month(
           context: context,
           firstDate: widget.firstDate,
           lastDate: widget.lastDate,
           initialMonth: widget.selected,
         );
 
-        setState(() {});
-        widget.onChanged?.call(selected);
+        if (date != null) {
+          setState(() => selected = date);
+          widget.onChanged?.call(selected);
+        }
       case DateTimeFieldPickerMode.year:
         if (!mounted) return;
 
@@ -392,15 +399,18 @@ class _MyDateFieldState extends State<MyDateField> {
       case DateTimeFieldPickerMode.monthYear:
         if (!mounted) return;
 
-        selected = await MyDatePicker.month(
+        final date = await MyDatePicker.month(
           context: context,
           firstDate: widget.firstDate,
           lastDate: widget.lastDate,
           initialMonth: widget.selected,
         );
 
-        setState(() {});
-        widget.onChanged?.call(selected);
+        if (date != null) {
+          setState(() => selected = date);
+          widget.onChanged?.call(selected);
+        }
+
       case DateTimeFieldPickerMode.range:
         break;
     }

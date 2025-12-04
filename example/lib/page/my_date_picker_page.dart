@@ -12,8 +12,12 @@ class MyDatePickerPage extends StatefulWidget {
 }
 
 class _MyDatePickerPageState extends State<MyDatePickerPage> {
+  late final GlobalKey<MyFormState> _formKey, _formKey1;
+
   @override
   void initState() {
+    _formKey = GlobalKey<MyFormState>();
+    _formKey1 = GlobalKey<MyFormState>();
     super.initState();
   }
 
@@ -36,47 +40,131 @@ class _MyDatePickerPageState extends State<MyDatePickerPage> {
         ExampleModule(
           title: 'Date & Time Fields',
           children: [
-            ExampleItem(desc: 'Date Time Field', builder: _dateField),
-            ExampleItem(desc: 'Date Time Form Field', builder: _dateFormField),
+            ExampleItem(desc: 'Date & Time Field', builder: _dateTimeField),
+            ExampleItem(desc: 'Date Field', builder: _dateField),
+            ExampleItem(desc: 'Date Form Field', builder: _dateFormField),
             ExampleItem(desc: 'Date Range Field', builder: _dateRangeField),
             ExampleItem(
               desc: 'Date Range Form Field',
               builder: _dateRangeFormField,
             ),
             ExampleItem(desc: 'Time Field', builder: _timeField),
+            ExampleItem(desc: 'Month Field', builder: _monthField),
+            ExampleItem(desc: 'Year Field', builder: _yearField),
           ],
         ),
       ],
     );
   }
 
-  Widget _dateField(BuildContext context) {
+  Widget _dateTimeField(BuildContext context) {
     return MyDateField(
+      placeholder: 'Select Date & Time',
       margin: EdgeInsets.symmetric(horizontal: 16),
       leading: Icon(
         LucideIcons.calendar,
         color: context.colorScheme.mutedForeground,
         size: 18,
       ),
-      mode: DateTimeFieldPickerMode.time,
+      mode: DateTimeFieldPickerMode.dateTime,
+    );
+  }
+
+  Widget _dateField(BuildContext context) {
+    return MyDateField(
+      placeholder: 'Select Date',
+      margin: EdgeInsets.symmetric(horizontal: 16),
+      leading: Icon(
+        LucideIcons.calendar,
+        color: context.colorScheme.mutedForeground,
+        size: 18,
+      ),
+      mode: DateTimeFieldPickerMode.date,
     );
   }
 
   Widget _dateFormField(BuildContext context) {
-    return MyDateField(margin: EdgeInsets.symmetric(horizontal: 16));
+    return MyForm(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 16,
+        children: [
+          MyDateFormField(
+            mode: DateTimeFieldPickerMode.date,
+            placeholder: 'Select Date',
+            leading: Icon(
+              LucideIcons.calendar,
+              color: context.colorScheme.mutedForeground,
+              size: 18,
+            ),
+            label: const Text('Date of birth'),
+            description: const Text(
+              'Your date of birth is used to calculate your age.',
+            ),
+            validator: (v) {
+              if (v == null) {
+                return 'A date of birth is required.';
+              }
+              return null;
+            },
+          ),
+          MyButton(
+            text: 'Submit',
+            onTap: () {
+              _formKey.currentState?.validate();
+            },
+          ),
+        ],
+      ).padding(horizontal: 16),
+    );
   }
 
   Widget _dateRangeField(BuildContext context) {
     return MyDateField(
-      margin: EdgeInsets.symmetric(horizontal: 16),
       mode: DateTimeFieldPickerMode.range,
+      margin: EdgeInsets.symmetric(horizontal: 16),
+      placeholder: 'Select From & To Date',
+      leading: Icon(
+        LucideIcons.calendar,
+        color: context.colorScheme.mutedForeground,
+        size: 18,
+      ),
     );
   }
 
   Widget _dateRangeFormField(BuildContext context) {
-    return MyDateField(
-      margin: EdgeInsets.symmetric(horizontal: 16),
-      mode: DateTimeFieldPickerMode.range,
+    return MyForm(
+      key: _formKey1,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 16,
+        children: [
+          MyDateRangeFormField(
+            placeholder: 'Select From & To Date',
+            leading: Icon(
+              LucideIcons.calendar,
+              color: context.colorScheme.mutedForeground,
+              size: 18,
+            ),
+            label: const Text('Range of dates'),
+            description: const Text(
+              'Select the range of dates you want to search between.',
+            ),
+            validator: (v) {
+              if (v == null) return 'A range of dates is required.';
+
+              return null;
+            },
+          ),
+          MyButton(
+            text: 'Submit',
+            onTap: () {
+              _formKey1.currentState?.validate();
+            },
+          ),
+        ],
+      ).padding(horizontal: 16),
     );
   }
 
@@ -84,6 +172,33 @@ class _MyDatePickerPageState extends State<MyDatePickerPage> {
     return MyDateField(
       margin: EdgeInsets.symmetric(horizontal: 16),
       mode: DateTimeFieldPickerMode.time,
+      selected: DateTime.now(),
+      leading: Icon(
+        LucideIcons.clock,
+        color: context.colorScheme.mutedForeground,
+        size: 18,
+      ),
+    );
+  }
+
+  Widget _monthField(BuildContext context) {
+    return MyDateField(
+      margin: EdgeInsets.symmetric(horizontal: 16),
+      mode: DateTimeFieldPickerMode.month,
+      selected: DateTime.now(),
+      leading: Icon(
+        LucideIcons.clock,
+        color: context.colorScheme.mutedForeground,
+        size: 18,
+      ),
+    );
+  }
+
+  Widget _yearField(BuildContext context) {
+    return MyDateField(
+      margin: EdgeInsets.symmetric(horizontal: 16),
+      mode: DateTimeFieldPickerMode.year,
+      selected: DateTime.now(),
       leading: Icon(
         LucideIcons.clock,
         color: context.colorScheme.mutedForeground,
