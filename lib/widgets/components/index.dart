@@ -40,6 +40,7 @@ export 'table/index.dart';
 export 'tabs/index.dart';
 export 'tag/index.dart';
 export 'text/index.dart';
+export 'text_area/index.dart';
 export 'time_counter/index.dart';
 export 'toast/index.dart';
 export 'tree/index.dart';
