@@ -391,7 +391,6 @@ class _MyTextareaState extends State<MyTextarea> {
         ScrollConfiguration(
           behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
           child: MyInput(
-            // editableTextSize: Size(double.infinity, _textareaHeight),
             initialValue: widget.initialValue,
             controller: widget.controller,
             focusNode: focusNode,
@@ -447,7 +446,7 @@ class _MyTextareaState extends State<MyTextarea> {
                 child:
                     widget.resizeHandleBuilder != null
                         ? Builder(builder: widget.resizeHandleBuilder!)
-                        : const ShadDefaultResizeGrip(),
+                        : const MyDefaultResizeGrip(),
               ),
             ),
           ),
@@ -461,8 +460,8 @@ class _MyTextareaState extends State<MyTextarea> {
 ///
 /// This widget appears in the bottom-right corner and allows
 /// the user to drag and resize the textarea vertically.
-class ShadDefaultResizeGrip extends StatelessWidget {
-  const ShadDefaultResizeGrip({super.key});
+class MyDefaultResizeGrip extends StatelessWidget {
+  const MyDefaultResizeGrip({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -472,7 +471,7 @@ class ShadDefaultResizeGrip extends StatelessWidget {
       width: 8,
       height: 8,
       child: CustomPaint(
-        painter: ShadResizeGripPainter(color: theme.colorScheme.ring),
+        painter: MyResizeGripPainter(color: theme.colorScheme.ring),
       ),
     );
   }
@@ -480,7 +479,7 @@ class ShadDefaultResizeGrip extends StatelessWidget {
 
 /// A customizable painter for drawing diagonal resize grip lines,
 /// typically used in the bottom-right corner of a resizable widget.
-class ShadResizeGripPainter extends CustomPainter {
+class MyResizeGripPainter extends CustomPainter {
   /// Creates a painter that draws multiple diagonal lines to represent a resize
   /// grip.
   ///
@@ -488,7 +487,7 @@ class ShadResizeGripPainter extends CustomPainter {
   /// - [strokeWidth]: Thickness of each grip line. Default is 0.8.
   /// - [lineCount]: Number of diagonal lines to draw. Default is 3.
   /// - [spacing]: Spacing between each line. Default is 4.0.
-  const ShadResizeGripPainter({
+  const MyResizeGripPainter({
     required this.color,
     this.strokeWidth = 0.8,
     this.lineCount = 3,
@@ -525,7 +524,7 @@ class ShadResizeGripPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant ShadResizeGripPainter oldDelegate) {
+  bool shouldRepaint(covariant MyResizeGripPainter oldDelegate) {
     return oldDelegate.color != color ||
         oldDelegate.strokeWidth != strokeWidth ||
         oldDelegate.lineCount != lineCount ||

@@ -7,12 +7,12 @@ class TextEditController extends TextEditingController {
   TextEditController.fromValue(TextEditingValue super.value)
     : super.fromValue();
 
-  TextEditingValue? previousValue;
+  TextEditingValue? previous;
 
   @override
   set value(TextEditingValue newValue) {
     if (newValue == value) return;
-    previousValue = value;
+    previous = value;
     super.value = newValue;
   }
 

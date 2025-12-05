@@ -15,6 +15,7 @@ export 'footer/index.dart';
 export 'image/index.dart';
 export 'image_viewer/index.dart';
 export 'indexes/index.dart';
+export 'input/index.dart';
 export 'link/index.dart';
 export 'loading/index.dart';
 export 'message/index.dart';
