@@ -3,7 +3,6 @@ part of 'my_divider.dart';
 /// A wavy divider that can be used to separate content horizontally or vertically.
 class _WavyDivider extends StatelessWidget {
   const _WavyDivider({
-    super.key,
     this.length,
     this.thickness = 2,
     this.color,

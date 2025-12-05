@@ -344,9 +344,9 @@ class _MyBadgePageState extends State<MyBadgePage> {
             child: Stack(
               alignment: Alignment.bottomLeft,
               children: [
-                TDAvatar(
-                  size: TDAvatarSize.large,
-                  type: TDAvatarType.icon,
+                MyAvatar(
+                  size: MyAvatarSize.large,
+                  type: MyAvatarType.icon,
                   backgroundColor: context.colorScheme.secondary,
                 ),
                 Positioned(
@@ -377,9 +377,9 @@ class _MyBadgePageState extends State<MyBadgePage> {
             child: Stack(
               alignment: Alignment.bottomLeft,
               children: [
-                TDAvatar(
-                  size: TDAvatarSize.medium,
-                  type: TDAvatarType.icon,
+                MyAvatar(
+                  size: MyAvatarSize.medium,
+                  type: MyAvatarType.icon,
                   backgroundColor: context.colorScheme.secondary,
                 ),
                 Positioned(

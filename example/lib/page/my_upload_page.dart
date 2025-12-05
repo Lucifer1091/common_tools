@@ -7,74 +7,74 @@ class MyUploadPage extends StatefulWidget {
   const MyUploadPage({super.key});
 
   @override
-  State<StatefulWidget> createState() => TDUploadState();
+  State<StatefulWidget> createState() => MyUploadState();
 }
 
-class TDUploadState extends State<MyUploadPage> {
-  final List<TDUploadFile> files1 = [];
-  final List<TDUploadFile> files2 = [
-    TDUploadFile(
+class MyUploadState extends State<MyUploadPage> {
+  final List<MyUploadFile> files1 = [];
+  final List<MyUploadFile> files2 = [
+    MyUploadFile(
       key: 1,
       remotePath: 'https://tdesign.gtimg.com/demo/images/example1.png',
     ),
-    TDUploadFile(
+    MyUploadFile(
       key: 2,
       remotePath: 'https://tdesign.gtimg.com/demo/images/example2.png',
     ),
-    TDUploadFile(
+    MyUploadFile(
       key: 3,
       remotePath: 'https://tdesign.gtimg.com/demo/images/example3.png',
     ),
   ];
-  final List<TDUploadFile> files3 = [
-    TDUploadFile(
+  final List<MyUploadFile> files3 = [
+    MyUploadFile(
       key: 1,
-      status: TDUploadFileStatus.loading,
-      loadingText: '上传中...',
+      status: MyUploadFileStatus.loading,
+      loadingText: 'Uploading...',
       remotePath: 'https://tdesign.gtimg.com/demo/images/example1.png',
     ),
-    TDUploadFile(
+    MyUploadFile(
       key: 2,
-      status: TDUploadFileStatus.loading,
+      status: MyUploadFileStatus.loading,
       progress: 68,
       remotePath: 'https://tdesign.gtimg.com/demo/images/example1.png',
     ),
   ];
-  final List<TDUploadFile> files4 = [
-    TDUploadFile(
+  final List<MyUploadFile> files4 = [
+    MyUploadFile(
       key: 1,
-      status: TDUploadFileStatus.retry,
-      retryText: '重新上传',
+      status: MyUploadFileStatus.retry,
+      retryText: 'Reupload',
       remotePath: 'https://tdesign.gtimg.com/demo/images/example1.png',
     ),
   ];
-  final List<TDUploadFile> files5 = [
-    TDUploadFile(
+  final List<MyUploadFile> files5 = [
+    MyUploadFile(
       key: 1,
-      status: TDUploadFileStatus.error,
-      errorText: '上传失败',
+      status: MyUploadFileStatus.error,
+      errorText: 'Upload failed',
       remotePath: 'https://tdesign.gtimg.com/demo/images/example4.png',
     ),
   ];
-  final List<TDUploadFile> files6 = [];
+  final List<MyUploadFile> files6 = [];
 
   void onValueChanged(
-    List<TDUploadFile> fileList,
-    List<TDUploadFile> value,
-    TDUploadType event,
+    List<MyUploadFile> fileList,
+    List<MyUploadFile> value,
+    MyUploadType event,
   ) {
     switch (event) {
-      case TDUploadType.add:
+      case MyUploadType.add:
         setState(() {
           fileList.addAll(value);
         });
         break;
-      case TDUploadType.remove:
+      case MyUploadType.remove:
         setState(() {
           fileList.removeWhere((element) => element.key == value[0].key);
         });
         break;
-      case TDUploadType.replace:
+      case MyUploadType.replace:
         setState(() {
           final firstReplaceFile = value.first;
           final index = fileList.indexWhere(
@@ -89,11 +89,11 @@ class TDUploadState extends State<MyUploadPage> {
   }
 
   void onClick(int key) {
-    print('点击 $key');
+    print('Clicked $key');
   }
 
   void onCancel() {
-    print('取消');
+    print('Cancel');
   }
 
   @override
@@ -102,34 +102,37 @@ class TDUploadState extends State<MyUploadPage> {
       title: myTitle(),
       exampleCodeGroup: 'upload',
       desc:
-          '用于相册读取或拉起拍照的图片上传功能。${MyPlatform.isWeb ? "Web端不支持读取本地图片,请前往移动端体验。" : ""}',
+          'This is used for reading images from the photo album or uploading images taken by taking a photo. `${MyPlatform.isWeb ? "The web version does not support reading local images; please try it on the mobile version." : ""}',
       children: [
         ExampleModule(
           title: 'Component Types',
           children: [
-            ExampleItem(desc: '单选上传', builder: _uploadSingle),
-            ExampleItem(desc: '单选上传(替换)', builder: _uploadSingleWithReplace),
-            ExampleItem(desc: '多选上传', builder: _uploadMultiple),
+            ExampleItem(desc: 'Single Upload', builder: _uploadSingle),
+            ExampleItem(
+              desc: 'Single Upload (Replace)',
+              builder: _uploadSingleWithReplace,
+            ),
+            ExampleItem(desc: 'Multiple Upload', builder: _uploadMultiple),
           ],
         ),
         ExampleModule(
           title: 'Component State',
           children: [
-            ExampleItem(desc: '加载状态', builder: _uploadLoading),
-            ExampleItem(desc: '重新上传', builder: _uploadRetry),
-            ExampleItem(desc: '上传失败', builder: _uploadError),
+            ExampleItem(desc: 'Loading status', builder: _uploadLoading),
+            ExampleItem(desc: 'Re-upload', builder: _uploadRetry),
+            ExampleItem(desc: 'Upload failed', builder: _uploadError),
           ],
         ),
       ],
       test: [
         ExampleItem(
           ignoreCode: true,
-          desc: '单选快速替换, 大小和图形测试',
+          desc: 'Single-select quick replace, size and graphics test',
           builder: _uploadSingleWithReplace,
         ),
         ExampleItem(
           ignoreCode: true,
-          desc: '上传文件大小限制，10KB',
+          desc: 'Upload file size limit, 10KB',
           builder: _uploadSizeLimit,
         ),
       ],
@@ -153,8 +156,8 @@ class TDUploadState extends State<MyUploadPage> {
 
   Widget _uploadSingle(BuildContext context) {
     return wrapDemoContainer(
-      '单选上传',
-      child: TDUpload(
+      'Single selection upload',
+      child: MyUpload(
         files: files1,
         onClick: onClick,
         onCancel: onCancel,
@@ -167,12 +170,12 @@ class TDUploadState extends State<MyUploadPage> {
 
   Widget _uploadSingleWithReplace(BuildContext context) {
     return wrapDemoContainer(
-      '单选上传(替换)',
-      child: TDUpload(
+      'Single selection upload (replace)',
+      child: MyUpload(
         files: files6,
         width: 60,
         height: 60,
-        type: TDUploadBoxType.circle,
+        type: MyUploadBoxType.circle,
         enabledReplaceType: true,
         onClick: onClick,
         onCancel: onCancel,
@@ -185,8 +188,8 @@ class TDUploadState extends State<MyUploadPage> {
 
   Widget _uploadMultiple(BuildContext context) {
     return wrapDemoContainer(
-      '多选上传',
-      child: TDUpload(
+      'Multiple selection upload',
+      child: MyUpload(
         files: files2,
         multiple: true,
         max: 9,
@@ -201,8 +204,8 @@ class TDUploadState extends State<MyUploadPage> {
 
   Widget _uploadLoading(BuildContext context) {
     return wrapDemoContainer(
-      '上传图片',
-      child: TDUpload(
+      'Upload pictures',
+      child: MyUpload(
         files: files3,
         multiple: true,
         max: 9,
@@ -217,8 +220,8 @@ class TDUploadState extends State<MyUploadPage> {
 
   Widget _uploadRetry(BuildContext context) {
     return wrapDemoContainer(
-      '上传图片',
-      child: TDUpload(
+      'Upload pictures',
+      child: MyUpload(
         files: files4,
         multiple: true,
         max: 9,
@@ -233,8 +236,8 @@ class TDUploadState extends State<MyUploadPage> {
 
   Widget _uploadError(BuildContext context) {
     return wrapDemoContainer(
-      '上传图片',
-      child: TDUpload(
+      'Upload pictures',
+      child: MyUpload(
         files: files5,
         multiple: true,
         max: 9,
@@ -249,8 +252,8 @@ class TDUploadState extends State<MyUploadPage> {
 
   Widget _uploadSizeLimit(BuildContext context) {
     return wrapDemoContainer(
-      '限制10KB',
-      child: TDUpload(
+      'Limit 10KB',
+      child: MyUpload(
         files: files1,
         onClick: onClick,
         onCancel: onCancel,

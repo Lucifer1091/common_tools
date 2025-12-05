@@ -3,7 +3,6 @@ part of 'my_divider.dart';
 /// Creates a dashed line widget that supports both horizontal and vertical directions.
 class _DashedLine extends StatelessWidget {
   const _DashedLine({
-    super.key,
     this.width,
     this.height,
     this.dashLength = 9,

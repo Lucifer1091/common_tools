@@ -7,24 +7,24 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../index.dart';
 
-enum TDUploadMediaType { image, video }
+enum MyUploadMediaType { image, video }
 
-enum TDUploadValidatorError { overSize, overQuantity }
+enum MyUploadValidatorError { overSize, overQuantity }
 
-enum TDUploadFileStatus { success, loading, error, retry }
+enum MyUploadFileStatus { success, loading, error, retry }
 
-enum TDUploadType { add, remove, replace }
+enum MyUploadType { add, remove, replace }
 
-enum TDUploadBoxType { roundedSquare, circle }
+enum MyUploadBoxType { roundedSquare, circle }
 
-class TDUploadFile {
-  TDUploadFile({
+class MyUploadFile {
+  MyUploadFile({
     required this.key,
     this.remotePath,
     this.assetPath,
     this.file,
     this.progress,
-    this.status = TDUploadFileStatus.success,
+    this.status = MyUploadFileStatus.success,
     this.loadingText = 'Loading...',
     this.retryText = 'Re-Upload',
     this.errorText = 'Error',
@@ -40,21 +40,21 @@ class TDUploadFile {
   final String loadingText;
   final String retryText;
   final String errorText;
-  TDUploadFileStatus status;
+  MyUploadFileStatus status;
 }
 
-typedef TDUploadErrorEvent = void Function(Object e);
-typedef TDUploadClickEvent = void Function(int value);
-typedef TDUploadValueChangedEvent =
-    void Function(List<TDUploadFile> files, TDUploadType type);
-typedef TDUploadValidatorEvent = void Function(TDUploadValidatorError e);
+typedef MyUploadErrorEvent = void Function(Object e);
+typedef MyUploadClickEvent = void Function(int value);
+typedef MyUploadValueChangedEvent =
+    void Function(List<MyUploadFile> files, MyUploadType type);
+typedef MyUploadValidatorEvent = void Function(MyUploadValidatorError e);
 
-class TDUpload extends StatefulWidget {
-  const TDUpload({
+class MyUpload extends StatefulWidget {
+  const MyUpload({
     required this.files,
     super.key,
     this.max = 0,
-    this.mediaType = const [TDUploadMediaType.image, TDUploadMediaType.video],
+    this.mediaType = const [MyUploadMediaType.image, MyUploadMediaType.video],
     this.sizeLimit,
     this.onCancel,
     this.onError,
@@ -65,7 +65,7 @@ class TDUpload extends StatefulWidget {
     this.multiple = false,
     this.width = 80.0,
     this.height = 80.0,
-    this.type = TDUploadBoxType.roundedSquare,
+    this.type = MyUploadBoxType.roundedSquare,
     this.disabled = false,
     this.enabledReplaceType = false,
     this.wrapSpacing,
@@ -73,52 +73,35 @@ class TDUpload extends StatefulWidget {
     this.wrapAlignment,
   });
 
-  final List<TDUploadFile> files;
+  final List<MyUploadFile> files;
 
   /// Used to control the number of files uploaded, 0 means no limit, only
   /// valid when multiple is true
   final int max;
-
-  final List<TDUploadMediaType> mediaType;
-
+  final List<MyUploadMediaType> mediaType;
   final double? sizeLimit;
-
   final bool multiple;
-
   final VoidCallback? onCancel;
-
-  final TDUploadErrorEvent? onError;
-
-  final TDUploadValidatorEvent? onValidate;
-
-  final TDUploadClickEvent? onClick;
-
+  final MyUploadErrorEvent? onError;
+  final MyUploadValidatorEvent? onValidate;
+  final MyUploadClickEvent? onClick;
   final VoidCallback? onMaxLimitReached;
-
-  final TDUploadValueChangedEvent? onChange;
-
+  final MyUploadValueChangedEvent? onChange;
   final double? width;
-
   final double? height;
-
-  final TDUploadBoxType type;
-
+  final MyUploadBoxType type;
   final bool? enabledReplaceType;
-
   final bool? disabled;
-
   final double? wrapSpacing;
-
   final double? wrapRunSpacing;
-
   final WrapAlignment? wrapAlignment;
 
   @override
-  State<TDUpload> createState() => _TDUploadState();
+  State<MyUpload> createState() => _MyUploadState();
 }
 
-class _TDUploadState extends State<TDUpload> {
-  List<TDUploadFile> fileList = [];
+class _MyUploadState extends State<MyUpload> {
+  List<MyUploadFile> fileList = [];
 
   bool get canUpload =>
       widget.multiple
@@ -127,9 +110,9 @@ class _TDUploadState extends State<TDUpload> {
 
   final ImagePicker _picker = ImagePicker();
 
-  final Map<TDUploadBoxType, TDImageType> _imageTypeMap = {
-    TDUploadBoxType.roundedSquare: TDImageType.roundedSquare,
-    TDUploadBoxType.circle: TDImageType.circle,
+  final Map<MyUploadBoxType, TDImageType> _imageTypeMap = {
+    MyUploadBoxType.roundedSquare: TDImageType.roundedSquare,
+    MyUploadBoxType.circle: TDImageType.circle,
   };
 
   @override
@@ -146,7 +129,7 @@ class _TDUploadState extends State<TDUpload> {
       if (widget.onMaxLimitReached != null) {
         widget.onMaxLimitReached!();
       } else if (widget.onValidate != null) {
-        widget.onValidate!(TDUploadValidatorError.overQuantity);
+        widget.onValidate!(MyUploadValidatorError.overQuantity);
       } else {
         throw Exception('Initial file count exceeds the maximum limit');
       }
@@ -164,7 +147,7 @@ class _TDUploadState extends State<TDUpload> {
         medias = await _picker.pickMultiImage();
       } else {
         XFile? media;
-        if (widget.mediaType.contains(TDUploadMediaType.image)) {
+        if (widget.mediaType.contains(MyUploadMediaType.image)) {
           media = await _picker.pickImage(source: ImageSource.gallery);
         } else {
           media = await _picker.pickVideo(source: ImageSource.gallery);
@@ -180,7 +163,7 @@ class _TDUploadState extends State<TDUpload> {
         if (widget.onMaxLimitReached != null) {
           widget.onMaxLimitReached!();
         } else if (widget.onValidate != null) {
-          widget.onValidate?.call(TDUploadValidatorError.overQuantity);
+          widget.onValidate?.call(MyUploadValidatorError.overQuantity);
         }
         return [];
       }
@@ -208,10 +191,10 @@ class _TDUploadState extends State<TDUpload> {
     final originMaxKeys =
         fileList.isEmpty ? 0 : fileList.map((file) => file.key).reduce(max);
 
-    final newFiles = <TDUploadFile>[];
+    final newFiles = <MyUploadFile>[];
     for (var i = 0; i < files.length; i++) {
       newFiles.add(
-        TDUploadFile(
+        MyUploadFile(
           key: originMaxKeys + i + 1,
           file: File(files[i].path),
           assetPath: files[i].path,
@@ -219,10 +202,10 @@ class _TDUploadState extends State<TDUpload> {
       );
     }
 
-    widget.onChange?.call(newFiles, TDUploadType.add);
+    widget.onChange?.call(newFiles, MyUploadType.add);
   }
 
-  Future<void> replaceMedia(List<XFile> files, TDUploadFile oldFile) async {
+  Future<void> replaceMedia(List<XFile> files, MyUploadFile oldFile) async {
     if (files.isEmpty || files.length != 1) return;
 
     final result = await validateResources(files, false);
@@ -232,20 +215,20 @@ class _TDUploadState extends State<TDUpload> {
       return;
     }
 
-    final newFile = TDUploadFile(
+    final newFile = MyUploadFile(
       key: oldFile.key,
       file: File(files[0].path),
       assetPath: files[0].path,
     );
 
-    widget.onChange?.call([newFile], TDUploadType.replace);
+    widget.onChange?.call([newFile], MyUploadType.replace);
   }
 
-  Future<TDUploadValidatorError?> validateResources(
+  Future<MyUploadValidatorError?> validateResources(
     List<XFile> files, [
     bool? multiple,
   ]) async {
-    TDUploadValidatorError? error;
+    MyUploadValidatorError? error;
 
     var isMultiple = multiple ?? widget.multiple;
 
@@ -257,7 +240,7 @@ class _TDUploadState extends State<TDUpload> {
       final remain = widget.max - fileList.length;
 
       if (files.length > remain) {
-        return TDUploadValidatorError.overQuantity;
+        return MyUploadValidatorError.overQuantity;
       }
     }
 
@@ -266,7 +249,7 @@ class _TDUploadState extends State<TDUpload> {
         final fileSize = await file.length();
         final sizeLimitInBytes = widget.sizeLimit! * 1024;
         if (fileSize > sizeLimitInBytes) {
-          error = TDUploadValidatorError.overSize;
+          error = MyUploadValidatorError.overSize;
           break;
         }
       }
@@ -275,8 +258,8 @@ class _TDUploadState extends State<TDUpload> {
     return error;
   }
 
-  void onDelete(TDUploadFile file) {
-    widget.onChange?.call([file], TDUploadType.remove);
+  void onDelete(MyUploadFile file) {
+    widget.onChange?.call([file], MyUploadType.remove);
   }
 
   @override
@@ -296,6 +279,7 @@ class _TDUploadState extends State<TDUpload> {
         ),
       );
     }
+
     return SizedBox(
       width: double.infinity,
       child: Wrap(
@@ -320,7 +304,7 @@ class _TDUploadState extends State<TDUpload> {
           width: widget.width,
           height: widget.height,
           decoration:
-              widget.type == TDUploadBoxType.circle
+              widget.type == MyUploadBoxType.circle
                   ? BoxDecoration(
                     shape: BoxShape.circle,
                     color: ThemeColors.neutral.shade50,
@@ -341,7 +325,7 @@ class _TDUploadState extends State<TDUpload> {
     );
   }
 
-  Widget _buildImageBox(BuildContext context, TDUploadFile file) {
+  Widget _buildImageBox(BuildContext context, MyUploadFile file) {
     return GestureDetector(
       onTap: () async {
         widget.onClick?.call(file.key);
@@ -363,7 +347,7 @@ class _TDUploadState extends State<TDUpload> {
             type: _imageTypeMap[widget.type] ?? TDImageType.roundedSquare,
           ),
           Visibility(
-            visible: file.status != TDUploadFileStatus.success,
+            visible: file.status != MyUploadFileStatus.success,
             child: _buildShadowBox(file),
           ),
           Visibility(
@@ -379,7 +363,7 @@ class _TDUploadState extends State<TDUpload> {
                   width: 20,
                   height: 20,
                   decoration:
-                      widget.type == TDUploadBoxType.circle
+                      widget.type == MyUploadBoxType.circle
                           ? const BoxDecoration(
                             shape: BoxShape.circle,
                             color: Color.fromRGBO(0, 0, 0, 0.6),
@@ -407,17 +391,17 @@ class _TDUploadState extends State<TDUpload> {
     );
   }
 
-  Widget _buildShadowBox(TDUploadFile file) {
+  Widget _buildShadowBox(MyUploadFile file) {
     var displayText = '';
     switch (file.status) {
-      case TDUploadFileStatus.loading:
+      case MyUploadFileStatus.loading:
         displayText =
             file.progress != null ? '${file.progress!}%' : file.loadingText;
-      case TDUploadFileStatus.retry:
+      case MyUploadFileStatus.retry:
         displayText = file.retryText;
-      case TDUploadFileStatus.error:
+      case MyUploadFileStatus.error:
         displayText = file.errorText;
-      case TDUploadFileStatus.success:
+      case MyUploadFileStatus.success:
         break;
     }
 
@@ -425,7 +409,7 @@ class _TDUploadState extends State<TDUpload> {
       width: widget.width,
       height: widget.height,
       decoration:
-          widget.type == TDUploadBoxType.circle
+          widget.type == MyUploadBoxType.circle
               ? const BoxDecoration(
                 shape: BoxShape.circle,
                 color: Color.fromRGBO(0, 0, 0, 0.4),
@@ -441,7 +425,7 @@ class _TDUploadState extends State<TDUpload> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Visibility(
-                visible: file.status == TDUploadFileStatus.loading,
+                visible: file.status == MyUploadFileStatus.loading,
                 child: const MyLoader(
                   size: MyLoaderSize.large,
                   // iconColor: Colors.white,
@@ -449,10 +433,10 @@ class _TDUploadState extends State<TDUpload> {
               ),
               Visibility(
                 visible:
-                    file.status == TDUploadFileStatus.retry ||
-                    file.status == TDUploadFileStatus.error,
+                    file.status == MyUploadFileStatus.retry ||
+                    file.status == MyUploadFileStatus.error,
                 child: Icon(
-                  file.status == TDUploadFileStatus.retry
+                  file.status == MyUploadFileStatus.retry
                       ? Icons.refresh_rounded
                       : Icons.cancel_outlined,
                   size: 24,

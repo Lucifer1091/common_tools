@@ -1,1 +1,1 @@
-export 'td_avatar.dart';
+export 'my_avatar.dart';

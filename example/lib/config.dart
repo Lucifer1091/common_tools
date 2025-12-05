@@ -13,7 +13,7 @@ import 'page/sidebar/my_sidebar_page_loading.dart';
 import 'page/sidebar/my_sidebar_page_outline.dart';
 import 'page/sidebar/my_sidebar_page_pagination.dart';
 import 'page/td_action_sheet_page.dart';
-import 'page/td_avatar_page.dart';
+import 'page/my_avatar_page.dart';
 import 'page/my_badge_page.dart';
 import 'page/my_cell_page.dart';
 import 'page/my_checkbox_page.dart';
@@ -239,7 +239,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'Avatar',
       name: 'avatar',
-      pageBuilder: _wrapInheritedTheme((context) => const TDAvatarPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyAvatarPage()),
     ),
     ExamplePageModel(
       text: 'Badge',

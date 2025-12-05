@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../index.dart';
 
-enum TDAvatarSize { large, medium, small }
+enum MyAvatarSize { large, medium, small }
 
-enum TDAvatarType { icon, normal, customText, display, operation }
+enum MyAvatarType { icon, normal, customText, display, operation }
 
-enum TDAvatarShape { circle, square }
+enum MyAvatarShape { circle, square }
 
-class TDAvatar extends StatelessWidget {
-  const TDAvatar({
+class MyAvatar extends StatelessWidget {
+  const MyAvatar({
     super.key,
-    this.size = TDAvatarSize.medium,
-    this.type = TDAvatarType.normal,
-    this.shape = TDAvatarShape.circle,
+    this.size = MyAvatarSize.medium,
+    this.type = MyAvatarType.normal,
+    this.shape = MyAvatarShape.circle,
     this.text,
     this.textColor,
     this.style,
@@ -33,107 +34,93 @@ class TDAvatar extends StatelessWidget {
   });
 
   final String? avatarUrl;
-
-  final TDAvatarSize size;
-
-  final TDAvatarType type;
-
-  final TDAvatarShape shape;
-
+  final MyAvatarSize size;
+  final MyAvatarType type;
+  final MyAvatarShape shape;
   final String? text;
-
   final Color? textColor;
-
   final TextStyle? style;
-
   final double? radius;
-
   final double? avatarSize;
-
   final IconData? icon;
-
   final String defaultUrl;
-
   final List<String>? avatarDisplayList;
-
   final List<String>? avatarDisplayListAsset;
-
   final double avatarDisplayBorder;
-
   final Widget? avatarDisplayWidget;
-
   final String? displayText;
-
   final VoidCallback? onTap;
-
   final Color? backgroundColor;
-
   final BoxFit? fit;
 
   double _getAvatarWidth() {
     return avatarSize ??
         switch (size) {
-          TDAvatarSize.large => 64,
-          TDAvatarSize.medium => 48,
-          TDAvatarSize.small => 40,
+          MyAvatarSize.large => 64,
+          MyAvatarSize.medium => 48,
+          MyAvatarSize.small => 40,
         };
   }
 
   TextStyle? _getTextStyle(BuildContext context) {
     return style ??
         switch (size) {
-          TDAvatarSize.large => context.titleLarge,
-          TDAvatarSize.medium => context.titleMedium,
-          TDAvatarSize.small => context.titleSmall,
-        }.copyWith(color: textColor);
+          MyAvatarSize.large => context.titleLarge,
+          MyAvatarSize.medium => context.titleMedium,
+          MyAvatarSize.small => context.titleSmall,
+        }.copyWith(color: textColor ?? context.colorScheme.primaryForeground);
   }
 
   double _getIconWidth() {
     return switch (size) {
-      TDAvatarSize.large => 32,
-      TDAvatarSize.medium => 24,
-      TDAvatarSize.small => 20,
+      MyAvatarSize.large => 32,
+      MyAvatarSize.medium => 24,
+      MyAvatarSize.small => 20,
     };
   }
 
   double _getAvatarRadius(BuildContext context) {
     return radius ??
         switch (shape) {
-          TDAvatarShape.circle => _getAvatarWidth() / 2,
-          TDAvatarShape.square => 8,
+          MyAvatarShape.circle => _getAvatarWidth() / 2,
+          MyAvatarShape.square => 8,
         };
   }
 
   @override
   Widget build(BuildContext context) {
     switch (type) {
-      case TDAvatarType.icon:
+      case MyAvatarType.icon:
         return GestureDetector(
           onTap: onTap,
           child: Container(
             width: _getAvatarWidth(),
             height: _getAvatarWidth(),
             decoration: BoxDecoration(
-              color: backgroundColor ?? context.colorScheme.background,
+              color:
+                  backgroundColor ??
+                  context.colorScheme.primary.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(_getAvatarRadius(context)),
             ),
             child: Center(
               child: Icon(
-                icon ?? Icons.person_outline_rounded,
+                icon ?? LucideIcons.user,
                 size: _getIconWidth(),
                 color: context.colorScheme.primary,
               ),
             ),
           ),
         );
-      case TDAvatarType.normal:
+      case MyAvatarType.normal:
         return GestureDetector(
           onTap: onTap,
           child: Container(
             width: _getAvatarWidth(),
             height: _getAvatarWidth(),
             decoration: BoxDecoration(
-              color: backgroundColor ?? context.colorScheme.background,
+              color:
+                  backgroundColor ??
+                  context.colorScheme.primary.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(_getAvatarRadius(context)),
               image:
                   avatarUrl != null
@@ -144,7 +131,7 @@ class TDAvatar extends StatelessWidget {
             ),
           ),
         );
-      case TDAvatarType.customText:
+      case MyAvatarType.customText:
         return GestureDetector(
           onTap: onTap,
           child: Container(
@@ -163,18 +150,18 @@ class TDAvatar extends StatelessWidget {
             ),
           ),
         );
-      case TDAvatarType.display:
+      case MyAvatarType.display:
         return _buildDisplayAvatar(context);
-      case TDAvatarType.operation:
+      case MyAvatarType.operation:
         return _buildOperationAvatar(context);
     }
   }
 
   double _getDisplayPadding() {
     return switch (size) {
-      TDAvatarSize.large => 10,
-      TDAvatarSize.medium => 8,
-      TDAvatarSize.small => 6,
+      MyAvatarSize.large => 10,
+      MyAvatarSize.medium => 8,
+      MyAvatarSize.small => 6,
     };
   }
 
@@ -202,7 +189,7 @@ class TDAvatar extends StatelessWidget {
                   height: _getAvatarWidth(),
                   clipBehavior: Clip.hardEdge,
                   decoration: ShapeDecoration(
-                    color: context.colorScheme.background,
+                    color: context.colorScheme.primary.withValues(alpha: 0.2),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(
                         _getAvatarWidth() - _getDisplayPadding(),
@@ -215,7 +202,7 @@ class TDAvatar extends StatelessWidget {
                   ),
                   child: Center(
                     child: Icon(
-                      icon ?? Icons.person_add_alt,
+                      icon ?? LucideIcons.userPlus,
                       size: _getIconWidth(),
                       color: context.colorScheme.primary,
                     ),
@@ -269,7 +256,7 @@ class TDAvatar extends StatelessWidget {
                   height: _getAvatarWidth(),
                   clipBehavior: Clip.hardEdge,
                   decoration: ShapeDecoration(
-                    color: context.colorScheme.background,
+                    color: context.colorScheme.primary.withValues(alpha: 0.2),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(
                         _getAvatarWidth() - _getDisplayPadding(),
@@ -284,7 +271,7 @@ class TDAvatar extends StatelessWidget {
                     child:
                         avatarDisplayWidget ??
                         Icon(
-                          icon ?? Icons.person_add_alt,
+                          icon ??  LucideIcons.userPlus,
                           size: _getIconWidth(),
                           color: context.colorScheme.primary,
                         ),
@@ -354,7 +341,7 @@ class TDAvatar extends StatelessWidget {
                 height: _getAvatarWidth(),
                 clipBehavior: Clip.hardEdge,
                 decoration: ShapeDecoration(
-                  color: context.colorScheme.background,
+                  color: context.colorScheme.primary.withValues(alpha: 0.2),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(
                       _getAvatarWidth() - _getDisplayPadding(),
@@ -420,7 +407,7 @@ class TDAvatar extends StatelessWidget {
                 height: _getAvatarWidth(),
                 clipBehavior: Clip.hardEdge,
                 decoration: ShapeDecoration(
-                  color: context.colorScheme.background,
+                  color: context.colorScheme.primary.withValues(alpha: 0.2),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(
                       _getAvatarWidth() - _getDisplayPadding(),

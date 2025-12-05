@@ -3,118 +3,116 @@ import 'package:common_tools/index.dart';
 
 import '../../base/example_widget.dart';
 
-class TDAvatarPage extends StatefulWidget {
-  const TDAvatarPage({Key? key}) : super(key: key);
+class MyAvatarPage extends StatefulWidget {
+  const MyAvatarPage({super.key});
 
   @override
-  State<StatefulWidget> createState() => _TDAvatarPageState();
+  State<StatefulWidget> createState() => _MyAvatarPageState();
 }
 
-class _TDAvatarPageState extends State<TDAvatarPage> {
+class _MyAvatarPageState extends State<MyAvatarPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
       backgroundColor: context.colorScheme.primaryForeground,
       title: myTitle(),
       exampleCodeGroup: 'avatar',
-      desc: '用于告知用户，该区域的状态变化或者待处理任务的数量。',
+      desc: 'Avatars are used to represent people or objects.',
       children: [
         ExampleModule(
           title: 'Component Types',
           children: [
-            ExampleItem(desc: '图片头像', builder: _buildImageAvatar),
-            ExampleItem(desc: '字符头像', builder: _buildTextAvatar),
-            ExampleItem(desc: '图标头像', builder: _buildIconAvatar),
-            ExampleItem(desc: '带徽标头像', builder: _buildBadgeAvatar),
+            ExampleItem(desc: 'Image Avatar', builder: _buildImageAvatar),
+            ExampleItem(desc: 'Character Avatar', builder: _buildTextAvatar),
+            ExampleItem(desc: 'Icon Avatar', builder: _buildIconAvatar),
+            ExampleItem(desc: 'Avatar with Logo', builder: _buildBadgeAvatar),
           ],
         ),
         ExampleModule(
-          title: '特殊类型',
+          title: 'Special Type',
           children: [
-            ExampleItem(desc: '纯展示的头像组', builder: _buildDisplayAvatar),
-            ExampleItem(desc: '带操作的头像组', builder: _buildOperationAvatar),
+            ExampleItem(
+              desc: 'Avatar Group for Pure Display',
+              builder: _buildDisplayAvatar,
+            ),
+            ExampleItem(
+              desc: 'Avatar Group with Operations',
+              builder: _buildOperationAvatar,
+            ),
           ],
         ),
         ExampleModule(
-          title: '组件尺寸',
+          title: 'Component Size',
           children: [
-            ExampleItem(desc: '大尺寸 :64px', builder: _buildLargeAvatar),
-            ExampleItem(desc: '中尺寸 :48px', builder: _buildMediumAvatar),
-            ExampleItem(desc: '小尺寸 :40px', builder: _buildSmallAvatar),
+            ExampleItem(desc: 'Large Size: 64px', builder: _buildLargeAvatar),
+            ExampleItem(desc: 'Medium Size: 48px', builder: _buildMediumAvatar),
+            ExampleItem(desc: 'Small Size: 40px', builder: _buildSmallAvatar),
           ],
         ),
       ],
     );
   }
 
-  /// 图片头像
-
   Widget _buildImageAvatar(BuildContext context) {
     return const Padding(
       padding: EdgeInsets.only(left: 16),
       child: Row(
         children: [
-          TDAvatar(
-            size: TDAvatarSize.medium,
-            type: TDAvatarType.normal,
+          MyAvatar(
+            size: MyAvatarSize.medium,
+            type: MyAvatarType.normal,
             defaultUrl: 'assets/img/td_avatar_1.png',
           ),
           SizedBox(width: 32),
-          TDAvatar(
-            size: TDAvatarSize.medium,
-            type: TDAvatarType.normal,
-            shape: TDAvatarShape.square,
+          MyAvatar(
+            size: MyAvatarSize.medium,
+            type: MyAvatarType.normal,
+            shape: MyAvatarShape.square,
             defaultUrl: 'assets/img/td_avatar_1.png',
           ),
         ],
       ),
     );
   }
-
-  /// 字符头像
 
   Widget _buildTextAvatar(BuildContext context) {
     return const Padding(
       padding: EdgeInsets.only(left: 16),
       child: Row(
         children: [
-          TDAvatar(
-            size: TDAvatarSize.medium,
-            type: TDAvatarType.customText,
+          MyAvatar(
+            size: MyAvatarSize.medium,
+            type: MyAvatarType.customText,
             text: 'A',
           ),
           SizedBox(width: 32),
-          TDAvatar(
-            size: TDAvatarSize.medium,
-            type: TDAvatarType.customText,
-            shape: TDAvatarShape.square,
+          MyAvatar(
+            size: MyAvatarSize.medium,
+            type: MyAvatarType.customText,
+            shape: MyAvatarShape.square,
             text: 'A',
           ),
         ],
       ),
     );
   }
-
-  /// 图标头像
 
   Widget _buildIconAvatar(BuildContext context) {
     return const Padding(
       padding: EdgeInsets.only(left: 16),
       child: Row(
         children: [
-          TDAvatar(size: TDAvatarSize.medium, type: TDAvatarType.icon),
+          MyAvatar(size: MyAvatarSize.medium, type: MyAvatarType.icon),
           SizedBox(width: 32),
-          TDAvatar(
-            size: TDAvatarSize.medium,
-            type: TDAvatarType.icon,
-            shape: TDAvatarShape.square,
+          MyAvatar(
+            size: MyAvatarSize.medium,
+            type: MyAvatarType.icon,
+            shape: MyAvatarShape.square,
           ),
         ],
       ),
     );
   }
-
-  /// 带徽标头像
 
   Widget _buildBadgeAvatar(BuildContext context) {
     return const Padding(
@@ -127,9 +125,9 @@ class _TDAvatarPageState extends State<TDAvatarPage> {
             child: Stack(
               alignment: Alignment.bottomLeft,
               children: [
-                TDAvatar(
-                  size: TDAvatarSize.medium,
-                  type: TDAvatarType.normal,
+                MyAvatar(
+                  size: MyAvatarSize.medium,
+                  type: MyAvatarType.normal,
                   defaultUrl: 'assets/img/td_avatar_1.png',
                 ),
                 Positioned(
@@ -147,9 +145,9 @@ class _TDAvatarPageState extends State<TDAvatarPage> {
             child: Stack(
               alignment: Alignment.bottomLeft,
               children: [
-                TDAvatar(
-                  size: TDAvatarSize.medium,
-                  type: TDAvatarType.customText,
+                MyAvatar(
+                  size: MyAvatarSize.medium,
+                  type: MyAvatarType.customText,
                   text: 'A',
                 ),
                 Positioned(
@@ -167,7 +165,7 @@ class _TDAvatarPageState extends State<TDAvatarPage> {
             child: Stack(
               alignment: Alignment.bottomLeft,
               children: [
-                TDAvatar(size: TDAvatarSize.medium, type: TDAvatarType.icon),
+                MyAvatar(size: MyAvatarSize.medium, type: MyAvatarType.icon),
                 Positioned(
                   right: 0,
                   top: 0,
@@ -181,8 +179,6 @@ class _TDAvatarPageState extends State<TDAvatarPage> {
     );
   }
 
-  /// 纯展示的头像组
-
   Widget _buildDisplayAvatar(BuildContext context) {
     var assetUrl = 'assets/img/td_avatar_1.png';
     var assetUrl2 = 'assets/img/td_avatar_2.png';
@@ -190,16 +186,14 @@ class _TDAvatarPageState extends State<TDAvatarPage> {
     return Container(
       alignment: Alignment.centerLeft,
       padding: const EdgeInsets.only(left: 16),
-      child: TDAvatar(
-        size: TDAvatarSize.medium,
-        type: TDAvatarType.display,
+      child: MyAvatar(
+        size: MyAvatarSize.medium,
+        type: MyAvatarType.display,
         displayText: '+5',
         avatarDisplayListAsset: avatarList,
       ),
     );
   }
-
-  /// 带操作的头像组
 
   Widget _buildOperationAvatar(BuildContext context) {
     var assetUrl = 'assets/img/td_avatar_1.png';
@@ -208,9 +202,9 @@ class _TDAvatarPageState extends State<TDAvatarPage> {
     return Container(
       alignment: Alignment.centerLeft,
       padding: const EdgeInsets.only(left: 16),
-      child: TDAvatar(
-        size: TDAvatarSize.medium,
-        type: TDAvatarType.operation,
+      child: MyAvatar(
+        size: MyAvatarSize.medium,
+        type: MyAvatarType.operation,
         avatarDisplayListAsset: avatarList,
         onTap: () {
           TDToast.showText('点击了操作', context: context);
@@ -219,76 +213,70 @@ class _TDAvatarPageState extends State<TDAvatarPage> {
     );
   }
 
-  /// 组件尺寸 大尺寸
-
   Widget _buildLargeAvatar(BuildContext context) {
     return const Padding(
       padding: EdgeInsets.only(left: 16),
       child: Row(
         children: [
-          TDAvatar(
-            size: TDAvatarSize.large,
-            type: TDAvatarType.normal,
+          MyAvatar(
+            size: MyAvatarSize.large,
+            type: MyAvatarType.normal,
             defaultUrl: 'assets/img/td_avatar_1.png',
           ),
           SizedBox(width: 32),
-          TDAvatar(
-            size: TDAvatarSize.large,
-            type: TDAvatarType.customText,
+          MyAvatar(
+            size: MyAvatarSize.large,
+            type: MyAvatarType.customText,
             text: 'A',
           ),
           SizedBox(width: 32),
-          TDAvatar(size: TDAvatarSize.large, type: TDAvatarType.icon),
+          MyAvatar(size: MyAvatarSize.large, type: MyAvatarType.icon),
         ],
       ),
     );
   }
-
-  /// 组件尺寸 中尺寸
 
   Widget _buildMediumAvatar(BuildContext context) {
     return const Padding(
       padding: EdgeInsets.only(left: 16),
       child: Row(
         children: [
-          TDAvatar(
-            size: TDAvatarSize.medium,
-            type: TDAvatarType.normal,
+          MyAvatar(
+            size: MyAvatarSize.medium,
+            type: MyAvatarType.normal,
             defaultUrl: 'assets/img/td_avatar_1.png',
           ),
           SizedBox(width: 48),
-          TDAvatar(
-            size: TDAvatarSize.medium,
-            type: TDAvatarType.customText,
+          MyAvatar(
+            size: MyAvatarSize.medium,
+            type: MyAvatarType.customText,
             text: 'A',
           ),
           SizedBox(width: 48),
-          TDAvatar(size: TDAvatarSize.medium, type: TDAvatarType.icon),
+          MyAvatar(size: MyAvatarSize.medium, type: MyAvatarType.icon),
         ],
       ),
     );
   }
-
-  /// 组件尺寸 小尺寸
 
   Widget _buildSmallAvatar(BuildContext context) {
     return const Padding(
       padding: EdgeInsets.only(left: 16),
       child: Row(
         children: [
-          TDAvatar(
-            size: TDAvatarSize.small,
-            type: TDAvatarType.normal,
+          MyAvatar(
+            size: MyAvatarSize.small,
+            type: MyAvatarType.normal,
             defaultUrl: 'assets/img/td_avatar_1.png',
           ),
           SizedBox(width: 56),
-          TDAvatar(
-            size: TDAvatarSize.small,
-            type: TDAvatarType.customText,
+          MyAvatar(
+            size: MyAvatarSize.small,
+            type: MyAvatarType.customText,
             text: 'A',
           ),
           SizedBox(width: 56),
-          TDAvatar(size: TDAvatarSize.small, type: TDAvatarType.icon),
+          MyAvatar(size: MyAvatarSize.small, type: MyAvatarType.icon),
         ],
       ),
     );
