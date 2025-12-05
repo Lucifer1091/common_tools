@@ -294,13 +294,13 @@ class MyTextarea extends StatefulWidget {
   /// {@endtemplate}
   final WidgetBuilder? resizeHandleBuilder;
 
-  /// {@macro ShadKeyboardToolbar.toolbarBuilder}
+  /// {@macro MyKeyboardToolbar.toolbarBuilder}
   final WidgetBuilder? keyboardToolbarBuilder;
 
-  /// {@macro ShadInput.leading}
+  /// {@macro MyInput.leading}
   final Widget? leading;
 
-  /// {@macro ShadInput.trailing}
+  /// {@macro MyInput.trailing}
   final Widget? trailing;
 
   @override

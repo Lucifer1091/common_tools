@@ -605,6 +605,15 @@ class MyInput extends StatefulWidget {
     );
   }
 
+  // ignore: prefer_function_declarations_over_variables
+  static final noCounter =
+      (
+        context, {
+        required currentLength,
+        required isFocused,
+        required maxLength,
+      }) => null;
+
   @override
   State<MyInput> createState() => MyInputState();
 }
@@ -719,10 +728,9 @@ class MyInputState extends State<MyInput>
       return effectiveDecoration.copyWith(counter: counter);
     }
 
-    if (widget.maxLength == null) {
-      return effectiveDecoration;
-    } // No counter widget
+    if (widget.maxLength == null) return effectiveDecoration;
 
+    // Default Counter Widget
     String counterText = '$currentLength';
     String semanticCounterText = '';
 

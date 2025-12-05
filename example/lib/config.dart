@@ -4,6 +4,7 @@ import 'package:example/page/my_steps_page.dart';
 import 'package:flutter/material.dart';
 
 import 'base/example_base.dart';
+import 'page/my_otp_page.dart';
 import 'page/sidebar/my_sidebar_page.dart';
 import 'page/sidebar/my_sidebar_page_anchor.dart';
 import 'page/sidebar/my_sidebar_page_custom.dart';
@@ -60,7 +61,7 @@ import 'page/td_theme_page.dart';
 import 'page/td_time_counter_page.dart';
 import 'page/td_toast_page.dart';
 import 'page/td_tree_select_page.dart';
-import 'page/td_upload_page.dart';
+import 'page/my_upload_page.dart';
 import 'page/todo_page.dart';
 
 PageBuilder _wrapInheritedTheme(WidgetBuilder builder) {
@@ -178,6 +179,11 @@ Map<String, List<ExamplePageModel>> exampleMap = {
       pageBuilder: _wrapInheritedTheme((context) => const MyInputViewPage()),
     ),
     ExamplePageModel(
+      text: 'One Time Pass - OTP',
+      name: 'otp',
+      pageBuilder: _wrapInheritedTheme((context) => const MyOtpPage()),
+    ),
+    ExamplePageModel(
       text: 'Picker',
       name: 'picker',
       pageBuilder: _wrapInheritedTheme((context) => const MyPickerPage()),
@@ -226,7 +232,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'Upload',
       name: 'upload',
-      pageBuilder: _wrapInheritedTheme((context) => const TDUploadPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyUploadPage()),
     ),
   ],
   'Data display': [

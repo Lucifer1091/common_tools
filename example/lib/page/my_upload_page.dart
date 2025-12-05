@@ -3,14 +3,14 @@ import 'package:common_tools/index.dart';
 
 import '../base/example_widget.dart';
 
-class TDUploadPage extends StatefulWidget {
-  const TDUploadPage({Key? key}) : super(key: key);
+class MyUploadPage extends StatefulWidget {
+  const MyUploadPage({super.key});
 
   @override
   State<StatefulWidget> createState() => TDUploadState();
 }
 
-class TDUploadState extends State<TDUploadPage> {
+class TDUploadState extends State<MyUploadPage> {
   final List<TDUploadFile> files1 = [];
   final List<TDUploadFile> files2 = [
     TDUploadFile(
