@@ -532,7 +532,7 @@ class _MyStepsPageState extends State<MyStepsPage> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(6),
                 child: const MyImage(
-                  assetUrl: 'assets/img/image.png',
+                  image: 'assets/img/image.png',
                   type: MyImageType.square,
                 ),
               ),

@@ -219,7 +219,7 @@ class TDSwiperPage extends StatelessWidget {
         builder: TDSwiperPagination.dots,
       ),
       itemBuilder: (BuildContext context, int index) {
-        return const MyImage(assetUrl: 'assets/img/image.png');
+        return const MyImage(image: 'assets/img/image.png');
       },
     );
   }
@@ -234,7 +234,7 @@ class TDSwiperPage extends StatelessWidget {
         builder: TDSwiperPagination.dotsBar,
       ),
       itemBuilder: (BuildContext context, int index) {
-        return const MyImage(assetUrl: 'assets/img/image.png');
+        return const MyImage(image: 'assets/img/image.png');
       },
     );
   }
@@ -249,7 +249,7 @@ class TDSwiperPage extends StatelessWidget {
         builder: TDSwiperPagination.fraction,
       ),
       itemBuilder: (BuildContext context, int index) {
-        return const MyImage(assetUrl: 'assets/img/image.png');
+        return const MyImage(image: 'assets/img/image.png');
       },
     );
   }
@@ -264,7 +264,7 @@ class TDSwiperPage extends StatelessWidget {
         builder: TDSwiperPagination.controls,
       ),
       itemBuilder: (BuildContext context, int index) {
-        return const MyImage(assetUrl: 'assets/img/image.png');
+        return const MyImage(image: 'assets/img/image.png');
       },
     );
   }
@@ -282,7 +282,7 @@ class TDSwiperPage extends StatelessWidget {
         builder: TDSwiperPagination.dots,
       ),
       itemBuilder: (BuildContext context, int index) {
-        return const MyImage(assetUrl: 'assets/img/image.png');
+        return const MyImage(image: 'assets/img/image.png');
       },
     );
   }
@@ -300,7 +300,7 @@ class TDSwiperPage extends StatelessWidget {
         builder: TDSwiperPagination.dots,
       ),
       itemBuilder: (BuildContext context, int index) {
-        return const MyImage(assetUrl: 'assets/img/image.png');
+        return const MyImage(image: 'assets/img/image.png');
       },
     );
   }
@@ -316,7 +316,7 @@ class TDSwiperPage extends StatelessWidget {
         builder: TDSwiperPagination.dots,
       ),
       itemBuilder: (BuildContext context, int index) {
-        return const MyImage(assetUrl: 'assets/img/image.png');
+        return const MyImage(image: 'assets/img/image.png');
       },
     );
   }
@@ -332,7 +332,7 @@ class TDSwiperPage extends StatelessWidget {
         builder: TDSwiperPagination.dots,
       ),
       itemBuilder: (BuildContext context, int index) {
-        return const MyImage(assetUrl: 'assets/img/image.png');
+        return const MyImage(image: 'assets/img/image.png');
       },
     );
   }
@@ -350,7 +350,7 @@ class TDSwiperPage extends StatelessWidget {
         builder: TDSwiperPagination.dots,
       ),
       itemBuilder: (BuildContext context, int index) {
-        return const MyImage(assetUrl: 'assets/img/image.png');
+        return const MyImage(image: 'assets/img/image.png');
       },
     );
   }
@@ -366,7 +366,7 @@ class TDSwiperPage extends StatelessWidget {
         builder: TDSwiperPagination.dotsBar,
       ),
       itemBuilder: (BuildContext context, int index) {
-        return const MyImage(assetUrl: 'assets/img/image.png');
+        return const MyImage(image: 'assets/img/image.png');
       },
     );
   }
@@ -381,7 +381,7 @@ class TDSwiperPage extends StatelessWidget {
         builder: TDSwiperPagination.fraction,
       ),
       itemBuilder: (BuildContext context, int index) {
-        return const MyImage(assetUrl: 'assets/img/image.png');
+        return const MyImage(image: 'assets/img/image.png');
       },
     );
   }
@@ -397,7 +397,7 @@ class TDSwiperPage extends StatelessWidget {
         builder: TDSwiperPagination.dotsBar,
       ),
       itemBuilder: (BuildContext context, int index) {
-        return const MyImage(assetUrl: 'assets/img/image.png');
+        return const MyImage(image: 'assets/img/image.png');
       },
     );
   }

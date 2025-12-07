@@ -68,16 +68,12 @@ class MyImageProvider extends StatelessWidget {
     this.errorBuilder,
     this.cache = true,
     this.assetPrefix = 'assets',
-    this.useDefaultImage = false,
     this.colorFilter,
     this.headers,
     this.opacity,
     this.fadeDuration = const Duration(milliseconds: 400),
     this.enableZoom = false,
-  }) : assert(
-         source is String || source is IconData || source is Uint8List,
-         '',
-       );
+  });
 
   /// Represents the alignment of the image within its container.
   final Alignment alignment;
@@ -125,10 +121,8 @@ class MyImageProvider extends StatelessWidget {
   final Widget? errorBuilder;
 
   /// A boolean property that determines whether the image should be cached. Default is `true`.
+  /// If false then use [Image.network] else [CachedNetworkImage]
   final bool cache;
-
-  /// If true then use [Image.network] else [CachedNetworkImage]
-  final bool useDefaultImage;
 
   /// An optional `ui.ColorFilter` property that sets the color filter of the image.
   final ui.ColorFilter? colorFilter;
@@ -289,7 +283,7 @@ class MyImageProvider extends StatelessWidget {
     }
 
     if (_isNetwork) {
-      if (useDefaultImage || !cache) {
+      if (!cache) {
         return Image.network(
           imageUri,
           key: key,
@@ -495,6 +489,19 @@ class MyImageProvider extends StatelessWidget {
     if (image == null) {
       return errorBuilder ?? const NoWidget();
     }
+
+    // AnimatedBuilder(
+    //                 animation: _statesController,
+    //                 builder: (context, child) {
+    //                   return AnimatedScale(
+    //                     duration: kDefaultDuration,
+    //                     scale: _statesController.value
+    //                             .contains(WidgetState.hovered)
+    //                         ? hoverScale
+    //                         : normalScale,
+    //                     child: widget.image,
+    //                   );
+    //                 }),
 
     // Builds the image content with optional zoom functionality.
     Widget imageContent = AnimatedSwitcher(

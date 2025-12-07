@@ -1,9 +1,9 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import 'image_widget.dart';
+import '../../../index.dart';
+import 'my_image_provider.dart';
 
 enum MyImageType {
   clip,
@@ -26,8 +26,6 @@ class MyImage extends StatelessWidget {
     this.height,
     this.fit,
     this.frameBuilder,
-    this.loadingBuilder,
-    this.errorBuilder,
     this.semanticLabel,
     this.excludeFromSemantics = false,
     this.color,
@@ -42,448 +40,206 @@ class MyImage extends StatelessWidget {
     this.filterQuality = FilterQuality.low,
     this.cacheHeight,
     this.cacheWidth,
-    this.assetUrl,
-    this.imageFile,
   });
 
-  final String? image;
-
-  final String? assetUrl;
-
-  final File? imageFile;
-
+  final Object? image;
   final MyImageType type;
-
   final Widget? loadingWidget;
-
   final Widget? errorWidget;
-
   final double? width;
-
   final double? height;
-
   final BoxFit? fit;
-
   final ImageFrameBuilder? frameBuilder;
-
-  final ImageLoadingBuilder? loadingBuilder;
-
-  final ImageErrorWidgetBuilder? errorBuilder;
-
   final Color? color;
-
   final Animation<double>? opacity;
-
   final FilterQuality filterQuality;
-
   final BlendMode? colorBlendMode;
-
-  final AlignmentGeometry alignment;
-
+  final Alignment alignment;
   final ImageRepeat repeat;
-
   final Rect? centerSlice;
-
   final bool matchTextDirection;
-
   final bool gaplessPlayback;
-
   final String? semanticLabel;
-
   final bool excludeFromSemantics;
-
   final bool isAntiAlias;
-
   final int? cacheHeight;
-
   final int? cacheWidth;
+
+  Widget _wrap(BuildContext context, Widget child) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: context.colorScheme.secondary,
+        borderRadius: MyBorderRadius.medium,
+      ),
+      child: Center(
+        child: MyLoader(
+          size: MyLoaderSize.small,
+          icon: MyCircleLoader(options: MyLoaderOptions(strokeWidth: 3)),
+        ),
+      ),
+    );
+  }
+
+  Widget _loader(BuildContext context) {
+    return loadingWidget ??
+        DecoratedBox(
+          decoration: BoxDecoration(
+            color: context.colorScheme.secondary,
+            borderRadius: MyBorderRadius.medium,
+          ),
+          child: Center(
+            child: MyLoader(
+              size: MyLoaderSize.small,
+              icon: MyCircleLoader(options: MyLoaderOptions(strokeWidth: 3)),
+            ),
+          ),
+        );
+  }
+
+  Widget _error(BuildContext context) {
+    return errorWidget ??
+        DecoratedBox(
+          decoration: BoxDecoration(
+            color: context.colorScheme.secondary,
+            borderRadius: MyBorderRadius.medium,
+          ),
+          child: Center(
+            child: Icon(
+              LucideIcons.image,
+              color: context.colorScheme.mutedForeground,
+            ),
+          ),
+        );
+  }
 
   @override
   Widget build(BuildContext context) {
     switch (type) {
       case MyImageType.clip:
-        return imageFile == null
-            ? (assetUrl == null
-                ? ImageWidget.network(
-                  image,
-                  height: height ?? 72,
-                  width: width ?? 72,
-                  errorWidget: errorWidget,
-                  loadingWidget: loadingWidget,
-                  fit: fit ?? BoxFit.none,
-                  color: color,
-                  frameBuilder: frameBuilder,
-                  loadingBuilder: loadingBuilder,
-                  errorBuilder: errorBuilder,
-                  semanticLabel: semanticLabel,
-                  excludeFromSemantics: excludeFromSemantics,
-                  opacity: opacity,
-                  colorBlendMode: colorBlendMode,
-                  alignment: alignment,
-                  repeat: repeat,
-                  centerSlice: centerSlice,
-                  matchTextDirection: matchTextDirection,
-                  gaplessPlayback: gaplessPlayback,
-                  filterQuality: filterQuality,
-                  isAntiAlias: isAntiAlias,
-                  cacheHeight: cacheHeight,
-                  cacheWidth: cacheWidth,
-                )
-                : ImageWidget.asset(
-                  assetUrl,
-                  width: width ?? 72,
-                  height: height ?? 72,
-                  errorWidget: errorWidget,
-                  loadingWidget: loadingWidget,
-                  fit: fit ?? BoxFit.none,
-                  color: color,
-                  frameBuilder: frameBuilder,
-                  errorBuilder: errorBuilder,
-                  semanticLabel: semanticLabel,
-                  excludeFromSemantics: excludeFromSemantics,
-                  opacity: opacity,
-                  colorBlendMode: colorBlendMode,
-                  alignment: alignment,
-                  repeat: repeat,
-                  centerSlice: centerSlice,
-                  matchTextDirection: matchTextDirection,
-                  gaplessPlayback: gaplessPlayback,
-                  filterQuality: filterQuality,
-                  isAntiAlias: isAntiAlias,
-                  cacheHeight: cacheHeight,
-                  cacheWidth: cacheWidth,
-                ))
-            : ImageWidget.file(
-              imageFile,
-              width: width ?? 72,
-              height: height ?? 72,
-              fit: fit ?? BoxFit.none,
-              color: color,
-              frameBuilder: frameBuilder,
-              errorBuilder: errorBuilder,
-              semanticLabel: semanticLabel,
-              excludeFromSemantics: excludeFromSemantics,
-              colorBlendMode: colorBlendMode,
-              alignment: alignment,
-              repeat: repeat,
-              centerSlice: centerSlice,
-              matchTextDirection: matchTextDirection,
-              gaplessPlayback: gaplessPlayback,
-              filterQuality: filterQuality,
-              isAntiAlias: isAntiAlias,
-              cacheWidth: cacheWidth,
-              cacheHeight: cacheHeight,
-            );
+        return MyImageProvider(
+          image,
+          height: height ?? 72,
+          width: width ?? 72,
+          fit: fit ?? BoxFit.none,
+          color: color,
+          frameBuilder: frameBuilder,
+          loadingBuilder: _loader(context),
+          errorBuilder: _error(context),
+          semanticLabel: semanticLabel,
+          excludeFromSemantics: excludeFromSemantics,
+          opacity: opacity,
+          colorBlendMode: colorBlendMode,
+          alignment: alignment,
+          repeat: repeat,
+          centerSlice: centerSlice,
+          matchTextDirection: matchTextDirection,
+          gaplessPlayback: gaplessPlayback,
+          filterQuality: filterQuality,
+          isAntiAlias: isAntiAlias,
+          cacheHeight: cacheHeight,
+          cacheWidth: cacheWidth,
+        );
       case MyImageType.fitHeight:
-        return imageFile == null
-            ? (assetUrl == null
-                ? ImageWidget.network(
-                  image,
-                  height: height,
-                  width: width,
-                  errorWidget: errorWidget,
-                  loadingWidget: loadingWidget,
-                  fit: fit ?? BoxFit.fitHeight,
-                  color: color,
-                  frameBuilder: frameBuilder,
-                  loadingBuilder: loadingBuilder,
-                  errorBuilder: errorBuilder,
-                  semanticLabel: semanticLabel,
-                  excludeFromSemantics: excludeFromSemantics,
-                  opacity: opacity,
-                  colorBlendMode: colorBlendMode,
-                  alignment: alignment,
-                  repeat: repeat,
-                  centerSlice: centerSlice,
-                  matchTextDirection: matchTextDirection,
-                  gaplessPlayback: gaplessPlayback,
-                  filterQuality: filterQuality,
-                  isAntiAlias: isAntiAlias,
-                  cacheHeight: cacheHeight,
-                  cacheWidth: cacheWidth,
-                )
-                : ImageWidget.asset(
-                  assetUrl,
-                  width: width,
-                  height: height,
-                  errorWidget: errorWidget,
-                  loadingWidget: loadingWidget,
-                  fit: fit ?? BoxFit.fitHeight,
-                  color: color,
-                  frameBuilder: frameBuilder,
-                  errorBuilder: errorBuilder,
-                  semanticLabel: semanticLabel,
-                  excludeFromSemantics: excludeFromSemantics,
-                  opacity: opacity,
-                  colorBlendMode: colorBlendMode,
-                  alignment: alignment,
-                  repeat: repeat,
-                  centerSlice: centerSlice,
-                  matchTextDirection: matchTextDirection,
-                  gaplessPlayback: gaplessPlayback,
-                  filterQuality: filterQuality,
-                  isAntiAlias: isAntiAlias,
-                  cacheHeight: cacheHeight,
-                  cacheWidth: cacheWidth,
-                ))
-            : ImageWidget.file(
-              imageFile,
-              width: width,
-              height: height,
-              fit: fit ?? BoxFit.fitHeight,
-              color: color,
-              frameBuilder: frameBuilder,
-              errorBuilder: errorBuilder,
-              semanticLabel: semanticLabel,
-              excludeFromSemantics: excludeFromSemantics,
-              colorBlendMode: colorBlendMode,
-              alignment: alignment,
-              repeat: repeat,
-              centerSlice: centerSlice,
-              matchTextDirection: matchTextDirection,
-              gaplessPlayback: gaplessPlayback,
-              filterQuality: filterQuality,
-              isAntiAlias: isAntiAlias,
-              cacheWidth: cacheWidth,
-              cacheHeight: cacheHeight,
-            );
+        return MyImageProvider(
+          image,
+          height: height,
+          width: width,
+          fit: fit ?? BoxFit.fitHeight,
+          color: color,
+          frameBuilder: frameBuilder,
+          loadingBuilder: _loader(context),
+          errorBuilder: _error(context),
+          semanticLabel: semanticLabel,
+          excludeFromSemantics: excludeFromSemantics,
+          opacity: opacity,
+          colorBlendMode: colorBlendMode,
+          alignment: alignment,
+          repeat: repeat,
+          centerSlice: centerSlice,
+          matchTextDirection: matchTextDirection,
+          gaplessPlayback: gaplessPlayback,
+          filterQuality: filterQuality,
+          isAntiAlias: isAntiAlias,
+          cacheHeight: cacheHeight,
+          cacheWidth: cacheWidth,
+        );
       case MyImageType.stretch:
-        return imageFile == null
-            ? (assetUrl == null
-                ? ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxHeight: height ?? 72,
-                    maxWidth: width ?? 72,
-                  ),
-                  child: ImageWidget.network(
-                    image,
-                    height: height ?? 72,
-                    width: width ?? 72,
-                    errorWidget: errorWidget,
-                    loadingWidget: loadingWidget,
-                    fit: fit ?? BoxFit.fill,
-                    color: color,
-                    frameBuilder: frameBuilder,
-                    loadingBuilder: loadingBuilder,
-                    errorBuilder: errorBuilder,
-                    semanticLabel: semanticLabel,
-                    excludeFromSemantics: excludeFromSemantics,
-                    opacity: opacity,
-                    colorBlendMode: colorBlendMode,
-                    alignment: alignment,
-                    repeat: repeat,
-                    centerSlice: centerSlice,
-                    matchTextDirection: matchTextDirection,
-                    gaplessPlayback: gaplessPlayback,
-                    filterQuality: filterQuality,
-                    isAntiAlias: isAntiAlias,
-                    cacheHeight: cacheHeight,
-                    cacheWidth: cacheWidth,
-                  ),
-                )
-                : ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxHeight: height ?? 72,
-                    maxWidth: width ?? 72,
-                  ),
-                  child: ImageWidget.asset(
-                    assetUrl,
-                    width: width ?? 72,
-                    height: height ?? 72,
-                    errorWidget: errorWidget,
-                    loadingWidget: loadingWidget,
-                    fit: fit ?? BoxFit.fill,
-                    color: color,
-                    frameBuilder: frameBuilder,
-                    errorBuilder: errorBuilder,
-                    semanticLabel: semanticLabel,
-                    excludeFromSemantics: excludeFromSemantics,
-                    opacity: opacity,
-                    colorBlendMode: colorBlendMode,
-                    alignment: alignment,
-                    repeat: repeat,
-                    centerSlice: centerSlice,
-                    matchTextDirection: matchTextDirection,
-                    gaplessPlayback: gaplessPlayback,
-                    filterQuality: filterQuality,
-                    isAntiAlias: isAntiAlias,
-                    cacheHeight: cacheHeight,
-                    cacheWidth: cacheWidth,
-                  ),
-                ))
-            : ImageWidget.file(
-              imageFile,
-              width: width ?? 72,
-              height: height ?? 72,
-              fit: fit ?? BoxFit.fill,
-              color: color,
-              frameBuilder: frameBuilder,
-              errorBuilder: errorBuilder,
-              semanticLabel: semanticLabel,
-              excludeFromSemantics: excludeFromSemantics,
-              colorBlendMode: colorBlendMode,
-              alignment: alignment,
-              repeat: repeat,
-              centerSlice: centerSlice,
-              matchTextDirection: matchTextDirection,
-              gaplessPlayback: gaplessPlayback,
-              filterQuality: filterQuality,
-              isAntiAlias: isAntiAlias,
-              cacheWidth: cacheWidth,
-              cacheHeight: cacheHeight,
-            );
+        return MyImageProvider(
+          image,
+          height: height ?? 72,
+          width: width ?? 72,
+          fit: fit ?? BoxFit.fill,
+          color: color,
+          frameBuilder: frameBuilder,
+          loadingBuilder: _loader(context),
+          errorBuilder: _error(context),
+          semanticLabel: semanticLabel,
+          excludeFromSemantics: excludeFromSemantics,
+          opacity: opacity,
+          colorBlendMode: colorBlendMode,
+          alignment: alignment,
+          repeat: repeat,
+          centerSlice: centerSlice,
+          matchTextDirection: matchTextDirection,
+          gaplessPlayback: gaplessPlayback,
+          filterQuality: filterQuality,
+          isAntiAlias: isAntiAlias,
+          cacheHeight: cacheHeight,
+          cacheWidth: cacheWidth,
+        );
       case MyImageType.square:
-        return imageFile == null
-            ? (assetUrl == null
-                ? ImageWidget.network(
-                  image,
-                  height: height ?? 72,
-                  width: width ?? 72,
-                  errorWidget: errorWidget,
-                  loadingWidget: loadingWidget,
-                  fit: fit ?? BoxFit.cover,
-                  color: color,
-                  frameBuilder: frameBuilder,
-                  loadingBuilder: loadingBuilder,
-                  errorBuilder: errorBuilder,
-                  semanticLabel: semanticLabel,
-                  excludeFromSemantics: excludeFromSemantics,
-                  opacity: opacity,
-                  colorBlendMode: colorBlendMode,
-                  alignment: alignment,
-                  repeat: repeat,
-                  centerSlice: centerSlice,
-                  matchTextDirection: matchTextDirection,
-                  gaplessPlayback: gaplessPlayback,
-                  filterQuality: filterQuality,
-                  isAntiAlias: isAntiAlias,
-                  cacheHeight: cacheHeight,
-                  cacheWidth: cacheWidth,
-                )
-                : ImageWidget.asset(
-                  assetUrl,
-                  width: width ?? 72,
-                  height: height ?? 72,
-                  errorWidget: errorWidget,
-                  loadingWidget: loadingWidget,
-                  fit: fit ?? BoxFit.cover,
-                  color: color,
-                  frameBuilder: frameBuilder,
-                  errorBuilder: errorBuilder,
-                  semanticLabel: semanticLabel,
-                  excludeFromSemantics: excludeFromSemantics,
-                  opacity: opacity,
-                  colorBlendMode: colorBlendMode,
-                  alignment: alignment,
-                  repeat: repeat,
-                  centerSlice: centerSlice,
-                  matchTextDirection: matchTextDirection,
-                  gaplessPlayback: gaplessPlayback,
-                  filterQuality: filterQuality,
-                  isAntiAlias: isAntiAlias,
-                  cacheHeight: cacheHeight,
-                  cacheWidth: cacheWidth,
-                ))
-            : ImageWidget.file(
-              imageFile,
-              width: width ?? 72,
-              height: height ?? 72,
-              fit: fit ?? BoxFit.cover,
-              color: color,
-              frameBuilder: frameBuilder,
-              errorBuilder: errorBuilder,
-              semanticLabel: semanticLabel,
-              excludeFromSemantics: excludeFromSemantics,
-              colorBlendMode: colorBlendMode,
-              alignment: alignment,
-              repeat: repeat,
-              centerSlice: centerSlice,
-              matchTextDirection: matchTextDirection,
-              gaplessPlayback: gaplessPlayback,
-              filterQuality: filterQuality,
-              isAntiAlias: isAntiAlias,
-              cacheWidth: cacheWidth,
-              cacheHeight: cacheHeight,
-            );
+        return MyImageProvider(
+          image,
+          height: height ?? 72,
+          width: width ?? 72,
+          fit: fit ?? BoxFit.cover,
+          color: color,
+          frameBuilder: frameBuilder,
+          loadingBuilder: _loader(context),
+          errorBuilder: _error(context),
+          semanticLabel: semanticLabel,
+          excludeFromSemantics: excludeFromSemantics,
+          opacity: opacity,
+          colorBlendMode: colorBlendMode,
+          alignment: alignment,
+          repeat: repeat,
+          centerSlice: centerSlice,
+          matchTextDirection: matchTextDirection,
+          gaplessPlayback: gaplessPlayback,
+          filterQuality: filterQuality,
+          isAntiAlias: isAntiAlias,
+          cacheHeight: cacheHeight,
+          cacheWidth: cacheWidth,
+        );
       case MyImageType.roundedSquare:
         return Container(
           height: height ?? 72,
           width: width ?? 72,
           clipBehavior: Clip.hardEdge,
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(6)),
-          child:
-              imageFile == null
-                  ? (assetUrl == null
-                      ? ImageWidget.network(
-                        image,
-                        height: height ?? 72,
-                        width: width ?? 72,
-                        errorWidget: errorWidget,
-                        loadingWidget: loadingWidget,
-                        fit: fit ?? BoxFit.cover,
-                        color: color,
-                        frameBuilder: frameBuilder,
-                        loadingBuilder: loadingBuilder,
-                        errorBuilder: errorBuilder,
-                        semanticLabel: semanticLabel,
-                        excludeFromSemantics: excludeFromSemantics,
-                        opacity: opacity,
-                        colorBlendMode: colorBlendMode,
-                        alignment: alignment,
-                        repeat: repeat,
-                        centerSlice: centerSlice,
-                        matchTextDirection: matchTextDirection,
-                        gaplessPlayback: gaplessPlayback,
-                        filterQuality: filterQuality,
-                        isAntiAlias: isAntiAlias,
-                        cacheHeight: cacheHeight,
-                        cacheWidth: cacheWidth,
-                      )
-                      : ImageWidget.asset(
-                        assetUrl,
-                        width: width ?? 72,
-                        height: height ?? 72,
-                        errorWidget: errorWidget,
-                        loadingWidget: loadingWidget,
-                        fit: fit ?? BoxFit.cover,
-                        color: color,
-                        frameBuilder: frameBuilder,
-                        errorBuilder: errorBuilder,
-                        semanticLabel: semanticLabel,
-                        excludeFromSemantics: excludeFromSemantics,
-                        opacity: opacity,
-                        colorBlendMode: colorBlendMode,
-                        alignment: alignment,
-                        repeat: repeat,
-                        centerSlice: centerSlice,
-                        matchTextDirection: matchTextDirection,
-                        gaplessPlayback: gaplessPlayback,
-                        filterQuality: filterQuality,
-                        isAntiAlias: isAntiAlias,
-                        cacheHeight: cacheHeight,
-                        cacheWidth: cacheWidth,
-                      ))
-                  : ImageWidget.file(
-                    imageFile,
-                    width: width ?? 72,
-                    height: height ?? 72,
-                    fit: fit ?? BoxFit.cover,
-                    color: color,
-                    frameBuilder: frameBuilder,
-                    errorBuilder: errorBuilder,
-                    semanticLabel: semanticLabel,
-                    excludeFromSemantics: excludeFromSemantics,
-                    colorBlendMode: colorBlendMode,
-                    alignment: alignment,
-                    repeat: repeat,
-                    centerSlice: centerSlice,
-                    matchTextDirection: matchTextDirection,
-                    gaplessPlayback: gaplessPlayback,
-                    filterQuality: filterQuality,
-                    isAntiAlias: isAntiAlias,
-                    cacheWidth: cacheWidth,
-                    cacheHeight: cacheHeight,
-                  ),
+          decoration: BoxDecoration(borderRadius: MyBorderRadius.medium),
+          child: MyImageProvider(
+            image,
+            height: height ?? 72,
+            width: width ?? 72,
+            fit: fit ?? BoxFit.cover,
+            color: color,
+            frameBuilder: frameBuilder,
+            loadingBuilder: _loader(context),
+            errorBuilder: _error(context),
+            semanticLabel: semanticLabel,
+            excludeFromSemantics: excludeFromSemantics,
+            opacity: opacity,
+            colorBlendMode: colorBlendMode,
+            alignment: alignment,
+            repeat: repeat,
+            centerSlice: centerSlice,
+            matchTextDirection: matchTextDirection,
+            gaplessPlayback: gaplessPlayback,
+            filterQuality: filterQuality,
+            isAntiAlias: isAntiAlias,
+            cacheHeight: cacheHeight,
+            cacheWidth: cacheWidth,
+          ),
         );
       case MyImageType.circle:
         return Container(
@@ -491,159 +247,54 @@ class MyImage extends StatelessWidget {
           width: width ?? 72,
           clipBehavior: Clip.hardEdge,
           decoration: const BoxDecoration(shape: BoxShape.circle),
-          child:
-              imageFile == null
-                  ? (assetUrl == null
-                      ? ImageWidget.network(
-                        image,
-                        height: height ?? 72,
-                        width: width ?? 72,
-                        errorWidget: errorWidget,
-                        loadingWidget: loadingWidget,
-                        fit: fit ?? BoxFit.cover,
-                        color: color,
-                        frameBuilder: frameBuilder,
-                        loadingBuilder: loadingBuilder,
-                        errorBuilder: errorBuilder,
-                        semanticLabel: semanticLabel,
-                        excludeFromSemantics: excludeFromSemantics,
-                        opacity: opacity,
-                        colorBlendMode: colorBlendMode,
-                        alignment: alignment,
-                        repeat: repeat,
-                        centerSlice: centerSlice,
-                        matchTextDirection: matchTextDirection,
-                        gaplessPlayback: gaplessPlayback,
-                        filterQuality: filterQuality,
-                        isAntiAlias: isAntiAlias,
-                        cacheHeight: cacheHeight,
-                        cacheWidth: cacheWidth,
-                      )
-                      : ImageWidget.asset(
-                        assetUrl,
-                        width: width ?? 72,
-                        height: height ?? 72,
-                        errorWidget: errorWidget,
-                        loadingWidget: loadingWidget,
-                        fit: fit ?? BoxFit.cover,
-                        color: color,
-                        frameBuilder: frameBuilder,
-                        errorBuilder: errorBuilder,
-                        semanticLabel: semanticLabel,
-                        excludeFromSemantics: excludeFromSemantics,
-                        opacity: opacity,
-                        colorBlendMode: colorBlendMode,
-                        alignment: alignment,
-                        repeat: repeat,
-                        centerSlice: centerSlice,
-                        matchTextDirection: matchTextDirection,
-                        gaplessPlayback: gaplessPlayback,
-                        filterQuality: filterQuality,
-                        isAntiAlias: isAntiAlias,
-                        cacheHeight: cacheHeight,
-                        cacheWidth: cacheWidth,
-                      ))
-                  : ImageWidget.file(
-                    imageFile,
-                    width: width ?? 72,
-                    height: height ?? 72,
-                    errorWidget: errorWidget,
-                    loadingWidget: loadingWidget,
-                    fit: fit ?? BoxFit.cover,
-                    color: color,
-                    frameBuilder: frameBuilder,
-                    errorBuilder: errorBuilder,
-                    semanticLabel: semanticLabel,
-                    excludeFromSemantics: excludeFromSemantics,
-                    opacity: opacity,
-                    colorBlendMode: colorBlendMode,
-                    alignment: alignment,
-                    repeat: repeat,
-                    centerSlice: centerSlice,
-                    matchTextDirection: matchTextDirection,
-                    gaplessPlayback: gaplessPlayback,
-                    filterQuality: filterQuality,
-                    isAntiAlias: isAntiAlias,
-                    cacheHeight: cacheHeight,
-                    cacheWidth: cacheWidth,
-                  ),
+          child: MyImageProvider(
+            image,
+            height: height ?? 72,
+            width: width ?? 72,
+            fit: fit ?? BoxFit.cover,
+            color: color,
+            frameBuilder: frameBuilder,
+            loadingBuilder: _loader(context),
+            errorBuilder: _error(context),
+            semanticLabel: semanticLabel,
+            excludeFromSemantics: excludeFromSemantics,
+            opacity: opacity,
+            colorBlendMode: colorBlendMode,
+            alignment: alignment,
+            repeat: repeat,
+            centerSlice: centerSlice,
+            matchTextDirection: matchTextDirection,
+            gaplessPlayback: gaplessPlayback,
+            filterQuality: filterQuality,
+            isAntiAlias: isAntiAlias,
+            cacheHeight: cacheHeight,
+            cacheWidth: cacheWidth,
+          ),
         );
       case MyImageType.fitWidth:
-        return imageFile == null
-            ? (assetUrl == null
-                ? ImageWidget.network(
-                  image,
-                  height: height,
-                  width: width,
-                  errorWidget: errorWidget,
-                  loadingWidget: loadingWidget,
-                  fit: fit ?? BoxFit.fitWidth,
-                  color: color,
-                  frameBuilder: frameBuilder,
-                  loadingBuilder: loadingBuilder,
-                  errorBuilder: errorBuilder,
-                  semanticLabel: semanticLabel,
-                  excludeFromSemantics: excludeFromSemantics,
-                  opacity: opacity,
-                  colorBlendMode: colorBlendMode,
-                  alignment: alignment,
-                  repeat: repeat,
-                  centerSlice: centerSlice,
-                  matchTextDirection: matchTextDirection,
-                  gaplessPlayback: gaplessPlayback,
-                  filterQuality: filterQuality,
-                  isAntiAlias: isAntiAlias,
-                  cacheHeight: cacheHeight,
-                  cacheWidth: cacheWidth,
-                )
-                : ImageWidget.asset(
-                  assetUrl,
-                  width: width,
-                  height: height,
-                  errorWidget: errorWidget,
-                  loadingWidget: loadingWidget,
-                  fit: fit ?? BoxFit.fitWidth,
-                  color: color,
-                  frameBuilder: frameBuilder,
-                  errorBuilder: errorBuilder,
-                  semanticLabel: semanticLabel,
-                  excludeFromSemantics: excludeFromSemantics,
-                  opacity: opacity,
-                  colorBlendMode: colorBlendMode,
-                  alignment: alignment,
-                  repeat: repeat,
-                  centerSlice: centerSlice,
-                  matchTextDirection: matchTextDirection,
-                  gaplessPlayback: gaplessPlayback,
-                  filterQuality: filterQuality,
-                  isAntiAlias: isAntiAlias,
-                  cacheHeight: cacheHeight,
-                  cacheWidth: cacheWidth,
-                ))
-            : ImageWidget.file(
-              imageFile,
-              width: width,
-              height: height,
-              errorWidget: errorWidget,
-              loadingWidget: loadingWidget,
-              fit: fit ?? BoxFit.fitWidth,
-              color: color,
-              frameBuilder: frameBuilder,
-              errorBuilder: errorBuilder,
-              semanticLabel: semanticLabel,
-              excludeFromSemantics: excludeFromSemantics,
-              opacity: opacity,
-              colorBlendMode: colorBlendMode,
-              alignment: alignment,
-              repeat: repeat,
-              centerSlice: centerSlice,
-              matchTextDirection: matchTextDirection,
-              gaplessPlayback: gaplessPlayback,
-              filterQuality: filterQuality,
-              isAntiAlias: isAntiAlias,
-              cacheHeight: cacheHeight,
-              cacheWidth: cacheWidth,
-            );
+        return MyImageProvider(
+          image,
+          height: height,
+          width: width,
+          fit: fit ?? BoxFit.fitWidth,
+          color: color,
+          frameBuilder: frameBuilder,
+          loadingBuilder: _loader(context),
+          errorBuilder: _error(context),
+          semanticLabel: semanticLabel,
+          excludeFromSemantics: excludeFromSemantics,
+          opacity: opacity,
+          colorBlendMode: colorBlendMode,
+          alignment: alignment,
+          repeat: repeat,
+          centerSlice: centerSlice,
+          matchTextDirection: matchTextDirection,
+          gaplessPlayback: gaplessPlayback,
+          filterQuality: filterQuality,
+          isAntiAlias: isAntiAlias,
+          cacheHeight: cacheHeight,
+          cacheWidth: cacheWidth,
+        );
     }
   }
 }

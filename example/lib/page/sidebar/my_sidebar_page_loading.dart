@@ -193,7 +193,7 @@ class MySideBarLoadingPageState extends State<MySideBarLoadingPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: const [
           MyImage(
-            assetUrl: 'assets/img/empty.png',
+            image: 'assets/img/empty.png',
             type: MyImageType.roundedSquare,
             width: 48,
             height: 48,

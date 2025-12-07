@@ -40,14 +40,12 @@ class TDImageState extends State<MyImagePage>
       title: myTitle(),
       exampleCodeGroup: 'image',
       desc:
-          'Used for displaying effects, it mainly involves centering, stretching, and tiling in various ways.',
+          'Used for displaying images, it mainly involves centering, stretching, and tiling in various ways.',
       children: [
         ExampleModule(
           title: 'Component Types',
           children: [
             ExampleItem(
-              ignoreCode: true,
-              desc: '',
               builder: (context) {
                 return Container(
                   alignment: Alignment.topLeft,
@@ -68,8 +66,6 @@ class TDImageState extends State<MyImagePage>
               },
             ),
             ExampleItem(
-              ignoreCode: true,
-              desc: '',
               builder: (context) {
                 return Container(
                   alignment: Alignment.topLeft,
@@ -81,7 +77,7 @@ class TDImageState extends State<MyImagePage>
                         child: _imageFitHeight(context),
                       ),
                       Container(
-                        margin: const EdgeInsets.all(8), // 适应宽
+                        margin: const EdgeInsets.all(8),
                         child: _imageFitWidth(context),
                       ),
                     ],
@@ -90,8 +86,6 @@ class TDImageState extends State<MyImagePage>
               },
             ),
             ExampleItem(
-              ignoreCode: true,
-              desc: '',
               builder: (context) {
                 return Container(
                   alignment: Alignment.topLeft,
@@ -121,8 +115,6 @@ class TDImageState extends State<MyImagePage>
           title: 'Component State',
           children: [
             ExampleItem(
-              ignoreCode: true,
-              desc: '',
               builder: (context) {
                 return Container(
                   alignment: Alignment.topLeft,
@@ -142,55 +134,49 @@ class TDImageState extends State<MyImagePage>
                 );
               },
             ),
-            ExampleItem(
-              ignoreCode: true,
-              desc: '',
-              builder: (context) {
-                return Container(
-                  alignment: Alignment.topLeft,
-                  padding: const EdgeInsets.only(left: 8),
-                  child: Wrap(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        child: _failDefault(context),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        child: _failCustom(context),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
+            // ExampleItem(
+            //   builder: (context) {
+            //     return Container(
+            //       alignment: Alignment.topLeft,
+            //       padding: const EdgeInsets.only(left: 8),
+            //       child: Wrap(
+            //         children: [
+            //           Container(
+            //             margin: const EdgeInsets.all(8),
+            //             child: _failDefault(context),
+            //           ),
+            //           Container(
+            //             margin: const EdgeInsets.all(8),
+            //             child: _failCustom(context),
+            //           ),
+            //         ],
+            //       ),
+            //     );
+            //   },
+            // ),
           ],
         ),
       ],
-      test: [
-        ExampleItem(
-          ignoreCode: true,
-          desc: '',
-          builder: (context) {
-            return Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.only(left: 8),
-              child: Wrap(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.all(8),
-                    child: _imageFile(context),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-      ],
+      // test: [
+      //   ExampleItem(
+      //     builder: (context) {
+      //       return Container(
+      //         alignment: Alignment.center,
+      //         padding: const EdgeInsets.only(left: 8),
+      //         child: Wrap(
+      //           children: [
+      //             Container(
+      //               margin: const EdgeInsets.all(8),
+      //               child: _imageFile(context),
+      //             ),
+      //           ],
+      //         ),
+      //       );
+      //     },
+      //   ),
+      // ],
     );
   }
-
-  /* 图片裁剪 */
 
   Widget _imageClip(BuildContext context) {
     return Column(
@@ -198,18 +184,12 @@ class TDImageState extends State<MyImagePage>
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: MyText(
-            '裁剪',
-            fontSize: context.textTheme.bodyMedium.fontSize,
-            textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
-          ),
+          child: MyText('Clip', style: context.textTheme.bodyMedium),
         ),
-        const MyImage(assetUrl: 'assets/img/image.png', type: MyImageType.clip),
+        const MyImage(image: 'assets/img/image.png', type: MyImageType.clip),
       ],
     );
   }
-
-  /* 图片拉伸 */
 
   Widget _imageStretch(BuildContext context) {
     return Column(
@@ -217,11 +197,7 @@ class TDImageState extends State<MyImagePage>
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: MyText(
-            '拉伸',
-            fontSize: context.textTheme.bodyMedium.fontSize,
-            textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
-          ),
+          child: MyText('Stretch', style: context.textTheme.bodyMedium),
         ),
         Container(
           color: Colors.black,
@@ -231,7 +207,7 @@ class TDImageState extends State<MyImagePage>
             alignment: Alignment.center,
             children: [
               MyImage(
-                assetUrl: 'assets/img/image.png',
+                image: 'assets/img/image.png',
                 width: 121,
                 height: 50,
                 type: MyImageType.stretch,
@@ -243,26 +219,20 @@ class TDImageState extends State<MyImagePage>
     );
   }
 
-  /* 图片适应高 */
-
   Widget _imageFitHeight(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: MyText(
-            '适应高',
-            fontSize: context.textTheme.bodyMedium.fontSize,
-            textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
-          ),
+          child: MyText('Fit Height', style: context.textTheme.bodyMedium),
         ),
         Container(
           width: 89,
           height: 72,
           color: Colors.black,
           child: const MyImage(
-            assetUrl: 'assets/img/image.png',
+            image: 'assets/img/image.png',
             type: MyImageType.fitHeight,
           ),
         ),
@@ -270,26 +240,20 @@ class TDImageState extends State<MyImagePage>
     );
   }
 
-  /* 图片适应宽 */
-
   Widget _imageFitWidth(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: MyText(
-            '适应宽',
-            fontSize: context.textTheme.bodyMedium.fontSize,
-            textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
-          ),
+          child: MyText('Fit Width', style: context.textTheme.bodyMedium),
         ),
         Container(
           width: 72,
           height: 89,
           color: Colors.black,
           child: const MyImage(
-            assetUrl: 'assets/img/image.png',
+            image: 'assets/img/image.png',
             type: MyImageType.fitWidth,
           ),
         ),
@@ -297,29 +261,18 @@ class TDImageState extends State<MyImagePage>
     );
   }
 
-  /* 方形 */
-
   Widget _imageSquare(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: MyText(
-            '方形',
-            fontSize: context.textTheme.bodyMedium.fontSize,
-            textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
-          ),
+          child: MyText('Square', style: context.textTheme.bodyMedium),
         ),
-        const MyImage(
-          assetUrl: 'assets/img/image.png',
-          type: MyImageType.square,
-        ),
+        const MyImage(image: 'assets/img/image.png', type: MyImageType.square),
       ],
     );
   }
-
-  /* 圆角方形 */
 
   Widget _imageRoundedSquare(BuildContext context) {
     return Column(
@@ -327,14 +280,10 @@ class TDImageState extends State<MyImagePage>
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: MyText(
-            '圆角方形',
-            fontSize: context.textTheme.bodyMedium.fontSize,
-            textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
-          ),
+          child: MyText('Rounded Square', style: context.textTheme.bodyMedium),
         ),
         const MyImage(
-          assetUrl: 'assets/img/image.png',
+          image: 'assets/img/image.png',
           type: MyImageType.roundedSquare,
           width: 72,
           height: 72,
@@ -343,22 +292,16 @@ class TDImageState extends State<MyImagePage>
     );
   }
 
-  /* 圆形 */
-
   Widget _imageCircle(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: MyText(
-            '圆形',
-            fontSize: context.textTheme.bodyMedium.fontSize,
-            textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
-          ),
+          child: MyText('Circle', style: context.textTheme.bodyMedium),
         ),
         const MyImage(
-          assetUrl: 'assets/img/image.png',
+          image: 'assets/img/image.png',
           width: 72,
           height: 72,
           type: MyImageType.circle,
@@ -367,48 +310,22 @@ class TDImageState extends State<MyImagePage>
     );
   }
 
-  /* 加载默认提示 */
-
   Widget _loadingDefault(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: MyText(
-            '加载默认提示',
-            fontSize: context.textTheme.bodyMedium.fontSize,
-            textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
-          ),
+          child: MyText('Default Loading', style: context.textTheme.bodyMedium),
         ),
-        Container(
-          height: 72,
-          width: 72,
-          clipBehavior: Clip.hardEdge,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(MyRadius.medium),
-          ),
-          child: Container(
-            alignment: Alignment.center,
-            color: ThemeColors.neutral.shade100,
-            child: Icon(
-              Icons.more_horiz_rounded,
-              size: 22,
-              color: ThemeColors.neutral.shade700,
-            ),
-          ),
+        const MyImage(
+          // image:
+          //     'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+          type: MyImageType.roundedSquare,
         ),
-        // 实际组件写法如下：上面仅为加载展示
-        // const TDImage(
-        //   imgUrl:
-        //       'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-        //   type: TDImageType.roundedSquare,
-        // ),
       ],
     );
   }
-
-  /* 加载自定义提示 */
 
   Widget _loadingCustom(BuildContext context) {
     return Column(
@@ -417,9 +334,8 @@ class TDImageState extends State<MyImagePage>
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: MyText(
-            '加载自定义提示',
-            fontSize: context.textTheme.bodyMedium.fontSize,
-            textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
+            'Load custom prompts',
+            style: context.textTheme.bodyMedium,
           ),
         ),
         Container(
@@ -435,34 +351,31 @@ class TDImageState extends State<MyImagePage>
             child: RotationTransition(
               turns: animation,
               alignment: Alignment.center,
-              child: Placeholder(),
-              // child: MyCircleIndicator(
-              //   color: context.colorScheme.primary,
-              //   size: 18,
-              //   lineWidth: 3,
-              // ),
+              child: MyLoader(
+                // color: context.colorScheme.primary,
+                // size: 18,
+                // lineWidth: 3,
+              ),
             ),
           ),
         ),
-        // 实际组件写法如下：上面仅为加载展示
-        // TDImage(
-        //   imgUrl:
-        //       'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-        //   loadingWidget: RotationTransition(
-        //       turns: animation,
-        //       alignment: Alignment.center,
-        //       child: TDCircleIndicator(
-        //         color: context.colorScheme.primary,
-        //         size: 18,
-        //         lineWidth: 3,
-        //       )),
-        //   type: TDImageType.roundedSquare,
-        // ),
+        MyImage(
+          image:
+              'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+          loadingWidget: RotationTransition(
+            turns: animation,
+            alignment: Alignment.center,
+            child: MyLoader(
+              // color: context.colorScheme.primary,
+              // size: 18,
+              // lineWidth: 3,
+            ),
+          ),
+          type: MyImageType.roundedSquare,
+        ),
       ],
     );
   }
-
-  /* 失败默认提示 */
 
   Widget _failDefault(BuildContext context) {
     return Column(
@@ -471,17 +384,14 @@ class TDImageState extends State<MyImagePage>
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: MyText(
-            '失败默认提示',
-            fontSize: context.textTheme.bodyMedium.fontSize,
-            textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
+            'Default prompt for failure',
+            style: context.textTheme.bodyMedium,
           ),
         ),
         const MyImage(image: 'error', type: MyImageType.roundedSquare),
       ],
     );
   }
-
-  /* 失败自定义提示 */
 
   Widget _failCustom(BuildContext context) {
     return Column(
@@ -490,15 +400,14 @@ class TDImageState extends State<MyImagePage>
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: MyText(
-            '失败自定义提示',
-            fontSize: context.textTheme.bodyMedium.fontSize,
-            textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
+            'Failure custom prompt',
+            style: context.textTheme.bodyMedium,
           ),
         ),
         MyImage(
           image: 'error',
           errorWidget: MyText(
-            '加载失败',
+            'Loading failed',
             fontWeight: FontWeight.w500,
             textColor: ThemeColors.neutral.shade700,
           ),
@@ -509,11 +418,11 @@ class TDImageState extends State<MyImagePage>
   }
 
   Widget _imageFile(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 72,
       height: 72,
       child: MyImage(
-        imageFile: File('/sdcard/td/test.jpg'),
+        image: File('/sdcard/td/test.jpg'),
         type: MyImageType.fitWidth,
       ),
     );

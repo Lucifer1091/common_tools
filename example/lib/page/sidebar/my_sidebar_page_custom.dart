@@ -170,13 +170,13 @@ class MySideBarCustomPageState extends State<MySideBarCustomPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const MyImage(
-            assetUrl: 'assets/img/empty.png',
+            image: 'assets/img/empty.png',
             type: MyImageType.roundedSquare,
             width: 48,
             height: 48,
           ),
           const SizedBox(height: 8),
-          MyText('$title', style: const TextStyle(fontSize: 12)),
+          MyText(title, style: const TextStyle(fontSize: 12)),
         ],
       ),
     );

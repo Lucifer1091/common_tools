@@ -341,9 +341,7 @@ class _MyUploadState extends State<MyUpload> {
             key: Key(file.assetPath ?? ''),
             width: widget.width,
             height: widget.height,
-            image: file.remotePath,
-            imageFile: file.file,
-            assetUrl: file.file == null ? file.assetPath : null,
+            image: file.remotePath ?? file.assetPath ?? file.file,
             type: _imageTypeMap[widget.type] ?? MyImageType.roundedSquare,
           ),
           Visibility(
