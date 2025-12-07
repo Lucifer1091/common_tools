@@ -110,9 +110,9 @@ class _MyUploadState extends State<MyUpload> {
 
   final ImagePicker _picker = ImagePicker();
 
-  final Map<MyUploadBoxType, TDImageType> _imageTypeMap = {
-    MyUploadBoxType.roundedSquare: TDImageType.roundedSquare,
-    MyUploadBoxType.circle: TDImageType.circle,
+  final Map<MyUploadBoxType, MyImageType> _imageTypeMap = {
+    MyUploadBoxType.roundedSquare: MyImageType.roundedSquare,
+    MyUploadBoxType.circle: MyImageType.circle,
   };
 
   @override
@@ -337,14 +337,14 @@ class _MyUploadState extends State<MyUpload> {
       },
       child: Stack(
         children: [
-          TDImage(
+          MyImage(
             key: Key(file.assetPath ?? ''),
             width: widget.width,
             height: widget.height,
-            imgUrl: file.remotePath,
+            image: file.remotePath,
             imageFile: file.file,
             assetUrl: file.file == null ? file.assetPath : null,
-            type: _imageTypeMap[widget.type] ?? TDImageType.roundedSquare,
+            type: _imageTypeMap[widget.type] ?? MyImageType.roundedSquare,
           ),
           Visibility(
             visible: file.status != MyUploadFileStatus.success,

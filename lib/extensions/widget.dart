@@ -6,8 +6,9 @@ import '../../index.dart';
 extension WidgetExtensions on Widget {
   RepaintBoundary get repaintBoundary => RepaintBoundary(child: this);
 
-  MouseRegion get mouseRegion =>
-      MouseRegion(cursor: SystemMouseCursors.click, child: this);
+  MouseRegion get mouseRegion {
+    return MouseRegion(cursor: SystemMouseCursors.click, child: this);
+  }
 
   PreferredSize get preferredSize {
     return PreferredSize(
@@ -21,24 +22,29 @@ extension WidgetExtensions on Widget {
     double? widthFactor,
     double? heightFactor,
     bool enabled = true,
-  }) =>
-      Center(
-        key: key,
-        widthFactor: widthFactor,
-        heightFactor: heightFactor,
-        child: this,
-      ).showIfOrNull(enabled) ??
-      this;
+  }) {
+    if (!enabled) return this;
+    return Center(
+      key: key,
+      widthFactor: widthFactor,
+      heightFactor: heightFactor,
+      child: this,
+    );
+  }
 
-  Widget expanded({int flex = 1, bool enabled = true}) =>
-      Expanded(flex: flex, child: this).showIfOrNull(enabled) ?? this;
+  Widget expanded({int flex = 1, bool enabled = true}) {
+    if (!enabled) return this;
+    return Expanded(flex: flex, child: this);
+  }
 
   Widget flexible({
     int flex = 1,
     FlexFit fit = FlexFit.loose,
     bool enabled = true,
-  }) =>
-      Flexible(flex: flex, fit: fit, child: this).showIfOrNull(enabled) ?? this;
+  }) {
+    if (!enabled) return this;
+    return Flexible(flex: flex, fit: fit, child: this);
+  }
 
   Widget padding({
     double? all,
@@ -50,30 +56,34 @@ extension WidgetExtensions on Widget {
     double? horizontal,
     bool enabled = true,
     Key? key,
-  }) =>
-      Padding(
-        key: key,
-        padding: EdgeInsets.all(all ?? 0).except(
-          left: left,
-          top: top,
-          right: right,
-          bottom: bottom,
-          vertical: vertical,
-          horizontal: horizontal,
-        ),
-        child: this,
-      ).showIfOrNull(enabled) ??
-      this;
+  }) {
+    if (!enabled) return this;
+    return Padding(
+      key: key,
+      padding: EdgeInsets.all(all ?? 0).except(
+        left: left,
+        top: top,
+        right: right,
+        bottom: bottom,
+        vertical: vertical,
+        horizontal: horizontal,
+      ),
+      child: this,
+    );
+  }
 
   Widget colored({required Color color}) {
     return ColoredBox(color: color, child: this);
   }
 
-  Widget opacity({required double opacity, bool enabled = true}) =>
-      Opacity(opacity: opacity, child: this).showIfOrNull(enabled) ?? this;
+  Widget opacity({required double opacity, bool enabled = true}) {
+    if (!enabled) return this;
+    return Opacity(opacity: opacity, child: this);
+  }
 
-  Widget align({AlignmentGeometry? align}) =>
-      Align(alignment: align ?? Alignment.center, child: this);
+  Widget align({AlignmentGeometry? align}) {
+    return Align(alignment: align ?? Alignment.center, child: this);
+  }
 
   /// add rotation to parent widget
   Widget rotate({
@@ -124,14 +134,10 @@ extension WidgetExtensions on Widget {
     double? height,
     bool enabled = true,
     Key? key,
-  }) =>
-      SizedBox(
-        key: key,
-        width: width,
-        height: height,
-        child: this,
-      ).showIfOrNull(enabled) ??
-      this;
+  }) {
+    if (!enabled) return this;
+    return SizedBox(key: key, width: width, height: height, child: this);
+  }
 
   /// add FittedBox to parent widget
   Widget fit({BoxFit? fit, AlignmentGeometry? alignment}) {
@@ -192,17 +198,17 @@ extension WidgetExtensions on Widget {
     VoidCallback? onDoubleTap,
     Key? key,
     bool opaque = true,
-  }) =>
-      onTap != null || onDoubleTap != null
-          ? GestureDetector(
-            key: key,
-            onTap: onTap,
-            onDoubleTap: onDoubleTap,
-            behavior:
-                opaque ? HitTestBehavior.opaque : HitTestBehavior.deferToChild,
-            child: this,
-          ).mouseRegion
-          : this;
+  }) {
+    if (onTap == null && onDoubleTap == null) return this;
+
+    return MyGestureDetector(
+      key: key,
+      onTap: onTap,
+      onDoubleTap: onDoubleTap,
+      behavior: opaque ? HitTestBehavior.opaque : HitTestBehavior.deferToChild,
+      child: this,
+    );
+  }
 
   Tooltip tooltip({
     required String msg,
@@ -241,14 +247,15 @@ extension WidgetExtensions on Widget {
     child: this,
   );
 
-  Widget bgBlur({double blurRadius = 10, double? sigmaX, double? sigmaY}) =>
-      BackdropFilter(
-        filter: ImageFilter.blur(
-          sigmaX: sigmaX ?? blurRadius,
-          sigmaY: sigmaY ?? blurRadius,
-        ),
-        child: this,
-      );
+  Widget bgBlur({double blurRadius = 10, double? sigmaX, double? sigmaY}) {
+    return BackdropFilter(
+      filter: ImageFilter.blur(
+        sigmaX: sigmaX ?? blurRadius,
+        sigmaY: sigmaY ?? blurRadius,
+      ),
+      child: this,
+    );
+  }
 
   Widget gradient(Gradient gradient, [BlendMode? blendMode]) => ShaderMask(
     shaderCallback: (Rect bounds) {

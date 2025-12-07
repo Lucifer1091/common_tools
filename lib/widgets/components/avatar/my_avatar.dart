@@ -5,7 +5,7 @@ import '../../../index.dart';
 
 enum MyAvatarSize { large, medium, small }
 
-enum MyAvatarType { icon, normal, customText, display, operation }
+enum MyAvatarType { icon, normal, initials, display, operation }
 
 enum MyAvatarShape { circle, square }
 
@@ -15,7 +15,7 @@ class MyAvatar extends StatelessWidget {
     this.size = MyAvatarSize.medium,
     this.type = MyAvatarType.normal,
     this.shape = MyAvatarShape.circle,
-    this.text,
+    this.initials,
     this.textColor,
     this.style,
     this.radius,
@@ -37,7 +37,7 @@ class MyAvatar extends StatelessWidget {
   final MyAvatarSize size;
   final MyAvatarType type;
   final MyAvatarShape shape;
-  final String? text;
+  final String? initials;
   final Color? textColor;
   final TextStyle? style;
   final double? radius;
@@ -62,13 +62,15 @@ class MyAvatar extends StatelessWidget {
         };
   }
 
-  TextStyle? _getTextStyle(BuildContext context) {
+  TextStyle? _getTextStyle(BuildContext context, {Color? color}) {
     return style ??
         switch (size) {
           MyAvatarSize.large => context.titleLarge,
           MyAvatarSize.medium => context.titleMedium,
           MyAvatarSize.small => context.titleSmall,
-        }.copyWith(color: textColor ?? context.colorScheme.primaryForeground);
+        }.copyWith(
+          color: color ?? textColor ?? context.colorScheme.primaryForeground,
+        );
   }
 
   double _getIconWidth() {
@@ -89,17 +91,16 @@ class MyAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bgColor = context.colorScheme.primary.withValues(alpha: 0.15);
     switch (type) {
       case MyAvatarType.icon:
-        return GestureDetector(
+        return MyGestureDetector(
           onTap: onTap,
           child: Container(
             width: _getAvatarWidth(),
             height: _getAvatarWidth(),
             decoration: BoxDecoration(
-              color:
-                  backgroundColor ??
-                  context.colorScheme.primary.withValues(alpha: 0.2),
+              color: backgroundColor ?? bgColor,
               borderRadius: BorderRadius.circular(_getAvatarRadius(context)),
             ),
             child: Center(
@@ -112,15 +113,13 @@ class MyAvatar extends StatelessWidget {
           ),
         );
       case MyAvatarType.normal:
-        return GestureDetector(
+        return MyGestureDetector(
           onTap: onTap,
           child: Container(
             width: _getAvatarWidth(),
             height: _getAvatarWidth(),
             decoration: BoxDecoration(
-              color:
-                  backgroundColor ??
-                  context.colorScheme.primary.withValues(alpha: 0.2),
+              color: backgroundColor ?? bgColor,
               borderRadius: BorderRadius.circular(_getAvatarRadius(context)),
               image:
                   avatarUrl != null
@@ -131,8 +130,8 @@ class MyAvatar extends StatelessWidget {
             ),
           ),
         );
-      case MyAvatarType.customText:
-        return GestureDetector(
+      case MyAvatarType.initials:
+        return MyGestureDetector(
           onTap: onTap,
           child: Container(
             width: _getAvatarWidth(),
@@ -143,7 +142,7 @@ class MyAvatar extends StatelessWidget {
             ),
             child: Center(
               child: MyText(
-                text,
+                initials,
                 textAlign: TextAlign.center,
                 style: _getTextStyle(context),
               ),
@@ -166,6 +165,8 @@ class MyAvatar extends StatelessWidget {
   }
 
   Widget _buildOperationAvatar(BuildContext context) {
+    final bgColor = context.colorScheme.primary.withValues(alpha: 0.15);
+
     final list = <Widget>[];
 
     if (avatarDisplayList.isBlank && avatarDisplayListAsset.isBlank) {
@@ -182,20 +183,20 @@ class MyAvatar extends StatelessWidget {
           list.add(
             Positioned(
               left: left,
-              child: GestureDetector(
+              child: MyGestureDetector(
                 onTap: onTap,
                 child: Container(
                   width: _getAvatarWidth(),
                   height: _getAvatarWidth(),
                   clipBehavior: Clip.hardEdge,
                   decoration: ShapeDecoration(
-                    color: context.colorScheme.primary.withValues(alpha: 0.2),
+                    color: bgColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(
                         _getAvatarWidth() - _getDisplayPadding(),
                       ),
                       side: BorderSide(
-                        color: Colors.white,
+                        color: context.colorScheme.background,
                         width: avatarDisplayBorder,
                       ),
                     ),
@@ -225,7 +226,7 @@ class MyAvatar extends StatelessWidget {
                       _getAvatarWidth() - _getDisplayPadding(),
                     ),
                     side: BorderSide(
-                      color: Colors.white,
+                      color: context.colorScheme.background,
                       width: avatarDisplayBorder,
                     ),
                   ),
@@ -249,20 +250,20 @@ class MyAvatar extends StatelessWidget {
           list.add(
             Positioned(
               left: left,
-              child: GestureDetector(
+              child: MyGestureDetector(
                 onTap: onTap,
                 child: Container(
                   width: _getAvatarWidth(),
                   height: _getAvatarWidth(),
                   clipBehavior: Clip.hardEdge,
                   decoration: ShapeDecoration(
-                    color: context.colorScheme.primary.withValues(alpha: 0.2),
+                    color: bgColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(
                         _getAvatarWidth() - _getDisplayPadding(),
                       ),
                       side: BorderSide(
-                        color: Colors.white,
+                        color: context.colorScheme.background,
                         width: avatarDisplayBorder,
                       ),
                     ),
@@ -271,7 +272,7 @@ class MyAvatar extends StatelessWidget {
                     child:
                         avatarDisplayWidget ??
                         Icon(
-                          icon ??  LucideIcons.userPlus,
+                          icon ?? LucideIcons.userPlus,
                           size: _getIconWidth(),
                           color: context.colorScheme.primary,
                         ),
@@ -294,7 +295,7 @@ class MyAvatar extends StatelessWidget {
                       _getAvatarWidth() - _getDisplayPadding(),
                     ),
                     side: BorderSide(
-                      color: Colors.white,
+                      color: context.colorScheme.background,
                       width: avatarDisplayBorder,
                     ),
                   ),
@@ -318,6 +319,8 @@ class MyAvatar extends StatelessWidget {
   }
 
   Widget _buildDisplayAvatar(BuildContext context) {
+    final bgColor = context.colorScheme.primary.withValues(alpha: 0.15);
+
     final list = <Widget>[];
 
     if (avatarDisplayList.isBlank && avatarDisplayListAsset.isBlank) {
@@ -341,13 +344,13 @@ class MyAvatar extends StatelessWidget {
                 height: _getAvatarWidth(),
                 clipBehavior: Clip.hardEdge,
                 decoration: ShapeDecoration(
-                  color: context.colorScheme.primary.withValues(alpha: 0.2),
+                  color: bgColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(
                       _getAvatarWidth() - _getDisplayPadding(),
                     ),
                     side: BorderSide(
-                      color: Colors.white,
+                      color: context.colorScheme.background,
                       width: avatarDisplayBorder,
                     ),
                   ),
@@ -358,7 +361,10 @@ class MyAvatar extends StatelessWidget {
                       child: MyText(
                         displayText,
                         textAlign: TextAlign.center,
-                        style: _getTextStyle(context),
+                        style: _getTextStyle(
+                          context,
+                          color: context.colorScheme.primary,
+                        ),
                       ),
                     ),
               ),
@@ -378,7 +384,7 @@ class MyAvatar extends StatelessWidget {
                       _getAvatarWidth() - _getDisplayPadding(),
                     ),
                     side: BorderSide(
-                      color: Colors.white,
+                      color: context.colorScheme.background,
                       width: avatarDisplayBorder,
                     ),
                   ),
@@ -407,13 +413,13 @@ class MyAvatar extends StatelessWidget {
                 height: _getAvatarWidth(),
                 clipBehavior: Clip.hardEdge,
                 decoration: ShapeDecoration(
-                  color: context.colorScheme.primary.withValues(alpha: 0.2),
+                  color: bgColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(
                       _getAvatarWidth() - _getDisplayPadding(),
                     ),
                     side: BorderSide(
-                      color: Colors.white,
+                      color: context.colorScheme.background,
                       width: avatarDisplayBorder,
                     ),
                   ),
@@ -424,7 +430,10 @@ class MyAvatar extends StatelessWidget {
                       child: MyText(
                         displayText,
                         textAlign: TextAlign.center,
-                        style: _getTextStyle(context),
+                        style: _getTextStyle(
+                          context,
+                          color: context.colorScheme.primary,
+                        ),
                       ),
                     ),
               ),
@@ -444,7 +453,7 @@ class MyAvatar extends StatelessWidget {
                       _getAvatarWidth() - _getDisplayPadding(),
                     ),
                     side: BorderSide(
-                      color: Colors.white,
+                      color: context.colorScheme.background,
                       width: avatarDisplayBorder,
                     ),
                   ),

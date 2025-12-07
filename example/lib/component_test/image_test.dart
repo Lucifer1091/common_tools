@@ -34,9 +34,9 @@ class TestPage extends StatelessWidget {
             ),
             SizedBox(height: 20),
 
-            TDImage(
-              imgUrl: 'assets/img/image.png',
-              type: TDImageType.fitHeight,
+            MyImage(
+              image: 'assets/img/image.png',
+              type: MyImageType.fitHeight,
               height: 144,
               fit: BoxFit.fitHeight,
             ),

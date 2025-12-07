@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../../layout/no_widget.dart';
 
-///封装图片加载控件，增加图片加载失败时加载默认图片
+/// Encapsulates an image loading control, adding the ability to load a default
+/// image when an image fails to load.
 class ImageWidget extends StatefulWidget {
   const ImageWidget({
     required this.image,
@@ -220,6 +220,7 @@ class ImageWidget extends StatefulWidget {
   final int? cacheWidth;
 
   final int? cacheHeight;
+
   @override
   State<StatefulWidget> createState() {
     return _StateImageWidget();
@@ -309,6 +310,7 @@ class _StateImageWidget extends State<ImageWidget> {
               cacheWidth: widget.cacheWidth,
               cacheHeight: widget.cacheHeight,
             );
+    
     _resolve = _image.image.resolve(ImageConfiguration.empty);
     _listener = ImageStreamListener(
       (_, __) {

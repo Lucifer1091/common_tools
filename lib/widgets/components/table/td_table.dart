@@ -647,12 +647,12 @@ class TDTableState extends State<TDTable> {
     );
   }
 
-  TDImage _getEmptyImage() {
+  MyImage _getEmptyImage() {
     final url = widget.empty?.assetUrl ?? '';
     if (url.startsWith('http')) {
-      return TDImage(imgUrl: url);
+      return MyImage(image: url);
     }
-    return TDImage(assetUrl: url);
+    return MyImage(assetUrl: url);
   }
 
   List<Widget> _getVerticalCell(

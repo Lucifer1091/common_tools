@@ -25,12 +25,13 @@ class _MyAvatarPageState extends State<MyAvatarPage> {
             ExampleItem(desc: 'Image Avatar', builder: _buildImageAvatar),
             ExampleItem(desc: 'Character Avatar', builder: _buildTextAvatar),
             ExampleItem(desc: 'Icon Avatar', builder: _buildIconAvatar),
-            ExampleItem(desc: 'Avatar with Logo', builder: _buildBadgeAvatar),
+            ExampleItem(desc: 'Avatar with Badge', builder: _buildBadgeAvatar),
           ],
         ),
         ExampleModule(
           title: 'Special Type',
           children: [
+            // ExampleItem(desc: 'Avatar Group', builder: _buildAvatarGroup),
             ExampleItem(
               desc: 'Avatar Group for Pure Display',
               builder: _buildDisplayAvatar,
@@ -57,16 +58,10 @@ class _MyAvatarPageState extends State<MyAvatarPage> {
     return const Padding(
       padding: EdgeInsets.only(left: 16),
       child: Row(
+        spacing: 32,
         children: [
+          MyAvatar(defaultUrl: 'assets/img/td_avatar_1.png'),
           MyAvatar(
-            size: MyAvatarSize.medium,
-            type: MyAvatarType.normal,
-            defaultUrl: 'assets/img/td_avatar_1.png',
-          ),
-          SizedBox(width: 32),
-          MyAvatar(
-            size: MyAvatarSize.medium,
-            type: MyAvatarType.normal,
             shape: MyAvatarShape.square,
             defaultUrl: 'assets/img/td_avatar_1.png',
           ),
@@ -76,21 +71,21 @@ class _MyAvatarPageState extends State<MyAvatarPage> {
   }
 
   Widget _buildTextAvatar(BuildContext context) {
-    return const Padding(
+    return Padding(
       padding: EdgeInsets.only(left: 16),
       child: Row(
+        spacing: 32,
         children: [
+          MyAvatar(type: MyAvatarType.initials, initials: 'AA'),
           MyAvatar(
-            size: MyAvatarSize.medium,
-            type: MyAvatarType.customText,
-            text: 'A',
-          ),
-          SizedBox(width: 32),
-          MyAvatar(
-            size: MyAvatarSize.medium,
-            type: MyAvatarType.customText,
+            type: MyAvatarType.initials,
             shape: MyAvatarShape.square,
-            text: 'A',
+            initials: 'AC',
+          ),
+          MyAvatar(
+            type: MyAvatarType.initials,
+            shape: MyAvatarShape.square,
+            initials: 'Justin Greaves'.initials,
           ),
         ],
       ),
@@ -101,14 +96,10 @@ class _MyAvatarPageState extends State<MyAvatarPage> {
     return const Padding(
       padding: EdgeInsets.only(left: 16),
       child: Row(
+        spacing: 32,
         children: [
-          MyAvatar(size: MyAvatarSize.medium, type: MyAvatarType.icon),
-          SizedBox(width: 32),
-          MyAvatar(
-            size: MyAvatarSize.medium,
-            type: MyAvatarType.icon,
-            shape: MyAvatarShape.square,
-          ),
+          MyAvatar(type: MyAvatarType.icon),
+          MyAvatar(type: MyAvatarType.icon, shape: MyAvatarShape.square),
         ],
       ),
     );
@@ -118,61 +109,39 @@ class _MyAvatarPageState extends State<MyAvatarPage> {
     return const Padding(
       padding: EdgeInsets.only(left: 16),
       child: Row(
+        spacing: 32,
         children: [
-          SizedBox(
+          MyBadgeWrapper(
             height: 51,
             width: 51,
-            child: Stack(
-              alignment: Alignment.bottomLeft,
-              children: [
-                MyAvatar(
-                  size: MyAvatarSize.medium,
-                  type: MyAvatarType.normal,
-                  defaultUrl: 'assets/img/td_avatar_1.png',
-                ),
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  child: MyBadge(MyBadgeType.redPoint),
-                ),
-              ],
+            right: 0,
+            top: 0,
+            badge: MyBadge(MyBadgeType.redPoint),
+            child: MyAvatar(
+              size: MyAvatarSize.medium,
+              type: MyAvatarType.normal,
+              defaultUrl: 'assets/img/td_avatar_1.png',
             ),
           ),
-          SizedBox(width: 32),
-          SizedBox(
+          MyBadgeWrapper(
             height: 51,
             width: 51,
-            child: Stack(
-              alignment: Alignment.bottomLeft,
-              children: [
-                MyAvatar(
-                  size: MyAvatarSize.medium,
-                  type: MyAvatarType.customText,
-                  text: 'A',
-                ),
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  child: MyBadge(MyBadgeType.message, count: 8),
-                ),
-              ],
+            right: 0,
+            top: 0,
+            badge: MyBadge(MyBadgeType.message, count: 8),
+            child: MyAvatar(
+              size: MyAvatarSize.medium,
+              type: MyAvatarType.initials,
+              initials: 'AC',
             ),
           ),
-          SizedBox(width: 32),
-          SizedBox(
-            width: 51,
+          MyBadgeWrapper(
             height: 51,
-            child: Stack(
-              alignment: Alignment.bottomLeft,
-              children: [
-                MyAvatar(size: MyAvatarSize.medium, type: MyAvatarType.icon),
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  child: MyBadge(MyBadgeType.message, count: 12),
-                ),
-              ],
-            ),
+            width: 51,
+            right: 0,
+            top: 0,
+            badge: MyBadge(MyBadgeType.message, count: 12),
+            child: MyAvatar(type: MyAvatarType.icon),
           ),
         ],
       ),
@@ -187,7 +156,6 @@ class _MyAvatarPageState extends State<MyAvatarPage> {
       alignment: Alignment.centerLeft,
       padding: const EdgeInsets.only(left: 16),
       child: MyAvatar(
-        size: MyAvatarSize.medium,
         type: MyAvatarType.display,
         displayText: '+5',
         avatarDisplayListAsset: avatarList,
@@ -203,11 +171,10 @@ class _MyAvatarPageState extends State<MyAvatarPage> {
       alignment: Alignment.centerLeft,
       padding: const EdgeInsets.only(left: 16),
       child: MyAvatar(
-        size: MyAvatarSize.medium,
         type: MyAvatarType.operation,
         avatarDisplayListAsset: avatarList,
         onTap: () {
-          TDToast.showText('点击了操作', context: context);
+          TDToast.showText('On Add User Tap', context: context);
         },
       ),
     );
@@ -217,19 +184,18 @@ class _MyAvatarPageState extends State<MyAvatarPage> {
     return const Padding(
       padding: EdgeInsets.only(left: 16),
       child: Row(
+        spacing: 32,
         children: [
           MyAvatar(
             size: MyAvatarSize.large,
             type: MyAvatarType.normal,
             defaultUrl: 'assets/img/td_avatar_1.png',
           ),
-          SizedBox(width: 32),
           MyAvatar(
             size: MyAvatarSize.large,
-            type: MyAvatarType.customText,
-            text: 'A',
+            type: MyAvatarType.initials,
+            initials: 'AA',
           ),
-          SizedBox(width: 32),
           MyAvatar(size: MyAvatarSize.large, type: MyAvatarType.icon),
         ],
       ),
@@ -240,19 +206,18 @@ class _MyAvatarPageState extends State<MyAvatarPage> {
     return const Padding(
       padding: EdgeInsets.only(left: 16),
       child: Row(
+        spacing: 48,
         children: [
           MyAvatar(
             size: MyAvatarSize.medium,
             type: MyAvatarType.normal,
             defaultUrl: 'assets/img/td_avatar_1.png',
           ),
-          SizedBox(width: 48),
           MyAvatar(
             size: MyAvatarSize.medium,
-            type: MyAvatarType.customText,
-            text: 'A',
+            type: MyAvatarType.initials,
+            initials: 'AC',
           ),
-          SizedBox(width: 48),
           MyAvatar(size: MyAvatarSize.medium, type: MyAvatarType.icon),
         ],
       ),
@@ -263,22 +228,60 @@ class _MyAvatarPageState extends State<MyAvatarPage> {
     return const Padding(
       padding: EdgeInsets.only(left: 16),
       child: Row(
+        spacing: 56,
         children: [
           MyAvatar(
             size: MyAvatarSize.small,
             type: MyAvatarType.normal,
             defaultUrl: 'assets/img/td_avatar_1.png',
           ),
-          SizedBox(width: 56),
           MyAvatar(
             size: MyAvatarSize.small,
-            type: MyAvatarType.customText,
-            text: 'A',
+            type: MyAvatarType.initials,
+            initials: 'AA',
           ),
-          SizedBox(width: 56),
           MyAvatar(size: MyAvatarSize.small, type: MyAvatarType.icon),
         ],
       ),
     );
   }
+
+  // /// Helper that returns a few colored avatars to visualize overlap.
+  // List<AvatarWidget> getAvatars() {
+  //   return [
+  //     Avatar(
+  //       initials: Avatar.getInitials('sunarya-thito'),
+  //       backgroundColor: Colors.red,
+  //     ),
+  //     Avatar(
+  //       initials: Avatar.getInitials('sunarya-thito'),
+  //       backgroundColor: Colors.green,
+  //     ),
+  //     Avatar(
+  //       initials: Avatar.getInitials('sunarya-thito'),
+  //       backgroundColor: Colors.blue,
+  //     ),
+  //     Avatar(
+  //       initials: Avatar.getInitials('sunarya-thito'),
+  //       backgroundColor: Colors.yellow,
+  //     ),
+  //   ];
+  // }
+
+  // Widget _buildAvatarGroup(BuildContext context) {
+  //   return Wrap(
+  //     spacing: 16,
+  //     runSpacing: 16,
+  //     children: [
+  //       // Overlap avatars towards the left.
+  //       AvatarGroup.toLeft(children: getAvatars(), gap: 4),
+  //       // Overlap avatars towards the right.
+  //       AvatarGroup.toRight(children: getAvatars()),
+  //       // Stack vertically upwards.
+  //       AvatarGroup.toTop(children: getAvatars()),
+  //       // Stack vertically downwards.
+  //       AvatarGroup.toBottom(children: getAvatars()),
+  //     ],
+  //   );
+  // }
 }

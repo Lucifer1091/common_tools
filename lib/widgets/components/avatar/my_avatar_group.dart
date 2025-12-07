@@ -1,78 +1,8 @@
+// // ignore_for_file: avoid_implementing_value_types
+
 // import 'package:flutter/material.dart';
 
-// /// A theme for [Avatar].
-// class AvatarTheme {
-//   /// Creates a new [AvatarTheme].
-//   const AvatarTheme({
-//     this.size,
-//     this.borderRadius,
-//     this.backgroundColor,
-//     this.badgeAlignment,
-//     this.badgeGap,
-//     this.textStyle,
-//   });
-
-//   /// The default size of the avatar.
-//   final double? size;
-
-//   /// The border radius of the avatar.
-//   final double? borderRadius;
-
-//   /// The background color of the avatar.
-//   final Color? backgroundColor;
-
-//   /// The alignment of the badge relative to the avatar.
-//   final AlignmentGeometry? badgeAlignment;
-
-//   /// The gap between the avatar and the badge.
-//   final double? badgeGap;
-
-//   /// The text style of the initials.
-//   final TextStyle? textStyle;
-
-//   /// Creates a copy of this theme but with the given fields replaced with the new values.
-//   AvatarTheme copyWith({
-//     ValueGetter<double?>? size,
-//     ValueGetter<double?>? borderRadius,
-//     ValueGetter<Color?>? backgroundColor,
-//     ValueGetter<AlignmentGeometry?>? badgeAlignment,
-//     ValueGetter<double?>? badgeGap,
-//     ValueGetter<TextStyle?>? textStyle,
-//   }) {
-//     return AvatarTheme(
-//       size: size == null ? this.size : size(),
-//       borderRadius: borderRadius == null ? this.borderRadius : borderRadius(),
-//       backgroundColor:
-//           backgroundColor == null ? this.backgroundColor : backgroundColor(),
-//       badgeAlignment:
-//           badgeAlignment == null ? this.badgeAlignment : badgeAlignment(),
-//       badgeGap: badgeGap == null ? this.badgeGap : badgeGap(),
-//       textStyle: textStyle == null ? this.textStyle : textStyle(),
-//     );
-//   }
-
-//   @override
-//   bool operator ==(Object other) {
-//     if (identical(this, other)) return true;
-//     return other is AvatarTheme &&
-//         other.size == size &&
-//         other.borderRadius == borderRadius &&
-//         other.backgroundColor == backgroundColor &&
-//         other.badgeAlignment == badgeAlignment &&
-//         other.badgeGap == badgeGap &&
-//         other.textStyle == textStyle;
-//   }
-
-//   @override
-//   int get hashCode => Object.hash(
-//     size,
-//     borderRadius,
-//     backgroundColor,
-//     badgeAlignment,
-//     badgeGap,
-//     textStyle,
-//   );
-// }
+// import '../../../index.dart';
 
 // abstract class AvatarWidget extends Widget {
 //   const AvatarWidget({super.key});
@@ -111,6 +41,7 @@
 //          cacheHeight,
 //          NetworkImage(photoUrl),
 //        );
+
 //   static String getInitials(String name) {
 //     final List<String> parts = name.split(r'\s+');
 //     if (parts.isEmpty) {
@@ -153,18 +84,10 @@
 
 // class _AvatarState extends State<Avatar> {
 //   Widget _build(BuildContext context) {
-//     final theme = Theme.of(context);
-//     final compTheme = ComponentTheme.maybeOf<AvatarTheme>(context);
-//     final double size = styleValue(
-//       widgetValue: widget.size,
-//       themeValue: compTheme?.size,
-//       defaultValue: theme.scaling * 40,
-//     );
-//     final double borderRadius = styleValue(
-//       widgetValue: widget.borderRadius,
-//       themeValue: compTheme?.borderRadius,
-//       defaultValue: theme.radius * size,
-//     );
+//     final double size = widget.size ?? 40;
+
+//     final double borderRadius = widget.borderRadius ?? MyRadius.medium * size;
+
 //     if (widget.provider != null) {
 //       return SizedBox(
 //         width: size,
@@ -181,6 +104,7 @@
 //         ),
 //       );
 //     }
+
 //     return SizedBox(
 //       width: size,
 //       height: size,
@@ -189,29 +113,20 @@
 //   }
 
 //   Widget _buildInitials(BuildContext context, double borderRadius) {
-//     final theme = Theme.of(context);
-//     final compTheme = ComponentTheme.maybeOf<AvatarTheme>(context);
-//     return Container(
+//     return DecoratedBox(
 //       decoration: BoxDecoration(
-//         color: styleValue(
-//           widgetValue: widget.backgroundColor,
-//           themeValue: compTheme?.backgroundColor,
-//           defaultValue: theme.colorScheme.muted,
-//         ),
+//         color: widget.backgroundColor ?? context.colorScheme.muted,
 //         borderRadius: BorderRadius.circular(borderRadius),
 //       ),
 //       child: FittedBox(
 //         fit: BoxFit.fill,
 //         child: Padding(
-//           padding: EdgeInsets.all(theme.scaling * 8),
+//           padding: EdgeInsets.all(8),
 //           child: DefaultTextStyle.merge(
 //             child: Center(child: Text(widget.initials)),
-//             style: styleValue(
-//               themeValue: compTheme?.textStyle,
-//               defaultValue: TextStyle(
-//                 color: theme.colorScheme.foreground,
-//                 fontWeight: FontWeight.bold,
-//               ),
+//             style: TextStyle(
+//               color: context.colorScheme.foreground,
+//               fontWeight: FontWeight.bold,
 //             ),
 //           ),
 //         ),
@@ -224,37 +139,26 @@
 //     if (widget.badge == null) {
 //       return _build(context);
 //     }
-//     final theme = Theme.of(context);
-//     final compTheme = ComponentTheme.maybeOf<AvatarTheme>(context);
-//     final double size = styleValue(
-//       widgetValue: widget.size,
-//       themeValue: compTheme?.size,
-//       defaultValue: theme.scaling * 40,
-//     );
-//     final double borderRadius = styleValue(
-//       widgetValue: widget.borderRadius,
-//       themeValue: compTheme?.borderRadius,
-//       defaultValue: theme.radius * size,
-//     );
-//     final double badgeSize = widget.badge!.size ?? theme.scaling * 12;
+
+//     final double size = widget.size ?? 40;
+
+//     final double borderRadius = widget.borderRadius ?? MyRadius.medium * size;
+
+//     final double badgeSize = widget.badge!.size ?? 12;
+
 //     double offset = size / 2 - badgeSize / 2;
 //     offset = offset / size;
-//     final alignment = styleValue(
-//       widgetValue: widget.badgeAlignment,
-//       themeValue: compTheme?.badgeAlignment,
-//       defaultValue: AlignmentDirectional(offset, offset),
-//     );
-//     final gap = styleValue(
-//       widgetValue: widget.badgeGap,
-//       themeValue: compTheme?.badgeGap,
-//       defaultValue: theme.scaling * 4,
-//     );
+//     final alignment =
+//         widget.badgeAlignment ?? AlignmentDirectional(offset, offset);
+
+//     final gap = widget.badgeGap ?? 4;
+
 //     return AvatarGroup(
 //       alignment: alignment,
 //       gap: gap,
 //       children: [
 //         _AvatarWidget(
-//           size: widget.badge!.size ?? theme.scaling * 12,
+//           size: widget.badge!.size ?? 12,
 //           borderRadius: widget.badge!.borderRadius,
 //           child: widget.badge!,
 //         ),
@@ -285,15 +189,14 @@
 
 //   @override
 //   Widget build(BuildContext context) {
-//     final theme = Theme.of(context);
-//     final size = this.size ?? theme.scaling * 12;
+//     final size = this.size ?? 12;
 //     return Container(
 //       width: size,
 //       height: size,
 //       decoration: BoxDecoration(
 //         color: color ?? Theme.of(context).colorScheme.primary,
 //         borderRadius: BorderRadius.circular(
-//           borderRadius ?? theme.radius * size,
+//           borderRadius ?? MyRadius.medium * size,
 //         ),
 //       ),
 //       child: child,
@@ -414,7 +317,6 @@
 
 //   @override
 //   Widget build(BuildContext context) {
-//     final theme = Theme.of(context);
 //     final List<Positioned> children = [];
 //     double currentX = 0;
 //     double currentY = 0;
@@ -422,17 +324,18 @@
 //     double currentHeight = 0;
 //     Rect rect = Rect.zero;
 //     double currentBorderRadius = 0;
+
 //     final Alignment resolved = alignment.optionallyResolve(context);
+
 //     for (int i = 0; i < this.children.length; i++) {
 //       final AvatarWidget avatar = this.children[i];
-//       final double size = avatar.size ?? theme.scaling * 40;
+//       final double size = avatar.size ?? 40;
 //       if (i == 0) {
 //         children.add(Positioned(left: currentX, top: currentY, child: avatar));
 //         rect = Rect.fromLTWH(currentX, currentY, size, size);
 //         currentWidth = size;
 //         currentHeight = size;
-//         currentBorderRadius =
-//             avatar.borderRadius ?? Theme.of(context).radius * size;
+//         currentBorderRadius = avatar.borderRadius ?? MyRadius.medium * size;
 //       } else {
 //         final double width = size;
 //         final double height = size;
@@ -461,7 +364,7 @@
 //                 borderRadius: currentBorderRadius,
 //                 alignment: resolved,
 //                 previousAvatarSize: currentWidth,
-//                 gap: gap ?? theme.scaling * 4,
+//                 gap: gap ?? 4,
 //               ),
 //               child: avatar,
 //             ),
@@ -472,7 +375,7 @@
 //         currentY = y;
 //         currentWidth = size;
 //         currentHeight = size;
-//         currentBorderRadius = avatar.borderRadius ?? theme.radius * size;
+//         currentBorderRadius = avatar.borderRadius ?? MyRadius.medium * size;
 
 //         rect = rect.expandToInclude(Rect.fromLTWH(x, y, size, size));
 //       }
@@ -505,6 +408,7 @@
 //     required this.previousAvatarSize,
 //     required this.gap,
 //   });
+
 //   final double borderRadius;
 //   final Alignment alignment;
 //   final double previousAvatarSize;
@@ -521,15 +425,17 @@
 //     final double heightDiff = size.height - prevAvatarSize;
 
 //     // align both at center first
-//     double left = (widthDiff / 2);
-//     double top = (heightDiff / 2);
+//     double left = widthDiff / 2;
+//     double top = heightDiff / 2;
 
 //     left += size.width * alignment.x;
 //     top += size.height * alignment.y;
 
-//     final Path path = Path();
-//     path.fillType = PathFillType.evenOdd;
-//     path.addRect(Rect.fromLTWH(0, 0, size.width, size.height));
+//     final Path path =
+//         Path()
+//           ..fillType = PathFillType.evenOdd
+//           ..addRect(Rect.fromLTWH(0, 0, size.width, size.height));
+
 //     if (borderRadius > 0) {
 //       path.addRRect(
 //         RRect.fromRectAndRadius(

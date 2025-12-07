@@ -531,9 +531,9 @@ class _MyStepsPageState extends State<MyStepsPage> {
               margin: const EdgeInsets.only(bottom: 16),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(6),
-                child: const TDImage(
+                child: const MyImage(
                   assetUrl: 'assets/img/image.png',
-                  type: TDImageType.square,
+                  type: MyImageType.square,
                 ),
               ),
             ),

@@ -181,9 +181,9 @@ class MySideBarIconPageState extends State<MySideBarIconPage> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: const [
-          TDImage(
+          MyImage(
             assetUrl: 'assets/img/empty.png',
-            type: TDImageType.roundedSquare,
+            type: MyImageType.roundedSquare,
             width: 48,
             height: 48,
           ),

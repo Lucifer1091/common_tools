@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../image/td_image.dart';
+import '../image/my_image.dart';
 import '../link/my_link.dart';
 
 enum TDFooterType { text, link, brand }
@@ -74,9 +74,9 @@ class _TDFooterState extends State<TDFooter> {
       children: [
         Padding(
           padding: const EdgeInsets.only(top: 4, bottom: 4),
-          child: TDImage(
+          child: MyImage(
             assetUrl: widget.logo,
-            type: TDImageType.fitWidth,
+            type: MyImageType.fitWidth,
             width: widget.width,
             height: widget.height,
           ),

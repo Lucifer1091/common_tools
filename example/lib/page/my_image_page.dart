@@ -6,14 +6,14 @@ import '../../base/example_widget.dart';
 
 import 'dart:io';
 
-class TDImagePage extends StatefulWidget {
-  const TDImagePage({Key? key}) : super(key: key);
+class MyImagePage extends StatefulWidget {
+  const MyImagePage({super.key});
 
   @override
   State<StatefulWidget> createState() => TDImageState();
 }
 
-class TDImageState extends State<TDImagePage>
+class TDImageState extends State<MyImagePage>
     with SingleTickerProviderStateMixin {
   late Animation<double> animation;
   late AnimationController animationController;
@@ -39,7 +39,8 @@ class TDImageState extends State<TDImagePage>
     return ExamplePage(
       title: myTitle(),
       exampleCodeGroup: 'image',
-      desc: '用于展示效果，主要为上下左右居中裁切、拉伸、平铺等方式。',
+      desc:
+          'Used for displaying effects, it mainly involves centering, stretching, and tiling in various ways.',
       children: [
         ExampleModule(
           title: 'Component Types',
@@ -203,7 +204,7 @@ class TDImageState extends State<TDImagePage>
             textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
           ),
         ),
-        const TDImage(assetUrl: 'assets/img/image.png', type: TDImageType.clip),
+        const MyImage(assetUrl: 'assets/img/image.png', type: MyImageType.clip),
       ],
     );
   }
@@ -229,11 +230,11 @@ class TDImageState extends State<TDImagePage>
           child: const Stack(
             alignment: Alignment.center,
             children: [
-              TDImage(
+              MyImage(
                 assetUrl: 'assets/img/image.png',
                 width: 121,
                 height: 50,
-                type: TDImageType.stretch,
+                type: MyImageType.stretch,
               ),
             ],
           ),
@@ -260,9 +261,9 @@ class TDImageState extends State<TDImagePage>
           width: 89,
           height: 72,
           color: Colors.black,
-          child: const TDImage(
+          child: const MyImage(
             assetUrl: 'assets/img/image.png',
-            type: TDImageType.fitHeight,
+            type: MyImageType.fitHeight,
           ),
         ),
       ],
@@ -287,9 +288,9 @@ class TDImageState extends State<TDImagePage>
           width: 72,
           height: 89,
           color: Colors.black,
-          child: const TDImage(
+          child: const MyImage(
             assetUrl: 'assets/img/image.png',
-            type: TDImageType.fitWidth,
+            type: MyImageType.fitWidth,
           ),
         ),
       ],
@@ -310,9 +311,9 @@ class TDImageState extends State<TDImagePage>
             textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
           ),
         ),
-        const TDImage(
+        const MyImage(
           assetUrl: 'assets/img/image.png',
-          type: TDImageType.square,
+          type: MyImageType.square,
         ),
       ],
     );
@@ -332,9 +333,9 @@ class TDImageState extends State<TDImagePage>
             textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
           ),
         ),
-        const TDImage(
+        const MyImage(
           assetUrl: 'assets/img/image.png',
-          type: TDImageType.roundedSquare,
+          type: MyImageType.roundedSquare,
           width: 72,
           height: 72,
         ),
@@ -356,11 +357,11 @@ class TDImageState extends State<TDImagePage>
             textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
           ),
         ),
-        const TDImage(
+        const MyImage(
           assetUrl: 'assets/img/image.png',
           width: 72,
           height: 72,
-          type: TDImageType.circle,
+          type: MyImageType.circle,
         ),
       ],
     );
@@ -475,7 +476,7 @@ class TDImageState extends State<TDImagePage>
             textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
           ),
         ),
-        const TDImage(imgUrl: 'error', type: TDImageType.roundedSquare),
+        const MyImage(image: 'error', type: MyImageType.roundedSquare),
       ],
     );
   }
@@ -494,14 +495,14 @@ class TDImageState extends State<TDImagePage>
             textColor: ThemeColors.neutral.shade800.withValues(alpha: 0.6),
           ),
         ),
-        TDImage(
-          imgUrl: 'error',
+        MyImage(
+          image: 'error',
           errorWidget: MyText(
             '加载失败',
             fontWeight: FontWeight.w500,
             textColor: ThemeColors.neutral.shade700,
           ),
-          type: TDImageType.roundedSquare,
+          type: MyImageType.roundedSquare,
         ),
       ],
     );
@@ -511,9 +512,9 @@ class TDImageState extends State<TDImagePage>
     return Container(
       width: 72,
       height: 72,
-      child: TDImage(
+      child: MyImage(
         imageFile: File('/sdcard/td/test.jpg'),
-        type: TDImageType.fitWidth,
+        type: MyImageType.fitWidth,
       ),
     );
   }

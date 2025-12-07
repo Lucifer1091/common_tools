@@ -161,9 +161,9 @@ class MySideBarPaginationPageState extends State<MySideBarPaginationPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const TDImage(
+          const MyImage(
             assetUrl: 'assets/img/empty.png',
-            type: TDImageType.roundedSquare,
+            type: MyImageType.roundedSquare,
             width: 48,
             height: 48,
           ),
