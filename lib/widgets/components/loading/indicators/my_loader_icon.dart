@@ -12,7 +12,6 @@ part 'ball_spin_fade.dart';
 part 'basic_indicators.dart';
 part 'cardio_indicator.dart';
 part 'clock_indicator.dart';
-part 'pacman_indicator.dart';
 part 'square_indicator.dart';
 part 'text_loader.dart';
 part 'trefoil_indicator.dart';
@@ -36,7 +35,6 @@ abstract class MyLoaderIcon {
   static const MyLoaderIcon clock = MyClockLoader();
   static const MyLoaderIcon activity = MyActivityLoader();
   static const MyLoaderIcon wobble = MyWobbleLoader();
-  static const MyLoaderIcon pacman = MyPacmanLoader();
   static const MyLoaderIcon text = MyTextLoader();
   static const MyLoaderIcon trefoil = MyTrefoilLoader();
 }
@@ -237,26 +235,6 @@ class MyWobbleLoader extends MyLoaderIcon {
       );
 }
 
-class MyPacmanLoader extends MyLoaderIcon {
-  const MyPacmanLoader({
-    super.options = const MyLoaderOptions(
-      duration: Duration(milliseconds: 325),
-    ),
-    this.radius,
-    this.beanRadius,
-  });
-
-  final double? radius;
-  final double? beanRadius;
-
-  @override
-  Widget buildIcon(BuildContext context, MyLoaderOptions? defaults) =>
-      _PacmanIndicator(
-        radius: radius,
-        beanRadius: beanRadius,
-        options: options.merge(defaults),
-      );
-}
 
 class MyTextLoader extends MyLoaderIcon {
   const MyTextLoader({

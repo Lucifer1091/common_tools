@@ -171,7 +171,7 @@ class MySideBarCustomPageState extends State<MySideBarCustomPage> {
         children: [
           const MyImage(
             image: 'assets/img/empty.png',
-            type: MyImageType.roundedSquare,
+            type: MyImageType.squircle,
             width: 48,
             height: 48,
           ),

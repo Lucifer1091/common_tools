@@ -61,7 +61,7 @@ class RandomImage {
   }) {
     final imageColor = color != null ? '&color=${color.name}' : '';
     final data =
-        "https://robohash.org/$slug.${imageType.name}?size=${size.width.toInt()}x${size.height.toInt()}&set=${set.name}&bgset=${bg.name}$imageColor";
+        'https://robohash.org/$slug.${imageType.name}?size=${size.width.toInt()}x${size.height.toInt()}&set=${set.name}&bgset=${bg.name}$imageColor';
     return data;
   }
 

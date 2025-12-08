@@ -111,7 +111,7 @@ class _MyUploadState extends State<MyUpload> {
   final ImagePicker _picker = ImagePicker();
 
   final Map<MyUploadBoxType, MyImageType> _imageTypeMap = {
-    MyUploadBoxType.roundedSquare: MyImageType.roundedSquare,
+    MyUploadBoxType.roundedSquare: MyImageType.squircle,
     MyUploadBoxType.circle: MyImageType.circle,
   };
 
@@ -342,7 +342,7 @@ class _MyUploadState extends State<MyUpload> {
             width: widget.width,
             height: widget.height,
             image: file.remotePath ?? file.assetPath ?? file.file,
-            type: _imageTypeMap[widget.type] ?? MyImageType.roundedSquare,
+            type: _imageTypeMap[widget.type] ?? MyImageType.squircle,
           ),
           Visibility(
             visible: file.status != MyUploadFileStatus.success,

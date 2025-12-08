@@ -36,7 +36,11 @@ class MyLoader extends StatelessWidget {
   }
 
   Widget _contentWidget(BuildContext context) {
-    final options0 = options ?? MyLoaderOptions(size: size);
+    MyLoaderOptions options0 = options ?? MyLoaderOptions(size: size);
+    if (options0.size == null) {
+      options0 = options0.copyWith(size: size);
+    }
+
     final MyLoaderIcon icon0 = icon ?? MyCircleLoader(options: options0);
     final Widget indicator = icon0.buildIcon(context, options0);
 

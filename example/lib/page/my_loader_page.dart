@@ -229,11 +229,10 @@ class _MyLoaderPageState extends State<MyLoaderPage> {
         const MyLoader(text: 'Clock', icon: MyClockLoader(size: 50)),
         const MyLoader(text: 'Activity', icon: MyLoaderIcon.activity),
         const MyLoader(text: 'Wobble', icon: MyLoaderIcon.wobble),
-        const MyLoader(text: 'Pacman', icon: MyLoaderIcon.pacman),
         const MyLoader(text: 'Triangle', icon: MyLoaderIcon.triangle),
         const MyLoader(text: 'Square', icon: MyLoaderIcon.square),
-        const MyLoader(text: 'Text', icon: MyLoaderIcon.text),
         const MyLoader(text: 'Trefoil', icon: MyLoaderIcon.trefoil),
+        const MyLoader(text: 'Text', icon: MyLoaderIcon.text),
       ],
     );
   }

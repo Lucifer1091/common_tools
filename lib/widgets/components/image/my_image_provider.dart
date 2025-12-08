@@ -8,7 +8,7 @@ import 'package:cross_file/cross_file.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../layout/index.dart';
+import '../../../index.dart';
 
 /// The prefix of memory data
 const String _base64UriPrefix = 'data:image/';
@@ -64,8 +64,8 @@ class MyImageProvider extends StatelessWidget {
     this.allowDrawingOutsideViewBox = false,
     this.size,
     this.textDirection,
-    this.loadingBuilder,
-    this.errorBuilder,
+    this.loader,
+    this.error,
     this.cache = true,
     this.assetPrefix = 'assets',
     this.colorFilter,
@@ -73,6 +73,9 @@ class MyImageProvider extends StatelessWidget {
     this.opacity,
     this.fadeDuration = const Duration(milliseconds: 400),
     this.enableZoom = false,
+    this.enableScaleAnimation = false,
+    this.normalScale = 1.0,
+    this.hoverScale = 1.05,
   });
 
   /// Represents the alignment of the image within its container.
@@ -115,10 +118,10 @@ class MyImageProvider extends StatelessWidget {
   final double? height;
 
   /// An optional `Widget` property that defines the placeholder widget displayed while the image is loading.
-  final Widget? loadingBuilder;
+  final Widget? loader;
 
   /// An optional `Widget` property that defines the error placeholder widget displayed when the image fails to load.
-  final Widget? errorBuilder;
+  final Widget? error;
 
   /// A boolean property that determines whether the image should be cached. Default is `true`.
   /// If false then use [Image.network] else [CachedNetworkImage]
@@ -170,6 +173,15 @@ class MyImageProvider extends StatelessWidget {
   /// Whether zoom functionality is enabled for the image.
   final bool enableZoom;
 
+  /// Whether scale animation is enabled for the image on hover.
+  final bool enableScaleAnimation;
+
+  /// Scale when not hovered (default 1.0).
+  final double normalScale;
+
+  /// Scale to use when hovered (default 1.05).
+  final double hoverScale;
+
   /// Checks if the image is a network image.
   bool get _isNetwork => imageUri.startsWith('http');
 
@@ -206,9 +218,8 @@ class MyImageProvider extends StatelessWidget {
         excludeFromSemantics: excludeFromSemantics,
         matchTextDirection: matchTextDirection,
         allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
-        placeholderBuilder:
-            loadingBuilder != null ? (_) => loadingBuilder! : null,
-        errorBuilder: errorBuilder != null ? (_, _, _) => errorBuilder! : null,
+        placeholderBuilder: loader != null ? (_) => loader! : null,
+        errorBuilder: error != null ? (_, _, _) => error! : null,
         colorFilter: _getColorFilter(colorFilter, color, colorBlendMode),
       );
     }
@@ -226,9 +237,8 @@ class MyImageProvider extends StatelessWidget {
         excludeFromSemantics: excludeFromSemantics,
         matchTextDirection: matchTextDirection,
         allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
-        placeholderBuilder:
-            loadingBuilder != null ? (_) => loadingBuilder! : null,
-        errorBuilder: errorBuilder != null ? (_, _, _) => errorBuilder! : null,
+        placeholderBuilder: loader != null ? (_) => loader! : null,
+        errorBuilder: error != null ? (_, _, _) => error! : null,
         colorFilter: _getColorFilter(colorFilter, color, colorBlendMode),
       );
     }
@@ -244,16 +254,15 @@ class MyImageProvider extends StatelessWidget {
       excludeFromSemantics: excludeFromSemantics,
       matchTextDirection: matchTextDirection,
       allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
-      placeholderBuilder:
-          loadingBuilder != null ? (_) => loadingBuilder! : null,
+      placeholderBuilder: loader != null ? (_) => loader! : null,
       colorFilter: _getColorFilter(colorFilter, color, colorBlendMode),
-      errorBuilder: errorBuilder != null ? (_, _, _) => errorBuilder! : null,
+      errorBuilder: error != null ? (_, _, _) => error! : null,
     );
   }
 
   /// Create any image type except svg
-  Widget _createOtherImage() {
-    final error = (errorBuilder != null ? (_, _, _) => errorBuilder! : null);
+  Widget? _createOtherImage() {
+    final error = (this.error != null ? (_, _, _) => this.error! : null);
 
     if (_isAsset) {
       return Image.asset(
@@ -282,10 +291,28 @@ class MyImageProvider extends StatelessWidget {
       );
     }
 
-    if (_isNetwork) {
+    final bool isFile = !_isNetwork;
+    final bool isNetwork = _isNetwork || (isFile && MyPlatform.isWeb);
+
+    String url = imageUri;
+    File? file;
+
+    if (isFile) {
+      if (source is String) {
+        file = File(source! as String);
+      } else if (source is XFile) {
+        file = File((source! as XFile).path);
+      } else {
+        file = source! as File;
+      }
+
+      if (MyPlatform.isWeb) url = file.path;
+    }
+
+    if (isNetwork) {
       if (!cache) {
         return Image.network(
-          imageUri,
+          url,
           key: key,
           fit: fit,
           scale: scale,
@@ -306,25 +333,24 @@ class MyImageProvider extends StatelessWidget {
           cacheHeight: cacheHeight,
           headers: headers,
           frameBuilder: frameBuilder,
-          loadingBuilder:
-              loadingBuilder != null ? (_, _, _) => loadingBuilder! : null,
+          loadingBuilder: loader != null ? (_, _, _) => loader! : null,
           errorBuilder: error,
           opacity: opacity,
         );
       }
 
       return CachedNetworkImage(
-        imageUrl: imageUri,
+        imageUrl: url,
         height: height,
         width: width,
         fit: fit,
         scale: scale,
-        placeholder: loadingBuilder != null ? (_, _) => loadingBuilder! : null,
+        placeholder: loader != null ? (_, _) => loader! : null,
         errorWidget: error,
         fadeInDuration: fadeDuration,
         fadeOutDuration: const Duration(milliseconds: 300),
         httpHeaders: headers,
-        cacheKey: imageUri,
+        cacheKey: url,
         maxHeightDiskCache: cacheHeight,
         maxWidthDiskCache: cacheWidth,
         memCacheHeight: cacheHeight,
@@ -337,39 +363,34 @@ class MyImageProvider extends StatelessWidget {
       );
     }
 
-    final File file;
-    if (source is String) {
-      file = File(source! as String);
-    } else if (source is XFile) {
-      file = File((source! as XFile).path);
-    } else {
-      file = source! as File;
+    if (file != null) {
+      return Image.file(
+        file,
+        key: key,
+        fit: fit,
+        scale: scale,
+        color: color,
+        width: width,
+        height: height,
+        alignment: alignment,
+        filterQuality: filterQuality,
+        colorBlendMode: colorBlendMode,
+        isAntiAlias: isAntiAlias,
+        repeat: repeat,
+        centerSlice: centerSlice,
+        semanticLabel: semanticLabel,
+        excludeFromSemantics: excludeFromSemantics,
+        matchTextDirection: matchTextDirection,
+        gaplessPlayback: gaplessPlayback,
+        cacheWidth: cacheWidth,
+        cacheHeight: cacheHeight,
+        frameBuilder: frameBuilder,
+        errorBuilder: error,
+        opacity: opacity,
+      );
     }
 
-    return Image.file(
-      file,
-      key: key,
-      fit: fit,
-      scale: scale,
-      color: color,
-      width: width,
-      height: height,
-      alignment: alignment,
-      filterQuality: filterQuality,
-      colorBlendMode: colorBlendMode,
-      isAntiAlias: isAntiAlias,
-      repeat: repeat,
-      centerSlice: centerSlice,
-      semanticLabel: semanticLabel,
-      excludeFromSemantics: excludeFromSemantics,
-      matchTextDirection: matchTextDirection,
-      gaplessPlayback: gaplessPlayback,
-      cacheWidth: cacheWidth,
-      cacheHeight: cacheHeight,
-      frameBuilder: frameBuilder,
-      errorBuilder: error,
-      opacity: opacity,
-    );
+    return null;
   }
 
   ///
@@ -388,7 +409,7 @@ class MyImageProvider extends StatelessWidget {
 
   /// Create image from base64 data
   Widget _createBase64Image() {
-    final error = (errorBuilder != null ? (_, _, _) => errorBuilder! : null);
+    final error = (this.error != null ? (_, _, _) => this.error! : null);
 
     final data = imageUri;
     final bytes = data.base64Bytes;
@@ -420,7 +441,7 @@ class MyImageProvider extends StatelessWidget {
 
   /// Create image from memory image
   Widget _createMemoryImage() {
-    final error = (errorBuilder != null ? (_, _, _) => errorBuilder! : null);
+    final error = (this.error != null ? (_, _, _) => this.error! : null);
 
     final Uint8List bytes = source! as Uint8List;
 
@@ -487,27 +508,26 @@ class MyImageProvider extends StatelessWidget {
     }
 
     if (image == null) {
-      return errorBuilder ?? const NoWidget();
+      return error ?? const NoWidget();
     }
-
-    // AnimatedBuilder(
-    //                 animation: _statesController,
-    //                 builder: (context, child) {
-    //                   return AnimatedScale(
-    //                     duration: kDefaultDuration,
-    //                     scale: _statesController.value
-    //                             .contains(WidgetState.hovered)
-    //                         ? hoverScale
-    //                         : normalScale,
-    //                     child: widget.image,
-    //                   );
-    //                 }),
 
     // Builds the image content with optional zoom functionality.
     Widget imageContent = AnimatedSwitcher(
       duration: fadeDuration,
       child: image,
     );
+
+    if (enableScaleAnimation) {
+      imageContent = HoverBuilder(
+        builder: (context, hover) {
+          return AnimatedScale(
+            duration: kDefaultDuration,
+            scale: hover ? hoverScale : normalScale,
+            child: image,
+          );
+        },
+      );
+    }
 
     // Wraps the image content with InteractiveViewer if zoom is enabled.
     if (enableZoom) {

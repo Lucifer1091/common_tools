@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:common_tools/index.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../base/example_widget.dart';
 
@@ -10,10 +11,10 @@ class MyImagePage extends StatefulWidget {
   const MyImagePage({super.key});
 
   @override
-  State<StatefulWidget> createState() => TDImageState();
+  State<StatefulWidget> createState() => MyImageState();
 }
 
-class TDImageState extends State<MyImagePage>
+class MyImageState extends State<MyImagePage>
     with SingleTickerProviderStateMixin {
   late Animation<double> animation;
   late AnimationController animationController;
@@ -34,6 +35,17 @@ class TDImageState extends State<MyImagePage>
     super.dispose();
   }
 
+  static const images = [
+    'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    'https://fastly.picsum.photos/id/15/2500/1667.jpg?hmac=Lv03D1Y3AsZ9L2tMMC1KQZekBVaQSDc1waqJ54IHvo4',
+    'https://fastly.picsum.photos/id/10/2500/1667.jpg?hmac=J04WWC_ebchx3WwzbM-Z4_KC_LeLBWr5LZMaAkWkF68',
+    'https://fastly.picsum.photos/id/12/2500/1667.jpg?hmac=Pe3284luVre9ZqNzv1jMFpLihFI6lwq7TPgMSsNXw2w',
+    'https://fastly.picsum.photos/id/17/2500/1667.jpg?hmac=HD-JrnNUZjFiP2UZQvWcKrgLoC_pc_ouUSWv8kHsJJY',
+    'https://fastly.picsum.photos/id/16/2500/1667.jpg?hmac=uAkZwYc5phCRNFTrV_prJ_0rP0EdwJaZ4ctje2bY7aE',
+    'https://fastly.picsum.photos/id/16/2500/1667.jpg?hmac=uAkZwYc5phCRNFTrV_prJ_0rP0EdwJaZ4ctje2bY7aE',
+    'https://fastly.picsum.photos/id/16/2500/1667.jpg?hmac=uAkZwYc5phCRNFTrV_prJ_0rP0EdwJaZ4ctje2bY7aE',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
@@ -46,64 +58,43 @@ class TDImageState extends State<MyImagePage>
           title: 'Component Types',
           children: [
             ExampleItem(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               builder: (context) {
-                return Container(
+                return Align(
                   alignment: Alignment.topLeft,
-                  padding: const EdgeInsets.only(left: 8),
                   child: Wrap(
+                    spacing: 24,
+                    children: [_imageClip(context), _imageStretch(context)],
+                  ),
+                );
+              },
+            ),
+            ExampleItem(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              builder: (context) {
+                return Align(
+                  alignment: Alignment.topLeft,
+                  child: Wrap(
+                    spacing: 24,
                     children: [
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        child: _imageClip(context),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        child: _imageStretch(context),
-                      ),
+                      _imageFitHeight(context),
+                      _imageFitWidth(context),
                     ],
                   ),
                 );
               },
             ),
             ExampleItem(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               builder: (context) {
-                return Container(
+                return Align(
                   alignment: Alignment.topLeft,
-                  padding: const EdgeInsets.only(left: 8),
                   child: Wrap(
+                    spacing: 24,
                     children: [
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        child: _imageFitHeight(context),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        child: _imageFitWidth(context),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-            ExampleItem(
-              builder: (context) {
-                return Container(
-                  alignment: Alignment.topLeft,
-                  padding: const EdgeInsets.only(left: 8),
-                  child: Wrap(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        child: _imageSquare(context),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        child: _imageRoundedSquare(context),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        child: _imageCircle(context),
-                      ),
+                      _imageSquare(context),
+                      _imageSquircle(context),
+                      _imageCircle(context),
                     ],
                   ),
                 );
@@ -115,66 +106,59 @@ class TDImageState extends State<MyImagePage>
           title: 'Component State',
           children: [
             ExampleItem(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               builder: (context) {
-                return Container(
+                return Align(
                   alignment: Alignment.topLeft,
-                  padding: const EdgeInsets.only(left: 8),
                   child: Wrap(
+                    spacing: 24,
                     children: [
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        child: _loadingDefault(context),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        child: _loadingCustom(context),
-                      ),
+                      _loadingDefault(context),
+                      _loadingCustom(context),
                     ],
                   ),
                 );
               },
             ),
-            // ExampleItem(
-            //   builder: (context) {
-            //     return Container(
-            //       alignment: Alignment.topLeft,
-            //       padding: const EdgeInsets.only(left: 8),
-            //       child: Wrap(
-            //         children: [
-            //           Container(
-            //             margin: const EdgeInsets.all(8),
-            //             child: _failDefault(context),
-            //           ),
-            //           Container(
-            //             margin: const EdgeInsets.all(8),
-            //             child: _failCustom(context),
-            //           ),
-            //         ],
-            //       ),
-            //     );
-            //   },
-            // ),
+            ExampleItem(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              builder: (context) {
+                return Align(
+                  alignment: Alignment.topLeft,
+                  child: Wrap(
+                    spacing: 24,
+                    children: [
+                      _failDefault(context),
+                      _failCustom(context),
+                      _imageFile(context),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+        ExampleModule(
+          title: 'Component Styles',
+          children: [
+            ExampleItem(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              builder: (context) {
+                return Align(
+                  alignment: Alignment.topLeft,
+                  child: Wrap(
+                    spacing: 24,
+                    children: [
+                      _enableZoom(context),
+                      _enableScaleAnimation(context),
+                    ],
+                  ),
+                );
+              },
+            ),
           ],
         ),
       ],
-      // test: [
-      //   ExampleItem(
-      //     builder: (context) {
-      //       return Container(
-      //         alignment: Alignment.center,
-      //         padding: const EdgeInsets.only(left: 8),
-      //         child: Wrap(
-      //           children: [
-      //             Container(
-      //               margin: const EdgeInsets.all(8),
-      //               child: _imageFile(context),
-      //             ),
-      //           ],
-      //         ),
-      //       );
-      //     },
-      //   ),
-      // ],
     );
   }
 
@@ -274,20 +258,15 @@ class TDImageState extends State<MyImagePage>
     );
   }
 
-  Widget _imageRoundedSquare(BuildContext context) {
+  Widget _imageSquircle(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: MyText('Rounded Square', style: context.textTheme.bodyMedium),
+          child: MyText('Squircle', style: context.textTheme.bodyMedium),
         ),
-        const MyImage(
-          image: 'assets/img/image.png',
-          type: MyImageType.roundedSquare,
-          width: 72,
-          height: 72,
-        ),
+        const MyImage(image: 'assets/img/image.png', width: 72, height: 72),
       ],
     );
   }
@@ -316,13 +295,9 @@ class TDImageState extends State<MyImagePage>
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: MyText('Default Loading', style: context.textTheme.bodyMedium),
+          child: MyText('Default Loader', style: context.textTheme.bodyMedium),
         ),
-        const MyImage(
-          // image:
-          //     'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-          type: MyImageType.roundedSquare,
-        ),
+        MyImage(image: images.random()),
       ],
     );
   }
@@ -333,45 +308,22 @@ class TDImageState extends State<MyImagePage>
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: MyText(
-            'Load custom prompts',
-            style: context.textTheme.bodyMedium,
-          ),
+          child: MyText('Custom Loader', style: context.textTheme.bodyMedium),
         ),
-        Container(
-          height: 72,
-          width: 72,
-          clipBehavior: Clip.hardEdge,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(MyRadius.medium),
-          ),
-          child: Container(
-            alignment: Alignment.center,
-            color: ThemeColors.neutral.shade100,
-            child: RotationTransition(
-              turns: animation,
-              alignment: Alignment.center,
+        MyImage(
+          image: images.random(),
+          loader: DecoratedBox(
+            decoration: BoxDecoration(
+              color: context.colorScheme.secondary,
+              borderRadius: MyBorderRadius.medium,
+            ),
+            child: Center(
               child: MyLoader(
-                // color: context.colorScheme.primary,
-                // size: 18,
-                // lineWidth: 3,
+                size: MyLoaderSize.small,
+                icon: MyLoaderIcon.spin,
               ),
             ),
           ),
-        ),
-        MyImage(
-          image:
-              'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-          loadingWidget: RotationTransition(
-            turns: animation,
-            alignment: Alignment.center,
-            child: MyLoader(
-              // color: context.colorScheme.primary,
-              // size: 18,
-              // lineWidth: 3,
-            ),
-          ),
-          type: MyImageType.roundedSquare,
         ),
       ],
     );
@@ -383,12 +335,9 @@ class TDImageState extends State<MyImagePage>
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: MyText(
-            'Default prompt for failure',
-            style: context.textTheme.bodyMedium,
-          ),
+          child: MyText('Default Error', style: context.textTheme.bodyMedium),
         ),
-        const MyImage(image: 'error', type: MyImageType.roundedSquare),
+        const MyImage(image: 'error'),
       ],
     );
   }
@@ -399,32 +348,73 @@ class TDImageState extends State<MyImagePage>
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: MyText(
-            'Failure custom prompt',
-            style: context.textTheme.bodyMedium,
-          ),
+          child: MyText('Custom Error', style: context.textTheme.bodyMedium),
         ),
         MyImage(
           image: 'error',
-          errorWidget: MyText(
-            'Loading failed',
-            fontWeight: FontWeight.w500,
-            textColor: ThemeColors.neutral.shade700,
+          error: DecoratedBox(
+            decoration: BoxDecoration(
+              color: context.colorScheme.secondary,
+              borderRadius: MyBorderRadius.medium,
+            ),
+            child: Center(
+              child: Icon(
+                LucideIcons.fileWarning,
+                color: context.colorScheme.mutedForeground,
+              ),
+            ),
           ),
-          type: MyImageType.roundedSquare,
         ),
       ],
     );
   }
 
   Widget _imageFile(BuildContext context) {
-    return SizedBox(
-      width: 72,
-      height: 72,
-      child: MyImage(
-        image: File('/sdcard/td/test.jpg'),
-        type: MyImageType.fitWidth,
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: MyText('Asset Error', style: context.textTheme.bodyMedium),
+        ),
+        MyImage(image: File('/sdcard/td/test.jpg'), type: MyImageType.square),
+      ],
+    );
+  }
+
+  Widget _enableZoom(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: MyText('Pinch to Zoom', style: context.textTheme.bodyMedium),
+        ),
+        MyImage(
+          height: 400,
+          width: 200,
+          image: images.random(),
+          enableZoom: true,
+        ),
+      ],
+    );
+  }
+
+  Widget _enableScaleAnimation(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: MyText('Scale on Hover', style: context.textTheme.bodyMedium),
+        ),
+        MyImage(
+          height: 400,
+          width: 200,
+          image: images.random(),
+          enableScaleAnimation: true,
+        ),
+      ],
     );
   }
 }

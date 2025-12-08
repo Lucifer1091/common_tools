@@ -1,9 +1,9 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../index.dart';
-import 'my_image_provider.dart';
 
 enum MyImageType {
   clip,
@@ -11,7 +11,7 @@ enum MyImageType {
   fitWidth,
   stretch,
   square,
-  roundedSquare,
+  squircle,
   circle,
 }
 
@@ -19,18 +19,19 @@ class MyImage extends StatelessWidget {
   const MyImage({
     this.image,
     super.key,
-    this.type = MyImageType.roundedSquare,
-    this.errorWidget,
-    this.loadingWidget,
+    this.fit,
     this.width,
     this.height,
-    this.fit,
+    this.type = MyImageType.squircle,
+    this.loader,
+    this.error,
     this.frameBuilder,
     this.semanticLabel,
     this.excludeFromSemantics = false,
     this.color,
     this.opacity,
     this.colorBlendMode,
+    this.colorFilter,
     this.alignment = Alignment.center,
     this.repeat = ImageRepeat.noRepeat,
     this.centerSlice,
@@ -40,20 +41,35 @@ class MyImage extends StatelessWidget {
     this.filterQuality = FilterQuality.low,
     this.cacheHeight,
     this.cacheWidth,
+    this.scale = 1,
+    this.textDirection,
+    this.size,
+    this.allowDrawingOutsideViewBox = false,
+    this.cache = true,
+    this.assetPrefix = 'assets',
+    this.headers,
+    this.fadeDuration = const Duration(milliseconds: 400),
+    this.enableZoom = false,
+    this.enableScaleAnimation = false,
+    this.normalScale = 1.0,
+    this.hoverScale = 1.05,
   });
 
   final Object? image;
   final MyImageType type;
-  final Widget? loadingWidget;
-  final Widget? errorWidget;
+  final Widget? loader;
+  final Widget? error;
   final double? width;
   final double? height;
+  final double? size;
   final BoxFit? fit;
+  final double scale;
   final ImageFrameBuilder? frameBuilder;
   final Color? color;
   final Animation<double>? opacity;
   final FilterQuality filterQuality;
   final BlendMode? colorBlendMode;
+  final ui.ColorFilter? colorFilter;
   final Alignment alignment;
   final ImageRepeat repeat;
   final Rect? centerSlice;
@@ -64,6 +80,16 @@ class MyImage extends StatelessWidget {
   final bool isAntiAlias;
   final int? cacheHeight;
   final int? cacheWidth;
+  final TextDirection? textDirection;
+  final bool allowDrawingOutsideViewBox;
+  final bool cache;
+  final String assetPrefix;
+  final Map<String, String>? headers;
+  final Duration fadeDuration;
+  final bool enableZoom;
+  final bool enableScaleAnimation;
+  final double normalScale;
+  final double hoverScale;
 
   Widget _wrap(BuildContext context, Widget child) {
     return DecoratedBox(
@@ -71,44 +97,27 @@ class MyImage extends StatelessWidget {
         color: context.colorScheme.secondary,
         borderRadius: MyBorderRadius.medium,
       ),
-      child: Center(
-        child: MyLoader(
-          size: MyLoaderSize.small,
-          icon: MyCircleLoader(options: MyLoaderOptions(strokeWidth: 3)),
-        ),
-      ),
+      child: Center(child: child),
     );
   }
 
   Widget _loader(BuildContext context) {
-    return loadingWidget ??
-        DecoratedBox(
-          decoration: BoxDecoration(
-            color: context.colorScheme.secondary,
-            borderRadius: MyBorderRadius.medium,
-          ),
-          child: Center(
-            child: MyLoader(
-              size: MyLoaderSize.small,
-              icon: MyCircleLoader(options: MyLoaderOptions(strokeWidth: 3)),
-            ),
-          ),
+    return loader ??
+        _wrap(
+          context,
+          loader ??
+              MyLoader(
+                size: MyLoaderSize.extraSmall,
+                options: MyLoaderOptions(strokeWidth: 2.5),
+              ),
         );
   }
 
   Widget _error(BuildContext context) {
-    return errorWidget ??
-        DecoratedBox(
-          decoration: BoxDecoration(
-            color: context.colorScheme.secondary,
-            borderRadius: MyBorderRadius.medium,
-          ),
-          child: Center(
-            child: Icon(
-              LucideIcons.image,
-              color: context.colorScheme.mutedForeground,
-            ),
-          ),
+    return error ??
+        _wrap(
+          context,
+          Icon(LucideIcons.image, color: context.colorScheme.mutedForeground),
         );
   }
 
@@ -123,8 +132,8 @@ class MyImage extends StatelessWidget {
           fit: fit ?? BoxFit.none,
           color: color,
           frameBuilder: frameBuilder,
-          loadingBuilder: _loader(context),
-          errorBuilder: _error(context),
+          loader: _loader(context),
+          error: _error(context),
           semanticLabel: semanticLabel,
           excludeFromSemantics: excludeFromSemantics,
           opacity: opacity,
@@ -138,6 +147,19 @@ class MyImage extends StatelessWidget {
           isAntiAlias: isAntiAlias,
           cacheHeight: cacheHeight,
           cacheWidth: cacheWidth,
+          size: size,
+          allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
+          assetPrefix: assetPrefix,
+          cache: cache,
+          colorFilter: colorFilter,
+          enableZoom: enableZoom,
+          enableScaleAnimation: enableScaleAnimation,
+          fadeDuration: fadeDuration,
+          headers: headers,
+          hoverScale: hoverScale,
+          normalScale: normalScale,
+          scale: scale,
+          textDirection: textDirection,
         );
       case MyImageType.fitHeight:
         return MyImageProvider(
@@ -147,8 +169,8 @@ class MyImage extends StatelessWidget {
           fit: fit ?? BoxFit.fitHeight,
           color: color,
           frameBuilder: frameBuilder,
-          loadingBuilder: _loader(context),
-          errorBuilder: _error(context),
+          loader: _loader(context),
+          error: _error(context),
           semanticLabel: semanticLabel,
           excludeFromSemantics: excludeFromSemantics,
           opacity: opacity,
@@ -162,6 +184,19 @@ class MyImage extends StatelessWidget {
           isAntiAlias: isAntiAlias,
           cacheHeight: cacheHeight,
           cacheWidth: cacheWidth,
+          size: size,
+          allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
+          assetPrefix: assetPrefix,
+          cache: cache,
+          colorFilter: colorFilter,
+          enableZoom: enableZoom,
+          enableScaleAnimation: enableScaleAnimation,
+          fadeDuration: fadeDuration,
+          headers: headers,
+          hoverScale: hoverScale,
+          normalScale: normalScale,
+          scale: scale,
+          textDirection: textDirection,
         );
       case MyImageType.stretch:
         return MyImageProvider(
@@ -171,8 +206,8 @@ class MyImage extends StatelessWidget {
           fit: fit ?? BoxFit.fill,
           color: color,
           frameBuilder: frameBuilder,
-          loadingBuilder: _loader(context),
-          errorBuilder: _error(context),
+          loader: _loader(context),
+          error: _error(context),
           semanticLabel: semanticLabel,
           excludeFromSemantics: excludeFromSemantics,
           opacity: opacity,
@@ -186,6 +221,19 @@ class MyImage extends StatelessWidget {
           isAntiAlias: isAntiAlias,
           cacheHeight: cacheHeight,
           cacheWidth: cacheWidth,
+          size: size,
+          allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
+          assetPrefix: assetPrefix,
+          cache: cache,
+          colorFilter: colorFilter,
+          enableZoom: enableZoom,
+          enableScaleAnimation: enableScaleAnimation,
+          fadeDuration: fadeDuration,
+          headers: headers,
+          hoverScale: hoverScale,
+          normalScale: normalScale,
+          scale: scale,
+          textDirection: textDirection,
         );
       case MyImageType.square:
         return MyImageProvider(
@@ -195,8 +243,8 @@ class MyImage extends StatelessWidget {
           fit: fit ?? BoxFit.cover,
           color: color,
           frameBuilder: frameBuilder,
-          loadingBuilder: _loader(context),
-          errorBuilder: _error(context),
+          loader: _loader(context),
+          error: _error(context),
           semanticLabel: semanticLabel,
           excludeFromSemantics: excludeFromSemantics,
           opacity: opacity,
@@ -210,8 +258,21 @@ class MyImage extends StatelessWidget {
           isAntiAlias: isAntiAlias,
           cacheHeight: cacheHeight,
           cacheWidth: cacheWidth,
+          size: size,
+          allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
+          assetPrefix: assetPrefix,
+          cache: cache,
+          colorFilter: colorFilter,
+          enableZoom: enableZoom,
+          enableScaleAnimation: enableScaleAnimation,
+          fadeDuration: fadeDuration,
+          headers: headers,
+          hoverScale: hoverScale,
+          normalScale: normalScale,
+          scale: scale,
+          textDirection: textDirection,
         );
-      case MyImageType.roundedSquare:
+      case MyImageType.squircle:
         return Container(
           height: height ?? 72,
           width: width ?? 72,
@@ -224,8 +285,8 @@ class MyImage extends StatelessWidget {
             fit: fit ?? BoxFit.cover,
             color: color,
             frameBuilder: frameBuilder,
-            loadingBuilder: _loader(context),
-            errorBuilder: _error(context),
+            loader: _loader(context),
+            error: _error(context),
             semanticLabel: semanticLabel,
             excludeFromSemantics: excludeFromSemantics,
             opacity: opacity,
@@ -239,6 +300,19 @@ class MyImage extends StatelessWidget {
             isAntiAlias: isAntiAlias,
             cacheHeight: cacheHeight,
             cacheWidth: cacheWidth,
+            size: size,
+            allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
+            assetPrefix: assetPrefix,
+            cache: cache,
+            colorFilter: colorFilter,
+            enableZoom: enableZoom,
+            enableScaleAnimation: enableScaleAnimation,
+            fadeDuration: fadeDuration,
+            headers: headers,
+            hoverScale: hoverScale,
+            normalScale: normalScale,
+            scale: scale,
+            textDirection: textDirection,
           ),
         );
       case MyImageType.circle:
@@ -254,8 +328,8 @@ class MyImage extends StatelessWidget {
             fit: fit ?? BoxFit.cover,
             color: color,
             frameBuilder: frameBuilder,
-            loadingBuilder: _loader(context),
-            errorBuilder: _error(context),
+            loader: _loader(context),
+            error: _error(context),
             semanticLabel: semanticLabel,
             excludeFromSemantics: excludeFromSemantics,
             opacity: opacity,
@@ -269,6 +343,19 @@ class MyImage extends StatelessWidget {
             isAntiAlias: isAntiAlias,
             cacheHeight: cacheHeight,
             cacheWidth: cacheWidth,
+            size: size,
+            allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
+            assetPrefix: assetPrefix,
+            cache: cache,
+            colorFilter: colorFilter,
+            enableZoom: enableZoom,
+            enableScaleAnimation: enableScaleAnimation,
+            fadeDuration: fadeDuration,
+            headers: headers,
+            hoverScale: hoverScale,
+            normalScale: normalScale,
+            scale: scale,
+            textDirection: textDirection,
           ),
         );
       case MyImageType.fitWidth:
@@ -279,8 +366,8 @@ class MyImage extends StatelessWidget {
           fit: fit ?? BoxFit.fitWidth,
           color: color,
           frameBuilder: frameBuilder,
-          loadingBuilder: _loader(context),
-          errorBuilder: _error(context),
+          loader: _loader(context),
+          error: _error(context),
           semanticLabel: semanticLabel,
           excludeFromSemantics: excludeFromSemantics,
           opacity: opacity,
@@ -294,6 +381,19 @@ class MyImage extends StatelessWidget {
           isAntiAlias: isAntiAlias,
           cacheHeight: cacheHeight,
           cacheWidth: cacheWidth,
+          size: size,
+          allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
+          assetPrefix: assetPrefix,
+          cache: cache,
+          colorFilter: colorFilter,
+          enableZoom: enableZoom,
+          enableScaleAnimation: enableScaleAnimation,
+          fadeDuration: fadeDuration,
+          headers: headers,
+          hoverScale: hoverScale,
+          normalScale: normalScale,
+          scale: scale,
+          textDirection: textDirection,
         );
     }
   }

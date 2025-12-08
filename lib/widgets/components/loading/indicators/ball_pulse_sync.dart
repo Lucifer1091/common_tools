@@ -24,7 +24,10 @@ class _BallPulseSyncState extends State<_BallPulseSync>
 
   @override
   void initState() {
-    startEngine(this, widget.options.duration!);
+    startEngine(
+      this,
+      widget.options.duration ?? const Duration(milliseconds: 400),
+    );
     super.initState();
   }
 

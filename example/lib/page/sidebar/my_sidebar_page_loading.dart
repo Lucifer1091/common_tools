@@ -194,7 +194,7 @@ class MySideBarLoadingPageState extends State<MySideBarLoadingPage> {
         children: const [
           MyImage(
             image: 'assets/img/empty.png',
-            type: MyImageType.roundedSquare,
+            type: MyImageType.squircle,
             width: 48,
             height: 48,
           ),
