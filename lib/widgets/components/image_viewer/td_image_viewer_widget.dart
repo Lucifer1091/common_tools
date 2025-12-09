@@ -2,10 +2,6 @@
 // import 'dart:io';
 
 // import 'package:flutter/material.dart';
-// import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
-
-// import '../../../tdesign_flutter.dart';
-// import '../navbar/td_nav_bar.dart';
 
 // typedef OnIndexChange = Function(int index);
 // typedef OnClose = Function(int index);

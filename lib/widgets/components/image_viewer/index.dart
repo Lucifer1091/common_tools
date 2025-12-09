@@ -5,4 +5,3 @@ export 'gallery_item_thumbnail.dart';
 export 'galleryimage.dart';
 export 'td_image_viewer.dart';
 export 'td_image_viewer_widget.dart';
-export 'util.dart';

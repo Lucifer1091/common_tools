@@ -18,6 +18,7 @@ class MyImageState extends State<MyImagePage>
     with SingleTickerProviderStateMixin {
   late Animation<double> animation;
   late AnimationController animationController;
+  
   @override
   void initState() {
     super.initState();

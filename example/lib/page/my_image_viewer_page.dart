@@ -1,16 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:common_tools/index.dart';
 
 import '../base/example_widget.dart';
 
-class TDImageViewerPage extends StatefulWidget {
-  const TDImageViewerPage({Key? key}) : super(key: key);
+class MyImageViewerPage extends StatefulWidget {
+  const MyImageViewerPage({super.key});
 
   @override
-  State<TDImageViewerPage> createState() => _TDImageViewerPageState();
+  State<MyImageViewerPage> createState() => _MyImageViewerPageState();
 }
 
-class _TDImageViewerPageState extends State<TDImageViewerPage> {
+class _MyImageViewerPageState extends State<MyImageViewerPage> {
+  static const images = [
+    'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    'https://fastly.picsum.photos/id/15/2500/1667.jpg?hmac=Lv03D1Y3AsZ9L2tMMC1KQZekBVaQSDc1waqJ54IHvo4',
+    'https://fastly.picsum.photos/id/10/2500/1667.jpg?hmac=J04WWC_ebchx3WwzbM-Z4_KC_LeLBWr5LZMaAkWkF68',
+    'https://fastly.picsum.photos/id/12/2500/1667.jpg?hmac=Pe3284luVre9ZqNzv1jMFpLihFI6lwq7TPgMSsNXw2w',
+    'https://fastly.picsum.photos/id/17/2500/1667.jpg?hmac=HD-JrnNUZjFiP2UZQvWcKrgLoC_pc_ouUSWv8kHsJJY',
+    'https://fastly.picsum.photos/id/16/2500/1667.jpg?hmac=uAkZwYc5phCRNFTrV_prJ_0rP0EdwJaZ4ctje2bY7aE',
+    'https://fastly.picsum.photos/id/16/2500/1667.jpg?hmac=uAkZwYc5phCRNFTrV_prJ_0rP0EdwJaZ4ctje2bY7aE',
+    'https://fastly.picsum.photos/id/16/2500/1667.jpg?hmac=uAkZwYc5phCRNFTrV_prJ_0rP0EdwJaZ4ctje2bY7aE',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return ExamplePage(

@@ -1,14 +1,36 @@
-library galleryimage;
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'gallery_item_model.dart';
-import 'gallery_item_thumbnail.dart';
-import 'gallery_image_view_wrapper.dart';
-import 'util.dart';
+import '../../../index.dart';
 
 class GalleryImage extends StatefulWidget {
-  final List<String> imageUrls;
+  const GalleryImage({
+    required this.images,
+    super.key,
+    this.titleGallery,
+    this.childAspectRatio = 1,
+    this.crossAxisCount = 3,
+    this.mainAxisSpacing = 5,
+    this.crossAxisSpacing = 5,
+    this.numOfShowImages = 3,
+    this.colorOfNumberWidget,
+    this.textStyleOfNumberWidget,
+    this.padding = EdgeInsets.zero,
+    this.loadingWidget,
+    this.errorWidget,
+    this.galleryBackgroundColor = Colors.black,
+    this.minScale = .5,
+    this.maxScale = 10,
+    this.imageRadius = 8,
+    this.reverse = false,
+    this.showListInGalley = true,
+    this.showAppBar = true,
+    this.closeWhenSwipeUp = false,
+    this.closeWhenSwipeDown = false,
+  }) : assert(numOfShowImages <= images.length, '');
+
+  final List<Object?> images;
   final String? titleGallery;
   final int numOfShowImages;
   final int crossAxisCount;
@@ -30,47 +52,23 @@ class GalleryImage extends StatefulWidget {
   final bool closeWhenSwipeUp;
   final bool closeWhenSwipeDown;
 
-  const GalleryImage({
-    Key? key,
-    required this.imageUrls,
-    this.titleGallery,
-    this.childAspectRatio = 1,
-    this.crossAxisCount = 3,
-    this.mainAxisSpacing = 5,
-    this.crossAxisSpacing = 5,
-    this.numOfShowImages = 3,
-    this.colorOfNumberWidget,
-    this.textStyleOfNumberWidget,
-    this.padding = EdgeInsets.zero,
-    this.loadingWidget,
-    this.errorWidget,
-    this.galleryBackgroundColor = Colors.black,
-    this.minScale = .5,
-    this.maxScale = 10,
-    this.imageRadius = 8,
-    this.reverse = false,
-    this.showListInGalley = true,
-    this.showAppBar = true,
-    this.closeWhenSwipeUp = false,
-    this.closeWhenSwipeDown = false,
-  }) : assert(numOfShowImages <= imageUrls.length),
-       super(key: key);
   @override
   State<GalleryImage> createState() => _GalleryImageState();
 }
 
 class _GalleryImageState extends State<GalleryImage> {
   List<GalleryItemModel> galleryItems = <GalleryItemModel>[];
+
   @override
   void initState() {
-    _buildItemsList(widget.imageUrls);
+    _buildItemsList(widget.images);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return galleryItems.isEmpty
-        ? const EmptyWidget()
+        ? const NoWidget()
         : GridView.builder(
           primary: false,
           itemCount:
@@ -91,7 +89,7 @@ class _GalleryImageState extends State<GalleryImage> {
                 : GalleryItemThumbnail(
                   galleryItem: galleryItems[index],
                   onTap: () {
-                    _openImageFullScreen(index);
+                    unawaited(_openImageFullScreen(index));
                   },
                   loadingWidget: widget.loadingWidget,
                   errorWidget: widget.errorWidget,
@@ -105,7 +103,7 @@ class _GalleryImageState extends State<GalleryImage> {
   Widget _buildImageNumbers(int index) {
     return GestureDetector(
       onTap: () {
-        _openImageFullScreen(index);
+        unawaited(_openImageFullScreen(index));
       },
       child: Stack(
         alignment: AlignmentDirectional.center,
@@ -126,7 +124,7 @@ class _GalleryImageState extends State<GalleryImage> {
                   Colors.black.withValues(alpha: .7),
               child: Center(
                 child: Text(
-                  "+${galleryItems.length - index}",
+                  '+${galleryItems.length - index}',
                   style:
                       widget.textStyleOfNumberWidget ??
                       const TextStyle(color: Colors.white, fontSize: 40),
@@ -149,34 +147,39 @@ class _GalleryImageState extends State<GalleryImage> {
   Future<void> _openImageFullScreen(int indexOfImage) async {
     await Navigator.push(
       context,
-      MaterialPageRoute(
-        builder:
-            (context) => GalleryImageViewWrapper(
-              titleGallery: widget.titleGallery,
-              galleryItems: galleryItems,
-              backgroundColor: widget.galleryBackgroundColor,
-              initialIndex: indexOfImage,
-              loadingWidget: widget.loadingWidget,
-              errorWidget: widget.errorWidget,
-              maxScale: widget.maxScale,
-              minScale: widget.minScale,
-              reverse: widget.reverse,
-              showListInGalley: widget.showListInGalley,
-              showAppBar: widget.showAppBar,
-              closeWhenSwipeUp: widget.closeWhenSwipeUp,
-              closeWhenSwipeDown: widget.closeWhenSwipeDown,
-              radius: widget.imageRadius,
-            ),
+      MaterialPageRoute<void>(
+        builder: (context) {
+          return GalleryImageViewWrapper(
+            titleGallery: widget.titleGallery,
+            galleryItems: galleryItems,
+            backgroundColor: widget.galleryBackgroundColor,
+            initialIndex: indexOfImage,
+            loadingWidget: widget.loadingWidget,
+            errorWidget: widget.errorWidget,
+            maxScale: widget.maxScale,
+            minScale: widget.minScale,
+            reverse: widget.reverse,
+            showListInGalley: widget.showListInGalley,
+            showAppBar: widget.showAppBar,
+            closeWhenSwipeUp: widget.closeWhenSwipeUp,
+            closeWhenSwipeDown: widget.closeWhenSwipeDown,
+            radius: widget.imageRadius,
+          );
+        },
       ),
     );
   }
 
   // clear and build list
-  void _buildItemsList(List<String> items) {
+  void _buildItemsList(List<Object?> items) {
     galleryItems.clear();
-    for (var item in items) {
+    for (final item in items) {
       galleryItems.add(
-        GalleryItemModel(id: item, imageUrl: item, index: items.indexOf(item)),
+        GalleryItemModel(
+          id: item.toString(),
+          imageUrl: item,
+          index: items.indexOf(item),
+        ),
       );
     }
   }

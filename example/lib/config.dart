@@ -27,7 +27,7 @@ import 'page/td_empty_page.dart';
 import 'page/td_font_page.dart';
 import 'page/td_footer_page.dart';
 import 'page/my_image_page.dart';
-import 'page/td_image_viewer_page.dart';
+import 'page/my_image_viewer_page.dart';
 import 'page/my_indexes_page.dart';
 import 'page/my_input_page.dart';
 import 'page/my_link_page.dart';
@@ -286,7 +286,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
       text: 'ImageViewer',
       name: 'image-viewer',
       pageName: 'image_viewer',
-      pageBuilder: _wrapInheritedTheme((context) => const TDImageViewerPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyImageViewerPage()),
     ),
     ExamplePageModel(
       text: 'Progress',

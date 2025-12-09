@@ -73,6 +73,8 @@ class MyImageProvider extends StatelessWidget {
     this.opacity,
     this.fadeDuration = const Duration(milliseconds: 400),
     this.enableZoom = false,
+    this.minZoom = 1,
+    this.maxZoom = 4,
     this.enableScaleAnimation = false,
     this.normalScale = 1.0,
     this.hoverScale = 1.05,
@@ -172,6 +174,12 @@ class MyImageProvider extends StatelessWidget {
 
   /// Whether zoom functionality is enabled for the image.
   final bool enableZoom;
+
+  /// Scale when not hovered (default 1.0).
+  final double minZoom;
+
+  /// Scale to use when hovered (default 4).
+  final double maxZoom;
 
   /// Whether scale animation is enabled for the image on hover.
   final bool enableScaleAnimation;
@@ -532,8 +540,8 @@ class MyImageProvider extends StatelessWidget {
     // Wraps the image content with InteractiveViewer if zoom is enabled.
     if (enableZoom) {
       imageContent = InteractiveViewer(
-        minScale: 1,
-        maxScale: 4,
+        minScale: minZoom,
+        maxScale: maxZoom,
         child: imageContent,
       );
     }
