@@ -54,6 +54,33 @@ class MyDialog {
     );
   }
 
+  // static Future<T?> responsive<T>({
+  //   Duration? duration,
+  //   double? width,
+  //   double? height,
+  //   Alignment? alignment,
+  //   bool barrierDismissible = true,
+  //   required Widget content,
+  // }) async {
+  //   return await showGeneralDialog(
+  //     context: Get.context!,
+  //     barrierLabel: '',
+  //     barrierDismissible: barrierDismissible,
+  //     transitionDuration: duration ?? animationDuration,
+  //     transitionBuilder: (context, animation, secondaryAnimation, child) {
+  //       return PanaraAnimations.grow(animation, secondaryAnimation, child);
+  //     },
+  //     pageBuilder: (animation, secondaryAnimation, child) {
+  //       return _AnimatedResponsiveDialog(
+  //         content: content,
+  //         alignment: alignment,
+  //         width: width,
+  //         height: height,
+  //       );
+  //     },
+  //   );
+  // }
+
   /// Converts degrees to radians.
   static const double degrees2Radians = pi / 180.0;
 
@@ -164,3 +191,73 @@ enum MyDialogAnimation {
   slideLeftRight,
   slideRightLeft,
 }
+
+// class _AnimatedResponsiveDialog extends StatefulWidget {
+//   final Widget content;
+//   final Alignment? alignment;
+//   final double? width;
+//   final double? height;
+
+//   const _AnimatedResponsiveDialog({
+//     required this.content,
+//     this.alignment,
+//     this.width,
+//     this.height,
+//   });
+
+//   @override
+//   State<_AnimatedResponsiveDialog> createState() =>
+//       _AnimatedResponsiveDialogState();
+// }
+
+// class _AnimatedResponsiveDialogState extends State<_AnimatedResponsiveDialog> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return BackdropFilter(
+//       filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
+//       child: LayoutBuilder(
+//         builder: (context, constraints) {
+//           final size = constraints.biggest;
+//           final isMobile = Responsive.isMobileOrMobileLarge;
+
+//           return Dialog(
+//             insetPadding:
+//                 isMobile
+//                     ? EdgeInsets.zero
+//                     : const EdgeInsets.symmetric(horizontal: Sizes.PADDING_16),
+//             alignment: widget.alignment,
+//             backgroundColor: isMobile ? Colors.transparent : AppColors.primary,
+//             shape:
+//                 isMobile
+//                     ? null
+//                     : RoundedRectangleBorder(
+//                       borderRadius: BorderRadius.circular(Sizes.RADIUS_32),
+//                     ),
+//             child: AnimatedContainer(
+//               duration: const Duration(milliseconds: 300),
+//               curve: Curves.easeInOut,
+//               width: isMobile ? size.width : widget.width ?? 500,
+//               height: isMobile ? size.height : widget.height ?? 400,
+//               margin:
+//                   isMobile
+//                       ? null
+//                       : const EdgeInsets.only(left: Sizes.PADDING_8),
+//               decoration: BoxDecoration(
+//                 color: Get.context?.onSurfaceVariant,
+//                 borderRadius:
+//                     isMobile ? null : BorderRadius.circular(Sizes.RADIUS_30),
+//               ),
+//               child: ClipRRect(
+//                 borderRadius:
+//                     isMobile
+//                         ? BorderRadiusGeometry.zero
+//                         : BorderRadius.circular(Sizes.RADIUS_30),
+//                 child: widget.content,
+//               ),
+//             ),
+//           );
+//         },
+//       ),
+//     );
+//   }
+// }

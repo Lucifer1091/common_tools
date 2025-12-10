@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../../../index.dart';
 
-class MyImageGallery extends StatefulWidget {
-  const MyImageGallery({
+class MyImageViewer extends StatefulWidget {
+  const MyImageViewer({
     required this.images,
     super.key,
     this.titleGallery,
@@ -53,10 +53,10 @@ class MyImageGallery extends StatefulWidget {
   final bool closeWhenSwipeDown;
 
   @override
-  State<MyImageGallery> createState() => _MyImageGalleryState();
+  State<MyImageViewer> createState() => _MyImageViewerState();
 }
 
-class _MyImageGalleryState extends State<MyImageGallery> {
+class _MyImageViewerState extends State<MyImageViewer> {
   List<MyImageModel> galleryItems = <MyImageModel>[];
 
   @override

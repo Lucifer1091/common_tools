@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 
 import '../base/example_widget.dart';
 
-class MyImageGalleryPage extends StatefulWidget {
-  const MyImageGalleryPage({super.key});
+class MyImageViewerPage extends StatefulWidget {
+  const MyImageViewerPage({super.key});
 
   @override
-  State<MyImageGalleryPage> createState() => _MyImageGalleryPageState();
+  State<MyImageViewerPage> createState() => _MyImageViewerPageState();
 }
 
-class _MyImageGalleryPageState extends State<MyImageGalleryPage> {
+class _MyImageViewerPageState extends State<MyImageViewerPage> {
   static const images = [
     'https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
     'https://fastly.picsum.photos/id/15/2500/1667.jpg?hmac=Lv03D1Y3AsZ9L2tMMC1KQZekBVaQSDc1waqJ54IHvo4',
@@ -48,7 +48,11 @@ class _MyImageGalleryPageState extends State<MyImageGalleryPage> {
   Widget _actionImageViewer(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: MyImageGallery(numOfShowImages: 6, images: images),
+      child: MyImageViewer(
+        numOfShowImages: 6,
+        images: images,
+        titleGallery: 'Hello World',
+      ),
     );
   }
 

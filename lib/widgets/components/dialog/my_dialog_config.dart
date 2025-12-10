@@ -5,7 +5,7 @@ import '../../../index.dart';
 class MyDialogButtonOptions {
   MyDialogButtonOptions({
     required this.title,
-     this.action,
+    this.action,
     this.titleColor,
     this.titleSize,
     this.style,
