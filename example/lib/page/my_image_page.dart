@@ -18,7 +18,7 @@ class MyImageState extends State<MyImagePage>
     with SingleTickerProviderStateMixin {
   late Animation<double> animation;
   late AnimationController animationController;
-  
+
   @override
   void initState() {
     super.initState();
@@ -171,7 +171,7 @@ class MyImageState extends State<MyImagePage>
           padding: const EdgeInsets.only(bottom: 16),
           child: MyText('Clip', style: context.textTheme.bodyMedium),
         ),
-        const MyImage(image: 'assets/img/image.png', type: MyImageType.clip),
+        const MyImage(source: 'assets/img/image.png', type: MyImageType.clip),
       ],
     );
   }
@@ -192,7 +192,7 @@ class MyImageState extends State<MyImagePage>
             alignment: Alignment.center,
             children: [
               MyImage(
-                image: 'assets/img/image.png',
+                source: 'assets/img/image.png',
                 width: 121,
                 height: 50,
                 type: MyImageType.stretch,
@@ -217,7 +217,7 @@ class MyImageState extends State<MyImagePage>
           height: 72,
           color: Colors.black,
           child: const MyImage(
-            image: 'assets/img/image.png',
+            source: 'assets/img/image.png',
             type: MyImageType.fitHeight,
           ),
         ),
@@ -238,7 +238,7 @@ class MyImageState extends State<MyImagePage>
           height: 89,
           color: Colors.black,
           child: const MyImage(
-            image: 'assets/img/image.png',
+            source: 'assets/img/image.png',
             type: MyImageType.fitWidth,
           ),
         ),
@@ -254,7 +254,7 @@ class MyImageState extends State<MyImagePage>
           padding: const EdgeInsets.only(bottom: 16),
           child: MyText('Square', style: context.textTheme.bodyMedium),
         ),
-        const MyImage(image: 'assets/img/image.png', type: MyImageType.square),
+        const MyImage(source: 'assets/img/image.png', type: MyImageType.square),
       ],
     );
   }
@@ -267,7 +267,7 @@ class MyImageState extends State<MyImagePage>
           padding: const EdgeInsets.only(bottom: 16),
           child: MyText('Squircle', style: context.textTheme.bodyMedium),
         ),
-        const MyImage(image: 'assets/img/image.png', width: 72, height: 72),
+        const MyImage(source: 'assets/img/image.png', width: 72, height: 72),
       ],
     );
   }
@@ -281,7 +281,7 @@ class MyImageState extends State<MyImagePage>
           child: MyText('Circle', style: context.textTheme.bodyMedium),
         ),
         const MyImage(
-          image: 'assets/img/image.png',
+          source: 'assets/img/image.png',
           width: 72,
           height: 72,
           type: MyImageType.circle,
@@ -298,7 +298,7 @@ class MyImageState extends State<MyImagePage>
           padding: const EdgeInsets.only(bottom: 16),
           child: MyText('Default Loader', style: context.textTheme.bodyMedium),
         ),
-        MyImage(image: images.random()),
+        MyImage(source: images.random()),
       ],
     );
   }
@@ -312,7 +312,7 @@ class MyImageState extends State<MyImagePage>
           child: MyText('Custom Loader', style: context.textTheme.bodyMedium),
         ),
         MyImage(
-          image: images.random(),
+          source: images.random(),
           loader: DecoratedBox(
             decoration: BoxDecoration(
               color: context.colorScheme.secondary,
@@ -338,7 +338,7 @@ class MyImageState extends State<MyImagePage>
           padding: const EdgeInsets.only(bottom: 16),
           child: MyText('Default Error', style: context.textTheme.bodyMedium),
         ),
-        const MyImage(image: 'error'),
+        const MyImage(source: 'error'),
       ],
     );
   }
@@ -352,7 +352,7 @@ class MyImageState extends State<MyImagePage>
           child: MyText('Custom Error', style: context.textTheme.bodyMedium),
         ),
         MyImage(
-          image: 'error',
+          source: 'error',
           error: DecoratedBox(
             decoration: BoxDecoration(
               color: context.colorScheme.secondary,
@@ -378,7 +378,7 @@ class MyImageState extends State<MyImagePage>
           padding: const EdgeInsets.only(bottom: 16),
           child: MyText('Asset Error', style: context.textTheme.bodyMedium),
         ),
-        MyImage(image: File('/sdcard/td/test.jpg'), type: MyImageType.square),
+        MyImage(source: File('/sdcard/td/test.jpg'), type: MyImageType.square),
       ],
     );
   }
@@ -394,7 +394,7 @@ class MyImageState extends State<MyImagePage>
         MyImage(
           height: 400,
           width: 200,
-          image: images.random(),
+          source: images.random(),
           enableZoom: true,
         ),
       ],
@@ -412,7 +412,7 @@ class MyImageState extends State<MyImagePage>
         MyImage(
           height: 400,
           width: 200,
-          image: images.random(),
+          source: images.random(),
           enableScaleAnimation: true,
         ),
       ],

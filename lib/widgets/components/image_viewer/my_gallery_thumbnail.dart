@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import '../../../index.dart';
 
 // to show image in Row
-class GalleryItemThumbnail extends StatelessWidget {
-  const GalleryItemThumbnail({
-    required this.galleryItem,
+class MyGalleryThumbnail extends StatelessWidget {
+  const MyGalleryThumbnail({
+    required this.image,
     required this.onTap,
     required this.radius,
     required this.loadingWidget,
@@ -13,7 +13,7 @@ class GalleryItemThumbnail extends StatelessWidget {
     super.key,
   });
 
-  final GalleryItemModel galleryItem;
+  final MyImageModel image;
   final GestureTapCallback? onTap;
   final Widget? loadingWidget;
   final Widget? errorWidget;
@@ -21,12 +21,12 @@ class GalleryItemThumbnail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return MyGestureDetector(
       onTap: onTap,
       child: Hero(
-        tag: galleryItem.id,
+        tag: image.id,
         child: MyImage(
-          image: galleryItem.imageUrl,
+          source: image.source,
           fit: BoxFit.cover,
           loader: loadingWidget,
           error: errorWidget,

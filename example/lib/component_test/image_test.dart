@@ -35,7 +35,7 @@ class TestPage extends StatelessWidget {
             SizedBox(height: 20),
 
             MyImage(
-              image: 'assets/img/image.png',
+              source: 'assets/img/image.png',
               type: MyImageType.fitHeight,
               height: 144,
               fit: BoxFit.fitHeight,

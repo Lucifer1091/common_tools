@@ -17,7 +17,7 @@ enum MyImageType {
 
 class MyImage extends StatelessWidget {
   const MyImage({
-    this.image,
+    this.source,
     super.key,
     this.fit,
     this.width,
@@ -57,7 +57,7 @@ class MyImage extends StatelessWidget {
     this.hoverScale = 1.05,
   });
 
-  final Object? image;
+  final Object? source;
   final MyImageType type;
   final Widget? loader;
   final Widget? error;
@@ -189,7 +189,7 @@ class MyImage extends StatelessWidget {
     double? heightOverride,
   }) {
     return MyImageProvider(
-      image,
+      source,
       height: heightOverride ?? height,
       width: widthOverride ?? width,
       fit: fitOverride ?? fit ?? BoxFit.none,

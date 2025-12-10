@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../../../index.dart';
 
-class GalleryImage extends StatefulWidget {
-  const GalleryImage({
+class MyImageGallery extends StatefulWidget {
+  const MyImageGallery({
     required this.images,
     super.key,
     this.titleGallery,
@@ -53,11 +53,11 @@ class GalleryImage extends StatefulWidget {
   final bool closeWhenSwipeDown;
 
   @override
-  State<GalleryImage> createState() => _GalleryImageState();
+  State<MyImageGallery> createState() => _MyImageGalleryState();
 }
 
-class _GalleryImageState extends State<GalleryImage> {
-  List<GalleryItemModel> galleryItems = <GalleryItemModel>[];
+class _MyImageGalleryState extends State<MyImageGallery> {
+  List<MyImageModel> galleryItems = <MyImageModel>[];
 
   @override
   void initState() {
@@ -86,8 +86,8 @@ class _GalleryImageState extends State<GalleryImage> {
           itemBuilder: (BuildContext context, int index) {
             return _isLastItem(index)
                 ? _buildImageNumbers(index)
-                : GalleryItemThumbnail(
-                  galleryItem: galleryItems[index],
+                : MyGalleryThumbnail(
+                  image: galleryItems[index],
                   onTap: () {
                     unawaited(_openImageFullScreen(index));
                   },
@@ -109,8 +109,8 @@ class _GalleryImageState extends State<GalleryImage> {
         alignment: AlignmentDirectional.center,
         fit: StackFit.expand,
         children: <Widget>[
-          GalleryItemThumbnail(
-            galleryItem: galleryItems[index],
+          MyGalleryThumbnail(
+            image: galleryItems[index],
             loadingWidget: widget.loadingWidget,
             errorWidget: widget.errorWidget,
             onTap: null,
@@ -175,9 +175,9 @@ class _GalleryImageState extends State<GalleryImage> {
     galleryItems.clear();
     for (final item in items) {
       galleryItems.add(
-        GalleryItemModel(
+        MyImageModel(
           id: item.toString(),
-          imageUrl: item,
+          source: item,
           index: items.indexOf(item),
         ),
       );

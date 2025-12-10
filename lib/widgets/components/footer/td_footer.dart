@@ -73,7 +73,7 @@ class _TDFooterState extends State<TDFooter> {
         Padding(
           padding: const EdgeInsets.only(top: 4, bottom: 4),
           child: MyImage(
-            image: widget.logo,
+            source: widget.logo,
             type: MyImageType.fitWidth,
             width: widget.width,
             height: widget.height,

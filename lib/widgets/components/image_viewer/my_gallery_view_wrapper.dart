@@ -24,7 +24,7 @@ class GalleryImageViewWrapper extends StatefulWidget {
 
   final Color? backgroundColor;
   final int? initialIndex;
-  final List<GalleryItemModel> galleryItems;
+  final List<MyImageModel> galleryItems;
   final String? titleGallery;
   final Widget? loadingWidget;
   final Widget? errorWidget;
@@ -124,7 +124,7 @@ class _GalleryImageViewWrapperState extends State<GalleryImageViewWrapper> {
   }
 
   // build image with zooming
-  Widget _buildImage(GalleryItemModel item) {
+  Widget _buildImage(MyImageModel item) {
     return Hero(
       tag: item.id,
       child: InteractiveViewer(
@@ -132,7 +132,7 @@ class _GalleryImageViewWrapperState extends State<GalleryImageViewWrapper> {
         maxScale: widget.maxScale,
         child: Center(
           child: MyImage(
-            image: item.imageUrl,
+            source: item.source,
             loader: widget.loadingWidget,
             error: widget.errorWidget,
             // radius: widget.radius,
@@ -143,7 +143,7 @@ class _GalleryImageViewWrapperState extends State<GalleryImageViewWrapper> {
   }
 
   // build image with zooming
-  Widget _buildLitImage(GalleryItemModel item) {
+  Widget _buildLitImage(MyImageModel item) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: GestureDetector(
@@ -153,7 +153,7 @@ class _GalleryImageViewWrapperState extends State<GalleryImageViewWrapper> {
           });
         },
         child: MyImage(
-          image: item.imageUrl,
+          source: item.source,
           height: _currentPage == item.index ? 70 : 60,
           width: _currentPage == item.index ? 70 : 60,
           fit: BoxFit.cover,
