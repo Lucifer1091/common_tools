@@ -30,7 +30,7 @@ class GalleryImageViewWrapper extends StatefulWidget {
   final Widget? errorWidget;
   final double minScale;
   final double maxScale;
-  final double radius;
+  final BorderRadius? radius;
   final bool reverse;
   final bool showListInGalley;
   final bool showAppBar;
@@ -126,16 +126,16 @@ class _GalleryImageViewWrapperState extends State<GalleryImageViewWrapper> {
   // build image with zooming
   Widget _buildImage(MyImageModel item) {
     return Hero(
-      tag: item.id,
+      tag: item.heroTag,
       child: InteractiveViewer(
         minScale: widget.minScale,
         maxScale: widget.maxScale,
         child: Center(
           child: MyImage(
             source: item.source,
+            type: MyImageType.fitWidth,
             loader: widget.loadingWidget,
             error: widget.errorWidget,
-            // radius: widget.radius,
           ),
         ),
       ),

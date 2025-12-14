@@ -55,6 +55,7 @@ class MyImage extends StatelessWidget {
     this.enableScaleAnimation = false,
     this.normalScale = 1.0,
     this.hoverScale = 1.05,
+    this.borderRadius,
   });
 
   final Object? source;
@@ -94,6 +95,7 @@ class MyImage extends StatelessWidget {
   final bool enableScaleAnimation;
   final double normalScale;
   final double hoverScale;
+  final BorderRadiusGeometry? borderRadius;
 
   Widget _wrap(BuildContext context, Widget child) {
     return DecoratedBox(
@@ -156,7 +158,9 @@ class MyImage extends StatelessWidget {
           height: height ?? 72,
           width: width ?? 72,
           clipBehavior: Clip.hardEdge,
-          decoration: BoxDecoration(borderRadius: MyBorderRadius.medium),
+          decoration: BoxDecoration(
+            borderRadius: borderRadius ?? MyBorderRadius.medium,
+          ),
           child: _buildProvider(
             context,
             fitOverride: fit ?? BoxFit.cover,
