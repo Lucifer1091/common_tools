@@ -30,8 +30,6 @@ Future<void> main() async {
   // };
 
   // log.i('User from JSON: ${User.fromJson(userMap).toJson()}');
-
-  log.f(iterable.variance());
 }
 
 // class User {

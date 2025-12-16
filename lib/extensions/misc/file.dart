@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart' as p;
@@ -87,9 +89,24 @@ extension FileExtensionX on XFile {
       isArchive ||
       isJson;
 
-  /// get file size in mb
-  Future<double> get sizeInMb async {
-    final sizeInBytes = await length();
-    return sizeInBytes / (1024 * 1024);
+  /// Returns a formatted string with the appropriate size suffix (e.g., KB, MB).
+  Future<String> getSizeWithSuffix({int decimals = 0}) async {
+    final int bytes = await length();
+
+    if (bytes <= 0) return '0 Bytes';
+
+    const suffixes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    final i = (math.log(bytes) / math.log(1024)).floor();
+
+    return '${(bytes / math.pow(1024, i)).toStringAsFixed(decimals)} ${suffixes[i]}';
+  }
+
+  /// Converts the file size to the specified [SizeUnit].
+  Future<double> getSize({SizeUnit unit = SizeUnit.MB}) async {
+    final int bytes = await length();
+
+    if (bytes <= 0) return 0;
+
+    return bytes / math.pow(1000, unit.id);
   }
 }

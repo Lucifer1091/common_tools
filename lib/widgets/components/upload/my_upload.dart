@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
+import 'package:cross_file/cross_file.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../index.dart';
 
@@ -19,10 +20,8 @@ enum MyUploadBoxType { roundedSquare, circle }
 
 class MyUploadFile {
   MyUploadFile({
-    required this.key,
-    this.remotePath,
-    this.assetPath,
-    this.file,
+    required this.id,
+    this.source,
     this.progress,
     this.status = MyUploadFileStatus.success,
     this.loadingText = 'Loading...',
@@ -31,16 +30,22 @@ class MyUploadFile {
     this.canDelete = true,
   });
 
-  final int key;
-  final String? remotePath;
-  final String? assetPath;
-  final File? file;
+  final int id;
+  final Object? source;
   final bool canDelete;
   final int? progress;
   final String loadingText;
   final String retryText;
   final String errorText;
   MyUploadFileStatus status;
+
+  Key get key {
+    if (source is File || source is XFile) {
+      return Key((source as XFile?)?.path ?? '');
+    }
+
+    return Key(source?.toString() ?? '');
+  }
 }
 
 typedef MyUploadErrorEvent = void Function(Object e);
@@ -71,6 +76,7 @@ class MyUpload extends StatefulWidget {
     this.wrapSpacing,
     this.wrapRunSpacing,
     this.wrapAlignment,
+    this.addIcon,
   });
 
   final List<MyUploadFile> files;
@@ -95,6 +101,7 @@ class MyUpload extends StatefulWidget {
   final double? wrapSpacing;
   final double? wrapRunSpacing;
   final WrapAlignment? wrapAlignment;
+  final IconData? addIcon;
 
   @override
   State<MyUpload> createState() => _MyUploadState();
@@ -107,8 +114,6 @@ class _MyUploadState extends State<MyUpload> {
       widget.multiple
           ? (widget.max == 0 || fileList.length < widget.max)
           : fileList.isEmpty;
-
-  final ImagePicker _picker = ImagePicker();
 
   final Map<MyUploadBoxType, MyImageType> _imageTypeMap = {
     MyUploadBoxType.roundedSquare: MyImageType.squircle,
@@ -137,24 +142,23 @@ class _MyUploadState extends State<MyUpload> {
   }
 
   Future<List<XFile>> getMediaFromPicker(bool isMultiple) async {
-    if (widget.mediaType.isEmpty) {
-      return [];
-    }
+    if (widget.mediaType.isEmpty) return [];
 
     var medias = <XFile>[];
+
     try {
       if (isMultiple) {
-        medias = await _picker.pickMultiImage();
+        medias = await FileService.pickMultipleImages() ?? [];
       } else {
         XFile? media;
+
         if (widget.mediaType.contains(MyUploadMediaType.image)) {
-          media = await _picker.pickImage(source: ImageSource.gallery);
+          media = await FileService.pickImage();
         } else {
-          media = await _picker.pickVideo(source: ImageSource.gallery);
+          media = await FileService.pickVideo();
         }
-        if (media != null) {
-          medias = [media];
-        }
+
+        if (media != null) medias = [media];
       }
 
       if (widget.max > 0 &&
@@ -177,9 +181,7 @@ class _MyUploadState extends State<MyUpload> {
   }
 
   Future<void> extractImageList(List<XFile> files) async {
-    if (!canUpload || files.isEmpty) {
-      return;
-    }
+    if (!canUpload || files.isEmpty) return;
 
     final result = await validateResources(files);
 
@@ -189,17 +191,11 @@ class _MyUploadState extends State<MyUpload> {
     }
 
     final originMaxKeys =
-        fileList.isEmpty ? 0 : fileList.map((file) => file.key).reduce(max);
+        fileList.isEmpty ? 0 : fileList.map((file) => file.id).reduce(max);
 
     final newFiles = <MyUploadFile>[];
     for (var i = 0; i < files.length; i++) {
-      newFiles.add(
-        MyUploadFile(
-          key: originMaxKeys + i + 1,
-          file: File(files[i].path),
-          assetPath: files[i].path,
-        ),
-      );
+      newFiles.add(MyUploadFile(id: originMaxKeys + i + 1, source: files[i]));
     }
 
     widget.onChange?.call(newFiles, MyUploadType.add);
@@ -215,11 +211,7 @@ class _MyUploadState extends State<MyUpload> {
       return;
     }
 
-    final newFile = MyUploadFile(
-      key: oldFile.key,
-      file: File(files[0].path),
-      assetPath: files[0].path,
-    );
+    final newFile = MyUploadFile(id: oldFile.id, source: files[0]);
 
     widget.onChange?.call([newFile], MyUploadType.replace);
   }
@@ -232,9 +224,7 @@ class _MyUploadState extends State<MyUpload> {
 
     var isMultiple = multiple ?? widget.multiple;
 
-    if (multiple != null) {
-      isMultiple = multiple;
-    }
+    if (multiple != null) isMultiple = multiple;
 
     if (isMultiple && widget.max > 0) {
       final remain = widget.max - fileList.length;
@@ -298,7 +288,7 @@ class _MyUploadState extends State<MyUpload> {
   }) {
     return Visibility(
       visible: shouldDisplay,
-      child: GestureDetector(
+      child: MyGestureDetector(
         onTap: onTap,
         child: Container(
           width: widget.width,
@@ -307,17 +297,16 @@ class _MyUploadState extends State<MyUpload> {
               widget.type == MyUploadBoxType.circle
                   ? BoxDecoration(
                     shape: BoxShape.circle,
-                    color: ThemeColors.neutral.shade50,
+                    color: context.colorScheme.secondary,
                   )
                   : BoxDecoration(
-                    color: ThemeColors.neutral.shade50,
-                    borderRadius: BorderRadius.circular(6),
+                    color: context.colorScheme.secondary,
+                    borderRadius: MyBorderRadius.medium,
                   ),
-          child: const Center(
+          child: Center(
             child: Icon(
-              Icons.add_rounded,
-              color: Color.fromRGBO(0, 0, 0, 0.4),
-              size: 28,
+              widget.addIcon ?? LucideIcons.imagePlus,
+              color: context.colorScheme.mutedForeground,
             ),
           ),
         ),
@@ -326,9 +315,9 @@ class _MyUploadState extends State<MyUpload> {
   }
 
   Widget _buildImageBox(BuildContext context, MyUploadFile file) {
-    return GestureDetector(
+    return MyGestureDetector(
       onTap: () async {
-        widget.onClick?.call(file.key);
+        widget.onClick?.call(file.id);
 
         if (widget.enabledReplaceType ?? false) {
           final files = await getMediaFromPicker(false);
@@ -338,10 +327,10 @@ class _MyUploadState extends State<MyUpload> {
       child: Stack(
         children: [
           MyImage(
-            key: Key(file.assetPath ?? ''),
+            key: file.key,
             width: widget.width,
             height: widget.height,
-            source: file.remotePath ?? file.assetPath ?? file.file,
+            source: file.source,
             type: _imageTypeMap[widget.type] ?? MyImageType.squircle,
           ),
           Visibility(
@@ -353,10 +342,8 @@ class _MyUploadState extends State<MyUpload> {
             child: Positioned(
               right: 0,
               top: 0,
-              child: GestureDetector(
-                onTap: () {
-                  onDelete(file);
-                },
+              child: MyGestureDetector(
+                onTap: () => onDelete(file),
                 child: Container(
                   width: 20,
                   height: 20,
@@ -369,8 +356,8 @@ class _MyUploadState extends State<MyUpload> {
                           : const BoxDecoration(
                             color: Color.fromRGBO(0, 0, 0, 0.6),
                             borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(6),
-                              topRight: Radius.circular(6),
+                              bottomLeft: MyRadi.medium,
+                              topRight: MyRadi.medium,
                             ),
                           ),
                   child: const Center(
@@ -414,43 +401,40 @@ class _MyUploadState extends State<MyUpload> {
               )
               : BoxDecoration(
                 color: const Color.fromRGBO(0, 0, 0, 0.4),
-                borderRadius: BorderRadius.circular(6),
+                borderRadius: MyBorderRadius.medium,
               ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Visibility(
-                visible: file.status == MyUploadFileStatus.loading,
-                child: const MyLoader(
-                  size: MyLoaderSize.large,
-                  // iconColor: Colors.white,
-                ),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Visibility(
+              visible: file.status == MyUploadFileStatus.loading,
+              child: MyLoader(
+                size: MyLoaderSize.extraSmall,
+                options: MyLoaderOptions(strokeWidth: 2.5),
               ),
-              Visibility(
-                visible:
-                    file.status == MyUploadFileStatus.retry ||
-                    file.status == MyUploadFileStatus.error,
-                child: Icon(
-                  file.status == MyUploadFileStatus.retry
-                      ? Icons.refresh_rounded
-                      : Icons.cancel_outlined,
-                  size: 24,
-                  color: Colors.white,
-                ),
+            ),
+            Visibility(
+              visible:
+                  file.status == MyUploadFileStatus.retry ||
+                  file.status == MyUploadFileStatus.error,
+              child: Icon(
+                file.status == MyUploadFileStatus.retry
+                    ? LucideIcons.refreshCw
+                    : LucideIcons.circleSlash,
+                size: 18,
+                color: Colors.white,
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 4),
-                child: MyText(
-                  displayText,
-                  textColor: Colors.white,
-                  style: const TextStyle(fontSize: 12, height: 1.67),
-                ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 12),
+              child: MyText(
+                displayText,
+                textColor: Colors.white,
+                style: const TextStyle(fontSize: 12, height: 1.67),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

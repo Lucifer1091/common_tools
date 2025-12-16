@@ -1,343 +1,448 @@
-// import 'package:file_picker/file_picker.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
-// import 'package:image_picker/image_picker.dart';
-// import 'package:path/path.dart' as p;
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as p;
 
-// import '../index.dart';
+import '../index.dart';
 
-// class FileService {
-//   FileService._();
+class FileService {
+  FileService._();
 
-//   static Future<XFile?> pickImage({
-//     ImageSource imageSource = ImageSource.gallery,
-//     double? maxWidth,
-//     double? maxHeight,
-//     int? quality,
-//   }) async {
-//     try {
-//       if (!MyPlatform.isDesktop) {
-//         // For Android / IOS / Web
+  // File extension constants
+  static const _imageExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+  static const _documentExtensions = [
+    'doc',
+    'docx',
+    'pdf',
+    'xls',
+    'xlsx',
+    'csv',
+    'txt',
+    'ppt',
+    'pptx',
+    'json',
+  ];
 
-//         final XFile? image = await ImagePicker().pickImage(
-//           source: imageSource,
-//           maxWidth: maxWidth,
-//           maxHeight: maxHeight,
-//           imageQuality: quality,
-//         );
-//         // Check for Invalid File formats
-//         if (image != null) {
-//           final String ext = p.extension(image.path).toLowerCase();
-//           if (image.mimeType == 'image/jpeg' ||
-//               image.mimeType == 'image/jpg' ||
-//               image.mimeType == 'image/png' ||
-//               ext == '.jpg' ||
-//               ext == '.jpeg' ||
-//               ext == '.png') {
-//             return image;
-//           } else {
-//             SnackBars.error(title: 'Invalid File Format.');
-//           }
-//         }
-//       } else {
-//         // For Windows / MacOs / Linux
+  static const _videoExtensions = [
+    'mp4',
+    'mov',
+    'avi',
+    'mkv',
+    'webm',
+    'flv',
+    'wmv',
+    '3gp',
+    'ts',
+    'mts',
+  ];
 
-//         final FilePickerResult? result = await FilePicker.platform.pickFiles(
-//           type: FileType.custom,
-//           allowedExtensions: ['jpg', 'jpeg', 'png'],
-//         );
+  static const _audioExtensions = ['mp3', 'wav', 'aac', 'm4a', 'flac', 'ogg'];
 
-//         if (result != null) {
-//           return XFile(result.files.single.path!);
-//         }
-//       }
-//     } on PlatformException catch (_) {
-//       SnackBars.error(title: 'Failed to pick Image.');
-//     }
-//     return null;
-//   }
+  static const List<String> _allExtensions = [
+    ..._imageExtensions,
+    ..._documentExtensions,
+    ..._videoExtensions,
+    ..._audioExtensions,
+  ];
 
-//   static Future<XFile?> pickFile({
-//     double? maxWidth,
-//     double? maxHeight,
-//     int? quality,
-//     List<String>? allowedExtensions,
-//   }) async {
-//     try {
-//       final FilePickerResult? result = await FilePicker.platform.pickFiles(
-//         type: FileType.custom,
-//         allowedExtensions:
-//             allowedExtensions ??
-//             [
-//               'jpg',
-//               'jpeg',
-//               'png',
-//               'doc',
-//               'docx',
-//               'pdf',
-//               'xls',
-//               'xlsx',
-//               'csv',
-//               'txt',
-//             ],
-//       );
+  // MIME type constants
+  static const _imageMimeTypes = {
+    'image/jpeg',
+    'image/jpg',
+    'image/png',
+    'image/gif',
+  };
 
-//       if (result == null) return null;
+  static const _videoMimeTypes = {
+    'video/mp4',
+    'video/quicktime',
+    'video/x-msvideo',
+    'video/x-matroska',
+    'video/webm',
+    'video/x-flv',
+    'video/x-ms-wmv',
+    'video/3gpp',
+    'video/mp2t',
+  };
 
-//       final String? fileExt = result.files.single.extension?.toLowerCase();
+  static Future<XFile?> pickImage({
+    ImageSource imageSource = ImageSource.gallery,
+    double? maxWidth,
+    double? maxHeight,
+    int? quality,
+    int? maxSizeInBytes,
+  }) async {
+    try {
+      if (!MyPlatform.isDesktop) {
+        return await _pickUsingImagePicker(
+          imageSource: imageSource,
+          maxWidth: maxWidth,
+          maxHeight: maxHeight,
+          quality: quality,
+          maxSizeInBytes: maxSizeInBytes,
+        );
+      } else {
+        return await _pickUsingFilePicker(maxSizeInBytes: maxSizeInBytes);
+      }
+    } on PlatformException catch (_) {
+      SnackBars.error(title: 'Failed to pick Image.');
+    }
+    return null;
+  }
 
-//       if (fileExt == 'jpg' ||
-//           fileExt == 'jpeg' ||
-//           fileExt == 'png' ||
-//           fileExt == 'doc' ||
-//           fileExt == 'docx' ||
-//           fileExt == 'xls' ||
-//           fileExt == 'xlsx' ||
-//           fileExt == 'csv' ||
-//           fileExt == 'pdf' ||
-//           fileExt == 'txt') {
-//         if (MyPlatform.isWeb) {
-//           return XFile.fromData(
-//             result.files.single.bytes!,
-//             mimeType: fileExt,
-//             name: result.files.single.name,
-//           );
-//         } else {
-//           return XFile(
-//             result.files.single.path!,
-//             mimeType: fileExt,
-//             name: result.files.single.name,
-//           );
-//         }
-//       } else {
-//         SnackBars.error(title: 'Invalid File Format.');
-//       }
-//     } on PlatformException catch (_) {
-//       SnackBars.error(title: 'Failed to pick File.');
-//     }
-//     return null;
-//   }
+  static Future<XFile?> _pickUsingImagePicker({
+    required ImageSource imageSource,
+    double? maxWidth,
+    double? maxHeight,
+    int? quality,
+    int? maxSizeInBytes,
+  }) async {
+    final XFile? image = await ImagePicker().pickImage(
+      source: imageSource,
+      maxWidth: maxWidth,
+      maxHeight: maxHeight,
+      imageQuality: quality,
+    );
 
-//   static Future<List<XFile?>?> pickMultipleImages({
-//     double? maxWidth,
-//     double? maxHeight,
-//     int? quality,
-//   }) async {
-//     try {
-//       if (!MyPlatform.isDesktop) {
-//         // For Android / IOS / Web
+    if (image == null) return null;
 
-//         final List<XFile?> images = await ImagePicker().pickMultiImage(
-//           maxWidth: maxWidth,
-//           maxHeight: maxHeight,
-//           imageQuality: quality,
-//         );
-//         return images;
-//       } else {
-//         // For Windows / MacOs / Linux
+    if (!_isValidImageFormat(image)) {
+      SnackBars.error(title: 'Invalid File Format.');
+      return null;
+    }
 
-//         final FilePickerResult? result = await FilePicker.platform.pickFiles(
-//           type: FileType.image,
-//           allowMultiple: true,
-//         );
+    if (!await _validateFileSize(image, maxSizeInBytes)) return null;
 
-//         if (result != null) {
-//           return result.paths.map((path) => XFile(path!)).toList();
-//         }
-//       }
-//     } on PlatformException catch (_) {
-//       SnackBars.error(title: 'Failed to pick Image.');
-//     }
-//     return null;
-//   }
+    return image;
+  }
 
-//   static Future<List<XFile>?> pickFiles({
-//     double? maxWidth,
-//     double? maxHeight,
-//     int? quality,
-//     List<String>? allowedExtensions,
-//   }) async {
-//     try {
-//       final List<String> fileExtensions = [
-//         'jpg',
-//         'jpeg',
-//         'png',
-//         'doc',
-//         'docx',
-//         'pdf',
-//         'xls',
-//         'xlsx',
-//         'csv',
-//         'txt',
-//         'ppt',
-//         'pptx',
-//         'mp3',
-//         'mp4',
-//       ];
+  static Future<XFile?> _pickUsingFilePicker({int? maxSizeInBytes}) async {
+    final FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: _imageExtensions,
+    );
 
-//       final FilePickerResult? result = await FilePicker.platform.pickFiles(
-//         type: FileType.custom,
-//         allowMultiple: true,
-//         allowedExtensions: allowedExtensions ?? fileExtensions,
-//       );
+    if (result == null) return null;
 
-//       if (result == null) return null;
+    final file = XFile(result.files.single.path!);
 
-//       for (final PlatformFile file in result.files) {
-//         final String? fileExt = file.extension?.toLowerCase();
+    if (!_isValidImageFormat(file)) {
+      SnackBars.error(title: 'Invalid File Format.');
+      return null;
+    }
 
-//         if (!fileExtensions.contains(fileExt)) {
-//           SnackBars.error(title: 'Invalid File Format.');
-//           return null;
-//         }
-//       }
+    if (!await _validateFileSize(file, maxSizeInBytes)) return null;
 
-//       final List<XFile> files = [];
+    return file;
+  }
 
-//       if (MyPlatform.isWeb) {
-//         for (final PlatformFile file in result.files) {
-//           files.add(
-//             XFile.fromData(
-//               file.bytes!,
-//               mimeType: file.extension?.toLowerCase(),
-//               name: file.name,
-//             ),
-//           );
-//         }
-//       } else {
-//         for (final PlatformFile file in result.files) {
-//           files.add(
-//             XFile(
-//               file.path!,
-//               mimeType: file.extension?.toLowerCase(),
-//               name: file.name,
-//             ),
-//           );
-//         }
-//       }
+  static bool _isValidImageFormat(XFile image) {
+    final ext = p.extension(image.path).toLowerCase();
+    return _imageMimeTypes.contains(image.mimeType) ||
+        _imageExtensions.contains(ext.replaceFirst('.', ''));
+  }
 
-//       return files;
-//     } on PlatformException catch (_) {
-//       SnackBars.error(title: 'Failed to pick Files.');
-//     }
-//     return null;
-//   }
+  static bool _isValidVideoFormat(XFile video) {
+    final ext = p.extension(video.path).toLowerCase();
+    return _videoMimeTypes.contains(video.mimeType) ||
+        _videoExtensions.contains(ext.replaceFirst('.', ''));
+  }
 
-//   static Future<XFile?> showFilePickerPopup(
-//     BuildContext context, {
-//     bool isFilePicker = false,
-//     List<String>? allowedExtensions,
-//   }) async {
-//     XFile? source;
-//     // For Windows / MacOs / Linux Upload image/file by galley only.
-//     if (MyPlatform.isDesktop) {
-//       if (isFilePicker) {
-//         source = await pickFile(allowedExtensions: allowedExtensions);
-//       } else {
-//         source = await pickImage();
-//       }
-//     } else {
-//       if (isFilePicker) {
-//         source = await pickFile(allowedExtensions: allowedExtensions);
-//       } else {
-//         source =
-//             context.isCompact
-//                 ? await _showImagePickerSheet(
-//                   context,
-//                   isFilePicker: isFilePicker,
-//                 )
-//                 : await _showImagePickerDialog(
-//                   context,
-//                   isFilePicker: isFilePicker,
-//                 );
-//       }
-//     }
-//     return source;
-//   }
+  static Future<bool> _validateFileSize(XFile file, int? maxSizeInBytes) async {
+    if (maxSizeInBytes == null) return true;
 
-//   static Future<XFile?> _showImagePickerDialog(
-//     BuildContext context, {
-//     bool isFilePicker = false,
-//   }) => OLDDialogs.show<XFile?>(
-//     context,
-//     content: SizedBox(
-//       width: 400,
-//       height: 120,
-//       child: Center(
-//         child: _buildImagePickerContent(context, isFilePicker: isFilePicker),
-//       ),
-//     ),
-//   );
+    final fileSize = await file.length();
+    if (fileSize > maxSizeInBytes) {
+      _showMediaSizeExceedError(maxSizeInBytes);
+      return false;
+    }
+    return true;
+  }
 
-//   static Future<XFile?> _showImagePickerSheet(
-//     BuildContext context, {
-//     bool isFilePicker = false,
-//   }) async => BottomSheets.show<XFile?>(
-//     context,
-//     color: context.colorScheme.background,
-//     showDivider: false,
-//     maxHeight: 160,
-//     maxWidth: 500,
-//     bottomSheet: _buildImagePickerContent(context, isFilePicker: isFilePicker),
-//   );
+  static Future<XFile?> pickFile({
+    List<String>? allowedExtensions,
+    int? maxSizeInBytes,
+  }) async {
+    try {
+      final FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions:
+            allowedExtensions ?? [..._imageExtensions, ..._documentExtensions],
+      );
 
-//   static Widget _buildImagePickerContent(
-//     BuildContext context, {
-//     bool isFilePicker = false,
-//   }) {
-//     XFile? image;
+      if (result == null) return null;
 
-//     return Material(
-//       type: MaterialType.transparency,
-//       child: Column(
-//         mainAxisSize: MainAxisSize.min,
-//         children: [
-//           ListTile(
-//             onTap: () async {
-//               image = await pickImage(imageSource: ImageSource.camera).then((
-//                 value,
-//               ) {
-//                 Navigator.of(context).pop<XFile>(image);
-//                 return value;
-//               });
-//             },
-//             leading: Icon(
-//               Icons.camera_alt_outlined,
-//               color: context.colorScheme.primary,
-//             ),
-//             title: Text('Capture from camera', style: context.bodyLarge),
-//           ),
-//           if (!isFilePicker) ...[
-//             ListTile(
-//               onTap: () async {
-//                 image = await pickImage().then((value) {
-//                   Navigator.of(context).pop<XFile>(image);
-//                   return value;
-//                 });
-//               },
-//               leading: Icon(
-//                 Icons.photo_size_select_actual_outlined,
-//                 color: context.colorScheme.primary,
-//               ),
-//               title: Text('Upload from gallery', style: context.bodyLarge),
-//             ),
-//           ] else ...[
-//             ListTile(
-//               onTap: () async {
-//                 image = await pickFile().then((value) {
-//                   Navigator.of(context).pop<XFile>(image);
-//                   return value;
-//                 });
-//               },
-//               leading: Icon(
-//                 Icons.upload_file_outlined,
-//                 color: context.colorScheme.primary,
-//               ),
-//               title: Text('Upload from storage', style: context.bodyLarge),
-//             ),
-//           ],
-//         ],
-//       ),
-//     );
-//   }
-// }
+      final file = result.files.single;
+      final fileExt = file.extension?.toLowerCase();
+
+      if (!_isValidFileExtension(fileExt, extensions: allowedExtensions)) {
+        SnackBars.error(title: 'Invalid File Format.');
+        return null;
+      }
+
+      if (maxSizeInBytes != null && file.size > maxSizeInBytes) {
+        _showMediaSizeExceedError(maxSizeInBytes);
+        return null;
+      }
+
+      return MyPlatform.isWeb
+          ? XFile.fromData(file.bytes!, mimeType: fileExt, name: file.name)
+          : XFile(file.path!, mimeType: fileExt, name: file.name);
+    } on PlatformException catch (_) {
+      SnackBars.error(title: 'Failed to pick file.');
+    }
+    return null;
+  }
+
+  static bool _isValidFileExtension(String? ext, {List<String>? extensions}) {
+    final extensions0 = extensions ?? _allExtensions;
+    return ext != null && extensions0.contains(ext);
+  }
+
+  static Future<List<XFile>?> pickMultipleImages({
+    double? maxWidth,
+    double? maxHeight,
+    int? quality,
+    int? maxLimit,
+  }) async {
+    try {
+      if (!MyPlatform.isDesktop) {
+        return await ImagePicker().pickMultiImage(
+          maxWidth: maxWidth,
+          maxHeight: maxHeight,
+          imageQuality: quality,
+          limit: maxLimit,
+        );
+      } else {
+        final FilePickerResult? result = await FilePicker.platform.pickFiles(
+          type: FileType.image,
+          allowMultiple: true,
+        );
+        final files = result?.paths.map((path) => XFile(path!)).toList();
+        return files?.sublist(0, maxLimit ?? files.length);
+      }
+    } on PlatformException catch (_) {
+      SnackBars.error(title: 'Failed to pick Image.');
+    }
+    return null;
+  }
+
+  static Future<XFile?> pickVideo({
+    int? maxSizeInBytes,
+    Duration? maxDuration,
+    ImageSource source = ImageSource.gallery,
+  }) async {
+    try {
+      if (!MyPlatform.isDesktop) {
+        return await _pickVideoUsingImagePicker(
+          maxSizeInBytes: maxSizeInBytes,
+          maxDuration: maxDuration,
+          source: source,
+        );
+      } else {
+        return await _pickVideoUsingFilePicker(maxSizeInBytes: maxSizeInBytes);
+      }
+    } on PlatformException catch (_) {
+      SnackBars.error(title: 'Failed to pick Video.');
+    }
+    return null;
+  }
+
+  static Future<XFile?> _pickVideoUsingImagePicker({
+    int? maxSizeInBytes,
+    Duration? maxDuration,
+    ImageSource source = ImageSource.gallery,
+  }) async {
+    final XFile? video = await ImagePicker().pickVideo(
+      source: source,
+      maxDuration: maxDuration,
+    );
+
+    if (video == null) return null;
+
+    if (!_isValidVideoFormat(video)) {
+      SnackBars.error(title: 'Invalid Video Format.');
+      return null;
+    }
+
+    if (!await _validateFileSize(video, maxSizeInBytes)) return null;
+
+    return video;
+  }
+
+  static Future<XFile?> _pickVideoUsingFilePicker({int? maxSizeInBytes}) async {
+    final FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: _videoExtensions,
+    );
+
+    if (result == null) return null;
+
+    final file = XFile(result.files.single.path!);
+
+    if (!_isValidVideoFormat(file)) {
+      SnackBars.error(title: 'Invalid Video Format.');
+      return null;
+    }
+
+    if (!await _validateFileSize(file, maxSizeInBytes)) return null;
+
+    return file;
+  }
+
+  static Future<List<XFile>?> pickMultipleVideos({
+    Duration? maxDuration,
+    int? maxSizeInBytes,
+    int? maxLimit,
+  }) async {
+    try {
+      if (!MyPlatform.isDesktop) {
+        return await ImagePicker().pickMultiVideo(
+          limit: maxLimit,
+          maxDuration: maxDuration,
+        );
+      } else {
+        final FilePickerResult? result = await FilePicker.platform.pickFiles(
+          allowMultiple: true,
+          type: FileType.custom,
+          allowedExtensions: _videoExtensions,
+        );
+
+        if (result == null) return null;
+
+        final videos = result.paths.map((path) => XFile(path!)).toList();
+
+        for (final video in videos) {
+          if (!_isValidVideoFormat(video)) {
+            SnackBars.error(title: 'Invalid Video Format.');
+            return null;
+          }
+        }
+
+        return _buildXFilesList(
+          result.files,
+          maxSizeInBytes,
+        ).sublist(0, maxLimit ?? videos.length);
+      }
+    } on PlatformException catch (_) {
+      SnackBars.error(title: 'Failed to pick Videos.');
+    }
+    return null;
+  }
+
+  static Future<List<XFile>?> pickFiles({
+    List<String>? allowedExtensions,
+    int? maxSizeInBytes,
+  }) async {
+    try {
+      final FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowMultiple: true,
+        allowedExtensions: allowedExtensions ?? _allExtensions,
+      );
+
+      if (result == null) return null;
+
+      // Validate all file extensions
+      for (final file in result.files) {
+        final fileExt = file.extension?.toLowerCase();
+        if (!_isValidFileExtension(fileExt)) {
+          SnackBars.error(title: 'Invalid File Format.');
+          return null;
+        }
+      }
+
+      return _buildXFilesList(result.files, maxSizeInBytes);
+    } on PlatformException catch (_) {
+      SnackBars.error(title: 'Failed to pick Files.');
+    }
+    return null;
+  }
+
+  static List<XFile> _buildXFilesList(
+    List<PlatformFile> files,
+    int? maxSizeInBytes,
+  ) {
+    return files.map((file) {
+      if (maxSizeInBytes != null && file.size > maxSizeInBytes) {
+        _showMediaSizeExceedError(maxSizeInBytes);
+      }
+
+      return MyPlatform.isWeb
+          ? XFile.fromData(
+            file.bytes!,
+            mimeType: file.extension?.toLowerCase(),
+            name: file.name,
+          )
+          : XFile(
+            file.path!,
+            mimeType: file.extension?.toLowerCase(),
+            name: file.name,
+          );
+    }).toList();
+  }
+
+  static Future<XFile?> showFilePickerPopup(
+    BuildContext context, {
+    bool isFilePicker = false,
+    List<String>? allowedExtensions,
+  }) async {
+    if (MyPlatform.isDesktop) {
+      return isFilePicker
+          ? await pickFile(allowedExtensions: allowedExtensions)
+          : await pickImage();
+    }
+
+    return _showImagePickerDialog(context, isFilePicker: isFilePicker);
+
+    // return context.isCompact
+    //     ? await _showImagePickerSheet(context, isFilePicker: isFilePicker)
+    //     : await _showImagePickerDialog(context, isFilePicker: isFilePicker);
+  }
+
+  static Future<XFile?> _showImagePickerDialog(
+    BuildContext context, {
+    bool isFilePicker = false,
+  }) => MyDialog.show<XFile?>(
+    context: context,
+    builder: (context) {
+      return MyAlertDialog.vertical(
+        title: 'Upload Image',
+        content: 'How do you want to upload an image ?',
+        buttons: [
+          MyDialogButtonOptions(
+            title: 'Capture From Camera',
+            titleColor: context.colorScheme.primaryForeground,
+            action: () async {
+              final image = await pickImage(imageSource: ImageSource.camera);
+              if (context.mounted) Navigator.of(context).pop<XFile>(image);
+            },
+          ),
+          MyDialogButtonOptions(
+            title: 'Upload From Gallery',
+            action: () async {
+              final image = await pickImage();
+              if (context.mounted) Navigator.of(context).pop<XFile>(image);
+            },
+            type: MyButtonType.outline,
+          ),
+          MyDialogButtonOptions(
+            title: 'Cancel',
+            action: () async {
+              if (context.mounted) Navigator.of(context).pop();
+            },
+            type: MyButtonType.destructive,
+            titleColor: context.colorScheme.destructiveForeground,
+          ),
+        ],
+      );
+    },
+  );
+
+  static void _showMediaSizeExceedError(int sizeInBytes) {
+    SnackBars.error(
+      title: 'Image size exceeds ${sizeInBytes ~/ (1024 * 1024)} MB limit.',
+    );
+  }
+}

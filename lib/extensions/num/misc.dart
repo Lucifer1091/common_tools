@@ -4,7 +4,7 @@ import 'converters.dart';
 import 'validators.dart';
 
 extension NumHelper on num? {
-  /// Returns an iterable from `0` up to but not including [this].
+  /// Returns an iterable from `0` up to but not including [num].
   ///
   /// Example:
   /// ```dart
