@@ -15,6 +15,7 @@ class MyAvatar extends StatelessWidget {
     this.size = MyAvatarSize.medium,
     this.type = MyAvatarType.normal,
     this.shape = MyAvatarShape.circle,
+    this.direction = Axis.horizontal,
     this.initials,
     this.textColor,
     this.style,
@@ -30,12 +31,14 @@ class MyAvatar extends StatelessWidget {
     this.infoBorder = 2,
     this.backgroundColor,
     this.fit,
+    this.distance,
   });
 
   final Object? avatar, placeholder;
   final MyAvatarSize size;
   final MyAvatarType type;
   final MyAvatarShape shape;
+  final Axis direction;
   final String? initials;
   final Color? textColor;
   final TextStyle? style;
@@ -43,6 +46,7 @@ class MyAvatar extends StatelessWidget {
   final double? avatarSize;
   final IconData? icon;
   final List<Object>? avatars;
+  final double? distance;
   final double infoBorder;
   final Widget? infoWidget;
   final String? infoText;
@@ -157,182 +161,235 @@ class MyAvatar extends StatelessWidget {
   }
 
   double _getDisplayPadding() {
-    return switch (size) {
-      MyAvatarSize.large => 10,
-      MyAvatarSize.medium => 8,
-      MyAvatarSize.small => 6,
-    };
+    return distance ??
+        switch (size) {
+          MyAvatarSize.large => 10,
+          MyAvatarSize.medium => 8,
+          MyAvatarSize.small => 6,
+        };
   }
 
   Widget _buildOperationAvatar(BuildContext context) {
     final bgColor = context.colorScheme.primary.withValues(alpha: 0.15);
 
-    final list = <Widget>[];
-
     if (avatars.isBlank) return const NoWidget();
 
+    final list = <Widget>[];
     var length = 0;
 
     if (avatars != null) {
       length = avatars!.length;
       for (var i = 0; i < avatars!.length + 1; i++) {
-        final left = (_getAvatarWidth() - _getDisplayPadding()) * i;
-        if (i == avatars!.length) {
-          list.add(
-            Positioned(
-              left: left,
-              child: MyGestureDetector(
-                onTap: onTap,
-                child: Container(
-                  width: _getAvatarWidth(),
-                  height: _getAvatarWidth(),
-                  clipBehavior: Clip.hardEdge,
-                  decoration: ShapeDecoration(
-                    color: bgColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                        _getAvatarWidth() - _getDisplayPadding(),
-                      ),
-                      side: BorderSide(
-                        color: context.colorScheme.background,
-                        width: infoBorder,
-                      ),
-                    ),
-                  ),
-                  child: Center(
-                    child: Icon(
-                      icon ?? LucideIcons.userPlus,
-                      size: _getIconWidth(),
-                      color: context.colorScheme.primary,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          );
-        } else {
-          list.add(
-            Positioned(
-              left: left,
-              child: Container(
-                width: _getAvatarWidth(),
-                height: _getAvatarWidth(),
-                clipBehavior: Clip.antiAlias,
-                decoration: ShapeDecoration(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      _getAvatarWidth() - _getDisplayPadding(),
-                    ),
-                    side: BorderSide(
-                      color: context.colorScheme.background,
-                      width: infoBorder,
-                    ),
-                  ),
-                ),
-                child: MyImage(
-                  source: avatars![i],
-                  fit: fit ?? BoxFit.cover,
-                  type: _imageTypeMap[shape] ?? MyImageType.squircle,
-                ),
-              ),
-            ),
-          );
-        }
+        final offset = (_getAvatarWidth() - _getDisplayPadding()) * i;
+        list.add(
+          _buildOperationAvatarItem(
+            context,
+            bgColor,
+            i,
+            offset,
+            isHorizontal: direction != Axis.vertical,
+          ),
+        );
       }
     }
 
-    return SizedBox(
-      height: _getAvatarWidth(),
-      width: _getAvatarWidth() * (length + 1) - length * _getDisplayPadding(),
-      child: Stack(children: list),
-    );
+    if (direction == Axis.vertical) {
+      return SizedBox(
+        width: _getAvatarWidth(),
+        height:
+            _getAvatarWidth() * (length + 1) - length * _getDisplayPadding(),
+        child: Stack(children: list),
+      );
+    } else {
+      return SizedBox(
+        height: _getAvatarWidth(),
+        width: _getAvatarWidth() * (length + 1) - length * _getDisplayPadding(),
+        child: Stack(children: list),
+      );
+    }
+  }
+
+  Widget _buildOperationAvatarItem(
+    BuildContext context,
+    Color bgColor,
+    int index,
+    double offset, {
+    required bool isHorizontal,
+  }) {
+    final isLast = index == avatars!.length;
+
+    Widget buildAvatarContent() {
+      if (isLast) {
+        return MyGestureDetector(
+          onTap: onTap,
+          child: Container(
+            width: _getAvatarWidth(),
+            height: _getAvatarWidth(),
+            clipBehavior: Clip.hardEdge,
+            decoration: ShapeDecoration(
+              color: bgColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(
+                  _getAvatarWidth() - _getDisplayPadding(),
+                ),
+                side: BorderSide(
+                  color: context.colorScheme.background,
+                  width: infoBorder,
+                ),
+              ),
+            ),
+            child: Center(
+              child: Icon(
+                icon ?? LucideIcons.userPlus,
+                size: _getIconWidth(),
+                color: context.colorScheme.primary,
+              ),
+            ),
+          ),
+        );
+      }
+
+      return Container(
+        width: _getAvatarWidth(),
+        height: _getAvatarWidth(),
+        clipBehavior: Clip.antiAlias,
+        decoration: ShapeDecoration(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+              _getAvatarWidth() - _getDisplayPadding(),
+            ),
+            side: BorderSide(
+              color: context.colorScheme.background,
+              width: infoBorder,
+            ),
+          ),
+        ),
+        child: MyImage(
+          source: avatars![index],
+          fit: fit ?? BoxFit.cover,
+          type: _imageTypeMap[shape] ?? MyImageType.squircle,
+        ),
+      );
+    }
+
+    final positioning =
+        isHorizontal
+            ? Positioned(left: offset, child: buildAvatarContent())
+            : Positioned(top: offset, child: buildAvatarContent());
+
+    return positioning;
   }
 
   Widget _buildDisplayAvatar(BuildContext context) {
     final bgColor = context.colorScheme.primary.withValues(alpha: 0.15);
 
-    final list = <Widget>[];
-
     if (avatars.isBlank) return const NoWidget();
 
+    final list = <Widget>[];
     var length = 0;
 
     if (avatars != null) {
       length = avatars!.length;
-
       for (var i = avatars!.length; i >= 0; i--) {
-        final left = (_getAvatarWidth() - _getDisplayPadding()) * i;
-
-        if (i == avatars!.length) {
-          list.add(
-            Positioned(
-              left: left,
-              child: Container(
-                width: _getAvatarWidth(),
-                height: _getAvatarWidth(),
-                clipBehavior: Clip.hardEdge,
-                decoration: ShapeDecoration(
-                  color: bgColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      _getAvatarWidth() - _getDisplayPadding(),
-                    ),
-                    side: BorderSide(
-                      color: context.colorScheme.background,
-                      width: infoBorder,
-                    ),
-                  ),
-                ),
-                child:
-                    infoWidget ??
-                    Center(
-                      child: MyText(
-                        infoText,
-                        textAlign: TextAlign.center,
-                        style: _getTextStyle(
-                          context,
-                          color: context.colorScheme.primary,
-                        ),
-                      ),
-                    ),
-              ),
-            ),
-          );
-        } else {
-          list.add(
-            Positioned(
-              left: left,
-              child: Container(
-                width: _getAvatarWidth(),
-                height: _getAvatarWidth(),
-                clipBehavior: Clip.antiAlias,
-                decoration: ShapeDecoration(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      _getAvatarWidth() - _getDisplayPadding(),
-                    ),
-                    side: BorderSide(
-                      color: context.colorScheme.background,
-                      width: infoBorder,
-                    ),
-                  ),
-                ),
-                child: MyImage(
-                  source: avatars![i],
-                  fit: fit ?? BoxFit.cover,
-                  type: _imageTypeMap[shape] ?? MyImageType.squircle,
-                ),
-              ),
-            ),
-          );
-        }
+        final offset = (_getAvatarWidth() - _getDisplayPadding()) * i;
+        list.add(
+          _buildDisplayAvatarItem(
+            context,
+            bgColor,
+            i,
+            offset,
+            isHorizontal: direction != Axis.vertical,
+          ),
+        );
       }
     }
 
-    return SizedBox(
-      height: _getAvatarWidth(),
-      width: _getAvatarWidth() * (length + 1) - length * _getDisplayPadding(),
-      child: Stack(children: list),
-    );
+    if (direction == Axis.vertical) {
+      return SizedBox(
+        width: _getAvatarWidth(),
+        height:
+            _getAvatarWidth() * (length + 1) - length * _getDisplayPadding(),
+        child: Stack(children: list),
+      );
+    } else {
+      return SizedBox(
+        height: _getAvatarWidth(),
+        width: _getAvatarWidth() * (length + 1) - length * _getDisplayPadding(),
+        child: Stack(children: list),
+      );
+    }
+  }
+
+  Widget _buildDisplayAvatarItem(
+    BuildContext context,
+    Color bgColor,
+    int index,
+    double offset, {
+    required bool isHorizontal,
+  }) {
+    final isLast = index == avatars!.length;
+
+    Widget buildContent() {
+      if (isLast) {
+        return Container(
+          width: _getAvatarWidth(),
+          height: _getAvatarWidth(),
+          clipBehavior: Clip.hardEdge,
+          decoration: ShapeDecoration(
+            color: bgColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                _getAvatarWidth() - _getDisplayPadding(),
+              ),
+              side: BorderSide(
+                color: context.colorScheme.background,
+                width: infoBorder,
+              ),
+            ),
+          ),
+          child:
+              infoWidget ??
+              Center(
+                child: MyText(
+                  infoText,
+                  textAlign: TextAlign.center,
+                  style: _getTextStyle(
+                    context,
+                    color: context.colorScheme.primary,
+                  ),
+                ),
+              ),
+        );
+      }
+
+      return Container(
+        width: _getAvatarWidth(),
+        height: _getAvatarWidth(),
+        clipBehavior: Clip.antiAlias,
+        decoration: ShapeDecoration(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+              _getAvatarWidth() - _getDisplayPadding(),
+            ),
+            side: BorderSide(
+              color: context.colorScheme.background,
+              width: infoBorder,
+            ),
+          ),
+        ),
+        child: MyImage(
+          source: avatars![index],
+          fit: fit ?? BoxFit.cover,
+          type: _imageTypeMap[shape] ?? MyImageType.squircle,
+        ),
+      );
+    }
+
+    final positioning =
+        isHorizontal
+            ? Positioned(left: offset, child: buildContent())
+            : Positioned(top: offset, child: buildContent());
+
+    return positioning;
   }
 }

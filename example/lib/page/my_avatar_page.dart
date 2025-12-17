@@ -155,10 +155,22 @@ class _MyAvatarPageState extends State<MyAvatarPage> {
     return Container(
       alignment: Alignment.centerLeft,
       padding: const EdgeInsets.only(left: 16),
-      child: MyAvatar(
-        type: MyAvatarType.display,
-        infoText: '+5',
-        avatars: avatarList,
+      child: Row(
+        spacing: 16,
+        children: [
+          MyAvatar(
+            type: MyAvatarType.display,
+            infoText: '+5',
+            avatars: avatarList,
+          ),
+          MyAvatar(
+            distance: 16,
+            direction: Axis.vertical,
+            type: MyAvatarType.display,
+            infoText: '+5',
+            avatars: avatarList,
+          ),
+        ],
       ),
     );
   }
@@ -170,12 +182,25 @@ class _MyAvatarPageState extends State<MyAvatarPage> {
     return Container(
       alignment: Alignment.centerLeft,
       padding: const EdgeInsets.only(left: 16),
-      child: MyAvatar(
-        type: MyAvatarType.operation,
-        avatars: avatarList,
-        onTap: () {
-          TDToast.showText('On Add User Tap', context: context);
-        },
+      child: Row(
+        spacing: 16,
+        children: [
+          MyAvatar(
+            type: MyAvatarType.operation,
+            avatars: avatarList,
+            onTap: () {
+              TDToast.showText('On Add User Tap', context: context);
+            },
+          ),
+          MyAvatar(
+            direction: Axis.vertical,
+            type: MyAvatarType.operation,
+            avatars: avatarList,
+            onTap: () {
+              TDToast.showText('On Add User Tap', context: context);
+            },
+          ),
+        ],
       ),
     );
   }
@@ -245,43 +270,4 @@ class _MyAvatarPageState extends State<MyAvatarPage> {
       ),
     );
   }
-
-  // /// Helper that returns a few colored avatars to visualize overlap.
-  // List<AvatarWidget> getAvatars() {
-  //   return [
-  //     Avatar(
-  //       initials: Avatar.getInitials('sunarya-thito'),
-  //       backgroundColor: Colors.red,
-  //     ),
-  //     Avatar(
-  //       initials: Avatar.getInitials('sunarya-thito'),
-  //       backgroundColor: Colors.green,
-  //     ),
-  //     Avatar(
-  //       initials: Avatar.getInitials('sunarya-thito'),
-  //       backgroundColor: Colors.blue,
-  //     ),
-  //     Avatar(
-  //       initials: Avatar.getInitials('sunarya-thito'),
-  //       backgroundColor: Colors.yellow,
-  //     ),
-  //   ];
-  // }
-
-  // Widget _buildAvatarGroup(BuildContext context) {
-  //   return Wrap(
-  //     spacing: 16,
-  //     runSpacing: 16,
-  //     children: [
-  //       // Overlap avatars towards the left.
-  //       AvatarGroup.toLeft(children: getAvatars(), gap: 4),
-  //       // Overlap avatars towards the right.
-  //       AvatarGroup.toRight(children: getAvatars()),
-  //       // Stack vertically upwards.
-  //       AvatarGroup.toTop(children: getAvatars()),
-  //       // Stack vertically downwards.
-  //       AvatarGroup.toBottom(children: getAvatars()),
-  //     ],
-  //   );
-  // }
 }
