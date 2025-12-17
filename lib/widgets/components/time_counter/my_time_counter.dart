@@ -1,13 +1,10 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
-import '../../../extensions/generic/dynamic_extension.dart';
-import '../../../extensions/iterable/index.dart';
-import '../text/my_text.dart';
-import 'my_time_counter_controller.dart';
-import 'my_time_counter_style.dart';
+import '../../../index.dart';
 
 RegExp _timeReg = RegExp('D+|H+|m+|s+|S+');
 
@@ -39,31 +36,20 @@ class MyTimeCounter extends StatefulWidget {
   });
 
   final bool autoStart;
-
   final Widget Function(int time)? content;
 
-  /// /// Time format, DD-day, HH-hour, mm-minute, ss-second, SSS-millisecond
+  /// Time format, DD-day, HH-hour, mm-minute, ss-second, SSS-millisecond
   /// (the separator must be a non-space character with a length of 1)
   final String format;
-
   final bool millisecond;
-
   final MyTimeCounterSize size;
-
   final bool splitWithUnit;
-
   final MyTimeCounterTheme theme;
-
   final int time;
-
   final MyTimeCounterStyle? style;
-
   final void Function(int time)? onChange;
-
   final VoidCallback? onFinish;
-
   final MyTimeCounterDirection direction;
-
   final MyTimeCounterController? controller;
 
   @override
@@ -147,14 +133,14 @@ class _MyTimeCounterState extends State<MyTimeCounter>
           }
         });
         _tempMilliseconds = elapsed.inMilliseconds;
-        widget.onChange?.call(_time);
       } else {
         pauseTimer();
         widget.onFinish?.call();
       }
       setState(() {});
     });
-    _ticker!.start();
+
+    unawaited(_ticker!.start());
   }
 
   void pauseTimer() {
@@ -234,19 +220,19 @@ class _MyTimeCounterState extends State<MyTimeCounter>
   List<Widget> _buildTextWidget(String time, String split) {
     final children = <Widget>[
       Container(
-        width: _style.timeWidth,
-        height: _style.timeHeight,
-        padding: _style.timePadding,
-        margin: _style.timeMargin,
-        decoration: _style.timeBox,
+        width: _style.width,
+        height: _style.height,
+        padding: _style.padding,
+        margin: _style.margin,
+        decoration: _style.decoration,
         child: Center(
           child: MyText(
             time,
             style: TextStyle(
-              fontSize: _style.timeFontSize,
-              height: _style.timeFontHeight,
-              fontWeight: _style.timeFontWeight,
-              color: _style.timeColor,
+              fontSize: _style.fontSize,
+              height: _style.fontHeight,
+              fontWeight: _style.fontWeight,
+              color: _style.color,
             ),
           ),
         ),

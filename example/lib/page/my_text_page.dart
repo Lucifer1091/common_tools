@@ -11,15 +11,13 @@ class MyTextPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // debugPaintBaselinesEnabled = true;
     return ExamplePage(
-      padding: const EdgeInsets.all(8),
       title: myTitle(context),
       exampleCodeGroup: 'text',
       desc: 'Use to display text with various styles using exposed properties.',
       children: [
         ExampleModule(
-          title: 'Usage example',
+          title: 'Component Types',
           children: [
             ExampleItem(desc: 'System Text', builder: _buildSystemText),
             ExampleItem(desc: 'Normal MyText', builder: _buildNormalMyText),

@@ -10,15 +10,15 @@ enum MyTimeCounterTheme { defaultTheme, round, square }
 
 class MyTimeCounterStyle {
   MyTimeCounterStyle({
-    this.timeWidth,
-    this.timeHeight,
-    this.timePadding,
-    this.timeMargin,
-    this.timeBox,
-    this.timeFontSize,
-    this.timeFontHeight,
-    this.timeFontWeight,
-    this.timeColor,
+    this.width,
+    this.height,
+    this.padding,
+    this.margin,
+    this.decoration,
+    this.fontSize,
+    this.fontHeight,
+    this.fontWeight,
+    this.color,
     this.splitFontSize,
     this.splitFontHeight,
     this.splitFontWeight,
@@ -36,84 +36,81 @@ class MyTimeCounterStyle {
     switch (size ?? MyTimeCounterSize.medium) {
       case MyTimeCounterSize.small:
         if (theme == MyTimeCounterTheme.defaultTheme) {
-          timeWidth = timeHeight = null;
+          width = height = null;
           font = context.bodyMedium;
-          timeFontSize = splitFontSize = font.fontSize ?? 14;
-          timeFontHeight =
-              splitFontHeight = font.height ?? (22 / timeFontSize!);
+          fontSize = splitFontSize = font.fontSize ?? 14;
+          fontHeight = splitFontHeight = font.height ?? (22 / fontSize!);
         } else {
-          timeWidth = timeHeight = 20;
+          width = height = 20;
           font = context.bodySmall;
-          timeFontSize = splitFontSize = font.fontSize ?? 12;
-          timeFontHeight = splitFontHeight = null;
+          fontSize = splitFontSize = font.fontSize ?? 12;
+          fontHeight = splitFontHeight = null;
         }
         space = 2;
       case MyTimeCounterSize.medium:
         if (theme == MyTimeCounterTheme.defaultTheme) {
-          timeWidth = timeHeight = null;
+          width = height = null;
           font = context.bodyLarge;
-          timeFontSize = splitFontSize = font.fontSize ?? 16;
-          timeFontHeight =
-              splitFontHeight = font.height ?? (24 / timeFontSize!);
+          fontSize = splitFontSize = font.fontSize ?? 16;
+          fontHeight = splitFontHeight = font.height ?? (24 / fontSize!);
         } else {
-          timeWidth = timeHeight = 24;
+          width = height = 24;
           font = context.bodyMedium;
-          timeFontSize = splitFontSize = font.fontSize ?? 14;
-          timeFontHeight = splitFontHeight = null;
+          fontSize = splitFontSize = font.fontSize ?? 14;
+          fontHeight = splitFontHeight = null;
         }
         space = 4;
       case MyTimeCounterSize.large:
         if (theme == MyTimeCounterTheme.defaultTheme) {
-          timeWidth = timeHeight = null;
+          width = height = null;
           font = context.titleSmall;
-          timeFontSize = splitFontSize = font.fontSize ?? 18;
-          timeFontHeight =
-              splitFontHeight = font.height ?? (26 / timeFontSize!);
+          fontSize = splitFontSize = font.fontSize ?? 18;
+          fontHeight = splitFontHeight = font.height ?? (26 / fontSize!);
         } else {
-          timeWidth = timeHeight = 28;
+          width = height = 28;
           font = context.bodyLarge;
-          timeFontSize = splitFontSize = font.fontSize ?? 16;
-          timeFontHeight = splitFontHeight = null;
+          fontSize = splitFontSize = font.fontSize ?? 16;
+          fontHeight = splitFontHeight = null;
         }
         space = 6;
     }
 
     switch (theme ?? MyTimeCounterTheme.defaultTheme) {
       case MyTimeCounterTheme.round:
-        timeBox = BoxDecoration(
+        decoration = BoxDecoration(
           shape: BoxShape.circle,
-          color: ThemeColors.error.shade500,
+          color: context.colorScheme.destructive,
         );
-        timeColor = Colors.white;
-        splitColor = ThemeColors.error.shade500;
+        color = context.colorScheme.destructiveForeground;
+        splitColor = context.colorScheme.destructive;
       case MyTimeCounterTheme.square:
-        timeBox = BoxDecoration(
-          borderRadius: BorderRadius.circular(3),
-          color: ThemeColors.error.shade500,
+        decoration = BoxDecoration(
+          borderRadius: MyBorderRadius.small,
+          color: context.colorScheme.destructive,
         );
-        timeColor = Colors.white;
-        splitColor = ThemeColors.error.shade500;
+        color = context.colorScheme.destructiveForeground;
+        splitColor = context.colorScheme.destructive;
       case MyTimeCounterTheme.defaultTheme:
-        timeBox = null;
-        timeColor = splitColor = Colors.white;
-        timeWidth = null;
-        timeHeight = null;
+        decoration = null;
+        color = splitColor = context.colorScheme.foreground;
+        width = null;
+        height = null;
     }
 
     if (splitWithUnit ?? false) {
-      splitColor = ThemeColors.neutral.shade900;
+      splitColor = context.colorScheme.mutedForeground;
     }
   }
 
-  double? timeWidth;
-  double? timeHeight;
-  EdgeInsets? timePadding;
-  EdgeInsets? timeMargin;
-  BoxDecoration? timeBox;
-  double? timeFontSize;
-  double? timeFontHeight;
-  FontWeight? timeFontWeight;
-  Color? timeColor;
+  double? width;
+  double? height;
+  EdgeInsets? padding;
+  EdgeInsets? margin;
+  BoxDecoration? decoration;
+  double? fontSize;
+  double? fontHeight;
+  FontWeight? fontWeight;
+  Color? color;
   double? splitFontSize;
   double? splitFontHeight;
   FontWeight? splitFontWeight;

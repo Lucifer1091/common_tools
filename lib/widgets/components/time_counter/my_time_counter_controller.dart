@@ -2,8 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 enum MyTimeCounterStatus { start, pause, resume, reset, idle }
 
-/// Countdown component controller, can control start (`start()`)
-/// /pause (`pause()`)/continue (`resume()`)/reset (`reset([int? time])`)
+/// Countdown controller, can control [start], [pause], [reset] & [resume]
 class MyTimeCounterController extends ValueNotifier<MyTimeCounterStatus> {
   MyTimeCounterController() : super(MyTimeCounterStatus.idle);
 
