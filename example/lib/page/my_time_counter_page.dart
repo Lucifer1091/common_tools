@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:common_tools/index.dart';
 import '../../base/example_widget.dart';
 
-class TDTimeCounterPage extends StatelessWidget {
-  const TDTimeCounterPage({super.key});
+class MyTimeCounterPage extends StatelessWidget {
+  const MyTimeCounterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -288,175 +288,175 @@ class TDTimeCounterPage extends StatelessWidget {
   }
 }
 
-TDTimeCounter _buildSimple(BuildContext context) {
-  return const TDTimeCounter(time: 60 * 60 * 1000);
+MyTimeCounter _buildSimple(BuildContext context) {
+  return const MyTimeCounter(time: 60 * 60 * 1000);
 }
 
-TDTimeCounter _buildMillisecondSimple(BuildContext context) {
-  return const TDTimeCounter(time: 60 * 60 * 1000, millisecond: true);
+MyTimeCounter _buildMillisecondSimple(BuildContext context) {
+  return const MyTimeCounter(time: 60 * 60 * 1000, millisecond: true);
 }
 
-TDTimeCounter _buildUpSimple(BuildContext context) {
-  return const TDTimeCounter(
+MyTimeCounter _buildUpSimple(BuildContext context) {
+  return const MyTimeCounter(
     time: 60 * 60 * 1000,
     millisecond: true,
-    direction: TDTimeCounterDirection.up,
+    direction: MyTimeCounterDirection.up,
   );
 }
 
-TDTimeCounter _buildSquareSimple(BuildContext context) {
-  return const TDTimeCounter(
+MyTimeCounter _buildSquareSimple(BuildContext context) {
+  return const MyTimeCounter(
     time: 60 * 60 * 1000,
-    theme: TDTimeCounterTheme.square,
+    theme: MyTimeCounterTheme.square,
   );
 }
 
-TDTimeCounter _buildRoundSimple(BuildContext context) {
-  return const TDTimeCounter(
+MyTimeCounter _buildRoundSimple(BuildContext context) {
+  return const MyTimeCounter(
     time: 60 * 60 * 1000,
-    theme: TDTimeCounterTheme.round,
+    theme: MyTimeCounterTheme.round,
   );
 }
 
-TDTimeCounter _buildUnitSimple(BuildContext context) {
-  return const TDTimeCounter(
+MyTimeCounter _buildUnitSimple(BuildContext context) {
+  return const MyTimeCounter(
     time: 60 * 60 * 1000,
-    theme: TDTimeCounterTheme.square,
+    theme: MyTimeCounterTheme.square,
     splitWithUnit: true,
   );
 }
 
-TDTimeCounter _buildCustomUnitSimple(BuildContext context) {
-  var style = TDTimeCounterStyle.generateStyle(context);
+MyTimeCounter _buildCustomUnitSimple(BuildContext context) {
+  var style = MyTimeCounterStyle.generateStyle(context);
   style.timeColor = ThemeColors.error.shade500;
-  return TDTimeCounter(time: 60 * 60 * 1000, splitWithUnit: true, style: style);
+  return MyTimeCounter(time: 60 * 60 * 1000, splitWithUnit: true, style: style);
 }
 
-TDTimeCounter _buildSmallSize(BuildContext context) {
-  return const TDTimeCounter(
+MyTimeCounter _buildSmallSize(BuildContext context) {
+  return const MyTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.small,
+    size: MyTimeCounterSize.small,
   );
 }
 
-TDTimeCounter _buildMediumSize(BuildContext context) {
-  return const TDTimeCounter(
+MyTimeCounter _buildMediumSize(BuildContext context) {
+  return const MyTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.medium,
+    size: MyTimeCounterSize.medium,
   );
 }
 
-TDTimeCounter _buildLargeSize(BuildContext context) {
-  return const TDTimeCounter(
+MyTimeCounter _buildLargeSize(BuildContext context) {
+  return const MyTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.large,
+    size: MyTimeCounterSize.large,
   );
 }
 
-TDTimeCounter _buildSquareSmallSize(BuildContext context) {
-  return const TDTimeCounter(
+MyTimeCounter _buildSquareSmallSize(BuildContext context) {
+  return const MyTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.small,
-    theme: TDTimeCounterTheme.square,
+    size: MyTimeCounterSize.small,
+    theme: MyTimeCounterTheme.square,
   );
 }
 
-TDTimeCounter _buildSquareMediumSize(BuildContext context) {
-  return const TDTimeCounter(
+MyTimeCounter _buildSquareMediumSize(BuildContext context) {
+  return const MyTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.medium,
-    theme: TDTimeCounterTheme.square,
+    size: MyTimeCounterSize.medium,
+    theme: MyTimeCounterTheme.square,
   );
 }
 
-TDTimeCounter _buildSquareLargeSize(BuildContext context) {
-  return const TDTimeCounter(
+MyTimeCounter _buildSquareLargeSize(BuildContext context) {
+  return const MyTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.large,
-    theme: TDTimeCounterTheme.square,
+    size: MyTimeCounterSize.large,
+    theme: MyTimeCounterTheme.square,
   );
 }
 
-TDTimeCounter _buildRoundSmallSize(BuildContext context) {
-  return const TDTimeCounter(
+MyTimeCounter _buildRoundSmallSize(BuildContext context) {
+  return const MyTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.small,
-    theme: TDTimeCounterTheme.round,
+    size: MyTimeCounterSize.small,
+    theme: MyTimeCounterTheme.round,
   );
 }
 
-TDTimeCounter _buildRoundMediumSize(BuildContext context) {
-  return const TDTimeCounter(
+MyTimeCounter _buildRoundMediumSize(BuildContext context) {
+  return const MyTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.medium,
-    theme: TDTimeCounterTheme.round,
+    size: MyTimeCounterSize.medium,
+    theme: MyTimeCounterTheme.round,
   );
 }
 
-TDTimeCounter _buildRoundLargeSize(BuildContext context) {
-  return const TDTimeCounter(
+MyTimeCounter _buildRoundLargeSize(BuildContext context) {
+  return const MyTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.large,
-    theme: TDTimeCounterTheme.round,
+    size: MyTimeCounterSize.large,
+    theme: MyTimeCounterTheme.round,
   );
 }
 
-TDTimeCounter _buildUnitSmallSize(BuildContext context) {
-  return const TDTimeCounter(
+MyTimeCounter _buildUnitSmallSize(BuildContext context) {
+  return const MyTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.small,
-    theme: TDTimeCounterTheme.square,
+    size: MyTimeCounterSize.small,
+    theme: MyTimeCounterTheme.square,
     splitWithUnit: true,
   );
 }
 
-TDTimeCounter _buildUnitMediumSize(BuildContext context) {
-  return const TDTimeCounter(
+MyTimeCounter _buildUnitMediumSize(BuildContext context) {
+  return const MyTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.medium,
-    theme: TDTimeCounterTheme.square,
+    size: MyTimeCounterSize.medium,
+    theme: MyTimeCounterTheme.square,
     splitWithUnit: true,
   );
 }
 
-TDTimeCounter _buildUnitLargeSize(BuildContext context) {
-  return const TDTimeCounter(
+MyTimeCounter _buildUnitLargeSize(BuildContext context) {
+  return const MyTimeCounter(
     time: 60 * 60 * 1000,
-    size: TDTimeCounterSize.large,
-    theme: TDTimeCounterTheme.square,
+    size: MyTimeCounterSize.large,
+    theme: MyTimeCounterTheme.square,
     splitWithUnit: true,
   );
 }
 
-TDTimeCounter _buildCustomUnitSmallSize(BuildContext context) {
-  var style = TDTimeCounterStyle.generateStyle(
+MyTimeCounter _buildCustomUnitSmallSize(BuildContext context) {
+  var style = MyTimeCounterStyle.generateStyle(
     context,
-    size: TDTimeCounterSize.small,
+    size: MyTimeCounterSize.small,
   );
   style.timeColor = ThemeColors.error.shade500;
-  return TDTimeCounter(time: 60 * 60 * 1000, splitWithUnit: true, style: style);
+  return MyTimeCounter(time: 60 * 60 * 1000, splitWithUnit: true, style: style);
 }
 
-TDTimeCounter _buildCustomUnitMediumSize(BuildContext context) {
-  var style = TDTimeCounterStyle.generateStyle(
+MyTimeCounter _buildCustomUnitMediumSize(BuildContext context) {
+  var style = MyTimeCounterStyle.generateStyle(
     context,
-    size: TDTimeCounterSize.medium,
+    size: MyTimeCounterSize.medium,
   );
   style.timeColor = ThemeColors.error.shade500;
-  return TDTimeCounter(time: 60 * 60 * 1000, splitWithUnit: true, style: style);
+  return MyTimeCounter(time: 60 * 60 * 1000, splitWithUnit: true, style: style);
 }
 
-TDTimeCounter _buildCustomUnitLargeSize(BuildContext context) {
-  var style = TDTimeCounterStyle.generateStyle(
+MyTimeCounter _buildCustomUnitLargeSize(BuildContext context) {
+  var style = MyTimeCounterStyle.generateStyle(
     context,
-    size: TDTimeCounterSize.large,
+    size: MyTimeCounterSize.large,
   );
   style.timeColor = ThemeColors.error.shade500;
-  return TDTimeCounter(time: 60 * 60 * 1000, splitWithUnit: true, style: style);
+  return MyTimeCounter(time: 60 * 60 * 1000, splitWithUnit: true, style: style);
 }
 
 Widget _buildControl(BuildContext context) {
-  var controller = TDTimeCounterController();
+  var controller = MyTimeCounterController();
   return Wrap(
     direction: Axis.vertical,
     spacing: 8,
@@ -501,7 +501,7 @@ Widget _buildControl(BuildContext context) {
           ),
         ],
       ),
-      TDTimeCounter(
+      MyTimeCounter(
         time: 60 * 60 * 1000,
         controller: controller,
         // autoStart: false,
@@ -510,6 +510,6 @@ Widget _buildControl(BuildContext context) {
   );
 }
 
-TDTimeCounter _buildCustomNum(BuildContext context) {
-  return const TDTimeCounter(time: 2000 * 60 * 1000, format: 'mmmmmmm分sss秒');
+MyTimeCounter _buildCustomNum(BuildContext context) {
+  return const MyTimeCounter(time: 2000 * 60 * 1000, format: 'mmmmmmm分sss秒');
 }

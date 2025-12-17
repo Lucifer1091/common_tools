@@ -6,8 +6,8 @@ import 'package:flutter/scheduler.dart';
 import '../../../extensions/generic/dynamic_extension.dart';
 import '../../../extensions/iterable/index.dart';
 import '../text/my_text.dart';
-import 'td_time_counter_controller.dart';
-import 'td_time_counter_style.dart';
+import 'my_time_counter_controller.dart';
+import 'my_time_counter_style.dart';
 
 RegExp _timeReg = RegExp('D+|H+|m+|s+|S+');
 
@@ -20,21 +20,21 @@ String _getMark(String format, String? type) {
   return part.split('')[0];
 }
 
-class TDTimeCounter extends StatefulWidget {
-  const TDTimeCounter({
+class MyTimeCounter extends StatefulWidget {
+  const MyTimeCounter({
     required this.time,
     super.key,
     this.autoStart = true,
     this.content,
     this.format = 'HH:mm:ss',
     this.millisecond = false,
-    this.size = TDTimeCounterSize.medium,
+    this.size = MyTimeCounterSize.medium,
     this.splitWithUnit = false,
-    this.theme = TDTimeCounterTheme.defaultTheme,
+    this.theme = MyTimeCounterTheme.defaultTheme,
     this.style,
     this.onChange,
     this.onFinish,
-    this.direction = TDTimeCounterDirection.down,
+    this.direction = MyTimeCounterDirection.down,
     this.controller,
   });
 
@@ -48,31 +48,31 @@ class TDTimeCounter extends StatefulWidget {
 
   final bool millisecond;
 
-  final TDTimeCounterSize size;
+  final MyTimeCounterSize size;
 
   final bool splitWithUnit;
 
-  final TDTimeCounterTheme theme;
+  final MyTimeCounterTheme theme;
 
   final int time;
 
-  final TDTimeCounterStyle? style;
+  final MyTimeCounterStyle? style;
 
   final void Function(int time)? onChange;
 
   final VoidCallback? onFinish;
 
-  final TDTimeCounterDirection direction;
+  final MyTimeCounterDirection direction;
 
-  final TDTimeCounterController? controller;
+  final MyTimeCounterController? controller;
 
   @override
-  _TDTimeCounterState createState() => _TDTimeCounterState();
+  _MyTimeCounterState createState() => _MyTimeCounterState();
 }
 
-class _TDTimeCounterState extends State<TDTimeCounter>
+class _MyTimeCounterState extends State<MyTimeCounter>
     with SingleTickerProviderStateMixin {
-  late TDTimeCounterStyle _style;
+  late MyTimeCounterStyle _style;
   late Map<String, String> timeUnitMap;
   Ticker? _ticker;
   int _time = 0;
@@ -91,7 +91,7 @@ class _TDTimeCounterState extends State<TDTimeCounter>
     super.didChangeDependencies();
     _style =
         widget.style ??
-        TDTimeCounterStyle.generateStyle(
+        MyTimeCounterStyle.generateStyle(
           context,
           size: widget.size,
           theme: widget.theme,
@@ -108,7 +108,7 @@ class _TDTimeCounterState extends State<TDTimeCounter>
   }
 
   @override
-  void didUpdateWidget(TDTimeCounter oldWidget) {
+  void didUpdateWidget(MyTimeCounter oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.controller != oldWidget.controller) {
       oldWidget.controller?.removeListener(_onControllerChanged);
@@ -131,10 +131,10 @@ class _TDTimeCounterState extends State<TDTimeCounter>
 
     _tempMilliseconds = 0;
     _ticker ??= createTicker((Duration elapsed) {
-      if ((widget.direction == TDTimeCounterDirection.down && _time > 0) ||
-          widget.direction == TDTimeCounterDirection.up && _time < _maxTime) {
+      if ((widget.direction == MyTimeCounterDirection.down && _time > 0) ||
+          widget.direction == MyTimeCounterDirection.up && _time < _maxTime) {
         setState(() {
-          if (widget.direction == TDTimeCounterDirection.down) {
+          if (widget.direction == MyTimeCounterDirection.down) {
             _time = max(
               _time - (elapsed.inMilliseconds - _tempMilliseconds),
               0,
@@ -167,7 +167,7 @@ class _TDTimeCounterState extends State<TDTimeCounter>
 
   void resetTimer([int? time, bool update = true]) {
     _ticker?.stop();
-    if (widget.direction == TDTimeCounterDirection.down) {
+    if (widget.direction == MyTimeCounterDirection.down) {
       _time = time ?? widget.time;
     } else {
       _time = 0;
@@ -184,15 +184,15 @@ class _TDTimeCounterState extends State<TDTimeCounter>
 
   void _onControllerChanged() {
     switch (widget.controller?.value) {
-      case TDTimeCounterStatus.start:
+      case MyTimeCounterStatus.start:
         startTimer();
-      case TDTimeCounterStatus.pause:
+      case MyTimeCounterStatus.pause:
         pauseTimer();
-      case TDTimeCounterStatus.resume:
+      case MyTimeCounterStatus.resume:
         resumeTimer();
-      case TDTimeCounterStatus.reset:
+      case MyTimeCounterStatus.reset:
         resetTimer(widget.controller?.time);
-      case TDTimeCounterStatus.idle:
+      case MyTimeCounterStatus.idle:
       case null:
         break;
     }

@@ -58,7 +58,7 @@ import 'page/td_tag_page.dart';
 import 'page/my_text_page.dart';
 import 'page/my_textarea_page.dart';
 import 'page/td_theme_page.dart';
-import 'page/td_time_counter_page.dart';
+import 'page/my_time_counter_page.dart';
 import 'page/td_toast_page.dart';
 import 'page/td_tree_select_page.dart';
 import 'page/my_upload_page.dart';
@@ -252,9 +252,9 @@ Map<String, List<ExamplePageModel>> exampleMap = {
       pageBuilder: _wrapInheritedTheme((context) => const MyCellPage()),
     ),
     ExamplePageModel(
-      text: 'TimeCounter',
+      text: 'Time Counter',
       name: 'time-counter',
-      pageBuilder: _wrapInheritedTheme((context) => const TDTimeCounterPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyTimeCounterPage()),
     ),
     ExamplePageModel(
       text: 'Collapse',
@@ -304,7 +304,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
       pageBuilder: _wrapInheritedTheme((context) => const TDSkeletonPage()),
     ),
     ExamplePageModel(
-      text: 'Sticky 吸顶',
+      text: 'Sticky Header',
       name: 'sticky',
       isTodo: true,
       pageBuilder: _wrapInheritedTheme((context) => const TodoPage()),
