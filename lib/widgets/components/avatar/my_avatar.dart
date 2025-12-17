@@ -20,20 +20,19 @@ class MyAvatar extends StatelessWidget {
     this.style,
     this.radius,
     this.icon,
-    this.avatarUrl,
+    this.avatar,
+    this.placeholder,
+    this.avatars,
     this.avatarSize,
-    this.avatarDisplayList,
-    this.displayText,
+    this.infoText,
     this.onTap,
-    this.defaultUrl = '',
-    this.avatarDisplayWidget,
-    this.avatarDisplayBorder = 2,
-    this.avatarDisplayListAsset,
+    this.infoWidget,
+    this.infoBorder = 2,
     this.backgroundColor,
     this.fit,
   });
 
-  final String? avatarUrl;
+  final Object? avatar, placeholder;
   final MyAvatarSize size;
   final MyAvatarType type;
   final MyAvatarShape shape;
@@ -43,12 +42,10 @@ class MyAvatar extends StatelessWidget {
   final double? radius;
   final double? avatarSize;
   final IconData? icon;
-  final String defaultUrl;
-  final List<String>? avatarDisplayList;
-  final List<String>? avatarDisplayListAsset;
-  final double avatarDisplayBorder;
-  final Widget? avatarDisplayWidget;
-  final String? displayText;
+  final List<Object>? avatars;
+  final double infoBorder;
+  final Widget? infoWidget;
+  final String? infoText;
   final VoidCallback? onTap;
   final Color? backgroundColor;
   final BoxFit? fit;
@@ -89,6 +86,11 @@ class MyAvatar extends StatelessWidget {
         };
   }
 
+  static const Map<MyAvatarShape, MyImageType> _imageTypeMap = {
+    MyAvatarShape.square: MyImageType.squircle,
+    MyAvatarShape.circle: MyImageType.circle,
+  };
+
   @override
   Widget build(BuildContext context) {
     final bgColor = context.colorScheme.primary.withValues(alpha: 0.15);
@@ -121,12 +123,10 @@ class MyAvatar extends StatelessWidget {
             decoration: BoxDecoration(
               color: backgroundColor ?? bgColor,
               borderRadius: BorderRadius.circular(_getAvatarRadius(context)),
-              image:
-                  avatarUrl != null
-                      ? DecorationImage(image: NetworkImage(avatarUrl!))
-                      : defaultUrl != ''
-                      ? DecorationImage(image: AssetImage(defaultUrl))
-                      : null,
+            ),
+            child: MyImage(
+              source: avatar ?? placeholder,
+              type: _imageTypeMap[shape] ?? MyImageType.squircle,
             ),
           ),
         );
@@ -169,17 +169,15 @@ class MyAvatar extends StatelessWidget {
 
     final list = <Widget>[];
 
-    if (avatarDisplayList.isBlank && avatarDisplayListAsset.isBlank) {
-      return const NoWidget();
-    }
+    if (avatars.isBlank) return const NoWidget();
 
     var length = 0;
 
-    if (avatarDisplayList != null) {
-      length = avatarDisplayList!.length;
-      for (var i = 0; i < avatarDisplayList!.length + 1; i++) {
+    if (avatars != null) {
+      length = avatars!.length;
+      for (var i = 0; i < avatars!.length + 1; i++) {
         final left = (_getAvatarWidth() - _getDisplayPadding()) * i;
-        if (i == avatarDisplayList!.length) {
+        if (i == avatars!.length) {
           list.add(
             Positioned(
               left: left,
@@ -197,7 +195,7 @@ class MyAvatar extends StatelessWidget {
                       ),
                       side: BorderSide(
                         color: context.colorScheme.background,
-                        width: avatarDisplayBorder,
+                        width: infoBorder,
                       ),
                     ),
                   ),
@@ -227,82 +225,14 @@ class MyAvatar extends StatelessWidget {
                     ),
                     side: BorderSide(
                       color: context.colorScheme.background,
-                      width: avatarDisplayBorder,
+                      width: infoBorder,
                     ),
-                  ),
-                  image: DecorationImage(
-                    image: NetworkImage(avatarDisplayList![i]),
-                    fit: fit ?? BoxFit.cover,
                   ),
                 ),
-              ),
-            ),
-          );
-        }
-      }
-    } else if (avatarDisplayListAsset != null) {
-      length = avatarDisplayListAsset!.length;
-
-      for (var i = 0; i < avatarDisplayListAsset!.length + 1; i++) {
-        final left = (_getAvatarWidth() - _getDisplayPadding()) * i;
-
-        if (i == avatarDisplayListAsset!.length) {
-          list.add(
-            Positioned(
-              left: left,
-              child: MyGestureDetector(
-                onTap: onTap,
-                child: Container(
-                  width: _getAvatarWidth(),
-                  height: _getAvatarWidth(),
-                  clipBehavior: Clip.hardEdge,
-                  decoration: ShapeDecoration(
-                    color: bgColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                        _getAvatarWidth() - _getDisplayPadding(),
-                      ),
-                      side: BorderSide(
-                        color: context.colorScheme.background,
-                        width: avatarDisplayBorder,
-                      ),
-                    ),
-                  ),
-                  child: Center(
-                    child:
-                        avatarDisplayWidget ??
-                        Icon(
-                          icon ?? LucideIcons.userPlus,
-                          size: _getIconWidth(),
-                          color: context.colorScheme.primary,
-                        ),
-                  ),
-                ),
-              ),
-            ),
-          );
-        } else {
-          list.add(
-            Positioned(
-              left: left,
-              child: Container(
-                width: _getAvatarWidth(),
-                height: _getAvatarWidth(),
-                clipBehavior: Clip.antiAlias,
-                decoration: ShapeDecoration(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      _getAvatarWidth() - _getDisplayPadding(),
-                    ),
-                    side: BorderSide(
-                      color: context.colorScheme.background,
-                      width: avatarDisplayBorder,
-                    ),
-                  ),
-                  image: DecorationImage(
-                    image: AssetImage(avatarDisplayListAsset![i]),
-                    fit: fit ?? BoxFit.fill,
-                  ),
+                child: MyImage(
+                  source: avatars![i],
+                  fit: fit ?? BoxFit.cover,
+                  type: _imageTypeMap[shape] ?? MyImageType.squircle,
                 ),
               ),
             ),
@@ -323,19 +253,17 @@ class MyAvatar extends StatelessWidget {
 
     final list = <Widget>[];
 
-    if (avatarDisplayList.isBlank && avatarDisplayListAsset.isBlank) {
-      return const NoWidget();
-    }
+    if (avatars.isBlank) return const NoWidget();
 
     var length = 0;
 
-    if (avatarDisplayList != null) {
-      length = avatarDisplayList!.length;
+    if (avatars != null) {
+      length = avatars!.length;
 
-      for (var i = avatarDisplayList!.length; i >= 0; i--) {
+      for (var i = avatars!.length; i >= 0; i--) {
         final left = (_getAvatarWidth() - _getDisplayPadding()) * i;
 
-        if (i == avatarDisplayList!.length) {
+        if (i == avatars!.length) {
           list.add(
             Positioned(
               left: left,
@@ -351,15 +279,15 @@ class MyAvatar extends StatelessWidget {
                     ),
                     side: BorderSide(
                       color: context.colorScheme.background,
-                      width: avatarDisplayBorder,
+                      width: infoBorder,
                     ),
                   ),
                 ),
                 child:
-                    avatarDisplayWidget ??
+                    infoWidget ??
                     Center(
                       child: MyText(
-                        displayText,
+                        infoText,
                         textAlign: TextAlign.center,
                         style: _getTextStyle(
                           context,
@@ -385,82 +313,14 @@ class MyAvatar extends StatelessWidget {
                     ),
                     side: BorderSide(
                       color: context.colorScheme.background,
-                      width: avatarDisplayBorder,
-                    ),
-                  ),
-                  image: DecorationImage(
-                    image: NetworkImage(avatarDisplayList![i]),
-                    fit: fit ?? BoxFit.cover,
-                  ),
-                ),
-              ),
-            ),
-          );
-        }
-      }
-    } else if (avatarDisplayListAsset != null) {
-      length = avatarDisplayListAsset!.length;
-
-      for (var i = avatarDisplayListAsset!.length; i >= 0; i--) {
-        final left = (_getAvatarWidth() - _getDisplayPadding()) * i;
-
-        if (i == avatarDisplayListAsset!.length) {
-          list.add(
-            Positioned(
-              left: left,
-              child: Container(
-                width: _getAvatarWidth(),
-                height: _getAvatarWidth(),
-                clipBehavior: Clip.hardEdge,
-                decoration: ShapeDecoration(
-                  color: bgColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      _getAvatarWidth() - _getDisplayPadding(),
-                    ),
-                    side: BorderSide(
-                      color: context.colorScheme.background,
-                      width: avatarDisplayBorder,
+                      width: infoBorder,
                     ),
                   ),
                 ),
-                child:
-                    avatarDisplayWidget ??
-                    Center(
-                      child: MyText(
-                        displayText,
-                        textAlign: TextAlign.center,
-                        style: _getTextStyle(
-                          context,
-                          color: context.colorScheme.primary,
-                        ),
-                      ),
-                    ),
-              ),
-            ),
-          );
-        } else {
-          list.add(
-            Positioned(
-              left: left,
-              child: Container(
-                width: _getAvatarWidth(),
-                height: _getAvatarWidth(),
-                clipBehavior: Clip.antiAlias,
-                decoration: ShapeDecoration(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      _getAvatarWidth() - _getDisplayPadding(),
-                    ),
-                    side: BorderSide(
-                      color: context.colorScheme.background,
-                      width: avatarDisplayBorder,
-                    ),
-                  ),
-                  image: DecorationImage(
-                    image: AssetImage(avatarDisplayListAsset![i]),
-                    fit: fit ?? BoxFit.cover,
-                  ),
+                child: MyImage(
+                  source: avatars![i],
+                  fit: fit ?? BoxFit.cover,
+                  type: _imageTypeMap[shape] ?? MyImageType.squircle,
                 ),
               ),
             ),

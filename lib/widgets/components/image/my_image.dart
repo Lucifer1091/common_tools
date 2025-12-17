@@ -157,7 +157,7 @@ class MyImage extends StatelessWidget {
         return Container(
           height: height ?? 72,
           width: width ?? 72,
-          clipBehavior: Clip.hardEdge,
+          clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
             borderRadius: borderRadius ?? MyBorderRadius.medium,
           ),
@@ -172,7 +172,7 @@ class MyImage extends StatelessWidget {
         return Container(
           height: height ?? 72,
           width: width ?? 72,
-          clipBehavior: Clip.hardEdge,
+          clipBehavior: Clip.antiAlias,
           decoration: const BoxDecoration(shape: BoxShape.circle),
           child: _buildProvider(
             context,

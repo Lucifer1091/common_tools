@@ -60,10 +60,10 @@ class _MyAvatarPageState extends State<MyAvatarPage> {
       child: Row(
         spacing: 32,
         children: [
-          MyAvatar(defaultUrl: 'assets/img/td_avatar_1.png'),
+          MyAvatar(placeholder: 'assets/img/td_avatar_1.png'),
           MyAvatar(
             shape: MyAvatarShape.square,
-            defaultUrl: 'assets/img/td_avatar_1.png',
+            placeholder: 'assets/img/td_avatar_1.png',
           ),
         ],
       ),
@@ -120,7 +120,7 @@ class _MyAvatarPageState extends State<MyAvatarPage> {
             child: MyAvatar(
               size: MyAvatarSize.medium,
               type: MyAvatarType.normal,
-              defaultUrl: 'assets/img/td_avatar_1.png',
+              placeholder: 'assets/img/td_avatar_1.png',
             ),
           ),
           MyBadgeWrapper(
@@ -157,8 +157,8 @@ class _MyAvatarPageState extends State<MyAvatarPage> {
       padding: const EdgeInsets.only(left: 16),
       child: MyAvatar(
         type: MyAvatarType.display,
-        displayText: '+5',
-        avatarDisplayListAsset: avatarList,
+        infoText: '+5',
+        avatars: avatarList,
       ),
     );
   }
@@ -172,7 +172,7 @@ class _MyAvatarPageState extends State<MyAvatarPage> {
       padding: const EdgeInsets.only(left: 16),
       child: MyAvatar(
         type: MyAvatarType.operation,
-        avatarDisplayListAsset: avatarList,
+        avatars: avatarList,
         onTap: () {
           TDToast.showText('On Add User Tap', context: context);
         },
@@ -189,7 +189,7 @@ class _MyAvatarPageState extends State<MyAvatarPage> {
           MyAvatar(
             size: MyAvatarSize.large,
             type: MyAvatarType.normal,
-            defaultUrl: 'assets/img/td_avatar_1.png',
+            placeholder: 'assets/img/td_avatar_1.png',
           ),
           MyAvatar(
             size: MyAvatarSize.large,
@@ -211,7 +211,7 @@ class _MyAvatarPageState extends State<MyAvatarPage> {
           MyAvatar(
             size: MyAvatarSize.medium,
             type: MyAvatarType.normal,
-            defaultUrl: 'assets/img/td_avatar_1.png',
+            placeholder: 'assets/img/td_avatar_1.png',
           ),
           MyAvatar(
             size: MyAvatarSize.medium,
@@ -233,7 +233,7 @@ class _MyAvatarPageState extends State<MyAvatarPage> {
           MyAvatar(
             size: MyAvatarSize.small,
             type: MyAvatarType.normal,
-            defaultUrl: 'assets/img/td_avatar_1.png',
+            placeholder: 'assets/img/td_avatar_1.png',
           ),
           MyAvatar(
             size: MyAvatarSize.small,
