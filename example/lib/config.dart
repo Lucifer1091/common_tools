@@ -17,7 +17,7 @@ import 'page/my_avatar_page.dart';
 import 'page/my_badge_page.dart';
 import 'page/my_cell_page.dart';
 import 'page/my_checkbox_page.dart';
-import 'page/td_collapse.dart';
+import 'page/my_collapse_page.dart';
 import 'page/my_date_picker_page.dart';
 import 'page/my_dialog_page.dart';
 import 'page/my_divider_page.dart';
@@ -259,7 +259,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'Collapse',
       name: 'collapse',
-      pageBuilder: _wrapInheritedTheme((context) => const TDCollapsePage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyCollapsePage()),
     ),
     ExamplePageModel(
       text: 'Empty',

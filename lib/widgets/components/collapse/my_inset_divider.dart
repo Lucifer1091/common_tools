@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../constants/theme_colors.dart';
 
-class TDInsetDivider extends StatelessWidget {
-  const TDInsetDivider({super.key});
+class MyInsetDivider extends StatelessWidget {
+  const MyInsetDivider({super.key});
 
   @override
   Widget build(BuildContext context) {

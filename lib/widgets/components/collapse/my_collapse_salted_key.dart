@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 
-class TDCollapseSaltedKey<S, V> extends LocalKey {
-  const TDCollapseSaltedKey(this.salt, this.value);
+class MyCollapseSaltedKey<S, V> extends LocalKey {
+  const MyCollapseSaltedKey(this.salt, this.value);
 
   final S salt;
   final V value;
 
   @override
   bool operator ==(Object other) {
-    if (other is! TDCollapseSaltedKey<S, V>) return false;
+    if (other is! MyCollapseSaltedKey<S, V>) return false;
 
     return salt == other.salt && value == other.value;
   }

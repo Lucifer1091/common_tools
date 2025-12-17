@@ -302,6 +302,11 @@ class MyButtonPage extends StatelessWidget {
                   );
                 },
               ),
+              ExampleItem(
+                center: false,
+                desc: 'Gradient Background Button',
+                builder: _buildGradientButton,
+              ),
             ],
           ),
         ],
@@ -545,5 +550,45 @@ class MyButtonPage extends StatelessWidget {
         Spacer(),
       ],
     ).constrained();
+  }
+
+  Widget _buildGradientButton(BuildContext context) {
+    return const Wrap(
+      spacing: 16,
+      runSpacing: 16,
+      alignment: WrapAlignment.center,
+      children: [
+        MyButton(
+          text: 'Primary',
+          size: MyButtonSize.large,
+          type: MyButtonType.primary,
+          gradient: LinearGradient(colors: [Colors.red, Colors.blue]),
+        ),
+        MyButton(
+          icon: Icons.dashboard_rounded,
+          size: MyButtonSize.large,
+          type: MyButtonType.primary,
+          iconPosition: MyButtonIconPosition.right,
+          gradient: LinearGradient(
+            colors: [Colors.red, Colors.blue],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        MyButton(
+          text: 'Spacing 20',
+          icon: Icons.dashboard_rounded,
+          size: MyButtonSize.large,
+          type: MyButtonType.primary,
+          iconPosition: MyButtonIconPosition.right,
+          iconTextSpacing: 20,
+          gradient: LinearGradient(
+            colors: [Colors.red, Colors.blue],
+            begin: Alignment.centerRight,
+            end: Alignment.centerLeft,
+          ),
+        ),
+      ],
+    ).padding(left: 16);
   }
 }

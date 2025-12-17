@@ -38,6 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Align(
         alignment: Alignment.topCenter,
         child: SingleChildScrollView(
+          padding: EdgeInsets.only(bottom: 32),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: _buildChildren(context),

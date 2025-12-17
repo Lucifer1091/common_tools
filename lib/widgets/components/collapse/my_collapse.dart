@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-import 'td_collapse_panel.dart';
-import 'td_collapse_salted_key.dart';
-import 'td_inset_divider.dart';
-import 'td_nonanimated_expand_icon.dart';
+import 'my_collapse_panel.dart';
+import 'my_collapse_salted_key.dart';
+import 'my_inset_divider.dart';
+import 'my_nonanimated_expand_icon.dart';
 
-enum TDCollapseStyle { block, card }
+enum MyCollapseStyle { block, card }
 
-/// Collapse panel list component, needs to be used with [TDCollapsePanel]
-class TDCollapse extends StatefulWidget {
-  const TDCollapse({
+/// Collapse panel list component, needs to be used with [MyCollapsePanel]
+class MyCollapse extends StatefulWidget {
+  const MyCollapse({
     required this.children,
-    this.style = TDCollapseStyle.block,
+    this.style = MyCollapseStyle.block,
     this.expansionCallback,
     this.animationDuration = kThemeAnimationDuration,
     this.elevation = 0,
@@ -19,9 +19,9 @@ class TDCollapse extends StatefulWidget {
   }) : _allowOnlyOnePanelOpen = false,
        initialOpenPanelValue = null;
 
-  const TDCollapse.accordion({
+  const MyCollapse.accordion({
     required this.children,
-    this.style = TDCollapseStyle.block,
+    this.style = MyCollapseStyle.block,
     this.expansionCallback,
     this.animationDuration = kThemeAnimationDuration,
     this.elevation = 0,
@@ -30,11 +30,11 @@ class TDCollapse extends StatefulWidget {
   }) : _allowOnlyOnePanelOpen = true;
 
   /// Style of the folding panel list
-  /// - [TDCollapseStyle.block] Full-bar style
-  /// - [TDCollapseStyle.card] Card style
-  final TDCollapseStyle style;
+  /// - [MyCollapseStyle.block] Full-bar style
+  /// - [MyCollapseStyle.card] Card style
+  final MyCollapseStyle style;
 
-  final List<TDCollapsePanel> children;
+  final List<MyCollapsePanel> children;
 
   /// Callback function for the folding panel list;
   /// When calling back, the input parameters are the index of the currently
@@ -46,17 +46,17 @@ class TDCollapse extends StatefulWidget {
   final double elevation;
 
   /// The default expanded panel value of the folded panel list;
-  /// This value takes effect when [TDCollapse.accordion] is used
+  /// This value takes effect when [MyCollapse.accordion] is used
   final Object? initialOpenPanelValue;
 
   final bool _allowOnlyOnePanelOpen;
 
   @override
-  State createState() => _TDCollapseState();
+  State createState() => _MyCollapseState();
 }
 
-class _TDCollapseState extends State<TDCollapse> {
-  TDCollapsePanel? _currentOpenPanel;
+class _MyCollapseState extends State<MyCollapse> {
+  MyCollapsePanel? _currentOpenPanel;
 
   @override
   void initState() {
@@ -79,7 +79,7 @@ class _TDCollapseState extends State<TDCollapse> {
   }
 
   @override
-  void didUpdateWidget(TDCollapse oldWidget) {
+  void didUpdateWidget(MyCollapse oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     if (!widget._allowOnlyOnePanelOpen) {
@@ -125,11 +125,11 @@ class _TDCollapseState extends State<TDCollapse> {
 
       items.add(
         MaterialSlice(
-          key: TDCollapseSaltedKey<BuildContext, int>(context, index * 2),
+          key: MyCollapseSaltedKey<BuildContext, int>(context, index * 2),
           color: child.backgroundColor,
           child: Column(
             // to prevent collapse state change when parent rebuild
-            key: TDCollapseSaltedKey<BuildContext, int>(context, index * 2),
+            key: MyCollapseSaltedKey<BuildContext, int>(context, index * 2),
             children: [
               MergeSemantics(
                 child: InkWell(
@@ -159,7 +159,7 @@ class _TDCollapseState extends State<TDCollapse> {
                 firstChild: Container(height: 0),
                 secondChild: Column(
                   children: [
-                    const TDInsetDivider(),
+                    const MyInsetDivider(),
                     Padding(
                       padding: const EdgeInsets.all(16),
                       child: child.body,
@@ -179,7 +179,7 @@ class _TDCollapseState extends State<TDCollapse> {
                         : CrossFadeState.showFirst,
                 duration: widget.animationDuration,
               ),
-              if (!isLastChild) const TDInsetDivider(),
+              if (!isLastChild) const MyInsetDivider(),
             ],
           ),
         ),
@@ -212,7 +212,7 @@ class _TDCollapseState extends State<TDCollapse> {
   MergeableMaterialItem _buildGap(BuildContext context, int value) {
     return MaterialGap(
       size: 0,
-      key: TDCollapseSaltedKey<BuildContext, int>(context, value),
+      key: MyCollapseSaltedKey<BuildContext, int>(context, value),
     );
   }
 
@@ -233,7 +233,7 @@ class _TDCollapseState extends State<TDCollapse> {
   }
 
   bool _isCardStyle() {
-    return widget.style == TDCollapseStyle.card;
+    return widget.style == MyCollapseStyle.card;
   }
 
   bool _isChildExpanded(int index) {
@@ -272,7 +272,7 @@ class _TDCollapseState extends State<TDCollapse> {
 
   Widget _buildTitleWidget(
     BuildContext context,
-    TDCollapsePanel child,
+    MyCollapsePanel child,
     int index,
   ) {
     final titleWidget = child.headerBuilder(context, _isChildExpanded(index));
@@ -281,13 +281,13 @@ class _TDCollapseState extends State<TDCollapse> {
 
   Widget _buildExpandIconWidget(
     BuildContext context,
-    TDCollapsePanel child,
+    MyCollapsePanel child,
     int index,
   ) {
     final Widget expandedIcon = Container(
-      key: TDCollapseSaltedKey<BuildContext, int>(context, index * 2),
+      key: MyCollapseSaltedKey<BuildContext, int>(context, index * 2),
       margin: EdgeInsetsDirectional.zero,
-      child: TdNonAnimatedExpandIcon(
+      child: MyNonAnimatedExpandIcon(
         isExpanded: _isChildExpanded(index),
         padding:
             child.expandIconTextBuilder != null
@@ -310,21 +310,21 @@ class _TDCollapseState extends State<TDCollapse> {
   }
 
   bool _allPanelsHaveValue() {
-    return widget.children.every((TDCollapsePanel child) {
+    return widget.children.every((MyCollapsePanel child) {
       return child.value != null;
     });
   }
 
   bool _allPanelsHaveDistinctValues() {
     final valueSet = <Object?>{};
-    return widget.children.every((TDCollapsePanel child) {
+    return widget.children.every((MyCollapsePanel child) {
       if (!valueSet.add(child.value)) return false;
 
       return true;
     });
   }
 
-  TDCollapsePanel? _searchPanelByValue(Object? value) {
+  MyCollapsePanel? _searchPanelByValue(Object? value) {
     for (var index = 0; index < widget.children.length; index += 1) {
       final child = widget.children[index];
       if (child.value == value) return child;
