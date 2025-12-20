@@ -67,7 +67,7 @@ class MyCollapsePageState extends State<MyCollapsePage> {
             return MyText(item.headerValue);
           },
           isExpanded: item.isExpanded,
-          body: const MyText(randomString),
+          body: MyText(randomString, style: context.bodyMedium),
         );
       }).toList(),
     );
@@ -87,7 +87,7 @@ class MyCollapsePageState extends State<MyCollapsePage> {
             return MyText(item.headerValue);
           },
           isExpanded: item.isExpanded,
-          body: const MyText(randomString),
+          body: MyText(randomString, style: context.bodyMedium),
         );
       }).toList(),
     );
@@ -96,6 +96,7 @@ class MyCollapsePageState extends State<MyCollapsePage> {
   Widget _buildCardCollapse(BuildContext context) {
     return MyCollapse(
       style: MyCollapseStyle.card,
+      backgroundColor: context.colorScheme.secondary.withValues(alpha: 0.4),
       expansionCallback: (int index, bool isExpanded) {
         setState(() {
           _cardStyleData[index].isExpanded = !isExpanded;
@@ -107,7 +108,7 @@ class MyCollapsePageState extends State<MyCollapsePage> {
             return MyText(item.headerValue);
           },
           isExpanded: item.isExpanded,
-          body: const MyText(randomString),
+          body: MyText(randomString, style: context.bodyMedium),
         );
       }).toList(),
     );
@@ -130,7 +131,7 @@ class MyCollapsePageState extends State<MyCollapsePage> {
             return isExpanded ? 'Collapse' : 'Expand';
           },
           isExpanded: item.isExpanded,
-          body: const MyText(randomString),
+          body: MyText(randomString, style: context.bodyMedium),
         );
       }).toList(),
     );
@@ -138,7 +139,8 @@ class MyCollapsePageState extends State<MyCollapsePage> {
 
   Widget _buildAccordionCollapse(BuildContext context) {
     return MyCollapse.accordion(
-      style: MyCollapseStyle.block,
+      style: MyCollapseStyle.card,
+      backgroundColor: context.colorScheme.secondary.withValues(alpha: 0.4),
       expansionCallback: (int index, bool isExpanded) {
         setState(() {
           _accordionData[index].isExpanded = !isExpanded;
@@ -150,8 +152,8 @@ class MyCollapsePageState extends State<MyCollapsePage> {
             return MyText(item.headerValue);
           },
           isExpanded: item.isExpanded,
-          body: const MyText(randomString),
           value: item.expandedValue,
+          body: MyText(randomString, style: context.bodyMedium),
         );
       }).toList(),
     );

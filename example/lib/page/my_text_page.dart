@@ -4,15 +4,23 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../base/example_widget.dart';
 
-class MyTextPage extends StatelessWidget {
+class MyTextPage extends StatefulWidget {
   const MyTextPage({super.key});
 
+  @override
+  State<MyTextPage> createState() => _MyTextPageState();
+}
+
+class _MyTextPageState extends State<MyTextPage> {
   final exampleTxt = 'Example Text';
+
+  int _number = 0;
+  final NumEditController _controller = NumEditController();
 
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: myTitle(context),
+      title: myTitle(),
       exampleCodeGroup: 'text',
       desc: 'Use to display text with various styles using exposed properties.',
       children: [
@@ -23,6 +31,7 @@ class MyTextPage extends StatelessWidget {
             ExampleItem(desc: 'Normal MyText', builder: _buildNormalMyText),
             ExampleItem(desc: 'General Properties', builder: _buildGeneralProp),
             ExampleItem(desc: 'MyText.rich', builder: _buildRichText),
+            ExampleItem(desc: 'Number Ticker', builder: _buildNumberTicker),
             ExampleItem(desc: 'Circular Text', builder: _buildCircularText),
             ExampleItem(desc: 'Drop Cap Text', builder: _buildDropCapText),
           ],
@@ -73,6 +82,39 @@ class MyTextPage extends StatelessWidget {
       fontSize: context.bodyLarge.fontSize,
       textColor: context.colorScheme.primary,
       style: TextStyle(color: context.colorScheme.destructive, fontSize: 32),
+    );
+  }
+
+  Widget _buildNumberTicker(BuildContext context) {
+    return Column(
+      children: [
+        MyNumberTicker(
+          // Starting point for the first animation frame.
+          initialNumber: 0,
+          // The live value to animate toward. When this changes, the ticker
+          // interpolates between the previous and the new value.
+          number: _number,
+          style: const TextStyle(fontSize: 32),
+          formatter: (number) {
+            // Optional display formatter: 1200 -> 1.2K, etc.
+            return number.compact;
+          },
+        ),
+        const Gap(24),
+        MyInput(
+          controller: _controller,
+          placeholder: 'Enter a number here',
+          onEditingComplete: () {
+            // Commit input on edit complete and update the ticker target.
+            int? number = int.tryParse(_controller.text);
+            if (number != null) {
+              setState(() {
+                _number = number;
+              });
+            }
+          },
+        ).padding(horizontal: 16),
+      ],
     );
   }
 

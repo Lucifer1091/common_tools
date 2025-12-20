@@ -23,7 +23,7 @@ import 'page/my_dialog_page.dart';
 import 'page/my_divider_page.dart';
 import 'page/my_drawer_page.dart';
 import 'page/td_dropdown_menu_page.dart';
-import 'page/td_empty_page.dart';
+import 'page/my_errors_page.dart';
 import 'page/td_font_page.dart';
 import 'page/td_footer_page.dart';
 import 'page/my_image_page.dart';
@@ -262,9 +262,9 @@ Map<String, List<ExamplePageModel>> exampleMap = {
       pageBuilder: _wrapInheritedTheme((context) => const MyCollapsePage()),
     ),
     ExamplePageModel(
-      text: 'Empty',
-      name: 'empty',
-      pageBuilder: _wrapInheritedTheme((context) => const TDEmptyPage()),
+      text: 'Errors',
+      name: 'errors',
+      pageBuilder: _wrapInheritedTheme((context) => const MyErrorsPage()),
     ),
     ExamplePageModel(
       text: 'Footer',

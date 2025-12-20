@@ -635,12 +635,12 @@ class TDTableState extends State<TDTable> {
       child: Center(
         child: Padding(
           padding: const EdgeInsets.only(top: 16, bottom: 38),
-          child: TDEmpty(
-            image: Visibility(
+          child: MyError(
+            icon: Visibility(
               visible: widget.empty?.assetUrl != null,
               child: _getEmptyImage(),
             ),
-            emptyText: widget.empty?.text ?? defaultText,
+            title: widget.empty?.text ?? defaultText,
           ),
         ),
       ),

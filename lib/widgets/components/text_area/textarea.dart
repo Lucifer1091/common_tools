@@ -388,8 +388,7 @@ class _MyTextareaState extends State<MyTextarea> {
 
     return Stack(
       children: [
-        ScrollConfiguration(
-          behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+        DisableScrollbar(
           child: MyInput(
             initialValue: widget.initialValue,
             controller: widget.controller,

@@ -123,11 +123,11 @@ class _MyCollapseState extends State<MyCollapse> {
 
       items.add(
         MaterialSlice(
-          key: MyCollapseSaltedKey<BuildContext, int>(context, index * 2),
-          color: widget.backgroundColor ?? context.colorScheme.secondary,
+          key: ValueKey<int>(index * 2),
+          color: widget.backgroundColor ?? context.colorScheme.background,
           child: Column(
             // to prevent collapse state change when parent rebuild
-            key: MyCollapseSaltedKey<BuildContext, int>(context, index * 2),
+            key: ValueKey<int>(index * 2),
             children: [
               MergeSemantics(
                 child: MyGestureDetector(
@@ -187,7 +187,6 @@ class _MyCollapseState extends State<MyCollapse> {
       }
     }
 
-    // FIXME: Non-continuously expanded items will cause animation loss during expansion
     Widget collapse = MergeableMaterial(
       elevation: widget.elevation,
       children: items,
@@ -196,10 +195,7 @@ class _MyCollapseState extends State<MyCollapse> {
     if (_isCardStyle()) {
       collapse = Container(
         margin: const EdgeInsets.symmetric(horizontal: 16),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(9),
-          child: collapse,
-        ),
+        child: ClipRRect(borderRadius: MyBorderRadius.large, child: collapse),
       );
     }
 
@@ -207,10 +203,7 @@ class _MyCollapseState extends State<MyCollapse> {
   }
 
   MergeableMaterialItem _buildGap(BuildContext context, int value) {
-    return MaterialGap(
-      size: 0,
-      key: MyCollapseSaltedKey<BuildContext, int>(context, value),
-    );
+    return MaterialGap(size: 0, key: ValueKey<int>(value));
   }
 
   bool _isCardStyle() {
@@ -257,7 +250,7 @@ class _MyCollapseState extends State<MyCollapse> {
     int index,
   ) {
     final titleWidget = child.headerBuilder(context, _isChildExpanded(index));
-    return ListTile(title: titleWidget);
+    return ListTile(title: titleWidget, mouseCursor: SystemMouseCursors.click);
   }
 
   Widget _buildExpandIconWidget(
@@ -266,7 +259,7 @@ class _MyCollapseState extends State<MyCollapse> {
     int index,
   ) {
     final Widget expandedIcon = Container(
-      key: MyCollapseSaltedKey<BuildContext, int>(context, index * 2),
+      key: ValueKey<int>(index * 2),
       margin: EdgeInsetsDirectional.zero,
       child: MyNonAnimatedExpandIcon(
         isExpanded: _isChildExpanded(index),

@@ -3,6 +3,7 @@ export 'animated_fade_scale.dart';
 export 'animated_text.dart';
 export 'animated_visibility.dart';
 export 'animation_builder.dart';
+export 'animation.dart';
 export 'api_animator.dart';
 export 'bounce_animation.dart';
 export 'click_translate.dart';
