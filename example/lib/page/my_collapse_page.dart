@@ -4,7 +4,7 @@ import 'package:common_tools/index.dart';
 import '../base/example_widget.dart';
 
 class MyCollapsePage extends StatefulWidget {
-  const MyCollapsePage({Key? key}) : super(key: key);
+  const MyCollapsePage({super.key});
 
   @override
   MyCollapsePageState createState() => MyCollapsePageState();
@@ -43,7 +43,7 @@ class MyCollapsePageState extends State<MyCollapsePage> {
           ],
         ),
         ExampleModule(
-          title: 'Style Component Style',
+          title: 'Component Style',
           children: [
             ExampleItem(desc: 'Block Style', builder: _buildBlockStyleCollapse),
             ExampleItem(desc: 'Card Style', builder: _buildCardCollapse),
@@ -64,10 +64,10 @@ class MyCollapsePageState extends State<MyCollapsePage> {
       children: _basicData.map((CollapseDataItem item) {
         return MyCollapsePanel(
           headerBuilder: (BuildContext context, bool isExpanded) {
-            return Text(item.headerValue);
+            return MyText(item.headerValue);
           },
           isExpanded: item.isExpanded,
-          body: const Text(randomString),
+          body: const MyText(randomString),
         );
       }).toList(),
     );
@@ -84,10 +84,10 @@ class MyCollapsePageState extends State<MyCollapsePage> {
       children: _blockStyleData.map((CollapseDataItem item) {
         return MyCollapsePanel(
           headerBuilder: (BuildContext context, bool isExpanded) {
-            return Text(item.headerValue);
+            return MyText(item.headerValue);
           },
           isExpanded: item.isExpanded,
-          body: const Text(randomString),
+          body: const MyText(randomString),
         );
       }).toList(),
     );
@@ -104,10 +104,10 @@ class MyCollapsePageState extends State<MyCollapsePage> {
       children: _cardStyleData.map((CollapseDataItem item) {
         return MyCollapsePanel(
           headerBuilder: (BuildContext context, bool isExpanded) {
-            return Text(item.headerValue);
+            return MyText(item.headerValue);
           },
           isExpanded: item.isExpanded,
-          body: const Text(randomString),
+          body: const MyText(randomString),
         );
       }).toList(),
     );
@@ -124,13 +124,13 @@ class MyCollapsePageState extends State<MyCollapsePage> {
       children: _blockStyleWithOpText.map((CollapseDataItem item) {
         return MyCollapsePanel(
           headerBuilder: (BuildContext context, bool isExpanded) {
-            return Text(item.headerValue);
+            return MyText(item.headerValue);
           },
           expandIconTextBuilder: (BuildContext context, bool isExpanded) {
-            return isExpanded ? '收起' : '展开';
+            return isExpanded ? 'Collapse' : 'Expand';
           },
           isExpanded: item.isExpanded,
-          body: const Text(randomString),
+          body: const MyText(randomString),
         );
       }).toList(),
     );
@@ -147,10 +147,10 @@ class MyCollapsePageState extends State<MyCollapsePage> {
       children: _accordionData.map((CollapseDataItem item) {
         return MyCollapsePanel(
           headerBuilder: (BuildContext context, bool isExpanded) {
-            return Text(item.headerValue);
+            return MyText(item.headerValue);
           },
           isExpanded: item.isExpanded,
-          body: const Text(randomString),
+          body: const MyText(randomString),
           value: item.expandedValue,
         );
       }).toList(),

@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'my_collapse_panel.dart';
-import 'my_collapse_salted_key.dart';
-import 'my_inset_divider.dart';
-import 'my_nonanimated_expand_icon.dart';
+import '../../../index.dart';
 
 enum MyCollapseStyle { block, card }
 
@@ -15,6 +12,7 @@ class MyCollapse extends StatefulWidget {
     this.expansionCallback,
     this.animationDuration = kThemeAnimationDuration,
     this.elevation = 0,
+    this.backgroundColor,
     super.key,
   }) : _allowOnlyOnePanelOpen = false,
        initialOpenPanelValue = null;
@@ -26,6 +24,7 @@ class MyCollapse extends StatefulWidget {
     this.animationDuration = kThemeAnimationDuration,
     this.elevation = 0,
     this.initialOpenPanelValue,
+    this.backgroundColor,
     super.key,
   }) : _allowOnlyOnePanelOpen = true;
 
@@ -48,6 +47,8 @@ class MyCollapse extends StatefulWidget {
   /// The default expanded panel value of the folded panel list;
   /// This value takes effect when [MyCollapse.accordion] is used
   final Object? initialOpenPanelValue;
+
+  final Color? backgroundColor;
 
   final bool _allowOnlyOnePanelOpen;
 
@@ -120,20 +121,16 @@ class _MyCollapseState extends State<MyCollapse> {
       final titleWidget = _buildTitleWidget(context, child, index);
       final expandIconWidget = _buildExpandIconWidget(context, child, index);
 
-      final borderRadius =
-          _isCardStyle() ? _createRadius(index) : BorderRadius.zero;
-
       items.add(
         MaterialSlice(
           key: MyCollapseSaltedKey<BuildContext, int>(context, index * 2),
-          color: child.backgroundColor,
+          color: widget.backgroundColor ?? context.colorScheme.secondary,
           child: Column(
             // to prevent collapse state change when parent rebuild
             key: MyCollapseSaltedKey<BuildContext, int>(context, index * 2),
             children: [
               MergeSemantics(
-                child: InkWell(
-                  borderRadius: borderRadius,
+                child: MyGestureDetector(
                   onTap: () => _handlePressed(index, _isChildExpanded(index)),
                   child: Row(
                     children: [
@@ -216,22 +213,6 @@ class _MyCollapseState extends State<MyCollapse> {
     );
   }
 
-  BorderRadius _createRadius(int index) {
-    final radius = Radius.circular(9);
-
-    final isFirst = index == 0;
-    if (isFirst) {
-      return BorderRadius.only(topLeft: radius, topRight: radius);
-    }
-
-    final isLast = index == widget.children.length - 1;
-    if (isLast) {
-      return BorderRadius.only(bottomLeft: radius, bottomRight: radius);
-    }
-
-    return BorderRadius.zero;
-  }
-
   bool _isCardStyle() {
     return widget.style == MyCollapseStyle.card;
   }
@@ -299,10 +280,12 @@ class _MyCollapseState extends State<MyCollapse> {
     return Row(
       children: [
         if (child.expandIconTextBuilder != null)
-          Text(
+          MyText(
             child.expandIconTextBuilder!(context, _isChildExpanded(index)),
             textAlign: TextAlign.right,
-            style: TextStyle(color: Colors.black.withValues(alpha: .4)),
+            style: context.bodySmall.copyWith(
+              color: context.colorScheme.mutedForeground,
+            ),
           ),
         expandedIcon,
       ],

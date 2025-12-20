@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../constants/theme_colors.dart';
+import '../../../extensions/context/index.dart';
 
 class MyInsetDivider extends StatelessWidget {
   const MyInsetDivider({super.key});
@@ -10,7 +10,7 @@ class MyInsetDivider extends StatelessWidget {
     return SizedBox(
       height: 1,
       child: Divider(
-        color: ThemeColors.neutral.shade200,
+        color: context.colorScheme.border,
         indent: 16,
         endIndent: 0,
         height: 1,
