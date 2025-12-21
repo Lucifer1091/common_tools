@@ -20,56 +20,23 @@ class _MyResultPageState extends State<MyResultPage> {
         ExampleModule(
           title: 'Component Types',
           children: [
-            ExampleItem(
-              desc: 'Basic results',
-              ignoreCode: true,
-              builder: _buildBasicResult,
-            ),
-            ExampleItem(
-              desc: 'Results with description',
-              ignoreCode: true,
-              builder: _buildResultWithDescription,
-            ),
-            ExampleItem(
-              desc: 'Custom results',
-              ignoreCode: true,
-              builder: _buildCustomResult,
-            ),
-            ExampleItem(
-              desc: 'Page example',
-              ignoreCode: true,
-              builder: _buildPageExample,
-            ),
+            ExampleItem(desc: 'Dafault Results', builder: _buildDefaultResults),
+            ExampleItem(desc: 'Custom results', builder: _buildCustomResult),
+            ExampleItem(desc: 'Page example', builder: _buildPageExample),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildBasicResult(BuildContext context) {
+  Widget _buildDefaultResults(BuildContext context) {
     return Column(
+      spacing: 48,
       children: [
-        _buildBasicResultSuccess(context),
-        const SizedBox(height: 48),
-        _buildBasicResultError(context),
-        const SizedBox(height: 48),
-        _buildBasicResultWarning(context),
-        const SizedBox(height: 48),
-        _buildBasicResultDefault(context),
-      ],
-    );
-  }
-
-  Widget _buildResultWithDescription(BuildContext context) {
-    return Column(
-      children: [
-        _buildResultWithDescriptionSuccess(context),
-        const SizedBox(height: 48),
-        _buildResultWithDescriptionError(context),
-        const SizedBox(height: 48),
-        _buildResultWithDescriptionWarning(context),
-        const SizedBox(height: 48),
-        _buildResultWithDescriptionDefault(context),
+        _buildSuccessResult(context),
+        _buildErrorResult(context),
+        _buildWarningResult(context),
+        _buildDefaultResult(context),
       ],
     );
   }
@@ -94,17 +61,17 @@ class _MyResultPageState extends State<MyResultPage> {
                 children: [
                   const SizedBox(height: 48),
                   const MyResult(
-                    title: 'success status',
+                    title: 'Success',
                     theme: MyResultTheme.success,
-                    description: 'Description text',
+                    subtitle:
+                        'Your booking has been confirmed.\nPlease check your email for details.',
                   ),
                   const SizedBox(height: 48),
                   MyButton(
-                    text: 'return',
+                    text: 'Return',
                     size: MyButtonSize.large,
                     type: MyButtonType.outline,
                     isExpanded: true,
-
                     onTap: () {
                       Navigator.pop(context);
                     },
@@ -118,65 +85,44 @@ class _MyResultPageState extends State<MyResultPage> {
     );
   }
 
-  MyResult _buildBasicResultSuccess(BuildContext context) {
+  MyResult _buildSuccessResult(BuildContext context) {
     return const MyResult(
-      title: 'success status',
+      title: 'Success',
       theme: MyResultTheme.success,
+      subtitle:
+          'Your booking has been confirmed.\nPlease check your email for details.',
     );
   }
 
-  MyResult _buildBasicResultError(BuildContext context) {
-    return const MyResult(title: 'failure status', theme: MyResultTheme.error);
-  }
-
-  MyResult _buildBasicResultWarning(BuildContext context) {
-    return const MyResult(title: 'alert status', theme: MyResultTheme.warning);
-  }
-
-  MyResult _buildBasicResultDefault(BuildContext context) {
+  MyResult _buildErrorResult(BuildContext context) {
     return const MyResult(
-      title: 'Default state',
-      theme: MyResultTheme.defaultTheme,
-    );
-  }
-
-  MyResult _buildResultWithDescriptionSuccess(BuildContext context) {
-    return const MyResult(
-      title: 'success status',
-      theme: MyResultTheme.success,
-      description: 'Description text',
-    );
-  }
-
-  MyResult _buildResultWithDescriptionError(BuildContext context) {
-    return const MyResult(
-      title: 'failure status',
+      title: 'Error',
       theme: MyResultTheme.error,
-      description: 'Description text',
+      subtitle: 'Your transcation has failed.\n Please go back and try again.',
     );
   }
 
-  MyResult _buildResultWithDescriptionWarning(BuildContext context) {
+  MyResult _buildWarningResult(BuildContext context) {
     return const MyResult(
-      title: 'alert status',
+      title: 'Warning',
       theme: MyResultTheme.warning,
-      description: 'Description text',
+      subtitle: 'There was a problem with your network connection.',
     );
   }
 
-  MyResult _buildResultWithDescriptionDefault(BuildContext context) {
+  MyResult _buildDefaultResult(BuildContext context) {
     return const MyResult(
-      title: 'Default state',
-      theme: MyResultTheme.defaultTheme,
-      description: 'Description text',
+      title: 'Info',
+      theme: MyResultTheme.primary,
+      subtitle: 'Please read the comment carefully and search again.',
     );
   }
 
   MyResult _buildCustomResultContent(BuildContext context) {
     return MyResult(
-      title: 'Custom results',
+      title: 'Error',
       icon: Image.asset('assets/img/illustration.png'),
-      description: 'Description text',
+      subtitle: 'No network found.\nPlese check your connection and try again.',
     );
   }
 }

@@ -1,24 +1,30 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
 
-enum MyResultTheme { defaultTheme, success, warning, error }
+enum MyResultTheme { primary, success, warning, error }
 
 class MyResult extends StatelessWidget {
   const MyResult({
     super.key,
-    this.description,
+    this.theme = MyResultTheme.primary,
     this.icon,
-    this.titleStyle,
-    this.theme = MyResultTheme.defaultTheme,
+    this.iconSize,
+    this.iconColor,
     this.title = '',
+    this.subtitle,
+    this.titleStyle,
+    this.subtitleStyle,
   });
 
+  final MyResultTheme theme;
   final Widget? icon;
   final String title;
-  final TextStyle? titleStyle;
-  final String? description;
-  final MyResultTheme theme;
+  final TextStyle? titleStyle, subtitleStyle;
+  final String? subtitle;
+  final double? iconSize;
+  final Color? iconColor;
 
   @override
   Widget build(BuildContext context) {
@@ -27,29 +33,21 @@ class MyResult extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(child: displayIcon),
-        if (title.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.only(top: 17),
-            child: MyText(
-              title,
-              textColor: ThemeColors.neutral.shade900,
-              style: (titleStyle ?? context.displayMedium).copyWith(
-                color: ThemeColors.neutral.shade900,
-              ),
-            ),
+        displayIcon,
+        const Gap(16),
+        MyText(
+          title,
+          style: titleStyle ?? context.titleLarge,
+          textAlign: TextAlign.center,
+        ),
+        const Gap(4),
+        if (subtitle != null) ...[
+          MyText(
+            subtitle,
+            style: subtitleStyle ?? context.bodyMedium,
+            textAlign: TextAlign.center,
           ),
-        if (description?.isNotEmpty ?? false)
-          Padding(
-            padding: const EdgeInsets.only(top: 8),
-            child: MyText(
-              description!,
-              textColor: ThemeColors.neutral.shade800,
-              style: context.titleSmall.copyWith(
-                color: ThemeColors.neutral.shade800,
-              ),
-            ),
-          ),
+        ],
       ],
     );
   }
@@ -58,26 +56,26 @@ class MyResult extends StatelessWidget {
     switch (theme) {
       case MyResultTheme.success:
         return Icon(
-          Icons.check_circle_rounded,
-          color: ThemeColors.success.shade400,
-          size: 70,
-        );
-      case MyResultTheme.warning:
-        return Icon(
-          Icons.report_rounded,
-          color: ThemeColors.warning.shade400,
+          CupertinoIcons.check_mark_circled_solid,
+          color: ThemeColors.success.shade600,
           size: 70,
         );
       case MyResultTheme.error:
         return Icon(
-          Icons.cancel_rounded,
-          color: ThemeColors.error.shade600,
+          CupertinoIcons.xmark_circle_fill,
+          color: context.colorScheme.destructive,
           size: 70,
         );
-      case MyResultTheme.defaultTheme:
+      case MyResultTheme.warning:
+        return Icon(
+          CupertinoIcons.exclamationmark_triangle_fill,
+          color: ThemeColors.warning,
+          size: 70,
+        );
+      case MyResultTheme.primary:
         return Icon(
           Icons.info_rounded,
-          color: ThemeColors.blue.shade600,
+          color: context.colorScheme.primary,
           size: 70,
         );
     }

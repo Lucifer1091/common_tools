@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../index.dart';
 
@@ -262,18 +263,18 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
               ? getAutoText()
               : showIconBorder
               ? const Icon(Icons.error_rounded)
-              : const Icon(Icons.priority_high_rounded),
+              : const Icon(CupertinoIcons.exclamationmark),
       MyProgressStatus.danger:
           showInsideLabel
               ? getAutoText()
               : showIconBorder
-              ? const Icon(Icons.cancel_rounded)
+              ? const Icon(CupertinoIcons.xmark_circle_fill)
               : const Icon(Icons.close_rounded),
       MyProgressStatus.success:
           showInsideLabel
               ? getAutoText()
               : showIconBorder
-              ? const Icon(Icons.check_circle_rounded)
+              ? const Icon(CupertinoIcons.check_mark_circled_solid)
               : const Icon(Icons.check_rounded),
     };
 
