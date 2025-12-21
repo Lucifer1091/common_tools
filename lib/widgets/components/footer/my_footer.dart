@@ -42,7 +42,7 @@ class MyFooter extends StatelessWidget {
               if (links.isNotEmpty)
                 _renderLinks(context)
               else
-                _renderText(context),
+                _renderText(context), 
             ],
           ),
         );

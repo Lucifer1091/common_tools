@@ -3,21 +3,19 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../../index.dart';
 
-enum MyProgressType { linear, circular, micro, button }
+enum MyProgressType { linear, circular, micro }
 
 enum MyProgressLabelPosition { inside, left, right }
 
 enum MyProgressStatus { primary, warning, danger, success }
 
-abstract class MyLabelWidget extends Widget {
-  const MyLabelWidget({super.key});
+mixin MyLabelWidget on Widget {}
+
+class MyTextLabel extends MyText with MyLabelWidget {
+  const MyTextLabel(super.text, {super.key, super.style});
 }
 
-class MyTextLabel extends Text implements MyLabelWidget {
-  const MyTextLabel(super.data, {super.key, super.style});
-}
-
-class MyIconLabel extends Icon implements MyLabelWidget {
+class MyIconLabel extends Icon with MyLabelWidget {
   const MyIconLabel(IconData super.icon, {super.key, super.size, super.color});
 }
 
@@ -104,6 +102,7 @@ class MyProgress extends StatelessWidget {
       onLongPress: onLongPress,
       type: type,
       context: context,
+      animationDuration: animationDuration ?? 300,
     );
   }
 
@@ -112,30 +111,23 @@ class MyProgress extends StatelessWidget {
       case MyProgressType.linear:
         return _DefaultValues(
           strokeWidth: 20,
-          backgroundColor: ThemeColors.neutral.shade200,
+          backgroundColor: context.colorScheme.secondary,
           linearBorderRadius: BorderRadius.circular(20),
           circleRadius: 0,
         );
       case MyProgressType.circular:
         return _DefaultValues(
           strokeWidth: 5,
-          backgroundColor: ThemeColors.neutral.shade100,
+          backgroundColor: context.colorScheme.secondary,
           linearBorderRadius: BorderRadius.circular(20),
           circleRadius: 100,
         );
       case MyProgressType.micro:
         return _DefaultValues(
           strokeWidth: 2,
-          backgroundColor: ThemeColors.neutral.shade100,
+          backgroundColor: context.colorScheme.secondary,
           linearBorderRadius: BorderRadius.circular(20),
           circleRadius: 25,
-        );
-      case MyProgressType.button:
-        return _DefaultValues(
-          strokeWidth: 50,
-          backgroundColor: ThemeColors.blue.shade600,
-          linearBorderRadius: BorderRadius.circular(8),
-          circleRadius: 0,
         );
     }
   }
@@ -216,7 +208,6 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
       duration: Duration(milliseconds: widget.animationDuration),
     );
     _updateAnimation();
-    _updateEffectiveColor();
     _updateEffectiveLabel();
   }
 
@@ -225,10 +216,6 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
     super.didUpdateWidget(oldWidget);
     if (oldWidget.value != widget.value) {
       _updateAnimation(oldWidgetValue: oldWidget.value);
-    }
-    if (oldWidget.color != widget.color ||
-        oldWidget.progressStatus != widget.progressStatus) {
-      _updateEffectiveColor();
     }
     if (oldWidget.label != widget.label ||
         oldWidget.progressStatus != widget.progressStatus) {
@@ -296,13 +283,13 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
   Color _getColorFromStatus(MyProgressStatus status) {
     switch (status) {
       case MyProgressStatus.primary:
-        return ThemeColors.blue.shade600;
+        return context.colorScheme.primary;
       case MyProgressStatus.warning:
-        return ThemeColors.warning.shade400;
+        return ThemeColors.warning;
       case MyProgressStatus.danger:
-        return ThemeColors.error.shade600;
+        return context.colorScheme.destructive;
       case MyProgressStatus.success:
-        return ThemeColors.success.shade400;
+        return ThemeColors.success.shade600;
     }
   }
 
@@ -314,6 +301,8 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
 
   @override
   Widget build(BuildContext context) {
+    _updateEffectiveColor();
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -322,9 +311,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
         else if (widget.type == MyProgressType.circular)
           _buildCircularProgress()
         else if (widget.type == MyProgressType.micro)
-          _buildMicroProgress()
-        else if (widget.type == MyProgressType.button)
-          _buildButtonProgress(),
+          _buildMicroProgress(),
       ],
     );
   }
@@ -380,7 +367,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
                 ),
                 child:
                     widget.customProgressLabel ??
-                    _buildLabelWidget(ThemeColors.neutral.shade900),
+                    _buildLabelWidget(context.colorScheme.foreground),
               ),
             Expanded(
               child: Stack(
@@ -408,7 +395,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
                 ),
                 child:
                     widget.customProgressLabel ??
-                    _buildLabelWidget(ThemeColors.neutral.shade900),
+                    _buildLabelWidget(context.colorScheme.foreground),
               ),
           ],
         );
@@ -440,7 +427,9 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
                 alignment: Alignment.centerRight,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: _buildLabelWidget(Colors.white),
+                  child: _buildLabelWidget(
+                    context.colorScheme.primaryForeground,
+                  ),
                 ),
               )
               : null,
@@ -512,16 +501,12 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
         iconSize = widget.circleRadius * 0.5;
         fontSize = widget.circleRadius * 0.2;
         fontWeight = FontWeight.normal;
-      case MyProgressType.button:
-        iconSize = widget.strokeWidth * 0.3;
-        fontSize = widget.strokeWidth * 0.3;
-        fontWeight = FontWeight.normal;
     }
 
     return IconTheme(
       data: IconThemeData(color: _effectiveColor, size: iconSize),
       child: DefaultTextStyle(
-        style: TextStyle(
+        style: context.bodyMedium.copyWith(
           color: labelColor,
           fontSize: fontSize,
           fontWeight: fontWeight,
@@ -543,7 +528,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
               width: widget.circleRadius,
               child: Padding(
                 padding: EdgeInsets.all(widget.strokeWidth / 2),
-                child: TDProgressCircular(
+                child: MyProgressCircular(
                   strokeWidth: widget.strokeWidth,
                   circleRadius: widget.circleRadius,
                   value: _animation.value,
@@ -553,7 +538,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
               ),
             ),
             if (widget.showLabel)
-              _buildLabelWidget(ThemeColors.neutral.shade900),
+              _buildLabelWidget(context.colorScheme.foreground),
           ],
         );
       },
@@ -572,7 +557,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
             children: [
               _buildMicroOutline(),
               if (widget.showLabel)
-                _buildLabelWidget(ThemeColors.neutral.shade900),
+                _buildLabelWidget(context.colorScheme.foreground),
             ],
           ),
         );
@@ -586,7 +571,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
       width: widget.circleRadius,
       child: Padding(
         padding: EdgeInsets.all(widget.strokeWidth / 2),
-        child: TDProgressCircular(
+        child: MyProgressCircular(
           strokeWidth: widget.strokeWidth,
           circleRadius: widget.circleRadius,
           value: _animation.value,
@@ -594,57 +579,6 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
           valueColor: AlwaysStoppedAnimation<Color>(_effectiveColor),
         ),
       ),
-    );
-  }
-
-  Widget _buildButtonProgress() {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final maxWidth = constraints.maxWidth;
-        return AnimatedBuilder(
-          animation: _animation,
-          builder: (context, child) {
-            final progressWidth = maxWidth * _animation.value;
-            return ClipRRect(
-              borderRadius: widget.linearBorderRadius,
-              child: GestureDetector(
-                onTap: widget.onTap,
-                onLongPress: widget.onLongPress,
-                child: Stack(
-                  children: [
-                    _buildBackgroundContainer(),
-                    _buildButtonActiveContainer(progressWidth),
-                    if (widget.showLabel) _buildButtonLabel(maxWidth),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-
-  Widget _buildButtonActiveContainer(double progressWidth) {
-    return Container(
-      height: widget.strokeWidth,
-      width: progressWidth,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            _effectiveColor,
-            ThemeColors.blue.shade200.withValues(alpha: .5),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildButtonLabel(double maxWidth) {
-    return Container(
-      height: widget.strokeWidth,
-      alignment: Alignment.center,
-      child: _buildLabelWidget(Colors.white),
     );
   }
 }

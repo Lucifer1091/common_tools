@@ -1,29 +1,24 @@
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../text/my_text.dart';
 
-enum TDResultTheme { defaultTheme, success, warning, error }
+enum MyResultTheme { defaultTheme, success, warning, error }
 
-class TDResult extends StatelessWidget {
-  const TDResult({
+class MyResult extends StatelessWidget {
+  const MyResult({
     super.key,
     this.description,
     this.icon,
     this.titleStyle,
-    this.theme = TDResultTheme.defaultTheme,
+    this.theme = MyResultTheme.defaultTheme,
     this.title = '',
   });
 
   final Widget? icon;
-
   final String title;
-
   final TextStyle? titleStyle;
-
   final String? description;
-
-  final TDResultTheme theme;
+  final MyResultTheme theme;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +34,7 @@ class TDResult extends StatelessWidget {
             child: MyText(
               title,
               textColor: ThemeColors.neutral.shade900,
-              style: (titleStyle ?? context.displayMedium)?.copyWith(
+              style: (titleStyle ?? context.displayMedium).copyWith(
                 color: ThemeColors.neutral.shade900,
               ),
             ),
@@ -50,7 +45,7 @@ class TDResult extends StatelessWidget {
             child: MyText(
               description!,
               textColor: ThemeColors.neutral.shade800,
-              style: context.titleSmall?.copyWith(
+              style: context.titleSmall.copyWith(
                 color: ThemeColors.neutral.shade800,
               ),
             ),
@@ -59,27 +54,27 @@ class TDResult extends StatelessWidget {
     );
   }
 
-  Widget _getDefaultIconByTheme(BuildContext context, TDResultTheme theme) {
+  Widget _getDefaultIconByTheme(BuildContext context, MyResultTheme theme) {
     switch (theme) {
-      case TDResultTheme.success:
+      case MyResultTheme.success:
         return Icon(
           Icons.check_circle_rounded,
           color: ThemeColors.success.shade400,
           size: 70,
         );
-      case TDResultTheme.warning:
+      case MyResultTheme.warning:
         return Icon(
           Icons.report_rounded,
           color: ThemeColors.warning.shade400,
           size: 70,
         );
-      case TDResultTheme.error:
+      case MyResultTheme.error:
         return Icon(
           Icons.cancel_rounded,
           color: ThemeColors.error.shade600,
           size: 70,
         );
-      case TDResultTheme.defaultTheme:
+      case MyResultTheme.defaultTheme:
         return Icon(
           Icons.info_rounded,
           color: ThemeColors.blue.shade600,

@@ -2,8 +2,8 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-class TDProgressCircular extends StatelessWidget {
-  const TDProgressCircular({
+class MyProgressCircular extends StatelessWidget {
+  const MyProgressCircular({
     required double value,
     required this.strokeWidth,
     required this.backgroundColor,
@@ -26,7 +26,7 @@ class TDProgressCircular extends StatelessWidget {
       width: circleRadius * 2,
       height: circleRadius * 2,
       child: CustomPaint(
-        painter: _TDProgressCircularPainter(
+        painter: _MyProgressCircularPainter(
           value: value,
           backgroundColor: backgroundColor,
           valueColor: valueColor,
@@ -38,8 +38,8 @@ class TDProgressCircular extends StatelessWidget {
   }
 }
 
-class _TDProgressCircularPainter extends CustomPainter {
-  _TDProgressCircularPainter({
+class _MyProgressCircularPainter extends CustomPainter {
+  _MyProgressCircularPainter({
     required this.value,
     required this.backgroundColor,
     required this.valueColor,

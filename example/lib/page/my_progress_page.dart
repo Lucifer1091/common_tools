@@ -17,10 +17,6 @@ class MyProgressPage extends StatefulWidget {
 }
 
 class _MyProgressPageState extends State<MyProgressPage> {
-  MyLabelWidget buttonLabel = const MyTextLabel('Start');
-  double progressValue = 0.0;
-  Timer? _timer;
-  bool isProgressing = false;
   bool isPlaying = false;
   double microProgressValue = 0.3;
   Timer? _microTimer;
@@ -42,7 +38,7 @@ class _MyProgressPageState extends State<MyProgressPage> {
               builder: _buildRightLabelLinear,
             ),
             ExampleItem(
-              desc: 'Percent Internal Display',
+              desc: 'Linear Progress Bar - Percent Inside',
               padding: widget.examplePadding,
               builder: _buildInsideLabelLinear,
             ),
@@ -57,11 +53,6 @@ class _MyProgressPageState extends State<MyProgressPage> {
               padding: widget.examplePadding,
               center: false,
               builder: _buildMicro,
-            ),
-            ExampleItem(
-              desc: 'Button Progress Bar',
-              padding: widget.examplePadding,
-              builder: _buildButton,
             ),
             ExampleItem(
               desc: 'Miniature Button Progress Bar',
@@ -128,16 +119,6 @@ class _MyProgressPageState extends State<MyProgressPage> {
 
   Widget _buildMicro(BuildContext context) {
     return MyProgress(type: MyProgressType.micro, value: 0.75);
-  }
-
-  Widget _buildButton(BuildContext context) {
-    return MyProgress(
-      type: MyProgressType.button,
-      onTap: _toggleProgress,
-      onLongPress: _resetProgress,
-      value: progressValue,
-      label: buttonLabel,
-    );
   }
 
   Widget _buildMicroButton(BuildContext context) {
@@ -222,44 +203,6 @@ class _MyProgressPageState extends State<MyProgressPage> {
       progressStatus: MyProgressStatus.success,
       value: 1,
     );
-  }
-
-  void _toggleProgress() {
-    if (isProgressing) {
-      // 暂停进度
-      _timer?.cancel();
-      setState(() {
-        buttonLabel = const MyTextLabel('Continue');
-        isProgressing = false;
-      });
-    } else {
-      // 开始或继续进度
-      _timer?.cancel();
-      _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
-        setState(() {
-          if (progressValue < 1.0) {
-            progressValue += 0.01;
-            buttonLabel = MyTextLabel('${(progressValue * 100).toInt()}%');
-          } else {
-            _timer?.cancel();
-            buttonLabel = const MyTextLabel('Finish');
-            isProgressing = false;
-          }
-        });
-      });
-      setState(() {
-        isProgressing = true;
-      });
-    }
-  }
-
-  void _resetProgress() {
-    _timer?.cancel();
-    setState(() {
-      progressValue = 0.0;
-      buttonLabel = const MyTextLabel('Start');
-      isProgressing = false;
-    });
   }
 
   void _toggleMicroProgress() {

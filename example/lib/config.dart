@@ -43,7 +43,7 @@ import 'page/my_radio_page.dart';
 import 'page/td_radius_page.dart';
 import 'page/my_rating_page.dart';
 import 'page/td_refresh_page.dart';
-import 'page/td_result_page.dart';
+import 'page/my_result_page.dart';
 import 'page/td_search_bar_page.dart';
 import 'page/td_shadows_page.dart';
 import 'page/td_skeleton_page.dart';
@@ -296,7 +296,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'Result',
       name: 'result',
-      pageBuilder: _wrapInheritedTheme((context) => const TDResultPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyResultPage()),
     ),
     ExamplePageModel(
       text: 'Skeleton',

@@ -2,41 +2,41 @@ import 'package:flutter/material.dart';
 import 'package:common_tools/index.dart';
 import '../../base/example_widget.dart';
 
-class TDResultPage extends StatefulWidget {
-  const TDResultPage({Key? key}) : super(key: key);
+class MyResultPage extends StatefulWidget {
+  const MyResultPage({super.key});
 
   @override
-  State<TDResultPage> createState() => _TDResultPageState();
+  State<MyResultPage> createState() => _MyResultPageState();
 }
 
-class _TDResultPageState extends State<TDResultPage> {
+class _MyResultPageState extends State<MyResultPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: 'Result 结果',
-      desc: '反馈结果状态。',
+      title: 'Result',
+      desc: 'Used to display feedback result status. ',
       exampleCodeGroup: 'result',
       children: [
         ExampleModule(
           title: 'Component Types',
           children: [
             ExampleItem(
-              desc: '基础结果',
+              desc: 'Basic results',
               ignoreCode: true,
               builder: _buildBasicResult,
             ),
             ExampleItem(
-              desc: '带描述的结果',
+              desc: 'Results with description',
               ignoreCode: true,
               builder: _buildResultWithDescription,
             ),
             ExampleItem(
-              desc: '自定义结果',
+              desc: 'Custom results',
               ignoreCode: true,
               builder: _buildCustomResult,
             ),
             ExampleItem(
-              desc: '页面示例',
+              desc: 'Page example',
               ignoreCode: true,
               builder: _buildPageExample,
             ),
@@ -80,30 +80,27 @@ class _TDResultPageState extends State<TDResultPage> {
 
   Widget _buildPageExample(BuildContext context) {
     return MyButton(
-      text: '页面示例',
-
+      text: 'Page example',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       isExpanded: true,
-
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => Scaffold(
-              appBar: AppBar(title: const Text('Result 结果')),
+              appBar: AppBar(title: const Text('Result')),
               body: Column(
                 children: [
                   const SizedBox(height: 48),
-                  const TDResult(
-                    title: '成功状态',
-                    theme: TDResultTheme.success,
-                    description: '描述文字',
+                  const MyResult(
+                    title: 'success status',
+                    theme: MyResultTheme.success,
+                    description: 'Description text',
                   ),
                   const SizedBox(height: 48),
                   MyButton(
-                    text: '返回',
-
+                    text: 'return',
                     size: MyButtonSize.large,
                     type: MyButtonType.outline,
                     isExpanded: true,
@@ -121,59 +118,65 @@ class _TDResultPageState extends State<TDResultPage> {
     );
   }
 
-  TDResult _buildBasicResultSuccess(BuildContext context) {
-    return const TDResult(title: '成功状态', theme: TDResultTheme.success);
-  }
-
-  TDResult _buildBasicResultError(BuildContext context) {
-    return const TDResult(title: '失败状态', theme: TDResultTheme.error);
-  }
-
-  TDResult _buildBasicResultWarning(BuildContext context) {
-    return const TDResult(title: '警示状态', theme: TDResultTheme.warning);
-  }
-
-  TDResult _buildBasicResultDefault(BuildContext context) {
-    return const TDResult(title: '默认状态', theme: TDResultTheme.defaultTheme);
-  }
-
-  TDResult _buildResultWithDescriptionSuccess(BuildContext context) {
-    return const TDResult(
-      title: '成功状态',
-      theme: TDResultTheme.success,
-      description: '描述文字',
+  MyResult _buildBasicResultSuccess(BuildContext context) {
+    return const MyResult(
+      title: 'success status',
+      theme: MyResultTheme.success,
     );
   }
 
-  TDResult _buildResultWithDescriptionError(BuildContext context) {
-    return const TDResult(
-      title: '失败状态',
-      theme: TDResultTheme.error,
-      description: '描述文字',
+  MyResult _buildBasicResultError(BuildContext context) {
+    return const MyResult(title: 'failure status', theme: MyResultTheme.error);
+  }
+
+  MyResult _buildBasicResultWarning(BuildContext context) {
+    return const MyResult(title: 'alert status', theme: MyResultTheme.warning);
+  }
+
+  MyResult _buildBasicResultDefault(BuildContext context) {
+    return const MyResult(
+      title: 'Default state',
+      theme: MyResultTheme.defaultTheme,
     );
   }
 
-  TDResult _buildResultWithDescriptionWarning(BuildContext context) {
-    return const TDResult(
-      title: '警示状态',
-      theme: TDResultTheme.warning,
-      description: '描述文字',
+  MyResult _buildResultWithDescriptionSuccess(BuildContext context) {
+    return const MyResult(
+      title: 'success status',
+      theme: MyResultTheme.success,
+      description: 'Description text',
     );
   }
 
-  TDResult _buildResultWithDescriptionDefault(BuildContext context) {
-    return const TDResult(
-      title: '默认状态',
-      theme: TDResultTheme.defaultTheme,
-      description: '描述文字',
+  MyResult _buildResultWithDescriptionError(BuildContext context) {
+    return const MyResult(
+      title: 'failure status',
+      theme: MyResultTheme.error,
+      description: 'Description text',
     );
   }
 
-  TDResult _buildCustomResultContent(BuildContext context) {
-    return TDResult(
-      title: '自定义结果',
+  MyResult _buildResultWithDescriptionWarning(BuildContext context) {
+    return const MyResult(
+      title: 'alert status',
+      theme: MyResultTheme.warning,
+      description: 'Description text',
+    );
+  }
+
+  MyResult _buildResultWithDescriptionDefault(BuildContext context) {
+    return const MyResult(
+      title: 'Default state',
+      theme: MyResultTheme.defaultTheme,
+      description: 'Description text',
+    );
+  }
+
+  MyResult _buildCustomResultContent(BuildContext context) {
+    return MyResult(
+      title: 'Custom results',
       icon: Image.asset('assets/img/illustration.png'),
-      description: '描述文字',
+      description: 'Description text',
     );
   }
 }

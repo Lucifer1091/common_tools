@@ -96,7 +96,7 @@ class _MyFooterPageState extends State<MyFooterPage> {
   Widget _buildBrandFooter(BuildContext context) {
     return MyFooter(
       MyFooterType.brand,
-      logo: 'assets/img/td_brand.png',
+      logo: 'assets/img/google.svg',
       width: 204,
       height: 48,
     );
