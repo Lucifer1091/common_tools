@@ -5,19 +5,19 @@ import 'package:common_tools/index.dart';
 
 import '../base/example_widget.dart';
 
-class TDProgressPage extends StatefulWidget {
-  const TDProgressPage({Key? key}) : super(key: key);
+class MyProgressPage extends StatefulWidget {
+  const MyProgressPage({super.key});
 
   final examplePadding = const EdgeInsets.symmetric(horizontal: 16);
 
   @override
   State<StatefulWidget> createState() {
-    return _TDProgressPageState();
+    return _MyProgressPageState();
   }
 }
 
-class _TDProgressPageState extends State<TDProgressPage> {
-  TDLabelWidget buttonLabel = const TDTextLabel('开始');
+class _MyProgressPageState extends State<MyProgressPage> {
+  MyLabelWidget buttonLabel = const MyTextLabel('Start');
   double progressValue = 0.0;
   Timer? _timer;
   bool isProgressing = false;
@@ -29,43 +29,42 @@ class _TDProgressPageState extends State<TDProgressPage> {
   Widget build(BuildContext context) {
     return ExamplePage(
       title: myTitle(),
-      desc: '用于展示任务当前的进度',
+      desc: 'Used to display the current progress of a task.',
       exampleCodeGroup: 'progress',
-      backgroundColor: Colors.white,
       padding: const EdgeInsets.symmetric(vertical: 8),
       children: [
         ExampleModule(
           title: 'Component Types',
           children: [
             ExampleItem(
-              desc: '线性进度条',
+              desc: 'Linear Progress Bar',
               padding: widget.examplePadding,
               builder: _buildRightLabelLinear,
             ),
             ExampleItem(
-              desc: '百分比内显',
+              desc: 'Percent Internal Display',
               padding: widget.examplePadding,
               builder: _buildInsideLabelLinear,
             ),
             ExampleItem(
-              desc: '环形进度条',
+              desc: 'Circular Progress Bar',
               padding: widget.examplePadding,
               center: false,
               builder: _buildCircle,
             ),
             ExampleItem(
-              desc: '微型环形进度条',
+              desc: 'Miniature Circular Progress Bar',
               padding: widget.examplePadding,
               center: false,
               builder: _buildMicro,
             ),
             ExampleItem(
-              desc: '按钮进度条',
+              desc: 'Button Progress Bar',
               padding: widget.examplePadding,
               builder: _buildButton,
             ),
             ExampleItem(
-              desc: '微型按钮进度条',
+              desc: 'Miniature Button Progress Bar',
               padding: widget.examplePadding,
               center: false,
               builder: _buildMicroButton,
@@ -76,7 +75,7 @@ class _TDProgressPageState extends State<TDProgressPage> {
           title: 'Component State',
           children: [
             ExampleItem(
-              desc: '线性进度条',
+              desc: 'Linear Progress Bar',
               padding: widget.examplePadding,
               builder: _buildPrimary,
             ),
@@ -84,7 +83,7 @@ class _TDProgressPageState extends State<TDProgressPage> {
             ExampleItem(padding: widget.examplePadding, builder: _buildDanger),
             ExampleItem(padding: widget.examplePadding, builder: _buildSuccess),
             ExampleItem(
-              desc: '环形进度条',
+              desc: 'Circular Progress Bar',
               padding: widget.examplePadding,
               center: false,
               builder: _buildCirclePrimary,
@@ -111,29 +110,29 @@ class _TDProgressPageState extends State<TDProgressPage> {
   }
 
   Widget _buildRightLabelLinear(BuildContext context) {
-    return TDProgress(
-      type: TDProgressType.linear,
+    return MyProgress(
+      type: MyProgressType.linear,
       value: 0.8,
       strokeWidth: 6,
-      progressLabelPosition: TDProgressLabelPosition.right,
+      progressLabelPosition: MyProgressLabelPosition.right,
     );
   }
 
   Widget _buildInsideLabelLinear(BuildContext context) {
-    return TDProgress(type: TDProgressType.linear, value: 0.8);
+    return MyProgress(type: MyProgressType.linear, value: 0.8);
   }
 
   Widget _buildCircle(BuildContext context) {
-    return TDProgress(type: TDProgressType.circular, value: 0.3);
+    return MyProgress(type: MyProgressType.circular, value: 0.3);
   }
 
   Widget _buildMicro(BuildContext context) {
-    return TDProgress(type: TDProgressType.micro, value: 0.75);
+    return MyProgress(type: MyProgressType.micro, value: 0.75);
   }
 
   Widget _buildButton(BuildContext context) {
-    return TDProgress(
-      type: TDProgressType.button,
+    return MyProgress(
+      type: MyProgressType.button,
       onTap: _toggleProgress,
       onLongPress: _resetProgress,
       value: progressValue,
@@ -142,11 +141,11 @@ class _TDProgressPageState extends State<TDProgressPage> {
   }
 
   Widget _buildMicroButton(BuildContext context) {
-    return TDProgress(
-      type: TDProgressType.micro,
+    return MyProgress(
+      type: MyProgressType.micro,
       value: microProgressValue,
       onTap: _toggleMicroProgress,
-      label: TDIconLabel(
+      label: MyIconLabel(
         isPlaying ? Icons.pause : Icons.play_arrow,
         color: context.colorScheme.primary,
       ),
@@ -154,73 +153,73 @@ class _TDProgressPageState extends State<TDProgressPage> {
   }
 
   Widget _buildPrimary(BuildContext context) {
-    return TDProgress(
-      type: TDProgressType.linear,
-      progressStatus: TDProgressStatus.primary,
+    return MyProgress(
+      type: MyProgressType.linear,
+      progressStatus: MyProgressStatus.primary,
       value: 0.8,
       strokeWidth: 6,
-      progressLabelPosition: TDProgressLabelPosition.right,
+      progressLabelPosition: MyProgressLabelPosition.right,
     );
   }
 
   Widget _buildWarning(BuildContext context) {
-    return TDProgress(
-      type: TDProgressType.linear,
-      progressStatus: TDProgressStatus.warning,
+    return MyProgress(
+      type: MyProgressType.linear,
+      progressStatus: MyProgressStatus.warning,
       value: 0.8,
       strokeWidth: 6,
-      progressLabelPosition: TDProgressLabelPosition.right,
+      progressLabelPosition: MyProgressLabelPosition.right,
     );
   }
 
   Widget _buildDanger(BuildContext context) {
-    return TDProgress(
-      type: TDProgressType.linear,
-      progressStatus: TDProgressStatus.danger,
+    return MyProgress(
+      type: MyProgressType.linear,
+      progressStatus: MyProgressStatus.danger,
       value: 0.8,
       strokeWidth: 6,
-      progressLabelPosition: TDProgressLabelPosition.right,
+      progressLabelPosition: MyProgressLabelPosition.right,
     );
   }
 
   Widget _buildSuccess(BuildContext context) {
-    return TDProgress(
-      type: TDProgressType.linear,
-      progressStatus: TDProgressStatus.success,
+    return MyProgress(
+      type: MyProgressType.linear,
+      progressStatus: MyProgressStatus.success,
       value: 0.8,
       strokeWidth: 6,
-      progressLabelPosition: TDProgressLabelPosition.right,
+      progressLabelPosition: MyProgressLabelPosition.right,
     );
   }
 
   Widget _buildCirclePrimary(BuildContext context) {
-    return TDProgress(
-      type: TDProgressType.circular,
-      progressStatus: TDProgressStatus.primary,
+    return MyProgress(
+      type: MyProgressType.circular,
+      progressStatus: MyProgressStatus.primary,
       value: 0.3,
     );
   }
 
   Widget _buildCircleWarning(BuildContext context) {
-    return TDProgress(
-      type: TDProgressType.circular,
-      progressStatus: TDProgressStatus.warning,
+    return MyProgress(
+      type: MyProgressType.circular,
+      progressStatus: MyProgressStatus.warning,
       value: 0.3,
     );
   }
 
   Widget _buildCircleDanger(BuildContext context) {
-    return TDProgress(
-      type: TDProgressType.circular,
-      progressStatus: TDProgressStatus.danger,
+    return MyProgress(
+      type: MyProgressType.circular,
+      progressStatus: MyProgressStatus.danger,
       value: 0.3,
     );
   }
 
   Widget _buildCircleSuccess(BuildContext context) {
-    return TDProgress(
-      type: TDProgressType.circular,
-      progressStatus: TDProgressStatus.success,
+    return MyProgress(
+      type: MyProgressType.circular,
+      progressStatus: MyProgressStatus.success,
       value: 1,
     );
   }
@@ -230,7 +229,7 @@ class _TDProgressPageState extends State<TDProgressPage> {
       // 暂停进度
       _timer?.cancel();
       setState(() {
-        buttonLabel = const TDTextLabel('继续');
+        buttonLabel = const MyTextLabel('Continue');
         isProgressing = false;
       });
     } else {
@@ -240,10 +239,10 @@ class _TDProgressPageState extends State<TDProgressPage> {
         setState(() {
           if (progressValue < 1.0) {
             progressValue += 0.01;
-            buttonLabel = TDTextLabel('${(progressValue * 100).toInt()}%');
+            buttonLabel = MyTextLabel('${(progressValue * 100).toInt()}%');
           } else {
             _timer?.cancel();
-            buttonLabel = const TDTextLabel('完成');
+            buttonLabel = const MyTextLabel('Finish');
             isProgressing = false;
           }
         });
@@ -258,7 +257,7 @@ class _TDProgressPageState extends State<TDProgressPage> {
     _timer?.cancel();
     setState(() {
       progressValue = 0.0;
-      buttonLabel = const TDTextLabel('开始');
+      buttonLabel = const MyTextLabel('Start');
       isProgressing = false;
     });
   }

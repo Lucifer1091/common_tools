@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../../index.dart';
 
-enum TDFooterType { text, link, brand }
+enum MyFooterType { text, link, brand }
 
-class TDFooter extends StatefulWidget {
-  const TDFooter(
+class MyFooter extends StatelessWidget {
+  const MyFooter(
     this.type, {
     super.key,
     this.logo,
@@ -16,50 +16,43 @@ class TDFooter extends StatefulWidget {
   });
 
   final String? logo;
-
-  final TDFooterType type;
-
+  final MyFooterType type;
   final String text;
-
   final double? width;
-
   final double? height;
-
   final List<MyLink> links;
 
   @override
-  State<TDFooter> createState() => _TDFooterState();
-}
-
-class _TDFooterState extends State<TDFooter> {
-  @override
   Widget build(BuildContext context) {
-    switch (widget.type) {
-      case TDFooterType.text:
+    switch (type) {
+      case MyFooterType.text:
         return Container(
           alignment: Alignment.center,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [_renderText()],
+            children: [_renderText(context)],
           ),
         );
-      case TDFooterType.link:
+      case MyFooterType.link:
         return Container(
           alignment: Alignment.center,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (widget.links.isNotEmpty) _renderLinks() else _renderText(),
+              if (links.isNotEmpty)
+                _renderLinks(context)
+              else
+                _renderText(context),
             ],
           ),
         );
-      case TDFooterType.brand:
+      case MyFooterType.brand:
         return Container(
           alignment: Alignment.center,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (widget.logo != null) _renderLogo() else _renderText(),
+              if (logo != null) _renderLogo() else _renderText(context),
             ],
           ),
         );
@@ -73,17 +66,17 @@ class _TDFooterState extends State<TDFooter> {
         Padding(
           padding: const EdgeInsets.only(top: 4, bottom: 4),
           child: MyImage(
-            source: widget.logo,
+            source: logo,
             type: MyImageType.fitWidth,
-            width: widget.width,
-            height: widget.height,
+            width: width,
+            height: height,
           ),
         ),
       ],
     );
   }
 
-  Widget _renderLinks() {
+  Widget _renderLinks(BuildContext context) {
     return Column(
       children: [
         Padding(
@@ -91,15 +84,15 @@ class _TDFooterState extends State<TDFooter> {
           child: Wrap(
             alignment: WrapAlignment.center,
             children:
-                List.generate(widget.links.length, (index) {
-                  final link = widget.links[index];
+                List.generate(links.length, (index) {
+                  final link = links[index];
                   return Container(
                     decoration:
-                        index < (widget.links.length - 1)
+                        index < (links.length - 1)
                             ? BoxDecoration(
                               border: Border(
                                 right: BorderSide(
-                                  color: ThemeColors.neutral.shade200,
+                                  color: context.colorScheme.border,
                                 ),
                               ),
                             )
@@ -114,18 +107,21 @@ class _TDFooterState extends State<TDFooter> {
           padding: const EdgeInsets.only(bottom: 4),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [Flexible(child: _renderText())],
+            children: [Flexible(child: _renderText(context))],
           ),
         ),
       ],
     );
   }
 
-  Widget _renderText() {
+  Widget _renderText(BuildContext context) {
     return Text(
-      widget.text,
+      text,
       textAlign: TextAlign.center,
-      style: TextStyle(fontSize: 12, color: ThemeColors.neutral.shade700),
+      style: TextStyle(
+        fontSize: 12,
+        color: context.colorScheme.mutedForeground,
+      ),
     );
   }
 }

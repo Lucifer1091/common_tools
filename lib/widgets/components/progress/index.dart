@@ -1,2 +1,2 @@
-export 'td_progress.dart';
-export 'td_progress_circular.dart';
+export 'my_progress.dart';
+export 'my_progress_circular.dart';

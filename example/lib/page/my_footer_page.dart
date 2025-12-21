@@ -3,29 +3,32 @@ import 'package:flutter/material.dart';
 import 'package:common_tools/index.dart';
 import '../../base/example_widget.dart';
 
-class TDFooterPage extends StatefulWidget {
-  const TDFooterPage({Key? key}) : super(key: key);
+class MyFooterPage extends StatefulWidget {
+  const MyFooterPage({super.key});
 
   @override
-  State<StatefulWidget> createState() => _TDFooterPageState();
+  State<StatefulWidget> createState() => _MyFooterPageState();
 }
 
-class _TDFooterPageState extends State<TDFooterPage> {
+class _MyFooterPageState extends State<MyFooterPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
       title: myTitle(),
-      backgroundColor: context.colorScheme.primaryForeground,
-      desc: '用于展示App的版权声明、联系信息、重要页面链接和其他相关内容等信息。',
+      desc:
+          "This is used to display the app's copyright notice, contact information, links to important pages, and other relevant content.",
       exampleCodeGroup: 'footer',
       children: [
         ExampleModule(
           title: 'Component Types',
           children: [
-            ExampleItem(desc: '基础页脚', builder: _buildFooter),
-            ExampleItem(desc: '基础加链接页脚', builder: _buildSingleLinkFooter),
+            ExampleItem(desc: 'Basic footer', builder: _buildFooter),
+            ExampleItem(
+              desc: 'Basic footer with links',
+              builder: _buildSingleLinkFooter,
+            ),
             ExampleItem(desc: '', builder: _buildLinksFooter),
-            ExampleItem(desc: '品牌页脚', builder: _buildBrandFooter),
+            ExampleItem(desc: 'Brand footer', builder: _buildBrandFooter),
           ],
         ),
       ],
@@ -33,67 +36,66 @@ class _TDFooterPageState extends State<TDFooterPage> {
   }
 
   Widget _buildFooter(BuildContext context) {
-    return const TDFooter(
-      TDFooterType.text,
-      text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
+    return const MyFooter(
+      MyFooterType.text,
+      text: 'Copyright © 2024-2026 MyDesign.All Rights Reserved.',
     );
   }
 
   Widget _buildSingleLinkFooter(BuildContext context) {
-    // 示例链接列表
     final singleLink = <MyLink>[
       MyLink(
-        text: '底部链接',
+        text: 'Bottom link',
         style: MyLinkStyle.primary,
-        // type: MyLinkType.withSuffixIcon,
         uri: Uri.parse('https://example.com'),
         onTap: (link) {
-          print('点击了链接 $link');
+          print('Clicked link $link');
         },
       ),
     ];
 
-    return TDFooter(
-      TDFooterType.link,
+    return MyFooter(
+      MyFooterType.link,
       links: singleLink,
-      text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
+      text: 'Copyright © 2024-2026 MyDesign.All Rights Reserved.',
     );
   }
 
   Widget _buildLinksFooter(BuildContext context) {
     final links = <MyLink>[
       MyLink(
-        text: '底部链接1',
+        text: 'Bottom link 1',
         style: MyLinkStyle.primary,
         uri: Uri.parse('https://example.com'),
         onTap: (link) {
-          print('点击了链接1 $link');
+          print('Clicked link 1 $link');
         },
       ),
       MyLink(
-        text: '底部链接2',
+        text: 'Bottom link 2',
         style: MyLinkStyle.primary,
         uri: Uri.parse('https://example.com'),
         onTap: (link) {
-          print('点击了链接2 $link');
+          print('Clicked link 2 $link');
         },
       ),
     ];
+
     return Column(
       children: [
-        const SizedBox(height: 12),
-        TDFooter(
-          TDFooterType.link,
+        const Gap(12),
+        MyFooter(
+          MyFooterType.link,
           links: links,
-          text: 'Copyright © 2019-2023 TDesign.All Rights Reserved.',
+          text: 'Copyright © 2024-2026 MyDesign.All Rights Reserved.',
         ),
       ],
     );
   }
 
   Widget _buildBrandFooter(BuildContext context) {
-    return TDFooter(
-      TDFooterType.brand,
+    return MyFooter(
+      MyFooterType.brand,
       logo: 'assets/img/td_brand.png',
       width: 204,
       height: 48,

@@ -25,7 +25,7 @@ import 'page/my_drawer_page.dart';
 import 'page/td_dropdown_menu_page.dart';
 import 'page/my_errors_page.dart';
 import 'page/td_font_page.dart';
-import 'page/td_footer_page.dart';
+import 'page/my_footer_page.dart';
 import 'page/my_image_page.dart';
 import 'page/my_image_viewer_page.dart';
 import 'page/my_indexes_page.dart';
@@ -38,7 +38,7 @@ import 'page/td_notice_bar_page.dart';
 import 'page/my_picker_page.dart';
 import 'page/td_popover_page.dart';
 import 'page/td_popup_page.dart';
-import 'page/td_progress_page.dart';
+import 'page/my_progress_page.dart';
 import 'page/my_radio_page.dart';
 import 'page/td_radius_page.dart';
 import 'page/my_rating_page.dart';
@@ -269,7 +269,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'Footer',
       name: 'footer',
-      pageBuilder: _wrapInheritedTheme((context) => const TDFooterPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyFooterPage()),
     ),
     ExamplePageModel(
       text: 'Grid',
@@ -291,7 +291,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'Progress',
       name: 'progress',
-      pageBuilder: _wrapInheritedTheme((context) => const TDProgressPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyProgressPage()),
     ),
     ExamplePageModel(
       text: 'Result',
