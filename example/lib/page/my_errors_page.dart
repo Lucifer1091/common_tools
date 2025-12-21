@@ -28,14 +28,18 @@ class _MyErrorsPageState extends State<MyErrorsPage> {
             ExampleItem(desc: 'No Internet', builder: _noInternet),
             ExampleItem(desc: 'Restricted Access', builder: _restricted),
             ExampleItem(desc: 'Page Not Found', builder: _pageNotFound),
-            ExampleItem(desc: 'Empty Custom Icon', builder: _customIcon),
+            ExampleItem(desc: 'Empty with Custom Icon', builder: _customIcon),
             ExampleItem(
-              desc: 'Empty Image with Operation',
-              builder: _operationEmpty,
+              desc: 'Generic with Custom Image',
+              builder: _customImage,
             ),
             ExampleItem(
-              desc: 'Empty Image with Operation',
-              builder: _operationCustomEmpty,
+              desc: 'Empty with Action Button',
+              builder: _emptyWithButton,
+            ),
+            ExampleItem(
+              desc: 'Generic with Custom Action Button',
+              builder: _genericWithButton,
             ),
           ],
         ),
@@ -64,42 +68,40 @@ class _MyErrorsPageState extends State<MyErrorsPage> {
   }
 
   Widget _customIcon(BuildContext context) {
-    return MyError(
-      type: MyErrorType.empty,
-      icon: Container(
-        width: 120,
-        height: 120,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(MyRadius.medium),
-          image: const DecorationImage(
-            image: AssetImage('assets/img/empty.png'),
-          ),
-        ),
+    return MyError.empty(
+      icon: Icon(
+        Icons.fmd_bad_rounded,
+        size: 96,
+        color: context.colorScheme.primary,
       ),
     );
   }
 
-  Widget _operationEmpty(BuildContext context) {
-    return const MyError(
-      type: MyErrorType.generic,
-      buttonText: 'Action button',
-      title: 'Description text',
+  Widget _customImage(BuildContext context) {
+    return MyError.generic(
+      icon: MyImage(
+        height: 96,
+        width: 96,
+        source: 'https://demofree.sirv.com/nope-not-here.jpg',
+      ),
     );
   }
 
-  Widget _operationCustomEmpty(BuildContext context) {
-    return MyError(
-      type: MyErrorType.generic,
-      title: 'Description text',
-      action: Padding(
-        padding: const EdgeInsets.only(top: 32),
-        child: MyButton(
-          text: 'Custom action',
-          size: MyButtonSize.medium,
-          type: MyButtonType.destructive,
-          width: 160,
-          onTap: () {},
-        ),
+  Widget _emptyWithButton(BuildContext context) {
+    return MyError.empty(
+      buttonText: 'Refresh',
+      onAction: () {
+        //
+      },
+    );
+  }
+
+  Widget _genericWithButton(BuildContext context) {
+    return MyError.generic(
+      action: MyButton(
+        text: 'Try Again',
+        type: MyButtonType.destructive,
+        onTap: () {},
       ),
     );
   }

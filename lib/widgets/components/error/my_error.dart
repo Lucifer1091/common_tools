@@ -133,7 +133,7 @@ class MyError extends StatelessWidget {
           ),
         ],
         if (action != null || onAction != null) ...[
-          const Gap(36),
+          const Gap(24),
           action ??
               MyButton(
                 text: buttonText ?? 'Try Again',
@@ -145,12 +145,10 @@ class MyError extends StatelessWidget {
     );
   }
 
- // https://fonts.google.com/icons?icon.query=!&icon.size=24&icon.color=%231f1f1f&icon.style=Rounded
- 
   Icon _getIcon(BuildContext context) {
     final size = iconSize ?? 96.0;
     final color =
-        iconColor ?? context.colorScheme.mutedForeground.scaleAlpha(0.5);
+        iconColor ?? context.colorScheme.mutedForeground.scaleAlpha(0.4);
 
     return switch (type) {
       MyErrorType.generic => Icon(
@@ -158,20 +156,13 @@ class MyError extends StatelessWidget {
         size: size,
         color: color,
       ),
-      MyErrorType.empty => Icon(
-        // Icons.disc_full_rounded,
-        Icons.report_rounded,
-        size: size,
-        color: color,
-      ),
+      MyErrorType.empty => Icon(Icons.report_rounded, size: size, color: color),
       MyErrorType.noInternet => Icon(
         Icons.perm_scan_wifi_rounded,
         size: size,
         color: color,
       ),
       MyErrorType.restricted => Icon(
-        // Icons.shield_rounded,
-        // Icons.gpp_maybe_rounded,
         Icons.gpp_maybe_rounded,
         size: size,
         color: color,
