@@ -1,71 +1,70 @@
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import 'td_skeleton_rowcol.dart';
 
-enum TDSkeletonAnimation { gradient, flashed }
+enum MySkeletonAnimation { gradient, flashed }
 
-enum TDSkeletonTheme { avatar, image, text, paragraph }
+enum MySkeletonTheme { avatar, image, text, paragraph }
 
-class TDSkeleton extends StatefulWidget {
-  factory TDSkeleton({
+class MySkeleton extends StatefulWidget {
+  factory MySkeleton({
     Key? key,
-    TDSkeletonAnimation? animation,
+    MySkeletonAnimation? animation,
     int delay = 0,
-    TDSkeletonTheme theme = TDSkeletonTheme.text,
+    MySkeletonTheme theme = MySkeletonTheme.text,
   }) {
     assert(delay >= 0, '');
 
     switch (theme) {
-      case TDSkeletonTheme.avatar:
-        return TDSkeleton.fromRowCol(
+      case MySkeletonTheme.avatar:
+        return MySkeleton.fromRowCol(
           key: key,
           animation: animation,
           delay: delay,
-          rowCol: TDSkeletonRowCol(
+          rowCol: MySkeletonRowCol(
             objects: const [
-              [TDSkeletonRowColObj.circle()],
+              [MySkeletonRowColObj.circle()],
             ],
           ),
         );
-      case TDSkeletonTheme.image:
-        return TDSkeleton.fromRowCol(
+      case MySkeletonTheme.image:
+        return MySkeleton.fromRowCol(
           key: key,
           animation: animation,
           delay: delay,
-          rowCol: TDSkeletonRowCol(
+          rowCol: MySkeletonRowCol(
             objects: const [
-              [TDSkeletonRowColObj.rect(width: 72, height: 72, flex: null)],
+              [MySkeletonRowColObj.rect(width: 72, height: 72, flex: null)],
             ],
           ),
         );
-      case TDSkeletonTheme.text:
-        return TDSkeleton.fromRowCol(
+      case MySkeletonTheme.text:
+        return MySkeleton.fromRowCol(
           key: key,
           animation: animation,
           delay: delay,
-          rowCol: TDSkeletonRowCol(
+          rowCol: MySkeletonRowCol(
             objects: const [
               [
-                TDSkeletonRowColObj.text(flex: 24),
-                TDSkeletonRowColObj.spacer(width: 16),
-                TDSkeletonRowColObj.text(flex: 76),
+                MySkeletonRowColObj.text(flex: 24),
+                MySkeletonRowColObj.spacer(width: 16),
+                MySkeletonRowColObj.text(flex: 76),
               ],
-              [TDSkeletonRowColObj.text()],
+              [MySkeletonRowColObj.text()],
             ],
           ),
         );
-      case TDSkeletonTheme.paragraph:
-        return TDSkeleton.fromRowCol(
+      case MySkeletonTheme.paragraph:
+        return MySkeleton.fromRowCol(
           key: key,
           animation: animation,
           delay: delay,
-          rowCol: TDSkeletonRowCol(
+          rowCol: MySkeletonRowCol(
             objects: [
-              for (int i = 0; i < 3; i++) [const TDSkeletonRowColObj.text()],
+              for (int i = 0; i < 3; i++) [const MySkeletonRowColObj.text()],
               const [
-                TDSkeletonRowColObj.text(flex: 55),
-                TDSkeletonRowColObj.spacer(flex: 45),
+                MySkeletonRowColObj.text(flex: 55),
+                MySkeletonRowColObj.spacer(flex: 45),
               ],
             ],
           ),
@@ -73,24 +72,22 @@ class TDSkeleton extends StatefulWidget {
     }
   }
 
-  const TDSkeleton.fromRowCol({
+  const MySkeleton.fromRowCol({
     required this.rowCol,
     super.key,
     this.animation,
     this.delay = 0,
   }) : assert(delay >= 0, '');
 
-  final TDSkeletonAnimation? animation;
-
+  final MySkeletonAnimation? animation;
   final int delay;
-
-  final TDSkeletonRowCol rowCol;
+  final MySkeletonRowCol rowCol;
 
   @override
-  _TDSkeletonState createState() => _TDSkeletonState();
+  _MySkeletonState createState() => _MySkeletonState();
 }
 
-class _TDSkeletonState extends State<TDSkeleton>
+class _MySkeletonState extends State<MySkeleton>
     with SingleTickerProviderStateMixin {
   late final AnimationController? _controller;
 
@@ -119,14 +116,14 @@ class _TDSkeletonState extends State<TDSkeleton>
     super.initState();
 
     switch (widget.animation) {
-      case TDSkeletonAnimation.gradient:
+      case MySkeletonAnimation.gradient:
         _controller = AnimationController(
           duration: const Duration(milliseconds: 1500),
           vsync: this,
         )..repeat();
         _animation = Tween<double>(begin: -1, end: 1).animate(_controller!)
           ..addListener(() => setState(() {}));
-      case TDSkeletonAnimation.flashed:
+      case MySkeletonAnimation.flashed:
         _controller = AnimationController(
           duration: const Duration(seconds: 1),
           vsync: this,
@@ -146,8 +143,8 @@ class _TDSkeletonState extends State<TDSkeleton>
     );
   }
 
-  Widget Function(TDSkeletonRowColObj) _buildObj(BuildContext context) => (
-    TDSkeletonRowColObj obj,
+  Widget Function(MySkeletonRowColObj) _buildObj(BuildContext context) => (
+    MySkeletonRowColObj obj,
   ) {
     Widget skeletonObj = Container(
       width: obj.width,
@@ -160,7 +157,7 @@ class _TDSkeletonState extends State<TDSkeleton>
     );
 
     switch (widget.animation) {
-      case TDSkeletonAnimation.gradient:
+      case MySkeletonAnimation.gradient:
         skeletonObj = ShaderMask(
           blendMode: BlendMode.srcATop,
           shaderCallback:
@@ -174,9 +171,11 @@ class _TDSkeletonState extends State<TDSkeleton>
               ),
           child: skeletonObj,
         );
-      case TDSkeletonAnimation.flashed:
-      case null:
+      case MySkeletonAnimation.flashed:
         skeletonObj = Opacity(opacity: _animation!.value, child: skeletonObj);
+      case null:
+        // No animation, return skeleton object as is
+        break;
     }
 
     return obj.flex == null

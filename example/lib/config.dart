@@ -46,7 +46,7 @@ import 'page/td_refresh_page.dart';
 import 'page/my_result_page.dart';
 import 'page/td_search_bar_page.dart';
 import 'page/td_shadows_page.dart';
-import 'page/td_skeleton_page.dart';
+import 'page/my_skeleton_page.dart';
 import 'page/my_slider_page.dart';
 import 'page/my_stepper_page.dart';
 import 'page/td_swipe_cell_page.dart';
@@ -301,7 +301,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'Skeleton',
       name: 'skeleton',
-      pageBuilder: _wrapInheritedTheme((context) => const TDSkeletonPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MySkeletonPage()),
     ),
     ExamplePageModel(
       text: 'Sticky Header',

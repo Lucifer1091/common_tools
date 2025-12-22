@@ -1,2 +1,2 @@
-export 'td_skeleton.dart';
-export 'td_skeleton_rowcol.dart';
+export 'my_skeleton.dart';
+export 'my_skeleton_rowcol.dart';

@@ -1,75 +1,74 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:common_tools/index.dart';
 
 import '../../base/example_widget.dart';
 
-class TDSkeletonPage extends StatefulWidget {
-  const TDSkeletonPage({Key? key}) : super(key: key);
+class MySkeletonPage extends StatefulWidget {
+  const MySkeletonPage({super.key});
 
   @override
-  State<StatefulWidget> createState() => _TDSkeletonPageState();
+  State<StatefulWidget> createState() => _MySkeletonPageState();
 }
 
-class _TDSkeletonPageState extends State<TDSkeletonPage> {
+class _MySkeletonPageState extends State<MySkeletonPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
       title: myTitle(),
-      desc: '当网络较慢时，在页面真实数据加载之前，给用户展示出页面的大致结构。',
+      desc:
+          'When the network is slow, show the user the general structure of the page before the actual page data loads.',
       exampleCodeGroup: 'skeleton',
-      backgroundColor: context.colorScheme.primaryForeground,
       children: [
         ExampleModule(
-          title: '类型',
+          title: 'Component Types',
           children: [
             ExampleItem(
-              desc: '头像骨架屏',
+              desc: 'Avatar Skeleton Screen',
               builder: _wrapper(_buildAvatarSkeleton),
               methodName: '_buildAvatarSkeleton',
             ),
             ExampleItem(
-              desc: '图片骨架屏',
+              desc: 'Image Skeleton',
               builder: _wrapper(_buildImageSkeleton),
               methodName: '_buildImageSkeleton',
             ),
             ExampleItem(
-              desc: '文本骨架屏',
+              desc: 'text skeleton screen',
               builder: _wrapper(_buildTextSkeleton, isFlexible: true),
               methodName: '_buildTextSkeleton',
             ),
             ExampleItem(
-              desc: '段落骨架屏',
+              desc: 'Paragraph skeleton screen',
               builder: _wrapper(_buildParagraphSkeleton, isFlexible: true),
               methodName: '_buildParagraphSkeleton',
             ),
             ExampleItem(
-              desc: '单元格骨架屏',
+              desc: 'Cell skeleton screen',
               builder: _wrapper(_buildCellSkeleton),
               methodName: '_buildCellSkeleton',
             ),
             ExampleItem(
-              desc: '宫格骨架屏',
+              desc: 'Grid-style frame screen',
               builder: _wrapper(_buildGridSkeleton),
               methodName: '_buildGridSkeleton',
             ),
             ExampleItem(
-              desc: '图文组合骨架屏',
+              desc: 'Image and text combined skeleton screen',
               builder: _wrapper(_buildCombineSkeleton),
               methodName: '_buildCombineSkeleton',
             ),
           ],
         ),
         ExampleModule(
-          title: '组件动效',
+          title: 'Component Animations',
           children: [
             ExampleItem(
-              desc: '渐变加载效果',
+              desc: 'Gradient loading effect',
               builder: _wrapper(_buildGradientSkeleton, isFlexible: true),
               methodName: '_buildGradientSkeleton',
             ),
             ExampleItem(
-              desc: '闪烁加载效果',
+              desc: 'flash loading effect',
               builder: _wrapper(_buildFlashedSkeleton, isFlexible: true),
               methodName: '_buildFlashedSkeleton',
             ),
@@ -92,48 +91,44 @@ class _TDSkeletonPageState extends State<TDSkeletonPage> {
       );
 
   Widget _buildAvatarSkeleton(BuildContext context) {
-    return TDSkeleton(theme: TDSkeletonTheme.avatar);
+    return MySkeleton(theme: MySkeletonTheme.avatar);
   }
 
   Widget _buildImageSkeleton(BuildContext context) {
-    return TDSkeleton(theme: TDSkeletonTheme.image);
+    return MySkeleton(theme: MySkeletonTheme.image);
   }
 
   Widget _buildTextSkeleton(BuildContext context) {
-    return TDSkeleton(theme: TDSkeletonTheme.text);
+    return MySkeleton(theme: MySkeletonTheme.text);
   }
 
   Widget _buildParagraphSkeleton(BuildContext context) {
-    return TDSkeleton(theme: TDSkeletonTheme.paragraph);
+    return MySkeleton(theme: MySkeletonTheme.paragraph);
   }
 
   Widget _buildCellSkeleton(BuildContext context) {
-    var rowColsAvatar = TDSkeleton(theme: TDSkeletonTheme.avatar);
-    var rowColsImage = TDSkeleton.fromRowCol(
-      rowCol: TDSkeletonRowCol(
+    var rowColsAvatar = MySkeleton(theme: MySkeletonTheme.avatar);
+    var rowColsImage = MySkeleton.fromRowCol(
+      rowCol: MySkeletonRowCol(
         objects: const [
-          [TDSkeletonRowColObj.rect(width: 48, height: 48, flex: null)],
+          [MySkeletonRowColObj.rect(width: 48, height: 48, flex: null)],
         ],
       ),
     );
-    var rowColsContent = TDSkeleton.fromRowCol(
-      rowCol: TDSkeletonRowCol(
+    var rowColsContent = MySkeleton.fromRowCol(
+      rowCol: MySkeletonRowCol(
         objects: const [
-          [TDSkeletonRowColObj(), TDSkeletonRowColObj.spacer(flex: 1)],
-          [TDSkeletonRowColObj()],
+          [MySkeletonRowColObj(), MySkeletonRowColObj.spacer(flex: 1)],
+          [MySkeletonRowColObj()],
         ],
       ),
     );
 
     return Column(
+      spacing: 16,
       children: [
-        Row(
-          children: [rowColsAvatar, const SizedBox(width: 12), rowColsContent],
-        ),
-        const SizedBox(height: 16),
-        Row(
-          children: [rowColsImage, const SizedBox(width: 12), rowColsContent],
-        ),
+        Row(spacing: 12, children: [rowColsAvatar, rowColsContent]),
+        Row(spacing: 12, children: [rowColsImage, rowColsContent]),
       ],
     );
   }
@@ -143,11 +138,11 @@ class _TDSkeletonPageState extends State<TDSkeletonPage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         for (var i = 0; i < 5; i++)
-          TDSkeleton.fromRowCol(
-            rowCol: TDSkeletonRowCol(
+          MySkeleton.fromRowCol(
+            rowCol: MySkeletonRowCol(
               objects: const [
-                [TDSkeletonRowColObj.rect(width: 48, height: 48, flex: null)],
-                [TDSkeletonRowColObj.text(width: 48, flex: null)],
+                [MySkeletonRowColObj.rect(width: 48, height: 48, flex: null)],
+                [MySkeletonRowColObj.text(width: 48, flex: null)],
               ],
             ),
           ),
@@ -160,27 +155,27 @@ class _TDSkeletonPageState extends State<TDSkeletonPage> {
       child: LayoutBuilder(
         builder: (context, constraints) => Row(
           children: [
-            TDSkeleton.fromRowCol(
-              rowCol: TDSkeletonRowCol(
+            MySkeleton.fromRowCol(
+              rowCol: MySkeletonRowCol(
                 objects: [
                   [
-                    TDSkeletonRowColObj(
+                    MySkeletonRowColObj(
                       width: constraints.maxWidth * 0.96,
                       height: constraints.maxWidth,
                       flex: null,
-                      style: TDSkeletonRowColObjStyle(
+                      style: MySkeletonRowColObjStyle(
                         borderRadius: (context) => MyRadius.extraLarge,
                       ),
                     ),
                   ],
                   [
-                    TDSkeletonRowColObj.text(
+                    MySkeletonRowColObj.text(
                       width: constraints.maxWidth * 0.96,
                     ),
                   ],
                   const [
-                    TDSkeletonRowColObj.text(),
-                    TDSkeletonRowColObj.spacer(flex: 1),
+                    MySkeletonRowColObj.text(),
+                    MySkeletonRowColObj.spacer(flex: 1),
                   ],
                 ],
               ),
@@ -194,16 +189,16 @@ class _TDSkeletonPageState extends State<TDSkeletonPage> {
   }
 
   Widget _buildGradientSkeleton(BuildContext context) {
-    return TDSkeleton(
-      animation: TDSkeletonAnimation.gradient,
-      theme: TDSkeletonTheme.paragraph,
+    return MySkeleton(
+      animation: MySkeletonAnimation.gradient,
+      theme: MySkeletonTheme.paragraph,
     );
   }
 
   Widget _buildFlashedSkeleton(BuildContext context) {
-    return TDSkeleton(
-      animation: TDSkeletonAnimation.flashed,
-      theme: TDSkeletonTheme.paragraph,
+    return MySkeleton(
+      animation: MySkeletonAnimation.flashed,
+      theme: MySkeletonTheme.paragraph,
     );
   }
 }

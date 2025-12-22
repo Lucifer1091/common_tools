@@ -2,23 +2,23 @@ import 'package:flutter/material.dart';
 
 import '../../../index.dart';
 
-class TDSkeletonRowColStyle {
-  const TDSkeletonRowColStyle({this.rowSpacing = _defaultRowSpacing});
+class MySkeletonRowColStyle {
+  const MySkeletonRowColStyle({this.rowSpacing = _defaultRowSpacing});
 
   final double Function(BuildContext) rowSpacing;
 
   static double _defaultRowSpacing(BuildContext context) => 16;
 }
 
-class TDSkeletonRowCol {
-  TDSkeletonRowCol({
+class MySkeletonRowCol {
+  MySkeletonRowCol({
     required this.objects,
-    this.style = const TDSkeletonRowColStyle(),
+    this.style = const MySkeletonRowColStyle(),
   }) : assert(objects.isNotEmpty && objects.every((row) => row.isNotEmpty), '');
 
-  final List<List<TDSkeletonRowColObj>> objects;
+  final List<List<MySkeletonRowColObj>> objects;
 
-  final TDSkeletonRowColStyle style;
+  final MySkeletonRowColStyle style;
 
   double visualHeight(BuildContext context) {
     var rowSpacing = style.rowSpacing(context);
@@ -38,22 +38,22 @@ class TDSkeletonRowCol {
   }
 }
 
-class TDSkeletonRowColObjStyle {
-  const TDSkeletonRowColObjStyle({
+class MySkeletonRowColObjStyle {
+  const MySkeletonRowColObjStyle({
     this.background = _defaultBackground,
     this.borderRadius = _textBorderRadius,
   });
 
-  const TDSkeletonRowColObjStyle.circle({this.background = _defaultBackground})
+  const MySkeletonRowColObjStyle.circle({this.background = _defaultBackground})
     : borderRadius = _circleBorderRadius;
 
-  const TDSkeletonRowColObjStyle.rect({this.background = _defaultBackground})
+  const MySkeletonRowColObjStyle.rect({this.background = _defaultBackground})
     : borderRadius = _rectBorderRadius;
 
-  const TDSkeletonRowColObjStyle.text({this.background = _defaultBackground})
+  const MySkeletonRowColObjStyle.text({this.background = _defaultBackground})
     : borderRadius = _textBorderRadius;
 
-  const TDSkeletonRowColObjStyle.spacer()
+  const MySkeletonRowColObjStyle.spacer()
     : background = _transparentBackground,
       borderRadius = _textBorderRadius;
 
@@ -74,55 +74,50 @@ class TDSkeletonRowColObjStyle {
   static double _textBorderRadius(BuildContext context) => 3;
 }
 
-class TDSkeletonRowColObj {
-  const TDSkeletonRowColObj({
+class MySkeletonRowColObj {
+  const MySkeletonRowColObj({
     this.width,
     this.height = 16,
     this.flex = 1,
     this.margin = EdgeInsets.zero,
-    this.style = const TDSkeletonRowColObjStyle(),
+    this.style = const MySkeletonRowColObjStyle(),
   });
 
-  const TDSkeletonRowColObj.circle({
+  const MySkeletonRowColObj.circle({
     this.width = 48,
     this.height = 48,
     this.flex,
     this.margin = EdgeInsets.zero,
-    this.style = const TDSkeletonRowColObjStyle.circle(),
+    this.style = const MySkeletonRowColObjStyle.circle(),
   });
 
-  const TDSkeletonRowColObj.rect({
+  const MySkeletonRowColObj.rect({
     this.width,
     this.height = 16,
     this.flex = 1,
     this.margin = EdgeInsets.zero,
-    this.style = const TDSkeletonRowColObjStyle.rect(),
+    this.style = const MySkeletonRowColObjStyle.rect(),
   });
 
-  const TDSkeletonRowColObj.text({
+  const MySkeletonRowColObj.text({
     this.width,
     this.height = 16,
     this.flex = 1,
     this.margin = EdgeInsets.zero,
-    this.style = const TDSkeletonRowColObjStyle.text(),
+    this.style = const MySkeletonRowColObjStyle.text(),
   });
 
-  const TDSkeletonRowColObj.spacer({
+  const MySkeletonRowColObj.spacer({
     this.width,
     this.height,
     this.flex,
     this.margin = EdgeInsets.zero,
-  }) : style = const TDSkeletonRowColObjStyle.spacer();
+  }) : style = const MySkeletonRowColObjStyle.spacer();
 
   final double? width;
-
   final double? height;
-
   final int? flex;
-
   final EdgeInsets margin;
-
-  final TDSkeletonRowColObjStyle style;
-
+  final MySkeletonRowColObjStyle style;
   double get visualHeight => (height ?? 0) + margin.top + margin.bottom;
 }

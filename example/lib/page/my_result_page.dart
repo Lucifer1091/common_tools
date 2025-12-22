@@ -21,8 +21,8 @@ class _MyResultPageState extends State<MyResultPage> {
           title: 'Component Types',
           children: [
             ExampleItem(desc: 'Dafault Results', builder: _buildDefaultResults),
-            ExampleItem(desc: 'Custom results', builder: _buildCustomResult),
-            ExampleItem(desc: 'Page example', builder: _buildPageExample),
+            ExampleItem(desc: 'Custom Result', builder: _buildCustomResult),
+            ExampleItem(desc: 'Dialog Example', builder: _buildDialogExample),
           ],
         ),
       ],
@@ -38,50 +38,6 @@ class _MyResultPageState extends State<MyResultPage> {
         _buildWarningResult(context),
         _buildDefaultResult(context),
       ],
-    );
-  }
-
-  Widget _buildCustomResult(BuildContext context) {
-    return _buildCustomResultContent(context);
-  }
-
-  Widget _buildPageExample(BuildContext context) {
-    return MyButton(
-      text: 'Page example',
-      size: MyButtonSize.large,
-      type: MyButtonType.outline,
-      isExpanded: true,
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Scaffold(
-              appBar: AppBar(title: const Text('Result')),
-              body: Column(
-                children: [
-                  const SizedBox(height: 48),
-                  const MyResult(
-                    title: 'Success',
-                    theme: MyResultTheme.success,
-                    subtitle:
-                        'Your booking has been confirmed.\nPlease check your email for details.',
-                  ),
-                  const SizedBox(height: 48),
-                  MyButton(
-                    text: 'Return',
-                    size: MyButtonSize.large,
-                    type: MyButtonType.outline,
-                    isExpanded: true,
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
     );
   }
 
@@ -106,7 +62,8 @@ class _MyResultPageState extends State<MyResultPage> {
     return const MyResult(
       title: 'Warning',
       theme: MyResultTheme.warning,
-      subtitle: 'There was a problem with your network connection.',
+      subtitle:
+          'There was a problem with your network connection.\nPlease check your connection and try again.',
     );
   }
 
@@ -114,15 +71,38 @@ class _MyResultPageState extends State<MyResultPage> {
     return const MyResult(
       title: 'Info',
       theme: MyResultTheme.primary,
-      subtitle: 'Please read the comment carefully and search again.',
+      subtitle:
+          'Please read the comment carefully and search again.\n You can watch the tutorials for futher guidance.',
     );
   }
 
-  MyResult _buildCustomResultContent(BuildContext context) {
+  MyResult _buildCustomResult(BuildContext context) {
     return MyResult(
       title: 'Error',
       icon: Image.asset('assets/img/illustration.png'),
       subtitle: 'No network found.\nPlese check your connection and try again.',
+    );
+  }
+
+  Widget _buildDialogExample(BuildContext context) {
+    return MyButton(
+      text: 'Open Dialog',
+      size: MyButtonSize.large,
+      onTap: () {
+        MyDialog.show(
+          context: context,
+          builder: (context) {
+            return MyInfoDialog(
+              contentWidget: const MyResult(
+                title: 'Success',
+                theme: MyResultTheme.success,
+                subtitle:
+                    'Your booking has been confirmed.\nPlease check your email for details.',
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }
