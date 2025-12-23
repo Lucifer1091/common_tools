@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../flutter_swiper.dart';
 
-class SwiperControl extends SwiperPlugin {
-  const SwiperControl({
+class MySwiperControl extends SwiperPlugin {
+  const MySwiperControl({
     this.iconPrevious = Icons.arrow_back_ios,
     this.iconNext = Icons.arrow_forward_ios,
     this.color,

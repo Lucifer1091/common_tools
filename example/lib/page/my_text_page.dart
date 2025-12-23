@@ -196,7 +196,7 @@ class _MyTextPageState extends State<MyTextPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: MyDropCapText(
-        Faker.generateLoremIpsumWords(200),
+        MyFaker.generateLoremIpsumWords(200),
         style: TextStyle(fontStyle: FontStyle.italic),
       ),
     );

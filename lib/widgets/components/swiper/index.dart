@@ -1,3 +1,3 @@
 export 'flutter_swiper/index.dart';
-export 'td_page_transform.dart';
-export 'td_swiper.dart';
+export 'my_page_transform.dart';
+export 'my_swiper.dart';

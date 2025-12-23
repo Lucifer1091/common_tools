@@ -2,18 +2,16 @@ import 'package:flutter/material.dart';
 
 import 'flutter_swiper/src/transformer_page_view/transformer_page_view.dart';
 
-class TDPageTransformer extends PageTransformer {
-  TDPageTransformer({this.fade, this.scale, this.margin});
+class MyPageTransformer extends PageTransformer {
+  MyPageTransformer({this.fade, this.scale, this.margin});
 
-  TDPageTransformer.margin({this.margin = 6.0}) : fade = 1, scale = 1;
+  MyPageTransformer.margin({this.margin = 6.0}) : fade = 1, scale = 1;
 
-  TDPageTransformer.scaleAndFade({this.fade = 1, this.scale = 0.8})
+  MyPageTransformer.scaleAndFade({this.fade = 1, this.scale = 0.8})
     : margin = 0.0;
 
   final double? scale;
-
   final double? fade;
-
   final double? margin;
 
   @override

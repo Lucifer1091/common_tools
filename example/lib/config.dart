@@ -50,7 +50,7 @@ import 'page/my_skeleton_page.dart';
 import 'page/my_slider_page.dart';
 import 'page/my_stepper_page.dart';
 import 'page/td_swipe_cell_page.dart';
-import 'page/td_swiper_page.dart';
+import 'page/my_swiper_page.dart';
 import 'page/my_switch_page.dart';
 import 'page/td_table_page.dart';
 import 'page/my_tabs_page.dart';
@@ -312,7 +312,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'Swiper',
       name: 'swiper',
-      pageBuilder: _wrapInheritedTheme((context) => const TDSwiperPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MySwiperPage()),
     ),
     ExamplePageModel(
       text: 'Table',

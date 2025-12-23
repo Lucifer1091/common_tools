@@ -24,8 +24,8 @@ enum ImageColor {
   white,
 }
 
-class RandomImage {
-  RandomImage._();
+class MyRandomImage {
+  MyRandomImage._();
 
   /// Get a random image from Picsum with the specified dimensions.
   ///
@@ -83,8 +83,8 @@ class RandomImage {
   }
 }
 
-class Faker {
-  Faker._();
+class MyFaker {
+  MyFaker._();
 
   /// Generates Lorem Ipsum text with the specified number of words [length].
   ///
@@ -185,7 +185,7 @@ class Faker {
     return {
       'id': Guid.ulid(),
       'name': name,
-      'image': RandomImage.picsumImage(300, 300),
+      'image': MyRandomImage.picsumImage(300, 300),
       // Generates random age between 18 and 60
       'age': minAge + random.nextInt(maxAge - minAge + 1),
       'email': generateEmail(name),

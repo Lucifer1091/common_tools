@@ -180,8 +180,8 @@ abstract class _CustomLayoutStateBase<T extends _SubSwiper> extends State<T>
         throw Exception(
           'Custom layout does not support SwiperControllerEvent.MOVE_INDEX yet!',
         );
-      case SwiperController.STOP_AUTOPLAY:
-      case SwiperController.START_AUTOPLAY:
+      case MySwiperController.STOP_AUTOPLAY:
+      case MySwiperController.START_AUTOPLAY:
         break;
     }
   }

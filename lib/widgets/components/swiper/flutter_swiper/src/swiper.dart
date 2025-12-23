@@ -23,8 +23,8 @@ const int kMiddleValue = 1000000000;
 
 enum SwiperLayout { DEFAULT, STACK, TINDER, CUSTOM }
 
-class Swiper extends StatefulWidget {
-  const Swiper({
+class MySwiper extends StatefulWidget {
+  const MySwiper({
     required this.itemBuilder,
     required this.itemCount,
     this.indicatorLayout = PageIndicatorLayout.NONE,
@@ -70,7 +70,7 @@ class Swiper extends StatefulWidget {
          'Only support `PageIndicatorLayout.SCALE` and `PageIndicatorLayout.COLOR`when layout==SwiperLayout.DEFAULT in loop mode',
        );
 
-  factory Swiper.children({
+  factory MySwiper.children({
     required List<Widget> children,
     bool autoplay = false,
     PageTransformer? transformer,
@@ -86,7 +86,7 @@ class Swiper extends StatefulWidget {
     SwiperPlugin? pagination,
     SwiperPlugin? control,
     List<SwiperPlugin>? plugins,
-    SwiperController? controller,
+    MySwiperController? controller,
     Key? key,
     CustomLayoutOption? customLayoutOption,
     ScrollPhysics? physics,
@@ -98,7 +98,7 @@ class Swiper extends StatefulWidget {
     bool outer = false,
     double scale = 1.0,
   }) {
-    return Swiper(
+    return MySwiper(
       transformer: transformer,
       customLayoutOption: customLayoutOption,
       containerHeight: containerHeight,
@@ -131,7 +131,7 @@ class Swiper extends StatefulWidget {
     );
   }
 
-  factory Swiper.list({
+  factory MySwiper.list({
     required List<dynamic> list,
     required SwiperDataBuilder<dynamic> builder,
     PageTransformer? transformer,
@@ -149,7 +149,7 @@ class Swiper extends StatefulWidget {
     SwiperPlugin? pagination,
     SwiperPlugin? control,
     List<SwiperPlugin>? plugins,
-    SwiperController? controller,
+    MySwiperController? controller,
     Key? key,
     ScrollPhysics? physics,
     double? containerHeight,
@@ -160,7 +160,7 @@ class Swiper extends StatefulWidget {
     bool outer = false,
     double scale = 1.0,
   }) {
-    return Swiper(
+    return MySwiper(
       transformer: transformer,
       customLayoutOption: customLayoutOption,
       containerHeight: containerHeight,
@@ -259,7 +259,7 @@ class Swiper extends StatefulWidget {
   final List<SwiperPlugin>? plugins;
 
   ///
-  final SwiperController? controller;
+  final MySwiperController? controller;
 
   final ScrollPhysics? physics;
 
@@ -282,19 +282,19 @@ class Swiper extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _SwiperState();
+    return _MySwiperState();
   }
 }
 
-abstract class _SwiperTimerMixin extends State<Swiper> {
+abstract class _SwiperTimerMixin extends State<MySwiper> {
   Timer? _timer;
 
-  SwiperController? _controller;
+  MySwiperController? _controller;
 
   @override
   void initState() {
     _controller = widget.controller;
-    _controller ??= SwiperController();
+    _controller ??= MySwiperController();
 
     _controller?.addListener(_onController);
     _handleAutoplay();
@@ -303,16 +303,16 @@ abstract class _SwiperTimerMixin extends State<Swiper> {
 
   void _onController() {
     switch (_controller?.event) {
-      case SwiperController.START_AUTOPLAY:
+      case MySwiperController.START_AUTOPLAY:
         if (_timer == null) _startAutoplay();
 
-      case SwiperController.STOP_AUTOPLAY:
+      case MySwiperController.STOP_AUTOPLAY:
         if (_timer != null) _stopAutoplay();
     }
   }
 
   @override
-  void didUpdateWidget(Swiper oldWidget) {
+  void didUpdateWidget(MySwiper oldWidget) {
     if (_controller != oldWidget.controller) {
       if (oldWidget.controller != null) {
         oldWidget.controller?.removeListener(_onController);
@@ -367,7 +367,7 @@ abstract class _SwiperTimerMixin extends State<Swiper> {
   }
 }
 
-class _SwiperState extends _SwiperTimerMixin {
+class _MySwiperState extends _SwiperTimerMixin {
   int _activeIndex = 0;
 
   TransformerPageController? _pageController;
@@ -406,11 +406,11 @@ class _SwiperState extends _SwiperTimerMixin {
     super.didChangeDependencies();
   }
 
-  bool _getReverse(Swiper widget) =>
+  bool _getReverse(MySwiper widget) =>
       widget.transformer != null && widget.transformer!.reverse;
 
   @override
-  void didUpdateWidget(Swiper oldWidget) {
+  void didUpdateWidget(MySwiper oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (_isPageViewLayout()) {
       if (_pageController == null ||
@@ -662,7 +662,7 @@ abstract class _SubSwiper extends StatefulWidget {
   final int itemCount;
   final int? index;
   final ValueChanged<int>? onIndexChanged;
-  final SwiperController controller;
+  final MySwiperController controller;
   final int duration;
   final Curve curve;
   final double itemWidth;

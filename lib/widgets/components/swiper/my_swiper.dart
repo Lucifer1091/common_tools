@@ -3,35 +3,33 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import 'flutter_swiper/flutter_swiper.dart';
 
 const _kAminatedDuration = 100;
 
-/// TDesign style Swiper indicator style, used in conjunction with flutter_swiper's Swiper
-class TDSwiperPagination extends SwiperPlugin {
-  const TDSwiperPagination({
+class MySwiperPagination extends SwiperPlugin {
+  const MySwiperPagination({
     this.alignment,
     this.key,
     this.margin = const EdgeInsets.all(10),
-    this.builder = TDSwiperPagination.dots,
+    this.builder = MySwiperPagination.dots,
   });
 
   /// Dot Style
-  static const SwiperPlugin dots = TDSwiperDotsPagination();
+  static const SwiperPlugin dots = MySwiperDotsPagination();
 
   /// Rounded rectangle + dot style default width 20, height 6
-  static const SwiperPlugin dotsBar = TDSwiperDotsPagination(
+  static const SwiperPlugin dotsBar = MySwiperDotsPagination(
     roundedRectangleWidth: 20,
   );
 
   /// Number style
-  static const SwiperPlugin fraction = TDFractionPagination();
+  static const SwiperPlugin fraction = MyFractionPagination();
 
   /// Arrow style
-  static const SwiperPlugin controls = TDSwiperArrowPagination();
+  static const SwiperPlugin controls = MySwiperArrowPagination();
 
-  /// When scrollDirection== Axis.horizontal, the default is Alignment.bottomCenter
-  /// When scrollDirection== Axis.vertical, the default is Alignment.centerRight
+  /// When [MySwiper.scrollDirection] == [Axis.horizontal], the default is [Alignment.bottomCenter]
+  /// When [MySwiper.scrollDirection] == [Axis.vertical], the default is [Alignment.centerRight]
   final Alignment? alignment;
 
   /// The distance between the indicator and the container
@@ -49,8 +47,8 @@ class TDSwiperPagination extends SwiperPlugin {
             ? Alignment.bottomCenter
             : Alignment.centerRight);
 
-    Widget child = Container(
-      margin: margin,
+    Widget child = Padding(
+      padding: margin,
       child: builder.build(context, config),
     );
 
@@ -62,8 +60,8 @@ class TDSwiperPagination extends SwiperPlugin {
   }
 }
 
-class TDSwiperDotsPagination extends SwiperPlugin {
-  const TDSwiperDotsPagination({
+class MySwiperDotsPagination extends SwiperPlugin {
+  const MySwiperDotsPagination({
     this.activeColor,
     this.color,
     this.key,
@@ -75,19 +73,12 @@ class TDSwiperDotsPagination extends SwiperPlugin {
   });
 
   final Color? activeColor;
-
   final Color? color;
-
   final double activeSize;
-
   final double size;
-
   final double space;
-
   final double? roundedRectangleWidth;
-
   final int? animationDuration;
-
   final Key? key;
 
   @override
@@ -95,17 +86,17 @@ class TDSwiperDotsPagination extends SwiperPlugin {
     if (config.itemCount > 20) {
       debugPrint(
         'warning: The itemCount is too big, '
-        'we suggest use TDFractionPaginationBuilder',
+        'we suggest use MyFractionPaginationBuilder',
       );
     }
     final activeColor =
         this.activeColor ??
-        (config.outer ? ThemeColors.blue.shade600 : Colors.white);
+        (config.outer ? context.colorScheme.primary : Colors.white);
 
     final color =
         this.color ??
         (config.outer
-            ? ThemeColors.neutral.shade200
+            ? context.colorScheme.secondary
             : Colors.white.withValues(alpha: 0.55));
 
     if (config.indicatorLayout != PageIndicatorLayout.NONE &&
@@ -172,35 +163,35 @@ class TDSwiperDotsPagination extends SwiperPlugin {
   }
 }
 
-class TDFractionPagination extends SwiperPlugin {
-  const TDFractionPagination({
+class MyFractionPagination extends SwiperPlugin {
+  const MyFractionPagination({
     this.width,
     this.height,
     this.borderRadius,
     this.backgroundColor,
     this.color = Colors.white,
-    this.textStyle = const TextStyle(fontSize: 12, color: Colors.white),
-    this.activeTextStyle = const TextStyle(fontSize: 12, color: Colors.white),
+    this.textStyle = const TextStyle(
+      fontSize: 12,
+      color: Colors.white,
+      fontFamily: MyTypography.kDefaultFontFamily,
+    ),
+    this.activeTextStyle = const TextStyle(
+      fontSize: 12,
+      color: Colors.white,
+      fontFamily: MyTypography.kDefaultFontFamily,
+    ),
     this.key,
     this.activeColor = Colors.white,
   });
 
   final double? width;
-
   final double? height;
-
   final double? borderRadius;
-
   final Color? backgroundColor;
-
   final Color? color;
-
   final Color? activeColor;
-
   final TextStyle? textStyle;
-
   final TextStyle? activeTextStyle;
-
   final Key? key;
 
   @override
@@ -212,7 +203,7 @@ class TDFractionPagination extends SwiperPlugin {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Text('${config.activeIndex + 1}', style: activeTextStyle),
-          Text('/', style: textStyle),
+          Text(' / ', style: textStyle),
           Text('${config.itemCount}', style: textStyle),
         ],
       );
@@ -222,12 +213,13 @@ class TDFractionPagination extends SwiperPlugin {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Text('${config.activeIndex + 1}', style: activeTextStyle),
-          Text('/${config.itemCount}', style: textStyle),
+          Text(' / ${config.itemCount}', style: textStyle),
         ],
       );
     }
+
     return Container(
-      width: width ?? 37,
+      width: width ?? 40,
       height: height ?? 20,
       alignment: Alignment.center,
       decoration: BoxDecoration(
@@ -239,8 +231,8 @@ class TDFractionPagination extends SwiperPlugin {
   }
 }
 
-class TDSwiperArrowPagination extends SwiperPlugin {
-  const TDSwiperArrowPagination({
+class MySwiperArrowPagination extends SwiperPlugin {
+  const MySwiperArrowPagination({
     this.radius,
     this.backgroundColor,
     this.backArrow,
@@ -249,13 +241,9 @@ class TDSwiperArrowPagination extends SwiperPlugin {
   });
 
   final bool? autoHideWhenAtBoundary;
-
   final Widget? backArrow;
-
   final Widget? forwardArrow;
-
   final double? radius;
-
   final Color? backgroundColor;
 
   @override
@@ -269,10 +257,10 @@ class TDSwiperArrowPagination extends SwiperPlugin {
           visible:
               config.loop ||
               ((autoHideWhenAtBoundary ?? false) && activeIndex != 0),
-          child: GestureDetector(
+          child: MyGestureDetector(
             child: CircleAvatar(
               radius: radius ?? 10.0,
-              backgroundColor: backgroundColor ?? ThemeColors.neutral.shade700,
+              backgroundColor: backgroundColor ?? Colors.black54,
               child:
                   backArrow ??
                   const Icon(
@@ -292,10 +280,10 @@ class TDSwiperArrowPagination extends SwiperPlugin {
               config.loop ||
               ((autoHideWhenAtBoundary ?? false) &&
                   activeIndex != itemCount - 1),
-          child: GestureDetector(
+          child: MyGestureDetector(
             child: CircleAvatar(
               radius: radius ?? 10.0,
-              backgroundColor: backgroundColor ?? ThemeColors.neutral.shade700,
+              backgroundColor: backgroundColor ?? Colors.black54,
               child:
                   forwardArrow ??
                   const Icon(

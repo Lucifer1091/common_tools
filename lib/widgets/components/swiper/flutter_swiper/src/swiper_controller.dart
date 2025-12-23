@@ -1,8 +1,7 @@
-
 import '../flutter_swiper.dart';
-import 'transformer_page_view/index_controller.dart';
 
-class SwiperController extends IndexController {
+class MySwiperController extends IndexController {
+  MySwiperController();
   // Autoplay is started
   static const int START_AUTOPLAY = 2;
 
@@ -23,21 +22,17 @@ class SwiperController extends IndexController {
   // this value is PageViewController.pos
   double? pos;
 
-  int index = 0;
-  bool animation = false;
   bool? autoplay;
 
-  SwiperController();
-
   void startAutoplay() {
-    event = SwiperController.START_AUTOPLAY;
-    this.autoplay = true;
+    event = MySwiperController.START_AUTOPLAY;
+    autoplay = true;
     notifyListeners();
   }
 
   void stopAutoplay() {
-    event = SwiperController.STOP_AUTOPLAY;
-    this.autoplay = false;
+    event = MySwiperController.STOP_AUTOPLAY;
+    autoplay = false;
     notifyListeners();
   }
 }

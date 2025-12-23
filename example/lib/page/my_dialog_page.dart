@@ -121,7 +121,7 @@ class _MyDialogPageState extends State<MyDialogPage> {
                     title: 'You have been kicked out of session.',
                     titleAlignment: Alignment.centerLeft,
                     contentAlignment: Alignment.centerLeft,
-                    content: Faker.generateLoremIpsumWords(15),
+                    content: MyFaker.generateLoremIpsumWords(15),
                     buttonWidget: MyDialogShrinkButtons(
                       rightBtn: MyDialogButtonOptions(
                         title: 'OK',
@@ -162,7 +162,7 @@ class _MyDialogPageState extends State<MyDialogPage> {
                     title: 'Are you absolutely sure ?',
                     titleAlignment: Alignment.centerLeft,
                     contentAlignment: Alignment.centerLeft,
-                    content: Faker.generateLoremIpsumWords(15),
+                    content: MyFaker.generateLoremIpsumWords(15),
                     buttonWidget: MyDialogShrinkButtons(
                       leftBtn: MyDialogButtonOptions(
                         title: 'Cancel',
