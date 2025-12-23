@@ -108,10 +108,10 @@ class MyTablePage extends StatelessWidget {
   Widget _basicTable(BuildContext context) {
     return MyTable(
       columns: [
-        MyTableCol(title: 'Title', colKey: 'title1', ellipsis: true),
-        MyTableCol(title: 'Title', colKey: 'title2'),
-        MyTableCol(title: 'Title', colKey: 'title3'),
-        MyTableCol(title: 'Title', colKey: 'title4'),
+        MyTableColumn(title: 'Title', colKey: 'title1', ellipsis: true),
+        MyTableColumn(title: 'Title', colKey: 'title2'),
+        MyTableColumn(title: 'Title', colKey: 'title3'),
+        MyTableColumn(title: 'Title', colKey: 'title4'),
       ],
       data: _getData(9),
     );
@@ -120,15 +120,15 @@ class MyTablePage extends StatelessWidget {
   Widget _sortableTable(BuildContext context) {
     return MyTable(
       columns: [
-        MyTableCol(
+        MyTableColumn(
           title: 'Title',
           colKey: 'title1',
           ellipsis: true,
           sortable: true,
         ),
-        MyTableCol(title: 'Title', colKey: 'title2', sortable: true),
-        MyTableCol(title: 'Title', colKey: 'title3', sortable: true),
-        MyTableCol(title: 'Title', colKey: 'title4', sortable: true),
+        MyTableColumn(title: 'Title', colKey: 'title2', sortable: true),
+        MyTableColumn(title: 'Title', colKey: 'title3', sortable: true),
+        MyTableColumn(title: 'Title', colKey: 'title4', sortable: true),
       ],
       data: _getData(9),
     );
@@ -137,10 +137,10 @@ class MyTablePage extends StatelessWidget {
   Widget _operationBtnTable(BuildContext context) {
     return MyTable(
       columns: [
-        MyTableCol(title: 'Title', colKey: 'title1', ellipsis: true),
-        MyTableCol(title: 'Title', colKey: 'title2'),
-        MyTableCol(title: 'Title', colKey: 'title3'),
-        MyTableCol(
+        MyTableColumn(title: 'Title', colKey: 'title1', ellipsis: true),
+        MyTableColumn(title: 'Title', colKey: 'title2'),
+        MyTableColumn(title: 'Title', colKey: 'title3'),
+        MyTableColumn(
           title: 'Title',
           colKey: 'title4',
           cellBuilder: (BuildContext context, int index) {
@@ -175,10 +175,10 @@ class MyTablePage extends StatelessWidget {
   Widget _operationIconTable(BuildContext context) {
     return MyTable(
       columns: [
-        MyTableCol(title: 'Title', colKey: 'title1', ellipsis: true),
-        MyTableCol(title: 'Title', colKey: 'title2'),
-        MyTableCol(title: 'Title', colKey: 'title3'),
-        MyTableCol(
+        MyTableColumn(title: 'Title', colKey: 'title1', ellipsis: true),
+        MyTableColumn(title: 'Title', colKey: 'title2'),
+        MyTableColumn(title: 'Title', colKey: 'title3'),
+        MyTableColumn(
           title: 'Title',
           colKey: 'title4',
           cellBuilder: (BuildContext context, int index) {
@@ -207,10 +207,10 @@ class MyTablePage extends StatelessWidget {
   Widget _fixedFirstColTable(BuildContext context) {
     return MyTable(
       columns: [
-        MyTableCol(title: 'Title', colKey: 'title1'),
-        MyTableCol(title: 'Title', colKey: 'title2'),
-        MyTableCol(title: 'Title', colKey: 'title3'),
-        MyTableCol(
+        MyTableColumn(title: 'Title', colKey: 'title1'),
+        MyTableColumn(title: 'Title', colKey: 'title2'),
+        MyTableColumn(title: 'Title', colKey: 'title3'),
+        MyTableColumn(
           title: 'Title',
           colKey: 'title4',
           fixed: MyTableColFixed.left,
@@ -223,10 +223,10 @@ class MyTablePage extends StatelessWidget {
   Widget _fixedEndColTable(BuildContext context) {
     return MyTable(
       columns: [
-        MyTableCol(title: 'Title', colKey: 'title1'),
-        MyTableCol(title: 'Title', colKey: 'title2'),
-        MyTableCol(title: 'Title', colKey: 'title3'),
-        MyTableCol(
+        MyTableColumn(title: 'Title', colKey: 'title1'),
+        MyTableColumn(title: 'Title', colKey: 'title2'),
+        MyTableColumn(title: 'Title', colKey: 'title3'),
+        MyTableColumn(
           title: 'Title',
           colKey: 'title4',
           fixed: MyTableColFixed.right,
@@ -260,9 +260,9 @@ class MyTablePage extends StatelessWidget {
   Widget _horizontalScrollTable(BuildContext context) {
     return MyTable(
       columns: [
-        MyTableCol(title: 'Title', colKey: 'title1', width: 160),
-        MyTableCol(title: 'Title', colKey: 'title2', width: 160),
-        MyTableCol(title: 'Title', colKey: 'title3', width: 160),
+        MyTableColumn(title: 'Title', colKey: 'title1', width: 160),
+        MyTableColumn(title: 'Title', colKey: 'title2', width: 160),
+        MyTableColumn(title: 'Title', colKey: 'title3', width: 160),
       ],
       data: _getData2(),
     );
@@ -272,10 +272,10 @@ class MyTablePage extends StatelessWidget {
     return MyTable(
       stripe: true,
       columns: [
-        MyTableCol(title: 'Title', colKey: 'title1', ellipsis: true),
-        MyTableCol(title: 'Title', colKey: 'title2'),
-        MyTableCol(title: 'Title', colKey: 'title3'),
-        MyTableCol(title: 'Title', colKey: 'title4'),
+        MyTableColumn(title: 'Title', colKey: 'title1', ellipsis: true),
+        MyTableColumn(title: 'Title', colKey: 'title2'),
+        MyTableColumn(title: 'Title', colKey: 'title3'),
+        MyTableColumn(title: 'Title', colKey: 'title4'),
       ],
       data: _getData(9),
     );
@@ -285,10 +285,10 @@ class MyTablePage extends StatelessWidget {
     return MyTable(
       bordered: true,
       columns: [
-        MyTableCol(title: 'Title', colKey: 'title1', ellipsis: true),
-        MyTableCol(title: 'Title', colKey: 'title2'),
-        MyTableCol(title: 'Title', colKey: 'title3'),
-        MyTableCol(title: 'Title', colKey: 'title4'),
+        MyTableColumn(title: 'Title', colKey: 'title1', ellipsis: true),
+        MyTableColumn(title: 'Title', colKey: 'title2'),
+        MyTableColumn(title: 'Title', colKey: 'title3'),
+        MyTableColumn(title: 'Title', colKey: 'title4'),
       ],
       data: _getData(9),
     );
@@ -299,10 +299,10 @@ class MyTablePage extends StatelessWidget {
       bordered: true,
       height: 240,
       columns: [
-        MyTableCol(title: 'Title', colKey: 'title1', ellipsis: true),
-        MyTableCol(title: 'Title', colKey: 'title2'),
-        MyTableCol(title: 'Title', colKey: 'title3'),
-        MyTableCol(title: 'Title', colKey: 'title4'),
+        MyTableColumn(title: 'Title', colKey: 'title1', ellipsis: true),
+        MyTableColumn(title: 'Title', colKey: 'title2'),
+        MyTableColumn(title: 'Title', colKey: 'title3'),
+        MyTableColumn(title: 'Title', colKey: 'title4'),
       ],
       data: _getData(9),
     );
@@ -311,10 +311,10 @@ class MyTablePage extends StatelessWidget {
   Widget _fixedScrollTable(BuildContext context) {
     return MyTable(
       columns: [
-        MyTableCol(title: 'Title', colKey: 'title1', width: 200),
-        MyTableCol(title: 'Title', colKey: 'title2', width: 160),
-        MyTableCol(title: 'Title', colKey: 'title3', width: 160),
-        MyTableCol(
+        MyTableColumn(title: 'Title', colKey: 'title1', width: 200),
+        MyTableColumn(title: 'Title', colKey: 'title2', width: 160),
+        MyTableColumn(title: 'Title', colKey: 'title3', width: 160),
+        MyTableColumn(
           title: 'Title',
           colKey: 'title4',
           fixed: MyTableColFixed.right,
@@ -348,22 +348,22 @@ class MyTablePage extends StatelessWidget {
   Widget _centerTable(BuildContext context) {
     return MyTable(
       columns: [
-        MyTableCol(
+        MyTableColumn(
           title: 'Title',
           colKey: 'title1',
           align: MyTableColAlign.center,
         ),
-        MyTableCol(
+        MyTableColumn(
           title: 'Title',
           colKey: 'title2',
           align: MyTableColAlign.center,
         ),
-        MyTableCol(
+        MyTableColumn(
           title: 'Title',
           colKey: 'title3',
           align: MyTableColAlign.center,
         ),
-        MyTableCol(
+        MyTableColumn(
           title: 'Title',
           colKey: 'title4',
           align: MyTableColAlign.center,
@@ -376,10 +376,10 @@ class MyTablePage extends StatelessWidget {
   Widget _emptyTable(BuildContext context) {
     return MyTable(
       columns: [
-        MyTableCol(title: 'Title', colKey: 'title1'),
-        MyTableCol(title: 'Title', colKey: 'title2'),
-        MyTableCol(title: 'Title', colKey: 'title3'),
-        MyTableCol(title: 'Title', colKey: 'title4'),
+        MyTableColumn(title: 'Title', colKey: 'title1'),
+        MyTableColumn(title: 'Title', colKey: 'title2'),
+        MyTableColumn(title: 'Title', colKey: 'title3'),
+        MyTableColumn(title: 'Title', colKey: 'title4'),
       ],
     );
   }
@@ -387,10 +387,10 @@ class MyTablePage extends StatelessWidget {
   Widget _loadingTable(BuildContext context) {
     return MyTable(
       columns: [
-        MyTableCol(title: 'Title', colKey: 'title1'),
-        MyTableCol(title: 'Title', colKey: 'title2'),
-        MyTableCol(title: 'Title', colKey: 'title3'),
-        MyTableCol(title: 'Title', colKey: 'title4'),
+        MyTableColumn(title: 'Title', colKey: 'title1'),
+        MyTableColumn(title: 'Title', colKey: 'title2'),
+        MyTableColumn(title: 'Title', colKey: 'title3'),
+        MyTableColumn(title: 'Title', colKey: 'title4'),
       ],
       loading: true,
     );
@@ -400,7 +400,7 @@ class MyTablePage extends StatelessWidget {
     return MyTable(
       data: _getData(10),
       columns: [
-        MyTableCol(
+        MyTableColumn(
           selection: true,
           checked: (index, row) {
             return index == 0;
@@ -410,10 +410,10 @@ class MyTablePage extends StatelessWidget {
             return index % 2 == 0;
           },
         ),
-        MyTableCol(title: 'Title', colKey: 'title1'),
-        MyTableCol(title: 'Title', colKey: 'title2'),
-        MyTableCol(title: 'Title', colKey: 'title3'),
-        MyTableCol(title: 'Title', colKey: 'title4'),
+        MyTableColumn(title: 'Title', colKey: 'title1'),
+        MyTableColumn(title: 'Title', colKey: 'title2'),
+        MyTableColumn(title: 'Title', colKey: 'title3'),
+        MyTableColumn(title: 'Title', colKey: 'title4'),
       ],
     );
   }

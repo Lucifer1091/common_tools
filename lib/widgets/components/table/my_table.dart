@@ -6,15 +6,15 @@ enum MyTableColFixed { left, right, none }
 
 enum MyTableColAlign { left, center, right }
 
-typedef OnCellTap = void Function(int rowIndex, Json? row, MyTableCol col);
+typedef OnCellTap = void Function(int rowIndex, Json? row, MyTableColumn col);
 typedef OnScroll = void Function(ScrollController controller);
 typedef OnSelect = void Function(List<dynamic>? data);
 typedef OnRowSelect = void Function(int index, bool checked);
 typedef SelectableFunc = bool Function(int index, Json? row);
 typedef RowCheckFunc = bool Function(int index, Json row);
 
-class MyTableCol {
-  MyTableCol({
+class MyTableColumn {
+  MyTableColumn({
     this.title,
     this.colKey,
     this.width,
@@ -54,7 +54,6 @@ class MyTableEmpty {
   MyTableEmpty({this.assetUrl, this.text});
 
   String? assetUrl;
-
   String? text;
 }
 
@@ -81,7 +80,7 @@ class MyTable extends StatefulWidget {
   });
 
   final bool? bordered;
-  final List<MyTableCol> columns;
+  final List<MyTableColumn> columns;
   final List<Json>? data;
   final MyTableEmpty? empty;
   final double? height;
@@ -107,7 +106,7 @@ class MyTableState extends State<MyTable> {
   String? _sortKey;
   int _hasChecked = 0;
   int _totalSelectable = 0;
-  late MyTableCol _selectableCol;
+  late MyTableColumn _selectableCol;
   late List<bool> _checkedList;
   final _scrollController = ScrollController();
 
@@ -124,7 +123,7 @@ class MyTableState extends State<MyTable> {
     return Alignment(xPos, 0);
   }
 
-  List<MyTableCol> _getCol(MyTableColFixed fixed) {
+  List<MyTableColumn> _getCol(MyTableColFixed fixed) {
     return widget.columns.where((col) => col.fixed == fixed).toList();
   }
 
@@ -136,6 +135,7 @@ class MyTableState extends State<MyTable> {
     final fixedLeftCells = <Widget>[],
         cells = <Widget>[],
         fixedRightCells = <Widget>[];
+
     for (var i = 0; i < fixedLeftCol.length; i++) {
       final cell = _getCell(fixedLeftCol[i], true, null, start, i == 0);
       if (fixedLeftCol[i].width != null) {
@@ -145,7 +145,9 @@ class MyTableState extends State<MyTable> {
       }
       start++;
     }
+
     start = fixedLeftCol.length;
+
     for (var i = 0; i < fixedNonCol.length; i++) {
       final cell = _getCell(fixedNonCol[i], true, null, start, i == 0);
       if (fixedNonCol[i].width != null) {
@@ -155,6 +157,7 @@ class MyTableState extends State<MyTable> {
       }
       start++;
     }
+
     for (var i = 0; i < fixedRightCol.length; i++) {
       final cell = _getCell(fixedRightCol[i], true, null, start, i == 0);
       if (fixedRightCol[i].width != null) {
@@ -166,6 +169,7 @@ class MyTableState extends State<MyTable> {
       }
       start++;
     }
+
     return Row(children: [...fixedLeftCells, ...cells, ...fixedRightCells]);
   }
 
@@ -174,14 +178,15 @@ class MyTableState extends State<MyTable> {
       return Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 32),
-          child:
-              widget.loadingWidget ?? const MyLoader(size: MyLoaderSize.large),
+          child: widget.loadingWidget ?? const MyLoader(),
         ),
       );
     }
+
     if (widget.data == null || widget.data!.isEmpty) {
       return _getEmpty('No data yet.');
     }
+
     final cells = <Widget>[];
     final fixedLeftCol = _getCol(MyTableColFixed.left);
     final fixedNonCol = _getCol(MyTableColFixed.none);
@@ -205,12 +210,13 @@ class MyTableState extends State<MyTable> {
           row.add(Expanded(child: cell));
         }
       }
+
       cells.add(
         ColoredBox(
           color:
               (widget.stripe ?? false) && i.isEven
                   ? const Color(0xffF3F3F3)
-                  : Colors.white,
+                  : context.colorScheme.background,
           child: Row(children: row),
         ),
       );
@@ -219,7 +225,7 @@ class MyTableState extends State<MyTable> {
   }
 
   Widget _getCell(
-    MyTableCol col,
+    MyTableColumn col,
     bool isHeader,
     data,
     int index,
@@ -359,11 +365,12 @@ class MyTableState extends State<MyTable> {
         ),
       ),
     );
+
     return cell;
   }
 
   Widget _getCellText(
-    MyTableCol col,
+    MyTableColumn col,
     String title,
     bool ellipsis,
     bool isHeader,
@@ -388,7 +395,9 @@ class MyTableState extends State<MyTable> {
 
     if (isHeader) {
       final selectColor = context.colorScheme.primary;
-      final unSelectColor = ThemeColors.neutral.shade700;
+      final unSelectColor = context.colorScheme.foreground.withValues(
+        alpha: 0.5,
+      );
       return Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -397,7 +406,7 @@ class MyTableState extends State<MyTable> {
             visible: isHeader && sortable,
             child: Padding(
               padding: const EdgeInsets.only(left: 4),
-              child: GestureDetector(
+              child: MyGestureDetector(
                 onTap: () {
                   setState(() {
                     if (_sortKey != col.colKey) {
@@ -553,16 +562,14 @@ class MyTableState extends State<MyTable> {
           Align(
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 32),
-              child:
-                  widget.loadingWidget ??
-                  const MyLoader(size: MyLoaderSize.large),
+              child: widget.loadingWidget ?? const MyLoader(),
             ),
           ),
         ];
       }
       return Container(
         width: width,
-        color: widget.backgroundColor ?? Colors.white,
+        color: widget.backgroundColor ?? context.colorScheme.background,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -584,7 +591,7 @@ class MyTableState extends State<MyTable> {
     }
     final child = Container(
       width: width,
-      color: widget.backgroundColor ?? Colors.white,
+      color: widget.backgroundColor ?? context.colorScheme.background,
       child: Row(
         children: [...fixedLeftCols, ...fixedNonCols, ...fixedRightCols],
       ),
@@ -594,13 +601,13 @@ class MyTableState extends State<MyTable> {
       placeholder = Align(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 32),
-          child:
-              widget.loadingWidget ?? const MyLoader(size: MyLoaderSize.large),
+          child: widget.loadingWidget ?? const MyLoader(),
         ),
       );
     }
+
     return ColoredBox(
-      color: widget.backgroundColor ?? Colors.white,
+      color: widget.backgroundColor ?? context.colorScheme.background,
       child: Column(children: [child, placeholder]),
     );
   }
@@ -629,7 +636,7 @@ class MyTableState extends State<MyTable> {
   }
 
   List<Widget> _getVerticalCell(
-    List<MyTableCol> cols,
+    List<MyTableColumn> cols,
     List<List<String>> titles,
     double cellWidth,
   ) {
@@ -652,7 +659,7 @@ class MyTableState extends State<MyTable> {
     return rows;
   }
 
-  List<List<String>> _getCellsText(List<MyTableCol> cols) {
+  List<List<String>> _getCellsText(List<MyTableColumn> cols) {
     final list = <List<String>>[];
     for (final col in cols) {
       final titles = <String>[col.title ?? ''];
@@ -700,7 +707,7 @@ class MyTableState extends State<MyTable> {
     if (width < _getColsWidth()) {
       return Container(
         width: width,
-        color: widget.backgroundColor ?? Colors.white,
+        color: widget.backgroundColor ?? context.colorScheme.background,
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           physics: const ClampingScrollPhysics(),
@@ -725,7 +732,7 @@ class MyTableState extends State<MyTable> {
     }
     return Container(
       width: width,
-      color: widget.backgroundColor ?? Colors.white,
+      color: widget.backgroundColor ?? context.colorScheme.background,
       child: Column(
         children: [
           Visibility(
@@ -750,7 +757,6 @@ class ChevronPainter extends CustomPainter {
   ChevronPainter({required this.upColor, required this.downColor});
 
   final Color upColor;
-
   final Color downColor;
 
   @override
