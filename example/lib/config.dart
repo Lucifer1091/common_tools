@@ -52,7 +52,7 @@ import 'page/my_stepper_page.dart';
 import 'page/td_swipe_cell_page.dart';
 import 'page/my_swiper_page.dart';
 import 'page/my_switch_page.dart';
-import 'page/td_table_page.dart';
+import 'page/my_table_page.dart';
 import 'page/my_tabs_page.dart';
 import 'page/td_tag_page.dart';
 import 'page/my_text_page.dart';
@@ -317,7 +317,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'Table',
       name: 'table',
-      pageBuilder: _wrapInheritedTheme((context) => const TDTablePage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyTablePage()),
     ),
     ExamplePageModel(
       text: 'Tag',

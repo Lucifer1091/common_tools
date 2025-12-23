@@ -2,27 +2,27 @@ import 'package:flutter/material.dart';
 
 import '../../../index.dart';
 
-enum TDTableColFixed { left, right, none }
+enum MyTableColFixed { left, right, none }
 
-enum TDTableColAlign { left, center, right }
+enum MyTableColAlign { left, center, right }
 
-typedef OnCellTap = void Function(int rowIndex, Json? row, TDTableCol col);
+typedef OnCellTap = void Function(int rowIndex, Json? row, MyTableCol col);
 typedef OnScroll = void Function(ScrollController controller);
 typedef OnSelect = void Function(List<dynamic>? data);
 typedef OnRowSelect = void Function(int index, bool checked);
 typedef SelectableFunc = bool Function(int index, Json? row);
 typedef RowCheckFunc = bool Function(int index, Json row);
 
-class TDTableCol {
-  TDTableCol({
+class MyTableCol {
+  MyTableCol({
     this.title,
     this.colKey,
     this.width,
-    this.fixed = TDTableColFixed.none,
+    this.fixed = MyTableColFixed.none,
     this.ellipsis,
     this.ellipsisTitle,
     this.cellBuilder,
-    this.align = TDTableColAlign.left,
+    this.align = MyTableColAlign.left,
     this.sortable = false,
     this.selection,
     this.selectable,
@@ -31,23 +31,14 @@ class TDTableCol {
 
   /// Whether to display a checkbox in the row, invalid when customizing columns
   bool? selection;
-
   String? title;
-
   String? colKey;
-
   double? width;
-
-  TDTableColFixed? fixed;
-
+  MyTableColFixed? fixed;
   bool? ellipsis;
-
   bool? ellipsisTitle;
-
   IndexedWidgetBuilder? cellBuilder;
-
-  TDTableColAlign? align;
-
+  MyTableColAlign? align;
   bool? sortable;
 
   /// Whether the CheckBox of the current row is selectable, only selection: true is valid
@@ -59,16 +50,16 @@ class TDTableCol {
   double? get widthPx => width;
 }
 
-class TDTableEmpty {
-  TDTableEmpty({this.assetUrl, this.text});
+class MyTableEmpty {
+  MyTableEmpty({this.assetUrl, this.text});
 
   String? assetUrl;
 
   String? text;
 }
 
-class TDTable extends StatefulWidget {
-  const TDTable({
+class MyTable extends StatefulWidget {
+  const MyTable({
     required this.columns,
     super.key,
     this.bordered,
@@ -90,73 +81,57 @@ class TDTable extends StatefulWidget {
   });
 
   final bool? bordered;
-
-  final List<TDTableCol> columns;
-
+  final List<MyTableCol> columns;
   final List<Json>? data;
-
-  final TDTableEmpty? empty;
-
+  final MyTableEmpty? empty;
   final double? height;
-
   final double? rowHeight;
-
   final bool? loading;
-
   final Widget? loadingWidget;
-
   final bool? showHeader;
-
   final bool? stripe;
-
   final Color? backgroundColor;
-
   final double? width;
-
   final String? defaultSort;
-
   final OnCellTap? onCellTap;
-
   final OnScroll? onScroll;
-
   final OnSelect? onSelect;
-
   final OnRowSelect? onRowSelect;
 
   @override
-  State<TDTable> createState() => TDTableState();
+  State<MyTable> createState() => MyTableState();
 }
 
-class TDTableState extends State<TDTable> {
+class MyTableState extends State<MyTable> {
   bool? _sortable;
   String? _sortKey;
   int _hasChecked = 0;
   int _totalSelectable = 0;
-  late TDTableCol _selectableCol;
+  late MyTableCol _selectableCol;
   late List<bool> _checkedList;
   final _scrollController = ScrollController();
 
-  Alignment _getVerticalAlign(TDTableColAlign x) {
+  Alignment _getVerticalAlign(MyTableColAlign x) {
     var xPos = 0.0;
     switch (x) {
-      case TDTableColAlign.left:
+      case MyTableColAlign.left:
         xPos = -1;
-      case TDTableColAlign.center:
+      case MyTableColAlign.center:
         xPos = 0;
-      case TDTableColAlign.right:
+      case MyTableColAlign.right:
         xPos = 1;
     }
     return Alignment(xPos, 0);
   }
 
-  List<TDTableCol> _getCol(TDTableColFixed fixed) {
+  List<MyTableCol> _getCol(MyTableColFixed fixed) {
     return widget.columns.where((col) => col.fixed == fixed).toList();
   }
 
   Widget _getTableHeader(BuildContext context) {
-    final fixedLeftCol = _getCol(TDTableColFixed.left);
-    final fixedNonCol = _getCol(TDTableColFixed.none);
-    final fixedRightCol = _getCol(TDTableColFixed.right);
+    final fixedLeftCol = _getCol(MyTableColFixed.left);
+    final fixedNonCol = _getCol(MyTableColFixed.none);
+    final fixedRightCol = _getCol(MyTableColFixed.right);
     var start = 0;
     final fixedLeftCells = <Widget>[],
         cells = <Widget>[],
@@ -205,12 +180,12 @@ class TDTableState extends State<TDTable> {
       );
     }
     if (widget.data == null || widget.data!.isEmpty) {
-      return _getEmpty('暂无数据');
+      return _getEmpty('No data yet.');
     }
     final cells = <Widget>[];
-    final fixedLeftCol = _getCol(TDTableColFixed.left);
-    final fixedNonCol = _getCol(TDTableColFixed.none);
-    final fixedRightCol = _getCol(TDTableColFixed.right);
+    final fixedLeftCol = _getCol(MyTableColFixed.left);
+    final fixedNonCol = _getCol(MyTableColFixed.none);
+    final fixedRightCol = _getCol(MyTableColFixed.right);
     final headerCol = [...fixedLeftCol, ...fixedNonCol, ...fixedRightCol];
     for (var i = 0; i < widget.data!.length; i++) {
       final data = widget.data![i];
@@ -244,7 +219,7 @@ class TDTableState extends State<TDTable> {
   }
 
   Widget _getCell(
-    TDTableCol col,
+    MyTableCol col,
     bool isHeader,
     data,
     int index,
@@ -268,10 +243,10 @@ class TDTableState extends State<TDTable> {
     if (widget.bordered ?? false) {
       rightBorder = halfBorder;
     }
-    if (fixedBorder && col.fixed == TDTableColFixed.left) {
+    if (fixedBorder && col.fixed == MyTableColFixed.left) {
       rightBorder = doubleBorder;
     }
-    if (fixedBorder && col.fixed == TDTableColFixed.right) {
+    if (fixedBorder && col.fixed == MyTableColFixed.right) {
       leftBorder = doubleBorder;
     }
 
@@ -285,40 +260,40 @@ class TDTableState extends State<TDTable> {
         id: 'index:$index',
         checked: _checkedList[index],
         enabled: enable,
-        // customIconBuilder: (context, checked) {
-        //   if (checked) {
-        //     return Icon(
-        //       Icons.check_box_rounded,
-        //       size: 16,
-        //       color: ThemeColors.blue.shade600,
-        //     );
-        //   }
-        //   return Icon(
-        //     Icons.check_box_outline_blank_rounded,
-        //     size: 16,
-        //     color:
-        //         enable
-        //             ? ThemeColors.neutral.shade900
-        //             : ThemeColors.neutral.shade700,
-        //   );
-        // },
+        customIconBuilder: (context, checked) {
+          if (checked ?? false) {
+            return Icon(
+              Icons.check_box_rounded,
+              size: 16,
+              color: context.colorScheme.primary,
+            );
+          }
+          return Icon(
+            Icons.check_box_outline_blank_rounded,
+            size: 16,
+            color:
+                enable
+                    ? ThemeColors.neutral.shade900
+                    : ThemeColors.neutral.shade700,
+          );
+        },
         onChanged: (checked) {
           setState(() {
-            // _checkedList[index] = checked;
-            // if (checked) {
-            //   _hasChecked += 1;
-            // } else {
-            //   _hasChecked -= 1;
-            // }
-            // final selectList = <Json>[];
-            // for (var i = 0; i < _checkedList.length; i++) {
-            //   if (_checkedList[i]) {
-            //     selectList.add(widget.data![i]);
-            //   }
-            // }
-            // widget.onSelect?.call(selectList);
-            // widget.onRowSelect?.call(index, checked);
-            // print('!!!!::::${_hasChecked}');
+            _checkedList[index] = checked ?? false;
+            if (checked ?? false) {
+              _hasChecked += 1;
+            } else {
+              _hasChecked -= 1;
+            }
+            final selectList = <Json>[];
+            for (var i = 0; i < _checkedList.length; i++) {
+              if (_checkedList[i]) {
+                selectList.add(widget.data![i]);
+              }
+            }
+            widget.onSelect?.call(selectList);
+            widget.onRowSelect?.call(index, checked ?? false);
+            print('!!!!::::$_hasChecked');
           });
         },
       );
@@ -341,17 +316,17 @@ class TDTableState extends State<TDTable> {
             return getAllIcon(allCheck, halfSelected);
           },
           onChanged: (checked) {
-            // setState(() {
-            //   _hasChecked = checked ? _totalSelectable : 0;
-            //   for (var i = 0; i < widget.data!.length; i++) {
-            //     _checkedList[i] = checked;
-            //     // Unselect rows where selectable == false
-            //     if (_selectableCol.selectable!(i, widget.data![i])) {
-            //       _checkedList[i] = checked;
-            //     }
-            //   }
-            //   widget.onSelect?.call(checked ? widget.data : []);
-            // });
+            setState(() {
+              _hasChecked = checked ?? false ? _totalSelectable : 0;
+              for (var i = 0; i < widget.data!.length; i++) {
+                _checkedList[i] = checked ?? false;
+                // Unselect rows where selectable == false
+                if (_selectableCol.selectable!(i, widget.data![i])) {
+                  _checkedList[i] = checked ?? false;
+                }
+              }
+              widget.onSelect?.call(checked ?? false ? widget.data : []);
+            });
           },
         );
       }
@@ -388,7 +363,7 @@ class TDTableState extends State<TDTable> {
   }
 
   Widget _getCellText(
-    TDTableCol col,
+    MyTableCol col,
     String title,
     bool ellipsis,
     bool isHeader,
@@ -412,7 +387,7 @@ class TDTableState extends State<TDTable> {
     );
 
     if (isHeader) {
-      final selectColor = ThemeColors.blue.shade600;
+      final selectColor = context.colorScheme.primary;
       final unSelectColor = ThemeColors.neutral.shade700;
       return Row(
         mainAxisSize: MainAxisSize.min,
@@ -474,6 +449,7 @@ class TDTableState extends State<TDTable> {
     if (col.cellBuilder != null) {
       return Builder(builder: (_) => col.cellBuilder!(context, index));
     }
+
     return titleWidget;
   }
 
@@ -497,7 +473,7 @@ class TDTableState extends State<TDTable> {
   }
 
   @override
-  void didUpdateWidget(covariant TDTable oldWidget) {
+  void didUpdateWidget(covariant MyTable oldWidget) {
     super.didUpdateWidget(oldWidget);
     _initCols();
   }
@@ -508,7 +484,7 @@ class TDTableState extends State<TDTable> {
     _checkedList = List.generate(widget.data?.length ?? 0, (index) => false);
     final cols = widget.columns.where((col) => col.selection ?? false);
     if (cols.length > 1) {
-      throw FlutterError('selectable column must be only one');
+      throw FlutterError('Selectable column must be only one');
     }
     if (widget.data != null && cols.isNotEmpty) {
       _selectableCol = cols.first;
@@ -527,9 +503,9 @@ class TDTableState extends State<TDTable> {
   }
 
   Widget _getFixedTable(BuildContext context) {
-    final fixedLeftCol = _getCol(TDTableColFixed.left);
-    final fixedNonCol = _getCol(TDTableColFixed.none);
-    final fixedRightCol = _getCol(TDTableColFixed.right);
+    final fixedLeftCol = _getCol(MyTableColFixed.left);
+    final fixedNonCol = _getCol(MyTableColFixed.none);
+    final fixedRightCol = _getCol(MyTableColFixed.right);
 
     final fixedLeftTitle = _getCellsText(fixedLeftCol);
     final fixedNonTitle = _getCellsText(fixedNonCol);
@@ -558,8 +534,8 @@ class TDTableState extends State<TDTable> {
 
     var fixedCellsWidth = 0.0;
     for (final tableCol in widget.columns) {
-      if (tableCol.fixed == TDTableColFixed.left ||
-          tableCol.fixed == TDTableColFixed.right) {
+      if (tableCol.fixed == MyTableColFixed.left ||
+          tableCol.fixed == MyTableColFixed.right) {
         fixedCellsWidth += tableCol.width ?? cellWidth;
       }
     }
@@ -570,7 +546,7 @@ class TDTableState extends State<TDTable> {
     }
 
     if ((width - fixedCellsWidth) < fixedNonCellsWidth) {
-      var content = [Row(children: fixedNonCols), _getEmpty('暂无数据')];
+      var content = [Row(children: fixedNonCols), _getEmpty('No data yet')];
       if (widget.loading ?? false) {
         content = [
           Row(children: fixedNonCols),
@@ -613,7 +589,7 @@ class TDTableState extends State<TDTable> {
         children: [...fixedLeftCols, ...fixedNonCols, ...fixedRightCols],
       ),
     );
-    var placeholder = _getEmpty('暂无数据');
+    var placeholder = _getEmpty('No data yet');
     if (widget.loading ?? false) {
       placeholder = Align(
         child: Padding(
@@ -653,7 +629,7 @@ class TDTableState extends State<TDTable> {
   }
 
   List<Widget> _getVerticalCell(
-    List<TDTableCol> cols,
+    List<MyTableCol> cols,
     List<List<String>> titles,
     double cellWidth,
   ) {
@@ -676,7 +652,7 @@ class TDTableState extends State<TDTable> {
     return rows;
   }
 
-  List<List<String>> _getCellsText(List<TDTableCol> cols) {
+  List<List<String>> _getCellsText(List<MyTableCol> cols) {
     final list = <List<String>>[];
     for (final col in cols) {
       final titles = <String>[col.title ?? ''];
@@ -704,7 +680,7 @@ class TDTableState extends State<TDTable> {
       size: 16,
       color:
           (checked || halfSelected)
-              ? ThemeColors.blue.shade600
+              ? context.colorScheme.primary
               : ThemeColors.neutral.shade300,
     );
   }
@@ -713,8 +689,8 @@ class TDTableState extends State<TDTable> {
   Widget build(BuildContext context) {
     final width = widget.width ?? MediaQuery.of(context).size.width;
     final fixedCols = [
-      ..._getCol(TDTableColFixed.left),
-      ..._getCol(TDTableColFixed.right),
+      ..._getCol(MyTableColFixed.left),
+      ..._getCol(MyTableColFixed.right),
     ];
 
     if (fixedCols.isNotEmpty) {

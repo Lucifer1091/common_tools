@@ -1,28 +1,27 @@
-import 'package:flutter/cupertino.dart';
 import 'package:common_tools/index.dart';
 import 'package:flutter/material.dart';
 
 import '../base/example_widget.dart';
 
-class TDTablePage extends StatelessWidget {
-  const TDTablePage({Key? key}) : super(key: key);
+class MyTablePage extends StatelessWidget {
+  const MyTablePage({super.key});
 
   List<Json> _getData(int index) {
     var data = <Json>[];
     for (var i = 0; i < 10; i++) {
       if (i == index) {
         data.add({
-          'title1': '内容内容内容内容',
-          'title2': '内容',
-          'title3': '内容',
-          'title4': '内容',
+          'title1': 'Content Content Content Content',
+          'title2': 'Content',
+          'title3': 'Content',
+          'title4': 'Content',
         });
       } else {
         data.add({
-          'title1': '内容',
-          'title2': '内容',
-          'title3': '内容',
-          'title4': '内容',
+          'title1': 'Content',
+          'title2': 'Content',
+          'title3': 'Content',
+          'title4': 'Content',
         });
       }
     }
@@ -34,12 +33,16 @@ class TDTablePage extends StatelessWidget {
     for (var i = 0; i < 10; i++) {
       if (i == 0) {
         data.add({
-          'title1': '横向平铺内容不省略',
-          'title2': '横向平铺内容不省略',
-          'title3': '横向平铺内容不省略',
+          'title1': 'Horizontal tiled content not omitted',
+          'title2': 'Horizontal tiled content not omitted',
+          'title3': 'Horizontal tiled content not omitted',
         });
       } else {
-        data.add({'title1': '内容', 'title2': '内容', 'title3': '内容'});
+        data.add({
+          'title1': 'Content',
+          'title2': 'Content',
+          'title3': 'Content',
+        });
       }
     }
     return data;
@@ -50,79 +53,94 @@ class TDTablePage extends StatelessWidget {
     return ExamplePage(
       title: myTitle(context),
       desc:
-          '表格常用于展示同类结构下的多种数据，易于组织、对比和分析等，并可对数据进行搜索、筛选、排序等操作。一般包括表头、数据行和表尾三部分。',
+          'Tables are commonly used to display multiple data sets with similar structures, facilitating organization, comparison, and analysis. They also allow for data searching, filtering, and sorting. Generally, they consist of three parts: a header, data rows, and a footer.',
       exampleCodeGroup: 'table',
       children: [
         ExampleModule(
           title: 'Component Types',
           children: [
-            ExampleItem(desc: '基础表格', builder: _basicTable),
-            ExampleItem(desc: '可排序表格', builder: _sortableTable),
-            ExampleItem(desc: '带操作或按钮表格', builder: _operationBtnTable),
+            ExampleItem(desc: 'Basic Table', builder: _basicTable),
+            ExampleItem(desc: 'Sortable Table', builder: _sortableTable),
+            ExampleItem(
+              desc: 'Table with Actions or Buttons',
+              builder: _operationBtnTable,
+            ),
             ExampleItem(
               builder: _operationIconTable,
               padding: const EdgeInsets.only(top: 16),
             ),
-            ExampleItem(desc: '可固定首列表格', builder: _fixedFirstColTable),
-            ExampleItem(desc: '可固定尾列表格', builder: _fixedEndColTable),
-            ExampleItem(desc: '横向平铺可滚动表格', builder: _horizontalScrollTable),
+            ExampleItem(
+              desc: 'Fixed FirstColTable',
+              builder: _fixedFirstColTable,
+            ),
+            ExampleItem(desc: 'Fixed EndColTable', builder: _fixedEndColTable),
+            ExampleItem(
+              desc: 'Horizontal Tiled Scrollable Table',
+              builder: _horizontalScrollTable,
+            ),
           ],
         ),
         ExampleModule(
           title: 'Component Style',
           children: [
-            ExampleItem(desc: '带斑马纹表格样式', builder: _stripeTable),
-            ExampleItem(desc: '带边框表格样式', builder: _borderTable),
+            ExampleItem(
+              desc: 'Table Style with Zebra Stripe',
+              builder: _stripeTable,
+            ),
+            ExampleItem(desc: 'Table Style with Border', builder: _borderTable),
           ],
         ),
       ],
       test: [
-        ExampleItem(desc: '固定表头', builder: _fixedHeaderTable),
-        ExampleItem(desc: '固定列尾+滚动表格', builder: _fixedScrollTable),
-        ExampleItem(desc: '内容居中表格', builder: _centerTable),
-        ExampleItem(desc: '空数据表格', builder: _emptyTable),
-        ExampleItem(desc: '加载动画表格', builder: _loadingTable),
-        ExampleItem(desc: '可选表格', builder: _selectTable),
+        ExampleItem(desc: 'Fixed Header', builder: _fixedHeaderTable),
+        ExampleItem(
+          desc: 'Fixed Column Footer + Scrolling Table',
+          builder: _fixedScrollTable,
+        ),
+        ExampleItem(desc: 'Centered Table', builder: _centerTable),
+        ExampleItem(desc: 'Empty Data Table', builder: _emptyTable),
+        ExampleItem(desc: 'Loading Animation Table', builder: _loadingTable),
+        ExampleItem(desc: 'Optional Table', builder: _selectTable),
       ],
     );
   }
 
   Widget _basicTable(BuildContext context) {
-    return TDTable(
+    return MyTable(
       columns: [
-        TDTableCol(title: 'Title', colKey: 'title1', ellipsis: true),
-        TDTableCol(title: 'Title', colKey: 'title2'),
-        TDTableCol(title: 'Title', colKey: 'title3'),
-        TDTableCol(title: 'Title', colKey: 'title4'),
+        MyTableCol(title: 'Title', colKey: 'title1', ellipsis: true),
+        MyTableCol(title: 'Title', colKey: 'title2'),
+        MyTableCol(title: 'Title', colKey: 'title3'),
+        MyTableCol(title: 'Title', colKey: 'title4'),
       ],
       data: _getData(9),
     );
   }
 
   Widget _sortableTable(BuildContext context) {
-    return TDTable(
+    return MyTable(
       columns: [
-        TDTableCol(
+        MyTableCol(
           title: 'Title',
           colKey: 'title1',
           ellipsis: true,
           sortable: true,
         ),
-        TDTableCol(title: 'Title', colKey: 'title2', sortable: true),
-        TDTableCol(title: 'Title', colKey: 'title3', sortable: true),
-        TDTableCol(title: 'Title', colKey: 'title4', sortable: true),
+        MyTableCol(title: 'Title', colKey: 'title2', sortable: true),
+        MyTableCol(title: 'Title', colKey: 'title3', sortable: true),
+        MyTableCol(title: 'Title', colKey: 'title4', sortable: true),
       ],
       data: _getData(9),
     );
   }
 
   Widget _operationBtnTable(BuildContext context) {
-    return TDTable(
+    return MyTable(
       columns: [
-        TDTableCol(title: 'Title', colKey: 'title1', ellipsis: true),
-        TDTableCol(title: 'Title', colKey: 'title2'),
-        TDTableCol(title: 'Title', colKey: 'title3'),
-        TDTableCol(
+        MyTableCol(title: 'Title', colKey: 'title1', ellipsis: true),
+        MyTableCol(title: 'Title', colKey: 'title2'),
+        MyTableCol(title: 'Title', colKey: 'title3'),
+        MyTableCol(
           title: 'Title',
           colKey: 'title4',
           cellBuilder: (BuildContext context, int index) {
@@ -130,7 +148,7 @@ class TDTablePage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 MyText(
-                  '修改',
+                  'Revise',
                   style: TextStyle(
                     color: context.colorScheme.primary,
                     fontSize: 14,
@@ -138,7 +156,7 @@ class TDTablePage extends StatelessWidget {
                   ),
                 ),
                 MyText(
-                  '通过',
+                  'Pass',
                   style: TextStyle(
                     color: context.colorScheme.primary,
                     fontSize: 14,
@@ -155,12 +173,12 @@ class TDTablePage extends StatelessWidget {
   }
 
   Widget _operationIconTable(BuildContext context) {
-    return TDTable(
+    return MyTable(
       columns: [
-        TDTableCol(title: 'Title', colKey: 'title1', ellipsis: true),
-        TDTableCol(title: 'Title', colKey: 'title2'),
-        TDTableCol(title: 'Title', colKey: 'title3'),
-        TDTableCol(
+        MyTableCol(title: 'Title', colKey: 'title1', ellipsis: true),
+        MyTableCol(title: 'Title', colKey: 'title2'),
+        MyTableCol(title: 'Title', colKey: 'title3'),
+        MyTableCol(
           title: 'Title',
           colKey: 'title4',
           cellBuilder: (BuildContext context, int index) {
@@ -187,15 +205,15 @@ class TDTablePage extends StatelessWidget {
   }
 
   Widget _fixedFirstColTable(BuildContext context) {
-    return TDTable(
+    return MyTable(
       columns: [
-        TDTableCol(title: 'Title', colKey: 'title1'),
-        TDTableCol(title: 'Title', colKey: 'title2'),
-        TDTableCol(title: 'Title', colKey: 'title3'),
-        TDTableCol(
+        MyTableCol(title: 'Title', colKey: 'title1'),
+        MyTableCol(title: 'Title', colKey: 'title2'),
+        MyTableCol(title: 'Title', colKey: 'title3'),
+        MyTableCol(
           title: 'Title',
           colKey: 'title4',
-          fixed: TDTableColFixed.left,
+          fixed: MyTableColFixed.left,
         ),
       ],
       data: _getData(10),
@@ -203,28 +221,28 @@ class TDTablePage extends StatelessWidget {
   }
 
   Widget _fixedEndColTable(BuildContext context) {
-    return TDTable(
+    return MyTable(
       columns: [
-        TDTableCol(title: 'Title', colKey: 'title1'),
-        TDTableCol(title: 'Title', colKey: 'title2'),
-        TDTableCol(title: 'Title', colKey: 'title3'),
-        TDTableCol(
+        MyTableCol(title: 'Title', colKey: 'title1'),
+        MyTableCol(title: 'Title', colKey: 'title2'),
+        MyTableCol(title: 'Title', colKey: 'title3'),
+        MyTableCol(
           title: 'Title',
           colKey: 'title4',
-          fixed: TDTableColFixed.right,
+          fixed: MyTableColFixed.right,
           cellBuilder: (BuildContext context, int index) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 MyText(
-                  '修改',
+                  'Revise',
                   style: TextStyle(
                     color: context.colorScheme.primary,
                     fontSize: 14,
                   ),
                 ),
                 MyText(
-                  '通过',
+                  'Pass',
                   style: TextStyle(
                     color: context.colorScheme.primary,
                     fontSize: 14,
@@ -240,79 +258,79 @@ class TDTablePage extends StatelessWidget {
   }
 
   Widget _horizontalScrollTable(BuildContext context) {
-    return TDTable(
+    return MyTable(
       columns: [
-        TDTableCol(title: 'Title', colKey: 'title1', width: 160),
-        TDTableCol(title: 'Title', colKey: 'title2', width: 160),
-        TDTableCol(title: 'Title', colKey: 'title3', width: 160),
+        MyTableCol(title: 'Title', colKey: 'title1', width: 160),
+        MyTableCol(title: 'Title', colKey: 'title2', width: 160),
+        MyTableCol(title: 'Title', colKey: 'title3', width: 160),
       ],
       data: _getData2(),
     );
   }
 
   Widget _stripeTable(BuildContext context) {
-    return TDTable(
+    return MyTable(
       stripe: true,
       columns: [
-        TDTableCol(title: 'Title', colKey: 'title1', ellipsis: true),
-        TDTableCol(title: 'Title', colKey: 'title2'),
-        TDTableCol(title: 'Title', colKey: 'title3'),
-        TDTableCol(title: 'Title', colKey: 'title4'),
+        MyTableCol(title: 'Title', colKey: 'title1', ellipsis: true),
+        MyTableCol(title: 'Title', colKey: 'title2'),
+        MyTableCol(title: 'Title', colKey: 'title3'),
+        MyTableCol(title: 'Title', colKey: 'title4'),
       ],
       data: _getData(9),
     );
   }
 
   Widget _borderTable(BuildContext context) {
-    return TDTable(
+    return MyTable(
       bordered: true,
       columns: [
-        TDTableCol(title: 'Title', colKey: 'title1', ellipsis: true),
-        TDTableCol(title: 'Title', colKey: 'title2'),
-        TDTableCol(title: 'Title', colKey: 'title3'),
-        TDTableCol(title: 'Title', colKey: 'title4'),
+        MyTableCol(title: 'Title', colKey: 'title1', ellipsis: true),
+        MyTableCol(title: 'Title', colKey: 'title2'),
+        MyTableCol(title: 'Title', colKey: 'title3'),
+        MyTableCol(title: 'Title', colKey: 'title4'),
       ],
       data: _getData(9),
     );
   }
 
   Widget _fixedHeaderTable(BuildContext context) {
-    return TDTable(
+    return MyTable(
       bordered: true,
       height: 240,
       columns: [
-        TDTableCol(title: 'Title', colKey: 'title1', ellipsis: true),
-        TDTableCol(title: 'Title', colKey: 'title2'),
-        TDTableCol(title: 'Title', colKey: 'title3'),
-        TDTableCol(title: 'Title', colKey: 'title4'),
+        MyTableCol(title: 'Title', colKey: 'title1', ellipsis: true),
+        MyTableCol(title: 'Title', colKey: 'title2'),
+        MyTableCol(title: 'Title', colKey: 'title3'),
+        MyTableCol(title: 'Title', colKey: 'title4'),
       ],
       data: _getData(9),
     );
   }
 
   Widget _fixedScrollTable(BuildContext context) {
-    return TDTable(
+    return MyTable(
       columns: [
-        TDTableCol(title: 'Title', colKey: 'title1', width: 200),
-        TDTableCol(title: 'Title', colKey: 'title2', width: 160),
-        TDTableCol(title: 'Title', colKey: 'title3', width: 160),
-        TDTableCol(
+        MyTableCol(title: 'Title', colKey: 'title1', width: 200),
+        MyTableCol(title: 'Title', colKey: 'title2', width: 160),
+        MyTableCol(title: 'Title', colKey: 'title3', width: 160),
+        MyTableCol(
           title: 'Title',
           colKey: 'title4',
-          fixed: TDTableColFixed.right,
+          fixed: MyTableColFixed.right,
           cellBuilder: (BuildContext context, int index) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 MyText(
-                  '修改',
+                  'Revise',
                   style: TextStyle(
                     color: context.colorScheme.primary,
                     fontSize: 14,
                   ),
                 ),
                 MyText(
-                  '通过',
+                  'Pass',
                   style: TextStyle(
                     color: context.colorScheme.primary,
                     fontSize: 14,
@@ -328,27 +346,27 @@ class TDTablePage extends StatelessWidget {
   }
 
   Widget _centerTable(BuildContext context) {
-    return TDTable(
+    return MyTable(
       columns: [
-        TDTableCol(
+        MyTableCol(
           title: 'Title',
           colKey: 'title1',
-          align: TDTableColAlign.center,
+          align: MyTableColAlign.center,
         ),
-        TDTableCol(
+        MyTableCol(
           title: 'Title',
           colKey: 'title2',
-          align: TDTableColAlign.center,
+          align: MyTableColAlign.center,
         ),
-        TDTableCol(
+        MyTableCol(
           title: 'Title',
           colKey: 'title3',
-          align: TDTableColAlign.center,
+          align: MyTableColAlign.center,
         ),
-        TDTableCol(
+        MyTableCol(
           title: 'Title',
           colKey: 'title4',
-          align: TDTableColAlign.center,
+          align: MyTableColAlign.center,
         ),
       ],
       data: _getData(10),
@@ -356,33 +374,33 @@ class TDTablePage extends StatelessWidget {
   }
 
   Widget _emptyTable(BuildContext context) {
-    return TDTable(
+    return MyTable(
       columns: [
-        TDTableCol(title: 'Title', colKey: 'title1'),
-        TDTableCol(title: 'Title', colKey: 'title2'),
-        TDTableCol(title: 'Title', colKey: 'title3'),
-        TDTableCol(title: 'Title', colKey: 'title4'),
+        MyTableCol(title: 'Title', colKey: 'title1'),
+        MyTableCol(title: 'Title', colKey: 'title2'),
+        MyTableCol(title: 'Title', colKey: 'title3'),
+        MyTableCol(title: 'Title', colKey: 'title4'),
       ],
     );
   }
 
   Widget _loadingTable(BuildContext context) {
-    return TDTable(
+    return MyTable(
       columns: [
-        TDTableCol(title: 'Title', colKey: 'title1'),
-        TDTableCol(title: 'Title', colKey: 'title2'),
-        TDTableCol(title: 'Title', colKey: 'title3'),
-        TDTableCol(title: 'Title', colKey: 'title4'),
+        MyTableCol(title: 'Title', colKey: 'title1'),
+        MyTableCol(title: 'Title', colKey: 'title2'),
+        MyTableCol(title: 'Title', colKey: 'title3'),
+        MyTableCol(title: 'Title', colKey: 'title4'),
       ],
       loading: true,
     );
   }
 
   Widget _selectTable(BuildContext context) {
-    return TDTable(
+    return MyTable(
       data: _getData(10),
       columns: [
-        TDTableCol(
+        MyTableCol(
           selection: true,
           checked: (index, row) {
             return index == 0;
@@ -392,10 +410,10 @@ class TDTablePage extends StatelessWidget {
             return index % 2 == 0;
           },
         ),
-        TDTableCol(title: 'Title', colKey: 'title1'),
-        TDTableCol(title: 'Title', colKey: 'title2'),
-        TDTableCol(title: 'Title', colKey: 'title3'),
-        TDTableCol(title: 'Title', colKey: 'title4'),
+        MyTableCol(title: 'Title', colKey: 'title1'),
+        MyTableCol(title: 'Title', colKey: 'title2'),
+        MyTableCol(title: 'Title', colKey: 'title3'),
+        MyTableCol(title: 'Title', colKey: 'title4'),
       ],
     );
   }
