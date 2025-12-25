@@ -1,5 +1,6 @@
 import 'package:common_tools/index.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../base/example_widget.dart';
 
@@ -62,18 +63,22 @@ class MyTablePage extends StatelessWidget {
             ExampleItem(desc: 'Basic Table', builder: _basicTable),
             ExampleItem(desc: 'Sortable Table', builder: _sortableTable),
             ExampleItem(
-              desc: 'Table with Actions or Buttons',
+              desc: 'Table with Text Buttons',
               builder: _operationBtnTable,
             ),
             ExampleItem(
+              desc: 'Table with Icon Buttons',
               builder: _operationIconTable,
               padding: const EdgeInsets.only(top: 16),
             ),
             ExampleItem(
-              desc: 'Fixed FirstColTable',
+              desc: 'Fixed First Column Table',
               builder: _fixedFirstColTable,
             ),
-            ExampleItem(desc: 'Fixed EndColTable', builder: _fixedEndColTable),
+            ExampleItem(
+              desc: 'Fixed End Column Table',
+              builder: _fixedEndColTable,
+            ),
             ExampleItem(
               desc: 'Horizontal Tiled Scrollable Table',
               builder: _horizontalScrollTable,
@@ -94,13 +99,13 @@ class MyTablePage extends StatelessWidget {
       test: [
         ExampleItem(desc: 'Fixed Header', builder: _fixedHeaderTable),
         ExampleItem(
-          desc: 'Fixed Column Footer + Scrolling Table',
+          desc: 'Fixed End Column + Scrolling Table',
           builder: _fixedScrollTable,
         ),
         ExampleItem(desc: 'Centered Table', builder: _centerTable),
         ExampleItem(desc: 'Empty Data Table', builder: _emptyTable),
         ExampleItem(desc: 'Loading Animation Table', builder: _loadingTable),
-        ExampleItem(desc: 'Optional Table', builder: _selectTable),
+        ExampleItem(desc: 'Multi Selection Table', builder: _selectTable),
       ],
     );
   }
@@ -141,27 +146,29 @@ class MyTablePage extends StatelessWidget {
         MyTableColumn(title: 'Title', field: 'title2'),
         MyTableColumn(title: 'Title', field: 'title3'),
         MyTableColumn(
-          title: 'Title',
+          title: 'Actions',
           field: 'title4',
           cellBuilder: (BuildContext context, int index) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                MyText(
-                  'Revise',
-                  style: TextStyle(
+                MyButton(
+                  text: 'Revise',
+                  textStyle: context.bodyMedium.copyWith(
                     color: context.colorScheme.primary,
-                    fontSize: 14,
-                    height: 1,
                   ),
+                  type: MyButtonType.text,
+                  size: MyButtonSize.small,
+                  padding: EdgeInsets.zero,
                 ),
-                MyText(
-                  'Pass',
-                  style: TextStyle(
+                MyButton(
+                  text: 'Pass',
+                  textStyle: context.bodyMedium.copyWith(
                     color: context.colorScheme.primary,
-                    fontSize: 14,
-                    height: 1,
                   ),
+                  type: MyButtonType.text,
+                  size: MyButtonSize.small,
+                  padding: EdgeInsets.zero,
                 ),
               ],
             );
@@ -179,21 +186,44 @@ class MyTablePage extends StatelessWidget {
         MyTableColumn(title: 'Title', field: 'title2'),
         MyTableColumn(title: 'Title', field: 'title3'),
         MyTableColumn(
-          title: 'Title',
+          title: 'Actions',
           field: 'title4',
           cellBuilder: (BuildContext context, int index) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Icon(
-                  Icons.upload,
-                  color: context.colorScheme.primary,
-                  size: 16,
+                MyButton(
+                  iconWidget: Icon(
+                    LucideIcons.upload,
+                    color: context.colorScheme.primary,
+                    size: 16,
+                  ),
+                  type: MyButtonType.ghost,
+                  shape: MyButtonShape.square,
+                  size: MyButtonSize.extraSmall,
+                  padding: EdgeInsets.zero,
                 ),
-                Icon(
-                  Icons.delete,
-                  color: context.colorScheme.primary,
-                  size: 16,
+                MyButton(
+                  iconWidget: Icon(
+                    LucideIcons.pencilLine,
+                    color: Colors.orange,
+                    size: 16,
+                  ),
+                  type: MyButtonType.ghost,
+                  shape: MyButtonShape.square,
+                  size: MyButtonSize.extraSmall,
+                  padding: EdgeInsets.zero,
+                ),
+                MyButton(
+                  iconWidget: Icon(
+                    LucideIcons.trash2,
+                    color: context.colorScheme.destructive,
+                    size: 16,
+                  ),
+                  type: MyButtonType.ghost,
+                  shape: MyButtonShape.square,
+                  size: MyButtonSize.extraSmall,
+                  padding: EdgeInsets.zero,
                 ),
               ],
             );
@@ -213,7 +243,7 @@ class MyTablePage extends StatelessWidget {
         MyTableColumn(
           title: 'Title',
           field: 'title4',
-          fixed: MyTableColFixed.left,
+          fixed: MyTableColumnFixed.left,
         ),
       ],
       data: _getData(10),
@@ -227,26 +257,30 @@ class MyTablePage extends StatelessWidget {
         MyTableColumn(title: 'Title', field: 'title2'),
         MyTableColumn(title: 'Title', field: 'title3'),
         MyTableColumn(
-          title: 'Title',
+          title: 'Actions',
           field: 'title4',
-          fixed: MyTableColFixed.right,
+          fixed: MyTableColumnFixed.right,
           cellBuilder: (BuildContext context, int index) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                MyText(
-                  'Revise',
-                  style: TextStyle(
+                MyButton(
+                  text: 'Revise',
+                  textStyle: context.bodyMedium.copyWith(
                     color: context.colorScheme.primary,
-                    fontSize: 14,
                   ),
+                  type: MyButtonType.text,
+                  size: MyButtonSize.small,
+                  padding: EdgeInsets.zero,
                 ),
-                MyText(
-                  'Pass',
-                  style: TextStyle(
+                MyButton(
+                  text: 'Pass',
+                  textStyle: context.bodyMedium.copyWith(
                     color: context.colorScheme.primary,
-                    fontSize: 14,
                   ),
+                  type: MyButtonType.text,
+                  size: MyButtonSize.small,
+                  padding: EdgeInsets.zero,
                 ),
               ],
             );
@@ -260,9 +294,10 @@ class MyTablePage extends StatelessWidget {
   Widget _horizontalScrollTable(BuildContext context) {
     return MyTable(
       columns: [
-        MyTableColumn(title: 'Title', field: 'title1', width: 160),
-        MyTableColumn(title: 'Title', field: 'title2', width: 160),
-        MyTableColumn(title: 'Title', field: 'title3', width: 160),
+        MyTableColumn(title: 'Title', field: 'title1', width: 200),
+        MyTableColumn(title: 'Title', field: 'title2', width: 200),
+        MyTableColumn(title: 'Title', field: 'title3', width: 200),
+        MyTableColumn(title: 'Title', field: 'title4', width: 200),
       ],
       data: _getData2(),
     );
@@ -317,7 +352,7 @@ class MyTablePage extends StatelessWidget {
         MyTableColumn(
           title: 'Title',
           field: 'title4',
-          fixed: MyTableColFixed.right,
+          fixed: MyTableColumnFixed.right,
           cellBuilder: (BuildContext context, int index) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -347,26 +382,27 @@ class MyTablePage extends StatelessWidget {
 
   Widget _centerTable(BuildContext context) {
     return MyTable(
+      bordered: true,
       columns: [
         MyTableColumn(
           title: 'Title',
           field: 'title1',
-          align: MyTableColAlign.center,
+          align: MyTableColumnAlign.center,
         ),
         MyTableColumn(
           title: 'Title',
           field: 'title2',
-          align: MyTableColAlign.center,
+          align: MyTableColumnAlign.center,
         ),
         MyTableColumn(
           title: 'Title',
           field: 'title3',
-          align: MyTableColAlign.center,
+          align: MyTableColumnAlign.center,
         ),
         MyTableColumn(
           title: 'Title',
           field: 'title4',
-          align: MyTableColAlign.center,
+          align: MyTableColumnAlign.center,
         ),
       ],
       data: _getData(10),
@@ -375,6 +411,7 @@ class MyTablePage extends StatelessWidget {
 
   Widget _emptyTable(BuildContext context) {
     return MyTable(
+      bordered: true,
       columns: [
         MyTableColumn(title: 'Title', field: 'title1'),
         MyTableColumn(title: 'Title', field: 'title2'),
@@ -386,13 +423,14 @@ class MyTablePage extends StatelessWidget {
 
   Widget _loadingTable(BuildContext context) {
     return MyTable(
+      bordered: true,
+      loading: true,
       columns: [
         MyTableColumn(title: 'Title', field: 'title1'),
         MyTableColumn(title: 'Title', field: 'title2'),
         MyTableColumn(title: 'Title', field: 'title3'),
         MyTableColumn(title: 'Title', field: 'title4'),
       ],
-      loading: true,
     );
   }
 
@@ -401,11 +439,11 @@ class MyTablePage extends StatelessWidget {
       data: _getData(10),
       columns: [
         MyTableColumn(
+          width: 50,
           selection: true,
           checked: (index, row) {
             return index == 0;
           },
-          width: 50,
           selectable: (index, row) {
             return index % 2 == 0;
           },

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../../../index.dart';
 
-enum TDTagTheme { defaultTheme, primary, warning, danger, success }
+enum MyTagTheme { defaultTheme, primary, warning, danger, success }
 
-enum TDTagSize { extraLarge, large, medium, small, custom }
+enum MyTagSize { extraLarge, large, medium, small, custom }
 
-enum TDTagShape { square, round, mark }
+enum MyTagShape { square, round, mark }
 
-class TDTagStyle {
-  TDTagStyle({
+class MyTagStyle {
+  MyTagStyle({
     this.context,
     this.textColor,
     this.backgroundColor,
@@ -19,30 +19,30 @@ class TDTagStyle {
     this.borderColor,
     this.borderRadius,
   });
-  TDTagStyle.generateFillStyleByTheme(
+  MyTagStyle.generateFillStyleByTheme(
     BuildContext this.context,
-    TDTagTheme? theme,
+    MyTagTheme? theme,
     bool light,
-    TDTagShape shape,
+    MyTagShape shape,
   ) {
     switch (theme) {
-      case TDTagTheme.primary:
+      case MyTagTheme.primary:
         textColor = light ? ThemeColors.blue.shade600 : Colors.white;
         backgroundColor =
             light ? ThemeColors.blue.shade50 : ThemeColors.blue.shade600;
-      case TDTagTheme.warning:
+      case MyTagTheme.warning:
         textColor = light ? ThemeColors.warning.shade400 : Colors.white;
         backgroundColor =
             light ? ThemeColors.warning.shade50 : ThemeColors.warning.shade400;
-      case TDTagTheme.danger:
+      case MyTagTheme.danger:
         textColor = light ? ThemeColors.error.shade500 : Colors.white;
         backgroundColor =
             light ? ThemeColors.error.shade50 : ThemeColors.error.shade500;
-      case TDTagTheme.success:
+      case MyTagTheme.success:
         textColor = light ? ThemeColors.success.shade400 : Colors.white;
         backgroundColor =
             light ? ThemeColors.success.shade50 : ThemeColors.success.shade400;
-      case TDTagTheme.defaultTheme:
+      case MyTagTheme.defaultTheme:
       case null:
         textColor = ThemeColors.neutral.shade900;
         backgroundColor =
@@ -50,11 +50,11 @@ class TDTagStyle {
     }
 
     switch (shape) {
-      case TDTagShape.square:
+      case MyTagShape.square:
         borderRadius = BorderRadius.circular(3);
-      case TDTagShape.round:
+      case MyTagShape.round:
         borderRadius = BorderRadius.circular(9999);
-      case TDTagShape.mark:
+      case MyTagShape.mark:
         borderRadius = BorderRadius.only(
           topRight: Radius.circular(9999),
           bottomRight: Radius.circular(9999),
@@ -64,30 +64,30 @@ class TDTagStyle {
     borderColor = backgroundColor;
   }
 
-  TDTagStyle.generateOutlineStyleByTheme(
+  MyTagStyle.generateOutlineStyleByTheme(
     BuildContext this.context,
-    TDTagTheme? theme,
+    MyTagTheme? theme,
     bool light,
-    TDTagShape shape,
+    MyTagShape shape,
   ) {
     switch (theme) {
-      case TDTagTheme.primary:
+      case MyTagTheme.primary:
         borderColor = ThemeColors.blue.shade600;
         textColor = ThemeColors.blue.shade600;
         backgroundColor = light ? ThemeColors.blue.shade50 : Colors.white;
-      case TDTagTheme.warning:
+      case MyTagTheme.warning:
         borderColor = ThemeColors.warning.shade400;
         textColor = ThemeColors.warning.shade400;
         backgroundColor = light ? ThemeColors.warning.shade50 : Colors.white;
-      case TDTagTheme.danger:
+      case MyTagTheme.danger:
         borderColor = ThemeColors.error.shade500;
         textColor = ThemeColors.error.shade500;
         backgroundColor = light ? ThemeColors.error.shade50 : Colors.white;
-      case TDTagTheme.success:
+      case MyTagTheme.success:
         borderColor = ThemeColors.success.shade400;
         textColor = ThemeColors.success.shade400;
         backgroundColor = light ? ThemeColors.success.shade50 : Colors.white;
-      case TDTagTheme.defaultTheme:
+      case MyTagTheme.defaultTheme:
       case null:
         borderColor = ThemeColors.neutral.shade600;
         textColor = ThemeColors.neutral.shade900;
@@ -95,11 +95,11 @@ class TDTagStyle {
     }
 
     switch (shape) {
-      case TDTagShape.square:
+      case MyTagShape.square:
         borderRadius = BorderRadius.circular(3);
-      case TDTagShape.round:
+      case MyTagShape.round:
         borderRadius = BorderRadius.circular(9999);
-      case TDTagShape.mark:
+      case MyTagShape.mark:
         borderRadius = BorderRadius.only(
           topRight: Radius.circular(9999),
           bottomRight: Radius.circular(9999),
@@ -109,16 +109,16 @@ class TDTagStyle {
     border = 1;
   }
 
-  TDTagStyle.generateDisableSelectStyle(bool isOutline, TDTagShape shape) {
+  MyTagStyle.generateDisableSelectStyle(bool isOutline, MyTagShape shape) {
     borderColor = ThemeColors.neutral.shade300;
     textColor = ThemeColors.neutral.shade600;
     backgroundColor = ThemeColors.neutral.shade100;
     switch (shape) {
-      case TDTagShape.square:
+      case MyTagShape.square:
         borderRadius = BorderRadius.circular(3);
-      case TDTagShape.round:
+      case MyTagShape.round:
         borderRadius = BorderRadius.circular(9999);
-      case TDTagShape.mark:
+      case MyTagShape.mark:
         borderRadius = BorderRadius.only(
           topRight: Radius.circular(9999),
           bottomRight: Radius.circular(9999),
@@ -128,17 +128,11 @@ class TDTagStyle {
   }
 
   BuildContext? context;
-
   Color? textColor;
-
   Color? backgroundColor;
-
   Color? borderColor;
-
   BorderRadiusGeometry? borderRadius;
-
   TextStyle? style;
-
   FontWeight? fontWeight;
 
   double border = 0;

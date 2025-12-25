@@ -48,9 +48,9 @@ class TestPage extends StatelessWidget {
           spacing: 12,
           runSpacing: 12,
           children: const [
-            TDTag('1', theme: TDTagTheme.primary, size: TDTagSize.medium),
-            TDTag('1000', theme: TDTagTheme.warning),
-            TDTag('文本', theme: TDTagTheme.success),
+            MyTag('1', theme: MyTagTheme.primary, size: MyTagSize.medium),
+            MyTag('1000', theme: MyTagTheme.warning),
+            MyTag('文本', theme: MyTagTheme.success),
           ],
         ),
         const SizedBox(height: 24),
@@ -71,14 +71,14 @@ class TestPage extends StatelessWidget {
           spacing: 12,
           runSpacing: 12,
           children: const [
-            TDTag(
+            MyTag(
               '1',
               fixedWidth: 80,
-              theme: TDTagTheme.primary,
-              size: TDTagSize.medium,
+              theme: MyTagTheme.primary,
+              size: MyTagSize.medium,
             ),
-            TDTag('1000', fixedWidth: 80, theme: TDTagTheme.warning),
-            TDTag('文本', fixedWidth: 80, theme: TDTagTheme.success),
+            MyTag('1000', fixedWidth: 80, theme: MyTagTheme.warning),
+            MyTag('文本', fixedWidth: 80, theme: MyTagTheme.success),
           ],
         ),
         const SizedBox(height: 24),
@@ -95,26 +95,26 @@ class TestPage extends StatelessWidget {
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 12),
-        const TDTag(
+        const MyTag(
           '超长文本测试超长文本测试超长文本测试超长文本测试',
           fixedWidth: 100,
-          theme: TDTagTheme.warning,
+          theme: MyTagTheme.warning,
         ),
         const SizedBox(height: 12),
-        const TDTag(
+        const MyTag(
           '带关闭按钮',
           fixedWidth: 150,
           needCloseIcon: true,
-          theme: TDTagTheme.danger,
+          theme: MyTagTheme.danger,
         ),
         const SizedBox(height: 12),
-        TDTag(
+        MyTag(
           '动态宽度',
           fixedWidth: MediaQuery.of(context).size.width * 0.5,
-          theme: TDTagTheme.success,
+          theme: MyTagTheme.success,
         ),
         const SizedBox(height: 12),
-        const TDTag('极小宽度', fixedWidth: 50, theme: TDTagTheme.primary),
+        const MyTag('极小宽度', fixedWidth: 50, theme: MyTagTheme.primary),
       ],
     );
   }

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../../index.dart';
 
-enum MyTableColFixed { left, right, none }
+enum MyTableColumnFixed { left, right, none }
 
-enum MyTableColAlign { left, center, right }
+enum MyTableColumnAlign { left, center, right }
 
 typedef OnCellTap = void Function(int rowIndex, Json? row, MyTableColumn col);
 typedef OnScroll = void Function(ScrollController controller);
@@ -18,11 +18,11 @@ class MyTableColumn {
     this.title,
     this.field,
     this.width,
-    this.fixed = MyTableColFixed.none,
+    this.fixed = MyTableColumnFixed.none,
     this.ellipsis,
     this.ellipsisTitle,
     this.cellBuilder,
-    this.align = MyTableColAlign.left,
+    this.align = MyTableColumnAlign.left,
     this.sortable = false,
     this.selection,
     this.selectable,
@@ -34,11 +34,11 @@ class MyTableColumn {
   String? title;
   String? field;
   double? width;
-  MyTableColFixed? fixed;
+  MyTableColumnFixed? fixed;
   bool? ellipsis;
   bool? ellipsisTitle;
   IndexedWidgetBuilder? cellBuilder;
-  MyTableColAlign? align;
+  MyTableColumnAlign? align;
   bool? sortable;
 
   /// Whether the CheckBox of the current row is selectable, only selection: true is valid
@@ -106,31 +106,32 @@ class MyTableState extends State<MyTable> {
   String? _sortKey;
   int _hasChecked = 0;
   int _totalSelectable = 0;
-  late MyTableColumn _selectableCol;
+  bool _checkAll = false;
+  late MyTableColumn _selectableColumn;
   late List<bool> _checkedList;
   final _scrollController = ScrollController();
 
-  Alignment _getVerticalAlign(MyTableColAlign x) {
+  Alignment _getVerticalAlign(MyTableColumnAlign x) {
     var xPos = 0.0;
     switch (x) {
-      case MyTableColAlign.left:
+      case MyTableColumnAlign.left:
         xPos = -1;
-      case MyTableColAlign.center:
+      case MyTableColumnAlign.center:
         xPos = 0;
-      case MyTableColAlign.right:
+      case MyTableColumnAlign.right:
         xPos = 1;
     }
     return Alignment(xPos, 0);
   }
 
-  List<MyTableColumn> _getColumns(MyTableColFixed fixed) {
+  List<MyTableColumn> _getColumns(MyTableColumnFixed fixed) {
     return widget.columns.where((col) => col.fixed == fixed).toList();
   }
 
   Widget _getTableHeader(BuildContext context) {
-    final fixedLeftCol = _getColumns(MyTableColFixed.left);
-    final fixedNonCol = _getColumns(MyTableColFixed.none);
-    final fixedRightCol = _getColumns(MyTableColFixed.right);
+    final fixedLeftCol = _getColumns(MyTableColumnFixed.left);
+    final fixedNonCol = _getColumns(MyTableColumnFixed.none);
+    final fixedRightCol = _getColumns(MyTableColumnFixed.right);
 
     var start = 0;
 
@@ -177,13 +178,7 @@ class MyTableState extends State<MyTable> {
 
   Widget _getTableContent(BuildContext context) {
     if (widget.loading ?? false) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 64),
-          child:
-              widget.loadingWidget ?? const MyLoader(size: MyLoaderSize.small),
-        ),
-      );
+      return _getLoader();
     }
 
     if (widget.data == null || widget.data!.isEmpty) {
@@ -191,9 +186,9 @@ class MyTableState extends State<MyTable> {
     }
 
     final cells = <Widget>[];
-    final fixedLeftCol = _getColumns(MyTableColFixed.left);
-    final fixedNonCol = _getColumns(MyTableColFixed.none);
-    final fixedRightCol = _getColumns(MyTableColFixed.right);
+    final fixedLeftCol = _getColumns(MyTableColumnFixed.left);
+    final fixedNonCol = _getColumns(MyTableColumnFixed.none);
+    final fixedRightCol = _getColumns(MyTableColumnFixed.right);
 
     final headerCol = [...fixedLeftCol, ...fixedNonCol, ...fixedRightCol];
 
@@ -220,7 +215,7 @@ class MyTableState extends State<MyTable> {
         ColoredBox(
           color:
               (widget.stripe ?? false) && i.isEven
-                  ? const Color(0xffF3F3F3)
+                  ? context.colorScheme.secondary.scaleAlpha(0.5)
                   : context.colorScheme.background,
           child: Row(children: row),
         ),
@@ -262,11 +257,11 @@ class MyTableState extends State<MyTable> {
 
     if (widget.bordered ?? false) rightBorder = halfBorder;
 
-    if (fixedBorder && column.fixed == MyTableColFixed.left) {
+    if (fixedBorder && column.fixed == MyTableColumnFixed.left) {
       rightBorder = doubleBorder;
     }
 
-    if (fixedBorder && column.fixed == MyTableColFixed.right) {
+    if (fixedBorder && column.fixed == MyTableColumnFixed.right) {
       leftBorder = doubleBorder;
     }
 
@@ -282,75 +277,81 @@ class MyTableState extends State<MyTable> {
     var content = text;
 
     if ((column.selection ?? false) && column.cellBuilder == null) {
-      final enable =
-          column.selectable?.call(index, widget.data?[index]) ?? true;
+      MyCheckbox? checkBox;
 
-      var checkBox = MyCheckbox(
-        id: 'index:$index',
-        checked: _checkedList[index],
-        enabled: enable,
-        customIconBuilder: (context, checked) {
-          if (checked ?? false) {
-            return Icon(
-              Icons.check_box_rounded,
-              size: 16,
-              color: context.colorScheme.primary,
-            );
-          }
-          return Icon(
-            Icons.check_box_outline_blank_rounded,
-            size: 16,
-            color:
-                enable
-                    ? ThemeColors.neutral.shade900
-                    : ThemeColors.neutral.shade700,
-          );
-        },
-        onChanged: (checked) {
-          setState(() {
-            _checkedList[index] = checked ?? false;
+      if (_notEmptyData()) {
+        final enable =
+            column.selectable?.call(index, widget.data?[index]) ?? true;
+
+        checkBox = MyCheckbox(
+          id: 'index:$index',
+          checked: _checkedList[index],
+          enabled: enable,
+          customIconBuilder: (context, checked) {
             if (checked ?? false) {
-              _hasChecked += 1;
-            } else {
-              _hasChecked -= 1;
+              return Icon(
+                Icons.check_box_rounded,
+                size: 16,
+                color: context.colorScheme.primary,
+              );
             }
-            final selectList = <Json>[];
-            for (var i = 0; i < _checkedList.length; i++) {
-              if (_checkedList[i]) {
-                selectList.add(widget.data![i]);
+            return Icon(
+              Icons.check_box_outline_blank_rounded,
+              size: 16,
+              color:
+                  enable
+                      ? context.colorScheme.foreground.scaleAlpha(0.5)
+                      : context.colorScheme.muted,
+            );
+          },
+          onChanged: (checked) {
+            setState(() {
+              _checkedList[index] = checked ?? false;
+              if (checked ?? false) {
+                _hasChecked += 1;
+              } else {
+                _hasChecked -= 1;
               }
-            }
-            widget.onSelect?.call(selectList);
-            widget.onRowSelect?.call(index, checked ?? false);
-            print('!!!!::::$_hasChecked');
-          });
-        },
-      );
+              _checkAll = _hasChecked == _totalSelectable;
+              final selectList = <Json>[];
+              for (var i = 0; i < _checkedList.length; i++) {
+                if (_checkedList[i]) {
+                  selectList.add(widget.data![i]);
+                }
+              }
+              widget.onSelect?.call(selectList);
+              widget.onRowSelect?.call(index, checked ?? false);
+            });
+          },
+        );
+      }
 
       if (isHeader) {
         checkBox = MyCheckbox(
           id: 'header',
-          checked: _hasChecked == _totalSelectable,
+          checked: _checkAll,
           customIconBuilder: (context, checked) {
-            if (_hasChecked == 0) {
+            if (_hasChecked == 0 || _totalSelectable == 0) {
               return Icon(
                 Icons.check_box_outline_blank_rounded,
                 size: 16,
-                color: ThemeColors.neutral.shade700,
+                color: context.colorScheme.foreground.scaleAlpha(0.5),
               );
             }
             final allCheck = _hasChecked >= _totalSelectable;
             final halfSelected =
-                _hasChecked > 0 && _hasChecked < widget.data!.length;
+                _hasChecked > 0 && _hasChecked < _totalSelectable;
             return getAllIcon(allCheck, halfSelected);
           },
           onChanged: (checked) {
             setState(() {
+              if (!_notEmptyData() && (checked ?? false)) {
+                _hasChecked = _totalSelectable = 1;
+              }
+              _checkAll = checked ?? false;
               _hasChecked = checked ?? false ? _totalSelectable : 0;
               for (var i = 0; i < widget.data!.length; i++) {
-                _checkedList[i] = checked ?? false;
-                // Unselect rows where selectable == false
-                if (_selectableCol.selectable!(i, widget.data![i])) {
+                if (_selectableColumn.selectable!(i, widget.data![i])) {
                   _checkedList[i] = checked ?? false;
                 }
               }
@@ -360,7 +361,7 @@ class MyTableState extends State<MyTable> {
         );
       }
 
-      content = Row(children: [checkBox, text]);
+      content = Row(children: [if (checkBox != null) checkBox, text]);
     }
 
     final cell = GestureDetector(
@@ -488,6 +489,10 @@ class MyTableState extends State<MyTable> {
     return width;
   }
 
+  bool _notEmptyData() {
+    return widget.data != null && widget.data!.isNotEmpty;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -496,33 +501,35 @@ class MyTableState extends State<MyTable> {
     _scrollController.addListener(() {
       widget.onScroll?.call(_scrollController);
     });
-    _initCols();
+    _initColumns();
   }
 
   @override
   void didUpdateWidget(covariant MyTable oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _initCols();
+    _initColumns();
   }
 
-  void _initCols() {
+  void _initColumns() {
     _totalSelectable = 0;
     _hasChecked = 0;
     _checkedList = List.generate(widget.data?.length ?? 0, (index) => false);
     final columns = widget.columns.where((col) => col.selection ?? false);
+
     if (columns.length > 1) {
       throw FlutterError('Selectable column must be only one');
     }
+
     if (widget.data != null && columns.isNotEmpty) {
-      _selectableCol = columns.first;
+      _selectableColumn = columns.first;
       final data = widget.data!;
       for (var i = 0; i < data.length; i++) {
-        final check = _selectableCol.checked?.call(i, data[i]) ?? false;
+        final check = _selectableColumn.checked?.call(i, data[i]) ?? false;
         _checkedList[i] = check;
         if (check) {
           _hasChecked++;
         }
-        if (_selectableCol.selectable?.call(i, data[i]) ?? false) {
+        if (_selectableColumn.selectable?.call(i, data[i]) ?? false) {
           _totalSelectable++;
         }
       }
@@ -530,9 +537,9 @@ class MyTableState extends State<MyTable> {
   }
 
   Widget _getFixedTable(BuildContext context) {
-    final fixedLeftCol = _getColumns(MyTableColFixed.left);
-    final fixedNonCol = _getColumns(MyTableColFixed.none);
-    final fixedRightCol = _getColumns(MyTableColFixed.right);
+    final fixedLeftCol = _getColumns(MyTableColumnFixed.left);
+    final fixedNonCol = _getColumns(MyTableColumnFixed.none);
+    final fixedRightCol = _getColumns(MyTableColumnFixed.right);
 
     final fixedLeftTitle = _getCellsText(fixedLeftCol);
     final fixedNonTitle = _getCellsText(fixedNonCol);
@@ -561,8 +568,8 @@ class MyTableState extends State<MyTable> {
 
     var fixedCellsWidth = 0.0;
     for (final column in widget.columns) {
-      if (column.fixed == MyTableColFixed.left ||
-          column.fixed == MyTableColFixed.right) {
+      if (column.fixed == MyTableColumnFixed.left ||
+          column.fixed == MyTableColumnFixed.right) {
         fixedCellsWidth += column.width ?? cellWidth;
       }
     }
@@ -575,17 +582,7 @@ class MyTableState extends State<MyTable> {
     if ((width - fixedCellsWidth) < fixedNonCellsWidth) {
       var content = [Row(children: fixedNonCols), _getEmpty()];
       if (widget.loading ?? false) {
-        content = [
-          Row(children: fixedNonCols),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 64),
-              child:
-                  widget.loadingWidget ??
-                  const MyLoader(size: MyLoaderSize.small),
-            ),
-          ),
-        ];
+        content = [Row(children: fixedNonCols), _getLoader()];
       }
       return Container(
         width: width,
@@ -621,13 +618,7 @@ class MyTableState extends State<MyTable> {
     var placeholder = _getEmpty();
 
     if (widget.loading ?? false) {
-      placeholder = Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 64),
-          child:
-              widget.loadingWidget ?? const MyLoader(size: MyLoaderSize.small),
-        ),
-      );
+      placeholder = _getLoader();
     }
 
     return ColoredBox(
@@ -644,6 +635,15 @@ class MyTableState extends State<MyTable> {
           padding: const EdgeInsets.only(top: 16, bottom: 38),
           child: widget.empty ?? const MyError.empty(),
         ),
+      ),
+    );
+  }
+
+  Widget _getLoader() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 64),
+        child: widget.loadingWidget ?? const MyLoader(size: MyLoaderSize.small),
       ),
     );
   }
@@ -695,13 +695,12 @@ class MyTableState extends State<MyTable> {
           ? Icons.check_box_rounded
           : halfSelected
           ? Icons.indeterminate_check_box_rounded
-          : Icons.circle,
-      // checked ? TDIcons.check_rectangle_filled : halfSelected ? TDIcons.minus_rectangle_filled : TDIcons.check_rectangle,
+          : Icons.check_box_outline_blank_rounded,
       size: 16,
       color:
           (checked || halfSelected)
               ? context.colorScheme.primary
-              : ThemeColors.neutral.shade300,
+              : context.colorScheme.foreground,
     );
   }
 
@@ -709,8 +708,8 @@ class MyTableState extends State<MyTable> {
   Widget build(BuildContext context) {
     final width = widget.width ?? MediaQuery.of(context).size.width;
     final fixedCols = [
-      ..._getColumns(MyTableColFixed.left),
-      ..._getColumns(MyTableColFixed.right),
+      ..._getColumns(MyTableColumnFixed.left),
+      ..._getColumns(MyTableColumnFixed.right),
     ];
 
     if (fixedCols.isNotEmpty) {
@@ -777,7 +776,7 @@ class ChevronPainter extends CustomPainter {
     final upPaint =
         Paint()
           ..color = upColor
-          ..strokeWidth = 1.4
+          ..strokeWidth = 1.5
           ..style = PaintingStyle.stroke
           ..strokeCap = StrokeCap.round;
 

@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import '../../../index.dart';
-import '../text/my_text.dart';
-import 'td_tag_styles.dart';
 
 /// Display label component, only display, internal state cannot be changed
 /// Supported styles: square/rounded/semicircle/with close icon
 ///
-class TDTag extends StatelessWidget {
-  const TDTag(
+class MyTag extends StatelessWidget {
+  const MyTag(
     this.text, {
     this.theme,
     this.icon,
@@ -17,10 +15,10 @@ class TDTag extends StatelessWidget {
     this.textStyle,
     this.fontWeight,
     this.style,
-    this.size = TDTagSize.medium,
+    this.size = MyTagSize.medium,
     this.padding,
     this.isOutline = false,
-    this.shape = TDTagShape.square,
+    this.shape = MyTagShape.square,
     this.isLight = false,
     this.disable = false,
     this.needCloseIcon = false,
@@ -31,41 +29,23 @@ class TDTag extends StatelessWidget {
   });
 
   final String text;
-
-  final TDTagTheme? theme;
-
+  final MyTagTheme? theme;
   final IconData? icon;
-
   final Widget? iconWidget;
-
   final Color? textColor;
-
   final Color? backgroundColor;
-
   final TextStyle? textStyle;
-
   final FontWeight? fontWeight;
-
-  final TDTagStyle? style;
-
-  final TDTagSize size;
-
+  final MyTagStyle? style;
+  final MyTagSize size;
   final EdgeInsets? padding;
-
   final bool isOutline;
-
-  final TDTagShape shape;
-
+  final MyTagShape shape;
   final bool isLight;
-
   final bool disable;
-
   final bool needCloseIcon;
-
   final TextOverflow? overflow;
-
   final GestureTapCallback? onCloseTap;
-
   final double? fixedWidth;
 
   @override
@@ -127,7 +107,7 @@ class TDTag extends StatelessWidget {
     );
   }
 
-  Widget? getIcon(TDTagStyle innerStyle) {
+  Widget? getIcon(MyTagStyle innerStyle) {
     if (iconWidget != null) return iconWidget;
 
     if (icon != null) {
@@ -149,28 +129,28 @@ class TDTag extends StatelessWidget {
     return null;
   }
 
-  TDTagStyle _getInnerStyle(BuildContext context) {
+  MyTagStyle _getInnerStyle(BuildContext context) {
     if (style != null) {
       return style!;
     }
     if (disable) {
-      return TDTagStyle.generateDisableSelectStyle(isOutline, shape);
+      return MyTagStyle.generateDisableSelectStyle(isOutline, shape);
     }
     return isOutline
-        ? TDTagStyle.generateOutlineStyleByTheme(context, theme, isLight, shape)
-        : TDTagStyle.generateFillStyleByTheme(context, theme, isLight, shape);
+        ? MyTagStyle.generateOutlineStyleByTheme(context, theme, isLight, shape)
+        : MyTagStyle.generateFillStyleByTheme(context, theme, isLight, shape);
   }
 
   TextStyle? _getFont(BuildContext context) {
     switch (size) {
-      case TDTagSize.extraLarge:
+      case MyTagSize.extraLarge:
         return context.bodyMedium;
-      case TDTagSize.large:
+      case MyTagSize.large:
         return context.bodyMedium;
-      case TDTagSize.small:
+      case MyTagSize.small:
         return context.labelMedium;
-      case TDTagSize.medium:
-      case TDTagSize.custom:
+      case MyTagSize.medium:
+      case MyTagSize.custom:
         return context.bodySmall;
     }
   }
@@ -179,19 +159,19 @@ class TDTag extends StatelessWidget {
     var hPadding = 0.0;
     var vPadding = 0.0;
     switch (size) {
-      case TDTagSize.extraLarge:
+      case MyTagSize.extraLarge:
         hPadding = 16;
         vPadding = 9;
-      case TDTagSize.large:
+      case MyTagSize.large:
         hPadding = 8;
         vPadding = 3;
-      case TDTagSize.medium:
+      case MyTagSize.medium:
         hPadding = 8;
         vPadding = 2;
-      case TDTagSize.small:
+      case MyTagSize.small:
         hPadding = 6;
         vPadding = 2;
-      case TDTagSize.custom:
+      case MyTagSize.custom:
         return EdgeInsets.zero;
     }
 
@@ -217,15 +197,15 @@ class TDTag extends StatelessWidget {
 
   double _getIconSize() {
     switch (size) {
-      case TDTagSize.extraLarge:
+      case MyTagSize.extraLarge:
         return 16;
-      case TDTagSize.large:
+      case MyTagSize.large:
         return 16;
-      case TDTagSize.medium:
+      case MyTagSize.medium:
         return 14;
-      case TDTagSize.small:
+      case MyTagSize.small:
         return 12;
-      case TDTagSize.custom:
+      case MyTagSize.custom:
         return 14;
     }
   }

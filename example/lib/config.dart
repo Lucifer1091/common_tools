@@ -54,7 +54,7 @@ import 'page/my_swiper_page.dart';
 import 'page/my_switch_page.dart';
 import 'page/my_table_page.dart';
 import 'page/my_tabs_page.dart';
-import 'page/td_tag_page.dart';
+import 'page/my_tag_page.dart';
 import 'page/my_text_page.dart';
 import 'page/my_textarea_page.dart';
 import 'page/td_theme_page.dart';
@@ -322,7 +322,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'Tag',
       name: 'tag',
-      pageBuilder: _wrapInheritedTheme((context) => const TDTagPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyTagPage()),
     ),
   ],
   'Feedback': [

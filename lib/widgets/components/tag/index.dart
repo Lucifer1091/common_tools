@@ -1,3 +1,3 @@
-export 'td_select_tag.dart';
-export 'td_tag.dart';
-export 'td_tag_styles.dart';
+export 'my_select_tag.dart';
+export 'my_tag.dart';
+export 'my_tag_styles.dart';

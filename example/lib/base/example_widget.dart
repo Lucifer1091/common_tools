@@ -90,7 +90,7 @@ class _ExamplePageState extends State<ExamplePage> {
                         if (widget.test.isNotEmpty) {
                           data = ExampleModule(
                             title: 'Unit Testing',
-                            children: [_buildTestExampleItem(), ...widget.test],
+                            children: widget.test,
                           );
                         }
                       }
@@ -132,14 +132,6 @@ class _ExamplePageState extends State<ExamplePage> {
     );
   }
 
-  ExampleItem _buildTestExampleItem() => ExampleItem(
-    desc:
-        '''Component styles not included in the sample draft but necessary for verification should be added to the 'test' parameter. The following scenarios must be tested:
-1. The parameter is a number. Test scenarios with negative numbers, 0, and larger values.
-2. The parameter is an enumeration. Test all enumeration combinations (optional combinations are optional).''',
-    builder: (_) => const MyDivider(),
-  );
-
   Widget _buildHeader(BuildContext context) {
     if (widget.showSingleChild) return const NoWidget();
 
@@ -154,7 +146,6 @@ class _ExamplePageState extends State<ExamplePage> {
             margin: const EdgeInsets.only(top: 4),
             child: MyText(widget.desc),
           ),
-          // Expanded(child: ),
         ],
       ),
     );
