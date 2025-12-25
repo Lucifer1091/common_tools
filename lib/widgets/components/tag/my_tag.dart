@@ -19,7 +19,7 @@ class MyTag extends StatelessWidget {
     this.padding,
     this.isOutline = false,
     this.shape = MyTagShape.square,
-    this.disable = false,
+    this.enable = true,
     this.needCloseIcon = false,
     this.onCloseTap,
     this.overflow,
@@ -40,10 +40,10 @@ class MyTag extends StatelessWidget {
   final EdgeInsets? padding;
   final bool isOutline;
   final MyTagShape shape;
-  final bool disable;
+  final bool enable;
   final bool needCloseIcon;
   final TextOverflow? overflow;
-  final GestureTapCallback? onCloseTap;
+  final VoidCallback? onCloseTap;
   final double? fixedWidth;
 
   @override
@@ -131,7 +131,7 @@ class MyTag extends StatelessWidget {
   MyTagStyle _getInnerStyle(BuildContext context) {
     if (style != null) return style!;
 
-    if (disable) {
+    if (!enable) {
       return MyTagStyle.generateDisableSelectStyle(context, isOutline, shape);
     }
 

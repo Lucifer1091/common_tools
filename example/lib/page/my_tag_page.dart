@@ -224,7 +224,7 @@ class MyTagPage extends StatelessWidget {
         MySelectTag('Unselected', theme: MyTagTheme.primary),
         MySelectTag('Selected', theme: MyTagTheme.primary, isSelected: true),
         MySelectTag('Selected', theme: MyTagTheme.warning, isSelected: true),
-        MySelectTag('Disabled', theme: MyTagTheme.primary, disableSelect: true),
+        MySelectTag('Disabled', theme: MyTagTheme.primary, enable: false),
       ],
     );
   }
@@ -250,7 +250,7 @@ class MyTagPage extends StatelessWidget {
           'Disabled',
           theme: MyTagTheme.primary,
           isOutline: true,
-          disableSelect: true,
+          enable: false,
         ),
       ],
     );

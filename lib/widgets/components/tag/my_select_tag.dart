@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'my_tag.dart';
-import 'my_tag_styles.dart';
+import '../../../index.dart';
 
 /// Clickable label component, changes its own state internally when clicked
 /// Supported styles: square/rounded/semicircle/with close icon
@@ -16,7 +15,7 @@ class MySelectTag extends StatefulWidget {
     this.disableSelectStyle,
     this.onSelectChanged,
     this.isSelected = false,
-    this.disableSelect = false,
+    this.enable = true,
     this.size = MyTagSize.medium,
     this.padding,
     this.isOutline = false,
@@ -36,13 +35,13 @@ class MySelectTag extends StatefulWidget {
   final MyTagStyle? disableSelectStyle;
   final ValueChanged<bool>? onSelectChanged;
   final bool isSelected;
-  final bool disableSelect;
+  final bool enable;
   final MyTagSize size;
   final EdgeInsets? padding;
   final bool isOutline;
   final MyTagShape shape;
   final bool needCloseIcon;
-  final GestureTapCallback? onCloseTap;
+  final VoidCallback? onCloseTap;
   final double? fixedWidth;
 
   @override
@@ -72,8 +71,8 @@ class _MyClickTagState extends State<MySelectTag> {
       fixedWidth: widget.fixedWidth,
     );
 
-    if (!widget.disableSelect) {
-      result = GestureDetector(
+    if (widget.enable) {
+      result = MyGestureDetector(
         onTap: () {
           setState(() {
             _isSelected = !_isSelected;
@@ -88,12 +87,12 @@ class _MyClickTagState extends State<MySelectTag> {
   }
 
   MyTagStyle? _getStyle() {
-    if (widget.disableSelect) return _geMyisableSelectStyle();
+    if (!widget.enable) return _getDisableSelectStyle();
 
     return _isSelected ? _getSelectStyle() : _getUnSelectStyle();
   }
 
-  MyTagStyle _geMyisableSelectStyle() {
+  MyTagStyle _getDisableSelectStyle() {
     if (widget.disableSelectStyle != null) return widget.disableSelectStyle!;
 
     return MyTagStyle.generateDisableSelectStyle(
