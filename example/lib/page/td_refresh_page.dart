@@ -72,9 +72,11 @@ class _TdPullDownRefreshPageState extends State<TdPullDownRefreshPage> {
       // 下拉刷新回调
       onRefresh: () {
         Future.delayed(const Duration(seconds: 2), () {
-          setState(() {
-            count++;
-          });
+          if (mounted) {
+            setState(() {
+              count++;
+            });
+          }
         });
       },
     );

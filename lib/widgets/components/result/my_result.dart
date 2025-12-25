@@ -57,7 +57,7 @@ class MyResult extends StatelessWidget {
       case MyResultTheme.success:
         return Icon(
           CupertinoIcons.check_mark_circled_solid,
-          color: ThemeColors.success.shade600,
+          color: MyColors.success,
           size: 70,
         );
       case MyResultTheme.error:
@@ -69,7 +69,7 @@ class MyResult extends StatelessWidget {
       case MyResultTheme.warning:
         return Icon(
           CupertinoIcons.exclamationmark_triangle_fill,
-          color: ThemeColors.warning,
+          color: MyColors.warning,
           size: 70,
         );
       case MyResultTheme.primary:

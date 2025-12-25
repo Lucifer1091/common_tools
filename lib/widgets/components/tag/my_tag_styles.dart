@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 
 import '../../../index.dart';
 
-enum MyTagTheme { defaultTheme, primary, warning, danger, success }
+enum MyTagTheme { defaults, primary, warning, danger, success }
 
-enum MyTagSize { extraLarge, large, medium, small, custom }
+enum MyTagSize { small, medium, large, extraLarge, custom }
 
 enum MyTagShape { square, round, mark }
 
 class MyTagStyle {
   MyTagStyle({
-    this.context,
+    required this.context,
     this.textColor,
     this.backgroundColor,
     this.style,
@@ -19,45 +19,40 @@ class MyTagStyle {
     this.borderColor,
     this.borderRadius,
   });
+
   MyTagStyle.generateFillStyleByTheme(
-    BuildContext this.context,
+    this.context,
     MyTagTheme? theme,
-    bool light,
     MyTagShape shape,
   ) {
     switch (theme) {
       case MyTagTheme.primary:
-        textColor = light ? ThemeColors.blue.shade600 : Colors.white;
-        backgroundColor =
-            light ? ThemeColors.blue.shade50 : ThemeColors.blue.shade600;
+        textColor = Colors.white;
+        backgroundColor = context.colorScheme.primary;
       case MyTagTheme.warning:
-        textColor = light ? ThemeColors.warning.shade400 : Colors.white;
-        backgroundColor =
-            light ? ThemeColors.warning.shade50 : ThemeColors.warning.shade400;
+        textColor = Colors.white;
+        backgroundColor = MyColors.warning;
       case MyTagTheme.danger:
-        textColor = light ? ThemeColors.error.shade500 : Colors.white;
-        backgroundColor =
-            light ? ThemeColors.error.shade50 : ThemeColors.error.shade500;
+        textColor = Colors.white;
+        backgroundColor = context.colorScheme.destructive;
       case MyTagTheme.success:
-        textColor = light ? ThemeColors.success.shade400 : Colors.white;
-        backgroundColor =
-            light ? ThemeColors.success.shade50 : ThemeColors.success.shade400;
-      case MyTagTheme.defaultTheme:
+        textColor = Colors.white;
+        backgroundColor = MyColors.success;
+      case MyTagTheme.defaults:
       case null:
-        textColor = ThemeColors.neutral.shade900;
-        backgroundColor =
-            light ? ThemeColors.neutral.shade50 : ThemeColors.neutral.shade200;
+        textColor = context.colorScheme.secondaryForeground;
+        backgroundColor = context.colorScheme.secondary;
     }
 
     switch (shape) {
       case MyTagShape.square:
-        borderRadius = BorderRadius.circular(3);
+        borderRadius = MyBorderRadius.small;
       case MyTagShape.round:
-        borderRadius = BorderRadius.circular(9999);
+        borderRadius = MyBorderRadius.round;
       case MyTagShape.mark:
         borderRadius = BorderRadius.only(
-          topRight: Radius.circular(9999),
-          bottomRight: Radius.circular(9999),
+          topRight: MyRadi.round,
+          bottomRight: MyRadi.round,
         );
     }
 
@@ -65,69 +60,73 @@ class MyTagStyle {
   }
 
   MyTagStyle.generateOutlineStyleByTheme(
-    BuildContext this.context,
+    this.context,
     MyTagTheme? theme,
-    bool light,
     MyTagShape shape,
   ) {
     switch (theme) {
       case MyTagTheme.primary:
-        borderColor = ThemeColors.blue.shade600;
-        textColor = ThemeColors.blue.shade600;
-        backgroundColor = light ? ThemeColors.blue.shade50 : Colors.white;
+        borderColor = context.colorScheme.primary;
+        textColor = context.colorScheme.primary;
+        backgroundColor = context.colorScheme.background;
       case MyTagTheme.warning:
-        borderColor = ThemeColors.warning.shade400;
-        textColor = ThemeColors.warning.shade400;
-        backgroundColor = light ? ThemeColors.warning.shade50 : Colors.white;
+        borderColor = MyColors.warning;
+        textColor = MyColors.warning;
+        backgroundColor = context.colorScheme.background;
       case MyTagTheme.danger:
-        borderColor = ThemeColors.error.shade500;
-        textColor = ThemeColors.error.shade500;
-        backgroundColor = light ? ThemeColors.error.shade50 : Colors.white;
+        borderColor = context.colorScheme.destructive;
+        textColor = context.colorScheme.destructive;
+        backgroundColor = context.colorScheme.background;
       case MyTagTheme.success:
-        borderColor = ThemeColors.success.shade400;
-        textColor = ThemeColors.success.shade400;
-        backgroundColor = light ? ThemeColors.success.shade50 : Colors.white;
-      case MyTagTheme.defaultTheme:
+        borderColor = MyColors.success;
+        textColor = MyColors.success;
+        backgroundColor = context.colorScheme.background;
+      case MyTagTheme.defaults:
       case null:
-        borderColor = ThemeColors.neutral.shade600;
-        textColor = ThemeColors.neutral.shade900;
-        backgroundColor = light ? ThemeColors.neutral.shade50 : Colors.white;
+        borderColor = context.colorScheme.border;
+        textColor = context.colorScheme.foreground;
+        backgroundColor = context.colorScheme.background;
     }
 
     switch (shape) {
       case MyTagShape.square:
-        borderRadius = BorderRadius.circular(3);
+        borderRadius = MyBorderRadius.small;
       case MyTagShape.round:
-        borderRadius = BorderRadius.circular(9999);
+        borderRadius = MyBorderRadius.round;
       case MyTagShape.mark:
         borderRadius = BorderRadius.only(
-          topRight: Radius.circular(9999),
-          bottomRight: Radius.circular(9999),
+          topRight: MyRadi.round,
+          bottomRight: MyRadi.round,
         );
     }
 
     border = 1;
   }
 
-  MyTagStyle.generateDisableSelectStyle(bool isOutline, MyTagShape shape) {
-    borderColor = ThemeColors.neutral.shade300;
-    textColor = ThemeColors.neutral.shade600;
-    backgroundColor = ThemeColors.neutral.shade100;
+  MyTagStyle.generateDisableSelectStyle(
+    this.context,
+    bool isOutline,
+    MyTagShape shape,
+  ) {
+    borderColor = context.colorScheme.muted;
+    textColor = context.colorScheme.mutedForeground;
+    backgroundColor = context.colorScheme.muted;
+
     switch (shape) {
       case MyTagShape.square:
-        borderRadius = BorderRadius.circular(3);
+        borderRadius = MyBorderRadius.small;
       case MyTagShape.round:
-        borderRadius = BorderRadius.circular(9999);
+        borderRadius = MyBorderRadius.round;
       case MyTagShape.mark:
         borderRadius = BorderRadius.only(
-          topRight: Radius.circular(9999),
-          bottomRight: Radius.circular(9999),
+          topRight: MyRadi.round,
+          bottomRight: MyRadi.round,
         );
     }
     border = isOutline ? 1 : 0;
   }
 
-  BuildContext? context;
+  BuildContext context;
   Color? textColor;
   Color? backgroundColor;
   Color? borderColor;
@@ -139,7 +138,8 @@ class MyTagStyle {
 
   Color get getTextColor => textColor ?? Colors.white;
 
-  Color get getBackgroundColor => backgroundColor ?? ThemeColors.blue.shade600;
+  Color get getBackgroundColor =>
+      backgroundColor ?? context.colorScheme.primary;
 
   Color get getBorderColor => borderColor ?? Colors.transparent;
 

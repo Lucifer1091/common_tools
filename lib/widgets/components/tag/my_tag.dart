@@ -19,7 +19,6 @@ class MyTag extends StatelessWidget {
     this.padding,
     this.isOutline = false,
     this.shape = MyTagShape.square,
-    this.isLight = false,
     this.disable = false,
     this.needCloseIcon = false,
     this.onCloseTap,
@@ -41,7 +40,6 @@ class MyTag extends StatelessWidget {
   final EdgeInsets? padding;
   final bool isOutline;
   final MyTagShape shape;
-  final bool isLight;
   final bool disable;
   final bool needCloseIcon;
   final TextOverflow? overflow;
@@ -61,6 +59,7 @@ class MyTag extends StatelessWidget {
     );
 
     final innerIcon = getIcon(innerStyle);
+
     if (innerIcon != null || needCloseIcon) {
       final children = <Widget>[];
       if (innerIcon != null) {
@@ -76,13 +75,13 @@ class MyTag extends StatelessWidget {
       children.add(child);
       if (needCloseIcon) {
         children.add(
-          GestureDetector(
+          MyGestureDetector(
             onTap: onCloseTap,
             child: Container(
               margin: const EdgeInsets.only(left: 4),
               child: Icon(
-                Icons.close,
-                color: ThemeColors.neutral.shade700,
+                Icons.close_rounded,
+                color: _getInnerStyle(context).textColor,
                 size: 14,
               ),
             ),
@@ -130,15 +129,15 @@ class MyTag extends StatelessWidget {
   }
 
   MyTagStyle _getInnerStyle(BuildContext context) {
-    if (style != null) {
-      return style!;
-    }
+    if (style != null) return style!;
+
     if (disable) {
-      return MyTagStyle.generateDisableSelectStyle(isOutline, shape);
+      return MyTagStyle.generateDisableSelectStyle(context, isOutline, shape);
     }
+
     return isOutline
-        ? MyTagStyle.generateOutlineStyleByTheme(context, theme, isLight, shape)
-        : MyTagStyle.generateFillStyleByTheme(context, theme, isLight, shape);
+        ? MyTagStyle.generateOutlineStyleByTheme(context, theme, shape)
+        : MyTagStyle.generateFillStyleByTheme(context, theme, shape);
   }
 
   TextStyle? _getFont(BuildContext context) {

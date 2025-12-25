@@ -89,8 +89,8 @@ class MyLink extends StatelessWidget {
           MyColors.warning.shade700,
         ),
         MyLinkStyle.success: context.themed(
-          MyColors.success.shade300,
-          MyColors.success.shade700,
+          MyColors.green.shade300,
+          MyColors.green.shade700,
         ),
         MyLinkStyle.defaults: context.colorScheme.mutedForeground,
       },

@@ -21,7 +21,6 @@ class MySelectTag extends StatefulWidget {
     this.padding,
     this.isOutline = false,
     this.shape = MyTagShape.square,
-    this.isLight = false,
     this.needCloseIcon = false,
     this.onCloseTap,
     this.fixedWidth,
@@ -42,7 +41,6 @@ class MySelectTag extends StatefulWidget {
   final EdgeInsets? padding;
   final bool isOutline;
   final MyTagShape shape;
-  final bool isLight;
   final bool needCloseIcon;
   final GestureTapCallback? onCloseTap;
   final double? fixedWidth;
@@ -99,6 +97,7 @@ class _MyClickTagState extends State<MySelectTag> {
     if (widget.disableSelectStyle != null) return widget.disableSelectStyle!;
 
     return MyTagStyle.generateDisableSelectStyle(
+      context,
       widget.isOutline,
       widget.shape,
     );
@@ -111,13 +110,11 @@ class _MyClickTagState extends State<MySelectTag> {
         ? MyTagStyle.generateOutlineStyleByTheme(
           context,
           widget.theme,
-          widget.isLight,
           widget.shape,
         )
         : MyTagStyle.generateFillStyleByTheme(
           context,
           widget.theme,
-          widget.isLight,
           widget.shape,
         );
   }
@@ -128,14 +125,12 @@ class _MyClickTagState extends State<MySelectTag> {
     return widget.isOutline
         ? MyTagStyle.generateOutlineStyleByTheme(
           context,
-          MyTagTheme.defaultTheme,
-          widget.isLight,
+          MyTagTheme.defaults,
           widget.shape,
         )
         : MyTagStyle.generateFillStyleByTheme(
           context,
-          MyTagTheme.defaultTheme,
-          widget.isLight,
+          MyTagTheme.defaults,
           widget.shape,
         );
   }

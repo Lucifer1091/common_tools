@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:common_tools/index.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../base/example_widget.dart';
 
 class MyTagPage extends StatelessWidget {
@@ -10,7 +11,7 @@ class MyTagPage extends StatelessWidget {
     return ExamplePage(
       title: myTitle(context),
       desc:
-          'Used to indicate the category, attribute, or status of the subject.',
+          'A tag is a small, interactive element that represents an attribute, text, entity, or action.',
       exampleCodeGroup: 'tag',
       children: [
         ExampleModule(
@@ -30,7 +31,7 @@ class MyTagPage extends StatelessWidget {
               },
             ),
             ExampleItem(
-              desc: 'Arc Label',
+              desc: 'Round Tag',
               builder: (context) {
                 return Row(
                   children: [
@@ -56,7 +57,7 @@ class MyTagPage extends StatelessWidget {
               },
             ),
             ExampleItem(
-              desc: 'Labels with icons',
+              desc: 'Labels With Icons',
               builder: (context) {
                 return Row(
                   children: [
@@ -69,7 +70,7 @@ class MyTagPage extends StatelessWidget {
               },
             ),
             ExampleItem(
-              desc: 'Closable tabs',
+              desc: 'Closable Tags',
               builder: (context) {
                 return Row(
                   children: [
@@ -82,7 +83,7 @@ class MyTagPage extends StatelessWidget {
               },
             ),
             ExampleItem(
-              desc: 'Selectable tags',
+              desc: 'Selectable Tags',
               builder: (context) {
                 return Container(
                   alignment: Alignment.topLeft,
@@ -93,29 +94,14 @@ class MyTagPage extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          const SizedBox(width: 80, child: MyText('dark')),
-                          _buildDarkSelectTags(context),
+                          const SizedBox(width: 80, child: MyText('Fill')),
+                          _buildFillSelectTags(context),
                         ],
                       ),
                       Row(
                         children: [
-                          const SizedBox(width: 80, child: MyText('light')),
-                          _buildLightSelectTags(context),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          const SizedBox(width: 80, child: MyText('outline')),
+                          const SizedBox(width: 80, child: MyText('Outline')),
                           _buildOutlineSelectTags(context),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          const SizedBox(
-                            width: 80,
-                            child: MyText('light-outline'),
-                          ),
-                          _buildLightOutlineSelectTags(context),
                         ],
                       ),
                     ],
@@ -129,7 +115,7 @@ class MyTagPage extends StatelessWidget {
           title: 'Component States',
           children: [
             ExampleItem(
-              desc: 'Display label',
+              desc: 'Display Label',
               builder: (context) {
                 return Container(
                   alignment: Alignment.topLeft,
@@ -138,10 +124,8 @@ class MyTagPage extends StatelessWidget {
                     spacing: 8,
                     direction: Axis.vertical,
                     children: [
-                      _buildLightShowTags(context),
-                      _buildDarkShowTags(context),
+                      _buildFillShowTags(context),
                       _buildOutlineShowTags(context),
-                      _buildLightOutlineShowTags(context),
                     ],
                   ),
                 );
@@ -156,7 +140,7 @@ class MyTagPage extends StatelessWidget {
               builder: (context) {
                 return Container(
                   alignment: Alignment.topLeft,
-                  padding: const EdgeInsets.only(left: 16),
+                  padding: const EdgeInsets.only(left: 16, top: 16),
                   child: Wrap(
                     spacing: 8,
                     direction: Axis.vertical,
@@ -169,629 +153,6 @@ class MyTagPage extends StatelessWidget {
               },
             ),
           ],
-        ),
-      ],
-      test: [
-        ExampleItem(
-          desc: 'Theme displays that are not filled with light colors',
-          builder: (context) {
-            return Wrap(
-              spacing: 8,
-              children: const [
-                MyTag('tag text'),
-                MyTag('tag text', theme: MyTagTheme.primary),
-                MyTag('tag text', theme: MyTagTheme.warning),
-                MyTag('tag text', theme: MyTagTheme.danger),
-                MyTag('tag text', theme: MyTagTheme.success),
-                MyTag('tag text', theme: MyTagTheme.success),
-              ],
-            );
-          },
-        ),
-        ExampleItem(
-          desc: 'Light-colored themed displays',
-          builder: (context) {
-            return Wrap(
-              spacing: 8,
-              children: const [
-                MyTag('tag text', isLight: true),
-                MyTag('tag text', isLight: true, theme: MyTagTheme.primary),
-                MyTag('tag text', isLight: true, theme: MyTagTheme.warning),
-                MyTag('tag text', isLight: true, theme: MyTagTheme.danger),
-                MyTag('tag text', isLight: true, theme: MyTagTheme.success),
-              ],
-            );
-          },
-        ),
-        ExampleItem(
-          desc: 'Display of various themes without light-colored outlines',
-          ignoreCode: true,
-          builder: (context) {
-            return Wrap(
-              spacing: 8,
-              children: const [
-                MyTag('label text', isOutline: true),
-                MyTag('label text', isOutline: true, theme: MyTagTheme.primary),
-                MyTag('label text', isOutline: true, theme: MyTagTheme.warning),
-                MyTag('label text', isOutline: true, theme: MyTagTheme.danger),
-                MyTag('label text', isOutline: true, theme: MyTagTheme.success),
-              ],
-            );
-          },
-        ),
-        ExampleItem(
-          desc: 'Light-colored outlines for each theme display',
-          builder: (context) {
-            return Wrap(
-              spacing: 8,
-              children: const [
-                MyTag('label text', isOutline: true, isLight: true),
-                MyTag(
-                  'label text',
-                  isOutline: true,
-                  isLight: true,
-                  theme: MyTagTheme.primary,
-                ),
-                MyTag(
-                  'label text',
-                  isOutline: true,
-                  isLight: true,
-                  theme: MyTagTheme.warning,
-                ),
-                MyTag(
-                  'label text',
-                  isOutline: true,
-                  isLight: true,
-                  theme: MyTagTheme.danger,
-                ),
-                MyTag(
-                  'label text',
-                  isOutline: true,
-                  isLight: true,
-                  theme: MyTagTheme.success,
-                ),
-              ],
-            );
-          },
-        ),
-        ExampleItem(
-          desc:
-              'The close icon color will not change across the various themes.',
-          builder: (context) {
-            return Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: const [
-                MyTag('label text', isOutline: true, needCloseIcon: true),
-                MyTag(
-                  'label text',
-                  isOutline: true,
-                  needCloseIcon: true,
-                  theme: MyTagTheme.primary,
-                ),
-                MyTag(
-                  'label text',
-                  isOutline: true,
-                  needCloseIcon: true,
-                  theme: MyTagTheme.warning,
-                ),
-                MyTag(
-                  'label text',
-                  isOutline: true,
-                  needCloseIcon: true,
-                  theme: MyTagTheme.danger,
-                ),
-                MyTag(
-                  'label text',
-                  isOutline: true,
-                  needCloseIcon: true,
-                  theme: MyTagTheme.success,
-                ),
-                MyTag('label text', needCloseIcon: true),
-                MyTag(
-                  'label text',
-                  needCloseIcon: true,
-                  theme: MyTagTheme.primary,
-                ),
-                MyTag(
-                  'label text',
-                  needCloseIcon: true,
-                  theme: MyTagTheme.warning,
-                ),
-                MyTag(
-                  'label text',
-                  needCloseIcon: true,
-                  theme: MyTagTheme.danger,
-                ),
-                MyTag(
-                  'label text',
-                  needCloseIcon: true,
-                  theme: MyTagTheme.success,
-                ),
-              ],
-            );
-          },
-        ),
-        ExampleItem(
-          desc: 'Tabs with icons that can be closed',
-          builder: (context) {
-            return Row(
-              children: const [
-                SizedBox(width: 16),
-                MyTag('label text', icon: Icons.discount, needCloseIcon: true),
-                SizedBox(width: 16),
-                MyTag(
-                  'label text',
-                  icon: Icons.discount,
-                  needCloseIcon: true,
-                  isOutline: true,
-                ),
-              ],
-            );
-          },
-        ),
-        ExampleItem(
-          desc: 'Each size test',
-          builder: (context) {
-            return Wrap(
-              spacing: 8,
-              direction: Axis.vertical,
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  margin: const EdgeInsets.only(left: 16, right: 16),
-                  child: Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: const [
-                      MyTag(
-                        'extraLarge',
-                        icon: Icons.discount,
-                        needCloseIcon: true,
-                        size: MyTagSize.extraLarge,
-                      ),
-                      MyTag(
-                        'large',
-                        icon: Icons.discount,
-                        needCloseIcon: true,
-                        size: MyTagSize.large,
-                      ),
-                      MyTag(
-                        'medium',
-                        icon: Icons.discount,
-                        needCloseIcon: true,
-                        size: MyTagSize.medium,
-                      ),
-                      MyTag(
-                        'small',
-                        icon: Icons.discount,
-                        needCloseIcon: true,
-                        size: MyTagSize.small,
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  margin: const EdgeInsets.only(left: 16, right: 16),
-                  child: Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: const [
-                      MyTag(
-                        'extraLarge',
-                        isOutline: true,
-                        icon: Icons.discount,
-                        needCloseIcon: true,
-                        size: MyTagSize.extraLarge,
-                      ),
-                      MyTag(
-                        'large',
-                        isOutline: true,
-                        icon: Icons.discount,
-                        needCloseIcon: true,
-                        size: MyTagSize.large,
-                      ),
-                      MyTag(
-                        'medium',
-                        isOutline: true,
-                        icon: Icons.discount,
-                        needCloseIcon: true,
-                        size: MyTagSize.medium,
-                      ),
-                      MyTag(
-                        'small',
-                        isOutline: true,
-                        icon: Icons.discount,
-                        needCloseIcon: true,
-                        size: MyTagSize.small,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
-        ExampleItem(
-          desc: 'Optional state tests',
-          builder: (context) {
-            return Wrap(
-              spacing: 8,
-              direction: Axis.vertical,
-              children: [
-                // Normal
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  margin: const EdgeInsets.only(left: 16, right: 16),
-                  child: Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: const [
-                      MySelectTag('Tag', theme: MyTagTheme.primary),
-                      MySelectTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        icon: Icons.discount,
-                        needCloseIcon: true,
-                        shape: MyTagShape.mark,
-                      ),
-                      MySelectTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        isSelected: true,
-                        shape: MyTagShape.mark,
-                      ),
-                      MySelectTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        icon: Icons.discount,
-                        needCloseIcon: true,
-                        isSelected: true,
-                      ),
-                      MySelectTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        disableSelect: true,
-                      ),
-                      MySelectTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        icon: Icons.discount,
-                        needCloseIcon: true,
-                        disableSelect: true,
-                        shape: MyTagShape.mark,
-                      ),
-                    ],
-                  ),
-                ),
-                // Light
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  margin: const EdgeInsets.only(left: 16, right: 16),
-                  child: Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: const [
-                      MySelectTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        isLight: true,
-                      ),
-                      MySelectTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        isLight: true,
-                        icon: Icons.discount,
-                        needCloseIcon: true,
-                        shape: MyTagShape.mark,
-                      ),
-                      MySelectTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        isLight: true,
-                        isSelected: true,
-                        shape: MyTagShape.mark,
-                      ),
-                      MySelectTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        icon: Icons.discount,
-                        isLight: true,
-                        needCloseIcon: true,
-                        isSelected: true,
-                      ),
-                      MySelectTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        isLight: true,
-                        disableSelect: true,
-                      ),
-                      MySelectTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        isLight: true,
-                        icon: Icons.discount,
-                        needCloseIcon: true,
-                        disableSelect: true,
-                        shape: MyTagShape.mark,
-                      ),
-                    ],
-                  ),
-                ),
-                // Outline
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  margin: const EdgeInsets.only(left: 16, right: 16),
-                  child: Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: const [
-                      MySelectTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        isOutline: true,
-                      ),
-                      MySelectTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        isOutline: true,
-                        icon: Icons.discount,
-                        needCloseIcon: true,
-                        shape: MyTagShape.mark,
-                      ),
-                      MySelectTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        isOutline: true,
-                        isSelected: true,
-                        shape: MyTagShape.mark,
-                      ),
-                      MySelectTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        icon: Icons.discount,
-                        isOutline: true,
-                        needCloseIcon: true,
-                        isSelected: true,
-                      ),
-                      MySelectTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        isOutline: true,
-                        disableSelect: true,
-                      ),
-                      MySelectTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        isOutline: true,
-                        icon: Icons.discount,
-                        needCloseIcon: true,
-                        disableSelect: true,
-                        shape: MyTagShape.mark,
-                      ),
-                    ],
-                  ),
-                ),
-                // Outline-Light
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  margin: const EdgeInsets.only(left: 16, right: 16),
-                  child: Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: const [
-                      MySelectTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        isOutline: true,
-                        isLight: true,
-                      ),
-                      MySelectTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        isOutline: true,
-                        isLight: true,
-                        icon: Icons.discount,
-                        needCloseIcon: true,
-                        shape: MyTagShape.mark,
-                      ),
-                      MySelectTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        isOutline: true,
-                        isLight: true,
-                        isSelected: true,
-                        shape: MyTagShape.mark,
-                      ),
-                      MySelectTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        icon: Icons.discount,
-                        isOutline: true,
-                        isLight: true,
-                        needCloseIcon: true,
-                        isSelected: true,
-                      ),
-                      MySelectTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        isOutline: true,
-                        isLight: true,
-                        disableSelect: true,
-                      ),
-                      MySelectTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        isOutline: true,
-                        isLight: true,
-                        icon: Icons.discount,
-                        needCloseIcon: true,
-                        disableSelect: true,
-                        shape: MyTagShape.mark,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
-        ExampleItem(
-          desc: 'Demonstrating tests in each state',
-          builder: (context) {
-            return Wrap(
-              spacing: 8,
-              direction: Axis.vertical,
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  margin: const EdgeInsets.only(left: 16, right: 16),
-                  child: Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: const [
-                      MyTag('Tag', theme: MyTagTheme.primary),
-                      MyTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        icon: Icons.discount,
-                        needCloseIcon: true,
-                        shape: MyTagShape.mark,
-                      ),
-                      MyTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        shape: MyTagShape.round,
-                        disable: true,
-                      ),
-                      MyTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        icon: Icons.discount,
-                        needCloseIcon: true,
-                        disable: true,
-                        shape: MyTagShape.mark,
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  margin: const EdgeInsets.only(left: 16, right: 16),
-                  child: Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: const [
-                      MyTag('Tag', theme: MyTagTheme.primary, isLight: true),
-                      MyTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        isLight: true,
-                        icon: Icons.discount,
-                        needCloseIcon: true,
-                        shape: MyTagShape.mark,
-                      ),
-                      MyTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        shape: MyTagShape.round,
-                        isLight: true,
-                        disable: true,
-                      ),
-                      MyTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        isLight: true,
-                        icon: Icons.discount,
-                        needCloseIcon: true,
-                        disable: true,
-                        shape: MyTagShape.mark,
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  margin: const EdgeInsets.only(left: 16, right: 16),
-                  child: Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: const [
-                      MyTag('Tag', theme: MyTagTheme.primary, isOutline: true),
-                      MyTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        isOutline: true,
-                        icon: Icons.discount,
-                        needCloseIcon: true,
-                        shape: MyTagShape.mark,
-                      ),
-                      MyTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        shape: MyTagShape.round,
-                        isOutline: true,
-                        disable: true,
-                      ),
-                      MyTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        isOutline: true,
-                        icon: Icons.discount,
-                        needCloseIcon: true,
-                        disable: true,
-                        shape: MyTagShape.mark,
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  margin: const EdgeInsets.only(left: 16, right: 16),
-                  child: Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: const [
-                      MyTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        isOutline: true,
-                        isLight: true,
-                      ),
-                      MyTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        isOutline: true,
-                        isLight: true,
-                        icon: Icons.discount,
-                        needCloseIcon: true,
-                        shape: MyTagShape.mark,
-                      ),
-                      MyTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        shape: MyTagShape.round,
-                        isOutline: true,
-                        isLight: true,
-                        disable: true,
-                      ),
-                      MyTag(
-                        'Tag',
-                        theme: MyTagTheme.primary,
-                        isOutline: true,
-                        isLight: true,
-                        icon: Icons.discount,
-                        needCloseIcon: true,
-                        disable: true,
-                        shape: MyTagShape.mark,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            );
-          },
         ),
       ],
     );
@@ -822,11 +183,17 @@ class MyTagPage extends StatelessWidget {
   }
 
   Widget _buildIconFillTag(BuildContext context) {
-    return const MyTag('label text', icon: Icons.discount);
+    return const MyTag(
+      'label text',
+      iconWidget: Icon(LucideIcons.tag, size: 10),
+    );
   }
 
   Widget _buildIconOutlineTag(BuildContext context) {
-    return const MyTag('label text', icon: Icons.discount, isOutline: true);
+    return const MyTag(
+      'label text',
+      iconWidget: Icon(LucideIcons.tag, size: 10),
+    );
   }
 
   Widget _buildCloseFillTag(BuildContext context) {
@@ -850,42 +217,14 @@ class MyTagPage extends StatelessWidget {
     );
   }
 
-  Widget _buildDarkSelectTags(BuildContext context) {
+  Widget _buildFillSelectTags(BuildContext context) {
     return Wrap(
       spacing: 8,
       children: const [
-        MySelectTag('unselected', theme: MyTagTheme.primary),
-        MySelectTag(
-          'Selected state',
-          theme: MyTagTheme.primary,
-          isSelected: true,
-        ),
-        MySelectTag(
-          'Not selectable',
-          theme: MyTagTheme.primary,
-          disableSelect: true,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildLightSelectTags(BuildContext context) {
-    return Wrap(
-      spacing: 8,
-      children: const [
-        MySelectTag('unselected', theme: MyTagTheme.primary, isLight: true),
-        MySelectTag(
-          'Selected state',
-          theme: MyTagTheme.primary,
-          isLight: true,
-          isSelected: true,
-        ),
-        MySelectTag(
-          'Not selectable',
-          theme: MyTagTheme.primary,
-          isLight: true,
-          disableSelect: true,
-        ),
+        MySelectTag('Unselected', theme: MyTagTheme.primary),
+        MySelectTag('Selected', theme: MyTagTheme.primary, isSelected: true),
+        MySelectTag('Selected', theme: MyTagTheme.warning, isSelected: true),
+        MySelectTag('Disabled', theme: MyTagTheme.primary, disableSelect: true),
       ],
     );
   }
@@ -894,15 +233,21 @@ class MyTagPage extends StatelessWidget {
     return Wrap(
       spacing: 8,
       children: const [
-        MySelectTag('unselected', theme: MyTagTheme.primary, isOutline: true),
+        MySelectTag('Unselected', theme: MyTagTheme.primary, isOutline: true),
         MySelectTag(
-          'Selected state',
+          'Selected',
           theme: MyTagTheme.primary,
           isOutline: true,
           isSelected: true,
         ),
         MySelectTag(
-          'Not selectable',
+          'Selected',
+          theme: MyTagTheme.warning,
+          isOutline: true,
+          isSelected: true,
+        ),
+        MySelectTag(
+          'Disabled',
           theme: MyTagTheme.primary,
           isOutline: true,
           disableSelect: true,
@@ -911,52 +256,7 @@ class MyTagPage extends StatelessWidget {
     );
   }
 
-  Widget _buildLightOutlineSelectTags(BuildContext context) {
-    return Wrap(
-      spacing: 8,
-      children: const [
-        MySelectTag(
-          'unselected',
-          theme: MyTagTheme.primary,
-          isOutline: true,
-          isLight: true,
-        ),
-        MySelectTag(
-          'Selected state',
-          theme: MyTagTheme.primary,
-          isOutline: true,
-          isLight: true,
-          isSelected: true,
-        ),
-        MySelectTag(
-          'Not selectable',
-          theme: MyTagTheme.primary,
-          isOutline: true,
-          isLight: true,
-          disableSelect: true,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildLightShowTags(BuildContext context) {
-    return Wrap(
-      spacing: 8,
-      children: const [
-        MyTag('Default', isLight: true),
-
-        MyTag('Primary', isLight: true, theme: MyTagTheme.primary),
-
-        MyTag('Warning', isLight: true, theme: MyTagTheme.warning),
-
-        MyTag('Danger', isLight: true, theme: MyTagTheme.danger),
-
-        MyTag('Success', isLight: true, theme: MyTagTheme.success),
-      ],
-    );
-  }
-
-  Widget _buildDarkShowTags(BuildContext context) {
+  Widget _buildFillShowTags(BuildContext context) {
     return Wrap(
       spacing: 8,
       children: const [
@@ -974,47 +274,10 @@ class MyTagPage extends StatelessWidget {
       spacing: 8,
       children: const [
         MyTag('Default', isOutline: true),
-
         MyTag('Primary', isOutline: true, theme: MyTagTheme.primary),
-
         MyTag('Warning', isOutline: true, theme: MyTagTheme.warning),
-
         MyTag('Danger', isOutline: true, theme: MyTagTheme.danger),
-
         MyTag('Success', isOutline: true, theme: MyTagTheme.success),
-      ],
-    );
-  }
-
-  Widget _buildLightOutlineShowTags(BuildContext context) {
-    return Wrap(
-      spacing: 8,
-      children: const [
-        MyTag('Default', isOutline: true, isLight: true),
-        MyTag(
-          'primary',
-          isOutline: true,
-          isLight: true,
-          theme: MyTagTheme.primary,
-        ),
-        MyTag(
-          'warning',
-          isOutline: true,
-          isLight: true,
-          theme: MyTagTheme.warning,
-        ),
-        MyTag(
-          'danger',
-          isOutline: true,
-          isLight: true,
-          theme: MyTagTheme.danger,
-        ),
-        MyTag(
-          'success',
-          isOutline: true,
-          isLight: true,
-          theme: MyTagTheme.success,
-        ),
       ],
     );
   }

@@ -12,7 +12,7 @@ class MyColors {
 
   static const transparent = Color(0x00000000);
 
-  static const success = green;
+  static const success = Color(0xff16a34a);
 
   static const warning = orange;
 
