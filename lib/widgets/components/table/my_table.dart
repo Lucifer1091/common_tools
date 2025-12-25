@@ -16,7 +16,7 @@ typedef RowCheckFunc = bool Function(int index, Json row);
 class MyTableColumn {
   MyTableColumn({
     this.title,
-    this.colKey,
+    this.field,
     this.width,
     this.fixed = MyTableColFixed.none,
     this.ellipsis,
@@ -32,7 +32,7 @@ class MyTableColumn {
   /// Whether to display a checkbox in the row, invalid when customizing columns
   bool? selection;
   String? title;
-  String? colKey;
+  String? field;
   double? width;
   MyTableColFixed? fixed;
   bool? ellipsis;
@@ -82,7 +82,7 @@ class MyTable extends StatefulWidget {
   final bool? bordered;
   final List<MyTableColumn> columns;
   final List<Json>? data;
-  final MyTableEmpty? empty;
+  final Widget? empty;
   final double? height;
   final double? rowHeight;
   final bool? loading;
@@ -123,15 +123,17 @@ class MyTableState extends State<MyTable> {
     return Alignment(xPos, 0);
   }
 
-  List<MyTableColumn> _getCol(MyTableColFixed fixed) {
+  List<MyTableColumn> _getColumns(MyTableColFixed fixed) {
     return widget.columns.where((col) => col.fixed == fixed).toList();
   }
 
   Widget _getTableHeader(BuildContext context) {
-    final fixedLeftCol = _getCol(MyTableColFixed.left);
-    final fixedNonCol = _getCol(MyTableColFixed.none);
-    final fixedRightCol = _getCol(MyTableColFixed.right);
+    final fixedLeftCol = _getColumns(MyTableColFixed.left);
+    final fixedNonCol = _getColumns(MyTableColFixed.none);
+    final fixedRightCol = _getColumns(MyTableColFixed.right);
+
     var start = 0;
+
     final fixedLeftCells = <Widget>[],
         cells = <Widget>[],
         fixedRightCells = <Widget>[];
@@ -177,21 +179,24 @@ class MyTableState extends State<MyTable> {
     if (widget.loading ?? false) {
       return Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 32),
-          child: widget.loadingWidget ?? const MyLoader(),
+          padding: const EdgeInsets.symmetric(vertical: 64),
+          child:
+              widget.loadingWidget ?? const MyLoader(size: MyLoaderSize.small),
         ),
       );
     }
 
     if (widget.data == null || widget.data!.isEmpty) {
-      return _getEmpty('No data yet.');
+      return _getEmpty();
     }
 
     final cells = <Widget>[];
-    final fixedLeftCol = _getCol(MyTableColFixed.left);
-    final fixedNonCol = _getCol(MyTableColFixed.none);
-    final fixedRightCol = _getCol(MyTableColFixed.right);
+    final fixedLeftCol = _getColumns(MyTableColFixed.left);
+    final fixedNonCol = _getColumns(MyTableColFixed.none);
+    final fixedRightCol = _getColumns(MyTableColFixed.right);
+
     final headerCol = [...fixedLeftCol, ...fixedNonCol, ...fixedRightCol];
+
     for (var i = 0; i < widget.data!.length; i++) {
       final data = widget.data![i];
       final row = <Widget>[];
@@ -221,11 +226,12 @@ class MyTableState extends State<MyTable> {
         ),
       );
     }
+
     return Column(children: cells);
   }
 
   Widget _getCell(
-    MyTableColumn col,
+    MyTableColumn column,
     bool isHeader,
     data,
     int index,
@@ -233,34 +239,51 @@ class MyTableState extends State<MyTable> {
   ) {
     final String title =
         isHeader
-            ? (col.title ?? '')
-            : ((data as Map?)?[col.colKey]?.toString() ?? '');
-    final ellipsis = (isHeader ? col.ellipsisTitle : col.ellipsis) ?? false;
-    final sortable = col.sortable ?? false;
+            ? (column.title ?? '')
+            : ((data as Map?)?[column.field]?.toString() ?? '');
+    final ellipsis =
+        (isHeader ? column.ellipsisTitle : column.ellipsis) ?? false;
+    final sortable = column.sortable ?? false;
 
-    final halfBorder = const BorderSide(width: 0.5, color: Color(0xffE7E7E7));
-    final doubleBorder = const BorderSide(width: 2, color: Color(0xffE7E7E7));
+    final halfBorder = BorderSide(
+      width: 0.5,
+      color: context.colorScheme.border,
+    );
+    final doubleBorder = BorderSide(
+      width: 2,
+      color: context.colorScheme.border,
+    );
 
     var topBorder = BorderSide.none,
         rightBorder = BorderSide.none,
         leftBorder = BorderSide.none;
 
     final bottomBorder = halfBorder;
-    if (widget.bordered ?? false) {
-      rightBorder = halfBorder;
-    }
-    if (fixedBorder && col.fixed == MyTableColFixed.left) {
+
+    if (widget.bordered ?? false) rightBorder = halfBorder;
+
+    if (fixedBorder && column.fixed == MyTableColFixed.left) {
       rightBorder = doubleBorder;
     }
-    if (fixedBorder && col.fixed == MyTableColFixed.right) {
+
+    if (fixedBorder && column.fixed == MyTableColFixed.right) {
       leftBorder = doubleBorder;
     }
 
-    final text = _getCellText(col, title, ellipsis, isHeader, sortable, index);
+    final text = _getCellText(
+      column,
+      title,
+      ellipsis,
+      isHeader,
+      sortable,
+      index,
+    );
+
     var content = text;
 
-    if ((col.selection ?? false) && col.cellBuilder == null) {
-      final enable = col.selectable?.call(index, widget.data?[index]) ?? true;
+    if ((column.selection ?? false) && column.cellBuilder == null) {
+      final enable =
+          column.selectable?.call(index, widget.data?[index]) ?? true;
 
       var checkBox = MyCheckbox(
         id: 'index:$index',
@@ -342,7 +365,7 @@ class MyTableState extends State<MyTable> {
 
     final cell = GestureDetector(
       onTap: () {
-        if (!isHeader) widget.onCellTap?.call(index, data as Json, col);
+        if (!isHeader) widget.onCellTap?.call(index, data as Json, column);
       },
       child: DecoratedBox(
         decoration: BoxDecoration(
@@ -358,7 +381,7 @@ class MyTableState extends State<MyTable> {
           child: SizedBox(
             height: widget.rowHeight ?? 22,
             child: Align(
-              alignment: _getVerticalAlign(col.align!),
+              alignment: _getVerticalAlign(column.align!),
               child: content,
             ),
           ),
@@ -370,7 +393,7 @@ class MyTableState extends State<MyTable> {
   }
 
   Widget _getCellText(
-    MyTableColumn col,
+    MyTableColumn column,
     String title,
     bool ellipsis,
     bool isHeader,
@@ -382,15 +405,10 @@ class MyTableState extends State<MyTable> {
       title,
       maxLines: 1,
       overflow: overflow,
-      style: TextStyle(
-        color:
-            isHeader
-                ? ThemeColors.neutral.shade700
-                : ThemeColors.neutral.shade900,
-        fontSize: 14,
-        height: 1,
-        letterSpacing: 0,
-      ),
+      style:
+          isHeader
+              ? context.bodyMedium.copyWith(fontWeight: FontWeight.w600)
+              : context.bodyMedium,
     );
 
     if (isHeader) {
@@ -409,7 +427,7 @@ class MyTableState extends State<MyTable> {
               child: MyGestureDetector(
                 onTap: () {
                   setState(() {
-                    if (_sortKey != col.colKey) {
+                    if (_sortKey != column.field) {
                       _sortable = true;
                     } else {
                       if (_sortable == false) {
@@ -418,10 +436,10 @@ class MyTableState extends State<MyTable> {
                         _sortable = !(_sortable ?? false);
                       }
                     }
-                    _sortKey = col.colKey;
+                    _sortKey = column.field;
                     widget.data?.sort((a, b) {
-                      final aValue = a[col.colKey];
-                      final bValue = b[col.colKey];
+                      final aValue = a[column.field];
+                      final bValue = b[column.field];
                       if (_sortable == false) {
                         if (bValue is Comparable && aValue is Comparable) {
                           return bValue.compareTo(aValue);
@@ -439,11 +457,11 @@ class MyTableState extends State<MyTable> {
                   size: const Size(16, 16),
                   painter: ChevronPainter(
                     upColor:
-                        (_sortable ?? false) && (_sortKey == col.colKey)
+                        (_sortable ?? false) && (_sortKey == column.field)
                             ? selectColor
                             : unSelectColor,
                     downColor:
-                        (_sortable == false) && (_sortKey == col.colKey)
+                        (_sortable == false) && (_sortKey == column.field)
                             ? selectColor
                             : unSelectColor,
                   ),
@@ -455,17 +473,17 @@ class MyTableState extends State<MyTable> {
       );
     }
 
-    if (col.cellBuilder != null) {
-      return Builder(builder: (_) => col.cellBuilder!(context, index));
+    if (column.cellBuilder != null) {
+      return Builder(builder: (_) => column.cellBuilder!(context, index));
     }
 
     return titleWidget;
   }
 
-  double _getColsWidth() {
+  double _getColumnsWidth() {
     var width = 0.0;
-    for (final col in widget.columns) {
-      width += col.width ?? 0;
+    for (final column in widget.columns) {
+      width += column.width ?? 0;
     }
     return width;
   }
@@ -491,12 +509,12 @@ class MyTableState extends State<MyTable> {
     _totalSelectable = 0;
     _hasChecked = 0;
     _checkedList = List.generate(widget.data?.length ?? 0, (index) => false);
-    final cols = widget.columns.where((col) => col.selection ?? false);
-    if (cols.length > 1) {
+    final columns = widget.columns.where((col) => col.selection ?? false);
+    if (columns.length > 1) {
       throw FlutterError('Selectable column must be only one');
     }
-    if (widget.data != null && cols.isNotEmpty) {
-      _selectableCol = cols.first;
+    if (widget.data != null && columns.isNotEmpty) {
+      _selectableCol = columns.first;
       final data = widget.data!;
       for (var i = 0; i < data.length; i++) {
         final check = _selectableCol.checked?.call(i, data[i]) ?? false;
@@ -512,9 +530,9 @@ class MyTableState extends State<MyTable> {
   }
 
   Widget _getFixedTable(BuildContext context) {
-    final fixedLeftCol = _getCol(MyTableColFixed.left);
-    final fixedNonCol = _getCol(MyTableColFixed.none);
-    final fixedRightCol = _getCol(MyTableColFixed.right);
+    final fixedLeftCol = _getColumns(MyTableColFixed.left);
+    final fixedNonCol = _getColumns(MyTableColFixed.none);
+    final fixedRightCol = _getColumns(MyTableColFixed.right);
 
     final fixedLeftTitle = _getCellsText(fixedLeftCol);
     final fixedNonTitle = _getCellsText(fixedNonCol);
@@ -542,27 +560,29 @@ class MyTableState extends State<MyTable> {
     );
 
     var fixedCellsWidth = 0.0;
-    for (final tableCol in widget.columns) {
-      if (tableCol.fixed == MyTableColFixed.left ||
-          tableCol.fixed == MyTableColFixed.right) {
-        fixedCellsWidth += tableCol.width ?? cellWidth;
+    for (final column in widget.columns) {
+      if (column.fixed == MyTableColFixed.left ||
+          column.fixed == MyTableColFixed.right) {
+        fixedCellsWidth += column.width ?? cellWidth;
       }
     }
 
     var fixedNonCellsWidth = 0.0;
-    for (final col in fixedNonCol) {
-      fixedNonCellsWidth += col.width ?? cellWidth;
+    for (final column in fixedNonCol) {
+      fixedNonCellsWidth += column.width ?? cellWidth;
     }
 
     if ((width - fixedCellsWidth) < fixedNonCellsWidth) {
-      var content = [Row(children: fixedNonCols), _getEmpty('No data yet')];
+      var content = [Row(children: fixedNonCols), _getEmpty()];
       if (widget.loading ?? false) {
         content = [
           Row(children: fixedNonCols),
-          Align(
+          Center(
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 32),
-              child: widget.loadingWidget ?? const MyLoader(),
+              padding: const EdgeInsets.symmetric(vertical: 64),
+              child:
+                  widget.loadingWidget ??
+                  const MyLoader(size: MyLoaderSize.small),
             ),
           ),
         ];
@@ -589,6 +609,7 @@ class MyTableState extends State<MyTable> {
         ),
       );
     }
+
     final child = Container(
       width: width,
       color: widget.backgroundColor ?? context.colorScheme.background,
@@ -596,12 +617,15 @@ class MyTableState extends State<MyTable> {
         children: [...fixedLeftCols, ...fixedNonCols, ...fixedRightCols],
       ),
     );
-    var placeholder = _getEmpty('No data yet');
+
+    var placeholder = _getEmpty();
+
     if (widget.loading ?? false) {
-      placeholder = Align(
+      placeholder = Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 32),
-          child: widget.loadingWidget ?? const MyLoader(),
+          padding: const EdgeInsets.symmetric(vertical: 64),
+          child:
+              widget.loadingWidget ?? const MyLoader(size: MyLoaderSize.small),
         ),
       );
     }
@@ -612,27 +636,16 @@ class MyTableState extends State<MyTable> {
     );
   }
 
-  Widget _getEmpty(String defaultText) {
+  Widget _getEmpty() {
     return Visibility(
       visible: widget.data == null || widget.data!.isEmpty,
       child: Center(
         child: Padding(
           padding: const EdgeInsets.only(top: 16, bottom: 38),
-          child: MyError(
-            icon: Visibility(
-              visible: widget.empty?.assetUrl != null,
-              child: _getEmptyImage(),
-            ),
-            title: widget.empty?.text ?? defaultText,
-          ),
+          child: widget.empty ?? const MyError.empty(),
         ),
       ),
     );
-  }
-
-  MyImage _getEmptyImage() {
-    final url = widget.empty?.assetUrl ?? '';
-    return MyImage(source: url);
   }
 
   List<Widget> _getVerticalCell(
@@ -659,15 +672,15 @@ class MyTableState extends State<MyTable> {
     return rows;
   }
 
-  List<List<String>> _getCellsText(List<MyTableColumn> cols) {
+  List<List<String>> _getCellsText(List<MyTableColumn> columns) {
     final list = <List<String>>[];
-    for (final col in cols) {
-      final titles = <String>[col.title ?? ''];
+    for (final column in columns) {
+      final titles = <String>[column.title ?? ''];
       if (widget.loading == false) {
         final dataList = <String>[];
         for (var i = 0; i < (widget.data?.length ?? 0); i++) {
           final data = widget.data![i];
-          dataList.add((data as Map?)?[col.colKey]?.toString() ?? '');
+          dataList.add((data as Map?)?[column.field]?.toString() ?? '');
         }
         titles.addAll(dataList);
       }
@@ -696,15 +709,15 @@ class MyTableState extends State<MyTable> {
   Widget build(BuildContext context) {
     final width = widget.width ?? MediaQuery.of(context).size.width;
     final fixedCols = [
-      ..._getCol(MyTableColFixed.left),
-      ..._getCol(MyTableColFixed.right),
+      ..._getColumns(MyTableColFixed.left),
+      ..._getColumns(MyTableColFixed.right),
     ];
 
     if (fixedCols.isNotEmpty) {
       return _getFixedTable(context);
     }
 
-    if (width < _getColsWidth()) {
+    if (width < _getColumnsWidth()) {
       return Container(
         width: width,
         color: widget.backgroundColor ?? context.colorScheme.background,
