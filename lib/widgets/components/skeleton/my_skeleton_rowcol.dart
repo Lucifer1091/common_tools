@@ -1,6 +1,93 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
+
+@immutable
+class MySkeletonStyle {
+  const MySkeletonStyle({
+    this.duration = const Duration(milliseconds: 1500),
+    this.curve = Curves.linear,
+    this.direction = MySkeletonDirection.ltr,
+    this.enabled = true,
+    this.lightColors = _defaultLightColors,
+    this.darkColors = _defaultDarkColors,
+    this.stops = _defaultStops,
+  });
+
+  static const List<Color> _defaultLightColors = <Color>[
+    Color.fromRGBO(0, 0, 0, 0.1),
+    Color.fromRGBO(0, 0, 0, 0.1),
+    Color(0x44CCCCCC),
+    Color.fromRGBO(0, 0, 0, 0.1),
+    Color.fromRGBO(0, 0, 0, 0.1),
+  ];
+
+  static const List<Color> _defaultDarkColors = <Color>[
+    Color(0xff2A2C2E),
+    Color(0xff2A2C2E),
+    Color(0xff3A3E3F),
+    Color(0xff2A2C2E),
+    Color(0xff2A2C2E),
+  ];
+
+  static const List<double> _defaultStops = <double>[0, 0.35, 0.5, 0.65, 1];
+
+  final Duration duration;
+  final Curve curve;
+  final MySkeletonDirection direction;
+  final bool enabled;
+  final List<Color> lightColors;
+  final List<Color> darkColors;
+  final List<double> stops;
+
+  List<Color> resolveColors(BuildContext context) {
+    final brightness = MyTheme.of(context).brightness;
+    return brightness == Brightness.dark ? darkColors : lightColors;
+  }
+
+  MySkeletonStyle copyWith({
+    Duration? duration,
+    Curve? curve,
+    MySkeletonDirection? direction,
+    bool? enabled,
+    List<Color>? lightColors,
+    List<Color>? darkColors,
+    List<double>? stops,
+  }) {
+    return MySkeletonStyle(
+      duration: duration ?? this.duration,
+      curve: curve ?? this.curve,
+      direction: direction ?? this.direction,
+      enabled: enabled ?? this.enabled,
+      lightColors: lightColors ?? this.lightColors,
+      darkColors: darkColors ?? this.darkColors,
+      stops: stops ?? this.stops,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MySkeletonStyle &&
+          duration == other.duration &&
+          curve == other.curve &&
+          direction == other.direction &&
+          enabled == other.enabled &&
+          listEquals(lightColors, other.lightColors) &&
+          listEquals(darkColors, other.darkColors) &&
+          listEquals(stops, other.stops);
+
+  @override
+  int get hashCode =>
+      duration.hashCode ^
+      curve.hashCode ^
+      direction.hashCode ^
+      enabled.hashCode ^
+      Object.hashAll(lightColors) ^
+      Object.hashAll(darkColors) ^
+      Object.hashAll(stops);
+}
 
 class MySkeletonRowColStyle {
   const MySkeletonRowColStyle({this.rowSpacing = _defaultRowSpacing});
@@ -16,7 +103,7 @@ class MySkeletonRowCol {
     this.style = const MySkeletonRowColStyle(),
   }) : assert(objects.isNotEmpty && objects.every((row) => row.isNotEmpty), '');
 
-  final List<List<MySkeletonRowColObj>> objects;
+  final List<List<MySkeletonItem>> objects;
 
   final MySkeletonRowColStyle style;
 
@@ -38,22 +125,22 @@ class MySkeletonRowCol {
   }
 }
 
-class MySkeletonRowColObjStyle {
-  const MySkeletonRowColObjStyle({
+class MySkeletonItemStyle {
+  const MySkeletonItemStyle({
     this.background = _defaultBackground,
     this.borderRadius = _textBorderRadius,
   });
 
-  const MySkeletonRowColObjStyle.circle({this.background = _defaultBackground})
+  const MySkeletonItemStyle.circle({this.background = _defaultBackground})
     : borderRadius = _circleBorderRadius;
 
-  const MySkeletonRowColObjStyle.rect({this.background = _defaultBackground})
+  const MySkeletonItemStyle.rect({this.background = _defaultBackground})
     : borderRadius = _rectBorderRadius;
 
-  const MySkeletonRowColObjStyle.text({this.background = _defaultBackground})
+  const MySkeletonItemStyle.text({this.background = _defaultBackground})
     : borderRadius = _textBorderRadius;
 
-  const MySkeletonRowColObjStyle.spacer()
+  const MySkeletonItemStyle.spacer()
     : background = _transparentBackground,
       borderRadius = _textBorderRadius;
 
@@ -62,7 +149,7 @@ class MySkeletonRowColObjStyle {
   final double Function(BuildContext) borderRadius;
 
   static Color _defaultBackground(BuildContext context) =>
-      ThemeColors.neutral.shade50;
+      context.colorScheme.secondary;
 
   static Color _transparentBackground(BuildContext context) =>
       Colors.transparent;
@@ -74,50 +161,50 @@ class MySkeletonRowColObjStyle {
   static double _textBorderRadius(BuildContext context) => 3;
 }
 
-class MySkeletonRowColObj {
-  const MySkeletonRowColObj({
+class MySkeletonItem {
+  const MySkeletonItem({
     this.width,
     this.height = 16,
     this.flex = 1,
     this.margin = EdgeInsets.zero,
-    this.style = const MySkeletonRowColObjStyle(),
+    this.style = const MySkeletonItemStyle(),
   });
 
-  const MySkeletonRowColObj.circle({
+  const MySkeletonItem.circle({
     this.width = 48,
     this.height = 48,
     this.flex,
     this.margin = EdgeInsets.zero,
-    this.style = const MySkeletonRowColObjStyle.circle(),
+    this.style = const MySkeletonItemStyle.circle(),
   });
 
-  const MySkeletonRowColObj.rect({
+  const MySkeletonItem.rect({
     this.width,
     this.height = 16,
     this.flex = 1,
     this.margin = EdgeInsets.zero,
-    this.style = const MySkeletonRowColObjStyle.rect(),
+    this.style = const MySkeletonItemStyle.rect(),
   });
 
-  const MySkeletonRowColObj.text({
+  const MySkeletonItem.text({
     this.width,
     this.height = 16,
     this.flex = 1,
     this.margin = EdgeInsets.zero,
-    this.style = const MySkeletonRowColObjStyle.text(),
+    this.style = const MySkeletonItemStyle.text(),
   });
 
-  const MySkeletonRowColObj.spacer({
+  const MySkeletonItem.spacer({
     this.width,
     this.height,
     this.flex,
     this.margin = EdgeInsets.zero,
-  }) : style = const MySkeletonRowColObjStyle.spacer();
+  }) : style = const MySkeletonItemStyle.spacer();
 
   final double? width;
   final double? height;
   final int? flex;
   final EdgeInsets margin;
-  final MySkeletonRowColObjStyle style;
+  final MySkeletonItemStyle style;
   double get visualHeight => (height ?? 0) + margin.top + margin.bottom;
 }

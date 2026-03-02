@@ -33,7 +33,7 @@ class _MySkeletonPageState extends State<MySkeletonPage> {
               methodName: '_buildImageSkeleton',
             ),
             ExampleItem(
-              desc: 'text skeleton screen',
+              desc: 'Text skeleton screen',
               builder: _wrapper(_buildTextSkeleton, isFlexible: true),
               methodName: '_buildTextSkeleton',
             ),
@@ -57,6 +57,16 @@ class _MySkeletonPageState extends State<MySkeletonPage> {
               builder: _wrapper(_buildCombineSkeleton),
               methodName: '_buildCombineSkeleton',
             ),
+            ExampleItem(
+              desc: 'Preset card skeleton',
+              builder: _wrapper(_buildPresetCardSkeleton, isFlexible: true),
+              methodName: '_buildPresetCardSkeleton',
+            ),
+            ExampleItem(
+              desc: 'Preset lines skeleton',
+              builder: _wrapper(_buildPresetLinesSkeleton, isFlexible: true),
+              methodName: '_buildPresetLinesSkeleton',
+            ),
           ],
         ),
         ExampleModule(
@@ -66,6 +76,11 @@ class _MySkeletonPageState extends State<MySkeletonPage> {
               desc: 'Gradient loading effect',
               builder: _wrapper(_buildGradientSkeleton, isFlexible: true),
               methodName: '_buildGradientSkeleton',
+            ),
+            ExampleItem(
+              desc: 'Custom style (RTL)',
+              builder: _wrapper(_buildCustomStyleSkeleton, isFlexible: true),
+              methodName: '_buildCustomStyleSkeleton',
             ),
             ExampleItem(
               desc: 'No animation effect',
@@ -111,15 +126,15 @@ class _MySkeletonPageState extends State<MySkeletonPage> {
     var rowColsImage = MySkeleton.fromRowCol(
       rowCol: MySkeletonRowCol(
         objects: const [
-          [MySkeletonRowColObj.rect(width: 48, height: 48, flex: null)],
+          [MySkeletonItem.rect(width: 48, height: 48, flex: null)],
         ],
       ),
     );
     var rowColsContent = MySkeleton.fromRowCol(
       rowCol: MySkeletonRowCol(
         objects: const [
-          [MySkeletonRowColObj(), MySkeletonRowColObj.spacer(flex: 1)],
-          [MySkeletonRowColObj()],
+          [MySkeletonItem(), MySkeletonItem.spacer(flex: 1)],
+          [MySkeletonItem()],
         ],
       ),
     );
@@ -141,8 +156,8 @@ class _MySkeletonPageState extends State<MySkeletonPage> {
           MySkeleton.fromRowCol(
             rowCol: MySkeletonRowCol(
               objects: const [
-                [MySkeletonRowColObj.rect(width: 48, height: 48, flex: null)],
-                [MySkeletonRowColObj.text(width: 48, flex: null)],
+                [MySkeletonItem.rect(width: 48, height: 48, flex: null)],
+                [MySkeletonItem.text(width: 48, flex: null)],
               ],
             ),
           ),
@@ -159,24 +174,17 @@ class _MySkeletonPageState extends State<MySkeletonPage> {
               rowCol: MySkeletonRowCol(
                 objects: [
                   [
-                    MySkeletonRowColObj(
+                    MySkeletonItem(
                       width: constraints.maxWidth * 0.96,
                       height: constraints.maxWidth,
                       flex: null,
-                      style: MySkeletonRowColObjStyle(
+                      style: MySkeletonItemStyle(
                         borderRadius: (context) => MyRadius.extraLarge,
                       ),
                     ),
                   ],
-                  [
-                    MySkeletonRowColObj.text(
-                      width: constraints.maxWidth * 0.96,
-                    ),
-                  ],
-                  const [
-                    MySkeletonRowColObj.text(),
-                    MySkeletonRowColObj.spacer(flex: 1),
-                  ],
+                  [MySkeletonItem.text(width: constraints.maxWidth * 0.96)],
+                  const [MySkeletonItem.text(), MySkeletonItem.spacer(flex: 1)],
                 ],
               ),
             ),
@@ -186,6 +194,14 @@ class _MySkeletonPageState extends State<MySkeletonPage> {
     );
 
     return Row(children: [rowCols, SizedBox(width: 4), rowCols]);
+  }
+
+  Widget _buildPresetCardSkeleton(BuildContext context) {
+    return MySkeleton.card();
+  }
+
+  Widget _buildPresetLinesSkeleton(BuildContext context) {
+    return MySkeleton.lines(count: 4);
   }
 
   Widget _buildGradientSkeleton(BuildContext context) {
@@ -199,6 +215,13 @@ class _MySkeletonPageState extends State<MySkeletonPage> {
     return MySkeleton(
       animation: MySkeletonAnimation.none,
       theme: MySkeletonTheme.paragraph,
+    );
+  }
+
+  Widget _buildCustomStyleSkeleton(BuildContext context) {
+    return MySkeleton.lines(
+      count: 4,
+      style: const MySkeletonStyle(direction: MySkeletonDirection.rtl),
     );
   }
 }
