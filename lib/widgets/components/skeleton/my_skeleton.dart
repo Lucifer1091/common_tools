@@ -1,15 +1,17 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
 
-enum MySkeletonAnimation { gradient, flashed }
+enum MySkeletonAnimation { gradient, none }
 
 enum MySkeletonTheme { avatar, image, text, paragraph }
 
 class MySkeleton extends StatefulWidget {
   factory MySkeleton({
     Key? key,
-    MySkeletonAnimation? animation,
+    MySkeletonAnimation animation = MySkeletonAnimation.gradient,
     int delay = 0,
     MySkeletonTheme theme = MySkeletonTheme.text,
   }) {
@@ -75,11 +77,11 @@ class MySkeleton extends StatefulWidget {
   const MySkeleton.fromRowCol({
     required this.rowCol,
     super.key,
-    this.animation,
+    this.animation = MySkeletonAnimation.gradient,
     this.delay = 0,
   }) : assert(delay >= 0, '');
 
-  final MySkeletonAnimation? animation;
+  final MySkeletonAnimation animation;
   final int delay;
   final MySkeletonRowCol rowCol;
 
@@ -97,19 +99,25 @@ class _MySkeletonState extends State<MySkeleton>
 
   static final _loadingWidget = Container();
 
-  static const _animationFlashed = .3;
+  static const Color _lightBaseColor = Color.fromRGBO(0, 0, 0, 0.1);
+  static const Color _lightHighlightColor = Color(0x44CCCCCC);
 
-  static LinearGradient _animationGradient(BuildContext context) =>
-      LinearGradient(
-        colors: [
-          Colors.transparent,
-          ThemeColors.neutral.shade300,
-          Colors.transparent,
-        ],
-        // 15 deg
-        begin: const Alignment(-1, -0.268),
-        end: const Alignment(1, 0.268),
-      );
+  static const Color _darkBaseColor = Color(0xff2A2C2E);
+  static const Color _darkHighlightColor = Color(0xff3A3E3F);
+
+  static const List<double> _shimmerStops = <double>[0, 0.35, 0.5, 0.65, 1];
+
+  static Color _shimmerBaseColor(BuildContext context) {
+    final brightness = MyTheme.of(context).brightness;
+    return brightness == Brightness.dark ? _darkBaseColor : _lightBaseColor;
+  }
+
+  static Color _shimmerHighlightColor(BuildContext context) {
+    final brightness = MyTheme.of(context).brightness;
+    return brightness == Brightness.dark
+        ? _darkHighlightColor
+        : _lightHighlightColor;
+  }
 
   @override
   void initState() {
@@ -117,71 +125,83 @@ class _MySkeletonState extends State<MySkeleton>
 
     switch (widget.animation) {
       case MySkeletonAnimation.gradient:
-        _controller = AnimationController(
+        final controller = AnimationController(
           duration: const Duration(milliseconds: 1500),
           vsync: this,
-        )..repeat();
-        _animation = Tween<double>(begin: -1, end: 1).animate(_controller!)
-          ..addListener(() => setState(() {}));
-      case MySkeletonAnimation.flashed:
-        _controller = AnimationController(
-          duration: const Duration(seconds: 1),
-          vsync: this,
-        )..repeat(reverse: true);
-        _animation = Tween<double>(
-          begin: 1,
-          end: _animationFlashed,
-        ).animate(_controller!)..addListener(() => setState(() {}));
-      case null:
+        );
+        _controller = controller;
+        unawaited(controller.repeat());
+        _animation = Tween<double>(begin: 0, end: 1).animate(
+          CurvedAnimation(parent: controller, curve: Curves.linear),
+        )..addListener(() => setState(() {}));
+      case MySkeletonAnimation.none:
         _controller = null;
         _animation = null;
     }
 
-    Future.delayed(
-      Duration(milliseconds: widget.delay),
-      () => setState(() => _isLoading = false),
+    unawaited(
+      Future.delayed(Duration(milliseconds: widget.delay), () {
+        if (!mounted) return;
+        setState(() => _isLoading = false);
+      }),
     );
   }
 
   Widget Function(MySkeletonRowColObj) _buildObj(BuildContext context) => (
     MySkeletonRowColObj obj,
   ) {
+    final baseColor = obj.style.background(context);
+    final shimmerBaseColor = _shimmerBaseColor(context);
+    final shimmerHighlightColor = _shimmerHighlightColor(context);
+    final borderRadius = BorderRadius.circular(obj.style.borderRadius(context));
+    final percent = _animation?.value ?? 0;
+    final hasAnimation =
+        widget.animation == MySkeletonAnimation.gradient &&
+        _animation != null &&
+        baseColor.a > 0;
+
     Widget skeletonObj = Container(
       width: obj.width,
       height: obj.height,
       margin: obj.margin,
       decoration: BoxDecoration(
-        color: obj.style.background(context),
-        borderRadius: BorderRadius.circular(obj.style.borderRadius(context)),
+        color: context.colorScheme.secondary,
+        borderRadius: borderRadius,
       ),
     );
 
-    switch (widget.animation) {
-      case MySkeletonAnimation.gradient:
-        skeletonObj = ShaderMask(
-          blendMode: BlendMode.srcATop,
-          shaderCallback:
-              (bounds) => _animationGradient(context).createShader(
-                Rect.fromLTWH(
-                  bounds.width * _animation!.value,
-                  0,
-                  bounds.width,
-                  bounds.height,
-                ),
-              ),
-          child: skeletonObj,
-        );
-      case MySkeletonAnimation.flashed:
-        skeletonObj = Opacity(opacity: _animation!.value, child: skeletonObj);
-      case null:
-        // No animation, return skeleton object as is
-        break;
+    if (hasAnimation) {
+      skeletonObj = ShaderMask(
+        blendMode: BlendMode.srcIn,
+        shaderCallback: (Rect bounds) {
+          final width = bounds.width;
+          final height = bounds.height;
+          final dx = _offset(-width, width, percent);
+          final rect = Rect.fromLTWH(dx - width, 0, 3 * width, height);
+          return LinearGradient(
+            begin: Alignment.topLeft,
+            colors: <Color>[
+              shimmerBaseColor,
+              shimmerBaseColor,
+              shimmerHighlightColor,
+              shimmerBaseColor,
+              shimmerBaseColor,
+            ],
+            stops: _shimmerStops,
+          ).createShader(rect);
+        },
+        child: skeletonObj,
+      );
     }
 
     return obj.flex == null
         ? skeletonObj
         : Flexible(flex: obj.flex!, child: skeletonObj);
   };
+
+  double _offset(double start, double end, double percent) {
+    return start + (end - start) * percent;
+  }
 
   @override
   Widget build(BuildContext context) {

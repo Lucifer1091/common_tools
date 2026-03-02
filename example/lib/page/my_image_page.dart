@@ -358,7 +358,7 @@ class MyImageState extends State<MyImagePage>
             ),
             child: Center(
               child: Icon(
-                LucideIcons.fileWarning,
+                LucideIcons.fileExclamationPoint,
                 color: context.colorScheme.mutedForeground,
               ),
             ),

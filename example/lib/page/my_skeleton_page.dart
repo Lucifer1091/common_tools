@@ -68,9 +68,9 @@ class _MySkeletonPageState extends State<MySkeletonPage> {
               methodName: '_buildGradientSkeleton',
             ),
             ExampleItem(
-              desc: 'flash loading effect',
-              builder: _wrapper(_buildFlashedSkeleton, isFlexible: true),
-              methodName: '_buildFlashedSkeleton',
+              desc: 'No animation effect',
+              builder: _wrapper(_buildNoneSkeleton, isFlexible: true),
+              methodName: '_buildNoneSkeleton',
             ),
           ],
         ),
@@ -195,9 +195,9 @@ class _MySkeletonPageState extends State<MySkeletonPage> {
     );
   }
 
-  Widget _buildFlashedSkeleton(BuildContext context) {
+  Widget _buildNoneSkeleton(BuildContext context) {
     return MySkeleton(
-      animation: MySkeletonAnimation.flashed,
+      animation: MySkeletonAnimation.none,
       theme: MySkeletonTheme.paragraph,
     );
   }
