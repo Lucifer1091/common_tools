@@ -154,31 +154,23 @@ class Breakpoint {
   /// dependency, preventing unnecessary rebuilds.
   ///
   /// Throws a [FlutterError] if the context does not contain a `PlatformTypeProvider`.
-  ///
-  /// Example usage:
-  /// ```dart
-  /// void main() {
-  ///   runApp(
-  ///     const PlatformTypeProvider(
-  ///       breakpoints: [
-  ///        Breakpoint(width: 200, name: 'Watch'),
-  ///         ...Breakpoint.defaults,
-  ///       ],
-  ///       child: MyApp(),
-  ///     ),
-  ///   );
-  /// }
-  /// ```
   static Breakpoint of(BuildContext context, {bool listen = true}) {
+    final result = maybeOf(context, listen: listen);
+    if (result != null) return result;
+
+    throw FlutterError(
+      'Breakpoint.of() called with a context that does not contain a PlatformTypeProvider.',
+    );
+  }
+
+  /// Retrieves the active breakpoint from the context if available.
+  ///
+  /// Returns `null` when no [PlatformTypeProvider] is found.
+  static Breakpoint? maybeOf(BuildContext context, {bool listen = true}) {
     if (listen) {
-      final result =
-          context.dependOnInheritedWidgetOfExactType<_PlatformTypeInherited>();
-      if (result == null) {
-        throw FlutterError(
-          'Breakpoint.of() called with a context that does not contain a PlatformTypeProvider.',
-        );
-      }
-      return result.breakpoint;
+      return context
+          .dependOnInheritedWidgetOfExactType<_PlatformTypeInherited>()
+          ?.breakpoint;
     } else {
       final inheritedElement =
           context
@@ -186,13 +178,29 @@ class Breakpoint {
                 _PlatformTypeInherited
               >();
       final result = inheritedElement?.widget as _PlatformTypeInherited?;
-      if (result == null) {
-        throw FlutterError(
-          'Breakpoint.of() called with a context that does not contain a PlatformTypeProvider.',
-        );
-      }
-      return result.breakpoint;
+      return result?.breakpoint;
     }
+  }
+
+  /// Resolves a breakpoint from raw [width].
+  ///
+  /// The highest breakpoint with `start <= width` is selected.
+  static Breakpoint forWidth(
+    double width, {
+    List<Breakpoint> breakpoints = defaults,
+  }) {
+    final sorted = List<Breakpoint>.of(breakpoints)
+      ..sort((a, b) => a.start.compareTo(b.start));
+
+    var result = sorted.first;
+    for (final breakpoint in sorted) {
+      if (width >= breakpoint.start) {
+        result = breakpoint;
+      } else {
+        break;
+      }
+    }
+    return result;
   }
 
   // String Representation
@@ -205,7 +213,7 @@ class Breakpoint {
     Breakpoint.medium(),
     Breakpoint.expanded(),
     Breakpoint.large(),
-    Breakpoint.expanded(),
+    Breakpoint.extraLarge(),
   ];
 
   @override
@@ -344,15 +352,20 @@ class _PlatformTypeProviderState extends State<PlatformTypeProvider> {
   }
 
   Breakpoint getBreakpoint(Size size, List<Breakpoint> breakpoints) {
-    for (final breakpoint in breakpoints) {
-      if (size.width <= breakpoint.start) return breakpoint;
-    }
-    return breakpoints.last;
+    return Breakpoint.forWidth(size.width, breakpoints: breakpoints);
   }
 }
 
 /// Extension methods on [BuildContext] for easy access to [Breakpoint] and [Orientation].
 extension BuildContextPlatformExtension on BuildContext {
+  /// Gets the current [Breakpoint] for the given [BuildContext] if available,
+  /// and establishes a dependency.
+  Breakpoint? get maybeWatchBreakpoint => Breakpoint.maybeOf(this);
+
+  /// Gets the current [Breakpoint] for the given [BuildContext] if available
+  /// without establishing a dependency.
+  Breakpoint? get maybeReadBreakpoint => Breakpoint.maybeOf(this, listen: false);
+
   /// Gets the current [Breakpoint] for the given [BuildContext] and establishes
   /// a dependency, causing the widget to rebuild whenever the breakpoint changes.
   ///

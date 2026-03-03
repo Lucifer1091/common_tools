@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../widgets/layout/adaptive_ui.dart';
-import '../../widgets/layout/responsive.dart';
 
 extension ContextSizeExtension on BuildContext {
   /// Equivalent as `Navigator.of(context)`
@@ -21,9 +20,8 @@ extension ContextSizeExtension on BuildContext {
   /// throws an exception, if no such ancestor exists.
   EdgeInsets get padding => MediaQuery.paddingOf(this);
 
-  /// textScaleFactor is calculated using the following formula:
-  /// textScaleFactor = MediaQuery.textScalerOf(this).scale(fontSize) / fontSize
-  double get textScaleFactor => MediaQuery.textScalerOf(this).scale(1) / 1.0;
+  /// Returns the [TextScaler] from [MediaQuery].
+  TextScaler get textScaler => MediaQuery.textScalerOf(this);
 
   /// Returns viewInsets for the nearest MediaQuery ancestor or
   /// throws an exception, if no such ancestor exists.
@@ -56,11 +54,14 @@ extension ContextSizeExtension on BuildContext {
 
   bool get isPortrait => mediaQuery.orientation == Orientation.portrait;
 
-  bool get isCompact => readBreakpoint.isCompact;
-  bool get isMedium => readBreakpoint.isMedium;
-  bool get isExpanded => readBreakpoint.isExpanded;
-  bool get isLarge => readBreakpoint.isLarge;
-  bool get isExtraLarge => readBreakpoint.isExtraLarge;
+  Breakpoint get _currentBreakpoint =>
+      maybeReadBreakpoint ?? Breakpoint.forWidth(width);
+
+  bool get isCompact => _currentBreakpoint.isCompact;
+  bool get isMedium => _currentBreakpoint.isMedium;
+  bool get isExpanded => _currentBreakpoint.isExpanded;
+  bool get isLarge => _currentBreakpoint.isLarge;
+  bool get isExtraLarge => _currentBreakpoint.isExtraLarge;
 
   T value<T>({
     required T compact,
@@ -69,31 +70,39 @@ extension ContextSizeExtension on BuildContext {
     T? large,
     T? extraLarge,
   }) {
-    return Responsive.value(
-      this,
-      compact: compact,
-      medium: medium,
-      expanded: expanded,
-      large: large,
-      extraLarge: extraLarge,
-    );
+    final breakpoint = _currentBreakpoint;
+    if (breakpoint.isExtraLarge) {
+      return extraLarge ?? large ?? expanded ?? medium ?? compact;
+    } else if (breakpoint.isLarge) {
+      return large ?? expanded ?? medium ?? compact;
+    } else if (breakpoint.isExpanded) {
+      return expanded ?? medium ?? compact;
+    } else if (breakpoint.isMedium) {
+      return medium ?? compact;
+    } else {
+      return compact;
+    }
   }
 
-  void callback<T>({
+  void callback({
     required VoidCallback compact,
     VoidCallback? medium,
     VoidCallback? expanded,
     VoidCallback? large,
     VoidCallback? extraLarge,
   }) {
-    return Responsive.callback(
-      this,
-      compact: compact,
-      medium: medium,
-      expanded: expanded,
-      large: large,
-      extraLarge: extraLarge,
-    );
+    final breakpoint = _currentBreakpoint;
+    if (breakpoint.isExtraLarge) {
+      (extraLarge ?? large ?? expanded ?? medium ?? compact)();
+    } else if (breakpoint.isLarge) {
+      (large ?? expanded ?? medium ?? compact)();
+    } else if (breakpoint.isExpanded) {
+      (expanded ?? medium ?? compact)();
+    } else if (breakpoint.isMedium) {
+      (medium ?? compact)();
+    } else {
+      compact();
+    }
   }
 
   /// percent with

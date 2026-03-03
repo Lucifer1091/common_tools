@@ -22,7 +22,7 @@ class LimitTextScaleWidget extends StatelessWidget {
     final maxTextScale = maxTextScaleFactor ?? 0;
 
     if (maxTextScale > 0) {
-      final limitTextScale = min(maxTextScale, context.textScaleFactor);
+      final limitTextScale = min(maxTextScale, context.textScaler.scale(1));
 
       return MediaQuery(
         data: MediaQuery.of(

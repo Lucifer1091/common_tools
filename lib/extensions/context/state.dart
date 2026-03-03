@@ -2,42 +2,36 @@ import 'package:flutter/material.dart';
 
 extension ContextStateExtension on BuildContext {
   /// check whether keyboard has focus or not
-  bool get hasFocus =>
-      FocusScope.of(this).hasFocus || FocusScope.of(this).hasPrimaryFocus;
+  bool get hasFocus {
+    final scope = FocusScope.of(this);
+    return scope.hasFocus || scope.hasPrimaryFocus;
+  }
 
   /// Request focus to given FocusNode
   void requestFocus(FocusNode focus) => FocusScope.of(this).requestFocus(focus);
 
-  /// Request focus to given FocusNode
+  /// Unfocus given [FocusNode].
   void unFocus(FocusNode focus) => focus.unfocus();
 
-  /// remove keyboard focus
-  void removeFocus() {
-    if (hasFocus) FocusManager.instance.primaryFocus?.unfocus();
-  }
-
-  /// Hide Keyboard
-  void unFocusKeyboard() => FocusScope.of(this).unfocus();
-
   /// Hide soft keyboard
-  void hideKeyboard() => FocusScope.of(this).requestFocus(FocusNode());
+  void hideKeyboard() => FocusManager.instance.primaryFocus?.unfocus();
 
-  /// Returns Form.of(context)
-  FormState? get formState => Form.of(this);
+  /// Returns the closest [FormState] or `null` if not found.
+  FormState? get formState => Form.maybeOf(this);
 
   /// Returns Scaffold.of(context)
-  ScaffoldState get scaffoldState => Scaffold.of(this);
+  ScaffoldState? get scaffoldState => Scaffold.maybeOf(this);
 
-  /// Returns Overlay.of(context)
-  OverlayState? get overlayState => Overlay.of(this);
+  /// Returns the closest [OverlayState] or `null` if not found.
+  OverlayState? get overlayState => Overlay.maybeOf(this);
 
   /// Open Drawer
-  void openDrawer() => Scaffold.of(this).openDrawer();
+  void openDrawer() => scaffoldState?.openDrawer();
 
-  void closeDrawer() => Scaffold.of(this).closeDrawer();
+  void closeDrawer() => scaffoldState?.closeDrawer();
 
   /// Hide Drawer
-  void openEndDrawer() => Scaffold.of(this).openEndDrawer();
+  void openEndDrawer() => scaffoldState?.openEndDrawer();
 
-  void closeEndDrawer() => Scaffold.of(this).closeEndDrawer();
+  void closeEndDrawer() => scaffoldState?.closeEndDrawer();
 }
