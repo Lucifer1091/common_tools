@@ -17,7 +17,7 @@ class Regex {
     r'^(\d?\d?\d)\.(\d?\d?\d)\.(\d?\d?\d)\.(\d?\d?\d)$',
   );
   static RegExp ipv6 = RegExp(
-    r'^::|^::1|^([a-fA-F0-9]{1,4}::?){1,7}([a-fA-F0-9]{1,4})$',
+    r'^((?:[A-Fa-f0-9]{1,4}:){7}[A-Fa-f0-9]{1,4}|(?:[A-Fa-f0-9]{1,4}:){1,7}:|(?:[A-Fa-f0-9]{1,4}:){1,6}:[A-Fa-f0-9]{1,4}|(?:[A-Fa-f0-9]{1,4}:){1,5}(?::[A-Fa-f0-9]{1,4}){1,2}|(?:[A-Fa-f0-9]{1,4}:){1,4}(?::[A-Fa-f0-9]{1,4}){1,3}|(?:[A-Fa-f0-9]{1,4}:){1,3}(?::[A-Fa-f0-9]{1,4}){1,4}|(?:[A-Fa-f0-9]{1,4}:){1,2}(?::[A-Fa-f0-9]{1,4}){1,5}|[A-Fa-f0-9]{1,4}:(?:(?::[A-Fa-f0-9]{1,4}){1,6})|:(?:(?::[A-Fa-f0-9]{1,4}){1,7}|:))$',
   );
 
   /// MAC Address RegExp
@@ -62,7 +62,7 @@ class Regex {
   ///
   /// Example: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12
   static RegExp sha256 = RegExp(
-    r'^([A-Fa-f0-9]{2}\:){31}[A-Fa-f0-9]{2}|[A-Fa-f0-9]{64}$',
+    r'^((?:[A-Fa-f0-9]{2}\:){31}[A-Fa-f0-9]{2}|[A-Fa-f0-9]{64})$',
   );
 
   static Map<String, RegExp> uuid = {
@@ -95,55 +95,55 @@ class Regex {
   ///
   /// Example: test.jpg
   static RegExp image = RegExp(
-    r'.(jpg|gif|png|jpeg|bmp|webp)$',
+    r'\.(jpg|gif|png|jpeg|bmp|webp)$',
     caseSensitive: false,
   );
   static RegExp mimeTypeImage = RegExp(r'^image\/.*$');
 
-  static RegExp svg = RegExp(r'.svg$');
+  static RegExp svg = RegExp(r'\.svg$');
   static RegExp mimeTypeSvg = RegExp(r'^image\/svg\+xml$');
 
-  static RegExp audio = RegExp(r'.(mp3|wav|wma|amr|ogg|wav|flac|aac)$');
+  static RegExp audio = RegExp(r'\.(mp3|wav|wma|amr|ogg|wav|flac|aac)$');
   static RegExp mimeTypeAudio = RegExp(r'^audio\/.*$');
 
   static RegExp video = RegExp(
-    r'.(mp4|avi|wmv|rmvb|mpg|mpeg|3gp|mkv|flv|mov|webm)$',
+    r'\.(mp4|avi|wmv|rmvb|mpg|mpeg|3gp|mkv|flv|mov|webm)$',
   );
   static RegExp mimeTypeVideo = RegExp(r'^video\/.*$');
 
-  static RegExp txt = RegExp(r'.(txt|rtf)$');
+  static RegExp txt = RegExp(r'\.(txt|rtf)$');
   static RegExp mimeTypeTxt = RegExp(r'^(application\/rtf|text\/plain)$');
 
-  static RegExp doc = RegExp(r'.(doc|docx)$');
+  static RegExp doc = RegExp(r'\.(doc|docx)$');
   static RegExp mimeTypeDoc = RegExp(
-    r'^application\/(msword|application/vnd.openxmlformats-officedocument.wordprocessingml.document)$',
+    r'^application\/(msword|vnd\.openxmlformats-officedocument\.wordprocessingml\.document)$',
   );
 
-  static RegExp csv = RegExp(r'.csv$');
+  static RegExp csv = RegExp(r'\.csv$');
   static RegExp mimeTypeCsv = RegExp(r'^text\/(csv|comma-separated-values)$');
 
-  static RegExp excel = RegExp(r'.(xls|xlsx)$');
+  static RegExp excel = RegExp(r'\.(xls|xlsx)$');
   static RegExp mimeTypeExcel = RegExp(
     r'^application\/(vnd.ms-excel|vnd.openxmlformats-officedocument.spreadsheetml.sheet)$',
   );
 
-  static RegExp ppt = RegExp(r'.(ppt|pptx)$');
+  static RegExp ppt = RegExp(r'\.(ppt|pptx)$');
   static RegExp mimeTypePpt = RegExp(
     r'^application\/(vnd.ms-powerpoint|vnd.openxmlformats-officedocument.presentationml.presentation)$',
   );
 
-  static RegExp pdf = RegExp(r'.pdf$');
+  static RegExp pdf = RegExp(r'\.pdf$');
   static RegExp mimeTypePdf = RegExp(r'^application\/pdf$');
 
-  static RegExp json = RegExp(r'.json$');
+  static RegExp json = RegExp(r'\.json$');
   static RegExp mimeTypeJson = RegExp(r'^application\/json$');
 
-  static RegExp archive = RegExp(r'.(zip|rar|7z|tar|gz)$');
+  static RegExp archive = RegExp(r'\.(zip|rar|7z|tar|gz)$');
   static RegExp mimeTypeArchive = RegExp(
     r'^application\/(zip|x-tar|x-gzip|x-bzip2)$',
   );
 
-  static RegExp xml = RegExp(r'.xml$');
+  static RegExp xml = RegExp(r'\.xml$');
   static RegExp mimeTypeXml = RegExp(r'^(application\/xml|text\/xml)$');
 
   static RegExp date = RegExp(

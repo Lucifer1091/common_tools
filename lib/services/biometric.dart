@@ -1,5 +1,3 @@
-import 'package:flutter/services.dart';
-import 'package:local_auth/error_codes.dart' as auth_error;
 import 'package:local_auth/local_auth.dart';
 
 class Biometric {
@@ -17,7 +15,6 @@ class Biometric {
 
   static Future<bool> authenticate({
     String? message = 'Please Authenticate to login automatically',
-    bool useErrorDialogs = true,
     bool biometricOnly = false,
   }) async {
     try {
@@ -25,24 +22,21 @@ class Biometric {
 
       return _auth.authenticate(
         localizedReason: message ?? 'Please Authenticate to continue.',
-        options: AuthenticationOptions(
-          stickyAuth: true,
-          biometricOnly: biometricOnly,
-          useErrorDialogs: useErrorDialogs,
-        ),
+        persistAcrossBackgrounding: true,
+        biometricOnly: biometricOnly,
       );
-    } on PlatformException catch (e) {
-      if (e.code == auth_error.notAvailable) {
+    } on LocalAuthException catch (e) {
+      if (e.code == LocalAuthExceptionCode.noBiometricHardware) {
         // Add handling of no hardware here.
-      } else if (e.code == auth_error.notEnrolled) {
+      } else if (e.code == LocalAuthExceptionCode.noBiometricsEnrolled) {
         // ...
       } else {
         // ...
       }
-      if (e.code == auth_error.notEnrolled) {
+      if (e.code == LocalAuthExceptionCode.noBiometricsEnrolled) {
         // Add handling of no hardware here.
-      } else if (e.code == auth_error.lockedOut ||
-          e.code == auth_error.permanentlyLockedOut) {
+      } else if (e.code == LocalAuthExceptionCode.temporaryLockout ||
+          e.code == LocalAuthExceptionCode.biometricLockout) {
         // ...
       } else {
         // ...

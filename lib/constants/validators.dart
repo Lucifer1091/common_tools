@@ -319,9 +319,16 @@ class ThresholdValidator {
   /// print(result); // Prints: Threshold Min cannot be greater then Threshold Max.
   /// ```
   String? minValidator({String? min, String? max}) {
-    if (min == null || max == null) return null;
+    if (min == null || max == null || min.isEmpty || max.isEmpty) return null;
 
-    if (num.parse(min) > num.parse(max)) {
+    final minValue = num.tryParse(min);
+    final maxValue = num.tryParse(max);
+
+    if (minValue == null || maxValue == null) {
+      return 'Threshold values must be valid numbers.';
+    }
+
+    if (minValue > maxValue) {
       return 'Threshold Min cannot be greater then Threshold Max.';
     }
 
@@ -339,9 +346,16 @@ class ThresholdValidator {
   /// print(result); // Prints: null (no error)
   /// ```
   String? maxValidator({String? min, String? max}) {
-    if (min == null || max == null) return null;
+    if (min == null || max == null || min.isEmpty || max.isEmpty) return null;
 
-    if (num.parse(min) > num.parse(max)) {
+    final minValue = num.tryParse(min);
+    final maxValue = num.tryParse(max);
+
+    if (minValue == null || maxValue == null) {
+      return 'Threshold values must be valid numbers.';
+    }
+
+    if (minValue > maxValue) {
       return 'Threshold Max cannot be less then Threshold Min.';
     }
 

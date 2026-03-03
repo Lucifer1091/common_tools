@@ -93,9 +93,9 @@ class InputFormat {
         FilteringTextInputFormatter.deny(',', replacementString: '.'),
         FilteringTextInputFormatter.allow(
           RegExp(
-            r'(^\d*\.?\d{0,'
+            r'^\d*\.?\d{0,'
             '$dp'
-            '}\$)',
+            r'}$',
           ),
         ),
         LengthLimitingTextInputFormatter(
@@ -120,7 +120,7 @@ class InputFormat {
           RegExp(
             r'^[-+]?\d*\.?\d{0,'
             '$dp'
-            '}\$)',
+            r'}$',
           ),
         ),
         LengthLimitingTextInputFormatter(
@@ -139,7 +139,7 @@ class InputFormat {
   /// ```
   static List<TextInputFormatter> alphabets({int max = 30}) =>
       <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
+        FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
         LengthLimitingTextInputFormatter(
           max,
           maxLengthEnforcement: MaxLengthEnforcement.enforced,
@@ -156,7 +156,7 @@ class InputFormat {
   /// ```
   static List<TextInputFormatter> alphaNumeric({int max = 30}) =>
       <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp("[0-9a-zA-Z ]")),
+        FilteringTextInputFormatter.allow(RegExp('[0-9a-zA-Z ]')),
         LengthLimitingTextInputFormatter(
           max,
           maxLengthEnforcement: MaxLengthEnforcement.enforced,
@@ -208,7 +208,7 @@ class InputFormat {
   static List<TextInputFormatter> numeral({int max = 15}) =>
       <TextInputFormatter>[
         FilteringTextInputFormatter.deny(',', replacementString: '.'),
-        FilteringTextInputFormatter.allow(RegExp("[0-9-+/*]")),
+        FilteringTextInputFormatter.allow(RegExp('[0-9-+/*]')),
         LengthLimitingTextInputFormatter(
           max,
           maxLengthEnforcement: MaxLengthEnforcement.enforced,
@@ -279,8 +279,8 @@ class NoLeadingSpaceFormatter extends TextInputFormatter {
 
 /// A text input formatter that does not allow spaces.
 ///
-/// This formatter ensures that any input text does not contain a space
-/// character by trimming trailing spaces when detected.
+/// This formatter ensures that any input text does not contain whitespace
+/// by removing all whitespace characters when detected.
 ///
 /// Example usage:
 /// ```dart
@@ -291,19 +291,21 @@ class NoLeadingSpaceFormatter extends TextInputFormatter {
 /// )
 /// ```
 class NoSpaceFormatter extends TextInputFormatter {
+  static final RegExp _whiteSpace = RegExp(r'\s+');
+
   @override
   TextEditingValue formatEditUpdate(
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
-    if (newValue.text.contains(' ')) {
-      final String trimedText = newValue.text.trimRight();
+    if (_whiteSpace.hasMatch(newValue.text)) {
+      final String trimmedText = newValue.text.replaceAll(_whiteSpace, '');
 
       return TextEditingValue(
-        text: trimedText,
+        text: trimmedText,
         selection: TextSelection(
-          baseOffset: trimedText.length,
-          extentOffset: trimedText.length,
+          baseOffset: trimmedText.length,
+          extentOffset: trimmedText.length,
         ),
       );
     }
@@ -336,52 +338,59 @@ class IpAddressInputFormatter extends TextInputFormatter {
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
-    var text = newValue.text;
+    final text = newValue.text;
 
     if (newValue.selection.baseOffset == 0) {
       return newValue;
     }
 
     int dotCounter = 0;
-    var buffer = StringBuffer();
-    String ipField = "";
+    final buffer = StringBuffer();
+    String ipField = '';
 
     for (int i = 0; i < text.length; i++) {
+      final char = text[i];
+
       if (dotCounter < 4) {
-        if (text[i] != ".") {
-          ipField += text[i];
+        if (char != '.') {
+          if (char.codeUnitAt(0) < 48 || char.codeUnitAt(0) > 57) {
+            continue;
+          }
+
+          ipField += char;
           if (ipField.length < 3) {
-            buffer.write(text[i]);
+            buffer.write(char);
           } else if (ipField.length == 3) {
-            if (int.parse(ipField) <= 255) {
-              buffer.write(text[i]);
+            final octet = int.tryParse(ipField);
+            if (octet != null && octet <= 255) {
+              buffer.write(char);
             } else {
               if (dotCounter < 3) {
-                buffer.write(".");
+                buffer.write('.');
                 dotCounter++;
-                buffer.write(text[i]);
-                ipField = text[i];
+                buffer.write(char);
+                ipField = char;
               }
             }
           } else if (ipField.length == 4) {
             if (dotCounter < 3) {
-              buffer.write(".");
+              buffer.write('.');
               dotCounter++;
-              buffer.write(text[i]);
-              ipField = text[i];
+              buffer.write(char);
+              ipField = char;
             }
           }
         } else {
           if (dotCounter < 3) {
-            buffer.write(".");
+            buffer.write('.');
             dotCounter++;
-            ipField = "";
+            ipField = '';
           }
         }
       }
     }
 
-    var string = buffer.toString();
+    final string = buffer.toString();
     return newValue.copyWith(
       text: string,
       selection: TextSelection.collapsed(offset: string.length),

@@ -200,7 +200,7 @@ class ThemeColors {
     1000: Color(0xFF090A0B),
   });
 
-  static List<MaterialColor> colors = [
+  static final List<MaterialColor> colors = List<MaterialColor>.unmodifiable([
     blue,
     green,
     red,
@@ -214,12 +214,11 @@ class ThemeColors {
     brown,
     zinc,
     grey,
-  ];
+  ]);
 
-  static List<Color> picker =
-      colors
-        ..removeLast()
-        ..map((color) => color.shade500).toList();
+  static final List<Color> picker = List<Color>.unmodifiable(
+    colors.where((color) => color != grey).map((color) => color.shade500),
+  );
 
   static const success = green;
 
