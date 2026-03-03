@@ -181,6 +181,17 @@ extension DateConversions on DateTime {
     return woy;
   }
 
+  /// Returns the ISO week-numbering year for this [DateTime].
+  ///
+  /// This can differ from the calendar year near new year boundaries.
+  int get isoWeekYear {
+    final DateTime utcDate = DateTime.utc(year, month, day);
+    final DateTime thursday = utcDate.add(
+      Duration(days: DateTime.thursday - utcDate.weekday),
+    );
+    return thursday.year;
+  }
+
   /// Calculates the age based on the current date.
   ///
   /// Returns the age in years.
@@ -231,7 +242,7 @@ extension DateConversions on DateTime {
   /// and December 31st returns 365 (or 366 in a leap year).
   int get dayOfYear {
     // Get the date of January 1st of the current year
-    final DateTime jan1st = DateTime(year);
+    final DateTime jan1st = (isUtc ? DateTime.utc : DateTime.new)(year);
 
     // Calculate the difference in days between the current date and January 1st
     final int difference = differenceInDays(jan1st);
@@ -268,8 +279,16 @@ extension DateConversions on DateTime {
     final DateTime a = this;
 
     // Convert both dates to midnight for accurate day difference calculation
-    final DateTime aMidnight = DateTime(a.year, a.month, a.day);
-    final DateTime bMidnight = DateTime(other.year, other.month, other.day);
+    final DateTime aMidnight = (a.isUtc ? DateTime.utc : DateTime.new)(
+      a.year,
+      a.month,
+      a.day,
+    );
+    final DateTime bMidnight = (other.isUtc ? DateTime.utc : DateTime.new)(
+      other.year,
+      other.month,
+      other.day,
+    );
 
     // Calculate the difference in milliseconds
     final int differenceInMilliseconds =
@@ -388,7 +407,13 @@ extension ParseDateTime on String? {
   String? toUtcString({
     bool utc = true,
     String format = 'MMM dd, yyyy h:mm a',
-  }) => parse(this, format: format, utc: utc)?.toString().split('.')[0];
+  }) {
+    final DateTime? parsed = parse(this, format: format, utc: utc);
+    if (parsed == null) return null;
+
+    final DateTime normalized = utc ? parsed.toUtc() : parsed.toLocal();
+    return normalized.toString().split('.')[0];
+  }
 
   String? detectFormat() {
     if (isBlank) return null;
@@ -440,25 +465,27 @@ extension ParseDateTime on String? {
   static DateTime? parse(Object? date, {bool utc = true, String? format}) {
     final String? dt = date?.toString().trim();
 
-    try {
-      if (dt == '' || (dt?.isEmpty ?? true) || dt == null) return null;
+    DateTime? normalize(DateTime? value) {
+      if (value == null) return null;
+      return utc ? value.toUtc() : value.toLocal();
+    }
 
-      if (utc) {
-        return DateFormat(
-          format ?? 'yyyy-MM-dd HH:mm:ss',
-        ).parse(dt, true).toLocal();
-      }
+    try {
+      if (dt == null || dt.isEmpty) return null;
 
       if (format != null) {
-        return DateFormat(format).parse(dt, utc).toLocal();
+        return DateFormat(format).parse(dt, utc);
       }
 
-      return DateTime.tryParse(dt);
+      final DateTime? parsed = DateTime.tryParse(dt);
+      if (parsed != null) return normalize(parsed);
+
+      return DateFormat('yyyy-MM-dd HH:mm:ss').tryParse(dt, utc);
     } catch (e) {
       try {
         // if its failing it means the date format is 2024-04-17T07:20:57.573
         final DateFormat format = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-        final DateTime dateTime = format.parse(dt!, utc).toLocal();
+        final DateTime dateTime = format.parse(dt!, utc);
 
         return dateTime;
       } catch (e) {
@@ -676,7 +703,7 @@ extension DateTimeExtension on DateTime? {
     return this!.dayOfYear; // Delegate to the non-nullable extension method
   }
 
-  /// Returns Duration difference between [this] and current time
+  /// Returns the duration difference between this value and current time.
   Duration fromNow() {
     if (this == null) return Duration.zero;
 

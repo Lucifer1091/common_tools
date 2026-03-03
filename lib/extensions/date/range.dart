@@ -10,23 +10,6 @@ extension DateRangeValidators on DateTimeRange? {
   /// Checks if the [DateTimeRange] value is not null.
   bool get isNotNull => !isNull;
 
-  /// Checks if this [DateTimeRange] is between or equal to the given [start] and [end] dates.
-  ///
-  /// Returns `true` if this [DateTimeRange] overlaps with the range defined by [start] and [end],
-  /// inclusive of both ends. Returns `false` otherwise.
-  ///
-  /// If this [DateTimeRange], [start], or [end] is null, returns `false`.
-  bool isBetweenOrEqual({DateTime? start, DateTime? end}) {
-    if (isNull || start == null || end == null) return false;
-
-    if (this!.start.isBeforeOrEqualTo(end) &&
-        start.isBeforeOrEqualTo(this!.end)) {
-      return true;
-    }
-
-    return false;
-  }
-
   /// Checks if the [date] is within the range, inclusive of start and end dates.
   ///
   /// Returns `true` if the [date] falls on or between the start and end dates.
@@ -43,11 +26,14 @@ extension DateRangeValidators on DateTimeRange? {
   /// Checks if the [range] overlaps with this range at any point.
   ///
   /// Returns `true` if any part of the [range] intersects with this range.
-  bool cross(DateTimeRange range) =>
-      isNotNull && includes(range.start) ||
-      includes(range.end) ||
-      range.includes(this!.start) ||
-      range.includes(this!.end);
+  bool cross(DateTimeRange range) {
+    if (isNull) return false;
+
+    return includes(range.start) ||
+        includes(range.end) ||
+        range.includes(this!.start) ||
+        range.includes(this!.end);
+  }
 
   /// Checks if the [range] is exactly equal to this range.
   ///
@@ -56,36 +42,6 @@ extension DateRangeValidators on DateTimeRange? {
       isNotNull &&
       this!.start.equals(range.start) &&
       this!.end.equals(range.end);
-
-  /// Static method to determine if two date ranges overlap.
-  ///
-  /// [firstStartDate]: The start date of the first range.
-  /// [firstEndDate]: The end date of the first range.
-  /// [secondStartDate]: The start date of the second range.
-  /// [secondEndDate]: The end date of the second range.
-  ///
-  /// Throws a [RangeError] if either range is invalid (start date is after end date).
-  ///
-  /// Returns `true` if the two date ranges overlap, otherwise returns `false`.
-  static bool areRangesOverlapping(
-    DateTime firstStartDate,
-    DateTime firstEndDate,
-    DateTime secondStartDate,
-    DateTime secondEndDate,
-  ) {
-    if (firstStartDate.isAfter(firstEndDate)) {
-      throw RangeError('Invalid initial range');
-    }
-
-    if (secondStartDate.isAfter(secondEndDate)) {
-      throw RangeError('Invalid comparison range');
-    }
-
-    final initial = DateTimeRange(start: firstStartDate, end: firstEndDate);
-    final compared = DateTimeRange(start: secondStartDate, end: secondEndDate);
-
-    return initial.cross(compared) || compared.cross(initial);
-  }
 }
 
 extension DateRangeOperators on DateTimeRange {
@@ -143,18 +99,12 @@ extension DateRangeConversions on DateTimeRange {
   /// If the ranges overlap or touch, the result is a [DateTimeRange] from the earliest
   /// start to the latest end. Throws a [RangeError] if the ranges do not overlap.
   DateTimeRange union(DateTimeRange other) {
-    if (cross(other)) {
-      if (end.isAfter(other.start) || end.isAtSameMomentAs(other.start)) {
-        return DateRange.set(start, other.end);
-      } else if (other.end.isAfter(start) ||
-          other.end.isAtSameMomentAs(start)) {
-        return DateRange.set(other.start, end);
-      } else {
-        throw RangeError('Error this: $this; other: $other');
-      }
-    } else {
-      throw RangeError("DateTimeRanges don't cross");
-    }
+    if (!cross(other)) throw RangeError("DateTimeRanges don't cross");
+
+    final DateTime unionStart = Date.min(start, other.start);
+    final DateTime unionEnd = Date.max(end, other.end);
+
+    return DateRange.set(unionStart, unionEnd);
   }
 
   /// Returns the intersection of this [DateTimeRange] and another [DateTimeRange].
@@ -162,11 +112,7 @@ extension DateRangeConversions on DateTimeRange {
   /// The result is a [DateTimeRange] representing the overlap between the two ranges.
   /// Throws a [RangeError] if the ranges do not overlap.
   DateTimeRange intersection(DateTimeRange other) {
-    if (!cross(other)) {
-      if (other.contains(this)) return this;
-
-      throw RangeError("DateTimeRanges don't cross");
-    }
+    if (!cross(other)) throw RangeError("DateTimeRanges don't cross");
 
     final intersectionStart = Date.max(start, other.start);
     final intersectionEnd = Date.min(end, other.end);
@@ -179,27 +125,25 @@ extension DateRangeConversions on DateTimeRange {
   /// The result is a [DateTimeRange] that represents the non-overlapping portion of this range.
   /// Returns null if the ranges are identical. Throws a [RangeError] if ranges overlap in an unexpected way.
   DateTimeRange? difference(DateTimeRange other) {
-    if (other == this) {
-      return null;
-    } else if (this <= other) {
-      if (end.isBefore(other.start)) {
-        return this;
-      } else {
-        return DateRange.set(start, other.start);
-      }
-    } else if (this >= other) {
-      if (other.end.isBefore(start)) {
-        return this;
-      } else {
-        return DateRange.set(other.end, end);
-      }
-    } else {
-      throw RangeError('Error this: $this; other: $other');
-    }
+    final bool sameRange = start.equals(other.start) && end.equals(other.end);
+    if (sameRange) return null;
+
+    if (!cross(other)) return this;
+
+    final bool otherCoversStart = other.start.isBeforeOrEqualTo(start);
+    final bool otherCoversEnd = other.end.isAfterOrEqualTo(end);
+
+    if (otherCoversStart && otherCoversEnd) return null;
+    if (otherCoversStart) return DateRange.set(other.end, end);
+    if (otherCoversEnd) return DateRange.set(start, other.start);
+
+    throw RangeError(
+      'Difference has two disjoint results. this: $this; other: $other',
+    );
   }
 
   /// Returns a string representation of the [DateTimeRange].
   ///
-  /// Format: '<start | end | duration>'.
+  /// Format: `<start | end | duration>`.
   String toPrint() => '<$start | $end | $duration>';
 }

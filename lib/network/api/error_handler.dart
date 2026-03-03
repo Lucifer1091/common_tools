@@ -93,7 +93,7 @@ class ErrorHandler {
       case 417:
         return 'Expectation Failed: Expectation header not met.';
       case 418:
-        return 'I\'m a teapot: April Fools joke, not implemented.';
+        return "I'm a teapot: April Fools joke, not implemented.";
       case 421:
         return 'Misdirected Request: Request was directed to an incorrect server.';
       case 422:

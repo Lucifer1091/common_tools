@@ -99,6 +99,8 @@ Map<String, LookupMessages> _lookupMessagesMap = {
 };
 
 class TimeAgo {
+  const TimeAgo._();
+
   static String toUnitString(int value, {String? unit, String? langCode}) {
     final langCodeVal = langCode ?? _default;
     final messages = _lookupMessagesMap[langCodeVal] ?? EnMessages();
@@ -118,8 +120,12 @@ class TimeAgo {
     }
   }
 
-  static String format(DateTime date,
-      {String? locale, DateTime? clock, bool? allowFromNow}) {
+  static String format(
+    DateTime date, {
+    String? locale,
+    DateTime? clock,
+    bool? allowFromNow,
+  }) {
     final localeVal = locale ?? _default;
     final allowNow = allowFromNow ?? false;
     final messages = _lookupMessagesMap[localeVal] ?? EnMessages();
@@ -170,8 +176,10 @@ class TimeAgo {
       result = messages.years(years.round());
     }
 
-    return [prefix, result, suffix]
-        .where((str) => str.isNotEmpty)
-        .join(messages.wordSeparator());
+    return [
+      prefix,
+      result,
+      suffix,
+    ].where((str) => str.isNotEmpty).join(messages.wordSeparator());
   }
 }

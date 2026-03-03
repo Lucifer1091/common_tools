@@ -31,11 +31,17 @@ extension DateTimeIterables on DateTime {
     bool inclusive = true,
     bool forceIncludeLast = false,
   }) sync* {
+    if (by <= Duration.zero) {
+      throw ArgumentError.value(by, 'by', 'Step duration must be positive');
+    }
+
     DateTime current = this;
 
-    if (current == end && !inclusive) return;
+    if (current.isAtSameMomentAs(end) && !inclusive) return;
+    final bool ascending =
+        current.isBefore(end) || current.isAtSameMomentAs(end);
 
-    if (current.isBefore(end) || (inclusive && current.isAtSameMomentAs(end))) {
+    if (ascending) {
       while (current.isBefore(end) ||
           (inclusive && current.isAtSameMomentAs(end))) {
         yield current;
@@ -49,10 +55,10 @@ extension DateTimeIterables on DateTime {
       }
     }
 
-    // Check if we need to force include the last date
-    if (forceIncludeLast &&
-        current != end &&
-        (current.isAfter(end) || current.isAtSameMomentAs(end))) {
+    final bool overshot =
+        ascending ? current.isAfter(end) : current.isBefore(end);
+
+    if (forceIncludeLast && overshot && !current.isAtSameMomentAs(end)) {
       yield end;
     }
   }
@@ -81,12 +87,15 @@ extension DateTimeIterables on DateTime {
   /// ```
   DateTime clamp({DateTime? min, DateTime? max}) {
     assert(
-      ((min != null) && (max != null)) && (min.isBefore(max) || (min == max)),
+      min == null ||
+          max == null ||
+          min.isBefore(max) ||
+          min.isAtSameMomentAs(max),
       'DateTime min has to be before or equal to max\n(min: $min - max: $max)',
     );
-    if ((min != null) && compareTo(min).isNegative) {
+    if ((min != null) && isBefore(min)) {
       return min;
-    } else if ((max != null) && max.compareTo(this).isNegative) {
+    } else if ((max != null) && isAfter(max)) {
       return max;
     }
     return this;

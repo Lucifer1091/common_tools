@@ -12,6 +12,12 @@ extension DateValidators on DateTime? {
   /// Checks if the [DateTime] value is not null.
   bool get isNotNull => !isNull;
 
+  DateTime? _utcDateOnly(DateTime? value) {
+    if (value == null) return null;
+    final DateTime utc = value.toUtc();
+    return DateTime.utc(utc.year, utc.month, utc.day);
+  }
+
   /// Whether the time of the date is zero/empty.
   bool get IsTimeZero =>
       this != null &&
@@ -44,8 +50,8 @@ extension DateValidators on DateTime? {
   /// print(monday.isWeekend); // Outputs: false
   /// ```
   bool get isWeekend =>
-      this != null && (this!.weekday == DateTime.saturday) ||
-      (this!.weekday == DateTime.sunday);
+      this != null &&
+      (this!.weekday == DateTime.saturday || this!.weekday == DateTime.sunday);
 
   /// Returns `true` if this [DateTime] is not a Saturday or Sunday.
   ///
@@ -100,7 +106,7 @@ extension DateValidators on DateTime? {
 
   /// Return `true` if is night, `false` otherwise.
   /// Night is between 23 and 5.
-  bool get isNight => this != null && this!.hour >= 21 || this!.hour < 6;
+  bool get isNight => this != null && (this!.hour >= 21 || this!.hour < 6);
 
   /// Checks if this [DateTime] is greater than [other].
   ///
@@ -161,8 +167,11 @@ extension DateValidators on DateTime? {
   /// The comparison is independent of whether the time is in UTC or
   /// in the local time zone.
   bool isBeforeDate(DateTime? other) {
-    if (this == null || other == null) return false;
-    return this!.startOfDay.isBefore(other.startOfDay);
+    final DateTime? a = _utcDateOnly(this);
+    final DateTime? b = _utcDateOnly(other);
+    if (a == null || b == null) return false;
+
+    return a.isBefore(b);
   }
 
   /// Returns true if the date of [DateTime] occurs after the date of [other].
@@ -170,8 +179,11 @@ extension DateValidators on DateTime? {
   /// The comparison is independent of whether the time is in UTC or
   /// in the local time zone.
   bool isAfterDate(DateTime? other) {
-    if (this == null || other == null) return false;
-    return this!.startOfDay.isAfter(other.startOfDay);
+    final DateTime? a = _utcDateOnly(this);
+    final DateTime? b = _utcDateOnly(other);
+    if (a == null || b == null) return false;
+
+    return a.isAfter(b);
   }
 
   /// Checks if this [DateTime] represents the same date as [other].
@@ -180,12 +192,11 @@ extension DateValidators on DateTime? {
   /// `false` otherwise.
   /// If this [DateTime] is null, returns `false`.
   bool isSameDate(DateTime? other) {
-    if (this == null || other == null) return false;
+    final DateTime? a = _utcDateOnly(this);
+    final DateTime? b = _utcDateOnly(other);
+    if (a == null || b == null) return false;
 
-    final date = this!;
-    return date.year == other.year &&
-        date.month == other.month &&
-        date.day == other.day;
+    return a.year == b.year && a.month == b.month && a.day == b.day;
   }
 
   /// Checks if this [DateTime] represents the same time as [other].
@@ -209,16 +220,6 @@ extension DateValidators on DateTime? {
     return isSameDate(other) && isSameTime(other);
   }
 
-  /// Returns true if the date of [DateTime] occurs on the same day as
-  /// the date of [other].
-  ///
-  /// The comparison is independent of whether the time is in UTC or
-  /// in the local time zone.
-  bool isSameDateAs(DateTime? other) {
-    if (this == null || other == null) return false;
-    return this!.startOfDay.equals(other.startOfDay);
-  }
-
   /// Determines if this date falls within the same ISO week as [other].
   ///
   /// Dates are considered to be in the same ISO week if they have the same ISO week
@@ -229,16 +230,10 @@ extension DateValidators on DateTime? {
   bool isSameWeek(DateTime? other) {
     if (this == null || other == null) return false;
 
-    // Convert dates to UTC to handle daylight savings time correctly
     final DateTime a = DateTime.utc(this!.year, this!.month, this!.day);
-    other = DateTime.utc(other.year, other.month, other.day);
+    final DateTime b = DateTime.utc(other.year, other.month, other.day);
 
-    // Calculate ISO week numbers for both dates
-    final int aWeek = a.weekNumber;
-    final int bWeek = other.weekNumber;
-
-    // Compare ISO week numbers to determine if they are in the same week
-    return aWeek == bWeek;
+    return a.weekNumber == b.weekNumber && a.isoWeekYear == b.isoWeekYear;
   }
 
   /// Check if this date is in the same month than other
@@ -278,12 +273,10 @@ extension DateValidators on DateTime? {
   bool get isSunday => this != null && this!.weekday == DateTime.sunday;
 
   /// Is the given date the first day of a month?
-  bool get isFirstDayOfMonth => isSameDate(this!.startOfMonth);
+  bool get isFirstDayOfMonth => this != null && isSameDate(this!.startOfMonth);
 
   /// Is the given date the last day of a month?
-  bool get isLastDayOfMonth =>
-      this != null &&
-      isSameDate(this!.nextMonth.startOfMonth.previousDay.startOfDay);
+  bool get isLastDayOfMonth => this != null && isSameDate(this!.endOfMonth);
 
   /// Return true if this [DateTime] is set as UTC.
   bool get isUTC => this != null && this!.isUtc;
@@ -315,9 +308,8 @@ extension DateValidators on DateTime? {
   /// ```
   ///
   /// Returns `true` if the date is yesterday, otherwise `false`.
-  bool get isYesterday => isSameDate(
-        DateTime.now().subtract(const Duration(days: 1)),
-      );
+  bool get isYesterday =>
+      isSameDate(DateTime.now().subtract(const Duration(days: 1)));
 
   /// Checks if the DateTime instance represents tomorrow's date.
   ///
@@ -332,9 +324,8 @@ extension DateValidators on DateTime? {
   /// ```
   ///
   /// Returns `true` if the date is tomorrow, otherwise `false`.
-  bool get isTomorrow => isSameDate(
-        DateTime.now().add(const Duration(days: 1)),
-      );
+  bool get isTomorrow =>
+      isSameDate(DateTime.now().add(const Duration(days: 1)));
 
   /// Boolean check to see if the current date is in the next week.
   ///
@@ -351,10 +342,10 @@ extension DateValidators on DateTime? {
     if (this == null) return false;
 
     final DateTime now = DateTime.now();
-    final DateTime startOfNextWeek = now.addDays(7 - now.weekday);
-    final DateTime endOfNextWeek = startOfNextWeek.addDays(6);
+    final DateTime startOfNextWeek = now.startOfWeek.addDays(7);
+    final DateTime endOfNextWeek = startOfNextWeek.endOfWeek;
 
-    return isAfter(now) && isBefore(endOfNextWeek);
+    return isBetween(startOfNextWeek.startOfDay, endOfNextWeek.endOfDay);
   }
 
   /// Boolean check to see if the current date is in the last week.
@@ -372,10 +363,10 @@ extension DateValidators on DateTime? {
     if (this == null) return false;
 
     final DateTime now = DateTime.now();
-    final DateTime startOfLastWeek = now.startOfLastWeek;
+    final DateTime startOfLastWeek = now.startOfWeek.subtractDays(7);
     final DateTime endOfLastWeek = startOfLastWeek.endOfWeek;
 
-    return isAfter(startOfLastWeek) && isBefore(endOfLastWeek);
+    return isBetween(startOfLastWeek.startOfDay, endOfLastWeek.endOfDay);
   }
 
   /// Checks if the current DateTime instance is in the past.
@@ -411,7 +402,7 @@ extension DateValidators on DateTime? {
     if (this == null) return false;
 
     final now = DateTime.now();
-    final previousMonth = DateTime(now.year, now.month - 1, now.day);
+    final previousMonth = now.startOfMonth.addMonths(-1);
 
     return this!.month == previousMonth.month &&
         this!.year == previousMonth.year;
@@ -422,7 +413,7 @@ extension DateValidators on DateTime? {
     if (this == null) return false;
 
     final now = DateTime.now();
-    final nextMonth = DateTime(now.year, now.month + 1, now.day);
+    final nextMonth = now.startOfMonth.addMonths(1);
 
     return this!.month == nextMonth.month && this!.year == nextMonth.year;
   }
@@ -470,29 +461,6 @@ extension DateValidators on DateTime? {
 
   /// Returns true if [DateTime] falls in december
   bool get isInDecember => this != null && this!.month == DateTime.december;
-
-  /// Checks if the current date is between the specified start date and end date.
-  ///
-  /// Returns `true` if the current date is greater than or equal to the start date
-  /// and less than or equal to the end date. Otherwise, returns `false`.
-  ///
-  /// Example:
-  /// ```dart
-  /// final startDate = DateTime(2024, 5, 1);
-  /// final endDate = DateTime(2024, 5, 31);
-  /// final currentDate = DateTime.now();
-  ///
-  /// final bool result = currentDate.isDateInRange(startDate, endDate);
-  /// print(result); // true if currentDate is between May 1 and May 31, 2024
-  /// ```
-  bool isDateInRange(
-    DateTime startDate,
-    DateTime endDate, [
-    DateTime? currentDate,
-  ]) {
-    final current = currentDate ?? this ?? DateTime.now();
-    return current.isAfter(startDate) && current.isBefore(endDate);
-  }
 
   /// Checks if a [DateTime] is within a given [DateTimeRange].
   ///

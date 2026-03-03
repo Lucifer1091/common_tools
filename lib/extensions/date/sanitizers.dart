@@ -12,12 +12,13 @@ extension DateTimeGetters on DateTime {
   /// Returns the starting [DateTime] of the current year.
   ///
   /// Returns a new [DateTime] instance set to the start of the year (January 1st, 00:00:00).
-  DateTime get startOfYear => DateTime(year);
+  DateTime get startOfYear => (isUtc ? DateTime.utc : DateTime.new)(year);
 
   /// Returns the starting [DateTime] of the current month.
   ///
   /// Returns a new [DateTime] instance set to the start of the month (first day, 00:00:00).
-  DateTime get startOfMonth => DateTime(year, month);
+  DateTime get startOfMonth =>
+      (isUtc ? DateTime.utc : DateTime.new)(year, month);
 
   /// Returns the starting [DateTime] of the current week.
   ///
@@ -40,27 +41,28 @@ extension DateTimeGetters on DateTime {
   /// Returns a new [DateTime] instance set to the start of the hour (HH:00:00).
   DateTime get startOfHour => clone.setMinute(0, 0, 0, 0);
 
-  /// Returns the end of the year for this date. The result will be in the local timezone.
+  /// Returns the end of the year for this date.
   DateTime get endOfYear => clone.setYear(year, DateTime.december).endOfMonth;
 
   /// Returns the ending [DateTime] of the current month.
   ///
   /// Returns a new [DateTime] instance set to the end of the month.
-  DateTime get endOfMonth => DateTime(year, month + 1, 0).startOfDay;
+  DateTime get endOfMonth =>
+      (isUtc ? DateTime.utc : DateTime.new)(year, month + 1, 0).endOfDay;
 
   /// Returns the ending [DateTime] of the current week.
   ///
   /// Returns a new [DateTime] instance set to the end of the week.
   DateTime get endOfWeek =>
-      add(Duration(days: DateTime.daysPerWeek - weekday)).startOfDay;
+      add(Duration(days: DateTime.daysPerWeek - weekday)).endOfDay;
 
   /// Returns the end of the next week from the current date.
-  DateTime get endOfNextWeek => endOfDay.addDays(7);
+  DateTime get endOfNextWeek => startOfWeek.addDays(7).endOfWeek;
 
-  /// Return the end of a day for this date. The result will be in the local timezone.
+  /// Return the end of a day for this date.
   DateTime get endOfDay => clone.setHour(23, 59, 59, 999, 999);
 
-  /// Return the end of the hour for this date. The result will be in the local timezone.
+  /// Return the end of the hour for this date.
   DateTime get endOfHour => clone.setMinute(59, 59, 999, 999);
 
   /// The year after this [DateTime]
@@ -85,33 +87,6 @@ extension DateTimeGetters on DateTime {
 
   /// The day previous this [DateTime]
   DateTime get previousDay => addDays(-1);
-
-  /// Returns the Monday of this week
-  DateTime get firstDayOfWeek =>
-      isUtc
-          ? DateTime.utc(year, month, day + 1 - weekday)
-          : DateTime(year, month, day + 1 - weekday);
-
-  /// Returns the Sunday of this week
-  DateTime get lastDayOfWeek =>
-      isUtc
-          ? DateTime.utc(year, month, day + 7 - weekday)
-          : DateTime(year, month, day + 7 - weekday);
-
-  /// Returns the first day of this month
-  DateTime get firstDayOfMonth =>
-      isUtc ? DateTime.utc(year, month) : DateTime(year, month);
-
-  /// Returns the last day of this month (considers leap years)
-  DateTime get lastDayOfMonth =>
-      isUtc ? DateTime.utc(year, month + 1, 0) : DateTime(year, month + 1, 0);
-
-  /// Returns the first day of this year
-  DateTime get firstDayOfYear => isUtc ? DateTime.utc(year) : DateTime(year);
-
-  /// Returns the last day of this year
-  DateTime get lastDayOfYear =>
-      isUtc ? DateTime.utc(year, 12, 31) : DateTime(year, 12, 31);
 
   /// Get UTC [DateTime] from this [DateTime]
   DateTime get utc =>
@@ -211,7 +186,7 @@ extension DateTimeSetters on DateTime {
     int? second,
     int? millisecond,
     int? microsecond,
-  ]) => DateTime(
+  ]) => (isUtc ? DateTime.utc : DateTime.new)(
     year,
     month ?? this.month,
     day ?? this.day,
@@ -238,7 +213,7 @@ extension DateTimeSetters on DateTime {
     int? second,
     int? millisecond,
     int? microsecond,
-  ]) => DateTime(
+  ]) => (isUtc ? DateTime.utc : DateTime.new)(
     year,
     month,
     day ?? this.day,
@@ -281,7 +256,7 @@ extension DateTimeSetters on DateTime {
     int? second,
     int? millisecond,
     int? microsecond,
-  ]) => DateTime(
+  ]) => (isUtc ? DateTime.utc : DateTime.new)(
     year,
     month,
     day,
@@ -301,7 +276,7 @@ extension DateTimeSetters on DateTime {
     int? second,
     int? millisecond,
     int? microsecond,
-  ]) => DateTime(
+  ]) => (isUtc ? DateTime.utc : DateTime.new)(
     year,
     month,
     day,
@@ -322,7 +297,7 @@ extension DateTimeSetters on DateTime {
     int? second,
     int? millisecond,
     int? microsecond,
-  ]) => DateTime(
+  ]) => (isUtc ? DateTime.utc : DateTime.new)(
     year,
     month,
     day,
@@ -338,7 +313,7 @@ extension DateTimeSetters on DateTime {
   /// set [millisecond] if you want to change it as well, to skip an change other optional field set it as null
   /// set [microsecond] if you want to change it as well
   DateTime setSecond(int second, [int? millisecond, int? microsecond]) =>
-      DateTime(
+      (isUtc ? DateTime.utc : DateTime.new)(
         year,
         month,
         day,
@@ -352,28 +327,30 @@ extension DateTimeSetters on DateTime {
   /// Change [millisecond] of this date
   ///
   /// set [microsecond] if you want to change it as well
-  DateTime setMillisecond(int millisecond, [int? microsecond]) => DateTime(
-    year,
-    month,
-    day,
-    hour,
-    minute,
-    second,
-    millisecond,
-    microsecond ?? this.microsecond,
-  );
+  DateTime setMillisecond(int millisecond, [int? microsecond]) =>
+      (isUtc ? DateTime.utc : DateTime.new)(
+        year,
+        month,
+        day,
+        hour,
+        minute,
+        second,
+        millisecond,
+        microsecond ?? this.microsecond,
+      );
 
   /// Change [microsecond] of this date
-  DateTime setMicrosecond(int microsecond) => DateTime(
-    year,
-    month,
-    day,
-    hour,
-    minute,
-    second,
-    millisecond,
-    microsecond,
-  );
+  DateTime setMicrosecond(int microsecond) =>
+      (isUtc ? DateTime.utc : DateTime.new)(
+        year,
+        month,
+        day,
+        hour,
+        minute,
+        second,
+        millisecond,
+        microsecond,
+      );
 
   /// Returns new [DateTime] instance of nearest `n`th weekday in the future
   ///
@@ -477,25 +454,42 @@ extension DateTimeSetters on DateTime {
   ///
   /// Returns a new [DateTime] instance with the same year, month, and day,
   /// but the time set to midnight (00:00:00).
-  DateTime truncateTime() => DateTime(year, month, day);
+  DateTime truncateTime() =>
+      (isUtc ? DateTime.utc : DateTime.new)(year, month, day);
 
   /// Removes any information that is equal to or smaller than milliseconds.
   /// Returned instance will have 0 milliseconds and microseconds.
-  DateTime truncateMicros() =>
-      DateTime(year, month, day, hour, minute, second, millisecond);
+  DateTime truncateMicros() => (isUtc ? DateTime.utc : DateTime.new)(
+    year,
+    month,
+    day,
+    hour,
+    minute,
+    second,
+    millisecond,
+  );
 
   /// Removes any information that is equal to or smaller than milliseconds.
   /// Returned instance will have 0 milliseconds and microseconds.
-  DateTime truncateMillis() => DateTime(year, month, day, hour, minute, second);
+  DateTime truncateMillis() => (isUtc ? DateTime.utc : DateTime.new)(
+    year,
+    month,
+    day,
+    hour,
+    minute,
+    second,
+  );
 
   /// Removes any information that is equal to or smaller than seconds.
   /// Returned instance will have 0 seconds, milliseconds and microseconds.
-  DateTime truncateSeconds() => DateTime(year, month, day, hour, minute);
+  DateTime truncateSeconds() =>
+      (isUtc ? DateTime.utc : DateTime.new)(year, month, day, hour, minute);
 
   /// Removes any information that is equal to or smaller than minutes.
   /// Returned instance will have 0 minutes, seconds,
   /// milliseconds and microseconds.
-  DateTime truncateMinutes() => DateTime(year, month, day, hour);
+  DateTime truncateMinutes() =>
+      (isUtc ? DateTime.utc : DateTime.new)(year, month, day, hour);
 
   /// Rounds this [DateTime] to the nearest quarter hour.
   ///
@@ -508,29 +502,11 @@ extension DateTimeSetters on DateTime {
   ///
   /// Returns a new [DateTime] instance rounded to the nearest quarter hour.
   DateTime nearestQuarter() {
-    // Calculate the minute value nearest to the quarter-hour mark
-    final int roundedMinute = [15, 30, 45, 60][(minute / 15).floor()];
-
-    // Return a new DateTime instance with the rounded minute value
-    return DateTime(year, month, day, hour, roundedMinute);
-  }
-
-  /// Rounds this [DateTime] to the nearest half hour.
-  ///
-  /// Example:
-  /// ```dart
-  /// DateTime dateTime = DateTime(2024, 6, 23, 14, 38);
-  /// DateTime roundedDateTime = dateTime.nearestHalf();
-  /// print(roundedDateTime); // Output: 2024-06-23 15:00:00.000
-  /// ```
-  ///
-  /// Returns a new [DateTime] instance rounded to the nearest half hour.
-  DateTime nearestHalf() {
-    // Calculate the minute value nearest to the half-hour mark
-    final int roundedMinute = [30, 60][(minute / 30).floor()];
-
-    // Return a new DateTime instance with the rounded minute value
-    return DateTime(year, month, day, hour, roundedMinute);
+    final int totalMinutes = (hour * 60) + minute;
+    final int roundedTotalMinutes = ((totalMinutes / 15).round()) * 15;
+    return (isUtc ? DateTime.utc : DateTime.new)(year, month, day).add(
+      Duration(minutes: roundedTotalMinutes),
+    );
   }
 
   /// Rounds this [DateTime] to the nearest half hour.
@@ -544,10 +520,10 @@ extension DateTimeSetters on DateTime {
   ///
   /// Returns a new [DateTime] instance rounded to the nearest half hour.
   DateTime nearestHalfHour() {
-    // Calculate the minute value rounded to the nearest half hour
-    final int roundedMinute = [0, 30, 60][(minute / 30).round()];
-
-    // Return a new DateTime instance with the rounded minute value
-    return DateTime(year, month, day, hour, roundedMinute);
+    final int totalMinutes = (hour * 60) + minute;
+    final int roundedTotalMinutes = ((totalMinutes / 30).round()) * 30;
+    return (isUtc ? DateTime.utc : DateTime.new)(year, month, day).add(
+      Duration(minutes: roundedTotalMinutes),
+    );
   }
 }
