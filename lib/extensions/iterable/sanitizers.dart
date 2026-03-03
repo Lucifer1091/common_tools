@@ -138,8 +138,8 @@ extension CollectionsExtensions<T> on Iterable<T> {
   ///  stack.pop()
   ///  stack.push(5)
   ///
-  StackX<T> toStack() {
-    final stack = StackX<T>()..addAll(this);
+  UnboundedStack<T> toStack() {
+    final stack = UnboundedStack<T>()..pushAll(this);
     return stack;
   }
 

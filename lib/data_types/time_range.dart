@@ -8,6 +8,14 @@ class TimeRange {
   final TimeOfDay start;
   final TimeOfDay end;
 
+  /// Returns `true` when the range crosses midnight (e.g. 22:00-06:00).
+  bool get spansMidnight => end.isBefore(start);
+
+  /// Returns `true` when start and end represent the same clock time.
+  ///
+  /// In this case, [includes] behaves as a single-minute point-in-time match.
+  bool get isSingleMoment => start == end;
+
   /// Returns the effective date range for this time range on the given [date].
   ///
   /// For time range within the same day returns the same day.
@@ -32,14 +40,21 @@ class TimeRange {
   /// // Returns: 2023-06-12 09:00 to 2023-06-12 17:00
   ///
   /// // Night shift: crosses midnight
-  /// final nightRange = nightRange.toDateRange(monday);
+  /// final nightDateRange = nightRange.toDateRange(monday);
   /// // Returns: 2023-06-12 22:00 to 2023-06-13 06:00
+  ///
+  /// // Same start/end: single-moment range on the same day
+  /// final pointRange = TimeRange(
+  ///   start: TimeOfDay(hour: 9, minute: 0),
+  ///   end: TimeOfDay(hour: 9, minute: 0),
+  /// ).toDateRange(monday);
+  /// // Returns: 2023-06-12 09:00 to 2023-06-12 09:00
   /// ```
   DateTimeRange toDateRange(DateTime date) {
     final startDateTime = date.copyTime(start);
     final endDateTime = date.copyTime(end);
 
-    if (end.isBefore(start)) {
+    if (spansMidnight) {
       // Overnight shift: end time is next day
       return DateTimeRange(start: startDateTime, end: endDateTime.addDays(1));
     } else {
@@ -52,7 +67,7 @@ class TimeRange {
   ///
   /// Example:
   /// ```dart
-  /// final workHours = ClockTimeRange(
+  /// final workHours = TimeRange(
   ///   start: TimeOfDay(hour: 9, min: 0),
   ///   end: TimeOfDay(hour: 17, min: 0),
   /// );
@@ -64,7 +79,7 @@ class TimeRange {
   /// workHours.includes(evening);  // false
   ///
   /// // Works with midnight-crossing ranges
-  /// final nightShift = ClockTimeRange(
+  /// final nightShift = TimeRange(
   ///   start: TimeOfDay(hour: 22, min: 0),
   ///   end: TimeOfDay(hour: 6, min: 0),
   /// );
@@ -72,18 +87,19 @@ class TimeRange {
   /// nightShift.includes(midnight);  // true
   /// ```
   bool includes(DateTime date) {
-    var startDate = date.copyTime(start);
-    var endDate = date.copyTime(end);
+    final startMinutes = _toMinutes(start);
+    final endMinutes = _toMinutes(end);
+    final currentMinutes = _toMinutes(date.timeOfDay);
 
-    if (end.isBefore(start)) {
-      if (start.isAfter(date.timeOfDay)) {
-        startDate = startDate - const Duration(days: 1);
-      } else {
-        endDate = endDate + const Duration(days: 1);
-      }
+    if (isSingleMoment) {
+      return currentMinutes == startMinutes;
     }
 
-    return startDate <= date && date <= endDate;
+    if (spansMidnight) {
+      return currentMinutes >= startMinutes || currentMinutes <= endMinutes;
+    }
+
+    return currentMinutes >= startMinutes && currentMinutes <= endMinutes;
   }
 
   @override
@@ -99,4 +115,6 @@ class TimeRange {
 
   @override
   int get hashCode => Object.hashAll([start, end]);
+
+  int _toMinutes(TimeOfDay time) => time.hour * 60 + time.minute;
 }
