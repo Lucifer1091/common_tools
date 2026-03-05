@@ -3,25 +3,31 @@ import 'package:flutter/material.dart';
 extension StringToColor on String {
   /// String is in the format "aabbcc" or "ffaabbcc" with an optional leading "#".
   Color fromHex() {
+    final normalized = replaceFirst('#', '');
+    if (normalized.length != 6 && normalized.length != 8) {
+      throw FormatException('Invalid hex color: $this');
+    }
+
     final buffer = StringBuffer();
-    if (length == 6 || length == 7) buffer.write('ff');
-    buffer.write(replaceFirst('#', ''));
+    if (normalized.length == 6) buffer.write('ff');
+    buffer.write(normalized);
     return Color(int.parse(buffer.toString(), radix: 16));
   }
 }
 
 extension HexColor on Color {
-  Color scaleAlpha(double factor) {
-    return withValues(alpha: a * factor);
-  }
+  int _to8Bit(double channel) => (channel * 255.0).round().clamp(0, 255);
+
+  Color scaleAlpha(double factor) =>
+      withValues(alpha: (a * factor).clamp(0.0, 1.0));
 
   /// Prefixes a hash sign if [leadingHashSign] is set to `true` (default is `true`).
   String toHex({bool leadingHashSign = true}) =>
       '${leadingHashSign ? '#' : ''}'
-      '${a.toInt().toRadixString(16).padLeft(2, '0')}'
-      '${r.toInt().toRadixString(16).padLeft(2, '0')}'
-      '${g.toInt().toRadixString(16).padLeft(2, '0')}'
-      '${b.toInt().toRadixString(16).padLeft(2, '0')}';
+      '${_to8Bit(a).toRadixString(16).padLeft(2, '0')}'
+      '${_to8Bit(r).toRadixString(16).padLeft(2, '0')}'
+      '${_to8Bit(g).toRadixString(16).padLeft(2, '0')}'
+      '${_to8Bit(b).toRadixString(16).padLeft(2, '0')}';
 
   /// Lighten the color by [percentage] (0.0 to 1.0).
   Color lighten([double percentage = .1]) {
@@ -84,7 +90,8 @@ extension HexColor on Color {
   /// double brightness = color.getBrightness;
   /// print('Brightness: $brightness'); // Output: 110.622
   /// ```
-  double get getBrightness => (r * 299 + g * 587 + b * 114) / 1000;
+  double get getBrightness =>
+      (_to8Bit(r) * 299 + _to8Bit(g) * 587 + _to8Bit(b) * 114) / 1000;
 
   /// Returns the luminance of the color.
   ///

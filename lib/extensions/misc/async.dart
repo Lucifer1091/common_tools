@@ -10,25 +10,13 @@ extension AsyncSnapshotExt<T> on AsyncSnapshot<T> {
 
   bool get isDone => connectionState == ConnectionState.done;
 
-  /// Check if the [AsyncSnapshot] has data.
-  bool get hasData =>
-      connectionState == ConnectionState.active ||
-      connectionState == ConnectionState.done && data != null;
-
-  /// Check if the [AsyncSnapshot] has an error.
-
-  bool get hasError =>
-      (connectionState == ConnectionState.active ||
-          connectionState == ConnectionState.done) &&
-      error != null;
-
   ///  **Perform conditional actions based on the state of the [AsyncSnapshot].**
   ///
-  /// ️ **Key points:**
+  /// **Key points:**
   ///
-  /// -️ Similar to [when], but allows [data] callback to be optional.
-  /// -️ If no [data] callback, calls [loading] callback instead.
-  /// -️ isComplete signifies a closed connection/stream.
+  /// - Similar to [when], but allows [data] callback to be optional.
+  /// - If no [data] callback, calls [loading] callback instead.
+  /// - `isComplete` signifies a closed connection/stream.
   ///
   ///  **Example:**
   ///
@@ -61,27 +49,24 @@ extension AsyncSnapshotExt<T> on AsyncSnapshot<T> {
     required R Function(Object error, StackTrace? stackTrace) error,
     R Function(T data, bool isComplete)? data,
   }) {
+    R resolveData(T value, bool isComplete) =>
+        data != null ? data(value, isComplete) : loading();
+
     switch (connectionState) {
       case ConnectionState.none:
-        if (this.data is T) {
-          return data!(this.data as T, true);
-        } else {
-          return loading();
-        }
+        if (hasError) return error(this.error!, stackTrace);
+        if (this.data is T) return resolveData(this.data as T, true);
+        return loading();
       case ConnectionState.waiting:
         return loading();
       case ConnectionState.active:
-        if (hasError) {
-          return error(this.error!, stackTrace);
-        } else {
-          return data!(this.data as T, false);
-        }
+        if (hasError) return error(this.error!, stackTrace);
+        if (this.data is T) return resolveData(this.data as T, false);
+        return loading();
       case ConnectionState.done:
-        if (hasError) {
-          return error(this.error!, stackTrace);
-        } else {
-          return data!(this.data as T, true);
-        }
+        if (hasError) return error(this.error!, stackTrace);
+        if (this.data is T) return resolveData(this.data as T, true);
+        return loading();
     }
   }
 
@@ -128,25 +113,19 @@ extension AsyncSnapshotExt<T> on AsyncSnapshot<T> {
   }) {
     switch (connectionState) {
       case ConnectionState.none:
-        if (this.data is T) {
-          return data(this.data as T, true);
-        } else {
-          return loading();
-        }
+        if (hasError) return error(this.error!, stackTrace);
+        if (this.data is T) return data(this.data as T, true);
+        return loading();
       case ConnectionState.waiting:
         return loading();
       case ConnectionState.active:
-        if (hasError) {
-          return error(this.error!, stackTrace);
-        } else {
-          return data(this.data as T, false);
-        }
+        if (hasError) return error(this.error!, stackTrace);
+        if (this.data is T) return data(this.data as T, false);
+        return loading();
       case ConnectionState.done:
-        if (hasError) {
-          return error(this.error!, stackTrace!);
-        } else {
-          return data(this.data as T, true);
-        }
+        if (hasError) return error(this.error!, stackTrace);
+        if (this.data is T) return data(this.data as T, true);
+        return loading();
     }
   }
 }

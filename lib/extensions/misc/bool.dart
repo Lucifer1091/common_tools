@@ -6,10 +6,10 @@ extension BooleanExtensions on bool? {
   bool getOr([bool value = false]) => this ?? value;
 
   /// Checks if the boolean value is true.
-  bool get isTrue => this != null && this!;
+  bool get isTrue => this ?? false;
 
   /// Checks if the boolean value is false.
-  bool get isFalse => this != null && !this!;
+  bool get isFalse => this == false;
 
   /// Converts the boolean value to an integer.
   ///
@@ -25,7 +25,7 @@ extension BooleanExtensions on bool? {
   ///
   /// If the value is true, it returns false.
   /// If the value is false or null, it returns true.
-  bool? get toggle => this != null ? !this! : null;
+  bool get toggle => !(this ?? false);
 
   /// Returns the inverse of this boolean.
   bool? not() {

@@ -1,24 +1,8 @@
 import '../../index.dart';
 
 extension DurationTimeExtension on Duration {
-  Duration operator +(Duration other) {
-    return Duration(microseconds: inMicroseconds + other.inMicroseconds);
-  }
-
-  Duration operator -(Duration other) {
-    return Duration(microseconds: inMicroseconds - other.inMicroseconds);
-  }
-
-  Duration operator *(Duration other) {
-    return Duration(microseconds: inMicroseconds * other.inMicroseconds);
-  }
-
   Duration times(int by) {
     return Duration(microseconds: inMicroseconds * by);
-  }
-
-  Duration operator /(Duration other) {
-    return Duration(microseconds: inMicroseconds ~/ other.inMicroseconds);
   }
 
   Duration divide(int by) {
@@ -92,7 +76,7 @@ extension DurationTimeExtension on Duration {
   /// ```
   Duration clamp({Duration? min, Duration? max}) {
     assert(
-      ((min != null) && (max != null)) && min.compareTo(max) <= 0,
+      min == null || max == null || min.compareTo(max) <= 0,
       'Duration min has to be shorter than max\n(min: $min - max: $max)',
     );
     if ((min != null) && compareTo(min).isNegative) {
@@ -119,15 +103,15 @@ extension DurationTimeExtension on Duration {
 
   /// Returns true if [Duration] duration equals to or more than a minute but
   /// is less than an hour.
-  bool get isInMinutes => inMinutes > 0 && !isInHours;
+  bool get isInMinutes => inMinutes > 0 && inHours == 0;
 
   /// Returns true if [Duration] duration equals to or more than a second but
   /// is less than a minute.
-  bool get isInSeconds => inSeconds > 0 && !isInMinutes;
+  bool get isInSeconds => inSeconds > 0 && inMinutes == 0;
 
   /// Returns true if [Duration] duration equals to or more than a millisecond but
   /// is less than a second.
-  bool get isInMillis => inMilliseconds > 0 && !isInSeconds;
+  bool get isInMillis => inMilliseconds > 0 && inSeconds == 0;
 
   /// Returns remaining minutes after deriving hours.
   int get absoluteMinutes => inMinutes % Duration.minutesPerHour;
