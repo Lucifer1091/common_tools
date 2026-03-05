@@ -13,7 +13,7 @@ extension IterableValidators<T> on Iterable<T>? {
 
   /// Returns true if no entries match the given [predicate] or if the
   /// collection is empty.
-  bool none(Predicate<T> predicate) => isNotBlank && !this!.any(predicate);
+  bool none(Predicate<T> predicate) => this?.any(predicate) != true;
 
   /// Returns `true` if there is exactly one element of [Iterable] which satisfies
   /// [test].
@@ -70,9 +70,10 @@ extension IterableValidators<T> on Iterable<T>? {
   /// If [compare] is provided, it is used to check if two elements are the
   /// same.
   bool contentEquals(Iterable<T>? other, [IsEqual<T>? compare]) {
-    if (isBlank || other.isBlank) return false;
+    if (identical(this, other)) return true;
+    if (this == null || other == null) return false;
 
-    final it1 = this!.iterator, it2 = other!.iterator;
+    final it1 = this!.iterator, it2 = other.iterator;
 
     if (compare != null) {
       while (it1.moveNext()) {
@@ -103,7 +104,8 @@ extension IterableValidators<T> on Iterable<T>? {
   /// [1, 2, 3].startsWith([2, 3]); // -> false
   /// ```
   bool startsWith(Iterable<T> other) {
-    if (isBlank || other.isBlank) return false;
+    if (other.isEmpty) return true;
+    if (this == null) return false;
 
     final thisIterator = this!.iterator;
     final otherIterator = other.iterator;

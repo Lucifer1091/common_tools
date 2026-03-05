@@ -73,16 +73,14 @@ extension NumListConverter<T extends num> on Iterable<T>? {
 
   /// Returns the product of all elements in the list.
   ///
-  /// If the list is empty, a [StateError] is thrown with the message 'No element'.
-  ///
-  /// Returns the product of all elements in the list.
+  /// Returns `null` if the list is empty.
   ///
   /// Example:
   /// ```dart
   /// List<int> numbers = [1, 2, 3];
   /// print(numbers.prod); // Output: 6
   ///
-  num? prodOrNull() => isBlank ? _zero() : this!.fold(1, (a, b) => a! * b);
+  num? prodOrNull() => isBlank ? null : this!.fold<num>(1, (a, b) => a * b);
 
   num prodOr(num value) => prodOrNull() ?? value;
 
@@ -150,9 +148,12 @@ extension NumListConverter<T extends num> on Iterable<T>? {
   /// The [percentile] should be a value between 0 and 100.
   num? percentile(double percentile) {
     if (isBlank) return null;
+    if (percentile < 0 || percentile > 100) {
+      throw RangeError.range(percentile, 0, 100, 'percentile');
+    }
 
     final sorted = List<num>.from(orEmpty())..sort();
-    final index = (percentile * (sorted.length - 1)).round();
+    final index = ((percentile / 100) * (sorted.length - 1)).round();
     return sorted[index];
   }
 }
@@ -223,21 +224,21 @@ extension RIterableNull<T> on List<T?> {
   }
 
   /// * return the `length` without `null` elements
-  int countWithoutNull() => count<T>((e) => e != null);
+  int countWithoutNull() => count((e) => e != null);
 
   /// * return the `count` of the `null` elements
-  int countNull() => count<T>((e) => e == null);
+  int countNull() => count((e) => e == null);
 }
 
 extension RIterableString on Iterable<String> {
   /// return counter of empty elements in the iterable
   /// does not count the null values
   int countEmpty({bool trim = true}) =>
-      count<String>((e) => trim ? e.trim().isEmpty : e.isEmpty);
+      count((e) => trim ? e.trim().isEmpty : e.isEmpty);
 
   /// return counter of empty elements in the iterable
   /// does not count the null values
-  int countNotEmpty() => count<String>((e) => e.trim().isNotEmpty);
+  int countNotEmpty() => count((e) => e.trim().isNotEmpty);
 }
 
 /// provides extensions for Iterable
@@ -252,11 +253,11 @@ extension IterableScrewDriver<T> on Iterable<T>? {
       _zero() as R;
 
   num prodBy<R extends num>(Transformer<T, R> selector) =>
-      this?.fold<R>(
-        _zero() as R,
-        (previous, element) => previous * selector(element) as R,
-      ) ??
-      _zero() as R;
+      isBlank
+          ? _zero()
+          : this!.skip(1).fold<num>(selector(this!.first), (previous, element) {
+            return previous * selector(element);
+          });
 
   /// Returns the average of all values produced by [selector] function
   /// applied to each element in the collection.
@@ -397,8 +398,8 @@ extension IterableScrewDriver<T> on Iterable<T>? {
   Set<T> union(Iterable<T> other) => toSet()..addAll(other);
 
   /// Returns the number of elements matching the given [predicate].
-  int count<E>([Predicate<T>? predicate]) {
-    if (isBlank) return -1;
+  int count([Predicate<T>? predicate]) {
+    if (this == null) return 0;
 
     if (predicate == null) return length;
 
@@ -419,7 +420,10 @@ extension IterableScrewDriver<T> on Iterable<T>? {
   }
 
   Iterable<T> onEachIndexed(MapIndexedValue<T, void> action) sync* {
-    if (isBlank) yield* Iterable.empty();
+    if (isBlank) {
+      yield* Iterable.empty();
+      return;
+    }
 
     final it = this!.iterator;
     var index = 0;
@@ -563,21 +567,21 @@ extension IterableGetters<T> on Iterable<T>? {
   int? get lastIndex => isNotBlank ? length - 1 : null;
 
   /// * return the `length` of the NOT `null` elements
-  int countNotNull() => count<T>((e) => e != null);
+  int countNotNull() => count((e) => e != null);
 
   /// counter the element of certain value
-  int countValue(T value) => count<T>((e) => e == value);
+  int countValue(T value) => count((e) => e == value);
 
   /// Returns count of elements that matches the given [predicate].
-  /// Returns -1 if iterable is null
+  /// Returns `0` if iterable is null.
   int countWhere(Predicate<T> predicate) {
-    if (isBlank) return -1;
+    if (this == null) return 0;
 
     return this!.where(predicate).length;
   }
 
-  /// * async for each
-  Future<void> loop(FutureOr<void> Function(T e) action) async {
+  /// Runs [action] sequentially for each item in this iterable.
+  Future<void> forEachAsync(FutureOr<void> Function(T e) action) async {
     if (isBlank) return;
 
     for (final item in this!) {
@@ -647,7 +651,7 @@ extension IterableGetters<T> on Iterable<T>? {
   List<T> concatWithSingleList(Iterable<T> iterable) {
     if (isBlank || iterable.isBlank) return [];
 
-    return <T>[...this.orEmpty(), ...iterable];
+    return <T>[...orEmpty(), ...iterable];
   }
 
   /// Return a list concatenates the output of the current list and multiple [iterables]
@@ -655,7 +659,7 @@ extension IterableGetters<T> on Iterable<T>? {
     if (isBlank || iterables.isBlank) return [];
 
     final list = iterables.toList(growable: false).expand((i) => i);
-    return <T>[...this.orEmpty(), ...list];
+    return <T>[...orEmpty(), ...list];
   }
 
   /// Returns a new lazy [Iterable] of values built from the elements of this
@@ -945,12 +949,19 @@ extension FicIterableExtensionTypeNullable<T> on Iterable<T?> {
   //
   /// Similar to [map], but MAY return a non-nullable type.
   ///
-  /// int? f(String? e) => (e == null) ? 0 : e.length;
+  /// `int? f(String? e) => (e == null) ? 0 : e.length;`
   ///
-  /// List<int?> list1 = ["xxx", "xx", null, "x"].map(f).toList();
-  /// expect(list1, isA<List<int?>>());
+  /// `List<int?> list1 = ["xxx", "xx", null, "x"].map(f).toList();`
+  /// `expect(list1, isA<List<int?>>());`
   ///
-  /// List<int?> list2 = ["xxx", "xx", null, "x"].mapNotNull(f).toList();
-  /// expect(list2, isA<List<int>>());
-  Iterable<E> mapNotNull<E>(E? Function(T? e) f) => map(f).cast();
+  /// `List<int> list2 = ["xxx", "xx", null, "x"].mapNotNull(f).toList();`
+  /// `expect(list2, isA<List<int>>());`
+  Iterable<E> mapNotNull<E>(E? Function(T? e) f) sync* {
+    for (final element in this) {
+      final result = f(element);
+      if (result != null) {
+        yield result;
+      }
+    }
+  }
 }

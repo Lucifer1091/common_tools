@@ -36,8 +36,8 @@ extension CollectionsExtensions<T> on Iterable<T> {
 
   /// Returns a set containing all elements that are contained
   /// by both this set and the specified collection.
-  Set<T> intersect(Iterable<T> other) {
-    final set = toMutableSet()..addAll(other);
+  Set<T> intersectSet(Iterable<T> other) {
+    final set = toMutableSet()..retainAll(other);
     return set;
   }
 
@@ -46,35 +46,19 @@ extension CollectionsExtensions<T> on Iterable<T> {
 
   /// Returns a list containing first [n] elements.
   List<T> takeOnly(int n) {
-    if (n == 0) return [];
+    if (n <= 0) return [];
 
-    final list = List<T>.empty();
-    final thisList = toList();
-    final resultSize = length - n;
-    if (resultSize <= 0) return [];
-    if (resultSize == 1) return [last];
-
-    List.generate(n, (index) {
-      list.add(thisList[index]);
-    });
-    return list;
+    final list = this is List<T> ? this as List<T> : toList();
+    if (n >= list.length) return List<T>.from(list);
+    return list.take(n).toList();
   }
 
   /// Returns a list containing all elements except first [n] elements.
   List<T> drop(int n) {
-    if (n == 0) return [];
-
-    final list = List<T>.empty();
-    final originalList = toList();
-    final resultSize = length - n;
-    if (resultSize <= 0) return [];
-    if (resultSize == 1) return [last];
-
-    originalList
-      ..removeRange(0, n)
-      ..forEach(list.add);
-
-    return list;
+    final list = this is List<T> ? this as List<T> : toList();
+    if (n <= 0) return List<T>.from(list);
+    if (n >= list.length) return [];
+    return list.sublist(n);
   }
 
   // Returns map operation as a List
@@ -99,8 +83,8 @@ extension CollectionsExtensions<T> on Iterable<T> {
 
   ///
   /// Performs the given action on each element on iterable, providing sequential index with the element.
-  /// [item] the element on the current iteration
-  /// [index] the index of the current iteration
+  /// `item` the element on the current iteration
+  /// `index` the index of the current iteration
   ///
   /// example:
   /// ["a","b","c"].forEachIndexed((element, index) {
@@ -437,11 +421,11 @@ extension ListExtension2<T> on List<T> {
       throw ArgumentError('Requested element count $n is less than zero.');
     }
 
-    if (n == 0) toList();
+    if (n == 0) return toList();
 
     final resultSize = length - n;
     if (resultSize <= 0) return [];
-    if (resultSize == 1) return [last!];
+    if (resultSize == 1) return [last];
 
     return sublist(n);
   }
@@ -465,7 +449,7 @@ extension ListExtension2<T> on List<T> {
     if (n < 0) {
       throw ArgumentError('Requested element count $n is less than zero.');
     }
-    if (n == 0) toList();
+    if (n == 0) return toList();
 
     final resultSize = length - n;
     if (resultSize <= 0) return [];
@@ -521,7 +505,7 @@ extension IterableSanitizers<T> on Iterable<T>? {
 
   /// Adds the [value] to the list if not in the iterable already.
   Iterable<T> putIfAbsent(T value, {Predicate<T>? compare}) {
-    if (isBlank) return <T>[];
+    if (isBlank) return <T>[value];
 
     if (compare != null ? this!.any(compare) : this!.contains(value)) {
       return this!;
@@ -533,7 +517,7 @@ extension IterableSanitizers<T> on Iterable<T>? {
   /// Adds or removes the [value] based on if the value was already
   /// in.
   List<T> toggle(T value) {
-    if (isBlank) return <T>[];
+    if (isBlank) return <T>[value];
 
     if (this!.contains(value)) {
       final result = this!.toList()..remove(value);
@@ -548,7 +532,12 @@ extension IterableSanitizers<T> on Iterable<T>? {
   Iterable<T> reverseIf(bool b) => b ? orEmpty().reversed : orEmpty();
 
   /// Returns the element at position [index] % [length].
-  T? loop(int index) => this?.toList()[index % length];
+  T? loop(int index) {
+    if (isBlank) return null;
+
+    final list = this!.toList();
+    return list[index % list.length];
+  }
 
   /// Transforms an iterable like:
   /// duplicate(3): [a,b] => [a,b,a,b,a,b]
@@ -617,10 +606,18 @@ extension IterableSanitizers<T> on Iterable<T>? {
   T? find(bool Function(T) test, {int start = 0, int? end}) {
     if (isBlank) return null;
 
-    // If endIndex is not provided, it defaults to the length of the list
-    end ??= length;
-    for (var i = start; i < end && i < length; i++) {
-      if (test(asList()[i])) return asList()[i];
+    final list = asList();
+    final startIndex =
+        start < 0 ? 0 : (start >= list.length ? list.length - 1 : start);
+    final endValue = end ?? list.length - 1;
+    final endIndex =
+        endValue < 0
+            ? 0
+            : (endValue >= list.length ? list.length - 1 : endValue);
+    if (startIndex > endIndex) return null;
+
+    for (var i = startIndex; i <= endIndex; i++) {
+      if (test(list[i])) return list[i];
     }
     return null;
   }

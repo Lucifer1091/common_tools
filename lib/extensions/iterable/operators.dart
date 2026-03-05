@@ -50,25 +50,23 @@ extension ListExt<T> on List<T>? {
   }
 
   List<T> separatorEvery(T separator, {bool start = false, bool end = false}) {
-    final List<T> list = <T>[];
+    if (isBlank) return <T>[];
 
-    if (isBlank) return list;
+    final source = this!;
+    final out = <T>[];
 
-    /// First item Top separator
-    if (start) list.add(separator);
+    if (start) out.add(separator);
 
-    for (int n = 0; n < (this?.length ?? 0); n++) {
-      if (end) {
-        list.addAll([this![n], separator]);
-        continue;
-      }
+    for (var i = 0; i < source.length; i++) {
+      out.add(source[i]);
 
-      if (!end && (n == ((this?.length ?? 1) - 1))) {
-        list.add(this![n]);
+      final isLast = i == source.length - 1;
+      if (!isLast || end) {
+        out.add(separator);
       }
     }
 
-    return list;
+    return out;
   }
 
   List<List<T>> divideListByFunction(Predicate<T> condition) {
@@ -200,17 +198,15 @@ extension IterableSC<T> on Iterable<T> {
   /// Replaces an item in the list with [replacement] where [comparator] returns
   /// true. Returns true if an item is replaced, false otherwise.
   Iterable<T> replaceLastWhere(Predicate<T> comparator, T replacement) sync* {
-    final it = iterator;
-    var found = false;
-
-    while (it.moveNext()) {
-      if (comparator(it.current) && !found) {
-        yield replacement;
-        found = true;
-      } else {
-        yield it.current;
-      }
+    final list = toList();
+    final index = list.lastIndexWhere(comparator);
+    if (index == -1) {
+      yield* list;
+      return;
     }
+
+    list[index] = replacement;
+    yield* list;
   }
 }
 
@@ -300,34 +296,8 @@ extension ListUtils<T> on List<T> {
 
   // Sort the list by [f] descending.
   /// Returns a new list sorted by [selector] descending.
-  List<T> sortedByDescending(dynamic Function(T) selector) {
-    final list = <T>[...this]..sort((a, b) {
-      final valueA = selector(a);
-      final valueB = selector(b);
-      if (valueA == null) {
-        if (valueB == null) {
-          return 0;
-        } else {
-          return -1;
-        }
-      } else if (valueB == null) {
-        return 1;
-      } else if (valueA is num) {
-        return valueA.compareTo(valueB as num);
-      } else if (valueA is String) {
-        return valueA.compareTo(valueB as String);
-      } else if (valueA is bool) {
-        return valueA == valueB ? 0 : (valueA ? -1 : 1);
-      } else if (valueA is DateTime) {
-        return valueA.compareTo(valueB as DateTime);
-      } else if (valueA is Comparable) {
-        return valueA.compareTo(valueB);
-      } else {
-        return 0;
-      }
-    });
-    return list;
-  }
+  List<T> sortedByDescending(dynamic Function(T) selector) =>
+      sortedByAscending(selector).reversed.toList();
 
   /// Join to [String] with [separator], [prefix] and [suffix], and [transform] function.
   /// Returns a [String] with the elements joined by [separator], [prefix] and [suffix], and transformed by [transform].
@@ -491,7 +461,7 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// Returns the [item] itself, if it's present in this iterable. Otherwise,
   /// return [orElse]. For example:
   ///
-  /// ```
+  /// ```dart
   /// var primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31];
   /// primes.restrict(14, orElse: -1); // Returns -1.
   /// primes.restrict(7, orElse: -1); // Returns 7.
@@ -523,11 +493,13 @@ extension FicIterableExtension<T> on Iterable<T> {
   /// processing. Suppose you have a list with a million items, and you want
   /// to remove duplicates and get the first 5:
   ///
+  /// ```dart
   /// // This will process 5 items:
   /// var newList = list.removeDuplicates().take(5).toList();
   ///
   /// // This will process a million items:
   /// var newList = list.distinct().sublist(0, 5);
+  /// ```
   ///
   ///
   Iterable<T> whereNoDuplicates({

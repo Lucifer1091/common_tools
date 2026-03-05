@@ -15,9 +15,12 @@ extension SetBasics<T> on Set<T>? {
   /// set.isEqualTo({'a', 'b', 'c', 'd'}); // false
   /// ```
   bool isEqualTo(Set<Object>? other) {
-    if (isBlank || other.isBlank) return false;
+    final current = this;
+    if (current == null || other == null) {
+      return current == null && other == null;
+    }
 
-    return this!.length == other?.length && this!.containsAll(other!);
+    return current.length == other.length && current.containsAll(other);
   }
 
   /// Returns `true` if [T] and [other] have no elements in common.
@@ -29,9 +32,9 @@ extension SetBasics<T> on Set<T>? {
   /// set.isDisjointWith({'d', 'e', 'b'}); // false
   /// ```
   bool isDisjointWith(Set<Object>? other) {
-    if (isBlank || other.isBlank) return false;
+    if (this == null || other == null) return true;
 
-    return this!.intersection(other!).isEmpty;
+    return this!.intersection(other).isEmpty;
   }
 
   /// Returns `true` if [T] and [other] have at least one element in common.
@@ -43,9 +46,9 @@ extension SetBasics<T> on Set<T>? {
   /// set.isIntersectingWith({'d', 'e', 'f'}); // false
   /// ```
   bool isIntersectingWith(Set<Object>? other) {
-    if (isBlank || other.isBlank) return false;
+    if (this == null || other == null) return false;
 
-    return this!.intersection(other!).isNotEmpty;
+    return this!.intersection(other).isNotEmpty;
   }
 
   /// Returns `true` if every element of [T] is contained in [other].
@@ -58,9 +61,11 @@ extension SetBasics<T> on Set<T>? {
   /// set.isSubsetOf({'a', 'b', 'f'}); // false
   /// ```
   bool isSubsetOf(Set<Object>? other) {
-    if (isBlank || other.isBlank) return false;
+    final current = this;
+    if (current == null || current.isEmpty) return true;
+    if (other == null) return false;
 
-    return this!.length <= other!.length && other.containsAll(this!);
+    return current.length <= other.length && other.containsAll(current);
   }
 
   /// Returns `true` if every element of [other] is contained in [T].
@@ -72,9 +77,10 @@ extension SetBasics<T> on Set<T>? {
   /// set.isSupersetOf({'a', 'b', 'f'}); // false
   /// ```
   bool isSupersetOf(Set<Object> other) {
-    if (isBlank || other.isBlank) return false;
+    final current = this;
+    if (current == null) return other.isEmpty;
 
-    return this!.length >= other.length && this!.containsAll(other);
+    return current.length >= other.length && current.containsAll(other);
   }
 
   /// Returns `true` if every element of [T] is contained in [other] and at
@@ -88,9 +94,10 @@ extension SetBasics<T> on Set<T>? {
   /// set.isStrictSubsetOf({'a', 'b', 'f'}); // false
   /// ```
   bool isStrictSubsetOf(Set<Object> other) {
-    if (isBlank || other.isBlank) return false;
+    final current = this;
+    if (current == null || current.isEmpty) return other.isNotEmpty;
 
-    return this!.length < other.length && other.containsAll(this!);
+    return current.length < other.length && other.containsAll(current);
   }
 
   /// Returns `true` if every element of [other] is contained in [T] and at
@@ -103,14 +110,15 @@ extension SetBasics<T> on Set<T>? {
   /// set.isStrictSupersetOf({'a', 'b', 'f'}); // false
   /// ```
   bool isStrictSupersetOf(Set<Object> other) {
-    if (isBlank || other.isBlank) return false;
+    final current = this;
+    if (current == null) return false;
 
-    return this!.length > other.length && this!.containsAll(other);
+    return current.length > other.length && current.containsAll(other);
   }
 
-  /// Removes a random element of [T] and returns it.
+  /// Removes a random element of this set and returns it.
   ///
-  /// Returns [null] if [T] is empty.
+  /// Returns `null` if the set is empty.
   ///
   /// If [seed] is provided, will be used as the random seed for determining
   /// which element to select. (See [math.Random].)
@@ -144,4 +152,3 @@ extension SetBasics<T> on Set<T>? {
     return groups;
   }
 }
-
