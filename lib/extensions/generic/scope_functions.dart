@@ -16,13 +16,13 @@ extension ScopeFunction<T> on T? {
   /// print([].isTruthy); // false
   /// ```
   bool get isTruthy => switch (this) {
-        final bool value => value,
-        final num value => value != 0,
-        final String value => value.isNotEmpty,
-        final Iterable<dynamic> value => value.isNotEmpty,
-        final Map<dynamic, dynamic> value => value.isNotEmpty,
-        _ => false,
-      };
+    final bool value => value,
+    final num value => value != 0,
+    final String value => value.isNotEmpty,
+    final Iterable<dynamic> value => value.isNotEmpty,
+    final Map<dynamic, dynamic> value => value.isNotEmpty,
+    _ => false,
+  };
 
   /// Checks whether the value is "falsy" (opposite of `isTruthy`).
   bool get isFalsy => !isTruthy;
@@ -56,23 +56,28 @@ extension ScopeFunction<T> on T? {
     return this;
   }
 
-  /// Calls the specified function [op] without passing `this` and returns its result.
+  /// Calls the specified function [op] with `this` as its argument and returns its result.
   ///
   /// Example:
   /// ```dart
-  /// var result = 'Hello'.run(() => 'Hello World');
+  /// var result = 'Hello'.run((it) => '$it World');
   /// print(result); // Output: Hello World
   /// ```
-  R run<R>(R Function() op) => op();
+  R? run<R>(R Function(T it) op) {
+    if (this == null) return null;
+    return op(this as T);
+  }
 
-  /// Calls the specified function [op] and returns `this`, useful for chaining.
+  /// Calls the specified function [op] with `this` as its argument and returns `this`,
+  /// useful for chaining.
   ///
   /// Example:
   /// ```dart
-  /// var list = [1, 2, 3].apply(() => print('List has ${list.length} elements'));
+  /// final list = <int>[1, 2, 3].apply((it) => print('List has ${it.length} elements'));
   /// ```
-  T? apply(void Function() op) {
-    op();
+  T? apply(void Function(T it) op) {
+    if (this == null) return null;
+    op(this as T);
     return this;
   }
 
@@ -124,26 +129,28 @@ extension ScopeFunction<T> on T? {
   }
 }
 
-/// Throws an [Error] if the given [test] condition evaluates to `true`.
+/// Throws the object returned by [errorFactoryFunc] if [test] evaluates to `true`.
 ///
 /// Example:
 /// ```dart
 /// throwIf(n < 1, () => ArgumentError("n must be greater than 0"));
 /// ```
-void throwIf(bool test, Error Function() errorFactoryFunc) {
+void throwIf(bool test, Object Function() errorFactoryFunc) {
   if (test) {
+    // ignore: only_throw_errors
     throw errorFactoryFunc();
   }
 }
 
-/// Throws an [Error] if the given [test] condition evaluates to `false`.
+/// Throws the object returned by [errorFactoryFunc] if [test] evaluates to `false`.
 ///
 /// Example:
 /// ```dart
 /// throwIfNot(n > 1, () => ArgumentError("n must be greater than 0"));
 /// ```
-void throwIfNot(bool test, Error Function() errorFactoryFunc) {
+void throwIfNot(bool test, Object Function() errorFactoryFunc) {
   if (!test) {
+    // ignore: only_throw_errors
     throw errorFactoryFunc();
   }
 }
@@ -163,31 +170,35 @@ void throwIfNot(bool test, Error Function() errorFactoryFunc) {
 /// ```
 FutureOr<T?> runCaching<T>(
   FutureOr<T?> Function() action, {
-  FutureOr<T?> Function(Object error, StackTrace stacktrace)? onError,
+  FutureOr<T?> Function(Object error, StackTrace stackTrace)? onError,
 }) {
+  FutureOr<T?> handleError(Object error, StackTrace stackTrace) {
+    if (onError == null) {
+      return null;
+    }
+
+    try {
+      return onError(error, stackTrace);
+    } catch (_) {
+      return null;
+    }
+  }
+
   try {
     final result = action.call();
 
     if (result is Future<T?>) {
-      return result.then(
+      return result.then<T?>(
         (value) => value,
-        onError: (error, stacktrace) {
-          try {
-            return onError?.call(error as Object, stacktrace as StackTrace);
-          } catch (_) {
-            return null; // Swallow error if `onError` throws
-          }
-        },
-      ).catchError((_) => null); // Swallow final errors
+        onError:
+            (Object error, StackTrace stackTrace) =>
+                Future<T?>.value(handleError(error, stackTrace)),
+      );
     }
 
     return result;
   } catch (error, stacktrace) {
-    try {
-      return onError?.call(error, stacktrace);
-    } catch (_) {
-      return null; // Swallow error if `onError` throws
-    }
+    return handleError(error, stacktrace);
   }
 }
 

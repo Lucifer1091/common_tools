@@ -4,7 +4,7 @@ import '../../data_types/either.dart';
 
 /// Provide [left] and [right] extensions on any types.
 extension ToEitherObjectExtension<T> on T {
-  /// Return a [Left] that contains [this] value.
+  /// Return a `Left` that contains this value.
   /// This is a shorthand for [Either.left].
   ///
   /// ### Example
@@ -12,9 +12,10 @@ extension ToEitherObjectExtension<T> on T {
   /// Either<int, Never> e1 = 1.left<Never>();
   /// Either<int, String> e2 = 1.left<String>();
   /// ```
+  // ignore: use_to_and_as_if_applicable
   Either<T, R> left<R>() => Either<T, R>.left(this);
 
-  /// Return a [Right] that contains [this] value.
+  /// Return a `Right` that contains this value.
   /// This is a shorthand for [Either.right].
   ///
   /// ### Example
@@ -22,14 +23,15 @@ extension ToEitherObjectExtension<T> on T {
   /// Either<Never, int> e1 = 1.right<Never>();
   /// Either<String, int> e2 = 1.right<String>();
   /// ```
+  // ignore: use_to_and_as_if_applicable
   Either<L, T> right<L>() => Either<L, T>.right(this);
 }
 
 /// Provide [toFuture] extension on [Either].
 extension AsFutureEitherExtension<L extends Object, R> on Either<L, R> {
   /// Convert this [Either] to a [Future].
-  /// If [this] is [Right], the Future will complete with [Right.value] as its value.
-  /// Otherwise, the result Future will complete with [Left.value] as its error.
+  /// If this is `Right`, the Future completes with its value.
+  /// Otherwise, the result Future completes with the `Left` value as its error.
   Future<R> toFuture() => fold(Future.error, Future.value);
 }
 
@@ -44,8 +46,7 @@ extension FutureEither<L, R> on Future<Either<L, R>> {
   Future<Either<TL, TR>> either<TL, TR>(
     TL Function(L left) fnL,
     TR Function(R right) fnR,
-  ) =>
-      then((either) => either.either(fnL, fnR));
+  ) => then((either) => either.either(fnL, fnR));
 
   /// Transform value of [Right]
   Future<Either<L, TR>> mapRight<TR>(FutureOr<TR> Function(R right) fnR) =>
@@ -58,14 +59,12 @@ extension FutureEither<L, R> on Future<Either<L, R>> {
   /// Async transform value of [Right] when transformation may be finished with an error
   Future<Either<L, TR>> thenRight<TR>(
     FutureOr<Either<L, TR>> Function(R right) fnR,
-  ) =>
-      then((either) => either.thenAsync(fnR));
+  ) => then((either) => either.thenAsync(fnR));
 
   /// Async transform value of [Left] when transformation may be finished with an [Right]
   Future<Either<TL, R>> thenLeft<TL>(
     FutureOr<Either<TL, R>> Function(L left) fnL,
-  ) =>
-      then((either) => either.thenLeftAsync(fnL));
+  ) => then((either) => either.thenLeftAsync(fnL));
 
   /// Fold [Left] and [Right] into the value of one type
   Future<T> fold<T>(
@@ -76,5 +75,5 @@ extension FutureEither<L, R> on Future<Either<L, R>> {
   }
 
   /// Swap [Left] and [Right]
-  Future<Either<R, L>> swap() => this.fold<Either<R, L>>(Right.new, Left.new);
+  Future<Either<R, L>> swap() => fold<Either<R, L>>(Right.new, Left.new);
 }

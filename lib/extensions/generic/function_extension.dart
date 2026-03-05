@@ -1,12 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 // ignore: inference_failure_on_function_return_type
 extension FunctionExtension on Function() {
-  void get widgetBinding =>
-      WidgetsBinding.instance.addPostFrameCallback((_) => this());
-
-  void get schedularBinding =>
+  void get schedulerBinding =>
       SchedulerBinding.instance.addPostFrameCallback((_) => this());
 
   void widgetBindingWithDelay(Duration duration) => WidgetsBinding.instance
@@ -14,11 +13,13 @@ extension FunctionExtension on Function() {
 
   void get endOfFrame => WidgetsBinding.instance.endOfFrame.then((_) => this());
 
-  void catchAll(void Function(Object error) onError) {
+  Future<void> catchAll(
+    FutureOr<void> Function(Object error, StackTrace stackTrace) onError,
+  ) async {
     try {
-      this();
-    } catch (e) {
-      onError(e);
+      await Future<void>.sync(() => this());
+    } catch (error, stackTrace) {
+      await onError(error, stackTrace);
     }
   }
 }

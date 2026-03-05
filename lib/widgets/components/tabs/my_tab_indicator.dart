@@ -143,7 +143,7 @@ class _MaterialIndicatorPainter extends BoxPainter {
           ..strokeWidth = decoration.strokeWidth
           ..strokeCap = StrokeCap.round;
 
-    if (decoration.gradient != null && decoration.gradient.isNotEmpty) {
+    if (decoration.gradient != null && decoration.gradient.isNotBlank) {
       paint.shader = ui.Gradient.linear(
         Offset(rect.left, 0),
         Offset(rect.right, 0),
@@ -221,7 +221,7 @@ class _TabIndicatorPainter extends BoxPainter {
           ..strokeWidth = decoration.strokeWidth
           ..strokeCap = StrokeCap.round;
 
-    if (decoration.gradient != null && decoration.gradient.isNotEmpty) {
+    if (decoration.gradient != null && decoration.gradient.isNotBlank) {
       paint.shader = ui.Gradient.linear(
         Offset(rect.left, 0),
         Offset(rect.right, 0),
@@ -271,7 +271,7 @@ class _DotIndicatorPainter extends BoxPainter {
           ..strokeWidth = decoration.strokeWidth
           ..strokeCap = StrokeCap.round;
 
-    if (decoration.gradient != null && decoration.gradient.isNotEmpty) {
+    if (decoration.gradient != null && decoration.gradient.isNotBlank) {
       paint.shader = ui.Gradient.linear(
         Offset(rect.left, 0),
         Offset(rect.right, 0),

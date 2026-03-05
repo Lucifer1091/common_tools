@@ -186,7 +186,7 @@ class _MyTimeCounterState extends State<MyTimeCounter>
 
   @override
   Widget build(BuildContext context) {
-    if (widget.content.isNull) {
+    if (widget.content.isFalsy) {
       return Row(
         mainAxisSize: MainAxisSize.min,
         children: _buildTimeWidget(context),

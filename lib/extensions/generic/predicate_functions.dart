@@ -25,7 +25,7 @@ extension BooleanPredicateExtensions on bool Function() {
   ///
   /// print(alwaysFalse()); // false
   /// ```
-  bool get negate => !this();
+  bool Function() get negate => () => !this();
 
   /// Returns a function that performs a logical AND (`&&`) operation between
   /// this function and the given [predicate].
@@ -65,10 +65,10 @@ extension BooleanPredicateExtensions on bool Function() {
   /// print(isGoodDay()); // false
   /// ```
   bool Function() xor(bool Function() predicate) => () {
-        final thisPredicate = this();
-        final otherPredicate = predicate();
-        return thisPredicate ^ otherPredicate;
-      };
+    final thisPredicate = this();
+    final otherPredicate = predicate();
+    return thisPredicate ^ otherPredicate;
+  };
 }
 
 /// Provides utility functions for composing and modifying boolean predicates

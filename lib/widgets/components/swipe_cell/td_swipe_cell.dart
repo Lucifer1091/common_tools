@@ -2,14 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
-import '../../../extensions/generic/dynamic_extension.dart';
-import '../../../extensions/iterable/index.dart';
-import '../cell/my_cell.dart';
-import 'td_swipe_cell_action.dart';
-import 'td_swipe_cell_inherited.dart';
-import 'td_swipe_cell_panel.dart';
+import '../../../index.dart';
 
 export 'package:flutter_slidable/flutter_slidable.dart';
 
