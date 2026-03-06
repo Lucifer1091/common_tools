@@ -2,7 +2,6 @@ import 'dart:math';
 import 'package:intl/intl.dart';
 
 import '../date/index.dart';
-import '../string/index.dart';
 import 'operators.dart';
 import 'validators.dart';
 
@@ -58,17 +57,17 @@ extension NumConverters on num? {
 
   /// Returns the percentage of `this` value relative to [total], optionally allowing decimals.
   num percentage(num total, {bool allowDecimals = true, int dp = 2}) {
-    if (this != null) {
-      final result = this! >= total ? 100 : max((this! / total) * 100, 0);
-
-      if (allowDecimals) {
-        return double.parse(result.toStringAsFixed(dp));
-      } else {
-        return result.toInt();
-      }
+    if (isNull) return 0;
+    if (total == 0) {
+      throw ArgumentError.value(total, 'total', 'cannot be zero');
     }
 
-    return 0;
+    final result = (this! / total) * 100;
+    if (allowDecimals) {
+      return double.parse(result.toStringAsFixed(dp));
+    }
+
+    return result.toInt();
   }
 
   /// Converts a file size (in bytes) to a specified unit (Bytes, KB, MB, GB, TB).
@@ -90,7 +89,7 @@ extension NumConverters on num? {
   /// ```
   double fileSize({SizeUnit unit = SizeUnit.MB}) {
     if (isNull || getOr() <= 0) return 0;
-    return this! / pow(1000, unit.id);
+    return this! / pow(1024, unit.id);
   }
 
   /// Converts a file size (in bytes) to a human-readable string with appropriate suffix (Bytes, KB, MB, GB, TB).
@@ -113,7 +112,7 @@ extension NumConverters on num? {
     if (isNull || getOr() <= 0) return '0 bytes';
 
     const suffixes = ['bytes', 'KB', 'MB', 'GB', 'TB'];
-    final i = (log(this!) / log(1024)).floor();
+    final i = min((log(this!) / log(1024)).floor(), suffixes.length - 1);
     return '${(this! / pow(1024, i)).toStringAsFixed(dp)} ${suffixes[i]}';
   }
 
@@ -134,8 +133,17 @@ extension NumConverters on num? {
   ///
   /// Returns a string representation of the number with the specified precision.
   String toSignificantDigits({int digit = 2}) {
-    final NumberFormat formatter = NumberFormat('0' * digit);
-    return formatter.format(this);
+    if (digit < 1) {
+      throw ArgumentError.value(digit, 'digit', 'must be greater than zero');
+    }
+    if (isNull) return '0';
+
+    final value = this!.toDouble();
+    if (value == 0) return '0';
+
+    final result = value.toStringAsPrecision(digit);
+    if (result.contains('e') || result.contains('E')) return result;
+    return result.replaceFirst(RegExp(r'\.?0+$'), '');
   }
 
   /// Returns the ordinal suffix for the integer (e.g., 1st, 2nd, 3rd, 4th, etc.).
@@ -214,8 +222,13 @@ extension NumConverters on num? {
   /// 2.1234567890.roundToPrecision(2)=> 2.12
   /// 2.1234567890.roundToPrecision(3)=> 2.123
   double roundToPrecision(int nthPosition) {
-    final NumberFormat formatter = NumberFormat('0.##')
-      ..minimumFractionDigits = 0;
+    if (nthPosition < 0) {
+      throw ArgumentError.value(
+        nthPosition,
+        'nthPosition',
+        'cannot be negative',
+      );
+    }
 
     if (isNull) return 0;
 
@@ -223,8 +236,8 @@ extension NumConverters on num? {
       return toDouble();
     }
 
-    formatter.maximumFractionDigits = nthPosition;
-    return double.parse(formatter.format(this));
+    final factor = pow(10, nthPosition).toDouble();
+    return (this! * factor).roundToDouble() / factor;
   }
 
   double floorWithDigit(int digit) {
@@ -232,24 +245,23 @@ extension NumConverters on num? {
     return (getOr() * digitValue).floorToDouble() / digitValue;
   }
 
-  /// Returns [int] as string which has a zero appended as prefix if [this]
+  /// Returns integer as string which has a zero appended as prefix if this value
   /// is a single digit value.
-  String twoDigits() => getOr() < 10 ? '0$this' : toString();
+  String twoDigits() {
+    final value = toInt();
+    return value.abs() < 10 ? '0$value' : value.toString();
+  }
 
   /// get last charts of give value
   /// 'I  like dart language'.lastChars(13) // dart language
   int lastDigits(int n) {
-    if (isNull) return 0;
-    int charCount = n;
-
-    if (toString().trim().length < n) {
-      charCount = toString().trim().length;
+    if (n <= 0) {
+      throw ArgumentError.value(n, 'n', 'must be greater than zero');
     }
+    if (isNull) return 0;
 
-    return toString()
-        .trim()
-        .substring(toString().trim().length - charCount)
-        .toInt();
+    final value = toInt().abs();
+    return value % pow(10, n).toInt();
   }
 
   /// Convert the number to a [String] with the specified [precision].
@@ -307,13 +319,19 @@ extension NumConverters on num? {
   String padRight(int width, [String padding = '0']) =>
       toString().padRight(width, padding);
 
-  /// Returns list of digits of [this]
+  /// Returns list of digits of this number.
   /// e.g   12345.digits    // returns [1, 2, 3, 4, 5]
   /// e.g   8564.digits    // returns [8, 5, 6, 4]
-  List<int> get digits => toString().split('').map(int.parse).toList();
+  List<int> get digits {
+    if (isNull) return const <int>[];
+
+    final raw = toString().replaceAll(RegExp('[^0-9]'), '');
+    if (raw.isEmpty) return const <int>[];
+    return raw.split('').map(int.parse).toList();
+  }
 
   /// Returns number of digits in this number
-  int get numberOfDigits => toString().length;
+  int get numberOfDigits => digits.length;
 
   /// Ensures that this value lies in the specified range
   /// [min]..[max].
@@ -328,14 +346,14 @@ extension NumConverters on num? {
   /// print(500.coerceIn(1, 100)) // 100
   /// 10.coerceIn(100, 0) // will fail with ArgumentError
   /// ````
-  T coerceIn<T extends num>(T min, T max) {
+  num coerceIn(num min, num max) {
     if (min > max) throw ArgumentError('min must be smaller the max');
 
     final value = getOr();
     if (value < min) return min;
     if (value > max) return max;
 
-    return value as T;
+    return value;
   }
 
   /// Ensures that this value is not less than the specified [min].
@@ -347,10 +365,10 @@ extension NumConverters on num? {
   /// print(10.coerceAtLeast(5)) // 10
   /// print(10.coerceAtLeast(20)) // 20
   /// ```
-  T coerceAtLeast<T extends num>(T min) {
+  num coerceAtLeast(num min) {
     final value = getOr();
 
-    return value < min ? min : value as T;
+    return value < min ? min : value;
   }
 
   /// Ensures that this value is not greater than the specified [max].
@@ -362,10 +380,10 @@ extension NumConverters on num? {
   /// print(10.coerceAtMost(5)) // 5
   /// print(10.coerceAtMost(20)) // 10
   /// ```
-  T coerceAtMost<T extends num>(T max) {
+  num coerceAtMost(num max) {
     final value = getOr();
 
-    return value > max ? max : value as T;
+    return value > max ? max : value;
   }
 }
 
@@ -406,6 +424,10 @@ extension NumTimeConverters on num? {
   /// Returns the full or abbreviated month name as a string.
   String toMonth({Abbreviation style = Abbreviation.none}) {
     if (isNull) return '';
+    final month = toInt();
+    if (month < 1 || month > 12) {
+      throw ArgumentError.value(month, 'month', 'must be between 1 and 12');
+    }
 
     final List<String> months = [
       'January',
@@ -437,8 +459,8 @@ extension NumTimeConverters on num? {
     ];
 
     return style == Abbreviation.full || style == Abbreviation.semi
-        ? shortMonths[toInt() - 1]
-        : months[toInt() - 1];
+        ? shortMonths[month - 1]
+        : months[month - 1];
   }
 
   /// Converts an integer representing the day of the week (1 for Monday through 7 for Sunday)
@@ -460,6 +482,10 @@ extension NumTimeConverters on num? {
   /// ```
   String toDay({Abbreviation style = Abbreviation.none}) {
     if (isNull) return '';
+    final day = toInt();
+    if (day < 1 || day > 7) {
+      throw ArgumentError.value(day, 'day', 'must be between 1 and 7');
+    }
 
     final List<String> days = [
       'Monday',
@@ -482,16 +508,17 @@ extension NumTimeConverters on num? {
     final List<String> veryShortDays = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
     if (style == Abbreviation.full) {
-      return veryShortDays[toInt() - 1];
+      return veryShortDays[day - 1];
     } else {
-      return style == Abbreviation.semi
-          ? shortDays[toInt() - 1]
-          : days[toInt() - 1];
+      return style == Abbreviation.semi ? shortDays[day - 1] : days[day - 1];
     }
   }
 
   String toClockFormat({bool showSeconds = false}) {
     if (isNull) return '00:00';
+    if (this! < 0) {
+      throw ArgumentError.value(this, 'seconds', 'cannot be negative');
+    }
 
     int h, m, s;
 
@@ -539,10 +566,10 @@ extension NumTimeConverters on num? {
   /// ```
   Duration get minutes => Duration(minutes: toInt());
 
-  /// Returns [DateTime] with time that is [this] minutes ago
+  /// Returns [DateTime] with time that is this value in minutes ago.
   DateTime get minutesAgo => DateTime.now() - Duration(minutes: toInt());
 
-  /// Returns [DateTime] with time that is [this] minutes after
+  /// Returns [DateTime] with time that is this value in minutes after now.
   DateTime get minutesAfter => DateTime.now() + Duration(minutes: toInt());
 
   /// Returns hours duration
@@ -551,10 +578,10 @@ extension NumTimeConverters on num? {
   /// ```
   Duration get hours => Duration(hours: toInt());
 
-  /// Returns [DateTime] with time that is [this] hours ago
+  /// Returns [DateTime] with time that is this value in hours ago.
   DateTime get hoursAgo => DateTime.now() - Duration(hours: toInt());
 
-  /// Returns [DateTime] with time that is [this] hours after
+  /// Returns [DateTime] with time that is this value in hours after now.
   DateTime get hoursAfter => DateTime.now() + Duration(hours: toInt());
 
   /// Returns days duration
@@ -563,10 +590,10 @@ extension NumTimeConverters on num? {
   /// ```
   Duration get days => Duration(days: toInt());
 
-  /// Returns [DateTime] with date that is [this] days ago
+  /// Returns [DateTime] with date that is this value in days ago.
   DateTime get daysAgo => DateTime.now() - Duration(days: toInt());
 
-  /// Returns [DateTime] with date that is [this] days after
+  /// Returns [DateTime] with date that is this value in days after now.
   DateTime get daysAfter => DateTime.now() + Duration(days: toInt());
 
   /// Returns month duration
@@ -575,10 +602,10 @@ extension NumTimeConverters on num? {
   /// ```
   Duration get weeks => Duration(days: toInt() * 7);
 
-  /// Returns [DateTime] with date that is [this] weeks ago
+  /// Returns [DateTime] with date that is this value in weeks ago.
   DateTime get weeksAgo => DateTime.now() - Duration(days: toInt() * 7);
 
-  /// Returns [DateTime] with date that is [this] weeks after
+  /// Returns [DateTime] with date that is this value in weeks after now.
   DateTime get weeksAfter => DateTime.now() + Duration(days: toInt() * 7);
 
   /// Returns month duration

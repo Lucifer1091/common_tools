@@ -2,7 +2,7 @@ import '../../index.dart';
 
 extension CurrencyStringX on String? {
   String toPrice({bool withSymbol = false, String unit = r'$', int dp = 2}) =>
-      _CurrencyExt.toPrice(this, withSymbol: withSymbol, dp: dp);
+      _CurrencyExt.toPrice(this, withSymbol: withSymbol, unit: unit, dp: dp);
 
   String toPercentage({bool withSymbol = true, int dp = 0}) =>
       _CurrencyExt.toPercentage(this, withSymbol: withSymbol, dp: dp);
@@ -10,7 +10,7 @@ extension CurrencyStringX on String? {
 
 extension CurrencyNumX on num? {
   String toPrice({bool withSymbol = false, String unit = r'$', int dp = 2}) =>
-      _CurrencyExt.toPrice(this, withSymbol: withSymbol, dp: dp);
+      _CurrencyExt.toPrice(this, withSymbol: withSymbol, unit: unit, dp: dp);
 
   String toPercentage({bool withSymbol = true, int dp = 0}) =>
       _CurrencyExt.toPercentage(this, withSymbol: withSymbol, dp: dp);

@@ -10,14 +10,18 @@ extension NumHelper on num? {
   /// ```dart
   /// 5.range; // (0, 1, 2, 3, 4)
   /// ```
-  Iterable<int> get range => Iterable<int>.generate(toInt());
+  Iterable<int> get range {
+    final count = toInt();
+    if (count <= 0) return const Iterable<int>.empty();
+    return Iterable<int>.generate(count);
+  }
 
   /// Generates a sequence from `this` to `end` (exclusive),
   /// with a customizable `step` size.
   ///
   /// - If `step` is positive, it counts up.
-  /// - If `step` is negative, it counts down.
-  /// - If `step` is omitted, it auto-determines direction.
+  /// - The direction is always inferred from `this` and [end].
+  /// - [step] is treated as a magnitude (`abs`) and cannot be zero.
   ///
   /// Example:
   /// ```dart
@@ -27,15 +31,19 @@ extension NumHelper on num? {
   /// print(1.to(10, step: 3)); // (1, 4, 7)
   /// ```
   Iterable<num> to(num end, {num? step}) sync* {
-    if (step == 0) {
+    if (isNull) return;
+
+    final start = this!;
+    if (start == end) return;
+
+    final magnitude = (step ?? 1).abs();
+    if (magnitude == 0) {
       throw ArgumentError('Step size cannot be zero');
     }
 
-    final num direction = end > getOr() ? 1 : -1; // Determine auto-direction
-    final num stepSize =
-        step ?? direction; // Use provided step or auto-direction
-
-    num current = getOr();
+    final num direction = end > start ? 1 : -1;
+    final num stepSize = magnitude * direction;
+    num current = start;
 
     while ((direction > 0 && current < end) ||
         (direction < 0 && current > end)) {
@@ -86,7 +94,12 @@ extension NumHelper on num? {
   /// Example:
   /// 3.times(() => print('Hello')); // Hello... Hello... Hello
   void times(void Function() action) {
-    0.until(toInt()).forEach((_) => action());
+    final count = toInt();
+    if (count <= 0) return;
+
+    for (var i = 0; i < count; i++) {
+      action();
+    }
   }
 
   /// runs [func] for [num] number of times.
@@ -101,19 +114,22 @@ extension NumHelper on num? {
   /// Get list of random numbers.
   List<num> randomList({int min = 0, int max = 100}) {
     if (isNull) return [];
-
-    final result = <num>[];
-
-    for (var i = 0; i < this!; i++) {
-      result.add(Random().nextInt(max - min) + min);
+    if (min >= max) {
+      throw ArgumentError.value(max, 'max', 'max must be greater than min');
     }
 
-    return result;
+    final count = toInt();
+    if (count <= 0) return [];
+
+    final random = Random();
+    return List<num>.generate(count, (_) => random.nextInt(max - min) + min);
   }
 
   /// Get the lorem ipsum text of [num] words.
   String loremIpsum() {
     if (isNull) return '';
+    final count = toInt();
+    if (count <= 0) return '';
 
     final words = [
       'lorem',
@@ -189,10 +205,10 @@ extension NumHelper on num? {
 
     final buffer = StringBuffer();
 
-    for (var i = 0; i < this!; i++) {
+    for (var i = 0; i < count; i++) {
       buffer.write('${words[i % words.length]} ');
     }
 
-    return buffer.toString();
+    return buffer.toString().trimRight();
   }
 }

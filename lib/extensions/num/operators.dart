@@ -22,16 +22,31 @@ extension NumOperators on num? {
   );
 
   /// Rounds this double to the nearest multiple of [multiple].
-  num roundToNearestMultiple(double multiple) =>
-      (getOr() / multiple).round() * multiple;
+  num roundToNearestMultiple(double multiple) {
+    if (multiple == 0) {
+      throw ArgumentError.value(multiple, 'multiple', 'cannot be zero');
+    }
+
+    return (getOr() / multiple).round() * multiple;
+  }
 
   /// Rounds this double up to the nearest multiple of [multiple].
-  num roundUpToMultiple(double multiple) =>
-      (getOr() / multiple).ceil() * multiple;
+  num roundUpToMultiple(double multiple) {
+    if (multiple == 0) {
+      throw ArgumentError.value(multiple, 'multiple', 'cannot be zero');
+    }
+
+    return (getOr() / multiple).ceil() * multiple;
+  }
 
   /// Rounds this double down to the nearest multiple of [multiple].
-  num roundDownToMultiple(double multiple) =>
-      (getOr() / multiple).floor() * multiple;
+  num roundDownToMultiple(double multiple) {
+    if (multiple == 0) {
+      throw ArgumentError.value(multiple, 'multiple', 'cannot be zero');
+    }
+
+    return (getOr() / multiple).floor() * multiple;
+  }
 
   /// Returns the prime factors of this integer.
   List<int> primeFactors() {
@@ -63,7 +78,12 @@ extension NumOperators on num? {
   int gcd(int other) => NumbersHelper.gcd(getOr().toInt(), other);
 
   /// Returns the least common multiple of this integer and [other].
-  int lcm(int other) => (getOr().toInt() * other).abs() ~/ gcd(other);
+  int lcm(int other) {
+    final a = getOr().toInt();
+    if (a == 0 || other == 0) return 0;
+
+    return (a * other).abs() ~/ NumbersHelper.gcd(a, other);
+  }
 
   /// Normalizes this number to a range between [min] and [max].
   num scaleBetween(num min, num max) {
@@ -89,11 +109,11 @@ class NumbersHelper {
   ///
   /// Example:
   /// ```dart
-  /// print(NumHelpers.safeDivide(0, 0)); // Output: 0
-  /// print(NumHelpers.safeDivide(10, 0)); // Output: Infinity
-  /// print(NumHelpers.safeDivide(10, 0, whenDivByZero: -1)); // Output: -1
-  /// print(NumHelpers.safeDivide(10, 0, returnNaNOnDivByZero: true)); // Output: NaN
-  /// print(NumHelpers.safeDivide(10, 2)); // Output: 5
+  /// print(NumbersHelper.safeDivide(0, 0)); // Output: 0
+  /// print(NumbersHelper.safeDivide(10, 0)); // Output: Infinity
+  /// print(NumbersHelper.safeDivide(10, 0, whenDivByZero: -1)); // Output: -1
+  /// print(NumbersHelper.safeDivide(10, 0, returnNaNOnDivByZero: true)); // Output: NaN
+  /// print(NumbersHelper.safeDivide(10, 2)); // Output: 5
   /// ```
   static double safeDivide(
     num a,
@@ -110,7 +130,16 @@ class NumbersHelper {
   }
 
   /// Calculates the greatest common divisor (GCD) of two integers [a] and [b].
-  static int gcd(int a, int b) => b == 0 ? a : gcd(b, a % b);
+  static int gcd(int a, int b) {
+    var x = a.abs();
+    var y = b.abs();
+    while (y != 0) {
+      final temp = y;
+      y = x % y;
+      x = temp;
+    }
+    return x;
+  }
 
   /// Checks if a number [n] is a perfect square.
   static bool isPerfectSquare(int n) {
@@ -118,58 +147,59 @@ class NumbersHelper {
     return sqrtN * sqrtN == n;
   }
 
-  /// A map of integers to Roman numeral representations.
-  ///
-  /// This map is used to convert integers into their corresponding Roman numeral forms.
-  static final _romanNumerals = <int, String>{
-    1: 'I', // One
-    2: 'II', // Two
-    3: 'III', // Three
-    4: 'IV', // Four
-    5: 'V', // Five
-    6: 'VI', // Six
-    7: 'VII', // Seven
-    8: 'VIII', // Eight
-    9: 'IX', // Nine
-    10: 'X', // Ten
-    11: 'XI', // Eleven
-    12: 'XII', // Twelve
-    13: 'XIII', // Thirteen
-    14: 'XIV', // Fourteen
-    15: 'XV', // Fifteen
-    20: 'XX', // Twenty
-    30: 'XXX', // Thirty
-    40: 'XL', // Forty
-    50: 'L', // Fifty
-    60: 'LX', // Sixty
-    70: 'LXX', // Seventy
-    90: 'XC', // Ninety
-    99: 'IC', // Ninety-Nine (rarely used; common alternative is XCIX)
-    100: 'C', // One Hundred
-    200: 'CC', // Two Hundred
-    400: 'CD', // Four Hundred
-    500: 'D', // Five Hundred
-    600: 'DC', // Six Hundred
-    900: 'CM', // Nine Hundred
-    990: 'XM', // Nine Hundred Ninety (non-standard; commonly use CMXC)
-    1000: 'M', // One Thousand
+  /// Standard Roman numeral symbol values.
+  static const _romanValues = <String, int>{
+    'I': 1,
+    'V': 5,
+    'X': 10,
+    'L': 50,
+    'C': 100,
+    'D': 500,
+    'M': 1000,
   };
 
   /// Converts a Roman numeral string [romanNumeral] to an integer.
   static int fromRomanNumeral(String romanNumeral) {
-    final romanMap = _romanNumerals.flip();
-    var i = 0;
+    final input = romanNumeral.trim().toUpperCase();
+    if (input.isEmpty) {
+      throw ArgumentError.value(
+        romanNumeral,
+        'romanNumeral',
+        'cannot be empty',
+      );
+    }
+    final canonicalRomanPattern = RegExp(
+      r'^M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$',
+    );
+    if (!canonicalRomanPattern.hasMatch(input)) {
+      throw ArgumentError.value(
+        romanNumeral,
+        'romanNumeral',
+        'is not a valid canonical Roman numeral (1..3999)',
+      );
+    }
+
     var result = 0;
-    while (i < romanNumeral.length) {
-      if (i + 1 < romanNumeral.length &&
-          romanMap.containsKey(romanNumeral.substring(i, i + 2))) {
-        result += romanMap[romanNumeral.substring(i, i + 2)]!;
-        i += 2;
+    var previous = 0;
+
+    for (var i = input.length - 1; i >= 0; i--) {
+      final current = _romanValues[input[i]];
+      if (current == null) {
+        throw ArgumentError.value(
+          romanNumeral,
+          'romanNumeral',
+          'contains invalid Roman symbols',
+        );
+      }
+
+      if (current < previous) {
+        result -= current;
       } else {
-        result += romanMap[romanNumeral[i]]!;
-        i += 1;
+        result += current;
+        previous = current;
       }
     }
+
     return result;
   }
 }

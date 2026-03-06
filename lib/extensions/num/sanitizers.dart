@@ -37,91 +37,75 @@ extension NumSanitizers on num? {
   /// sum of digits
   /// Returns the sum of digits in the number.
   num sumOfDigits() {
-    num sum = 0;
-    var number = getOr();
-    while (number > 0) {
-      sum += number % 10;
-      number = (number / 10).floor();
-    }
-    return sum;
-  }
+    final raw = toString().replaceAll(RegExp('[^0-9]'), '');
+    if (raw.isEmpty) return 0;
 
-  /// Return the min if this number is smaller then minimum
-  /// Return the max if this number is bigger the the maximum
-  /// Return this number if it's between the range
-  num inRangeOf(num min, num max) {
-    if (isNull) return 0;
-
-    if (min.isNull || max.isNull) throw Exception('min or max cannot be null');
-    if (min > max) throw ArgumentError('min must be smaller the max');
-
-    if (this! < min) return min;
-    if (this! > max) return max;
-    return this!;
-  }
-
-  /// Get the digits after a [substring] in the number
-  /// Returns the digits after a [substring] in the number
-  num digitsAfter(num substring) {
-    final index = toString().indexOf(substring.toString());
-    if (index == -1) return 0;
-    final result = toString().substring(index + 1);
-    return int.parse(result);
-  }
-
-  /// Get the digits before a [substring] in the number
-  /// Returns the digits before a [substring] in the number
-  num digitsBefore(num substring) {
-    final index = toString().indexOf(substring.toString());
-    if (index == -1) return 0;
-    final result = toString().substring(0, index);
-    return int.parse(result);
+    return raw.split('').fold<int>(0, (sum, digit) => sum + int.parse(digit));
   }
 
   /// Get the digits between [start] and [end] in the number
   /// Returns the digits between [start] and [end] in the number
   num digitsBetween(num start, num end) {
-    final startIndex = toString().indexOf(start.toString());
+    final source = toString();
+    final startText = start.toString();
+    final endText = end.toString();
+
+    final startIndex = source.indexOf(startText);
     if (startIndex == -1) return 0;
-    final endIndex = toString().indexOf(end.toString(), startIndex + 1);
+
+    final fromIndex = startIndex + startText.length;
+    final endIndex = source.indexOf(endText, fromIndex);
     if (endIndex == -1) return 0;
-    final result = toString().substring(startIndex + 1, endIndex);
-    return int.parse(result);
+
+    final result = source.substring(fromIndex, endIndex);
+    return _parseNumberOrZero(result);
   }
 
   /// Get the digits before the first occurrence of [substring] in the number
   /// Returns the digits before the first occurrence of [substring] in the number
   num digitsBeforeFirst(num substring) {
-    final index = toString().indexOf(substring.toString());
+    final source = toString();
+    final index = source.indexOf(substring.toString());
     if (index == -1) return 0;
-    final result = toString().substring(0, index);
-    return int.parse(result);
+
+    final result = source.substring(0, index);
+    return _parseNumberOrZero(result);
   }
 
   /// Get the digits after the first occurrence of [substring] in the number
   /// Returns the digits after the first occurrence of [substring] in the number
   num digitsAfterFirst(num substring) {
-    final index = toString().indexOf(substring.toString());
+    final source = toString();
+    final target = substring.toString();
+    final index = source.indexOf(target);
     if (index == -1) return 0;
-    final result = toString().substring(index + 1);
-    return int.parse(result);
+
+    final result = source.substring(index + target.length);
+    return _parseNumberOrZero(result);
   }
 
   /// Get the digits before the last occurrence of [substring] in the number
   /// Returns the digits before the last occurrence of [substring] in the number
   num digitsBeforeLast(num substring) {
-    final index = toString().lastIndexOf(substring.toString());
+    final source = toString();
+    final index = source.lastIndexOf(substring.toString());
     if (index == -1) return 0;
-    final result = toString().substring(0, index);
-    return int.parse(result);
+
+    final result = source.substring(0, index);
+    return _parseNumberOrZero(result);
   }
 
   /// Get the digits after the last occurrence of [substring] in the number
   /// Returns the digits after the last occurrence of [substring] in the number
   num digitsAfterLast(num substring) {
-    final index = toString().lastIndexOf(substring.toString());
+    final source = toString();
+    final target = substring.toString();
+    final index = source.lastIndexOf(target);
     if (index == -1) return 0;
-    final result = toString().substring(index + 1);
-    return int.parse(result);
+
+    final result = source.substring(index + target.length);
+    return _parseNumberOrZero(result);
   }
+
+  num _parseNumberOrZero(String value) => num.tryParse(value) ?? 0;
 }
