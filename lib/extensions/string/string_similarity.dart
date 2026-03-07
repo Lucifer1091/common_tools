@@ -5,7 +5,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-
 /// Algorithms used for comparing how similar two strings are.
 ///
 /// Each algorithm calculates similarity differently and suits various scenarios.
@@ -167,9 +166,9 @@ class StringSimilarityConfig {
     this.postProcessor,
     this.chunkSize = 5000,
   }) : assert(
-          jaroPrefixScale >= 0 && jaroPrefixScale <= 0.25,
-          'jaroPrefixScale must be between 0 and 0.25',
-        );
+         jaroPrefixScale >= 0 && jaroPrefixScale <= 0.25,
+         'jaroPrefixScale must be between 0 and 0.25',
+       );
 
   // Normalization options.
 
@@ -465,11 +464,12 @@ class SimilarityResult {
 
   /// Formats the result as a detailed report string.
   String toReport() {
-    final buffer = StringBuffer()
-      ..writeln('Similarity Score: ${score.toStringAsFixed(3)}')
-      ..writeln('First String: $firstString')
-      ..writeln('Second String: $secondString')
-      ..writeln('Algorithm: $algorithm');
+    final buffer =
+        StringBuffer()
+          ..writeln('Similarity Score: ${score.toStringAsFixed(3)}')
+          ..writeln('First String: $firstString')
+          ..writeln('Second String: $secondString')
+          ..writeln('Algorithm: $algorithm');
 
     if (normalizedFirst.isNotEmpty) {
       buffer.writeln('Normalized First: $normalizedFirst');
@@ -621,8 +621,9 @@ class StringSimilarity {
   static String _removeAccents(String input) {
     return input.replaceAllMapped(
       RegExp(
-          '[àáâãäåçèéêëìíîïñòóôõöøùúûüýÿæœßāăąćĉċčďđēĕėęěĝğġģĥħĩīĭįıĵķĸĺļľŀłńņňŉōŏőŕŗřśŝşšţťŧũūŭůűųŵŷźżž]',
-          unicode: true),
+        '[àáâãäåçèéêëìíîïñòóôõöøùúûüýÿæœßāăąćĉċčďđēĕėęěĝğġģĥħĩīĭįıĵķĸĺļľŀłńņňŉōŏőŕŗřśŝşšţťŧũūŭůűųŵŷźżž]',
+        unicode: true,
+      ),
       (Match m) => _accentMap[m[0]] ?? m[0]!,
     );
   }
@@ -681,17 +682,23 @@ class StringSimilarity {
     }
 
     // Fix: Use the sum of actual bigram counts rather than string lengths
-    final firstBigramsCount =
-        firstBigrams.values.fold<int>(0, (sum, count) => sum + count);
-    final secondBigramsCount =
-        secondBigrams.values.fold<int>(0, (sum, count) => sum + count);
+    final firstBigramsCount = firstBigrams.values.fold<int>(
+      0,
+      (sum, count) => sum + count,
+    );
+    final secondBigramsCount = secondBigrams.values.fold<int>(
+      0,
+      (sum, count) => sum + count,
+    );
 
     return (2.0 * intersectionSize) / (firstBigramsCount + secondBigramsCount);
   }
 
   /// Generates bigrams from a string with optimizations for long strings.
   static Map<String, int> _createBigrams(
-      String input, StringSimilarityConfig config) {
+    String input,
+    StringSimilarityConfig config,
+  ) {
     _initializeCaches(config);
     if (config.enableCache && _bigramCache != null) {
       final cached = _bigramCache!.get(input);
@@ -704,9 +711,11 @@ class StringSimilarity {
 
     // For very long strings, process in chunks to avoid potential performance issues
     if (input.length > config.chunkSize) {
-      for (var offset = 0;
-          offset < input.length - 1;
-          offset += config.chunkSize) {
+      for (
+        var offset = 0;
+        offset < input.length - 1;
+        offset += config.chunkSize
+      ) {
         final end = min(offset + config.chunkSize, input.length - 1);
         for (var i = offset; i < end; i++) {
           if (i + 1 < input.length) {
@@ -1001,7 +1010,9 @@ class StringSimilarity {
 
   // Helper for cosine calculation
   static double _calculateCosine(
-      Map<String, int> freq1, Map<String, int> freq2) {
+    Map<String, int> freq1,
+    Map<String, int> freq2,
+  ) {
     final allKeys = {...freq1.keys, ...freq2.keys};
 
     double dotProduct = 0;
@@ -1063,13 +1074,17 @@ class StringSimilarity {
       case SimilarityAlgorithm.levenshteinDistance:
         final distance = levenshteinDistance(first, second, config);
         metadata['levenshteinDistance'] = distance;
-        metadata['maxLength'] =
-            max(normalizedFirst.length, normalizedSecond.length);
+        metadata['maxLength'] = max(
+          normalizedFirst.length,
+          normalizedSecond.length,
+        );
       case SimilarityAlgorithm.soundex:
         metadata['firstSoundex'] = soundex(first, config);
         metadata['secondSoundex'] = soundex(second, config);
-      default:
-        break;
+      case SimilarityAlgorithm.diceCoefficient:
+      case SimilarityAlgorithm.jaro:
+      case SimilarityAlgorithm.jaroWinkler:
+      case SimilarityAlgorithm.cosine:
     }
 
     return SimilarityResult(
@@ -1096,8 +1111,10 @@ class StringSimilarity {
         return diceCoefficient(first, second, config);
       case SimilarityAlgorithm.levenshteinDistance:
         final distance = levenshteinDistance(first, second, config);
-        final maxLength = max(_normalizeString(first, config).length,
-            _normalizeString(second, config).length);
+        final maxLength = max(
+          _normalizeString(first, config).length,
+          _normalizeString(second, config).length,
+        );
         return maxLength == 0 ? 1 : 1 - (distance / maxLength);
       case SimilarityAlgorithm.jaro:
         return jaro(first, second, config);
@@ -1140,25 +1157,25 @@ class StringSimilarity {
       return pairs.map((pair) {
         if (pair.length != 2) {
           throw StringSimilarityError(
-              'Each pair must contain exactly 2 strings.');
+            'Each pair must contain exactly 2 strings.',
+          );
         }
         return compare(pair[0], pair[1], algorithm, config: config);
       }).toList();
     } else {
-      // For parallel processing, split into chunks and process
-      // This is a simplified approach; for true parallel processing,
-      // consider using Isolates
+      // For chunked processing, split into chunks and process.
+      // This avoids large one-pass memory spikes for huge inputs.
       final results = List<double>.filled(pairs.length, 0);
 
-      // Process in chunks of 100 pairs
-      const chunkSize = 100;
+      final chunkSize = max(1, config.chunkSize);
       for (var i = 0; i < pairs.length; i += chunkSize) {
         final end = min(i + chunkSize, pairs.length);
         for (var j = i; j < end; j++) {
           final pair = pairs[j];
           if (pair.length != 2) {
             throw StringSimilarityError(
-                'Each pair must contain exactly 2 strings.');
+              'Each pair must contain exactly 2 strings.',
+            );
           }
           results[j] = compare(pair[0], pair[1], algorithm, config: config);
         }
@@ -1213,14 +1230,20 @@ class StringSimilarity {
     StringSimilarityConfig config = const StringSimilarityConfig(),
     double threshold = 0.0,
   }) {
-    final rankings = candidates
-        .map((candidate) {
-          final score = compare(query, candidate, algorithm, config: config);
-          return MapEntry(candidate, score);
-        })
-        .where((entry) => entry.value >= threshold)
-        .toList()
-      ..sort((a, b) => b.value.compareTo(a.value));
+    final rankings =
+        candidates
+            .map((candidate) {
+              final score = compare(
+                query,
+                candidate,
+                algorithm,
+                config: config,
+              );
+              return MapEntry(candidate, score);
+            })
+            .where((entry) => entry.value >= threshold)
+            .toList()
+          ..sort((a, b) => b.value.compareTo(a.value));
     return rankings;
   }
 
@@ -1263,15 +1286,15 @@ class _NormalizationKey {
 
   @override
   int get hashCode => Object.hash(
-        input,
-        config.normalize,
-        config.removeSpaces,
-        config.toLowerCase,
-        config.removeSpecialChars,
-        config.removeAccents,
-        config.trimWhitespace,
-        config.locale,
-      );
+    input,
+    config.normalize,
+    config.removeSpaces,
+    config.toLowerCase,
+    config.removeSpecialChars,
+    config.removeAccents,
+    config.trimWhitespace,
+    config.locale,
+  );
 }
 
 /// Extensions on [String] for easy similarity calculations.

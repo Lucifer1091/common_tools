@@ -109,11 +109,14 @@ extension StringConversions on String? {
   ///
   /// print(fruit); // Output: Fruit.apple
   /// ```
-  T? toEnum<T>({required Iterable<T> values, T Function()? orElse}) {
+  T? toEnum<T extends Enum>({
+    required Iterable<T> values,
+    T Function()? orElse,
+  }) {
     if (isBlank) return orElse?.call();
 
     return values.firstWhere(
-      (e) => e != null && lowercase == (e as Enum).name.lowercase,
+      (e) => lowercase == e.name.lowercase,
       orElse: orElse,
     );
   }
@@ -156,11 +159,11 @@ extension StringConversions on String? {
   ///
   /// If [size] less or equal 0, that [ArgumentError] will be raised.
   Iterable<String> chunks(int size) sync* {
-    if (isBlank) yield this!;
-
     if (size <= 0) {
       throw ArgumentError.value(size, 'size', 'Should be more than zero');
     }
+
+    if (isBlank) return;
 
     final total = this!.length;
 
@@ -210,9 +213,9 @@ extension StringConversions on String? {
 }
 
 extension StringNormalization on String? {
-  String? get lowercase => ifNotBlank(this!.toLowerCase());
+  String? get lowercase => isNotBlank ? this!.toLowerCase() : this;
 
-  String? get uppercase => ifNotBlank(this!.toUpperCase());
+  String? get uppercase => isNotBlank ? this!.toUpperCase() : this;
 
   /// Capitalizes the `String` in normal form.
   /// ### Example
@@ -220,44 +223,44 @@ extension StringNormalization on String? {
   /// String foo = 'hAckER';
   /// String cFoo = foo.capitalize; // returns 'Hacker'.
   /// ```
-  String? get capitalize => ifNotBlank(_ReCase(this!).capitalize);
+  String? get capitalize => isNotBlank ? _ReCase(this!).capitalize : this;
 
   /// camelCase string
-  String? get camelCase => ifNotBlank(_ReCase(this!).camelCase);
+  String? get camelCase => isNotBlank ? _ReCase(this!).camelCase : this;
 
   /// constantCase string
-  String? get constantCase => ifNotBlank(_ReCase(this!).constantCase);
+  String? get constantCase => isNotBlank ? _ReCase(this!).constantCase : this;
 
   /// sentenceCase string
-  String? get sentenceCase => ifNotBlank(_ReCase(this!).sentenceCase);
+  String? get sentenceCase => isNotBlank ? _ReCase(this!).sentenceCase : this;
 
   /// snakeCase string
-  String? get snakeCase => ifNotBlank(_ReCase(this!).snakeCase);
+  String? get snakeCase => isNotBlank ? _ReCase(this!).snakeCase : this;
 
   /// dotCase string
-  String? get dotCase => ifNotBlank(_ReCase(this!).dotCase);
+  String? get dotCase => isNotBlank ? _ReCase(this!).dotCase : this;
 
   /// paramCase string
-  String? get paramCase => ifNotBlank(_ReCase(this!).paramCase);
+  String? get paramCase => isNotBlank ? _ReCase(this!).paramCase : this;
 
   /// pathCase string
-  String? get pathCase => ifNotBlank(_ReCase(this!).pathCase);
+  String? get pathCase => isNotBlank ? _ReCase(this!).pathCase : this;
 
   /// pascalCase string
-  String? get pascalCase => ifNotBlank(_ReCase(this!).pascalCase);
+  String? get pascalCase => isNotBlank ? _ReCase(this!).pascalCase : this;
 
   /// headerCase string
-  String? get headerCase => ifNotBlank(_ReCase(this!).headerCase);
+  String? get headerCase => isNotBlank ? _ReCase(this!).headerCase : this;
 
   /// titleCase string
-  String? get titleCase => ifNotBlank(_ReCase(this!).titleCase);
+  String? get titleCase => isNotBlank ? _ReCase(this!).titleCase : this;
 
   /// initials
   /// returns the initials of the string
   /// if the string is empty, returns an empty string
   /// if the string has one word, returns the first two characters
   /// if the string has two or more words, returns the first character of the first two words
-  String? get initials => ifNotBlank(_ReCase(this!).initials);
+  String? get initials => isNotBlank ? _ReCase(this!).initials : this;
 }
 
 /// use to convert string into different cases
@@ -318,7 +321,12 @@ class _ReCase {
     if (_words.isEmpty) return '';
 
     if (_words.length == 1) {
-      return '${_words.first[0].uppercase}${_words.first[1].uppercase}'.trim();
+      final firstWord = _words.first;
+      if (firstWord.length == 1) {
+        return firstWord[0].uppercase ?? '';
+      }
+
+      return '${firstWord[0].uppercase}${firstWord[1].uppercase}'.trim();
     }
 
     if (_words.length > 2) {

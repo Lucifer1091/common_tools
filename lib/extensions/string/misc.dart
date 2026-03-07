@@ -15,10 +15,17 @@ extension MiscExtensions on String? {
   /// ```
   int readTime({int wordsPerMinute = 200}) {
     if (isBlank) return 0;
+    if (wordsPerMinute <= 0) {
+      throw ArgumentError.value(
+        wordsPerMinute,
+        'wordsPerMinute',
+        'must be greater than zero',
+      );
+    }
 
     final words = this!.trim().split(RegExp(r'(\s+)'));
-    final magicalNumber = words.length / wordsPerMinute;
-    return (magicalNumber * 100).toInt();
+    final minutes = words.length / wordsPerMinute;
+    return (minutes * 60).ceil();
   }
 
   /// Returns the word count in the given `String`.
@@ -71,7 +78,9 @@ extension MiscExtensions on String? {
   int charCount(String char) {
     if (isBlank) return 0;
 
-    return this!.split('').fold<int>(
+    return this!
+        .split('')
+        .fold<int>(
           0,
           (previousValue, ch) => previousValue + (ch == char ? 1 : 0),
         );
@@ -326,6 +335,5 @@ extension MiscExtensions on String? {
     bool Function(String?) comparison,
     String? trueString,
     String? falseString,
-  ) =>
-      comparison(this) ? trueString : falseString;
+  ) => comparison(this) ? trueString : falseString;
 }

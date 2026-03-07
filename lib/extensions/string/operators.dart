@@ -210,9 +210,7 @@ extension StringOperators on String? {
   String? replaceAt({required int index, required String replacement}) {
     if (isBlank) return this;
 
-    if (index > this!.length) return this;
-
-    if (index < 0) return this;
+    if (index < 0 || index >= this!.length) return this;
 
     return '${this!.substring(0, index)}$replacement${this!.substring(index + 1, this!.length)}';
   }
@@ -263,7 +261,7 @@ extension StringOperators on String? {
   /// String result = foo.findPatterns(pattern:'abr'); // returns '[0, 7]'
   /// ```
   List<int> findPattern({required String pattern}) {
-    if (isBlank) return [];
+    if (isBlank || pattern.isEmpty) return [];
 
     final List<int> occurrences = [];
     // How many times the pattern can fit the text provided
@@ -361,7 +359,7 @@ extension StringOperators on String? {
   String? charAt(int index) {
     if (isBlank) return this;
 
-    if (index > this!.length || index < 0) return null;
+    if (index >= this!.length || index < 0) return null;
 
     return this!.split('')[index];
   }
@@ -444,21 +442,15 @@ extension StringOperators on String? {
   /// String afterString = test.addAfter('brother', ' sam '); // returns 'hello brother sam what a day today ';
   /// ```
   String? addAfter(String pattern, String addition) {
-    if (isBlank) return this;
+    if (isBlank || pattern.isEmpty) return this;
 
-    if (!this!.contains(pattern)) return this;
+    final index = this!.indexOf(pattern);
+    if (index == -1) return this;
 
-    final List<String> patternWords = pattern.split(' ');
-
-    if (patternWords.isEmpty) return '';
-
-    final int indexOfLastPatternWord = this!.indexOf(patternWords.last);
-
-    if (patternWords.last.isEmpty) return '';
-
-    return this!.substring(0, indexOfLastPatternWord + 1) +
+    final insertAt = index + pattern.length;
+    return this!.substring(0, insertAt) +
         addition +
-        this!.substring(indexOfLastPatternWord + 1, this!.length);
+        this!.substring(insertAt, this!.length);
   }
 
   /// Adds a `String` before the first match of the [pattern]. The [pattern] should not be `null`.
@@ -471,17 +463,10 @@ extension StringOperators on String? {
   /// String afterString = test.addBefore('brother', 'big '); // returns 'hello big brother what a day today';
   /// ```
   String? addBefore(String pattern, String addition) {
-    if (isBlank) return this;
+    if (isBlank || pattern.isEmpty) return this;
 
-    if (!this!.contains(pattern)) return this;
-
-    final List<String> patternWords = pattern.split(' ');
-
-    if (patternWords.isEmpty) return '';
-
-    final int indexOfFirstPatternWord = this!.indexOf(patternWords.first);
-
-    if (patternWords.last.isEmpty) return '';
+    final int indexOfFirstPatternWord = this!.indexOf(pattern);
+    if (indexOfFirstPatternWord == -1) return this;
 
     return this!.substring(0, indexOfFirstPatternWord) +
         addition +

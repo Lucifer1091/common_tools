@@ -1,5 +1,4 @@
 import '../../index.dart';
-import 'index.dart';
 
 extension SanitizerExtensions on String? {
   /// Formats the `String` with a specific mask.
@@ -186,7 +185,8 @@ extension SanitizerExtensions on String? {
     if (isBlank) return this;
 
     if (chars != null) {
-      return this!.replaceAll(RegExp('^[$chars]+|[$chars]+\$'), '');
+      final escaped = RegExp.escape(chars);
+      return this!.replaceAll(RegExp('^[$escaped]+|[$escaped]+\$'), '');
     } else {
       return this!.trim();
     }
@@ -269,7 +269,7 @@ extension SanitizerExtensions on String? {
   String? leftTrim([String? chars]) =>
       isNotBlank
           ? (chars != null)
-              ? this!.replaceAll(RegExp('^[$chars]+'), '')
+              ? this!.replaceAll(RegExp('^[${RegExp.escape(chars)}]+'), '')
               : this!.replaceAll(RegExp(r'^\s+'), '')
           : null;
 
@@ -277,15 +277,17 @@ extension SanitizerExtensions on String? {
   String? rightTrim([String? chars]) =>
       isNotBlank
           ? (chars != null)
-              ? this!.replaceAll(RegExp('[$chars]+\$'), '')
+              ? this!.replaceAll(RegExp('[${RegExp.escape(chars)}]+\$'), '')
               : this!.replaceAll(RegExp(r'\s+$'), '')
           : null;
 
   /// Removes characters that do not appear in the whitelist.
-  String? whitelist(String chars) => this?.replaceAll(RegExp('[^$chars]+'), '');
+  String? whitelist(String chars) =>
+      this?.replaceAll(RegExp('[^${RegExp.escape(chars)}]+'), '');
 
   /// Removes characters that appear in the blacklist.
-  String? blacklist(String chars) => this?.replaceAll(RegExp('[$chars]+'), '');
+  String? blacklist(String chars) =>
+      this?.replaceAll(RegExp('[${RegExp.escape(chars)}]+'), '');
 
   /// Removes characters with a numerical value less than 32 and 127.
   /// If [keepNewLines] is true, newline characters are preserved (\n and \r, hex 0xA and 0xD).

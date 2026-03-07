@@ -123,7 +123,13 @@ extension StringValidators on String? {
   /// String foo = 'hello world';
   /// bool isMixedCase = foo.isMixedCase; // returns false;
   ///
-  bool get isMixedCase => !isUpperCase && !isLowerCase;
+  bool get isMixedCase {
+    if (isBlank) return false;
+
+    final hasUpper = RegExp('[A-Z]').hasMatch(this!);
+    final hasLower = RegExp('[a-z]').hasMatch(this!);
+    return hasUpper && hasLower;
+  }
 
   /// Check if the string is a number that's divisible by another
   ///
@@ -460,7 +466,7 @@ extension StringValidators on String? {
   /// String text = "Hello, world!";
   /// bool hasSpecialChar = text.hasSpecial; // true
   /// ```
-  bool get hasSpecial => matches(regex: RegExp(r'^[a-zA-Z0-9 ]+$'));
+  bool get hasSpecial => matches(regex: RegExp('[^a-zA-Z0-9 ]'));
 
   /// Checks if the `String` is consisted of same characters (ignores cases).
   ///
@@ -626,13 +632,7 @@ extension StringValidators on String? {
   ///  String foo = 'Hello World';
   ///  bool containsAll = foo.containsAllCharacters('Hello!'); // returns false;
   /// ```
-  bool containsAllCharacters(String pattern) {
-    for (final String item in pattern.split('')) {
-      if (isBlank || !this!.contains(item)) return false;
-    }
-
-    return true;
-  }
+  bool containsAllCharacters(String pattern) => containsAll(pattern.split(''));
 }
 
 extension StringToFileValidators on String? {
