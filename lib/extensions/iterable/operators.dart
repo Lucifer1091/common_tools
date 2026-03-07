@@ -265,7 +265,7 @@ extension ListUtils<T> on List<T> {
 
   /// Sort the list by [selector].
   /// Returns a new list sorted by [selector].
-  List<T> sortedByAscending(dynamic Function(T) selector) {
+  List<T> sortByAscending(dynamic Function(T) selector) {
     final list = <T>[...this]..sort((a, b) {
       final valueA = selector(a);
       final valueB = selector(b);
@@ -296,8 +296,8 @@ extension ListUtils<T> on List<T> {
 
   // Sort the list by [f] descending.
   /// Returns a new list sorted by [selector] descending.
-  List<T> sortedByDescending(dynamic Function(T) selector) =>
-      sortedByAscending(selector).reversed.toList();
+  List<T> sortByDescending(dynamic Function(T) selector) =>
+      sortByAscending(selector).reversed.toList();
 
   /// Join to [String] with [separator], [prefix] and [suffix], and [transform] function.
   /// Returns a [String] with the elements joined by [separator], [prefix] and [suffix], and transformed by [transform].
@@ -417,42 +417,6 @@ extension ListExtensions1<T> on List<T> {
       return false;
     }
   }
-}
-
-extension NullableListExtensions<E> on List<E>? {
-  /// Copy current list with adding [element] at the end of new list.
-  ///
-  /// If current list is `null` - new list with [element] will be created.
-  List<E> copyWith(E element) => this?.copyWith(element) ?? [element];
-
-  /// Copy current list with adding all [elements] at the end of new list.
-  ///
-  /// If current list is `null` - copy of list [elements] will be created.
-  List<E> copyWithAll(List<E> elements) =>
-      this?.copyWithAll(elements) ?? List.from(elements);
-
-  /// Copy current list with adding all [elements] at the position of new list.
-  ///
-  /// If current list is `null` - copy of list [elements] will be created.
-  /// Error thrown due to a value being outside a valid range.
-  List<E> copyWithInsertAll(int index, List<E> elements) =>
-      this?.copyWithInsertAll(index, elements) ?? List.from(elements);
-
-  /// Copy current list, replacing all [element] occurrences with [replacement].
-  ///
-  /// If [element] is not in the list than just copy will be returned.
-  /// If current list is `null` - returns new empty list.
-  List<E> copyWithReplace(E element, E replacement) =>
-      this?.copyWithReplace(element, replacement) ?? const [];
-
-  /// Copy current list, replacing elements of list that
-  /// satisfy [test] predicate with [replacement].
-  ///
-  /// If no elements that satisfy [test] predicate found
-  /// than just copy will be returned.
-  /// If current list is `null` - returns new empty list.
-  List<E> copyWithReplaceWhere(Predicate<E> test, E replacement) =>
-      this?.copyWithReplaceWhere(test, replacement) ?? const [];
 }
 
 extension FicIterableExtension<T> on Iterable<T> {

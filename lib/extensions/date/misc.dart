@@ -219,10 +219,10 @@ extension Date on DateTime {
 
   /// Compare the two dates and return 1 if the first date [isAfter] the second,
   /// -1 if the first date [isBefore] the second or 0 first date [equals] the second.
-  static int compareAsc(DateTime dateLeft, DateTime dateRight) {
-    if (dateLeft.isAfter(dateRight)) {
+  static int compareAsc(DateTime left, DateTime right) {
+    if (left.isAfter(right)) {
       return 1;
-    } else if (dateLeft.isBefore(dateRight)) {
+    } else if (left.isBefore(right)) {
       return -1;
     } else {
       return 0;
@@ -231,6 +231,6 @@ extension Date on DateTime {
 
   /// Compare the two dates and return -1 if the first date [isAfter] the second,
   /// 1 if the first date [isBefore] the second or 0 first date [equals] the second.
-  static int compareDesc(DateTime dateLeft, DateTime dateRight) =>
-      (-1) * compareAsc(dateLeft, dateRight);
+  static int compareDesc(DateTime left, DateTime right) =>
+      (-1) * compareAsc(left, right);
 }

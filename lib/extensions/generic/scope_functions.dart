@@ -173,9 +173,7 @@ FutureOr<T?> runCaching<T>(
   FutureOr<T?> Function(Object error, StackTrace stackTrace)? onError,
 }) {
   FutureOr<T?> handleError(Object error, StackTrace stackTrace) {
-    if (onError == null) {
-      return null;
-    }
+    if (onError == null) return null;
 
     try {
       return onError(error, stackTrace);

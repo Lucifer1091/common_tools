@@ -107,10 +107,10 @@ extension IterableDateTimeHelper on Iterable<DateTime> {
   ///   DateTime(2023, 6, 10),
   ///   DateTime(2023, 6, 20),
   /// ];
-  /// final sorted = unsorted.sortedAscending();
+  /// final sorted = unsorted.sortAscending();
   /// // [2023-06-10, 2023-06-15, 2023-06-20]
   /// ```
-  List<DateTime> sortedAscending() {
+  List<DateTime> sortAscending() {
     return List<DateTime>.from(this)..sort((a, b) => a.compareTo(b));
   }
 
@@ -123,10 +123,10 @@ extension IterableDateTimeHelper on Iterable<DateTime> {
   ///   DateTime(2023, 6, 10),
   ///   DateTime(2023, 6, 20),
   /// ];
-  /// final sorted = unsorted.sortedDescending();
+  /// final sorted = unsorted.sortDescending();
   /// // [2023-06-20, 2023-06-15, 2023-06-10]
   /// ```
-  List<DateTime> sortedDescending() {
+  List<DateTime> sortDescending() {
     return List<DateTime>.from(this)..sort((a, b) => b.compareTo(a));
   }
 
@@ -159,14 +159,12 @@ extension IterableDateTimeHelper on Iterable<DateTime> {
       throw StateError('Cannot find median of empty iterable');
     }
 
-    final sorted = sortedAscending();
+    final sorted = sortAscending();
     final middle = sorted.length ~/ 2;
 
     // For even number of elements,
     // return the earlier of the two middle elements
-    if (sorted.length.isEven) {
-      return sorted[middle - 1];
-    }
+    if (sorted.length.isEven) return sorted[middle - 1];
 
     // For odd number of elements,
     // return the middle element
@@ -238,7 +236,7 @@ extension IterableDateTimeHelper on Iterable<DateTime> {
       throw StateError('Cannot calculate average gap with less than 2 dates');
     }
 
-    final sorted = sortedAscending();
+    final sorted = sortAscending();
     final gapsInMicroseconds = <int>[];
 
     // Calculate gaps between consecutive dates

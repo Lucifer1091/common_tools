@@ -81,26 +81,6 @@ extension CollectionsExtensions<T> on Iterable<T> {
     return list;
   }
 
-  ///
-  /// Performs the given action on each element on iterable, providing sequential index with the element.
-  /// `item` the element on the current iteration
-  /// `index` the index of the current iteration
-  ///
-  /// example:
-  /// ["a","b","c"].forEachIndexed((element, index) {
-  ///    print("$element, $index");
-  ///  });
-  /// result:
-  /// a, 0
-  /// b, 1
-  /// c, 2
-  void forEachIndexed(MapIndexedValue<T, void> action) {
-    var index = 0;
-    for (final element in this) {
-      action(index++, element);
-    }
-  }
-
   /// Returns a set containing all elements that are contained by this collection
   /// and not contained by the specified collection.
   /// The returned set preserves the element iteration order of the original collection.
@@ -413,21 +393,6 @@ extension ListExtension2<T> on List<T> {
     while (index <= lastIndex) {
       yield index++;
     }
-  }
-
-  /// Returns a new list containing all elements except first [n] elements.
-  List<T> drop(int n) {
-    if (n < 0) {
-      throw ArgumentError('Requested element count $n is less than zero.');
-    }
-
-    if (n == 0) return toList();
-
-    final resultSize = length - n;
-    if (resultSize <= 0) return [];
-    if (resultSize == 1) return [last];
-
-    return sublist(n);
   }
 
   /// Returns a new list containing all elements except last elements that

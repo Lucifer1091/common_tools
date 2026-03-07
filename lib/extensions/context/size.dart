@@ -3,17 +3,14 @@ import 'package:flutter/material.dart';
 import '../../widgets/layout/adaptive_ui.dart';
 
 extension ContextSizeExtension on BuildContext {
-  /// Equivalent as `Navigator.of(context)`
   NavigatorState get navigator => Navigator.of(this);
 
-  /// Equivalent as `MediaQuery.sizeOf(context)`
   Size get size => MediaQuery.sizeOf(this);
 
   double get width => size.width;
 
   double get height => size.height;
 
-  /// Equivalent as `MediaQuery.of(context)`
   MediaQueryData get mediaQuery => MediaQuery.of(this);
 
   /// Returns padding for the nearest MediaQuery ancestor or
@@ -30,10 +27,8 @@ extension ContextSizeExtension on BuildContext {
   /// the [MediaQueryData.viewInsets] property of the ancestor [MediaQuery] changes.
   EdgeInsets get viewInsets => MediaQuery.viewInsetsOf(this);
 
-  /// viewPadding
   EdgeInsets get viewPadding => MediaQuery.viewPaddingOf(this);
 
-  /// safeAreaTopPadding
   double get statusBarHeight => padding.top;
 
   /// software keyboard height
@@ -50,9 +45,11 @@ extension ContextSizeExtension on BuildContext {
   /// return screen devicePixelRatio
   double get pixelRatio => mediaQuery.devicePixelRatio;
 
-  bool get isLandscape => mediaQuery.orientation == Orientation.landscape;
+  Orientation get orientation => MediaQuery.orientationOf(this);
 
-  bool get isPortrait => mediaQuery.orientation == Orientation.portrait;
+  bool get isLandscape => orientation == Orientation.landscape;
+
+  bool get isPortrait => orientation == Orientation.portrait;
 
   Breakpoint get _currentBreakpoint =>
       maybeReadBreakpoint ?? Breakpoint.forWidth(width);

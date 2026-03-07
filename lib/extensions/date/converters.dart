@@ -298,6 +298,9 @@ extension DateConversions on DateTime {
     return (differenceInMilliseconds / (24 * 60 * 60 * 1000)).round();
   }
 
+  /// Returns the duration difference between this value and current time.
+  Duration fromNow() => difference(DateTime.now());
+
   /// Creates a [DateTimeRange] from this to [other].
   ///
   /// If this is after [other], the range is swapped to maintain chronological order.
@@ -354,6 +357,20 @@ extension DateConversions on DateTime {
 
     return toString().split('.')[0];
   }
+
+  /// Converts the DateTime object to the UTC timezone.
+  ///
+  /// Returns a DateTime object in UTC timezone.
+  ///
+  /// If the DateTime object is null, returns null.
+  ///
+  /// Example:
+  /// ```dart
+  /// DateTime dateTime = DateTime.now();
+  /// DateTime? utcDateTime = dateTime.asUtc;
+  /// print('UTC DateTime: $utcDateTime');
+  /// ```
+  DateTime? get asUtc => DateTime.utc(year, month, day, hour, minute, second);
 }
 
 extension ParseDateTime on String? {
@@ -424,7 +441,6 @@ extension ParseDateTime on String? {
     for (final entry in Regex.dateFormats.entries) {
       final regex = RegExp(entry.key);
       if (matches(regex: regex)) {
-        // return entry.value;
         patternsFound.add(entry.value);
       }
     }
@@ -507,47 +523,6 @@ extension ParseDateTime on String? {
 }
 
 extension DateTimeExtension on DateTime? {
-  /// Converts the month of the [DateTime] to a string representing the month's name.
-  ///
-  /// If [Abbreviation] is [Abbreviation.full], returns the abbreviated form of the month's name.
-  ///
-  /// Returns the full or abbreviated month name as a string.
-  ///
-  /// Example:
-  /// ```dart
-  /// DateTime? date = DateTime(2024, 6, 23);
-  /// print(date.toMonth()); // Output: June
-  /// print(date.toMonth(style : Abbreviation.full)); // Output: Jun
-  /// ```
-  String toMonth({Abbreviation style = Abbreviation.none}) {
-    if (this == null) return '';
-
-    return this!.toMonth(style: style);
-  }
-
-  /// Converts the weekday of the [DateTime] to a string representing the day's name.
-  ///
-  /// If [Abbreviation] is [Abbreviation.none], returns the normal form of the day's name (e.g., Monday).
-  ///
-  /// If [Abbreviation] is [Abbreviation.semi], returns the abbreviated form of the day's name (e.g., "Mon" for Monday).
-  ///
-  /// If [Abbreviation] is [Abbreviation.full], returns a very short form of the day's name (e.g., "M" for Monday).
-  ///
-  /// Returns the full, abbreviated, or very short day name as a string.
-  ///
-  /// Example:
-  /// ```dart
-  /// DateTime? date = DateTime(2024, 6, 23);
-  /// print(date.toWeekday()); // Output: Thursday
-  /// print(date.toWeekday(style : Abbreviation.semi)); // Output: Thu
-  /// print(date.toWeekday(style : Abbreviation.full)); // Output: T
-  /// ```
-  String toWeekday({Abbreviation style = Abbreviation.none}) {
-    if (this == null) return '';
-
-    return this!.toWeekday(style: style);
-  }
-
   /// Converts the time difference to a number of seconds.
   ///
   /// Returns the number of seconds between the current DateTime instance and [other].
@@ -666,47 +641,5 @@ extension DateTimeExtension on DateTime? {
         (this ?? DateTime.now()).millisecondsSinceEpoch;
     final int count = (difference / 31536000000).truncate();
     return count;
-  }
-
-  /// Converts the DateTime object to the UTC timezone.
-  ///
-  /// Returns a DateTime object in UTC timezone.
-  ///
-  /// If the DateTime object is null, returns null.
-  ///
-  /// Example:
-  /// ```dart
-  /// DateTime dateTime = DateTime.now();
-  /// DateTime? utcDateTime = dateTime.asUtc;
-  /// print('UTC DateTime: $utcDateTime');
-  /// ```
-  DateTime? get asUtc =>
-      isNull
-          ? null
-          : DateTime.utc(
-            this!.year,
-            this!.month,
-            this!.day,
-            this!.hour,
-            this!.minute,
-            this!.second,
-          );
-
-  /// Calculates the day of the year (1-based index) for the current date.
-  ///
-  /// The day of the year is calculated as the 1-based index of the current date
-  /// within its year. For example, January 1st returns 1, February 1st returns 32,
-  /// and December 31st returns 365 (or 366 in a leap year).
-  int? get dayOfYear {
-    if (this == null) return null;
-
-    return this!.dayOfYear; // Delegate to the non-nullable extension method
-  }
-
-  /// Returns the duration difference between this value and current time.
-  Duration fromNow() {
-    if (this == null) return Duration.zero;
-
-    return this!.difference(DateTime.now());
   }
 }
