@@ -4,31 +4,23 @@ import 'package:flutter/material.dart';
 extension GlobalKeyExt on GlobalKey<State<StatefulWidget>> {
   /// Returns the global offset of the widget attached to this key.
   Offset? get offset {
-    try {
-      if (currentState?.mounted == false) return null;
+    if (currentState?.mounted == false) return null;
 
-      final renderBox = currentContext?.findRenderObject() as RenderBox?;
-      final translation = renderBox?.getTransformTo(null).getTranslation();
+    final renderObject = currentContext?.findRenderObject();
+    if (renderObject is! RenderBox) return null;
 
-      if (translation == null) return null;
-
-      return Offset(translation.x, translation.y);
-    } catch (er) {
-      return null;
-    }
+    final translation = renderObject.getTransformTo(null).getTranslation();
+    return Offset(translation.x, translation.y);
   }
 
   /// Returns the size of the widget attached to this key.
   Size? get size {
-    try {
-      if (currentState?.mounted == false) return null;
+    if (currentState?.mounted == false) return null;
 
-      final renderBox = currentContext?.findRenderObject() as RenderBox?;
+    final renderObject = currentContext?.findRenderObject();
+    if (renderObject is! RenderBox) return null;
 
-      return renderBox?.size;
-    } catch (er) {
-      return null;
-    }
+    return renderObject.size;
   }
 
   /// Returns a Rect of this widget based on the global offset and its size.

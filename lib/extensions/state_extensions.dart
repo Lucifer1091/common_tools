@@ -20,21 +20,8 @@ extension StateExtensions<T extends StatefulWidget> on State<T> {
   bool safeSetState(VoidCallback callback) {
     if (!mounted) return false;
 
-    try {
-      // ignore: invalid_use_of_protected_member
-      setState(callback);
-      return true;
-    } on Exception catch (e) {
-      // In case setState throws an exception, we don't want to crash the app
-      debugPrint('safeSetState error: $e');
-      return false;
-    }
-  }
-}
-
-mixin StatefulMixin<T extends StatefulWidget> on State<T> {
-  /// Dynamic [setState] method
-  void setStateIfMounted(VoidCallback callback) {
-    if (mounted) setState(callback);
+    // ignore: invalid_use_of_protected_member
+    setState(callback);
+    return true;
   }
 }
