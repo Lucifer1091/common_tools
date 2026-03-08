@@ -2,16 +2,18 @@ import '../../index.dart';
 
 /// Common Operations for Iterables with nullable items.
 extension IterableValidators<T> on Iterable<T>? {
-  /// Returns true if [T] is either null or empty collection.
+  /// Returns `true` if this iterable is `null` or empty.
   bool get isBlank => this?.isEmpty ?? true;
 
-  /// Returns true if [T] is neither null nor empty collection.
+  /// Returns `true` if this iterable is not `null` and not empty.
   bool get isNotBlank => !isBlank;
 
-  // This getter checks if the List contains exactly one element.
+  /// Returns `true` if the iterable contains exactly one element.
+  ///
+  /// Returns `false` for `null`, empty, or multi-item iterables.
   bool get isSingle => this?.singleOrNull != null;
 
-  /// Returns true if no entries match the given [predicate] or if the
+  /// Returns `true` if no entries match the given [predicate] or if the
   /// collection is empty.
   bool none(Predicate<T> predicate) => this?.any(predicate) != true;
 
@@ -38,21 +40,21 @@ extension IterableValidators<T> on Iterable<T>? {
     return found;
   }
 
-  /// Returns `true` if the iterable is has an element of type [S].
+  /// Returns `true` if the iterable has at least one element of type [S].
   bool anyType<S extends T>() => this?.whereType<S>().isNotEmpty ?? false;
 
-  /// Returns true if the collection contains all the elements
+  /// Returns `true` if the collection contains all the elements
   /// present in [other] collection.
   bool containsAll(Iterable<T>? other) =>
       this != null && (other?.every(this!.contains) ?? false);
 
-  /// Returns true if the collection doesn't contain any of the elements
+  /// Returns `true` if the collection does not contain any of the elements
   /// present in [other] collection.
   bool containsNone(Iterable<T>? other) =>
       none((element) => other?.contains(element) ?? false);
 
   /// Checks if any elements in the specified [other] are contained in
-  /// T collection.
+  /// this collection.
   bool containsAny(Iterable<T>? other) {
     if (isBlank || other.isBlank) return false;
 
@@ -62,7 +64,7 @@ extension IterableValidators<T> on Iterable<T>? {
     return false;
   }
 
-  /// Returns true if T collection is structurally equal to the [other]
+  /// Returns `true` if this collection is structurally equal to the [other]
   /// collection.
   ///
   /// I.e. contain the same number of the same elements in the same order.

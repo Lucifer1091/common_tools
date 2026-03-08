@@ -139,11 +139,11 @@ extension UnaryBooleanPredicateExtensions<P> on bool Function(P) {
   /// ```dart
   /// final isEven = (int n) => n % 2 == 0;
   /// final isNegative = (int n) => n < 0;
-  /// final isOddOrNegative = isEven.xor(isNegative);
+  /// final isEvenXorNegative = isEven.xor(isNegative);
   ///
-  /// print(isOddOrNegative(4));  // false
-  /// print(isOddOrNegative(-3)); // true
-  /// print(isOddOrNegative(3));  // true
+  /// print(isEvenXorNegative(4));  // true
+  /// print(isEvenXorNegative(-3)); // true
+  /// print(isEvenXorNegative(-4)); // false
   /// ```
   bool Function(P) xor(bool Function(P) predicate) =>
       (p) => this(p) ^ predicate(p);

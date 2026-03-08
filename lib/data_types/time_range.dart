@@ -2,10 +2,33 @@ import 'package:flutter/material.dart';
 
 import '../index.dart';
 
+/// Represents a daily time-of-day interval.
+///
+/// A [TimeRange] can be:
+/// - same-day (for example `09:00 -> 17:00`)
+/// - overnight (for example `22:00 -> 06:00`)
+/// - single-moment (`start == end`)
+///
+/// Range boundaries are inclusive in [includes].
+///
+/// Example:
+/// ```dart
+/// final officeHours = TimeRange(
+///   start: const TimeOfDay(hour: 9, minute: 0),
+///   end: const TimeOfDay(hour: 17, minute: 0),
+/// );
+///
+/// print(officeHours.includes(DateTime(2026, 3, 8, 10, 30))); // true
+/// print(officeHours.includes(DateTime(2026, 3, 8, 20, 0)));  // false
+/// ```
 class TimeRange {
+  /// Creates a [TimeRange] from [start] to [end].
   const TimeRange({required this.start, required this.end});
 
+  /// Start time-of-day of the range.
   final TimeOfDay start;
+
+  /// End time-of-day of the range.
   final TimeOfDay end;
 
   /// Returns `true` when the range crosses midnight (e.g. 22:00-06:00).
@@ -16,21 +39,21 @@ class TimeRange {
   /// In this case, [includes] behaves as a single-minute point-in-time match.
   bool get isSingleMoment => start == end;
 
-  /// Returns the effective date range for this time range on the given [date].
+  /// Converts this daily time range into a concrete [DateTimeRange] for [date].
   ///
-  /// For time range within the same day returns the same day.
-  /// For overnight shifts (e.g., 22:00-06:00), the end time is moved
-  /// to the next day.
+  /// For same-day ranges, both [start] and [end] remain on [date].
+  /// For overnight ranges (for example `22:00 -> 06:00`), the end time is
+  /// moved to the next day.
   ///
   /// Example:
   /// ```dart
   /// final timeRange = TimeRange(
-  ///   start: TimeOfDay(hour: 9, min: 0),
-  ///   end: TimeOfDay(hour: 17, min: 0),
+  ///   start: TimeOfDay(hour: 9, minute: 0),
+  ///   end: TimeOfDay(hour: 17, minute: 0),
   /// );
   /// final nightRange = TimeRange(
-  ///   start: TimeOfDay(hour: 22, min: 0),
-  ///   end: TimeOfDay(hour: 6, min: 0),
+  ///   start: TimeOfDay(hour: 22, minute: 0),
+  ///   end: TimeOfDay(hour: 6, minute: 0),
   /// );
   ///
   /// final monday = DateTime(2023, 6, 12);
@@ -63,13 +86,17 @@ class TimeRange {
     }
   }
 
-  /// check if [date] is within the range
+  /// Returns whether [date] falls inside this time range.
+  ///
+  /// Only the time-of-day component is considered; calendar date is ignored.
+  ///
+  /// Start and end are both treated as inclusive boundaries.
   ///
   /// Example:
   /// ```dart
   /// final workHours = TimeRange(
-  ///   start: TimeOfDay(hour: 9, min: 0),
-  ///   end: TimeOfDay(hour: 17, min: 0),
+  ///   start: TimeOfDay(hour: 9, minute: 0),
+  ///   end: TimeOfDay(hour: 17, minute: 0),
   /// );
   ///
   /// final morning = DateTime(2023, 6, 15, 10, 30);  // 10:30 AM
@@ -80,8 +107,8 @@ class TimeRange {
   ///
   /// // Works with midnight-crossing ranges
   /// final nightShift = TimeRange(
-  ///   start: TimeOfDay(hour: 22, min: 0),
-  ///   end: TimeOfDay(hour: 6, min: 0),
+  ///   start: TimeOfDay(hour: 22, minute: 0),
+  ///   end: TimeOfDay(hour: 6, minute: 0),
   /// );
   /// final midnight = DateTime(2023, 6, 15, 2, 0);  // 2:00 AM
   /// nightShift.includes(midnight);  // true

@@ -1,6 +1,7 @@
 import 'sanitizers.dart';
 import 'validators.dart';
 
+/// Operator overloads for concise [DateTime] comparisons and arithmetic.
 extension DateTimeOperators on DateTime {
   /// Returns true if this occurs strictly before [other], accounting for time
   /// zones.
@@ -65,29 +66,25 @@ extension DateTimeOperators on DateTime {
   DateTime operator -(Duration duration) => subtract(duration);
 }
 
+/// Calendar-style add/subtract helpers for [DateTime].
 extension DateTimeOperations on DateTime {
   /// Returns the [DateTime] resulting from adding the given number
   /// of years to this [DateTime].
   ///
-  /// The result is computed by incrementing the year part of this
-  /// [DateTime] by [years] years, and, if required, adjusting the day part
-  /// of the resulting date downwards to the last day of the month
-  /// in resulting year.
+  /// Uses Dart [DateTime] normalization rules for invalid calendar dates.
   ///
   /// For example:
   /// (2020, 12, 31) -> add 2 years -> (2022, 12, 31).
-  /// (2020, 02, 29) -> add 1 year -> (2021, 02, 28).
+  /// (2020, 02, 29) -> add 1 year -> (2021, 03, 01).
   DateTime addYears(int years) => clone.setYear(year + years);
 
   /// Returns the [DateTime] resulting from adding the given number
   /// of months to this [DateTime].
   ///
-  /// The result is computed by incrementing the month parts of this
-  /// [DateTime] by [months] months, and, if required, adjusting the day part
-  /// of the resulting date downwards to the last day of the resulting month.
+  /// Uses Dart [DateTime] normalization rules for invalid calendar dates.
   ///
   /// For example:
-  /// (2020, 12, 31) -> add 2 months -> (2021, 2, 28).
+  /// (2020, 12, 31) -> add 2 months -> (2021, 3, 3).
   /// (2020, 12, 31) -> add 1 month -> (2021, 1, 31).
   DateTime addMonths(int months) => clone.setMonth(month + months);
 
@@ -97,7 +94,7 @@ extension DateTimeOperations on DateTime {
   ///
   /// For example:
   /// (2020, 12, 31) -> add 1 quarter -> (2021, 3, 31).
-  /// (2020, 12, 31) -> add 2 quarters -> (2021, 6, 30).
+  /// (2020, 12, 31) -> add 2 quarters -> (2021, 7, 1).
   DateTime addQuarters(int quarters) => addMonths(quarters * 3);
 
   /// Returns the [DateTime] resulting from adding the given number
@@ -154,16 +151,13 @@ extension DateTimeOperations on DateTime {
   ///
   /// For example:
   /// (2020-12-31 12:00:00) -> add 30 minutes -> (2020-12-31 12:30:00).
-  /// (2020-12-31 23:45:00) -> add 15 minutes -> (2020-12-31 23:59:00).
+  /// (2020-12-31 23:45:00) -> add 15 minutes -> (2021-01-01 00:00:00).
   DateTime addMinutes(int minutes) => add(Duration(minutes: minutes));
 
   /// Returns the [DateTime] resulting from subtracting the given number
   /// of years from this [DateTime].
   ///
-  /// The result is computed by decrementing the year part of this
-  /// [DateTime] by [years] years, and, if required, adjusting the day part
-  /// of the resulting date upwards to the last day of the month
-  /// in the resulting year.
+  /// Uses Dart [DateTime] normalization rules for invalid calendar dates.
   ///
   /// For example:
   /// (2022, 12, 31) -> subtract 2 years -> (2020, 12, 31).
@@ -173,9 +167,7 @@ extension DateTimeOperations on DateTime {
   /// Returns the [DateTime] resulting from subtracting the given number
   /// of months from this [DateTime].
   ///
-  /// The result is computed by decrementing the month parts of this
-  /// [DateTime] by [months] months, and, if required, adjusting the day part
-  /// of the resulting date upwards to the last day of the resulting month.
+  /// Uses Dart [DateTime] normalization rules for invalid calendar dates.
   ///
   /// For example:
   /// (2021, 2, 28) -> subtract 2 months -> (2020, 12, 28).
@@ -188,14 +180,14 @@ extension DateTimeOperations on DateTime {
   ///
   /// For example:
   /// (2021-03-31) -> subtract 1 quarter -> (2020-12-31).
-  /// (2021-06-30) -> subtract 2 quarters -> (2020-12-31).
+  /// (2021-06-30) -> subtract 2 quarters -> (2020-12-30).
   DateTime subtractQuarters(int quarters) => addMonths(-quarters * 3);
 
   /// Subtracts a specified number of days from this [DateTime].
   ///
   /// For example:
   /// (2021-01-02) -> subtract 2 days -> (2020-12-31).
-  /// (2021-01-15) -> subtract 14 days -> (2020-12-31).
+  /// (2021-01-15) -> subtract 14 days -> (2021-01-01).
   DateTime subtractDays(int days) => subtract(Duration(days: days));
 
   /// Subtracts a specified number of business days from this [DateTime].
@@ -203,7 +195,7 @@ extension DateTimeOperations on DateTime {
   /// Business days are considered as Monday to Friday.
   ///
   /// For example:
-  /// (2024-05-31) -> subtract 10 business days -> (2024-05-15).
+  /// (2024-05-31) -> subtract 10 business days -> (2024-05-17).
   DateTime subtractWorkingDays(int days) {
     int totalDays = days;
     DateTime result = this;
@@ -230,6 +222,6 @@ extension DateTimeOperations on DateTime {
   ///
   /// For example:
   /// (2020-12-31 12:30:00) -> subtract 30 minutes -> (2020-12-31 12:00:00).
-  /// (2020-12-31 23:59:00) -> subtract 15 minutes -> (2020-12-31 23:45:00).
+  /// (2020-12-31 23:59:00) -> subtract 15 minutes -> (2020-12-31 23:44:00).
   DateTime subtractMinutes(int minutes) => subtract(Duration(minutes: minutes));
 }

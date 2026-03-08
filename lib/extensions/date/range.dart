@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'misc.dart';
 import 'validators.dart';
 
+/// Nullable-safe validation helpers for [DateTimeRange].
 extension DateRangeValidators on DateTimeRange? {
   /// Checks if the [DateTimeRange] value is null.
   bool get isNull => this == null;
@@ -44,6 +45,7 @@ extension DateRangeValidators on DateTimeRange? {
       this!.end.equals(range.end);
 }
 
+/// Comparison operators for [DateTimeRange].
 extension DateRangeOperators on DateTimeRange {
   /// Compares if this range starts before [other].
   ///
@@ -68,6 +70,7 @@ extension DateRangeOperators on DateTimeRange {
       end.isAfter(other.end) || end.isAtSameMomentAs(other.end);
 }
 
+/// Factory and mutation-like helpers for [DateTimeRange].
 extension DateRange on DateTimeRange {
   /// Creates a new [DateTimeRange] with the specified [start] and [end] dates.
   ///
@@ -93,6 +96,10 @@ extension DateRange on DateTimeRange {
       set(start, start.add(duration));
 }
 
+/// Set-like operations for [DateTimeRange] values.
+///
+/// These helpers provide union/intersection/difference behavior similar to
+/// interval arithmetic.
 extension DateRangeConversions on DateTimeRange {
   /// Returns the union of this [DateTimeRange] and another [DateTimeRange].
   ///
@@ -123,7 +130,9 @@ extension DateRangeConversions on DateTimeRange {
   /// Returns the difference between this [DateTimeRange] and another [DateTimeRange].
   ///
   /// The result is a [DateTimeRange] that represents the non-overlapping portion of this range.
-  /// Returns null if the ranges are identical. Throws a [RangeError] if ranges overlap in an unexpected way.
+  /// Returns `null` if the ranges are identical or fully covered by [other].
+  ///
+  /// Throws a [RangeError] when the subtraction would produce two disjoint ranges.
   DateTimeRange? difference(DateTimeRange other) {
     final bool sameRange = start.equals(other.start) && end.equals(other.end);
     if (sameRange) return null;

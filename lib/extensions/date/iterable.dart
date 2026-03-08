@@ -1,21 +1,20 @@
 import '../../index.dart';
 
-/// [IterableDateTimeHelper] contains the helper methods
-/// for [Iterable<DateTime>].
+/// Aggregate and utility helpers for [Iterable<DateTime>].
 extension IterableDateTimeHelper on Iterable<DateTime> {
   /// Get the maximum date in the iterable.
   ///
-  /// The iterable must have at least one element
+  /// Throws [StateError] if the iterable is empty.
   DateTime max() => reduce((a, b) => a.isAfter(b) ? a : b);
 
   /// Get the minimum date in the iterable.
   ///
-  /// The iterable must have at least one element
+  /// Throws [StateError] if the iterable is empty.
   DateTime min() => reduce((a, b) => a.isBefore(b) ? a : b);
 
   /// Get the span between the earliest and latest dates.
   ///
-  /// The iterable must have at least one element
+  /// Throws [StateError] if the iterable is empty.
   ///
   /// Example:
   /// ```dart
@@ -30,7 +29,7 @@ extension IterableDateTimeHelper on Iterable<DateTime> {
 
   /// Calculate the total span in days between the earliest and latest dates.
   ///
-  /// Returns 0 if the iterable is empty.
+  /// Throws [StateError] if the iterable is empty.
   ///
   /// Example:
   /// ```dart
@@ -45,7 +44,7 @@ extension IterableDateTimeHelper on Iterable<DateTime> {
 
   /// Find the date in the iterable that is closest to the given [target] date.
   ///
-  /// The iterable must have at least one element
+  /// Throws [StateError] if the iterable is empty.
   ///
   /// Example:
   /// ```dart
@@ -135,7 +134,7 @@ extension IterableDateTimeHelper on Iterable<DateTime> {
   /// For an odd number of dates, returns the middle date.
   /// For an even number of dates, returns the earlier of the two middle dates.
   ///
-  /// The iterable must have at least one element.
+  /// Throws [StateError] if the iterable is empty.
   ///
   /// Example:
   /// ```dart
@@ -179,7 +178,7 @@ extension IterableDateTimeHelper on Iterable<DateTime> {
   /// If all dates occur with the same frequency,
   /// returns the earliest date.
   ///
-  /// The iterable must have at least one element.
+  /// Throws [StateError] if the iterable is empty.
   ///
   /// Example:
   /// ```dart

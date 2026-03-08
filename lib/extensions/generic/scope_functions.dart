@@ -27,7 +27,13 @@ extension ScopeFunction<T> on T? {
   /// Checks whether the value is "falsy" (opposite of `isTruthy`).
   bool get isFalsy => !isTruthy;
 
-  /// Return the fallback value if the provided value is null
+  /// Returns [fallback] when this value is `null`, otherwise returns `this`.
+  ///
+  /// Example:
+  /// ```dart
+  /// String? name;
+  /// print(name.orDefault('guest')); // guest
+  /// ```
   T orDefault(T fallback) => this ?? fallback;
 
   /// Calls the specified function [callback] with `this` as its argument and returns its result.
@@ -47,8 +53,8 @@ extension ScopeFunction<T> on T? {
   ///
   /// Example:
   /// ```dart
-  /// var person = Person('John').also((it) => it.name = 'Doe');
-  /// print(person.name); // Output: Doe
+  /// final numbers = <int>[1, 2, 3].also((it) => it.add(4));
+  /// print(numbers); // [1, 2, 3, 4]
   /// ```
   T? also(void Function(T it) callback) {
     if (this == null) return null;
@@ -133,7 +139,8 @@ extension ScopeFunction<T> on T? {
 ///
 /// Example:
 /// ```dart
-/// throwIf(n < 1, () => ArgumentError("n must be greater than 0"));
+/// final n = 0;
+/// throwIf(n < 1, () => ArgumentError('n must be greater than 0'));
 /// ```
 void throwIf(bool test, Object Function() errorFactoryFunc) {
   if (test) {
@@ -146,7 +153,8 @@ void throwIf(bool test, Object Function() errorFactoryFunc) {
 ///
 /// Example:
 /// ```dart
-/// throwIfNot(n > 1, () => ArgumentError("n must be greater than 0"));
+/// final n = 1;
+/// throwIfNot(n > 1, () => ArgumentError('n must be greater than 1'));
 /// ```
 void throwIfNot(bool test, Object Function() errorFactoryFunc) {
   if (!test) {
@@ -157,8 +165,9 @@ void throwIfNot(bool test, Object Function() errorFactoryFunc) {
 
 /// Executes a provided action and handles potential errors.
 ///
-/// If an exception occurs during execution, the optional [onError] function is called.
-/// If [onError] is not provided or returns `null`, the error is swallowed.
+/// If an exception occurs, the optional [onError] callback is invoked.
+/// If [onError] is not provided or returns `null`, the error is swallowed and
+/// `null` is returned.
 ///
 /// Example:
 /// ```dart

@@ -1,40 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import '../../index.dart';
 
+/// Controls how month/day text should be abbreviated when formatting.
 enum Abbreviation {
   /// Full form.
   ///
-  /// e.g., "3 hours", "7 minutes"
+  /// Example: `January`, `Monday`.
   none,
 
   /// Semi-abbreviated form.
   ///
-  /// e.g., "3 hr", "7 min"
+  /// Example: `Jan`, `Mon`.
   semi,
 
   /// Abbreviated form.
   ///
-  /// e.g., "3h", "7m"
+  /// Example: `J`, `M` (for weekday helpers) or `Jan` (for month helpers).
   full,
 }
 
+/// Common date/time format patterns used across the package.
 class MyDateFormats {
   MyDateFormats._();
 
   static const defaultDateTime = 'yyyy-MM-dd HH:mm:ss';
+
   static const defaultDate = 'yyyy-MM-dd';
+
   static const dateTime = 'MMM dd, yyyy hh:mm a';
+
   static const date = 'MMM dd, yyyy';
+
   static const time = 'hh:mm a';
+
   static const time24 = 'HH:mm:ss';
+
   static const month = 'MMMM';
+
   static const year = 'yyyy';
+
   static const monthYear = 'MMMM, yyyy';
+
   static const monthDay = 'MMM dd';
+
   static const day = 'dd';
+
   static const fullDay = 'EEEE';
+
   static const shortDay = 'EEE';
+
   static const fullDate = 'EEE MMM dd, yyyy';
 
   static const List<String> months = [
@@ -90,6 +106,7 @@ class MyDateFormats {
   static const List<String> veryShortDays = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 }
 
+/// Conversion helpers on [DateTime] for formatting, ranges, and calendar math.
 extension DateConversions on DateTime {
   /// Formats the [DateTime] value to a string using the specified [pattern] and [locale].
   ///
@@ -101,7 +118,9 @@ extension DateConversions on DateTime {
 
   /// Converts the month of the [DateTime] to a string representing the month's name.
   ///
-  /// If [Abbreviation] is [Abbreviation.full], returns the abbreviated form of the month's name.
+  /// [Abbreviation.none] returns full month text (for example, `June`).
+  /// [Abbreviation.semi] and [Abbreviation.full] return abbreviated month text
+  /// (for example, `Jun`).
   ///
   /// Returns the full or abbreviated month name as a string.
   ///
@@ -109,7 +128,7 @@ extension DateConversions on DateTime {
   /// ```dart
   /// DateTime date = DateTime(2024, 6, 23);
   /// print(date.toMonth()); // Output: June
-  /// print(date.toMonth(style : Abbreviation.full)); // Output: Jun
+  /// print(date.toMonth(style: Abbreviation.full)); // Output: Jun
   /// ```
   String toMonth({Abbreviation style = Abbreviation.none}) =>
       month.toMonth(style: style);
@@ -126,10 +145,10 @@ extension DateConversions on DateTime {
   ///
   /// Example:
   /// ```dart
-  /// DateTime date = DateTime(2024, 6, 23);
+  /// DateTime date = DateTime(2024, 6, 20);
   /// print(date.toWeekday()); // Output: Thursday
-  /// print(date.toWeekday(style : Abbreviation.semi)); // Output: Thu
-  /// print(date.toWeekday(style : Abbreviation.full)); // Output: T
+  /// print(date.toWeekday(style: Abbreviation.semi)); // Output: Thu
+  /// print(date.toWeekday(style: Abbreviation.full)); // Output: T
   /// ```
   String toWeekday({Abbreviation style = Abbreviation.none}) =>
       weekday.toDay(style: style);
@@ -138,6 +157,7 @@ extension DateConversions on DateTime {
   ///
   /// Returns "Good Morning" if the hour is between 5:00 and 11:59 AM,
   /// "Good Afternoon" if the hour is between 12:00 and 4:59 PM,
+  /// "Good Evening" if the hour is between 5:00 and 8:59 PM,
   /// and "Good Night" for all other times.
   String greeting() {
     if (isMorning) {
@@ -208,10 +228,10 @@ extension DateConversions on DateTime {
     }
   }
 
-  /// Calculates the number of ISO weeks for the current year.
+  /// Calculates number of ISO weeks for [year].
   ///
-  /// Returns the number of ISO weeks.
-  /// Calculates number of weeks for a given year as per https://en.wikipedia.org/wiki/ISO_week_date#Weeks_per_year
+  /// Reference:
+  /// https://en.wikipedia.org/wiki/ISO_week_date#Weeks_per_year
   int _numOfWeeks(int year) {
     final DateTime dec28 = DateTime(year, 12, 28);
     final int dayOfDec28 = int.parse(DateFormat('D').format(dec28));
@@ -220,8 +240,8 @@ extension DateConversions on DateTime {
 
   /// Returns the ISO week number for the current [DateTime].
   ///
-  /// Returns the ISO week number.
-  /// Calculates week number from a date as per https://en.wikipedia.org/wiki/ISO_week_date#Calculation
+  /// Reference:
+  /// https://en.wikipedia.org/wiki/ISO_week_date#Calculation
   int get weekNumber {
     final int dayOfYear = int.parse(DateFormat('D').format(this));
     int woy = ((dayOfYear - weekday + 10) / 7).floor();
@@ -244,9 +264,9 @@ extension DateConversions on DateTime {
     return thursday.year;
   }
 
-  /// Calculates the age based on the current date.
+  /// Calculates approximate age in years from this date until now.
   ///
-  /// Returns the age in years.
+  /// This uses a simple `inDays ~/ 365` calculation.
   int get toAge => (DateTime.now().difference(this).inDays) ~/ 365;
 
   /// Gets the Unix timestamp of this [DateTime].
@@ -305,7 +325,7 @@ extension DateConversions on DateTime {
 
   /// Calculates the difference in years between this date and [other].
   ///
-  /// Returns the number of full years between the two dates, considering whole days.
+  /// Uses a rough conversion (`inDays ~/ 365`), so this is approximate.
   int differenceInYear(DateTime other) {
     final Duration difference = this.difference(other);
     final int years = difference.inDays ~/ 365;
@@ -315,7 +335,8 @@ extension DateConversions on DateTime {
 
   /// Calculates the difference in months between this date and [other].
   ///
-  /// Returns the number of full months between the two dates, considering whole days.
+  /// Uses rough day-based math and returns only the month remainder after full
+  /// 365-day years are removed.
   int differenceInMonth(DateTime other) {
     final Duration difference = this.difference(other);
     final int months = (difference.inDays % 365) ~/ 30;
@@ -382,9 +403,11 @@ extension DateConversions on DateTime {
 
   /// Returns the timezone offset in a formatted string.
   ///
-  /// Formats the timezone offset as "GMT+/-HH:mm". You can disable [separateWithColon]
-  /// to remove the colon between hours and minutes, resulting in "GMT+/-HHmm".
-  /// Example: "-06:00" becomes "GMT-6" or "-0600" becomes "GMT-6:00".
+  /// The output format is `+/-HH:mm` by default.
+  ///
+  /// Set [separateWithColon] to `false` for compact output (`+/-HHmm`).
+  ///
+  /// Example: `+05:30` or `+0530`.
   String timeZoneFormatted([bool separateWithColon = true]) {
     final int inMinutes = timeZoneOffset.abs().inMinutes;
 
@@ -399,9 +422,9 @@ extension DateConversions on DateTime {
 
   /// Converts the [DateTime] object to a string representation.
   ///
-  /// If [utc] is `true`, converts the date to UTC and returns the UTC formatted string,
-  /// excluding milliseconds. If [utc] is `false` or omitted, returns the local time
-  /// formatted string, excluding milliseconds.
+  /// If [utc] is `true`, converts this value to UTC before formatting.
+  ///
+  /// The returned value drops fractional seconds by splitting at `.`.
   String toUtcString({bool utc = true}) {
     if (utc) {
       return toUtc().toString().split('.')[0];
@@ -412,37 +435,24 @@ extension DateConversions on DateTime {
 
   /// Converts the DateTime object to the UTC timezone.
   ///
-  /// Returns a DateTime object in UTC timezone.
-  ///
-  /// If the DateTime object is null, returns null.
+  /// Returns a [DateTime] in UTC with the same date and clock components.
   ///
   /// Example:
   /// ```dart
-  /// DateTime dateTime = DateTime.now();
-  /// DateTime? utcDateTime = dateTime.asUtc;
+  /// final dateTime = DateTime.now();
+  /// final utcDateTime = dateTime.asUtc;
   /// print('UTC DateTime: $utcDateTime');
   /// ```
   DateTime? get asUtc => DateTime.utc(year, month, day, hour, minute, second);
 }
 
+/// Parsing helpers for nullable date/time strings.
+///
+/// These helpers support both explicit patterns and best-effort parsing.
 extension ParseDateTime on String? {
-  /// Checks whether the `String` is a valid `DateTime`:
+  /// Checks whether this string can be interpreted as a date/time value.
   ///
-  /// ### Valid formats
-  ///
-  /// * dd/mm/yyyy
-  /// * dd-mm-yyyy
-  /// * dd.mm.yyyy
-  /// * yyyy-mm-dd
-  /// * yyyy-mm-dd hrs
-  /// * 20120227 13:27:00
-  /// * 20120227T132700
-  /// * 20120227
-  /// * +20120227
-  /// * 2012-02-27T14Z
-  /// * 2012-02-27T14+00:00
-  /// * -123450101 00:00:00 Z": in the year -12345
-  /// * 2002-02-27T14:00:00-0500": Same as "2002-02-27T19:00:00Z
+  /// This first checks [Regex.date], then falls back to [DateTime.parse].
   bool get isDate {
     if (isBlank) return false;
 
@@ -470,9 +480,27 @@ extension ParseDateTime on String? {
     return TimeOfDay.fromDateTime(format.parse(this!));
   }
 
+  /// Parses this string into [DateTime] using an optional [format].
+  ///
+  /// When [utc] is `true`, parsing is normalized to UTC.
+  /// Returns `null` for blank or invalid input.
+  ///
+  /// Example:
+  /// ```dart
+  /// final local = '15/01/2024 18:45'.toDateTime(
+  ///   format: 'dd/MM/yyyy HH:mm',
+  /// );
+  /// final utc = '2024-01-10T12:00:00Z'.toDateTime(utc: true);
+  /// ```
   DateTime? toDateTime({bool utc = false, String? format}) =>
       parse(this, utc: utc, format: format);
 
+  /// Parses this string and returns a normalized date-time string without
+  /// fractional seconds.
+  ///
+  /// The [format] is used only for parsing input text.
+  /// When [utc] is `true`, output is converted to UTC; otherwise local time is used.
+  /// Returns `null` if parsing fails.
   String? toUtcString({
     bool utc = true,
     String format = 'MMM dd, yyyy h:mm a',
@@ -484,7 +512,27 @@ extension ParseDateTime on String? {
     return normalized.toString().split('.')[0];
   }
 
-  static DateTime? parse(Object? date, {bool utc = true, String? format}) {
+  /// Parses [date] into a [DateTime] using a best-effort strategy.
+  ///
+  /// Resolution order:
+  /// 1. Returns `null` for blank values.
+  /// 2. Uses explicit [format] when provided.
+  /// 3. Tries [DateTime.tryParse].
+  /// 4. Falls back to `yyyy-MM-dd HH:mm:ss` parsing.
+  /// 5. If parsing throws, tries `yyyy-MM-dd'T'HH:mm:ss.SSS`.
+  ///
+  /// The resulting value is normalized based on [utc].
+  ///
+  /// Example:
+  /// ```dart
+  /// final a = ParseDateTime.parse('2024-01-10T12:00:00Z');
+  /// final b = ParseDateTime.parse(
+  ///   '15/01/2024 18:45',
+  ///   format: 'dd/MM/yyyy HH:mm',
+  ///   utc: false,
+  /// );
+  /// ```
+  static DateTime? parse(Object? date, {bool utc = false, String? format}) {
     final String? dt = date?.toString().trim();
 
     DateTime? normalize(DateTime? value) {
@@ -505,7 +553,7 @@ extension ParseDateTime on String? {
       return DateFormat('yyyy-MM-dd HH:mm:ss').tryParse(dt, utc);
     } catch (e) {
       try {
-        // if its failing it means the date format is 2024-04-17T07:20:57.573
+        // Fallback for values like 2024-04-17T07:20:57.573
         final DateFormat format = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
         final DateTime dateTime = format.parse(dt!, utc);
 

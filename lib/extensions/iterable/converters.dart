@@ -11,6 +11,9 @@ import '../../index.dart';
 /// It will be `0` for [int] and `0.0` for [double].
 T _zero<T extends num>() => T == int ? 0 as T : 0.0 as T;
 
+/// Statistical and aggregation helpers for nullable numeric iterables.
+///
+/// Most methods return fallbacks when the iterable is `null` or empty.
 extension NumListConverter<T extends num> on Iterable<T>? {
   /// * return list summation
   /// * return `null` if list is empty
@@ -21,7 +24,7 @@ extension NumListConverter<T extends num> on Iterable<T>? {
   num sumOr(num value) => sumOrNull() ?? value;
 
   /// * return list summation
-  /// * return `0` if  isEmpty
+  /// * return `0` if isEmpty
   num sumOrZero() => sumOrNull() ?? _zero();
 
   /// * return the average of the list
@@ -33,7 +36,7 @@ extension NumListConverter<T extends num> on Iterable<T>? {
   num averageOr(num value) => averageOrNull() ?? value;
 
   /// * return the average of the list
-  /// * return `0` if  isEmpty
+  /// * return `0` if isEmpty
   num averageOrZero() => averageOr(_zero());
 
   /// * return the maximum value in the list
@@ -61,7 +64,7 @@ extension NumListConverter<T extends num> on Iterable<T>? {
   num minOr(num value) => minOrNull() ?? value;
 
   /// * return the element with the minimum value
-  /// * return `value` if isEmpty
+  /// * return `0` if isEmpty
   num minOrZero() => minOrNull() ?? _zero();
 
   /// Returns the index where the min number of this list is.
@@ -75,24 +78,24 @@ extension NumListConverter<T extends num> on Iterable<T>? {
   /// Example:
   /// ```dart
   /// List<int> numbers = [1, 2, 3];
-  /// print(numbers.prod); // Output: 6
-  ///
+  /// print(numbers.prodOrNull()); // Output: 6
+  /// ```
   num? prodOrNull() => isBlank ? null : this!.fold<num>(1, (a, b) => a * b);
 
+  /// Returns the product of all elements, or [value] if empty.
   num prodOr(num value) => prodOrNull() ?? value;
 
+  /// Returns the product of all elements, or numeric zero if empty.
   num prodOrZero() => prodOrNull() ?? _zero();
 
   /// Calculates the median of all elements in the list.
   ///
-  /// If the list is empty, an [Exception] is thrown with the message 'List is empty'.
-  ///
-  /// Returns the median of all elements in the list.
+  /// Returns `null` when the list is empty.
   ///
   /// Example:
   /// ```dart
   /// List<int> numbers = [1, 2, 3, 4];
-  /// print(numbers.median); // Output: 2.5
+  /// print(numbers.median()); // Output: 2.5
   /// ```
   num? median() {
     if (isBlank) return null;
@@ -123,6 +126,7 @@ extension NumListConverter<T extends num> on Iterable<T>? {
         .toList();
   }
 
+  /// Returns the sum of squares for all values, or `null` if empty.
   num? sumOfSquares() => this?.map((value) => value * value).sumOrNull();
 
   /// Computes the variance of the numbers in the iterable.
@@ -159,8 +163,8 @@ extension NumListConverter<T extends num> on Iterable<T>? {
 extension EnumConverter<T extends Enum> on Iterable<T> {
   /// Returns the enum in the iterable with the same name as [name], if found.
   ///
-  /// Searches through the iterable to find an enum whose `name` property (obtained
-  /// via `toString().split('.').last`) matches the provided [name].
+  /// Searches through the iterable to find an enum whose `name` property
+  /// matches the provided [name].
   ///
   /// Returns `null` if no matching enum is found.
   ///
@@ -184,6 +188,7 @@ extension EnumConverter<T extends Enum> on Iterable<T> {
 
   T byNameOr(String name, T orElse) => byNameOrNull(name) ?? orElse;
 
+  /// Returns the first enum value matching [test], or `null` if none matches.
   T? byValueOrNull(Predicate<T> test) {
     for (final value in this) {
       if (test(value)) return value;
@@ -191,10 +196,11 @@ extension EnumConverter<T extends Enum> on Iterable<T> {
     return null;
   }
 
+  /// Returns the first enum value matching [test], or [orElse] if none matches.
   T byValueOr(Predicate<T> test, T orElse) => byValueOrNull(test) ?? orElse;
 }
 
-/// provides extensions for Iterable
+/// General-purpose functional helpers for nullable iterables.
 extension IterableScrewDriver<T> on Iterable<T>? {
   /// Returns the sum of all values produced by [selector] function
   /// applied to each element in the collection.
@@ -378,6 +384,7 @@ extension IterableScrewDriver<T> on Iterable<T>? {
     }
   }
 
+  /// Calls [action] for each element with its index and yields elements unchanged.
   Iterable<T> onEachIndexed(MapIndexedValue<T, void> action) sync* {
     if (isBlank) {
       yield* Iterable.empty();
@@ -414,10 +421,13 @@ extension IterableScrewDriver<T> on Iterable<T>? {
   }
 }
 
+/// Read helpers for nullable iterables, including safe index accessors and
+/// utility transformations.
 extension IterableGetters<T> on Iterable<T>? {
   /// Returns this Iterable if it's not `null` and the empty list otherwise.
   Iterable<T> orEmpty() => this ?? [];
 
+  /// Returns this iterable as a list, or an empty list when `null`.
   List<T> asList() => this?.toList() ?? <T>[];
 
   /// Returns an element at the given [index] or `null` if the [index] is out of
@@ -457,8 +467,8 @@ extension IterableGetters<T> on Iterable<T>? {
   ///
   /// ```dart
   /// final list = [1, 2, 3, 4];
-  /// final first = list.getOrElse(0); // 1
-  /// final fifth = list.getOrElse(4, -1); // -1
+  /// final first = list.getOrElse(0, (_) => -1); // 1
+  /// final fifth = list.getOrElse(4, (_) => -1); // -1
   /// ```
   T getOrElse(int index, Transformer<int, T> orElse) {
     return getOrNull(index) ?? orElse(index);
@@ -475,8 +485,8 @@ extension IterableGetters<T> on Iterable<T>? {
   /// First element or `defaultValue` if the collection is empty.
   ///
   /// ```dart
-  /// final first = [1, 2, 3, 4].firstOrDefault(-1); // 1
-  /// final emptyFirst = [].firstOrDefault(-1); // -1
+  /// final first = [1, 2, 3, 4].firstOr(-1); // 1
+  /// final emptyFirst = [].firstOr(-1); // -1
   /// ```
   T firstOr(T value) => firstOrNull ?? value;
 
@@ -520,6 +530,7 @@ extension IterableGetters<T> on Iterable<T>? {
     return null;
   }
 
+  /// Returns the last valid index, or `null` when the iterable is empty.
   int? get lastIndex => isNotBlank ? length - 1 : null;
 
   /// Runs [action] sequentially for each item in this iterable.
@@ -570,7 +581,7 @@ extension IterableGetters<T> on Iterable<T>? {
   ///
   /// Example:
   /// ```dart
-  /// {3, 8, 12, 4, 1}.range(2, 4); // [12, 4]
+  /// {3, 8, 12, 4, 1}.getRange(2, 4); // [12, 4]
   /// ```
   Iterable<T> getRange(int start, int end) {
     if (isBlank) return Iterable.empty();
@@ -580,6 +591,12 @@ extension IterableGetters<T> on Iterable<T>? {
   }
 
   /// * like `map()` function but now you have the index with the element
+  ///
+  /// Example:
+  /// ```dart
+  /// final labeled = ['a', 'b'].mapWithIndex((index, value) => '$index:$value');
+  /// // ['0:a', '1:b']
+  /// ```
   Iterable<E> mapWithIndex<E>(MapIndexedValue<T, E> map) sync* {
     if (isBlank) return;
 
@@ -639,7 +656,10 @@ extension IterableGetters<T> on Iterable<T>? {
     return list.sublist(start0, end0 + 1);
   }
 
-  /// Split one large list to limited sub lists
+  /// Splits this iterable into lazy chunks of [size].
+  ///
+  /// Returns a single empty chunk when this iterable is empty or [size] is not
+  /// positive.
   /// ```dart
   /// [1, 2, 3, 4, 5, 6, 7, 8, 9].chunks(2)
   /// // => [[1, 2], [3, 4], [5, 6], [7, 8], [9]]
@@ -733,15 +753,15 @@ extension IterableGetters<T> on Iterable<T>? {
   }
 
   /// Splits this collection into a lazy [Iterable], where each split will be
-  /// make if [predicate] returns true for a pair of entries.
+  /// created if [predicate] returns `true` for a pair of consecutive entries.
   ///
   /// For example, one could split the iterable at each changed value like this:
   /// ```dart
   /// final list = [1, 1, 1, 2, 2, 1, 4, 4];
-  /// final splitted = list.splitWhen((a, b) => a != b);
+  /// final split = list.splitWhen((a, b) => a != b);
   /// ```
   ///
-  /// In that example, `splitted` would consist of `[1, 1, 1, 1]`, `[2, 2]`,
+  /// In that example, `split` would consist of `[1, 1, 1]`, `[2, 2]`,
   /// `[1]`, `[4, 4]`.
   ///
   /// See also:
@@ -753,7 +773,7 @@ extension IterableGetters<T> on Iterable<T>? {
   /// Returns a new lazy [Iterable] of windows of the given [size] sliding along
   /// this collection with the given [step].
   ///
-  /// The last list may have less elements than the given size.
+  /// Partial windows are included only when [partialWindows] is `true`.
   ///
   /// Both [size] and [step] must be positive and can be greater than the number
   /// of elements in this collection.
@@ -818,18 +838,14 @@ extension IterableGetters<T> on Iterable<T>? {
     }
   }
 
-  /// Performs the given action on each element on iterable, providing sequential index with the element.
-  /// [element!] the element on the current iteration
-  /// [index!] the index of the current iteration
+  /// Performs [action] on each element, passing both index and value.
   ///
-  /// example:
-  /// ["ss","tt","xx"].forEachIndexed((it, index) {
-  ///    print("it, $index");
-  ///  });
-  /// result:
-  /// ss, 0
-  /// tt, 1
-  /// xx, 2
+  /// Example:
+  /// ```dart
+  /// ['ss', 'tt', 'xx'].forEachIndexed((index, element) {
+  ///   print('$element, $index');
+  /// });
+  /// ```
   void forEachIndexed(MapIndexedValue<T, void> action) {
     if (isBlank) return;
 
@@ -839,6 +855,7 @@ extension IterableGetters<T> on Iterable<T>? {
   }
 }
 
+/// Convenience helpers for non-null iterables.
 extension IterableExtensions<T> on Iterable<T> {
   /// Returns a random element from [Iterable].
   T random([math.Random? random, int? seed]) {

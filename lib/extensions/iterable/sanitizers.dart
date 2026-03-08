@@ -2,14 +2,18 @@ import 'dart:collection';
 
 import '../../index.dart';
 
+/// Sorting helpers for non-null iterables.
 extension IterableSanitizers2<T> on Iterable<T> {
+  /// Returns a new iterable sorted ascending by [selector].
   Iterable<T> sortByAsc<E extends Comparable<E>>(E Function(T) selector) =>
       toList()..sort((a, b) => selector(a).compareTo(selector(b)));
 
+  /// Returns a new iterable sorted descending by [selector].
   Iterable<T> sortByDesc<E extends Comparable<E>>(E Function(T) selector) =>
       toList()..sort((a, b) => selector(b).compareTo(selector(a)));
 }
 
+/// Collection conversion and slicing helpers for non-null iterables.
 extension CollectionsExtensions<T> on Iterable<T> {
   /// Convert iterable to set
   Set<T> toMutableSet() => Set.from(this);
@@ -21,7 +25,7 @@ extension CollectionsExtensions<T> on Iterable<T> {
     return set;
   }
 
-  // return the half size of a list
+  /// Returns `floor(length / 2)`.
   int get halfLength => (length / 2).floor();
 
   /// Returns a list containing first [n] elements.
@@ -41,13 +45,13 @@ extension CollectionsExtensions<T> on Iterable<T> {
     return list.sublist(n);
   }
 
-  // Returns map operation as a List
+  /// Maps each element with [f] and materializes the result as a [List].
   List<E> mapList<E>(E Function(T e) f) => map(f).toList();
 
-  // Takes the first half of a list
+  /// Returns the first half of this iterable as a list.
   List<T> firstHalf() => take(halfLength).toList();
 
-  // Takes the second half of a list
+  /// Returns the second half of this iterable as a list.
   List<T> secondHalf() => drop(halfLength).toList();
 
   /// returns a list with two swapped items
@@ -65,23 +69,23 @@ extension CollectionsExtensions<T> on Iterable<T> {
   /// and not contained by the specified collection.
   /// The returned set preserves the element iteration order of the original collection.
   ///
-  /// example:
-  ///
-  /// [1,2,3,4,5,6].subtract([4,5,6])
-  ///
-  /// result:
-  /// 1,2,3
+  /// Example:
+  /// ```dart
+  /// [1, 2, 3, 4, 5, 6].subtract([4, 5, 6]); // {1, 2, 3}
+  /// ```
   Set<T> subtract(Iterable<T> other) {
     final set = toSet()..removeAll(other);
     return set;
   }
 
-  /// will convert iterable into a Stack data structure
-  /// example:
-  ///  [1,2,3,4].toStack()
-  ///  stack.pop()
-  ///  stack.push(5)
+  /// Converts this iterable into an [UnboundedStack] preserving iteration order.
   ///
+  /// Example:
+  /// ```dart
+  /// final stack = [1, 2, 3, 4].toStack();
+  /// stack.pop(); // 4
+  /// stack.push(5);
+  /// ```
   UnboundedStack<T> toStack() {
     final stack = UnboundedStack<T>()..pushAll(this);
     return stack;
@@ -95,11 +99,8 @@ extension CollectionsExtensions<T> on Iterable<T> {
   /// Returns a list containing first [n] elements.
   ///
   /// ```dart
-  /// val chars = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-  /// print(chars.take(3)) // [1, 2, 3]
-  /// print(chars.takeWhile((it) => it < 5) // [1, 2, 3, 4]
-  /// print(chars.takeLast(2)) // [8, 9]
-  /// print(chars.takeLastWhile((it) => it > 5 }) // [6, 7, 8, 9]
+  /// final numbers = [1, 2, 3, 4, 5];
+  /// print(numbers.takeFirst(3)); // [1, 2, 3]
   /// ```
   List<T> takeFirst(int n) {
     final list = this is List<T> ? this as List<T> : toList();
@@ -109,25 +110,19 @@ extension CollectionsExtensions<T> on Iterable<T> {
   /// Returns a list containing last [n] elements.
   ///
   /// ```dart
-  /// val chars = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-  /// print(chars.take(3)) // [1, 2, 3]
-  /// print(chars.takeWhile((it) => it < 5) // [1, 2, 3, 4]
-  /// print(chars.takeLast(2)) // [8, 9]
-  /// print(chars.takeLastWhile((it) => it > 5 }) // [6, 7, 8, 9]
+  /// final numbers = [1, 2, 3, 4, 5];
+  /// print(numbers.takeLast(2)); // [4, 5]
   /// ```
   List<T> takeLast(int n) {
     final list = this is List<T> ? this as List<T> : toList();
     return list.reversed.take(n).reversed.toList();
   }
 
-  //// Returns the first elements satisfying the given [predicate].
+  /// Returns the leading elements satisfying [predicate].
   ///
   /// ```dart
-  /// val chars = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-  /// print(chars.take(3)) // [1, 2, 3]
-  /// print(chars.takeWhile((it) => it < 5) // [1, 2, 3, 4]
-  /// print(chars.takeLast(2)) // [8, 9]
-  /// print(chars.takeLastWhile((it) => it > 5 }) // [6, 7, 8, 9]
+  /// final numbers = [2, 4, 6, 1, 8];
+  /// print(numbers.firstWhile((e) => e.isEven)); // [2, 4, 6]
   /// ```
   Iterable<T> firstWhile(bool Function(T element) predicate) sync* {
     for (final element in this) {
@@ -139,11 +134,8 @@ extension CollectionsExtensions<T> on Iterable<T> {
   /// Returns the last elements satisfying the given [predicate].
   ///
   /// ```dart
-  /// val chars = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-  /// print(chars.take(3)) // [1, 2, 3]
-  /// print(chars.takeWhile((it) => it < 5) // [1, 2, 3, 4]
-  /// print(chars.takeLast(2)) // [8, 9]
-  /// print(chars.takeLastWhile((it) => it > 5 }) // [6, 7, 8, 9]
+  /// final numbers = [1, 3, 5, 6, 8];
+  /// print(numbers.lastWhile((e) => e.isEven)); // [6, 8]
   /// ```
   Iterable<T> lastWhile(bool Function(T element) predicate) {
     final list = ListQueue<T>();
@@ -155,6 +147,7 @@ extension CollectionsExtensions<T> on Iterable<T> {
   }
 }
 
+/// Predicate-based filtering helpers with optional index awareness.
 extension IterableWhereIndexed<T> on Iterable<T> {
   /// Returns all elements that satisfy the given [predicate].
   Iterable<T> whereIndexed(
@@ -238,6 +231,7 @@ extension IterableWhereIndexed<T> on Iterable<T> {
   }
 }
 
+/// Null-filtering helpers for nullable iterables.
 extension IterableFilterNotNull<T> on Iterable<T?> {
   /// Returns a new lazy [Iterable] with all elements which are not null.
   Iterable<T> filterNotNull() => whereNotNull();
@@ -246,6 +240,7 @@ extension IterableFilterNotNull<T> on Iterable<T?> {
   Iterable<T> whereNotNull() => where((element) => element != null).cast<T>();
 }
 
+/// Mapping and projection helpers for non-null iterables.
 extension IterableMapNotNull<T> on Iterable<T> {
   /// Returns a new lazy [Iterable] containing only the non-null results of
   /// applying the given [transform] function to each element in the original
@@ -293,8 +288,8 @@ extension IterableMapNotNull<T> on Iterable<T> {
   /// Returns a new lazy [Iterable] which iterates over this collection [n]
   /// times.
   ///
-  /// When it reaches the end, it jumps back to the beginning. Returns `null`
-  /// [n] times if the collection is empty.
+  /// When it reaches the end, it jumps back to the beginning. If the
+  /// collection is empty, this yields no elements.
   ///
   /// If [n] is omitted, the Iterable cycles forever.
   Iterable<T> cycle([int? n]) sync* {
@@ -349,6 +344,7 @@ extension IterableMapNotNull<T> on Iterable<T> {
   }
 }
 
+/// Extra list-only utilities.
 extension ListExtension2<T> on List<T> {
   /// Index of the first element or -1 if the collection is empty.
   ///
@@ -368,6 +364,7 @@ extension ListExtension2<T> on List<T> {
   /// ```
   int get lastIndex => length - 1;
 
+  /// Iterates all valid indices of the current list in ascending order.
   Iterable<int> get indices sync* {
     var index = 0;
     while (index <= lastIndex) {
@@ -375,7 +372,7 @@ extension ListExtension2<T> on List<T> {
     }
   }
 
-  /// Returns a new list containing all elements except last elements that
+  /// Returns a new list containing all elements except leading elements that
   /// satisfy the given [predicate].
   List<T> dropWhile(Predicate<T> predicate) {
     int? startIndex;
@@ -445,7 +442,9 @@ extension ListExtension2<T> on List<T> {
   }
 }
 
+/// Utility methods for nullable iterables returning materialized collections.
 extension IterableSanitizers<T> on Iterable<T>? {
+  /// Returns the iterable length, or `0` when the iterable is `null`.
   int get length => this?.length ?? 0;
 
   /// Adds the [value] to the list if not in the iterable already.
@@ -524,19 +523,20 @@ extension IterableSanitizers<T> on Iterable<T>? {
   /// Returns a new list with [hugger] at the beginning and at the end.
   Iterable<T> wrapBy(T hugger) => isBlank ? <T>[] : [hugger, ...this!, hugger];
 
-  /// Finds the first element in a list that satisfies a given condition,
-  /// optionally restricted to a given range of indices.
+  /// Finds the first element in this iterable that satisfies a given condition,
+  /// optionally restricted to a range of indices.
   ///
-  /// This method walks the list starting at index `startIndex` and ending at `endIndex` (inclusive),
+  /// This method walks the iterable starting at index `start` and ending at
+  /// index `end` (inclusive),
   /// applying the `test` function to each element. When the `test` function
   /// returns `true` for an element, that element is returned.
   /// If no element satisfies the condition, `null` is returned.
   ///
   /// Parameters:
-  /// - [test]: Function used to test whether a list element satisfies the condition.
+  /// - [test]: Function used to test whether an element satisfies the condition.
   /// - [start]: Starting index to search, defaults to 0.
-  /// - [end]: Ending index to search, defaults to the length of the list
-  /// minus one, meaning the entire list is traversed by default.
+  /// - [end]: Ending index to search, defaults to the iterable length minus
+  ///   one, meaning the entire iterable is traversed by default.
   ///
   /// Example:
   ///
@@ -545,7 +545,11 @@ extension IterableSanitizers<T> on Iterable<T>? {
   /// int? firstEven = numbers.find((element) => element % 2 == 0);
   /// print(firstEven); // Output: 2
   ///
-  /// int? inRangeEven = numbers.find((element) => element % 2 == 0, startIndex: 1, endIndex: 4);
+  /// int? inRangeEven = numbers.find(
+  ///   (element) => element % 2 == 0,
+  ///   start: 1,
+  ///   end: 4,
+  /// );
   /// print(inRangeEven); // Output: 2, because 2 is the first even number in the range from 1 to 4
   /// ```
   T? find(bool Function(T) test, {int start = 0, int? end}) {

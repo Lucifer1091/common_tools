@@ -2,6 +2,7 @@ import 'dart:async';
 
 import '../extensions/generic/either.dart';
 
+/// Deferred value factory.
 typedef Lazy<T> = T Function();
 
 /// Map [error] and [stackTrace] to a [T] value.
@@ -11,12 +12,12 @@ T _identity<T>(T t) => t;
 
 T Function(Object?) _const<T>(T t) => (_) => t;
 
-/// Return a `Right(r)`.
+/// Returns a `Right(r)`.
 ///
 /// Shortcut for `Either.of(r)`.
 Either<L, R> right<L, R>(R r) => Right<L, R>(r);
 
-/// Return a `Left(l)`.
+/// Returns a `Left(l)`.
 ///
 /// Shortcut for `Either.left(l)`.
 Either<L, R> left<L, R>(L l) => Left<L, R>(l);
@@ -24,13 +25,14 @@ Either<L, R> left<L, R>(L l) => Left<L, R>(l);
 /// Represents a value of one of two possible types.
 /// Instances of [Either] are either an instance of [Left] or [Right].
 ///
-/// [Left] is used for "failure".
-/// [Right] is used for "success".
+/// By convention:
+/// - [Left] is used for failures/errors.
+/// - [Right] is used for successes/values.
 
 sealed class Either<L, R> {
   const Either();
 
-  /// Return a `Right(r)`.
+  /// Returns a `Right(r)`.
   ///
   /// Same as `Either.right(r)`.
   factory Either.of(R r) => Right(r);
@@ -41,14 +43,21 @@ sealed class Either<L, R> {
   /// Create a [Right].
   const factory Either.right(R right) = Right;
 
-  /// Evaluates the specified [block] and wrap the result in a [Right].
+  /// Evaluates [block] and wraps the result in a [Right].
   ///
-  /// If an error is thrown, calling [error] with that error and wrap the result in a [Left].
+  /// If [block] throws, [error] is called and its value is wrapped in a [Left].
   ///
-  /// ### Example
+  /// Example:
   /// ```dart
-  /// Either<Object, int>.catchError((e, s) => e, () => throw Exception()); // Result: Left(Exception())
-  /// Either<Object, String>.catchError((e, s) => e, () => 'hoc081098');    // Result: Right('hoc081098')
+  /// final a = Either<Object, int>.catchError(
+  ///   (e, s) => e,
+  ///   () => throw Exception('boom'),
+  /// ); // Left(Exception('boom'))
+  ///
+  /// final b = Either<Object, String>.catchError(
+  ///   (e, s) => e,
+  ///   () => 'ok',
+  /// ); // Right('ok')
   /// ```
   factory Either.catchError(ErrorMapper<L> error, R Function() block) {
     try {
@@ -58,8 +67,15 @@ sealed class Either<L, R> {
     }
   }
 
-  /// If calling `predicate` with `r` returns `true`, then return `Right(r)`.
-  /// Otherwise return [Left] containing the result of `onFalse`.
+  /// If calling [predicate] with [r] returns `true`, returns `Right(r)`.
+  /// Otherwise returns [Left] containing the result of [onFalse].
+  ///
+  /// Example:
+  /// ```dart
+  /// final a = Either<String, int>.fromPredicate(10, (v) => v > 0, (_) => 'bad');
+  /// final b = Either<String, int>.fromPredicate(-1, (v) => v > 0, (_) => 'bad');
+  /// // a = Right(10), b = Left('bad')
+  /// ```
   factory Either.fromPredicate(
     R r,
     bool Function(R r) predicate,
@@ -68,21 +84,25 @@ sealed class Either<L, R> {
 
   /// Returns a [Right] if [value] is not `null`,
   /// otherwise returns a [Left] created by [onNull].
-  /// ### Example
+  ///
+  /// Example:
   /// ```dart
-  /// Either.fromNullable<String>(null);        // Result: Left(null)
-  /// Either.fromNullable<String>('hoc081098'); // Result: Right('hoc081098')
-  /// Either.fromNullable<String, int>(
+  /// final a = Either.fromNullable<String, int>(
   ///   null,
   ///   onNull: () => 'value is null',
-  /// ); // Result: Left('value is null')
+  /// ); // Left('value is null')
+  ///
+  /// final b = Either.fromNullable<String, int>(
+  ///   42,
+  ///   onNull: () => 'value is null',
+  /// ); // Right(42)
   /// ```
   static Either<L, R> fromNullable<L, R extends Object>(
     R? value, {
     required L Function() onNull,
   }) => value == null ? Either.left(onNull()) : Either.right(value);
 
-  /// Constructs a new [Either] from a function that might throw
+  /// Constructs a new [Either] from a function that might throw [Err].
   static Either<L, R> tryCatch<L, R, Err extends Object>(
     L Function(Err err) onError,
     R Function() fnR,
@@ -94,12 +114,13 @@ sealed class Either<L, R> {
     }
   }
 
-  /// Constructs a new [Either] from a function that might throw
+  /// Constructs a new [Either] from a function that might throw [Err].
   ///
-  /// simplified version of [Either.tryCatch]
+  /// Simplified version of [Either.tryCatch] where [Err] itself becomes [Left].
   ///
   /// ```dart
-  /// final fileOrError = Either.tryExcept<FileError>(() => /* maybe throw */);
+  /// final parsed = Either.tryExcept<FormatException, int>(() => int.parse('x'));
+  /// // Left(FormatException(...))
   /// ```
   static Either<Err, R> tryExcept<Err extends Object, R>(R Function() fnR) {
     try {
@@ -109,81 +130,87 @@ sealed class Either<L, R> {
     }
   }
 
-  /// If the condition is true then return [rightValue] in [Right] else [leftValue] in [Left]
+  /// Returns [Right] with [rightValue] when [test] is `true`,
+  /// otherwise [Left] with [leftValue].
   static Either<L, R> condition<L, R>(bool test, L leftValue, R rightValue) =>
       test ? Right(rightValue) : Left(leftValue);
 
-  /// If the condition is true then return [rightValue] in [Right] else [leftValue] in [Left]
+  /// Lazy version of [condition].
+  ///
+  /// Only the selected closure is evaluated.
   static Either<L, R> conditionLazy<L, R>(
     bool test,
     Lazy<L> leftValue,
     Lazy<R> rightValue,
   ) => test ? Right(rightValue()) : Left(leftValue());
 
-  /// Represents the left side of [Either] class which by convention is a "Failure".
+  /// Returns `true` when this value is [Left].
   bool get isLeft => this is Left<L, R>;
 
-  /// Represents the right side of [Either] class which by convention is a "Success"
+  /// Returns `true` when this value is [Right].
   bool get isRight => this is Right<L, R>;
 
-  /// Get [Left] value, may throw an exception when the value is [Right]
+  /// Returns the [Left] value.
+  ///
+  /// Throws [Exception] when this is a [Right].
   L get left => fold<L>(
     (value) => value,
     (right) =>
         throw Exception('Illegal use. You should check isLeft before calling'),
   );
 
-  /// Get [Right] value, may throw an exception when the value is [Left]
+  /// Returns the [Right] value.
+  ///
+  /// Throws [Exception] when this is a [Left].
   R get right => fold<R>(
     (left) =>
         throw Exception('Illegal use. You should check isRight before calling'),
     (value) => value,
   );
 
-  /// Transform values of [Left] and [Right]
+  /// Maps both sides into a new [Either].
   Either<TL, TR> either<TL, TR>(
     TL Function(L left) fnL,
     TR Function(R right) fnR,
   );
 
-  /// Transform value of [Right] when transformation may be finished with an error
+  /// Flat-maps [Right] into another [Either].
   Either<L, TR> then<TR>(Either<L, TR> Function(R right) fnR);
 
-  /// Transform value of [Right] when transformation may be finished with an error
+  /// Async flat-map of [Right] into another [Either].
   Future<Either<L, TR>> thenAsync<TR>(
     FutureOr<Either<L, TR>> Function(R right) fnR,
   );
 
-  /// Transform value of [Left] when transformation may be finished with an [Right]
+  /// Flat-maps [Left] into another [Either].
   Either<TL, R> thenLeft<TL>(Either<TL, R> Function(L left) fnL);
 
-  /// Transform value of [Left] when transformation may be finished with an [Right]
+  /// Async flat-map of [Left] into another [Either].
   Future<Either<TL, R>> thenLeftAsync<TL>(
     FutureOr<Either<TL, R>> Function(L left) fnL,
   );
 
-  /// Transform value of [Right]
+  /// Maps [Right] value.
   Either<L, TR> map<TR>(TR Function(R right) fnR);
 
-  /// Transform value of [Left]
+  /// Maps [Left] value.
   Either<TL, R> mapLeft<TL>(TL Function(L left) fnL);
 
-  /// Transform value of [Right]
+  /// Async map of [Right] value.
   Future<Either<L, TR>> mapAsync<TR>(FutureOr<TR> Function(R right) fnR);
 
-  /// Transform value of [Left]
+  /// Async map of [Left] value.
   Future<Either<TL, R>> mapLeftAsync<TL>(FutureOr<TL> Function(L left) fnL);
 
-  /// Fold [Left] and [Right] into the value of one type
+  /// Folds [Left] and [Right] into a value of one type.
   T fold<T>(T Function(L left) fnL, T Function(R right) fnR);
 
-  /// Swap [Left] and [Right]
+  /// Swaps [Left] and [Right].
   Either<R, L> swap() => fold(Right.new, Left.new);
 
-  /// Returns `false` if [Left] or returns the result of the application of
-  /// the given [predicate] to the [Right] value.
+  /// Returns `false` for [Left], otherwise evaluates [predicate] for [Right].
   ///
-  /// ### Example
+  /// Example:
   /// ```dart
   /// Right<int, int>(12).exists((v) => v > 10); // Result: true
   /// Right<int, int>(7).exists((v) => v > 10);  // Result: false
@@ -194,10 +221,9 @@ sealed class Either<L, R> {
   bool exists(bool Function(R value) predicate) =>
       fold(_const(false), predicate);
 
-  /// Returns `true` if [Left] or returns the result of the application of
-  /// the given predicate to the [Right] value.
+  /// Returns `true` for [Left], otherwise evaluates [predicate] for [Right].
   ///
-  /// ### Example
+  /// Example:
   /// ```dart
   /// Right<int, int>(12).all((v) => v > 10); // Result: true
   /// Right<int, int>(7).all((v) => v > 10);  // Result: false
@@ -209,7 +235,7 @@ sealed class Either<L, R> {
 
   /// Returns the value from this [Right] or the given argument if this is a [Left].
   ///
-  /// ### Example
+  /// Example:
   /// ```dart
   /// Right<int, int>(12).getOrElse(() => 17); // Result: 12
   /// Left<int, int>(12).getOrElse(() => 17);  // Result: 17
@@ -217,7 +243,7 @@ sealed class Either<L, R> {
   R getOrElse(R Function() defaultValue) =>
       fold((_) => defaultValue(), _identity);
 
-  /// Return the current [Either] if it is a [Right], otherwise return the result of `orElse`.
+  /// Returns this value if it is [Right], otherwise the result of [orElse].
   ///
   /// Used to provide an alternative [Either] in case the current one is [Left].
   Either<L, R> alt(covariant Either<L, R> Function() orElse);
@@ -234,7 +260,7 @@ sealed class Either<L, R> {
 
   /// Returns the [Right]'s value if it exists, otherwise `null`.
   ///
-  /// ### Example
+  /// Example:
   /// ```dart
   /// Right<int, int>(12).orNull(); // Result: 12
   /// Left<int, int>(12).orNull();  // Result: null
@@ -244,7 +270,7 @@ sealed class Either<L, R> {
   /// Returns the value from this [Right]
   /// or allows clients to transform the value of [Left] to the final result.
   ///
-  /// ### Example
+  /// Example:
   /// ```dart
   /// Right<int, int>(12).getOrHandle((v) => 17);   // Result: 12
   /// Left<int, int>(12).getOrHandle((v) => v + 5); // Result: 17
@@ -262,7 +288,7 @@ sealed class Either<L, R> {
   /// [ifRight] is the function to apply if this is a [Right].
   /// Returns the results of applying the function.
   ///
-  /// ### Example
+  /// Example:
   /// ```dart
   /// final Either<String, int> result = Right(1);
   ///
@@ -284,12 +310,12 @@ sealed class Either<L, R> {
     }
   }
 
-  /// Handle any error, potentially recovering from it, by mapping it to an [Either] value.
+  /// Handles any error by mapping it to another [Either] value.
   ///
   /// Applies the given function [f] if this is a [Left], otherwise returns this if this is a [Right].
   /// This is like `thenLeft` for the exception.
   ///
-  /// ### Example
+  /// Example:
   /// ```dart
   /// Right<int, int>(12).handleErrorWith((v) => (v + 1).right<String>());   // Right(12)
   /// Right<int, int>(12).handleErrorWith((v) => (v + 1).toString().left()); // Right(12)
@@ -299,10 +325,10 @@ sealed class Either<L, R> {
   Either<C, R> handleErrorWith<C>(Either<C, R> Function(L value) f) =>
       fold(f, (v) => v.right<C>());
 
-  /// Handle any error, potentially recovering from it, by mapping it to an [Either] value.
+  /// Handles any error by mapping [Left] into a recovered [Right] value.
   ///
-  /// Applies the given function [f] if this is a [Left] and return the result wrapped in a [Right],
-  /// otherwise returns this if this is a [Right].
+  /// Applies [f] if this is [Left] and wraps the result in [Right],
+  /// otherwise returns this value unchanged when it is [Right].
   Either<L, R> handleError(R Function(L value) f) =>
       fold((v) => f(v).right(), (v) => v.right());
 
@@ -337,7 +363,7 @@ sealed class Either<L, R> {
   int get hashCode => fold((left) => left.hashCode, (right) => right.hashCode);
 }
 
-/// Used for "failure"
+/// The failure branch of [Either].
 class Left<L, R> extends Either<L, R> {
   const Left(this.value);
   final L value;
@@ -409,7 +435,7 @@ class Left<L, R> extends Either<L, R> {
   Either<L1, R> orElse<L1>(Either<L1, R> Function(L l) onLeft) => onLeft(value);
 }
 
-/// Used for "success"
+/// The success branch of [Either].
 class Right<L, R> extends Either<L, R> {
   const Right(this.value);
   final R value;

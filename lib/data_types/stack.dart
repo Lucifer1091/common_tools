@@ -2,9 +2,23 @@ import 'dart:collection';
 
 /// A lightweight LIFO stack backed by a growable [List].
 ///
-/// This is the default stack type in the package. It provides both nullable
-/// (`pop`/`peek`) accessors.
+/// This is the default stack type in the package and does not enforce a
+/// capacity limit.
+///
+/// Both [pop] and [peek] are nullable and return `null` when the stack is
+/// empty.
+///
+/// Example:
+/// ```dart
+/// final stack = UnboundedStack<int>([1, 2]);
+/// stack.push(3);
+///
+/// print(stack.peek); // 3
+/// print(stack.pop()); // 3
+/// print(stack.toList()); // [1, 2]
+/// ```
 class UnboundedStack<T> {
+  /// Creates a stack optionally seeded with [values], from bottom to top.
   UnboundedStack([Iterable<T> values = const []]) : _items = List<T>.of(values);
 
   final List<T> _items;
@@ -30,7 +44,9 @@ class UnboundedStack<T> {
   /// Returns the top element without removing it, or `null` when empty.
   T? get peek => _items.isEmpty ? null : _items.last;
 
-  /// Returns an immutable snapshot from bottom to top.
+  /// Returns a snapshot copy from bottom to top.
+  ///
+  /// The returned list is growable when [growable] is `true`.
   List<T> toList({bool growable = true}) =>
       List<T>.of(_items, growable: growable);
 
@@ -61,9 +77,26 @@ class UnboundedStack<T> {
 
 /// A LIFO stack with a hard maximum capacity.
 ///
-/// Any push operation that would exceed [maxSize] throws
-/// [StackOperationException].
+/// [push] and [pushAll] throw [StackOperationException] when an operation
+/// would exceed [maxSize]. [tryPush] returns `false` instead of throwing.
+///
+/// Example:
+/// ```dart
+/// final stack = BoundedStack<String>(maxSize: 2);
+/// stack.push('a');
+/// stack.push('b');
+///
+/// final ok = stack.tryPush('c'); // false, already full
+/// print(ok);
+/// print(stack.length); // 2
+/// ```
 class BoundedStack<T> {
+  /// Creates a bounded stack with required [maxSize].
+  ///
+  /// The [maxSize] must be greater than `1`.
+  ///
+  /// Throws [ArgumentError] if [maxSize] is too small.
+  /// Throws [StackOperationException] if initial [values] exceed [maxSize].
   BoundedStack({required this.maxSize, Iterable<T> values = const []})
     : _stack = UnboundedStack<T>(values) {
     if (maxSize < 2) {
@@ -81,6 +114,7 @@ class BoundedStack<T> {
     }
   }
 
+  /// Maximum number of elements this stack can hold.
   final int maxSize;
 
   final UnboundedStack<T> _stack;
@@ -165,7 +199,9 @@ class BoundedStack<T> {
   /// Read-only iteration from top to bottom.
   Iterable<T> get reversed => _stack.reversed;
 
-  /// Returns an immutable snapshot from bottom to top.
+  /// Returns a snapshot copy from bottom to top.
+  ///
+  /// The returned list is growable when [growable] is `true`.
   List<T> toList({bool growable = true}) => _stack.toList(growable: growable);
 
   @override
@@ -174,8 +210,10 @@ class BoundedStack<T> {
 
 /// A domain exception used by stack operations.
 class StackOperationException implements Exception {
+  /// Creates a stack operation exception with a human-readable [message].
   StackOperationException(this.message);
 
+  /// The error message describing the failed stack operation.
   final String message;
 
   @override

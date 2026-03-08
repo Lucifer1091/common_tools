@@ -1,27 +1,30 @@
 import 'operators.dart';
 import 'sanitizers.dart';
-import 'validators.dart';
 
+/// Sequence and comparison helpers for [DateTime].
 extension DateTimeIterables on DateTime {
   /// Generates an iterable sequence of dates between `this` date and `end` date,
   /// optionally including or excluding both start and end dates based on [inclusive],
   /// with a specified [by] step.
   ///
-  /// If [forceIncludeLast] is set to true and the step (`by`) exceeds the end date,
-  /// the last possible date will be included which does not exceeds [end].
+  /// If [forceIncludeLast] is `true` and stepping overshoots, [end] is yielded
+  /// as the final value.
   ///
   /// Dates are yielded in ascending order, adjusting for changes in timezone
   /// offset during iteration.
   ///
-  /// Example usage:
-  ///
+  /// Example:
   /// ```dart
-  /// DateTime startDate = DateTime(2024, 6, 1);
-  /// DateTime endDate = startDate.endOfMonth;
+  /// final startDate = DateTime(2024, 6, 1);
+  /// final endDate = startDate.endOfMonth;
   ///
-  /// Iterable<DateTime> dates = startDate.to(endDate, inclusive: false, by: const Duration(days: 5));
+  /// final dates = startDate.to(
+  ///   endDate,
+  ///   inclusive: false,
+  ///   by: const Duration(days: 5),
+  /// );
   ///
-  /// for (var date in dates) {
+  /// for (final date in dates) {
   ///   print(date.toIso8601String());
   /// }
   /// ```
@@ -106,9 +109,9 @@ extension DateTimeIterables on DateTime {
   ///
   /// Example:
   /// ```dart
-  /// DateTime today = DateTime.now();
-  /// List<DateTime> dates = [DateTime(2024, 1, 1), DateTime(2024, 6, 15)];
-  /// int? closestIndex = today.closestIndexTo(dates);
+  /// final today = DateTime.now();
+  /// final dates = [DateTime(2024, 1, 1), DateTime(2024, 6, 15)];
+  /// final closestIndex = today.closestIndexTo(dates);
   /// ```
   int? closestIndexTo(Iterable<DateTime> datesArray) {
     if (datesArray.isEmpty) return null;
@@ -132,9 +135,9 @@ extension DateTimeIterables on DateTime {
   ///
   /// Example:
   /// ```dart
-  /// DateTime today = DateTime.now();
-  /// List<DateTime> dates = [DateTime(2024, 1, 1), DateTime(2024, 6, 15)];
-  /// DateTime? closestDate = today.closestTo(dates);
+  /// final today = DateTime.now();
+  /// final dates = [DateTime(2024, 1, 1), DateTime(2024, 6, 15)];
+  /// final closestDate = today.closestTo(dates);
   /// ```
   DateTime? closestTo(Iterable<DateTime> datesArray) {
     if (datesArray.isEmpty) return null;
@@ -144,25 +147,34 @@ extension DateTimeIterables on DateTime {
   }
 }
 
+/// Static helpers for constructing and comparing [DateTime] values.
 extension Date on DateTime {
-  /// Current date (Same as [DateTime.now])
+  /// Current date/time (same as [DateTime.now]).
   static DateTime now() => DateTime.now();
 
-  /// Current date (Same as [DateTime.now])
-  static DateTime today() => now().startOfDay;
-
-  /// Tomorrow at same hour / minute / second than now
+  /// Tomorrow at the same hour/minute/second as now.
   static DateTime tomorrow() => now().nextDay;
 
-  /// Yesterday at same hour / minute / second than now
+  /// Yesterday at the same hour/minute/second as now.
   static DateTime yesterday() => now().previousDay;
 
+  /// Returns the current time in UTC when [isUtc] is `true`,
+  /// otherwise returns local time.
   static DateTime nowWithTimezone(bool isUtc) {
     if (isUtc) return now().toUtc();
 
     return now();
   }
 
+  /// Creates a [DateTime] with explicit timezone mode.
+  ///
+  /// Uses [DateTime.utc] when [isUtc] is `true`, otherwise [DateTime.new].
+  ///
+  /// Example:
+  /// ```dart
+  /// final local = Date.withTimezone(false, 2026, 3, 8, 12);
+  /// final utc = Date.withTimezone(true, 2026, 3, 8, 12);
+  /// ```
   static DateTime withTimezone(
     bool isUtc,
     int year, [
@@ -198,6 +210,12 @@ extension Date on DateTime {
     );
   }
 
+  /// Creates a date-only [DateTime] with explicit timezone mode.
+  ///
+  /// Example:
+  /// ```dart
+  /// final d = Date.dateWithTimezone(2026, 3, 8, true);
+  /// ```
   static DateTime dateWithTimezone(
     int year, [
     int month = 1,
@@ -209,16 +227,20 @@ extension Date on DateTime {
     return DateTime(year, month, day);
   }
 
-  /// Returns true if left [isBefore] than right
+  /// Returns the earlier of [left] and [right].
   static DateTime min(DateTime left, DateTime right) =>
       (left < right) ? left : right;
 
-  /// Returns true if left [isAfter] than right
+  /// Returns the later of [left] and [right].
   static DateTime max(DateTime left, DateTime right) =>
       (left < right) ? right : left;
 
-  /// Compare the two dates and return 1 if the first date [isAfter] the second,
-  /// -1 if the first date [isBefore] the second or 0 first date [equals] the second.
+  /// Compares [left] with [right] in ascending order.
+  ///
+  /// Returns:
+  /// - `1` if [left] is after [right]
+  /// - `-1` if [left] is before [right]
+  /// - `0` if both represent the same moment
   static int compareAsc(DateTime left, DateTime right) {
     if (left.isAfter(right)) {
       return 1;
@@ -229,8 +251,7 @@ extension Date on DateTime {
     }
   }
 
-  /// Compare the two dates and return -1 if the first date [isAfter] the second,
-  /// 1 if the first date [isBefore] the second or 0 first date [equals] the second.
+  /// Compares [left] with [right] in descending order.
   static int compareDesc(DateTime left, DateTime right) =>
       (-1) * compareAsc(left, right);
 }

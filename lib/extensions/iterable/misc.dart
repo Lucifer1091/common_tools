@@ -1,5 +1,9 @@
 import '../../index.dart';
 
+/// String-building helpers for iterables.
+///
+/// Provides a configurable alternative to [Iterable.join] with support for
+/// element transforms, limits, and truncation markers.
 extension IterableJoinToString<T> on Iterable<T> {
   /// Creates a string from all the elements separated using [separator] and
   /// using the given [prefix] and [postfix] if supplied.

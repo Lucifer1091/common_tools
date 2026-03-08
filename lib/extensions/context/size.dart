@@ -2,15 +2,34 @@ import 'package:flutter/material.dart';
 
 import '../../widgets/layout/adaptive_ui.dart';
 
+/// Convenience accessors for common size and breakpoint operations on
+/// [BuildContext].
+///
+/// This extension wraps frequently used `MediaQuery` and adaptive-layout calls
+/// into concise getters/methods.
+///
+/// Example:
+/// ```dart
+/// final double cardWidth = context.value<double>(
+///   compact: context.pw(92),
+///   medium: 500,
+///   expanded: 640,
+/// );
+/// ```
 extension ContextSizeExtension on BuildContext {
-  NavigatorState get navigator => Navigator.of(this);
+  /// Returns the nearest [NavigatorState] if found else null.
+  NavigatorState? get navigator => Navigator.maybeOf(this);
 
+  /// Returns the current logical screen size from [MediaQuery].
   Size get size => MediaQuery.sizeOf(this);
 
+  /// Returns `size.width`.
   double get width => size.width;
 
+  /// Returns `size.height`.
   double get height => size.height;
 
+  /// Returns the nearest [MediaQueryData].
   MediaQueryData get mediaQuery => MediaQuery.of(this);
 
   /// Returns padding for the nearest MediaQuery ancestor or
@@ -27,31 +46,68 @@ extension ContextSizeExtension on BuildContext {
   /// the [MediaQueryData.viewInsets] property of the ancestor [MediaQuery] changes.
   EdgeInsets get viewInsets => MediaQuery.viewInsetsOf(this);
 
+  /// Returns [MediaQueryData.viewPadding] for this context.
   EdgeInsets get viewPadding => MediaQuery.viewPaddingOf(this);
 
-  /// Returns true if keyboard is visible
+  /// Returns `true` when the soft keyboard is currently visible.
   bool get isKeyboardShowing => viewInsets.bottom > 0;
 
+  /// Returns status-bar top padding plus [kToolbarHeight].
+  ///
+  /// Useful as an estimated full app-bar occupied vertical space.
   double get appBarHeight => mediaQuery.padding.top + kToolbarHeight;
 
-  /// return screen devicePixelRatio
+  /// Returns [MediaQueryData.devicePixelRatio].
   double get pixelRatio => mediaQuery.devicePixelRatio;
 
+  /// Returns the current device orientation.
   Orientation get orientation => MediaQuery.orientationOf(this);
 
+  /// Returns `true` when [orientation] is [Orientation.landscape].
   bool get isLandscape => orientation == Orientation.landscape;
 
+  /// Returns `true` when [orientation] is [Orientation.portrait].
   bool get isPortrait => orientation == Orientation.portrait;
 
+  /// Returns the active adaptive [Breakpoint].
+  ///
+  /// If an inherited breakpoint is available it is used, otherwise a breakpoint
+  /// is computed from the current [width].
   Breakpoint get _currentBreakpoint =>
       maybeReadBreakpoint ?? Breakpoint.forWidth(width);
 
+  /// Returns `true` when the active breakpoint is compact.
   bool get isCompact => _currentBreakpoint.isCompact;
+
+  /// Returns `true` when the active breakpoint is medium.
   bool get isMedium => _currentBreakpoint.isMedium;
+
+  /// Returns `true` when the active breakpoint is expanded.
   bool get isExpanded => _currentBreakpoint.isExpanded;
+
+  /// Returns `true` when the active breakpoint is large.
   bool get isLarge => _currentBreakpoint.isLarge;
+
+  /// Returns `true` when the active breakpoint is extra large.
   bool get isExtraLarge => _currentBreakpoint.isExtraLarge;
 
+  /// Resolves a value based on the current adaptive breakpoint.
+  ///
+  /// Fallback order:
+  /// - Extra-large: `extraLarge -> large -> expanded -> medium -> compact`
+  /// - Large: `large -> expanded -> medium -> compact`
+  /// - Expanded: `expanded -> medium -> compact`
+  /// - Medium: `medium -> compact`
+  /// - Compact: `compact`
+  ///
+  /// Example:
+  /// ```dart
+  /// final int columns = context.value<int>(
+  ///   compact: 1,
+  ///   medium: 2,
+  ///   expanded: 3,
+  /// );
+  /// ```
   T value<T>({
     required T compact,
     T? medium,
@@ -73,6 +129,17 @@ extension ContextSizeExtension on BuildContext {
     }
   }
 
+  /// Executes a callback chosen by the current adaptive breakpoint.
+  ///
+  /// Uses the same fallback chain as [value].
+  ///
+  /// Example:
+  /// ```dart
+  /// context.callback(
+  ///   compact: () => debugPrint('mobile'),
+  ///   expanded: () => debugPrint('desktop'),
+  /// );
+  /// ```
   void callback({
     required VoidCallback compact,
     VoidCallback? medium,
@@ -94,9 +161,13 @@ extension ContextSizeExtension on BuildContext {
     }
   }
 
-  /// percent with
+  /// Returns [percent] of the current screen width.
+  ///
+  /// For example, `pw(50)` returns half of [width].
   double pw(double percent) => width * (percent / 100);
 
-  /// percent height
+  /// Returns [percent] of the current screen height.
+  ///
+  /// For example, `ph(50)` returns half of [height].
   double ph(double percent) => height * (percent / 100);
 }

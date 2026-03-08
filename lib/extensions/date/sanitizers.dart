@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'operators.dart';
 
+/// Read-only derived values for [DateTime], such as period boundaries
+/// and next/previous units.
 extension DateTimeGetters on DateTime {
   /// Creates a new [DateTime] instance that is a copy of this instance.
   ///
@@ -23,7 +25,6 @@ extension DateTimeGetters on DateTime {
   /// Returns the starting [DateTime] of the current week.
   ///
   /// Returns a new [DateTime] instance set to the start of the week (Monday, 00:00:00).
-  /// Reference: https://stackoverflow.com/questions/62872349/dart-flutter-get-first-datetime-of-this-week
   DateTime get startOfWeek => subtract(Duration(days: weekday - 1)).startOfDay;
 
   /// Returns the starting [DateTime] of the previous week.
@@ -59,44 +60,48 @@ extension DateTimeGetters on DateTime {
   /// Returns the end of the next week from the current date.
   DateTime get endOfNextWeek => startOfWeek.addDays(7).endOfWeek;
 
-  /// Return the end of a day for this date.
+  /// Returns the end of this day (`23:59:59.999999`).
   DateTime get endOfDay => clone.setHour(23, 59, 59, 999, 999);
 
-  /// Return the end of the hour for this date.
+  /// Returns the end of this hour (`mm:ss.SSSuuu = 59:59.999999`).
   DateTime get endOfHour => clone.setMinute(59, 59, 999, 999);
 
-  /// The year after this [DateTime]
+  /// One calendar year after this [DateTime].
   DateTime get nextYear => clone.setYear(year + 1);
 
-  /// The year previous this [DateTime]
+  /// One calendar year before this [DateTime].
   DateTime get previousYear => clone.setYear(year - 1);
 
-  /// The month after this [DateTime]
+  /// One calendar month after this [DateTime].
   DateTime get nextMonth => clone.setMonth(month + 1);
 
-  /// The month previous this [DateTime]
+  /// One calendar month before this [DateTime].
   DateTime get previousMonth => clone.setMonth(month - 1);
 
-  /// The week after this [DateTime]
+  /// Seven days after this [DateTime].
   DateTime get nextWeek => addDays(7);
 
-  /// The week previous this [DateTime]
+  /// Seven days before this [DateTime].
   DateTime get previousWeek => subtractDays(7);
 
+  /// The next calendar day preserving local/UTC mode.
   DateTime get nextDay => addDays(1);
 
-  /// The day previous this [DateTime]
+  /// The previous calendar day.
   DateTime get previousDay => addDays(-1);
 
-  /// Get UTC [DateTime] from this [DateTime]
+  /// Returns this moment represented as a UTC [DateTime].
   DateTime get utc =>
       DateTime.fromMicrosecondsSinceEpoch(microsecondsSinceEpoch, isUtc: true);
 
-  /// Get Local [DateTime] from this [DateTime]
+  /// Returns this moment represented as a local [DateTime].
   DateTime get local =>
       DateTime.fromMicrosecondsSinceEpoch(microsecondsSinceEpoch);
 }
 
+/// Mutation-like setters that return new [DateTime] instances.
+///
+/// Each method is immutable and preserves the UTC/local mode of the source.
 extension DateTimeSetters on DateTime {
   /// Creates a new [DateTime] instance with the provided fields replaced.
   ///
@@ -133,6 +138,9 @@ extension DateTimeSetters on DateTime {
             microsecond ?? this.microsecond,
           );
 
+  /// Returns a copy using [time] for hour/minute while preserving the date.
+  ///
+  /// If [time] is omitted, the original time is preserved.
   DateTime copyTime([TimeOfDay? time]) {
     return (isUtc ? DateTime.utc : DateTime.new)(
       year,
@@ -168,15 +176,9 @@ extension DateTimeSetters on DateTime {
     );
   }
 
-  /// Change [year] of this date
+  /// Returns a copy with [year] replaced.
   ///
-  /// set [month] if you want to change it as well, to skip an change other optional field set it as null
-  /// set [day] if you want to change it as well, to skip an change other optional field set it as null
-  /// set [hour] if you want to change it as well, to skip an change other optional field set it as null
-  /// set [minute] if you want to change it as well, to skip an change other optional field set it as null
-  /// set [second] if you want to change it as well, to skip an change other optional field set it as null
-  /// set [millisecond] if you want to change it as well, to skip an change other optional field set it as null
-  /// set [microsecond] if you want to change it as well
+  /// Optional parameters override corresponding date/time parts.
   DateTime setYear(
     int year, [
     int? month,
@@ -197,14 +199,9 @@ extension DateTimeSetters on DateTime {
     microsecond ?? this.microsecond,
   );
 
-  /// Change [month] of this date
+  /// Returns a copy with [month] replaced.
   ///
-  /// set [day] if you want to change it as well, to skip an change other optional field set it as null
-  /// set [hour] if you want to change it as well, to skip an change other optional field set it as null
-  /// set [minute] if you want to change it as well, to skip an change other optional field set it as null
-  /// set [second] if you want to change it as well, to skip an change other optional field set it as null
-  /// set [millisecond] if you want to change it as well, to skip an change other optional field set it as null
-  /// set [microsecond] if you want to change it as well
+  /// Optional parameters override corresponding date/time parts.
   DateTime setMonth(
     int month, [
     int? day,
@@ -224,13 +221,9 @@ extension DateTimeSetters on DateTime {
     microsecond ?? this.microsecond,
   );
 
-  /// Change [day] of this date
+  /// Returns a copy with [day] replaced.
   ///
-  /// set [hour] if you want to change it as well, to skip an change other optional field set it as null
-  /// set [minute] if you want to change it as well, to skip an change other optional field set it as null
-  /// set [second] if you want to change it as well, to skip an change other optional field set it as null
-  /// set [millisecond] if you want to change it as well, to skip an change other optional field set it as null
-  /// set [microsecond] if you want to change it as well
+  /// Optional parameters override corresponding time parts.
   DateTime setDay(
     int day, [
     int? hour,
@@ -269,11 +262,9 @@ extension DateTimeSetters on DateTime {
     microsecond ?? this.microsecond,
   );
 
-  /// Change [minute] of this date
+  /// Returns a copy with [minute] replaced.
   ///
-  /// set [second] if you want to change it as well, to skip an change other optional field set it as null
-  /// set [millisecond] if you want to change it as well, to skip an change other optional field set it as null
-  /// set [microsecond] if you want to change it as well
+  /// Optional parameters override second, millisecond, and microsecond.
   DateTime setMinute(
     int minute, [
     int? second,
@@ -290,10 +281,9 @@ extension DateTimeSetters on DateTime {
     microsecond ?? this.microsecond,
   );
 
-  /// Change [second] of this date
+  /// Returns a copy with [second] replaced.
   ///
-  /// set [millisecond] if you want to change it as well, to skip an change other optional field set it as null
-  /// set [microsecond] if you want to change it as well
+  /// Optional parameters override millisecond and microsecond.
   DateTime setSecond(int second, [int? millisecond, int? microsecond]) =>
       (isUtc ? DateTime.utc : DateTime.new)(
         year,
@@ -306,9 +296,9 @@ extension DateTimeSetters on DateTime {
         microsecond ?? this.microsecond,
       );
 
-  /// Change [millisecond] of this date
+  /// Returns a copy with [millisecond] replaced.
   ///
-  /// set [microsecond] if you want to change it as well
+  /// Optionally overrides [microsecond].
   DateTime setMillisecond(int millisecond, [int? microsecond]) =>
       (isUtc ? DateTime.utc : DateTime.new)(
         year,
@@ -321,7 +311,7 @@ extension DateTimeSetters on DateTime {
         microsecond ?? this.microsecond,
       );
 
-  /// Change [microsecond] of this date
+  /// Returns a copy with [microsecond] replaced.
   DateTime setMicrosecond(int microsecond) =>
       (isUtc ? DateTime.utc : DateTime.new)(
         year,
@@ -334,9 +324,13 @@ extension DateTimeSetters on DateTime {
         microsecond,
       );
 
-  /// Returns new [DateTime] instance of nearest `n`th weekday in the future
+  /// Returns the next occurrence of [weekday] after this date.
   ///
-  /// If `n`th day is today, will return `7 days in the future`.
+  /// If this date already falls on [weekday], returns the same weekday in the
+  /// following week.
+  ///
+  /// In debug mode, assertions allow `0..7`; practical weekday values are
+  /// [DateTime.monday]..[DateTime.sunday] (`1..7`).
   DateTime nextWeekday(int weekday) {
     assert(
       weekday > -1 && weekday < 8,
@@ -348,9 +342,13 @@ extension DateTimeSetters on DateTime {
     return this + Duration(days: requiredDelta == 0 ? 7 : requiredDelta);
   }
 
-  /// Returns new [DateTime] instance of last `n`th weekday
+  /// Returns the previous occurrence of [weekday] before this date.
   ///
-  /// If today is the `n`th day, will return `7 days in the past`
+  /// If this date already falls on [weekday], returns the same weekday in the
+  /// previous week.
+  ///
+  /// In debug mode, assertions allow `0..7`; practical weekday values are
+  /// [DateTime.monday]..[DateTime.sunday] (`1..7`).
   DateTime lastWeekday(int weekday) {
     assert(
       weekday > -1 && weekday < 8,
@@ -369,8 +367,9 @@ extension DateTimeSetters on DateTime {
   DateTime truncateTime() =>
       (isUtc ? DateTime.utc : DateTime.new)(year, month, day);
 
-  /// Removes any information that is equal to or smaller than milliseconds.
-  /// Returned instance will have 0 milliseconds and microseconds.
+  /// Removes microseconds while preserving milliseconds.
+  ///
+  /// Returned instance has `microsecond == 0`.
   DateTime truncateMicros() => (isUtc ? DateTime.utc : DateTime.new)(
     year,
     month,
@@ -407,9 +406,9 @@ extension DateTimeSetters on DateTime {
   ///
   /// Example:
   /// ```dart
-  /// DateTime dateTime = DateTime(2024, 6, 23, 14, 38);
-  /// DateTime roundedDateTime = dateTime.nearestQuarter();
-  /// print(roundedDateTime); // Output: 2024-06-23 14:45:00.000
+  /// final dateTime = DateTime(2024, 6, 23, 14, 38);
+  /// final roundedDateTime = dateTime.nearestQuarter();
+  /// print(roundedDateTime); // 2024-06-23 14:45:00.000
   /// ```
   ///
   /// Returns a new [DateTime] instance rounded to the nearest quarter hour.
@@ -425,9 +424,9 @@ extension DateTimeSetters on DateTime {
   ///
   /// Example:
   /// ```dart
-  /// DateTime dateTime = DateTime(2024, 6, 23, 14, 38);
-  /// DateTime roundedDateTime = dateTime.nearestHalfHour();
-  /// print(roundedDateTime); // Output: 2024-06-23 14:30:00.000
+  /// final dateTime = DateTime(2024, 6, 23, 14, 38);
+  /// final roundedDateTime = dateTime.nearestHalfHour();
+  /// print(roundedDateTime); // 2024-06-23 14:30:00.000
   /// ```
   ///
   /// Returns a new [DateTime] instance rounded to the nearest half hour.

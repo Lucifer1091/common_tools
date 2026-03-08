@@ -4,7 +4,7 @@ import '../../index.dart';
 
 /// Utility extension methods for the native [Set] class.
 extension SetBasics<T> on Set<T>? {
-  /// Returns `true` if [T] and [other] contain exactly the same elements.
+  /// Returns `true` if this set and [other] contain exactly the same elements.
   ///
   /// Example:
   /// ```dart
@@ -23,7 +23,7 @@ extension SetBasics<T> on Set<T>? {
     return current.length == other.length && current.containsAll(other);
   }
 
-  /// Returns `true` if [T] and [other] have no elements in common.
+  /// Returns `true` if this set and [other] have no elements in common.
   ///
   /// Example:
   /// ```dart
@@ -37,7 +37,7 @@ extension SetBasics<T> on Set<T>? {
     return this!.intersection(other).isEmpty;
   }
 
-  /// Returns `true` if [T] and [other] have at least one element in common.
+  /// Returns `true` if this set and [other] have at least one element in common.
   ///
   /// Example:
   /// ```dart
@@ -51,7 +51,7 @@ extension SetBasics<T> on Set<T>? {
     return this!.intersection(other).isNotEmpty;
   }
 
-  /// Returns `true` if every element of [T] is contained in [other].
+  /// Returns `true` if every element of this set is contained in [other].
   ///
   /// Example:
   /// ```dart
@@ -68,7 +68,7 @@ extension SetBasics<T> on Set<T>? {
     return current.length <= other.length && other.containsAll(current);
   }
 
-  /// Returns `true` if every element of [other] is contained in [T].
+  /// Returns `true` if every element of [other] is contained in this set.
   ///
   /// ```dart
   /// var set = {'a', 'b', 'c'};
@@ -83,8 +83,8 @@ extension SetBasics<T> on Set<T>? {
     return current.length >= other.length && current.containsAll(other);
   }
 
-  /// Returns `true` if every element of [T] is contained in [other] and at
-  /// least one element of [other] is not contained in [T].
+  /// Returns `true` if every element of this set is contained in [other] and
+  /// at least one element of [other] is not contained in this set.
   ///
   /// Example:
   /// ```dart
@@ -100,8 +100,8 @@ extension SetBasics<T> on Set<T>? {
     return current.length < other.length && other.containsAll(current);
   }
 
-  /// Returns `true` if every element of [other] is contained in [T] and at
-  /// least one element of [T] is not contained in [other].
+  /// Returns `true` if every element of [other] is contained in this set and
+  /// at least one element of this set is not contained in [other].
   ///
   /// ```dart
   /// var set = {'a', 'b', 'c'};
@@ -130,7 +130,7 @@ extension SetBasics<T> on Set<T>? {
     return element;
   }
 
-  /// Returns a map grouping all elements of [T] with the same value for
+  /// Returns a map grouping all elements of this set with the same value for
   /// [classifier].
   ///
   /// Example:

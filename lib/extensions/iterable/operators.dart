@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 
 import '../../index.dart';
 
+/// Arithmetic-like operators for iterables.
+///
+/// Adds `*`, `+`, and `-` semantics for repetition, append, and exclusion.
 extension GenericListExtensions<T> on Iterable<T> {
   /// Returns a new list that contains this list repeated [data] times.
   ///
@@ -26,8 +29,8 @@ extension GenericListExtensions<T> on Iterable<T> {
     return result;
   }
 
-  /// Returns a new list containing all elements of the given [elements]
-  /// collection and then all elements of this collection.
+  /// Returns a new list containing all elements of this collection followed by
+  /// all elements from [elements].
   List<T> operator +(Iterable<T> elements) => append(elements).toList();
 
   /// Returns a new list containing all elements of this collection except the
@@ -35,8 +38,11 @@ extension GenericListExtensions<T> on Iterable<T> {
   List<T> operator -(Iterable<T> elements) => except(elements).toList();
 }
 
+/// Utility mutations and partitioning helpers for nullable lists.
 extension ListExt<T> on List<T>? {
-  /// convert List to List of widget
+  /// Maps each element to a [Widget] and returns a materialized widget list.
+  ///
+  /// Returns an empty list when the source list is `null` or empty.
   List<Widget> toWidgetList(Widget Function(T value) map) =>
       isBlank ? [] : [...this!.map(map)];
 
@@ -49,6 +55,16 @@ extension ListExt<T> on List<T>? {
     }
   }
 
+  /// Inserts [separator] between each element.
+  ///
+  /// If [start] is `true`, prepends the separator.
+  /// If [end] is `true`, appends the separator.
+  ///
+  /// Example:
+  /// ```dart
+  /// [1, 2, 3].separatorEvery(0); // [1, 0, 2, 0, 3]
+  /// [1, 2].separatorEvery(0, start: true, end: true); // [0, 1, 0, 2, 0]
+  /// ```
   List<T> separatorEvery(T separator, {bool start = false, bool end = false}) {
     if (isBlank) return <T>[];
 
@@ -69,6 +85,15 @@ extension ListExt<T> on List<T>? {
     return out;
   }
 
+  /// Splits this list into sub-lists whenever [condition] is `true`.
+  ///
+  /// Matching separator elements are not included in output chunks.
+  ///
+  /// Example:
+  /// ```dart
+  /// final parts = [1, 2, 0, 3, 4, 0, 5].divideListByFunction((e) => e == 0);
+  /// // [[1, 2], [3, 4], [5]]
+  /// ```
   List<List<T>> divideListByFunction(Predicate<T> condition) {
     final List<List<T>> nestedLists = [];
     final List<T> currentSublist = [];
@@ -96,6 +121,15 @@ extension ListExt<T> on List<T>? {
     return nestedLists;
   }
 
+  /// Splits this list into chunks of [rangeSize].
+  ///
+  /// Returns `null` when the source list is `null`.
+  /// Throws [ArgumentError] when [rangeSize] is less than or equal to `0`.
+  ///
+  /// Example:
+  /// ```dart
+  /// [1, 2, 3, 4, 5].divideListByRange(2); // [[1, 2], [3, 4], [5]]
+  /// ```
   List<List<T>>? divideListByRange(int rangeSize) {
     if (this == null) return null;
 
@@ -210,6 +244,7 @@ extension IterableSC<T> on Iterable<T> {
   }
 }
 
+/// Mutation-like utilities for non-null lists.
 extension ListUtils<T> on List<T> {
   /// Merge the list with [List] [other].
   /// Returns a new list with all elements of the list and [other].
@@ -335,7 +370,6 @@ extension ListUtils<T> on List<T> {
 
   /// Take if [selector] is true.
   ///  Returns a new list with the elements taken if [selector] is true.
-
   List<T> takeIf(Predicate<T> selector) {
     final list = <T>[];
     for (final item in this) {
@@ -353,35 +387,28 @@ extension ListExtensions1<T> on List<T> {
 
   // Transformation - List
   /// Copy current list with adding [element] at the end of new list.
-  ///
-  /// If current list is `null` - new list with [element] will be created.
   List<T> copyWith(T element) => List.from(this)..add(element);
 
   /// Copy current list with adding all [elements] at the end of new list.
-  ///
-  /// If current list is `null` - copy of list [elements] will be created.
   List<T> copyWithAll(List<T> elements) => List.from(this)..addAll(elements);
 
   /// Copy current list, replacing all [element] occurrences with [replacement].
   ///
-  /// If [element] is not in the list than just copy will be returned.
-  /// If current list is `null` - returns new empty list.
+  /// If [element] is not in the list, an unchanged copy is returned.
   List<T> copyWithReplace(T element, T replacement) => [
     for (final e in this) e == element ? replacement : e,
   ];
 
   /// Copy current list with adding all [elements] at the position of new list.
   ///
-  /// Error thrown due to a value being outside a valid range.
+  /// Throws [RangeError] if [index] is out of range.
   List<T> copyWithInsertAll(int index, List<T> elements) =>
       List.from(this)..insertAll(index, elements);
 
   /// Copy current list, replacing elements of list that
   /// satisfy [test] predicate with [replacement].
   ///
-  /// If no elements that satisfy [test] predicate found
-  /// than just copy will be returned.
-  /// If current list is `null` - returns new empty list.
+  /// If no elements satisfy [test], an unchanged copy is returned.
   List<T> copyWithReplaceWhere(Predicate<T> test, T replacement) => [
     for (final e in this) test(e) ? replacement : e,
   ];
@@ -390,7 +417,7 @@ extension ListExtensions1<T> on List<T> {
   /// with [replacement].
   ///
   /// Returns `true` if at least one element was replaced.
-  /// If no elements that satisfy [test] predicate found than will be no changes.
+  /// If no elements satisfy [test], the list is left unchanged.
   bool replaceWhere(Predicate<T> test, T replacement) {
     var found = false;
     final len = length;
@@ -419,6 +446,7 @@ extension ListExtensions1<T> on List<T> {
   }
 }
 
+/// Duplicate-handling and identity-based update helpers for iterables.
 extension FicIterableExtension<T> on Iterable<T> {
   /// Restricts some item to one of those present in this iterable.
   ///
@@ -526,6 +554,7 @@ extension FicIterableExtension<T> on Iterable<T> {
   }
 }
 
+/// Additional functional helpers for non-null iterables.
 extension IterableMinus<T> on Iterable<T> {
   /// Returns a new lazy [Iterable] containing all elements of this collection
   /// except the given [element].
@@ -535,29 +564,29 @@ extension IterableMinus<T> on Iterable<T> {
     }
   }
 
-  /// Returns a new lazy [Iterable] containing all elements of this collection
-  /// and then all elements of the given [elements] collection.
+  /// Returns a new lazy [Iterable] containing all elements of [elements]
+  /// followed by all elements of this collection.
   Iterable<T> prepend(Iterable<T> elements) sync* {
     yield* elements;
     yield* this;
   }
 
-  /// Returns a new lazy [Iterable] containing all elements of this collection
-  /// and then the given [element].
+  /// Returns a new lazy [Iterable] containing [element] followed by all
+  /// elements of this collection.
   Iterable<T> prependElement(T element) sync* {
     yield element;
     yield* this;
   }
 
-  /// Returns a new lazy [Iterable] containing all elements of the given
-  /// [elements] collection and then all elements of this collection.
+  /// Returns a new lazy [Iterable] containing all elements of this collection
+  /// followed by all elements of [elements].
   Iterable<T> append(Iterable<T> elements) sync* {
     yield* this;
     yield* elements;
   }
 
-  /// Returns a new lazy [Iterable] containing the given [element] and then all
-  /// elements of this collection.
+  /// Returns a new lazy [Iterable] containing all elements of this collection
+  /// followed by [element].
   Iterable<T> appendElement(T element) sync* {
     yield* this;
     yield element;

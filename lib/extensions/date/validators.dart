@@ -5,6 +5,10 @@ import 'operators.dart';
 import 'range.dart';
 import 'sanitizers.dart';
 
+/// Validation and boolean checks for nullable [DateTime] values.
+///
+/// These helpers are null-safe and return `false` for most checks when the
+/// receiver is `null`.
 extension DateValidators on DateTime? {
   /// Checks if the [DateTime] value is null.
   bool get isNull => this == null;
@@ -19,6 +23,8 @@ extension DateValidators on DateTime? {
   }
 
   /// Whether the time of the date is zero/empty.
+  ///
+  /// Returns `true` when hour/minute/second/millisecond/microsecond are all `0`.
   bool get IsTimeZero =>
       this != null &&
       this!.hour == 0 &&
@@ -92,20 +98,16 @@ extension DateValidators on DateTime? {
   /// ```
   bool get isPm => this != null && this!.hour >= 12;
 
-  /// Return `true` if is morning, `false` otherwise.
-  /// Morning is defined as between 5am and 12pm.
+  /// Returns `true` if this time is in the morning (`05:00` to `11:59`).
   bool get isMorning => this != null && this!.hour >= 5 && this!.hour < 12;
 
-  /// Return `true` if is afternoon, `false` otherwise.
-  /// Afternoon is defined as 12:00 to 17:59.
+  /// Returns `true` if this time is in the afternoon (`12:00` to `16:59`).
   bool get isAfternoon => this != null && this!.hour >= 12 && this!.hour < 17;
 
-  /// Return `true` if is evening, `false` otherwise.
-  /// Evening is between 18 and 22.
+  /// Returns `true` if this time is in the evening (`17:00` to `20:59`).
   bool get isEvening => this != null && this!.hour >= 17 && this!.hour < 21;
 
-  /// Return `true` if is night, `false` otherwise.
-  /// Night is between 23 and 5.
+  /// Returns `true` if this time is in the night window (`21:00` to `04:59`).
   bool get isNight => this != null && (this!.hour >= 21 || this!.hour < 6);
 
   /// Checks if this [DateTime] is greater than [other].
@@ -118,6 +120,10 @@ extension DateValidators on DateTime? {
     return this!.isAfter(other);
   }
 
+  /// Checks if this [DateTime] is less than [other].
+  ///
+  /// Returns `true` if this [DateTime] is earlier than [other], `false` otherwise.
+  /// If this [DateTime] is null, returns `false`.
   bool isBefore(DateTime? other) {
     if (this == null || other == null) return false;
 
@@ -236,40 +242,40 @@ extension DateValidators on DateTime? {
     return a.weekNumber == b.weekNumber && a.isoWeekYear == b.isoWeekYear;
   }
 
-  /// Check if this date is in the same month than other
+  /// Returns `true` if this date and [other] are in the same month and year.
   bool isSameMonth(DateTime? other) =>
       this != null && this!.startOfMonth == other?.startOfMonth;
 
-  /// Check if this date is in the same year than other
+  /// Returns `true` if this date and [other] are in the same calendar year.
   bool isSameYear(DateTime? other) =>
       this != null && other != null && this!.year == other.year;
 
-  /// Check if two dates are [equals]
+  /// Returns `true` if this and [other] represent the same moment in time.
   bool equals(DateTime? other) {
     if (this == null || other == null) return false;
 
     return this!.isAtSameMomentAs(other);
   }
 
-  /// Return true if this date day is monday
+  /// Returns `true` if this date is Monday.
   bool get isMonday => this != null && this!.weekday == DateTime.monday;
 
-  /// Return true if this date day is tuesday
+  /// Returns `true` if this date is Tuesday.
   bool get isTuesday => this != null && this!.weekday == DateTime.tuesday;
 
-  /// Return true if this date day is wednesday
+  /// Returns `true` if this date is Wednesday.
   bool get isWednesday => this != null && this!.weekday == DateTime.wednesday;
 
-  /// Return true if this date day is thursday
+  /// Returns `true` if this date is Thursday.
   bool get isThursday => this != null && this!.weekday == DateTime.thursday;
 
-  /// Return true if this date day is friday
+  /// Returns `true` if this date is Friday.
   bool get isFriday => this != null && this!.weekday == DateTime.friday;
 
-  /// Return true if this date day is saturday
+  /// Returns `true` if this date is Saturday.
   bool get isSaturday => this != null && this!.weekday == DateTime.saturday;
 
-  /// Return true if this date day is sunday
+  /// Returns `true` if this date is Sunday.
   bool get isSunday => this != null && this!.weekday == DateTime.sunday;
 
   /// Is the given date the first day of a month?
@@ -278,7 +284,7 @@ extension DateValidators on DateTime? {
   /// Is the given date the last day of a month?
   bool get isLastDayOfMonth => this != null && isSameDate(this!.endOfMonth);
 
-  /// Return true if this [DateTime] is set as UTC.
+  /// Returns `true` if this [DateTime] is in UTC mode.
   bool get isUTC => this != null && this!.isUtc;
 
   /// Checks if the DateTime instance represents today's date.
@@ -327,16 +333,15 @@ extension DateValidators on DateTime? {
   bool get isTomorrow =>
       isSameDate(DateTime.now().add(const Duration(days: 1)));
 
-  /// Boolean check to see if the current date is in the next week.
+  /// Returns `true` if this date falls within the next calendar week.
   ///
-  /// Returns `true` if this [DateTime] falls within the next week (starting from
-  /// the end of today until the end of the next week). Returns `false` if the
-  /// [DateTime] is `null`.
+  /// The range is from next week's Monday start through next week's Sunday end.
+  /// Returns `false` when the receiver is `null`.
   ///
   /// Example:
   /// ```dart
-  /// DateTime? nextMonday = DateTime.now().add(Duration(days: 7));
-  /// print(nextMonday.isNextWeek); // Outputs: true if today is not Monday
+  /// final nextMonday = DateTime.now().startOfWeek.addDays(7);
+  /// print(nextMonday.isNextWeek); // true
   /// ```
   bool get isNextWeek {
     if (this == null) return false;
@@ -348,16 +353,15 @@ extension DateValidators on DateTime? {
     return isBetween(startOfNextWeek.startOfDay, endOfNextWeek.endOfDay);
   }
 
-  /// Boolean check to see if the current date is in the last week.
+  /// Returns `true` if this date falls within the previous calendar week.
   ///
-  /// Returns `true` if this [DateTime] falls within the last week (from the start
-  /// of last week until the end of the previous day). Returns `false` if the
-  /// [DateTime] is `null`.
+  /// The range is from last week's Monday start through last week's Sunday end.
+  /// Returns `false` when the receiver is `null`.
   ///
   /// Example:
   /// ```dart
-  /// DateTime? lastWednesday = DateTime.now().subtract(Duration(days: 7 + DateTime.now().weekday - 3));
-  /// print(lastWednesday.isLastWeek); // Outputs: true if today is Wednesday
+  /// final lastWednesday = DateTime.now().startOfWeek.subtractDays(5);
+  /// print(lastWednesday.isLastWeek); // true
   /// ```
   bool get isLastWeek {
     if (this == null) return false;
@@ -378,7 +382,7 @@ extension DateValidators on DateTime? {
   /// Example:
   /// ```dart
   /// final dateTime = DateTime(2000);
-  /// final bool result = dateTime.isInPast();
+  /// final bool result = dateTime.isPast;
   /// print(result); // true, since 2000 is in the past
   /// ```
   bool get isPast => isBefore(DateTime.now());
@@ -392,12 +396,12 @@ extension DateValidators on DateTime? {
   /// Example:
   /// ```dart
   /// final dateTime = DateTime(3000);
-  /// final bool result = dateTime.isInFuture();
+  /// final bool result = dateTime.isFuture;
   /// print(result); // true, since 3000 is in the future
   /// ```
   bool get isFuture => isAfter(DateTime.now());
 
-  /// Returns true if [DateTime] occurs in previous month
+  /// Returns `true` if this date occurs in the previous calendar month.
   bool get isInPreviousMonth {
     if (this == null) return false;
 
@@ -408,7 +412,7 @@ extension DateValidators on DateTime? {
         this!.year == previousMonth.year;
   }
 
-  /// Returns true if [DateTime] occurs in previous month
+  /// Returns `true` if this date occurs in the next calendar month.
   bool get isInNextMonth {
     if (this == null) return false;
 
@@ -418,48 +422,48 @@ extension DateValidators on DateTime? {
     return this!.month == nextMonth.month && this!.year == nextMonth.year;
   }
 
-  /// Returns true if [DateTime] occurs in previous year
+  /// Returns `true` if this date occurs in the previous calendar year.
   bool get isInPreviousYear =>
       this != null && this!.year == DateTime.now().year - 1;
 
-  /// Returns true if [DateTime] occurs in next year
+  /// Returns `true` if this date occurs in the next calendar year.
   bool get isInNextYear =>
       this != null && this!.year == DateTime.now().year + 1;
 
-  /// Returns true if [DateTime] falls in january
+  /// Returns `true` if this date is in January.
   bool get isInJanuary => this != null && this!.month == DateTime.january;
 
-  /// Returns true if [DateTime] falls in february
+  /// Returns `true` if this date is in February.
   bool get isInFebruary => this != null && this!.month == DateTime.february;
 
-  /// Returns true if [DateTime] falls in march
+  /// Returns `true` if this date is in March.
   bool get isInMarch => this != null && this!.month == DateTime.march;
 
-  /// Returns true if [DateTime] falls in april
+  /// Returns `true` if this date is in April.
   bool get isInApril => this != null && this!.month == DateTime.april;
 
-  /// Returns true if [DateTime] falls in may
+  /// Returns `true` if this date is in May.
   bool get isInMay => this != null && this!.month == DateTime.may;
 
-  /// Returns true if [DateTime] falls in june
+  /// Returns `true` if this date is in June.
   bool get isInJune => this != null && this!.month == DateTime.june;
 
-  /// Returns true if [DateTime] falls in july
+  /// Returns `true` if this date is in July.
   bool get isInJuly => this != null && this!.month == DateTime.july;
 
-  /// Returns true if [DateTime] falls in august
+  /// Returns `true` if this date is in August.
   bool get isInAugust => this != null && this!.month == DateTime.august;
 
-  /// Returns true if [DateTime] falls in september
+  /// Returns `true` if this date is in September.
   bool get isInSeptember => this != null && this!.month == DateTime.september;
 
-  /// Returns true if [DateTime] falls in october
+  /// Returns `true` if this date is in October.
   bool get isInOctober => this != null && this!.month == DateTime.october;
 
-  /// Returns true if [DateTime] falls in november
+  /// Returns `true` if this date is in November.
   bool get isInNovember => this != null && this!.month == DateTime.november;
 
-  /// Returns true if [DateTime] falls in december
+  /// Returns `true` if this date is in December.
   bool get isInDecember => this != null && this!.month == DateTime.december;
 
   /// Checks if a [DateTime] is within a given [DateTimeRange].
@@ -470,8 +474,11 @@ extension DateValidators on DateTime? {
   ///
   /// Example:
   /// ```dart
-  /// DateTime? date = DateTime.now();
-  /// DateTimeRange range = DateTimeRange(start: DateTime.now().subtract(Duration(days: 1)), end: DateTime.now().add(Duration(days: 1)));
+  /// final date = DateTime.now();
+  /// final range = DateTimeRange(
+  ///   start: DateTime.now().subtract(const Duration(days: 1)),
+  ///   end: DateTime.now().add(const Duration(days: 1)),
+  /// );
   /// print(date.isWithinRange(range)); // Outputs: true
   /// ```
   bool isWithinRange(DateTimeRange range) =>
@@ -479,7 +486,7 @@ extension DateValidators on DateTime? {
 
   /// Checks if the datetime has passed a specified duration.
   ///
-  /// Returns `true` if the current datetime is later than the given duration.
+  /// Returns `true` if `DateTime.now()` is after `this + duration`.
   /// Otherwise, returns `false`.
   ///
   /// Example:
