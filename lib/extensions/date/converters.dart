@@ -19,8 +19,8 @@ enum Abbreviation {
   full,
 }
 
-class DateFormats {
-  DateFormats._();
+class MyDateFormats {
+  MyDateFormats._();
 
   static const defaultDateTime = 'yyyy-MM-dd HH:mm:ss';
   static const defaultDate = 'yyyy-MM-dd';
@@ -36,6 +36,58 @@ class DateFormats {
   static const fullDay = 'EEEE';
   static const shortDay = 'EEE';
   static const fullDate = 'EEE MMM dd, yyyy';
+
+  static const List<String> months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+
+  static const List<String> shortMonths = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+
+  static const List<String> days = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
+  ];
+
+  static const List<String> shortDays = [
+    'Mon',
+    'Tue',
+    'Wed',
+    'Thu',
+    'Fri',
+    'Sat',
+    'Sun',
+  ];
+
+  static const List<String> veryShortDays = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 }
 
 extension DateConversions on DateTime {
@@ -43,7 +95,7 @@ extension DateConversions on DateTime {
   ///
   /// Returns the formatted string.
   String format({
-    String pattern = DateFormats.dateTime,
+    String pattern = MyDateFormats.dateTime,
     String locale = 'en_US',
   }) => DateFormat(pattern, locale).format(this);
 
@@ -119,7 +171,7 @@ extension DateConversions on DateTime {
     final diff = now.difference(self);
     final sec = diff.inSeconds;
 
-    if (sec < 0) return format(pattern: DateFormats.date);
+    if (sec < 0) return format(pattern: MyDateFormats.date);
 
     return sec.timeAgo();
   }
@@ -136,7 +188,7 @@ extension DateConversions on DateTime {
   /// ```
   String get toHuman {
     final String time = DateFormat.jm().format(this);
-    final String day = format(pattern: DateFormats.fullDay);
+    final String day = format(pattern: MyDateFormats.fullDay);
     final String fullDate = DateFormat.yMMMEd().format(this);
     final String fullTime = DateFormat.jm().format(this);
     final String fullDateTime = '$fullDate $fullTime';
@@ -432,52 +484,6 @@ extension ParseDateTime on String? {
     return normalized.toString().split('.')[0];
   }
 
-  String? detectFormat() {
-    if (isBlank) return null;
-
-    String? finalPattern;
-    final List<String> patternsFound = [];
-
-    for (final entry in Regex.dateFormats.entries) {
-      final regex = RegExp(entry.key);
-      if (matches(regex: regex)) {
-        patternsFound.add(entry.value);
-      }
-    }
-
-    if (patternsFound.isNotEmpty && patternsFound.length > 1) {
-      for (final String pattern in patternsFound) {
-        final bool validatePattern = validateDatePattern(
-          expected: this!,
-          pattern: pattern,
-        );
-        if (validatePattern) {
-          finalPattern = pattern;
-          break;
-        }
-      }
-    } else {
-      if (patternsFound.isNotEmpty) finalPattern = patternsFound[0];
-    }
-
-    return finalPattern;
-  }
-
-  bool validateDatePattern({
-    required String expected,
-    String pattern = 'yyyy-MM-dd HH:mm:ss',
-  }) {
-    if (isBlank) return false;
-
-    try {
-      final DateTime dateTime = DateFormat(pattern).parse(this!);
-      final String formattedDate = DateFormat(pattern).format(dateTime);
-      return formattedDate == expected;
-    } catch (e) {
-      return false;
-    }
-  }
-
   static DateTime? parse(Object? date, {bool utc = true, String? format}) {
     final String? dt = date?.toString().trim();
 
@@ -505,141 +511,8 @@ extension ParseDateTime on String? {
 
         return dateTime;
       } catch (e) {
-        final String? detectedDateFormat = dt.detectFormat();
-
-        if (detectedDateFormat == null) return null;
-
-        try {
-          final DateFormat outputFormat = DateFormat(detectedDateFormat);
-          final DateTime? result = outputFormat.tryParse(dt!, utc);
-
-          return result;
-        } catch (e) {
-          return null;
-        }
+        return null;
       }
     }
-  }
-}
-
-extension DateTimeExtension on DateTime? {
-  /// Converts the time difference to a number of seconds.
-  ///
-  /// Returns the number of seconds between the current DateTime instance and [other].
-  /// If [other] is not provided, the current system DateTime is used.
-  int countSeconds(DateTime? other) {
-    final int difference =
-        (other ?? DateTime.now()).millisecondsSinceEpoch -
-        (this ?? DateTime.now()).millisecondsSinceEpoch;
-    final int count = (difference / 1000).truncate();
-    return count;
-  }
-
-  /// Converts the time difference to a number of minutes.
-  ///
-  /// Returns the number of minutes between the current DateTime instance and [other].
-  /// If [other] is not provided, the current system DateTime is used.
-  int countMinutes(DateTime? other) {
-    final int difference =
-        (other ?? DateTime.now()).millisecondsSinceEpoch -
-        (this ?? DateTime.now()).millisecondsSinceEpoch;
-    final int count = (difference / 60000).truncate();
-    return count;
-  }
-
-  /// Calculates the difference in hours between the current DateTime object and [other].
-  ///
-  /// If [other] is null, the current DateTime object is used.
-  ///
-  /// Returns the difference in hours as an integer value.
-  ///
-  /// Example:
-  /// ```dart
-  /// DateTime startDateTime = DateTime(2023, 1, 1);
-  /// DateTime endDateTime = DateTime(2023, 1, 2);
-  ///
-  /// int differenceInHours = startDateTime.countHours(endDateTime);
-  /// print('Difference in hours: $differenceInHours'); // Output: 24
-  /// ```
-  int countHours(DateTime? other) {
-    final int difference =
-        (other ?? DateTime.now()).millisecondsSinceEpoch -
-        (this ?? DateTime.now()).millisecondsSinceEpoch;
-    final int count = (difference / 3600000).truncate();
-    return count;
-  }
-
-  /// Calculates the number of days between two [DateTime] objects.
-  ///
-  /// The [other] parameter specifies the end date for the calculation.
-  ///
-  /// Returns the number of days as an integer value.
-  int countDays(DateTime? other) {
-    final int difference =
-        (other ?? DateTime.now()).millisecondsSinceEpoch -
-        (this ?? DateTime.now()).millisecondsSinceEpoch;
-    final int count = (difference / 86400000).truncate();
-    return count;
-  }
-
-  /// Counts the number of weeks between the current [DateTime] and the [other].
-  ///
-  /// Returns an integer representing the number of weeks.
-  /// This function truncates to the lowest week.
-  ///
-  /// Example:
-  /// ```dart
-  /// DateTime date1 = DateTime(2023, 1, 1);
-  /// DateTime date2 = DateTime(2023, 10, 16);
-  /// int weeksDifference = date1.countWeeks(date2);
-  /// print('Weeks difference: $weeksDifference'); // Output: Weeks difference: 41
-  /// ```
-  int countWeeks(DateTime? other) {
-    final int difference =
-        (other ?? DateTime.now()).millisecondsSinceEpoch -
-        (this ?? DateTime.now()).millisecondsSinceEpoch;
-    final int count = (difference / 604800000).truncate();
-    return count;
-  }
-
-  /// Calculates the number of months between the current DateTime object and [other].
-  ///
-  /// This function rounds to the nearest month and returns the count as an integer.
-  /// The result can be positive if [other] is after the current DateTime object,
-  /// or negative if [other] is before the current DateTime object.
-  ///
-  /// Example:
-  /// ```dart
-  /// DateTime startDate = DateTime(1996, 1, 1);
-  /// DateTime endDate = DateTime(2023, 10, 16);
-  ///
-  /// int monthsDifference = startDate.countMonths(endDate); // Output: 334
-  /// ```
-  int countMonths(DateTime? other) {
-    final int difference =
-        (other ?? DateTime.now()).millisecondsSinceEpoch -
-        (this ?? DateTime.now()).millisecondsSinceEpoch;
-    final int count = (difference / 2628003000).round();
-    return count;
-  }
-
-  /// Calculates the number of years between this DateTime instance and another DateTime instance.
-  ///
-  /// Returns an integer representing the number of years difference.
-  ///
-  /// Example usage:
-  /// ```dart
-  /// DateTime startDate = DateTime(1996, 1, 1);
-  /// DateTime endDate = DateTime(2023, 10, 16);
-  ///
-  /// int yearsDifference = startDate.countYears(endDate);
-  /// print('Years Difference: $yearsDifference'); // Output: 27
-  /// ```
-  int countYears(DateTime? other) {
-    final int difference =
-        (other ?? DateTime.now()).millisecondsSinceEpoch -
-        (this ?? DateTime.now()).millisecondsSinceEpoch;
-    final int count = (difference / 31536000000).truncate();
-    return count;
   }
 }

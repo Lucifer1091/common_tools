@@ -215,42 +215,4 @@ extension IterableDateTimeHelper on Iterable<DateTime> {
 
     return sortedCountsAscending.first.key;
   }
-
-  /// Calculate the average gap (duration) between consecutive dates.
-  ///
-  /// The iterable must have at least two elements.
-  /// Dates are sorted before calculating gaps.
-  ///
-  /// Example:
-  /// ```dart
-  /// final dates = [
-  ///   DateTime(2023, 1, 1),
-  ///   DateTime(2023, 1, 3),  // 2 days gap
-  ///   DateTime(2023, 1, 7),  // 4 days gap
-  ///   DateTime(2023, 1, 9),  // 2 days gap
-  /// ];
-  /// print(dates.averageGap); // Duration(days: 2, hours: 16) // Average of 2, 4, 2 days
-  /// ```
-  Duration get averageGap {
-    if (length < 2) {
-      throw StateError('Cannot calculate average gap with less than 2 dates');
-    }
-
-    final sorted = sortAscending();
-    final gapsInMicroseconds = <int>[];
-
-    // Calculate gaps between consecutive dates
-    for (var i = 1; i < sorted.length; i++) {
-      gapsInMicroseconds.add(
-        sorted[i].difference(sorted[i - 1]).inMicroseconds,
-      );
-    }
-
-    // Calculate average gap in microseconds
-    final totalMicroseconds = gapsInMicroseconds.reduce((a, b) => a + b);
-
-    final averageMicroseconds = totalMicroseconds ~/ gapsInMicroseconds.length;
-
-    return Duration(microseconds: averageMicroseconds);
-  }
 }

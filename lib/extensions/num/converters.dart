@@ -33,10 +33,6 @@ extension NumConverters on num? {
   /// Converts radians to degrees.
   double? radiansToDegrees() => isNotNull ? this! * (180.0 / pi) : null;
 
-  double asPercentage() => getOr() / 100.0;
-
-  double percentageOf(double percentage) => (getOr() * percentage) / 100.0;
-
   /// Converts this double to a fraction string representation.
   String asFraction() {
     final intPart = getOr().truncate();
@@ -54,6 +50,10 @@ extension NumConverters on num? {
 
   /// Returns the number of set bits in this integer's binary representation.
   int bitCount() => toInt().toBinaryString().replaceAll('0', '').length;
+
+  double asPercentage() => getOr() / 100.0;
+
+  double percentageOf(double percentage) => (getOr() * percentage) / 100.0;
 
   /// Returns the percentage of `this` value relative to [total], optionally allowing decimals.
   num percentage(num total, {bool allowDecimals = true, int dp = 2}) {
@@ -429,38 +429,9 @@ extension NumTimeConverters on num? {
       throw ArgumentError.value(month, 'month', 'must be between 1 and 12');
     }
 
-    final List<String> months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
-    final List<String> shortMonths = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-
     return style == Abbreviation.full || style == Abbreviation.semi
-        ? shortMonths[month - 1]
-        : months[month - 1];
+        ? MyDateFormats.shortMonths[month - 1]
+        : MyDateFormats.months[month - 1];
   }
 
   /// Converts an integer representing the day of the week (1 for Monday through 7 for Sunday)
@@ -487,30 +458,12 @@ extension NumTimeConverters on num? {
       throw ArgumentError.value(day, 'day', 'must be between 1 and 7');
     }
 
-    final List<String> days = [
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
-      'Sunday',
-    ];
-    final List<String> shortDays = [
-      'Mon',
-      'Tue',
-      'Wed',
-      'Thu',
-      'Fri',
-      'Sat',
-      'Sun',
-    ];
-    final List<String> veryShortDays = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-
     if (style == Abbreviation.full) {
-      return veryShortDays[day - 1];
+      return MyDateFormats.veryShortDays[day - 1];
     } else {
-      return style == Abbreviation.semi ? shortDays[day - 1] : days[day - 1];
+      return style == Abbreviation.semi
+          ? MyDateFormats.shortDays[day - 1]
+          : MyDateFormats.days[day - 1];
     }
   }
 

@@ -224,24 +224,6 @@ extension DateTimeSetters on DateTime {
     microsecond ?? this.microsecond,
   );
 
-  /// Change [weekday] of this date
-  ///
-  /// set [weekStartsOn] if you want to use any other day as the start of the week
-  DateTime setWeekDay(int weekday, [int weekStartsOn = DateTime.sunday]) {
-    const daysPerWeek = DateTime.daysPerWeek;
-    final currentDay = this.weekday;
-    final reminder = weekday % daysPerWeek;
-    final dayIndex = (reminder + daysPerWeek) % daysPerWeek;
-    final delta = daysPerWeek - weekStartsOn;
-    final diff =
-        weekday < 0 || weekday > 6
-            ? weekday - ((currentDay + delta) % daysPerWeek)
-            : ((dayIndex + delta) % daysPerWeek) -
-                ((currentDay + delta) % daysPerWeek);
-
-    return addDays(diff);
-  }
-
   /// Change [day] of this date
   ///
   /// set [hour] if you want to change it as well, to skip an change other optional field set it as null
@@ -366,41 +348,6 @@ extension DateTimeSetters on DateTime {
     return this + Duration(days: requiredDelta == 0 ? 7 : requiredDelta);
   }
 
-  /// Returns new [DateTime] instance of nearest Monday in the Future
-  ///
-  /// If this is Monday, will return `7 days in the future`
-  DateTime nextMonday() => nextWeekday(DateTime.monday);
-
-  /// Returns new [DateTime] instance of nearest Tuesday in the Future
-  ///
-  /// If this is Tuesday, will return `7 days in the future`
-  DateTime nextTuesday() => nextWeekday(DateTime.tuesday);
-
-  /// Returns new [DateTime] instance of nearest Wednesday in the Future
-  ///
-  /// If this is Wednesday, will return `7 days in the future`
-  DateTime nextWednesday() => nextWeekday(DateTime.wednesday);
-
-  /// Returns new [DateTime] instance of nearest Thursday in the Future
-  ///
-  /// If this is Thursday, will return `7 days in the future`
-  DateTime nextThursday() => nextWeekday(DateTime.thursday);
-
-  /// Returns new [DateTime] instance of nearest Friday in the Future
-  ///
-  /// If this is Friday, will return `7 days in the future`
-  DateTime nextFriday() => nextWeekday(DateTime.friday);
-
-  /// Returns new [DateTime] instance of nearest Saturday in the Future
-  ///
-  /// If this is Saturday, will return `7 days in the future`
-  DateTime nextSaturday() => nextWeekday(DateTime.saturday);
-
-  /// Returns new [DateTime] instance of nearest Sunday in the Future
-  ///
-  /// If this is Sunday, will return `7 days in the future`
-  DateTime nextSunday() => nextWeekday(DateTime.sunday);
-
   /// Returns new [DateTime] instance of last `n`th weekday
   ///
   /// If today is the `n`th day, will return `7 days in the past`
@@ -414,41 +361,6 @@ extension DateTimeSetters on DateTime {
 
     return this - Duration(days: requiredDelta == 0 ? 7 : requiredDelta);
   }
-
-  /// Returns new [DateTime] instance of nearest Monday in the past
-  ///
-  /// If this is Monday, will return `7 days in the past`
-  DateTime lastMonday() => lastWeekday(DateTime.monday);
-
-  /// Returns new [DateTime] instance of nearest Tuesday in the past
-  ///
-  /// If this is Tuesday, will return `7 days in the past`
-  DateTime lastTuesday() => lastWeekday(DateTime.tuesday);
-
-  /// Returns new [DateTime] instance of nearest Wednesday in the past
-  ///
-  /// If this is Wednesday, will return `7 days in the past`
-  DateTime lastWednesday() => lastWeekday(DateTime.wednesday);
-
-  /// Returns new [DateTime] instance of nearest Thursday in the past
-  ///
-  /// If this is Thursday, will return `7 days in the past`
-  DateTime lastThursday() => lastWeekday(DateTime.thursday);
-
-  /// Returns new [DateTime] instance of nearest Friday in the past
-  ///
-  /// If this is Friday, will return `7 days in the past`
-  DateTime lastFriday() => lastWeekday(DateTime.friday);
-
-  /// Returns new [DateTime] instance of nearest Saturday in the past
-  ///
-  /// If this is Saturday, will return `7 days in the past`
-  DateTime lastSaturday() => lastWeekday(DateTime.saturday);
-
-  /// Returns new [DateTime] instance of nearest Sunday in the past
-  ///
-  /// If this is Sunday, will return `7 days in the past`
-  DateTime lastSunday() => lastWeekday(DateTime.sunday);
 
   /// Truncates the time portion of the [DateTime] object.
   ///

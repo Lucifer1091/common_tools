@@ -12,9 +12,6 @@ import '../../index.dart';
 T _zero<T extends num>() => T == int ? 0 as T : 0.0 as T;
 
 extension NumListConverter<T extends num> on Iterable<T>? {
-  ///  how many elements == zero
-  int countZeros() => countValue(_zero());
-
   /// * return list summation
   /// * return `null` if list is empty
   num? sumOrNull() => isBlank ? null : this!.fold(_zero(), (a, b) => a! + b);
@@ -197,50 +194,6 @@ extension EnumConverter<T extends Enum> on Iterable<T> {
   T byValueOr(Predicate<T> test, T orElse) => byValueOrNull(test) ?? orElse;
 }
 
-/// Common extensions for iterables composed of more lists
-extension IterableListExt<T> on Iterable<List<T>> {
-  /// Returns a single list composed of each element of the lists inside.
-  List<T> get flat {
-    final l = <T>[];
-    forEach(l.addAll);
-
-    return l;
-  }
-}
-
-extension RIterableNull<T> on List<T?> {
-  /// * return the `length` without `null` elements
-  void removeWhereNull() => removeWhere((e) => e == null);
-
-  /// Returns a new list the the non-null items.
-  ///
-  /// Same as `where((el) => el != null)`
-  List<T> removeNull() {
-    final list = <T>[];
-    for (final element in this) {
-      if (element != null) list.add(element);
-    }
-    return list;
-  }
-
-  /// * return the `length` without `null` elements
-  int countWithoutNull() => count((e) => e != null);
-
-  /// * return the `count` of the `null` elements
-  int countNull() => count((e) => e == null);
-}
-
-extension RIterableString on Iterable<String> {
-  /// return counter of empty elements in the iterable
-  /// does not count the null values
-  int countEmpty({bool trim = true}) =>
-      count((e) => trim ? e.trim().isEmpty : e.isEmpty);
-
-  /// return counter of empty elements in the iterable
-  /// does not count the null values
-  int countNotEmpty() => count((e) => e.trim().isNotEmpty);
-}
-
 /// provides extensions for Iterable
 extension IterableScrewDriver<T> on Iterable<T>? {
   /// Returns the sum of all values produced by [selector] function
@@ -399,10 +352,16 @@ extension IterableScrewDriver<T> on Iterable<T>? {
 
   /// Returns the number of elements matching the given [predicate].
   int count([Predicate<T>? predicate]) {
-    if (this == null) return 0;
-
+    if (isBlank) return 0;
     if (predicate == null) return length;
 
+    return this!.where(predicate).length;
+  }
+
+  /// Returns count of elements that matches the given [predicate].
+  /// Returns `0` if iterable is null.
+  int countWhere(Predicate<T> predicate) {
+    if (isBlank) return 0;
     return this!.where(predicate).length;
   }
 
@@ -433,9 +392,6 @@ extension IterableScrewDriver<T> on Iterable<T>? {
       yield it.current;
     }
   }
-
-  /// Alias for [subtract].
-  Iterable<T> except(Iterable<T> other) => subtract(other);
 
   /// Returns an iterable containing the items with their respective indices
   /// in form of records.
@@ -469,8 +425,8 @@ extension IterableGetters<T> on Iterable<T>? {
   ///
   /// ```dart
   /// final list = [1, 2, 3, 4];
-  /// final first = list.elementAtOrNull(0); // 1
-  /// final fifth = list.elementAtOrNull(4); // null
+  /// final first = list.getOrNull(0); // 1
+  /// final fifth = list.getOrNull(4); // null
   /// ```
   T? getOrNull(int index) {
     if (isBlank || index < 0) return null;
@@ -490,8 +446,8 @@ extension IterableGetters<T> on Iterable<T>? {
   ///
   /// ```dart
   /// final list = [1, 2, 3, 4];
-  /// final first = list.elementAtOrDefault(0, -1); // 1
-  /// final fifth = list.elementAtOrDefault(4, -1); // -1
+  /// final first = list.getOr(0, -1); // 1
+  /// final fifth = list.getOr(4, -1); // -1
   /// ```
   T getOr(int index, T value) => getOrElse(index, (_) => value);
 
@@ -501,8 +457,8 @@ extension IterableGetters<T> on Iterable<T>? {
   ///
   /// ```dart
   /// final list = [1, 2, 3, 4];
-  /// final first = list.elementAtOrElse(0); // 1
-  /// final fifth = list.elementAtOrElse(4, -1); // -1
+  /// final first = list.getOrElse(0); // 1
+  /// final fifth = list.getOrElse(4, -1); // -1
   /// ```
   T getOrElse(int index, Transformer<int, T> orElse) {
     return getOrNull(index) ?? orElse(index);
@@ -545,7 +501,7 @@ extension IterableGetters<T> on Iterable<T>? {
   ///
   /// ```dart
   /// final last = [1, 2, 3, 4].lastOrNull; // 4
-  /// final emptyLast = [].firstOrNull; // null
+  /// final emptyLast = [].lastOrNull; // null
   /// ```
   T? get lastOrNull => isNotBlank ? this!.last : null;
 
@@ -565,20 +521,6 @@ extension IterableGetters<T> on Iterable<T>? {
   }
 
   int? get lastIndex => isNotBlank ? length - 1 : null;
-
-  /// * return the `length` of the NOT `null` elements
-  int countNotNull() => count((e) => e != null);
-
-  /// counter the element of certain value
-  int countValue(T value) => count((e) => e == value);
-
-  /// Returns count of elements that matches the given [predicate].
-  /// Returns `0` if iterable is null.
-  int countWhere(Predicate<T> predicate) {
-    if (this == null) return 0;
-
-    return this!.where(predicate).length;
-  }
 
   /// Runs [action] sequentially for each item in this iterable.
   Future<void> forEachAsync(FutureOr<void> Function(T e) action) async {
@@ -645,21 +587,6 @@ extension IterableGetters<T> on Iterable<T>? {
     for (final value in this!) {
       yield map(index++, value);
     }
-  }
-
-  /// Return a list concatenates the output of the current list and another [iterable]
-  List<T> concatWithSingleList(Iterable<T> iterable) {
-    if (isBlank || iterable.isBlank) return [];
-
-    return <T>[...orEmpty(), ...iterable];
-  }
-
-  /// Return a list concatenates the output of the current list and multiple [iterables]
-  List<T> concatWithMultipleList(List<Iterable<T>> iterables) {
-    if (isBlank || iterables.isBlank) return [];
-
-    final list = iterables.toList(growable: false).expand((i) => i);
-    return <T>[...orEmpty(), ...list];
   }
 
   /// Returns a new lazy [Iterable] of values built from the elements of this
@@ -910,25 +837,6 @@ extension IterableGetters<T> on Iterable<T>? {
       action(i, this!.elementAt(i));
     }
   }
-
-  /// Returns a list containing first [n] elements.
-  List<T> take(int n) {
-    if (this == null) return <T>[];
-    if (n <= 0) return [];
-
-    final list = <T>[];
-    if (this is Iterable) {
-      if (n >= this!.length) return this!.toList();
-
-      var count = 0;
-      final thisList = this!.toList();
-      for (final item in thisList) {
-        list.add(item);
-        if (++count == n) break;
-      }
-    }
-    return list;
-  }
 }
 
 extension IterableExtensions<T> on Iterable<T> {
@@ -943,25 +851,4 @@ extension IterableExtensions<T> on Iterable<T> {
   ///
   /// If [random] is given, it is being used for random number generation.
   List<T> shuffled([math.Random? random]) => toList()..shuffle(random);
-}
-
-extension FicIterableExtensionTypeNullable<T> on Iterable<T?> {
-  //
-  /// Similar to [map], but MAY return a non-nullable type.
-  ///
-  /// `int? f(String? e) => (e == null) ? 0 : e.length;`
-  ///
-  /// `List<int?> list1 = ["xxx", "xx", null, "x"].map(f).toList();`
-  /// `expect(list1, isA<List<int?>>());`
-  ///
-  /// `List<int> list2 = ["xxx", "xx", null, "x"].mapNotNull(f).toList();`
-  /// `expect(list2, isA<List<int>>());`
-  Iterable<E> mapNotNull<E>(E? Function(T? e) f) sync* {
-    for (final element in this) {
-      final result = f(element);
-      if (result != null) {
-        yield result;
-      }
-    }
-  }
 }

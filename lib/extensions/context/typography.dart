@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../index.dart';
 
-extension ContextTextThemeExtension on BuildContext {
+extension ContextTypographyExtension on BuildContext {
   DefaultTextStyle get defaultTextStyle => DefaultTextStyle.of(this);
 
   MyTypography get textTheme => MyTheme.of(this).typography;

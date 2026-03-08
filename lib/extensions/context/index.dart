@@ -1,4 +1,4 @@
 export 'size.dart';
 export 'state.dart';
-export 'text_theme.dart';
+export 'typography.dart';
 export 'theme.dart';

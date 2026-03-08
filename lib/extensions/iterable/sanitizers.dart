@@ -8,26 +8,6 @@ extension IterableSanitizers2<T> on Iterable<T> {
 
   Iterable<T> sortByDesc<E extends Comparable<E>>(E Function(T) selector) =>
       toList()..sort((a, b) => selector(b).compareTo(selector(a)));
-
-  /// The contrary version of [whereType]. Returns a new
-  /// list composed of only the elements that are **NOT** of type [S].
-  List<T> whereTypeNot<S extends T>() {
-    final extracted = whereType<S>();
-    return [
-      for (final element in this)
-        extracted.cast<T>().contains(element) ? null : element,
-    ].removeNull().cast<T>();
-  }
-
-  /// Same as [whereType] but with a pair of types.
-  List<T> whereTypes<S extends T, R extends T>() {
-    final uniqueValues = {...whereType<S>(), ...whereType<R>()};
-    final l = <T>[];
-    for (final item in this) {
-      if (uniqueValues.contains(item)) l.add(item);
-    }
-    return l;
-  }
 }
 
 extension CollectionsExtensions<T> on Iterable<T> {

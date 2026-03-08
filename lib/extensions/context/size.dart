@@ -29,18 +29,10 @@ extension ContextSizeExtension on BuildContext {
 
   EdgeInsets get viewPadding => MediaQuery.viewPaddingOf(this);
 
-  double get statusBarHeight => padding.top;
-
-  /// software keyboard height
-  double get keyboardHeight => viewInsets.bottom;
-
   /// Returns true if keyboard is visible
   bool get isKeyboardShowing => viewInsets.bottom > 0;
 
   double get appBarHeight => mediaQuery.padding.top + kToolbarHeight;
-
-  /// safeAreaBottomPadding
-  double get bottomBarHeight => padding.bottom;
 
   /// return screen devicePixelRatio
   double get pixelRatio => mediaQuery.devicePixelRatio;
