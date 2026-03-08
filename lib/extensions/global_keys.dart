@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 
-/// Common extensions for [GlobalKey]s
+/// Geometry helpers for a mounted widget referenced by a [GlobalKey].
 extension GlobalKeyExt on GlobalKey<State<StatefulWidget>> {
   /// Returns the global offset of the widget attached to this key.
+  ///
+  /// Returns `null` when:
+  /// - the state is unmounted
+  /// - no render object is attached
+  /// - render object is not a [RenderBox]
   Offset? get offset {
     if (currentState?.mounted == false) return null;
 
@@ -14,6 +19,11 @@ extension GlobalKeyExt on GlobalKey<State<StatefulWidget>> {
   }
 
   /// Returns the size of the widget attached to this key.
+  ///
+  /// Returns `null` when:
+  /// - the state is unmounted
+  /// - no render object is attached
+  /// - render object is not a [RenderBox]
   Size? get size {
     if (currentState?.mounted == false) return null;
 
@@ -24,6 +34,13 @@ extension GlobalKeyExt on GlobalKey<State<StatefulWidget>> {
   }
 
   /// Returns a Rect of this widget based on the global offset and its size.
+  ///
+  /// Returns `null` when either [offset] or [size] is unavailable.
+  ///
+  /// Example:
+  /// ```dart
+  /// final widgetRect = myKey.rect;
+  /// ```
   Rect? get rect {
     final offset0 = offset;
     if (offset0 == null) return null;

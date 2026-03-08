@@ -1,9 +1,10 @@
 import 'index.dart';
 
+/// Operator-style transformations and slicing helpers for nullable strings.
 extension StringOperators on String? {
-  /// Checks if the [length!] of the `String` is more than the length of [s].
+  /// Returns `true` when this string length is greater than [s].length.
   ///
-  /// If the `String` is null or empty, it returns false.
+  /// Returns `false` for blank values.
   ///
   /// ### Example
   ///
@@ -17,9 +18,9 @@ extension StringOperators on String? {
     return this!.length > s.length;
   }
 
-  /// Checks if the [length!] of the `String` is more or equal than the length of [s].
+  /// Returns `true` when this string length is greater than or equal to [s].length.
   ///
-  /// If the `String` is null or empty, it returns false.
+  /// Returns `false` for blank values.
   ///
   /// ### Example
   ///
@@ -33,9 +34,9 @@ extension StringOperators on String? {
     return this!.length >= s.length;
   }
 
-  /// Checks if the [length!] of the `String` is less than the length of [s].
+  /// Returns `true` when this string length is less than [s].length.
   ///
-  /// If the `String` is null or empty, it returns false.
+  /// Returns `false` for blank values.
   ///
   /// ### Example
   ///
@@ -49,9 +50,9 @@ extension StringOperators on String? {
     return this!.length < s.length;
   }
 
-  /// Checks if the [length!] of the `String` is less or equal than the length of [s].
+  /// Returns `true` when this string length is less than or equal to [s].length.
   ///
-  /// If the `String` is null or empty, it returns false.
+  /// Returns `false` for blank values.
   ///
   /// ### Example
   ///
@@ -65,17 +66,11 @@ extension StringOperators on String? {
     return this!.length <= s.length;
   }
 
-  /// Removes a specified substring from the string.
+  /// Removes all occurrences of [s] from this string using the `-` operator.
   ///
-  /// This operator method allows you to remove a specified substring from
-  /// the string using the `-` operator. If either the original string or
-  /// the substring is blank, appropriate behavior is handled.
-  ///
-  /// ### Example
-  ///
+  /// Example:
   /// ```dart
-  /// String text = "Hello, world!";
-  /// String result = text - "world"; // "Hello, !"
+  /// final result = 'Hello, world!' - 'world'; // Hello, !
   /// ```
   String operator -(String? s) {
     if (isBlank) return '';
@@ -85,25 +80,15 @@ extension StringOperators on String? {
     return this!.replaceAll(s!, '');
   }
 
-  /// Returns the first [n] characters of the `String`.
+  /// Returns the first [n] characters.
   ///
-  /// n is optional, by default it returns the first character of the `String`.
+  /// Returns this value unchanged when blank, when [n] is negative,
+  /// or when [n] exceeds the string length.
   ///
-  /// If [n] provided is longer than the `String`'s length, the string will be returned.
-  ///
-  /// Faster than using
+  /// Example:
   /// ```dart
-  /// substring(0,count)
-  /// ```
-  /// ### Example 1
-  /// ```dart
-  /// String foo = 'hello world';
-  /// String firstChars = foo.first(); // returns 'h'
-  /// ```
-  /// ### Example 2
-  /// ```dart
-  /// String foo = 'hello world';
-  /// bool firstChars = foo.first(3); // returns 'hel'
+  /// 'hello'.first(); // h
+  /// 'hello'.first(n: 3); // hel
   /// ```
   String? first({int n = 1}) {
     if (isBlank || this!.length < n || n < 0) return this;
@@ -111,25 +96,15 @@ extension StringOperators on String? {
     return this!.substring(0, n);
   }
 
-  /// Returns the last [n] characters of the `String`.
+  /// Returns the last [n] characters.
   ///
-  /// [n] is optional, by default it returns the first character of the `String`.
+  /// Returns this value unchanged when blank, when [n] is negative,
+  /// or when [n] exceeds the string length.
   ///
-  /// If [n] provided is longer than the `String`'s length, the string will be returned.
-  ///
-  /// Faster than using
+  /// Example:
   /// ```dart
-  /// substring(length-n,length)
-  /// ```
-  /// ### Example 1
-  /// ```dart
-  /// String foo = 'hello world';
-  /// String firstChars = foo.last(); // returns 'd'
-  /// ```
-  /// ### Example 2
-  /// ```dart
-  /// String foo = 'hello world';
-  /// bool firstChars = foo.last(3); // returns 'rld'
+  /// 'hello'.last(); // o
+  /// 'hello'.last(n: 3); // llo
   /// ```
   String? last({int n = 1}) {
     if (isBlank || this!.length < n || n < 0) return this;
@@ -137,9 +112,10 @@ extension StringOperators on String? {
     return this!.substring(this!.length - n, this!.length);
   }
 
-  /// Inserts a `String` at the specified index.
+  /// Inserts [value] at [index].
   ///
-  /// If the `String` is `null`, an `ArgumentError` is thrown.
+  /// Returns this value when `null`.
+  /// Throws [RangeError] when [index] is outside `0..length`.
   ///
   /// ### Example
   ///
@@ -162,9 +138,9 @@ extension StringOperators on String? {
         .toString();
   }
 
-  /// Returns a new `String` with the first occurrence of the given pattern replaced with the replacement `String`.
+  /// Replaces the first occurrence of [pattern] with [replacement].
   ///
-  /// If the `String` is `null`, an `ArgumentError` is thrown.
+  /// Returns this value when `null` or when [pattern] is not found.
   ///
   /// ### Example
   ///
@@ -181,9 +157,9 @@ extension StringOperators on String? {
     return this!.replaceRange(index, index + pattern.length, replacement);
   }
 
-  /// Returns a new `String` with the last occurrence of the given pattern replaced with the replacement `String`.
+  /// Replaces the last occurrence of [pattern] with [replacement].
   ///
-  /// If the `String` is `null`, an `ArgumentError` is thrown.
+  /// Returns this value when `null` or when [pattern] is not found.
   ///
   /// ### Example
   ///
@@ -200,7 +176,7 @@ extension StringOperators on String? {
     return this!.replaceRange(index, index + pattern.length, replacement);
   }
 
-  /// Adds a [replacement] character at [index] of the `String`.
+  /// Replaces the character at [index] with [replacement].
   ///
   /// ### Example
   /// ```dart
@@ -215,9 +191,10 @@ extension StringOperators on String? {
     return '${this!.substring(0, index)}$replacement${this!.substring(index + 1, this!.length)}';
   }
 
-  /// Replaces the part of the string after the first occurrence of the given [delimiter]
-  /// with the [replacement] string. If the string does not contain the delimiter,
-  /// returns [defaultValue] or the original string if [defaultValue] is not provided.
+  /// Replaces content after the first [delimiter] with [replacement].
+  ///
+  /// If [delimiter] is missing, returns [defaultValue] when provided,
+  /// otherwise the original string.
   String? replaceAfter(
     String delimiter,
     String replacement, [
@@ -236,9 +213,10 @@ extension StringOperators on String? {
         );
   }
 
-  /// Replaces the part of the string before the first occurrence of the given [delimiter]
-  /// with the [replacement] string. If the string does not contain the delimiter,
-  /// returns [defaultValue] or the original string if [defaultValue] is not provided.compareIgnoreCase
+  /// Replaces content before the first [delimiter] with [replacement].
+  ///
+  /// If [delimiter] is missing, returns [defaultValue] when provided,
+  /// otherwise the original string.
   String? replaceBefore(
     String delimiter,
     String replacement, [
@@ -253,7 +231,7 @@ extension StringOperators on String? {
         : this!.replaceRange(0, index, replacement);
   }
 
-  /// Given a pattern returns the starting indices of all occurrences of the [pattern] in the `String`.
+  /// Returns start indexes for all occurrences of [pattern].
   ///
   /// ### Example
   /// ```dart
@@ -284,7 +262,7 @@ extension StringOperators on String? {
     return occurrences;
   }
 
-  /// Repeats the `String` [count] times.
+  /// Repeats this string [count] times.
   ///
   /// ### Example
   /// ```dart
@@ -297,7 +275,7 @@ extension StringOperators on String? {
     return this! * count;
   }
 
-  /// Squeezes the `String` by removing repeats of a given character.
+  /// Squeezes duplicate runs of [char] down to a single [char].
   ///
   /// ### Example
   /// ```dart
@@ -318,7 +296,7 @@ extension StringOperators on String? {
     return sb;
   }
 
-  /// Reverses slash in the `String`, by providing [direction],
+  /// Converts slash direction based on [direction].
   ///
   /// `0 = / -> \\`
   ///
@@ -330,7 +308,7 @@ extension StringOperators on String? {
   /// String revFoo1 = foo1.reverseSlash(0); // returns 'C:\Documents\user\test'
   ///
   /// String foo2 = 'C:\\Documents\\user\\test';
-  /// String revFoo2 = foo1.reverseSlash(1); // returns 'C:/Documents/user/test'
+  /// String revFoo2 = foo2.reverseSlash(1); // returns 'C:/Documents/user/test'
   /// ```
   String? reverseSlash(int direction) {
     if (isBlank) return this;
@@ -345,7 +323,7 @@ extension StringOperators on String? {
     }
   }
 
-  /// Returns the character at [index] of the `String`.
+  /// Returns character at [index], or `null` when out of bounds.
   ///
   /// ### Example
   ///
@@ -364,13 +342,13 @@ extension StringOperators on String? {
     return this!.split('')[index];
   }
 
-  /// Appends a [suffix] to the `String`.
+  /// Returns this string with [suffix] appended.
   ///
   /// ### Example
   ///
   /// ```dart
   /// String foo = 'hello';
-  /// String newFoo = foo1.append(' world'); // returns 'hello world'
+  /// String newFoo = foo.append(' world'); // hello world
   /// ```
   String append(String suffix) {
     if (isBlank) return suffix;
@@ -378,13 +356,13 @@ extension StringOperators on String? {
     return this! + suffix;
   }
 
-  /// Prepends a [prefix] to the `String`.
+  /// Returns this string with [prefix] prepended.
   ///
   /// ### Example
   ///
   /// ```dart
   /// String foo = 'world';
-  /// String newFoo = foo1.prepend('hello '); // returns 'hello world'
+  /// String newFoo = foo.prepend('hello '); // hello world
   /// ```
   String prepend(String prefix) {
     if (isBlank) return prefix;
@@ -392,7 +370,7 @@ extension StringOperators on String? {
     return prefix + this!;
   }
 
-  /// Returns the left side of the `String` starting from [pattern].
+  /// Returns substring to the left of the first [pattern].
   ///
   /// If [pattern] doesn't exist, `null` is returned.
   /// ### Example
@@ -411,7 +389,7 @@ extension StringOperators on String? {
     return this!.substring(0, index);
   }
 
-  /// Returns the right side of the `String` starting from [pattern].
+  /// Returns substring to the right of the first [pattern].
   ///
   /// If [pattern] doesn't exist, `null` is returned.
   ///
@@ -431,7 +409,7 @@ extension StringOperators on String? {
     return this!.substring(index + pattern.length, this!.length);
   }
 
-  /// Adds a `String` after the first match of the [pattern]. The [pattern] should not be `null`.
+  /// Inserts [addition] immediately after first [pattern] match.
   ///
   /// If there is no match, the `String` is returned unchanged.
   ///
@@ -453,7 +431,7 @@ extension StringOperators on String? {
         this!.substring(insertAt, this!.length);
   }
 
-  /// Adds a `String` before the first match of the [pattern]. The [pattern] should not be `null`.
+  /// Inserts [addition] immediately before first [pattern] match.
   ///
   /// If there is no match, the `String` is returned unchanged.
   ///
@@ -473,7 +451,7 @@ extension StringOperators on String? {
         this!.substring(indexOfFirstPatternWord, this!.length);
   }
 
-  /// Wrap the given string between the [char].
+  /// Wraps this value with [char] on both sides.
   String? wrap(String char) {
     if (isBlank) return this;
 
@@ -504,7 +482,7 @@ extension StringOperators on String? {
     return char * leftPadding + this! + char * rightPadding;
   }
 
-  /// Shuffles the given `String`'s characters.
+  /// Returns this string with characters shuffled randomly.
   ///
   /// ### Example
   /// ```dart
@@ -519,9 +497,9 @@ extension StringOperators on String? {
     return stringArray.join();
   }
 
-  /// Measures how similar this string is to another string using the specified algorithm.
-  /// it uses the public [StringSimilarity] class which offers different methods
-  /// for measuring how similar two strings are.
+  /// Measures similarity to [other] using the selected [algorithm].
+  ///
+  /// Delegates to [StringSimilarity.compare].
   double compareWith(
     String other,
     SimilarityAlgorithm algorithm, {

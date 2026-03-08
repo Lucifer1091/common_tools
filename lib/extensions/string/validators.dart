@@ -2,8 +2,9 @@ import 'dart:convert';
 
 import '../../index.dart';
 
+/// Predicate/validation helpers for nullable strings.
 extension StringValidators on String? {
-  /// Checks whether the `String` is `null`.
+  /// Returns `true` when this value is `null` or the literal string `'null'`.
   /// ### Example 1
   /// ```dart
   /// String? foo;
@@ -16,7 +17,7 @@ extension StringValidators on String? {
   /// ```
   bool get isNull => this == null || (this != null && this! == 'null');
 
-  /// Checks whether the `String` is not `null`.
+  /// Returns `true` when [isNull] is `false`.
   /// ### Example 1
   /// ```dart
   /// String? foo;
@@ -35,10 +36,12 @@ extension StringValidators on String? {
   /// Checks if the `String` is not blank (null, empty or only white spaces).
   bool get isNotBlank => !isBlank;
 
-  /// Check if the string is an email
+  /// Returns `true` when this value matches email format.
   bool get isEmail => isNotBlank && lowercase.matches(regex: Regex.email);
 
-  /// check given string is valid phone number or not
+  /// Returns `true` when this value looks like a valid phone number.
+  ///
+  /// Requires length between 9 and 16 and regex match.
   bool get isPhoneNumber {
     if (isBlank) return false;
 
@@ -47,10 +50,10 @@ extension StringValidators on String? {
     return RegexMatcher.match(this, regex: Regex.phone);
   }
 
-  /// Check if the string is a URL
+  /// Returns `true` when this value is an absolute URL.
   bool get isUrl => isNotBlank && (Uri.tryParse(this!)?.isAbsolute ?? false);
 
-  /// Check if the string contains only letters (a-zA-Z).
+  /// Returns `true` when this value contains only Latin letters.
   bool get isAlpha => matches(regex: Regex.alpha);
 
   /// Checks if the `String` has only Latin characters.
@@ -83,31 +86,31 @@ extension StringValidators on String? {
     return onlyLetters?.length == this!.length;
   }
 
-  /// Check if the string contains only letters and numbers
+  /// Returns `true` when this value is alphanumeric.
   bool get isAlphanumeric => matches(regex: Regex.alphanumeric);
 
-  /// Check if the string contains only numbers
+  /// Returns `true` when this value can be parsed as [num].
   bool get isNum => toNumOrNull() != null;
 
-  /// Check if the string is an integer
+  /// Returns `true` when this value can be parsed as [int].
   bool get isInt => toIntOrNull() != null;
 
-  /// Check if the string is a double
+  /// Returns `true` when this value can be parsed as [double].
   bool get isDouble => toDoubleOrNull() != null;
 
-  /// Check if a string is base64 encoded
+  /// Returns `true` when this value matches base64 format.
   bool get isBase64 => matches(regex: Regex.base64);
 
-  /// Check if the string is a hexadecimal number
+  /// Returns `true` when this value is hexadecimal.
   bool get isHexadecimal => matches(regex: Regex.hexadecimal);
 
-  /// Check if the string is a hexadecimal color
+  /// Returns `true` when this value is a hex color.
   bool get isHexColor => matches(regex: Regex.hexColor);
 
-  /// Check if the string is lowercase
+  /// Returns `true` when all letters are lowercase.
   bool get isLowerCase => isNotBlank && this == lowercase;
 
-  /// Check if the string is uppercase
+  /// Returns `true` when all letters are uppercase.
   bool get isUpperCase => isNotBlank && this == uppercase;
 
   /// Checks whether the `String` is consisted of both upper and lower case letters.
@@ -122,7 +125,7 @@ extension StringValidators on String? {
   /// ```dart
   /// String foo = 'hello world';
   /// bool isMixedCase = foo.isMixedCase; // returns false;
-  ///
+  /// ```
   bool get isMixedCase {
     if (isBlank) return false;
 
@@ -131,9 +134,9 @@ extension StringValidators on String? {
     return hasUpper && hasLower;
   }
 
-  /// Check if the string is a number that's divisible by another
+  /// Returns `true` when numeric value is divisible by [n] with no remainder.
   ///
-  /// [n] is a String or an int.
+  /// [n] can be `String` or `int`.
   bool isDivisibleBy(Object n) {
     if (isBlank) return false;
 
@@ -156,8 +159,9 @@ extension StringValidators on String? {
     }
   }
 
-  /// Check if the string's length falls in a range.
-  /// If no max is given then any length above min is ok.
+  /// Returns `true` when length is within `[min, max]`.
+  ///
+  /// If [max] is omitted, checks only `length >= min`.
   bool isLength(int min, [int? max]) {
     if (isBlank) return false;
 
@@ -192,8 +196,10 @@ extension StringValidators on String? {
   /// ```
   bool get isGuid => matches(regex: Regex.guid);
 
+  /// Returns `true` when this value matches SHA-1 hash format.
   bool get isSha1 => matches(regex: Regex.sha1);
 
+  /// Returns `true` when this value matches SHA-256 hash format.
   bool get isSha256 => matches(regex: Regex.sha256);
 
   /// Checks if the `String` provided is a valid credit card number using Luhn Algorithm.
@@ -236,7 +242,7 @@ extension StringValidators on String? {
     return (sum % 10 == 0);
   }
 
-  /// Check if the string is an ISBN (version 10 or 13)
+  /// Returns `true` when this value is a valid ISBN-10 or ISBN-13.
   bool isISBN([Object? version]) {
     if (isBlank) return false;
 
@@ -272,9 +278,9 @@ extension StringValidators on String? {
     return false;
   }
 
-  /// Check if the string is an IP ([version] 4 or 6)
+  /// Returns `true` when this value is a valid IP address.
   ///
-  /// [version] is a String or an `int` with options 4 and 6 only.
+  /// [version] can be `4`, `6`, or `null` (checks both).
   bool isIP([Object? version]) {
     if (isBlank) return false;
 
@@ -297,6 +303,7 @@ extension StringValidators on String? {
     return version == '6' && matches(regex: Regex.ipv6);
   }
 
+  /// Returns `true` when this value matches MAC address format.
   bool get isMacAddress {
     if (isBlank) return false;
 
@@ -424,6 +431,7 @@ extension StringValidators on String? {
     return this == reverse;
   }
 
+  /// Returns `true` when escaped control characters are present.
   bool get hasEscapedChars {
     if (isBlank) return false;
 
@@ -449,7 +457,7 @@ extension StringValidators on String? {
     return this!.contains(Regex.whiteSpaces);
   }
 
-  /// Checks if the given string contains any special characters.
+  /// Returns `true` if this value contains any non-alphanumeric non-space char.
   ///
   /// A special character is defined as any character that is not a letter
   /// (a-z, A-Z), digit (0-9), or space.
@@ -468,7 +476,7 @@ extension StringValidators on String? {
   /// ```
   bool get hasSpecial => matches(regex: RegExp('[^a-zA-Z0-9 ]'));
 
-  /// Checks if the `String` is consisted of same characters (ignores cases).
+  /// Returns `true` when all characters are equal (case-insensitive).
   ///
   /// ### Example
   /// ```dart
@@ -493,7 +501,7 @@ extension StringValidators on String? {
     return true;
   }
 
-  /// Check if string matches the [pattern] or [regex].
+  /// Returns `true` when this value matches [pattern] or [regex].
   bool matches({
     RegExp? regex,
     String? pattern,
@@ -513,7 +521,7 @@ extension StringValidators on String? {
     );
   }
 
-  /// Check if the string exactly matches with the [comparison]
+  /// Returns `true` if this value exactly equals [comparison].toString().
   bool equals(Object? comparison) {
     if (comparison == null) {
       // Explicitly check if `comparison` is null because calling `toString`
@@ -561,15 +569,14 @@ extension StringValidators on String? {
   int compareIgnoreCase(String other) =>
       isNotBlank ? lowercase!.compareTo(other.toLowerCase()) : 0;
 
-  /// Returns `true` if at least one element matches the given [predicate].
-  /// the [predicate] should have only one character
+  /// Returns `true` if any character satisfies [predicate].
   bool anyChar(Predicate<String> predicate) {
     if (isBlank) return false;
 
     return this!.split('').any((s) => predicate(s));
   }
 
-  /// Check if the string is in an array of given values
+  /// Returns `true` when this value exists in [values].
   bool isIn(Object? values) {
     if (isBlank || values == null) return false;
 
@@ -606,7 +613,7 @@ extension StringValidators on String? {
   /// ### Example
   ///
   /// ```dart
-  /// bool contains = "abracadabra".containsAll(["abra", "cadabra"]; // returns true;
+  /// bool contains = "abracadabra".containsAll(["abra", "cadabra"]); // true
   /// ```
   bool containsAll(List<String?> patterns) {
     for (final String? item in patterns.where(
@@ -636,50 +643,50 @@ extension StringValidators on String? {
 }
 
 extension StringToFileValidators on String? {
-  /// Check if the string is a image path or url
+  /// Returns `true` when this value is an image path/url/data URI.
   bool get isImage =>
       isNotBlank &&
       (matches(regex: Regex.image) ||
           matches(regex: Regex.imageUrl) ||
           this!.startsWith('data:image'));
 
-  /// Audio regex
+  /// Returns `true` when this value is an audio file path/url.
   bool get isAudio => matches(regex: Regex.audio);
 
-  /// Video regex
+  /// Returns `true` when this value is a video file path/url.
   bool get isVideo => matches(regex: Regex.video);
 
-  /// Txt regex
+  /// Returns `true` when this value is a text file path/url.
   bool get isTxt => matches(regex: Regex.txt);
 
-  /// Document regex
+  /// Returns `true` when this value is a Word document path/url.
   bool get isDoc => matches(regex: Regex.doc);
 
-  /// Excel regex
+  /// Returns `true` when this value is an Excel file path/url.
   bool get isExcel => matches(regex: Regex.excel);
 
-  /// PPT regex
+  /// Returns `true` when this value is a PowerPoint file path/url.
   bool get isPPT => matches(regex: Regex.ppt);
 
-  /// PDF regex
+  /// Returns `true` when this value is a PDF file path/url.
   bool get isPdf => matches(regex: Regex.pdf);
 
-  /// checks whether string is svg
+  /// Returns `true` when this value is an SVG path/url.
   bool get isSvg => matches(regex: Regex.svg);
 
-  /// checks whether string is csv
+  /// Returns `true` when this value is a CSV path/url.
   bool get isCsv => matches(regex: Regex.csv);
 
-  /// checks whether string is xml
+  /// Returns `true` when this value is an XML path/url.
   bool get isXml => matches(regex: Regex.xml);
 
-  /// checks whether string is archive
+  /// Returns `true` when this value is an archive path/url.
   bool get isArchive => matches(regex: Regex.archive);
 
-  /// checks whether string is json
+  /// Returns `true` when this value is a JSON file path/url.
   bool get isJsonFile => matches(regex: Regex.json);
 
-  /// checks whether string is docx, pdf, xls, ppt, txt, csv, xml, archive or json
+  /// Returns `true` when this value matches any supported file type.
   bool get isFile =>
       isImage ||
       isSvg ||

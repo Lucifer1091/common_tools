@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import '../../index.dart';
 
+/// Numeric math operators and helpers for nullable numbers.
 extension NumOperators on num? {
   /// Safely divides two numbers with custom handling for division by zero and zero values.
   ///
@@ -21,7 +22,9 @@ extension NumOperators on num? {
     returnNaNOnDivByZero: returnNaNOnDivByZero,
   );
 
-  /// Rounds this double to the nearest multiple of [multiple].
+  /// Rounds this value to the nearest multiple of [multiple].
+  ///
+  /// Throws [ArgumentError] when [multiple] is `0`.
   num roundToNearestMultiple(double multiple) {
     if (multiple == 0) {
       throw ArgumentError.value(multiple, 'multiple', 'cannot be zero');
@@ -30,7 +33,9 @@ extension NumOperators on num? {
     return (getOr() / multiple).round() * multiple;
   }
 
-  /// Rounds this double up to the nearest multiple of [multiple].
+  /// Rounds this value up to the nearest multiple of [multiple].
+  ///
+  /// Throws [ArgumentError] when [multiple] is `0`.
   num roundUpToMultiple(double multiple) {
     if (multiple == 0) {
       throw ArgumentError.value(multiple, 'multiple', 'cannot be zero');
@@ -39,7 +44,9 @@ extension NumOperators on num? {
     return (getOr() / multiple).ceil() * multiple;
   }
 
-  /// Rounds this double down to the nearest multiple of [multiple].
+  /// Rounds this value down to the nearest multiple of [multiple].
+  ///
+  /// Throws [ArgumentError] when [multiple] is `0`.
   num roundDownToMultiple(double multiple) {
     if (multiple == 0) {
       throw ArgumentError.value(multiple, 'multiple', 'cannot be zero');
@@ -48,7 +55,9 @@ extension NumOperators on num? {
     return (getOr() / multiple).floor() * multiple;
   }
 
-  /// Returns the prime factors of this integer.
+  /// Returns the prime factors of `toInt()`.
+  ///
+  /// For values less than `2`, returns an empty list.
   List<int> primeFactors() {
     var n = getOr().toInt();
     final factors = <int>[];
@@ -62,7 +71,10 @@ extension NumOperators on num? {
     return factors;
   }
 
-  /// Returns the factorial of this integer.
+  /// Returns factorial of `toInt()`.
+  ///
+  /// `null` is treated as `0` and returns `1`.
+  /// Throws [ArgumentError] for negative values.
   int factorial() {
     final value = getOr().toInt();
 
@@ -74,10 +86,12 @@ extension NumOperators on num? {
     return result;
   }
 
-  /// Returns the greatest common divisor of this integer and [other].
+  /// Returns GCD of `toInt()` and [other].
   int gcd(int other) => NumbersHelper.gcd(getOr().toInt(), other);
 
-  /// Returns the least common multiple of this integer and [other].
+  /// Returns LCM of `toInt()` and [other].
+  ///
+  /// Returns `0` when either input is `0`.
   int lcm(int other) {
     final a = getOr().toInt();
     if (a == 0 || other == 0) return 0;
@@ -85,7 +99,10 @@ extension NumOperators on num? {
     return (a * other).abs() ~/ NumbersHelper.gcd(a, other);
   }
 
-  /// Normalizes this number to a range between [min] and [max].
+  /// Scales this value relative to the range `[min, max]`.
+  ///
+  /// Returns `(value - min) / (max - min)`. Values outside the range can
+  /// produce results outside `0..1`.
   num scaleBetween(num min, num max) {
     if (min == max) throw ArgumentError('Min and max cannot be the same.');
     return (getOr() - min) / (max - min);
@@ -141,7 +158,7 @@ class NumbersHelper {
     return x;
   }
 
-  /// Checks if a number [n] is a perfect square.
+  /// Returns `true` if [n] is a perfect square.
   static bool isPerfectSquare(int n) {
     final sqrtN = math.sqrt(n).toInt();
     return sqrtN * sqrtN == n;
@@ -158,7 +175,14 @@ class NumbersHelper {
     'M': 1000,
   };
 
-  /// Converts a Roman numeral string [romanNumeral] to an integer.
+  /// Converts canonical Roman numeral [romanNumeral] to an integer.
+  ///
+  /// Accepts only canonical numerals in the range `1..3999`.
+  ///
+  /// Example:
+  /// ```dart
+  /// NumbersHelper.fromRomanNumeral('XII'); // 12
+  /// ```
   static int fromRomanNumeral(String romanNumeral) {
     final input = romanNumeral.trim().toUpperCase();
     if (input.isEmpty) {

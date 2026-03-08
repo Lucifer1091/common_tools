@@ -3,79 +3,77 @@ import 'dart:math';
 import '../num/operators.dart';
 import 'index.dart';
 
-/// convert string to different types
+/// Conversion helpers for nullable strings.
 extension StringConversions on String? {
-  /// getOrDefault
-  /// returns default value if blank
+  /// Returns this value when non-blank, otherwise [value].
+  ///
+  /// Example:
+  /// ```dart
+  /// final String? name = '  ';
+  /// final resolved = name.getOrDefault('Guest'); // Guest
+  /// ```
   String getOrDefault(String value) => isNotBlank ? this! : value;
 
-  /// getOrNull
-  /// returns null if null or empty
+  /// Returns this value when non-blank, otherwise `null`.
   String? getOrNull() => isNotBlank ? this : null;
 
-  /// convert String to int if is possible
+  /// Parses this value as `int` with optional [radix], or `0` on failure.
   int toInt({int radix = 10}) => toIntOr(0, radix: radix);
 
-  /// convert String to int if is possible
-  /// else will return null
+  /// Parses this value as `int` with optional [radix], or `null` on failure.
   int? toIntOrNull({int radix = 10}) =>
       isNotBlank ? int.tryParse(this!, radix: radix) : null;
 
-  /// convert String to int if is possible
-  /// else will return value
+  /// Parses this value as `int` with optional [radix], or [value] on failure.
   int toIntOr(int value, {int radix = 10}) =>
       toIntOrNull(radix: radix) ?? value;
 
-  /// convert String to `double` if is possible
+  /// Parses this value as `double`, or `0` on failure.
   double toDouble() => toDoubleOr(0);
 
-  /// convert String to double if is possible
-  /// else will return null
+  /// Parses this value as `double`, or `null` on failure.
   double? toDoubleOrNull() => isNotBlank ? double.tryParse(this!) : null;
 
-  /// convert String to double if is possible
-  /// else will return value
+  /// Parses this value as `double`, or [value] on failure.
   double toDoubleOr(double value) => toDoubleOrNull() ?? value;
 
-  /// convert String to `DateTime` if is possible
+  /// Parses this value as [DateTime], or `DateTime.now()` on failure.
   DateTime toDate() => toDateOrNow();
 
-  /// convert String to DateTime if is possible
-  /// else will return null
+  /// Parses this value as [DateTime], or `null` on failure.
   DateTime? toDateOrNull() => isNotBlank ? DateTime.tryParse(this!) : null;
 
-  /// convert String to DateTime if is possible
-  /// else will return value
+  /// Parses this value as [DateTime], or [value] on failure.
   DateTime toDateOr(DateTime value) => toDateOrNull() ?? value;
 
-  /// convert String to DateTime if is possible
-  /// else will return DateTime Now
+  /// Parses this value as [DateTime], or `DateTime.now()` on failure.
   DateTime toDateOrNow() => toDateOrNull() ?? DateTime.now();
 
-  /// convert String to `num` if is possible
+  /// Parses this value as [num], or `0` on failure.
   num toNum() => toNumOrZero();
 
-  /// convert String to `num` if is possible
-  /// else return `0`
+  /// Parses this value as [num], or `0` on failure.
   num toNumOrZero() => toNumOr(0);
 
-  /// convert String to DateTime if is possible
-  /// else will return null
+  /// Parses this value as [num], or `null` on failure.
   num? toNumOrNull() => isNotBlank ? num.tryParse(this!) : null;
 
-  /// convert String to DateTime if is possible
-  /// else will return value
+  /// Parses this value as [num], or [value] on failure.
   num toNumOr(num value) => toNumOrNull() ?? value;
 
+  /// Parses this value as `bool`, or `false` when unrecognized.
   bool toBool() => toBoolOr(false);
 
-  /// Checks the `String` and maps the value to a `bool` if possible.
+  /// Parses this value as `bool`.
   ///
-  /// ### Example
+  /// Accepted true values: `1`, `true`, `yes` (case-insensitive).
+  /// Accepted false values: `0`, `false`, `no` (case-insensitive).
   ///
+  /// Example:
   /// ```dart
-  /// String text = 'yes';
-  /// bool? textBool = text.toBool() ; // returns true
+  /// 'yes'.toBoolOrNull(); // true
+  /// 'FALSE'.toBoolOrNull(); // false
+  /// 'ok'.toBoolOrNull(); // null
   /// ```
   bool? toBoolOrNull() {
     if (isBlank) return null;
@@ -87,15 +85,21 @@ extension StringConversions on String? {
     return null;
   }
 
+  /// Parses this value as `bool`, or [value] when unrecognized.
   bool toBoolOr(bool value) => toBoolOrNull() ?? value;
 
-  /// Returns the integer value of the Roman numeral string.
+  /// Parses this Roman numeral string into an integer.
+  ///
+  /// Returns `null` when this value is `null`.
+  /// Throws [ArgumentError] when non-null input is not a valid canonical Roman numeral.
   int? get fromRomanNumeral =>
       this == null ? null : NumbersHelper.fromRomanNumeral(this!);
 
-  /// Generic string to enum function
+  /// Parses this value to enum [T] by matching enum `name` case-insensitively.
   ///
-  /// Converts the string to a [T]. Returns [orElse] or null if not found.
+  /// If no match is found:
+  /// - returns `orElse()` when provided
+  /// - otherwise throws [StateError]
   ///
   /// Example:
   /// ```dart
@@ -136,16 +140,13 @@ extension StringConversions on String? {
     return this!.split('');
   }
 
-  /// Splits the `String` into a `List` of lines ('\r\n' or '\n').
+  /// Splits this string into lines using `\n` or `\r\n`.
   ///
-  /// If the `String` is `null`, an `ArgumentError` is thrown.
+  /// Returns an empty list when this value is `null`.
   ///
-  /// ### Example
-  ///
+  /// Example:
   /// ```dart
-  /// String text = 'hello\nworld';
-  /// List<String> lines = text.splitLines;
-  /// print(lines); // prints ['hello', 'world']
+  /// final lines = 'hello\nworld'.splitLines; // ['hello', 'world']
   /// ```
   List<String> get splitLines {
     if (isNull) return [];
@@ -153,11 +154,16 @@ extension StringConversions on String? {
     return this!.split(RegExp(r'\r?\n'));
   }
 
-  /// Splits string by chunks with specified [size].
+  /// Splits this string into chunks with the given [size].
   ///
-  /// If string is empty than empty [Iterable] will be returned.
+  /// Returns an empty iterable when this value is blank.
   ///
-  /// If [size] less or equal 0, that [ArgumentError] will be raised.
+  /// Throws [ArgumentError] when [size] is less than or equal to `0`.
+  ///
+  /// Example:
+  /// ```dart
+  /// 'abcdef'.chunks(2).toList(); // ['ab', 'cd', 'ef']
+  /// ```
   Iterable<String> chunks(int size) sync* {
     if (size <= 0) {
       throw ArgumentError.value(size, 'size', 'Should be more than zero');
@@ -179,16 +185,15 @@ extension StringConversions on String? {
     }
   }
 
-  /// Divides string into everything before [pattern], [pattern], and everything
-  /// after [pattern].
+  /// Splits this value into: before first [pattern], matched [pattern], and after.
   ///
   /// Example:
   /// ```dart
   /// 'word'.partition('or'); // ['w', 'or', 'd']
   /// ```
   ///
-  /// If [pattern] is not found, the entire string is treated as coming before
-  /// [pattern].
+  /// If [pattern] is not found, returns `[this, '', '']`.
+  /// Returns `[]` for blank input.
   ///
   /// Example:
   /// ```dart
@@ -212,9 +217,12 @@ extension StringConversions on String? {
   }
 }
 
+/// Case and style normalization helpers for nullable strings.
 extension StringNormalization on String? {
+  /// Lower-cases this value when non-blank.
   String? get lowercase => isNotBlank ? this!.toLowerCase() : this;
 
+  /// Upper-cases this value when non-blank.
   String? get uppercase => isNotBlank ? this!.toUpperCase() : this;
 
   /// Capitalizes the `String` in normal form.
@@ -225,46 +233,45 @@ extension StringNormalization on String? {
   /// ```
   String? get capitalize => isNotBlank ? _ReCase(this!).capitalize : this;
 
-  /// camelCase string
+  /// Converts this value to `camelCase`.
   String? get camelCase => isNotBlank ? _ReCase(this!).camelCase : this;
 
-  /// constantCase string
+  /// Converts this value to `CONSTANT_CASE`.
   String? get constantCase => isNotBlank ? _ReCase(this!).constantCase : this;
 
-  /// sentenceCase string
+  /// Converts this value to sentence case.
   String? get sentenceCase => isNotBlank ? _ReCase(this!).sentenceCase : this;
 
-  /// snakeCase string
+  /// Converts this value to `snake_case`.
   String? get snakeCase => isNotBlank ? _ReCase(this!).snakeCase : this;
 
-  /// dotCase string
+  /// Converts this value to `dot.case`.
   String? get dotCase => isNotBlank ? _ReCase(this!).dotCase : this;
 
-  /// paramCase string
+  /// Converts this value to `param-case`.
   String? get paramCase => isNotBlank ? _ReCase(this!).paramCase : this;
 
-  /// pathCase string
+  /// Converts this value to `path/case`.
   String? get pathCase => isNotBlank ? _ReCase(this!).pathCase : this;
 
-  /// pascalCase string
+  /// Converts this value to `PascalCase`.
   String? get pascalCase => isNotBlank ? _ReCase(this!).pascalCase : this;
 
-  /// headerCase string
+  /// Converts this value to `Header-Case`.
   String? get headerCase => isNotBlank ? _ReCase(this!).headerCase : this;
 
-  /// titleCase string
+  /// Converts this value to `Title Case`.
   String? get titleCase => isNotBlank ? _ReCase(this!).titleCase : this;
 
-  /// initials
-  /// returns the initials of the string
-  /// if the string is empty, returns an empty string
-  /// if the string has one word, returns the first two characters
-  /// if the string has two or more words, returns the first character of the first two words
+  /// Returns initials from this value.
+  ///
+  /// - empty input => empty output
+  /// - one word => first two characters
+  /// - multi-word => first character from first two words
   String? get initials => isNotBlank ? _ReCase(this!).initials : this;
 }
 
-/// use to convert string into different cases
-///
+/// Internal helper for converting text into multiple case styles.
 class _ReCase {
   _ReCase(String text) {
     originalText = text;
@@ -312,11 +319,7 @@ class _ReCase {
   /// Title Case
   String get titleCase => _getPascalCase(separator: ' ');
 
-  /// Initials
-  /// returns the initials of the string
-  /// if the string is empty, returns an empty string
-  /// if the string has one word, returns the first two characters
-  /// if the string has two or more words, returns the first character of the first two words
+  /// Returns initials from grouped words.
   String get initials {
     if (_words.isEmpty) return '';
 

@@ -3,13 +3,17 @@ import 'dart:ui' show ImageFilter;
 import 'package:flutter/material.dart';
 import '../../index.dart';
 
+/// Fluent widget wrappers for quick composition.
 extension WidgetExtensions on Widget {
+  /// Wraps this widget with [RepaintBoundary].
   RepaintBoundary get repaintBoundary => RepaintBoundary(child: this);
 
+  /// Wraps this widget with a clickable [MouseRegion].
   MouseRegion get mouseRegion {
     return MouseRegion(cursor: SystemMouseCursors.click, child: this);
   }
 
+  /// Wraps this widget in a [PreferredSize] with default toolbar height.
   PreferredSize get preferredSize {
     return PreferredSize(
       preferredSize: const Size.fromHeight(kToolbarHeight),
@@ -17,6 +21,9 @@ extension WidgetExtensions on Widget {
     );
   }
 
+  /// Wraps this widget in [Center].
+  ///
+  /// Returns this widget unchanged when [enabled] is `false`.
   Widget center({
     Key? key,
     double? widthFactor,
@@ -32,11 +39,17 @@ extension WidgetExtensions on Widget {
     );
   }
 
+  /// Wraps this widget in [Expanded].
+  ///
+  /// Returns this widget unchanged when [enabled] is `false`.
   Widget expanded({int flex = 1, bool enabled = true}) {
     if (!enabled) return this;
     return Expanded(flex: flex, child: this);
   }
 
+  /// Wraps this widget in [Flexible].
+  ///
+  /// Returns this widget unchanged when [enabled] is `false`.
   Widget flexible({
     int flex = 1,
     FlexFit fit = FlexFit.loose,
@@ -46,6 +59,11 @@ extension WidgetExtensions on Widget {
     return Flexible(flex: flex, fit: fit, child: this);
   }
 
+  /// Wraps this widget in [Padding].
+  ///
+  /// You can provide [all], axis-level ([vertical]/[horizontal]), or side-level
+  /// values; more specific values override broader ones.
+  /// Returns this widget unchanged when [enabled] is `false`.
   Widget padding({
     double? all,
     double? left,
@@ -72,20 +90,25 @@ extension WidgetExtensions on Widget {
     );
   }
 
+  /// Wraps this widget with [ColoredBox].
   Widget colored({required Color color}) {
     return ColoredBox(color: color, child: this);
   }
 
+  /// Wraps this widget in [Opacity].
+  ///
+  /// Returns this widget unchanged when [enabled] is `false`.
   Widget opacity({required double opacity, bool enabled = true}) {
     if (!enabled) return this;
     return Opacity(opacity: opacity, child: this);
   }
 
+  /// Wraps this widget in [Align].
   Widget align({AlignmentGeometry? align}) {
     return Align(alignment: align ?? Alignment.center, child: this);
   }
 
-  /// add rotation to parent widget
+  /// Wraps this widget in [Transform.rotate].
   Widget rotate({
     required double angle,
     bool transformHitTests = true,
@@ -99,7 +122,7 @@ extension WidgetExtensions on Widget {
     );
   }
 
-  /// add scaling to parent widget
+  /// Wraps this widget in [Transform.scale].
   Widget scale({
     required double scale,
     Offset? origin,
@@ -115,7 +138,7 @@ extension WidgetExtensions on Widget {
     );
   }
 
-  /// add translate to parent widget
+  /// Wraps this widget in [Transform.translate].
   Widget translate({
     required Offset offset,
     bool transformHitTests = true,
@@ -129,6 +152,9 @@ extension WidgetExtensions on Widget {
     );
   }
 
+  /// Wraps this widget in [SizedBox].
+  ///
+  /// Returns this widget unchanged when [enabled] is `false`.
   Widget sizedBox({
     double? width,
     double? height,
@@ -139,7 +165,7 @@ extension WidgetExtensions on Widget {
     return SizedBox(key: key, width: width, height: height, child: this);
   }
 
-  /// add FittedBox to parent widget
+  /// Wraps this widget in [FittedBox].
   Widget fit({BoxFit? fit, AlignmentGeometry? alignment}) {
     return FittedBox(
       fit: fit ?? BoxFit.contain,
@@ -149,7 +175,7 @@ extension WidgetExtensions on Widget {
   }
 
   /// Returns a widget that is shown conditionally based on the [condition].
-  /// If [condition] is true, the widget is returned; otherwise, null is returned
+  /// If [condition] is true, returns this widget; otherwise `null`.
   Widget? showIfOrNull(bool condition) {
     if (condition) return this;
 
@@ -157,8 +183,7 @@ extension WidgetExtensions on Widget {
   }
 
   /// Returns a widget that is shown conditionally based on the [condition].
-  /// If [condition] is true, the widget is returned; otherwise, an [NoWidget] widget is returned.
-  /// This is useful for cases where you want to display an empty placeholder when the condition is
+  /// If [condition] is true, returns this widget; otherwise [NoWidget].
   Widget showIfOrEmpty(bool condition) {
     if (condition) return this;
 
@@ -167,12 +192,13 @@ extension WidgetExtensions on Widget {
 
   /// Returns a widget that is disabled based on the [disable] parameter.
   /// If [disable] is true, the widget is rendered with reduced opacity using the [Opacity] widget.
-  /// If [disable] is false or null, the widget is rendered normally.
+  /// If [disable] is false, the widget is rendered normally.
   Widget disabled({bool disable = true, double opacity = 0.2}) => IgnorePointer(
     ignoring: disable,
     child: Opacity(opacity: disable ? opacity : 1, child: this),
   );
 
+  /// Wraps this widget in a [ConstrainedBox].
   ConstrainedBox constrained({
     double maxWidth = 450,
     double maxHeight = double.infinity,
@@ -210,6 +236,9 @@ extension WidgetExtensions on Widget {
     );
   }
 
+  /// Wraps this widget in [Tooltip].
+  ///
+  /// Set [showRichText] to render custom rich tooltip content.
   Tooltip tooltip({
     required String msg,
     bool showRichText = false,
@@ -242,11 +271,13 @@ extension WidgetExtensions on Widget {
     child: this,
   );
 
+  /// Applies foreground blur to this widget using [ImageFiltered].
   Widget blur({double? x, double? y}) => ImageFiltered(
     imageFilter: ImageFilter.blur(sigmaX: x ?? 3, sigmaY: y ?? 3),
     child: this,
   );
 
+  /// Applies backdrop blur behind this widget.
   Widget bgBlur({double blurRadius = 10, double? sigmaX, double? sigmaY}) {
     return BackdropFilter(
       filter: ImageFilter.blur(
@@ -257,6 +288,7 @@ extension WidgetExtensions on Widget {
     );
   }
 
+  /// Applies a [ShaderMask] with [gradient] to this widget.
   Widget gradient(Gradient gradient, [BlendMode? blendMode]) => ShaderMask(
     shaderCallback: (Rect bounds) {
       return gradient.createShader(bounds);
@@ -265,15 +297,19 @@ extension WidgetExtensions on Widget {
     child: this,
   );
 
+  /// Wraps this widget in [SliverToBoxAdapter].
   SliverToBoxAdapter get sliverToBoxAdapter => SliverToBoxAdapter(child: this);
 
+  /// Wraps this widget in [SliverFillViewport].
   SliverFillViewport get sliverFillViewPort =>
       SliverFillViewport(delegate: SliverChildListDelegate([this]));
 
+  /// Wraps this widget in [SliverFillRemaining] with overscroll fill enabled.
   SliverFillRemaining get sliverFillRemaining =>
       SliverFillRemaining(fillOverscroll: true, child: this);
 }
 
+/// Extra text-style helpers.
 extension TextStyleX on TextStyle {
   /// A method to underline a text with a customizable [distance] between the text
   /// and underline. The [color], [thickness] and [style] can be set
@@ -303,7 +339,7 @@ extension TextStyleX on TextStyle {
   }
 }
 
-/// Extension on IconData to create an Icon widget with customizable size and color.
+/// Helper to create an [Icon] directly from [IconData].
 extension IconExtension on IconData {
   /// Creates an Icon widget using the current IconData with optional size and color.
   ///
@@ -315,14 +351,18 @@ extension IconExtension on IconData {
   ///
   /// Example:
   /// ```dart
-  /// final editIcon = Icons.contact.edit(size: 24, color: Colors.blue);
+  /// final editIcon = Icons.edit.edit(size: 24, color: Colors.blue);
   /// ```
   Icon edit({double? size, Color? color}) {
     return Icon(this, size: size, color: color);
   }
 }
 
+/// EdgeInsets copy helper with selective overrides.
 extension EdgeInsetsX on EdgeInsets {
+  /// Returns a copy with selected side/axis values replaced.
+  ///
+  /// Axis values ([vertical]/[horizontal]) take precedence over side values.
   EdgeInsets except({
     double? left,
     double? top,

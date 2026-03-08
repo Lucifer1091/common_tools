@@ -1,15 +1,16 @@
 import '../../index.dart';
 
+/// Sanitization and masking helpers for nullable strings.
 extension SanitizerExtensions on String? {
-  /// Formats the `String` with a specific mask.
+  /// Applies [mask] to this value, replacing each [char] placeholder with
+  /// sequential characters from the source string.
   ///
-  /// You can assign your own [char], defaults to '#'.
-  ///
-  /// ### Example
+  /// Example:
   /// ```dart
-  ///var string3 = 'esentisgreece';
-  ///var mask3 = 'Hello ####### you are from ######';
-  ///var masked3 = string3.formatWithMask(mask3); // returns 'Hello esentis you are from greece'
+  /// final value = 'esentisgreece';
+  /// final mask = 'Hello ####### you are from ######';
+  /// final output = value.formatWithMask(mask);
+  /// // Hello esentis you are from greece
   /// ```
   String? formatWithMask(String mask, {String char = '#'}) {
     if (isBlank) return this;
@@ -30,14 +31,13 @@ extension SanitizerExtensions on String? {
     return out;
   }
 
-  /// Formats the `String` with a specific [char].
+  /// Returns an obscured version of this value when [obscure] is `true`.
   ///
-  /// You can assign your own [char], defaults to '*'.
+  /// Uses [char] as the replacement character.
   ///
-  /// ### Example
+  /// Example:
   /// ```dart
-  ///var string3 = 'esentisgreece';
-  ///var text = string3.obscure(obscure: true); // returns '**************'
+  /// 'secret'.obscure(obscure: true); // ******
   /// ```
   String? obscure({bool obscure = false, String char = '*'}) {
     if (isBlank || !obscure) return this;
@@ -45,17 +45,7 @@ extension SanitizerExtensions on String? {
     return char * this!.length;
   }
 
-  /// Removes only the letters from the `String`.
-  /// ### Example 1
-  /// ```dart
-  /// String foo = 'es4e5523nt1is';
-  /// String noLetters = foo.removeLetters; // returns '455231'
-  /// ```
-  /// ### Example 2
-  /// ```dart
-  /// String foo = '1244e*s*4e*5523n*t*1i*s';
-  /// String noLetters = foo.removeLetters; // returns '1244**4*5523**1*'
-  /// ```
+  /// Removes Latin letters (`a-zA-Z`) from this value.
   String? get removeLetters {
     if (isBlank) return this;
 
@@ -63,17 +53,7 @@ extension SanitizerExtensions on String? {
     return this!.replaceAll(regex, '');
   }
 
-  /// Removes only the numbers from the `String`.
-  /// ### Example 1
-  /// ```dart
-  /// String foo = 'es4e5523nt1is';
-  /// String noNumbers = foo.removeNumbers; // returns 'esentis'
-  /// ```
-  /// ### Example 2
-  /// ```dart
-  /// String foo = '1244e*s*4e*5523n*t*1i*s';
-  /// String noNumbers = foo.removeNumbers; // returns 'e*s*e*n*t*i*s'
-  /// ```
+  /// Removes numeric digits from this value.
   String? get removeNumbers {
     if (isBlank) return this;
 
@@ -81,12 +61,7 @@ extension SanitizerExtensions on String? {
     return this!.replaceAll(regex, '');
   }
 
-  /// Returns only the numbers from the `String`.
-  /// ### Example
-  /// ```dart
-  /// String foo = '4*%^55/es4e5523nt1is';
-  /// String onyNumbers = foo.onlyNumbers; // returns '455455231'
-  /// ```
+  /// Keeps only numeric digits from this value.
   String? get onlyNumbers {
     if (isBlank) return this;
 
@@ -94,12 +69,7 @@ extension SanitizerExtensions on String? {
     return this!.replaceAll(regex, '');
   }
 
-  /// Returns only the Latin characters from the `String`.
-  /// ### Example
-  /// ```dart
-  /// String foo = '4*%^55/es4e5523nt1is';
-  /// String onlyLatin = foo.onlyLatin; // returns 'esentis'
-  /// ```
+  /// Keeps only Latin letters and spaces.
   String? get onlyLatin {
     if (isBlank) return this;
 
@@ -107,27 +77,15 @@ extension SanitizerExtensions on String? {
     return this!.replaceAll(regex, '');
   }
 
-  /// Returns only the Latin OR Greek characters from the `String`.
-  /// ### Example
-  /// ```dart
-  /// String foo = '4*%^55/σοφ4e5523ια';
-  /// String onlyL1 = foo.onlyLetters; // returns 'σοφια'
-  /// String foo2 = '4*%^55/es4e5523nt1is';
-  /// String onlyL2 = foo2.onlyLetters; // returns 'esentis'
-  /// ```
+  /// Keeps only letter characters (Greek block + Latin + spaces).
   String? get onlyLetters {
     if (isBlank) return this;
 
-    final regex = RegExp(r'([^α-ωΑ-ΩίϊΐόάέύϋΰήώΊΪΌΆΈΎΫΉΏa-zA-Z\s]+)');
+    final regex = RegExp(r'([^\u0370-\u03FFA-Za-z\s]+)', unicode: true);
     return this!.replaceAll(regex, '');
   }
 
-  /// Returns all special characters from the `String`.
-  /// ### Example
-  /// ```dart
-  /// String foo = '/!@#\$%^\-&*()+",.?":{}|<>~_-`*%^/ese?:"///ntis/!@#\$%^&*(),.?":{}|<>~_-`';
-  /// String removed = foo.removeSpecial; // returns 'esentis'
-  /// ```
+  /// Removes common special characters from this value.
   String? get removeSpecial {
     if (isBlank) return this;
 
@@ -135,19 +93,18 @@ extension SanitizerExtensions on String? {
     return this!.replaceAll(regex, '');
   }
 
+  /// Removes escaped control characters matched by [Regex.escapedChar].
   String? get removeEscapedChars {
     if (isBlank) return this;
 
     return this!.replaceAll(Regex.escapedChar, '');
   }
 
-  /// Removes all whitespace from the `String`.
+  /// Removes all whitespace characters.
   ///
-  /// ### Example
-  ///
+  /// Example:
   /// ```dart
-  /// String foo = '   Hel l o W   orld';
-  /// String striped = foo.removeWhiteSpace; // returns 'HelloWorld';
+  /// '   Hel l o W   orld'.removeWhiteSpace; // HelloWorld
   /// ```
   String? get removeWhiteSpace {
     if (isBlank) return this;
@@ -155,32 +112,18 @@ extension SanitizerExtensions on String? {
     return this!.replaceAll(Regex.whiteSpaces, '');
   }
 
-  /// Removes all punctuation characters from the given string.
+  /// Removes punctuation characters (keeps letters, numbers, underscore, spaces).
   ///
-  /// Returns an empty string if the input is null.
-  ///
-  /// Returns a new string with all punctuation characters removed.
-  ///
-  /// Example:
-  /// ```dart
-  /// String input = "Hello, world!";
-  /// String output = input.removePunctuation;
-  /// print(output); // Output: "Hello world"
-  /// ```
-  ///
-  /// Returns:
-  /// A new string with all punctuation characters removed.
+  /// Returns this value unchanged when blank.
   String? get removePunctuation {
     if (isBlank) return this;
 
     return this!.replaceAll(RegExp(r'[^\w\s]'), '');
   }
 
-  /// Returns a new string with leading and trailing characters removed.
+  /// Removes leading/trailing characters listed in [chars].
   ///
-  /// The optional [chars] argument specifies the characters to remove.
-  ///
-  /// If [chars] is not provided, it removes leading and trailing whitespace.
+  /// If [chars] is omitted, trims surrounding whitespace.
   String? strip([String? chars]) {
     if (isBlank) return this;
 
@@ -192,12 +135,11 @@ extension SanitizerExtensions on String? {
     }
   }
 
-  /// Strips all HTML code from `String`.
+  /// Removes HTML tags from this value.
   ///
-  /// ### Example
+  /// Example:
   /// ```dart
-  /// String html = '<script>Hacky hacky.</script> <p>Here is some text. <span class="bold">This is bold. </span></p>';
-  /// String stripped = html.stripHtml; // returns 'Hacky hacky. Here is some text. This is bold.';
+  /// '<p>Hello</p>'.stripHtml; // Hello
   /// ```
   String? get stripHtml {
     if (isBlank) return this;
@@ -206,25 +148,25 @@ extension SanitizerExtensions on String? {
     return this!.replaceAll(regex, '');
   }
 
-  /// Truncate the string to given [length]
-  /// [ellipsis] allows to add '...' in the end
+  /// Truncates this string to [length] characters.
+  ///
+  /// Appends `...` when [ellipsis] is `true`.
+  /// Returns this value unchanged when blank, when [length] is non-positive,
+  /// or when [length] is greater than or equal to current length.
   String? truncate({int length = 10, bool ellipsis = false}) {
     if (isBlank || length <= 0 || length >= this!.length) return this;
 
     return this!.substring(0, length) + (ellipsis ? '...' : '');
   }
 
-  /// Truncates a long `String` in the middle while retaining the beginning and the end.
+  /// Truncates in the middle with an ellipsis, keeping both ends.
   ///
-  /// [maxChars] must be more than 0.
+  /// Returns this value unchanged when blank, when [maxChars] is non-positive,
+  /// or when [maxChars] is greater than the current length.
   ///
-  /// If [maxChars] > String.length the same `String` is returned without truncation.
-  ///
-  /// ### Example
-  ///
+  /// Example:
   /// ```dart
-  /// String f = 'congratulations';
-  /// String truncated = f.truncateMiddle(5); // Returns 'con...ns'
+  /// 'congratulations'.truncateMiddle(5); // con...ns
   /// ```
   String? truncateMiddle(int maxChars) {
     if (isBlank || maxChars <= 0 || maxChars > this!.length) return this;
@@ -235,11 +177,11 @@ extension SanitizerExtensions on String? {
     return '${this!.first(n: leftChars)}...${this!.last(n: rightChars)}';
   }
 
-  /// Returns the `String` reversed.
-  /// ### Example
+  /// Returns this string reversed.
+  ///
+  /// Example:
   /// ```dart
-  /// String foo = 'Hello World';
-  /// String reversed = foo.reverse; // returns 'dlrow olleH'
+  /// 'Hello World'.reverse; // dlroW olleH
   /// ```
   String? get reverse {
     if (isBlank) return this;
@@ -251,21 +193,16 @@ extension SanitizerExtensions on String? {
     return buffer.toString();
   }
 
-  /// Trims leading and trailing spaces from the `String`, so as extra spaces in between words.
-  ///
-  /// ### Example
-  ///
-  /// ```dart
-  /// String text = '    esentis    thinks   ';
-  /// String trimmed = text.trimAll ; // returns 'esentis thinks'
-  /// ```
+  /// Trims outer spaces and collapses repeated inner spaces to one.
   String? get trimAll {
     if (isBlank) return this;
 
     return this!.trim().replaceAll(RegExp(' +'), ' ');
   }
 
-  /// Trims characters from the left side of the string.
+  /// Trims characters from the left side.
+  ///
+  /// If [chars] is omitted, trims leading whitespace.
   String? leftTrim([String? chars]) =>
       isNotBlank
           ? (chars != null)
@@ -273,7 +210,9 @@ extension SanitizerExtensions on String? {
               : this!.replaceAll(RegExp(r'^\s+'), '')
           : null;
 
-  /// Trims characters from the right side of the string.
+  /// Trims characters from the right side.
+  ///
+  /// If [chars] is omitted, trims trailing whitespace.
   String? rightTrim([String? chars]) =>
       isNotBlank
           ? (chars != null)
@@ -281,16 +220,17 @@ extension SanitizerExtensions on String? {
               : this!.replaceAll(RegExp(r'\s+$'), '')
           : null;
 
-  /// Removes characters that do not appear in the whitelist.
+  /// Keeps only characters listed in [chars].
   String? whitelist(String chars) =>
       this?.replaceAll(RegExp('[^${RegExp.escape(chars)}]+'), '');
 
-  /// Removes characters that appear in the blacklist.
+  /// Removes all characters listed in [chars].
   String? blacklist(String chars) =>
       this?.replaceAll(RegExp('[${RegExp.escape(chars)}]+'), '');
 
-  /// Removes characters with a numerical value less than 32 and 127.
-  /// If [keepNewLines] is true, newline characters are preserved (\n and \r, hex 0xA and 0xD).
+  /// Removes control characters (`< 0x20`) and `DEL` (`0x7F`).
+  ///
+  /// If [keepNewLines] is `true`, preserves `\n` and `\r`.
   String? stripLow([bool keepNewLines = false]) {
     final chars =
         keepNewLines ? '\x00-\x09\x0B\x0C\x0E-\x1F\x7F' : '\x00-\x1F\x7F';

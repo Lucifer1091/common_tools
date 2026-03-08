@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Convenience accessors for [ScaffoldMessenger] operations from [BuildContext].
 extension FHUScaffoldMessengerExtension on BuildContext {
   /// The state from the closest instance of this class that encloses the given
   /// context.
@@ -17,6 +18,13 @@ extension FHUScaffoldMessengerExtension on BuildContext {
   /// to receive snack bars from their closest [ScaffoldMessenger] ancestor.
   /// If there are several registered scaffolds the snack bar is shown
   /// simultaneously on all of them.
+  ///
+  /// Example:
+  /// ```dart
+  /// context.showSnackBar(
+  ///   const SnackBar(content: Text('Saved')),
+  /// );
+  /// ```
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSnackBar(
     SnackBar snackBar,
   ) => scaffoldMessenger.showSnackBar(snackBar);

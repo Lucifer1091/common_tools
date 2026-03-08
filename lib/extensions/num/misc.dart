@@ -3,8 +3,9 @@ import 'dart:math';
 import 'converters.dart';
 import 'validators.dart';
 
+/// Iterable, looping, and random-text helpers for nullable numbers.
 extension NumHelper on num? {
-  /// Returns an iterable from `0` up to but not including [num].
+  /// Returns values from `0` up to but not including this integer value.
   ///
   /// Example:
   /// ```dart
@@ -16,12 +17,10 @@ extension NumHelper on num? {
     return Iterable<int>.generate(count);
   }
 
-  /// Generates a sequence from `this` to `end` (exclusive),
-  /// with a customizable `step` size.
+  /// Generates a sequence from this value toward [end] (exclusive).
   ///
-  /// - If `step` is positive, it counts up.
-  /// - The direction is always inferred from `this` and [end].
-  /// - [step] is treated as a magnitude (`abs`) and cannot be zero.
+  /// [step] is treated as magnitude (`abs`), and direction is inferred from
+  /// start/end.
   ///
   /// Example:
   /// ```dart
@@ -52,8 +51,7 @@ extension NumHelper on num? {
     }
   }
 
-  /// Creates an [Iterable<int>] that contains all values from current integer
-  /// until (including) the value [n].
+  /// Returns all integer values from this value through [n] (inclusive).
   ///
   /// Example:
   /// ```dart
@@ -69,8 +67,7 @@ extension NumHelper on num? {
     return Iterable.generate(count, (int index) => i += direction);
   }
 
-  /// Creates an [Iterable<int>] that contains all values from current integer
-  /// until (excluding) the value [n].
+  /// Returns all integer values from this value until [n] (exclusive).
   ///
   /// Example:
   /// ```dart
@@ -89,10 +86,12 @@ extension NumHelper on num? {
     }
   }
 
-  /// Executes the function [action] for [num] times.
+  /// Executes [action] `toInt()` times.
   ///
   /// Example:
-  /// 3.times(() => print('Hello')); // Hello... Hello... Hello
+  /// ```dart
+  /// 3.times(() => print('Hello'));
+  /// ```
   void times(void Function() action) {
     final count = toInt();
     if (count <= 0) return;
@@ -102,16 +101,19 @@ extension NumHelper on num? {
     }
   }
 
-  /// runs [func] for [num] number of times.
-  /// This is irrespective of the sign of [num]. the for loop will always
-  /// run from 1 to absolute value of [num].
+  /// Runs [func] `abs(toInt())` times with 1-based index.
   ///
-  /// Returns [List] of type [T] where T is the return type of [func]
+  /// Example:
+  /// ```dart
+  /// final values = 3.repeat((i) => i * 2); // [2, 4, 6]
+  /// ```
   List<T> repeat<T>(T Function(int count) func) => [
     for (var i = 1; i <= toInt().abs(); i++) func(i),
   ];
 
-  /// Get list of random numbers.
+  /// Returns a list of random integers in `[min, max)`.
+  ///
+  /// The resulting list length is `toInt()`.
   List<num> randomList({int min = 0, int max = 100}) {
     if (isNull) return [];
     if (min >= max) {
@@ -125,7 +127,9 @@ extension NumHelper on num? {
     return List<num>.generate(count, (_) => random.nextInt(max - min) + min);
   }
 
-  /// Get the lorem ipsum text of [num] words.
+  /// Returns lorem-ipsum text with `toInt()` words.
+  ///
+  /// Returns empty string for `null` or non-positive values.
   String loremIpsum() {
     if (isNull) return '';
     final count = toInt();

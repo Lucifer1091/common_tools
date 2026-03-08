@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 extension StateExtensions<T extends StatefulWidget> on State<T> {
   /// Safely calls [setState] only if the widget is still mounted.
   ///
-  /// This prevents the common error of calling setState on a disposed widget.
-  /// Returns `true` if setState was called,
-  /// `false` if the widget is not mounted.
+  /// This prevents calling `setState` after disposal.
+  ///
+  /// Returns:
+  /// - `true` if `setState` executed
+  /// - `false` if this state is not mounted
   ///
   /// Example:
   /// ```dart

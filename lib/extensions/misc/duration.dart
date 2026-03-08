@@ -1,29 +1,45 @@
 import '../../index.dart';
 
+/// Convenience math, conversion, and scheduling helpers for [Duration].
 extension DurationTimeExtension on Duration {
+  /// Returns this duration multiplied by [by].
+  ///
+  /// Example:
+  /// ```dart
+  /// final total = const Duration(minutes: 15).times(4); // 1 hour
+  /// ```
   Duration times(int by) {
     return Duration(microseconds: inMicroseconds * by);
   }
 
+  /// Returns this duration divided by [by] using integer division.
+  ///
+  /// Throws when [by] is `0`.
   Duration divide(int by) {
     return Duration(microseconds: inMicroseconds ~/ by);
   }
 
+  /// Number of days in one week.
   static const int daysPerWeek = 7;
 
+  /// Number of nanoseconds in one microsecond.
   static const int nanosecondsPerMicrosecond = 1000;
 
   /// Returns the duration represented in weeks.
   ///
-  /// The result is the number of weeks in this duration, rounded up.
+  /// The result is rounded up.
+  ///
+  /// Example:
+  /// ```dart
+  /// final weeks = const Duration(days: 8).inWeeks; // 2
+  /// ```
   int get inWeeks => (inDays / daysPerWeek).ceil();
 
   /// Returns a [DateTime] in the future by adding this [Duration] to the current time.
   ///
-  ///
   /// Example:
   /// ```dart
-  /// final twoDaysLater = Duration(days: 2).fromNow;
+  /// final expiresAt = const Duration(hours: 2).fromNow;
   /// ```
   DateTime get fromNow => DateTime.now() + this;
 
@@ -31,7 +47,7 @@ extension DurationTimeExtension on Duration {
   ///
   /// Example:
   /// ```dart
-  /// final twoDaysAgo = Duration(days: 2).ago;
+  /// final startedAt = const Duration(minutes: 30).ago;
   /// ```
   DateTime get ago => DateTime.now() - this;
 
@@ -39,16 +55,14 @@ extension DurationTimeExtension on Duration {
   ///
   /// This can be used to delay execution in asynchronous code.
   ///
-  /// Example 1:
+  /// If [callback] is omitted, the future completes with `null`.
+  ///
+  /// Example:
   /// ```dart
-  /// await Duration(seconds: 2).delay;
+  /// await const Duration(seconds: 2).delay();
+  ///
+  /// final value = await const Duration(milliseconds: 300).delay(() => 42);
   /// ```
-  /// Example 2:
-  /// ```dart
-  ///   await 3.seconds.delay(() {
-  ///           ....
-  ///   }
-  ///```
   Future<T> delay<T>([FutureOrCallback<T>? callback]) =>
       Future<T>.delayed(this, callback);
 
@@ -88,37 +102,34 @@ extension DurationTimeExtension on Duration {
   }
 
   /// Returns the number of whole years spanned by this Duration.
-  /// Please note that this does not account for leap year.
+  ///
+  /// This is a simple `365-days` calculation and ignores leap years.
   int get inYears => inDays ~/ 365;
 
-  /// Returns true if [Duration] duration equals to or more than a year.
+  /// Returns `true` when this duration is at least one year.
   bool get isInYears => inYears > 0;
 
-  /// Returns true if [Duration] duration equals to or more than a day.
+  /// Returns `true` when this duration is at least one day.
   bool get isInDays => inDays > 0;
 
-  /// Returns true if [Duration] duration equals to or more than an hour but
-  /// is less than a day.
+  /// Returns `true` when this duration is at least one hour and less than a day.
   bool get isInHours => inHours > 0 && !isInDays;
 
-  /// Returns true if [Duration] duration equals to or more than a minute but
-  /// is less than an hour.
+  /// Returns `true` when this duration is at least one minute and less than an hour.
   bool get isInMinutes => inMinutes > 0 && inHours == 0;
 
-  /// Returns true if [Duration] duration equals to or more than a second but
-  /// is less than a minute.
+  /// Returns `true` when this duration is at least one second and less than a minute.
   bool get isInSeconds => inSeconds > 0 && inMinutes == 0;
 
-  /// Returns true if [Duration] duration equals to or more than a millisecond but
-  /// is less than a second.
+  /// Returns `true` when this duration is at least one millisecond and less than a second.
   bool get isInMillis => inMilliseconds > 0 && inSeconds == 0;
 
   /// Returns remaining minutes after deriving hours.
   int get absoluteMinutes => inMinutes % Duration.minutesPerHour;
 
-  /// Returns remaining minutes after deriving days.
+  /// Returns remaining hours after deriving days.
   int get absoluteHours => inHours % Duration.hoursPerDay;
 
-  /// Returns remaining minutes after deriving minutes.
+  /// Returns remaining seconds after deriving minutes.
   int get absoluteSeconds => inSeconds % Duration.secondsPerMinute;
 }

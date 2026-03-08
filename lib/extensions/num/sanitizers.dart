@@ -1,41 +1,43 @@
 import '../../index.dart';
 
+/// Sign and digit-slicing helpers for nullable numbers.
 extension NumSanitizers on num? {
   /// Swap the sign of the number.
   num swapSign() => -getOr();
 
-  ///
+  /// Returns half of this value.
   num get half => getOr() / 2;
 
-  ///
+  /// Returns one-third of this value.
   num get third => getOr() / 3;
 
-  ///
+  /// Returns one-quarter of this value.
   num get quarter => getOr() / 4;
 
-  ///
+  /// Returns one-fifth of this value.
   num get fifth => getOr() / 5;
 
-  /// Returns tenth of the number
+  /// Returns one-tenth of this value.
   double get tenth => getOr() / 10;
 
-  /// Returns the absolute value
+  /// Returns absolute value.
   double get absolute => toDouble().abs();
 
-  /// Return this number time two
+  /// Returns this value multiplied by 2.
   num get doubled => getOr() * 2;
 
-  /// Return this number time three
+  /// Returns this value multiplied by 3.
   num get tripled => getOr() * 3;
 
-  /// Return this number time four
+  /// Returns this value multiplied by 4.
   num get quadrupled => getOr() * 4;
 
-  /// Return squared number
+  /// Returns this value squared.
   num get squared => getOr() * getOr();
 
-  /// sum of digits
-  /// Returns the sum of digits in the number.
+  /// Returns the sum of numeric digits in this value.
+  ///
+  /// Non-digit characters (including sign and decimal separator) are ignored.
   num sumOfDigits() {
     final raw = toString().replaceAll(RegExp('[^0-9]'), '');
     if (raw.isEmpty) return 0;
@@ -43,8 +45,10 @@ extension NumSanitizers on num? {
     return raw.split('').fold<int>(0, (sum, digit) => sum + int.parse(digit));
   }
 
-  /// Get the digits between [start] and [end] in the number
-  /// Returns the digits between [start] and [end] in the number
+  /// Returns the numeric substring between first [start] and next [end].
+  ///
+  /// Matching is performed on this value's string representation.
+  /// Returns `0` when boundaries are not found.
   num digitsBetween(num start, num end) {
     final source = toString();
     final startText = start.toString();
@@ -61,8 +65,10 @@ extension NumSanitizers on num? {
     return _parseNumberOrZero(result);
   }
 
-  /// Get the digits before the first occurrence of [substring] in the number
-  /// Returns the digits before the first occurrence of [substring] in the number
+  /// Returns numeric content before first [substring] match.
+  ///
+  /// Matching is performed on this value's string representation.
+  /// Returns `0` when [substring] is not found.
   num digitsBeforeFirst(num substring) {
     final source = toString();
     final index = source.indexOf(substring.toString());
@@ -72,8 +78,10 @@ extension NumSanitizers on num? {
     return _parseNumberOrZero(result);
   }
 
-  /// Get the digits after the first occurrence of [substring] in the number
-  /// Returns the digits after the first occurrence of [substring] in the number
+  /// Returns numeric content after first [substring] match.
+  ///
+  /// Matching is performed on this value's string representation.
+  /// Returns `0` when [substring] is not found.
   num digitsAfterFirst(num substring) {
     final source = toString();
     final target = substring.toString();
@@ -84,8 +92,10 @@ extension NumSanitizers on num? {
     return _parseNumberOrZero(result);
   }
 
-  /// Get the digits before the last occurrence of [substring] in the number
-  /// Returns the digits before the last occurrence of [substring] in the number
+  /// Returns numeric content before last [substring] match.
+  ///
+  /// Matching is performed on this value's string representation.
+  /// Returns `0` when [substring] is not found.
   num digitsBeforeLast(num substring) {
     final source = toString();
     final index = source.lastIndexOf(substring.toString());
@@ -95,8 +105,10 @@ extension NumSanitizers on num? {
     return _parseNumberOrZero(result);
   }
 
-  /// Get the digits after the last occurrence of [substring] in the number
-  /// Returns the digits after the last occurrence of [substring] in the number
+  /// Returns numeric content after last [substring] match.
+  ///
+  /// Matching is performed on this value's string representation.
+  /// Returns `0` when [substring] is not found.
   num digitsAfterLast(num substring) {
     final source = toString();
     final target = substring.toString();

@@ -3,10 +3,12 @@ import 'dart:math' as math;
 import 'converters.dart';
 import 'operators.dart';
 
+/// Predicate helpers for nullable numbers.
 extension NumValidators on num? {
   /// Returns `true` if this nullable number is `null`.
   bool get isNull => this == null;
 
+  /// Returns `true` when this value is not `null`.
   bool get isNotNull => !isNull;
 
   /// Returns `true` if the number is even, `false` otherwise.
@@ -21,7 +23,9 @@ extension NumValidators on num? {
   /// Returns `true` if the number is negative, `false` otherwise.
   bool get isNegative => isNotNull && this! < 0;
 
-  /// Returns to if [num] has .00000 fraction points
+  /// Returns `true` when this value has no fractional part.
+  ///
+  /// Returns `false` for `null`, infinities, and NaN.
   bool get isWhole =>
       isNotNull &&
       this != double.infinity &&
@@ -32,14 +36,16 @@ extension NumValidators on num? {
   /// Returns `true` if the number is zero, `false` otherwise.
   bool get isZero => isNotNull && this! == 0;
 
-  /// Returns `true` if the number is an integer, `false` otherwise.
+  /// Returns `true` when this value equals its integer truncation.
   bool get isInteger => this == toInt();
 
   /// Returns `true` if the number is a double, `false` otherwise.
   bool get isDouble => this is double;
 
-  /// Determines if `this` is between [min] and [max].
-  /// If [inclusive] is `true`, both bounds are inclusive; otherwise, the upper bound is exclusive.
+  /// Returns whether this value is inside `[min, max]`.
+  ///
+  /// Lower bound is always inclusive.
+  /// Upper bound is inclusive when [inclusive] is `true`, exclusive otherwise.
   bool between(num min, num max, {bool inclusive = true}) {
     assert(
       min <= max,
@@ -53,7 +59,11 @@ extension NumValidators on num? {
         : (min <= value && value < max);
   }
 
-  /// Returns `true` if this number is outside the given range of [min] and [max].
+  /// Returns `true` when this value is outside `[min, max]`.
+  ///
+  /// Boundary behavior matches [between]:
+  /// - [inclusive] `true`: values equal to bounds are considered inside.
+  /// - [inclusive] `false`: value equal to either bound is considered outside.
   bool outside(num min, num max, {bool inclusive = true}) {
     assert(
       min <= max,
@@ -67,28 +77,23 @@ extension NumValidators on num? {
         : (value <= min || value >= max);
   }
 
-  /// Check if the number starts with [prefix].
-  /// Returns `true` if the number starts with [prefix], `false` otherwise.
+  /// Returns `true` if this value's string form starts with [prefix].
   bool startsWith(num prefix) =>
       isNotNull && toString().startsWith(prefix.toString());
 
-  /// Check if the number ends with [suffix].
-  /// Returns `true` if the number ends with [suffix], `false` otherwise.
+  /// Returns `true` if this value's string form ends with [suffix].
   bool endsWith(num suffix) =>
       isNotNull && toString().endsWith(suffix.toString());
 
-  /// Check if the number contains [substring].
-  /// Returns `true` if the number contains [substring], `false` otherwise.
+  /// Returns `true` if this value's string form contains [substring].
   bool contains(num substring) =>
       isNotNull && toString().contains(substring.toString());
 
-  /// Returns true if [num] is close to [other] within [precision].
-  /// By default, [precision] is set to 1.0e-8 which is 0.00000001 which makes
-  /// it suitable for most of the cases.
+  /// Returns `true` when absolute difference from [other] is within [precision].
   bool isCloseTo(double other, {double precision = 1.0e-8}) =>
       isNotNull && (this! - other).abs() <= precision;
 
-  /// Returns true if [num] represents a leap year
+  /// Returns `true` if this integer value represents a leap year.
   bool get isLeapYear {
     if (isNull) return false;
     final int year = toInt();
@@ -97,7 +102,9 @@ extension NumValidators on num? {
     return (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;
   }
 
-  /// Returns true if [num] can be completely divisible by [divider]
+  /// Returns `true` when divisible by [divider] with no remainder.
+  ///
+  /// Throws [ArgumentError] when [divider] is `0`.
   bool isDivisibleBy(int divider) {
     if (divider == 0) {
       throw ArgumentError.value(divider, 'divider', 'cannot be zero');
@@ -107,8 +114,9 @@ extension NumValidators on num? {
     return this! % divider == 0;
   }
 
-  /// Returns true if [num] can be completely divisible
-  /// by all of the [dividers].
+  /// Returns `true` when divisible by every value in [dividers].
+  ///
+  /// Throws [ArgumentError] when [dividers] contains `0`.
   bool isDivisibleByAll(List<int> dividers) {
     if (dividers.contains(0)) {
       throw ArgumentError.value(dividers, 'dividers', 'cannot contain zero');
@@ -137,7 +145,9 @@ extension NumValidators on num? {
     return value >= 0 && NumbersHelper.isPerfectSquare(value);
   }
 
-  /// Checks if this integer is a perfect cube.
+  /// Checks if `abs(toInt())` is a perfect cube.
+  ///
+  /// Negative perfect cubes also return `true` because absolute value is used.
   bool isPerfectCube() {
     if (isNull) return false;
     final n = getOr().abs();

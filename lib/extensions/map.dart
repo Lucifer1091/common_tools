@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../../index.dart';
 
+/// Utility transforms and filters for maps.
 extension MapUtils<K, V> on Map<K, V> {
   /// Returns true when the map contains [key] and its value equals [value].
   bool contains(Object key, Object? value) =>
@@ -182,6 +183,7 @@ extension MapUtils<K, V> on Map<K, V> {
   }
 }
 
+/// Fundamental querying helpers for maps.
 extension MapBasics<K, V> on Map<K, V> {
   /// Type-safe get with fallback when key is absent.
   V? get(K key, {V? defaultValue}) =>
@@ -205,6 +207,7 @@ extension MapBasics<K, V> on Map<K, V> {
   };
 }
 
+/// Operator-style and structural helpers for maps.
 extension MapScrewdriver<K, V> on Map<K, V> {
   /// Adds a record entry to this map.
   void operator +((K, V) entry) => this[entry.$1] = entry.$2;
@@ -269,6 +272,7 @@ extension MapScrewdriver<K, V> on Map<K, V> {
   }
 }
 
+/// Lazy fallback getter for maps.
 extension MapGetOrElse<K, V> on Map<K, V> {
   /// Returns the value for [key], or result of [defaultValue] when key is absent.
   V getOrElse(K key, V Function() defaultValue) {
@@ -346,6 +350,7 @@ Map<String, dynamic>? _asMap(Object? value) {
   }
 }
 
+/// Safe typed extraction helpers for loosely typed JSON-like maps.
 extension JsonGetters<K, V> on Map<K, V> {
   /// Parses [key] to [T], returning [value] as fallback.
   T parse<T>(String key, {required T value}) => parseOrNull<T>(key) ?? value;
@@ -371,6 +376,7 @@ extension JsonGetters<K, V> on Map<K, V> {
   String getString(String key, {required String value}) =>
       getStringOrNull(key) ?? value;
 
+  /// Returns value at [key] as [String], or `null` when conversion is not possible.
   String? getStringOrNull(String key) {
     if (!containsKey(key)) return null;
 
@@ -382,6 +388,7 @@ extension JsonGetters<K, V> on Map<K, V> {
 
   num getNum(String key, {required num value}) => getNumOrNull(key) ?? value;
 
+  /// Returns value at [key] as [num], or `null` when conversion is not possible.
   num? getNumOrNull(String key) {
     if (!containsKey(key)) return null;
     return _asNum(this[key]);
@@ -389,6 +396,7 @@ extension JsonGetters<K, V> on Map<K, V> {
 
   int getInt(String key, {required int value}) => getIntOrNull(key) ?? value;
 
+  /// Returns value at [key] as [int], or `null` when conversion is not possible.
   int? getIntOrNull(String key) {
     if (!containsKey(key)) return null;
     return _asInt(this[key]);
@@ -397,6 +405,7 @@ extension JsonGetters<K, V> on Map<K, V> {
   double getDouble(String key, {required double value}) =>
       getDoubleOrNull(key) ?? value;
 
+  /// Returns value at [key] as [double], or `null` when conversion is not possible.
   double? getDoubleOrNull(String key) {
     if (!containsKey(key)) return null;
     return _asDouble(this[key]);
@@ -405,6 +414,7 @@ extension JsonGetters<K, V> on Map<K, V> {
   bool getBool(String key, {required bool value}) =>
       getBoolOrNull(key) ?? value;
 
+  /// Returns value at [key] as [bool], or `null` when conversion is not possible.
   bool? getBoolOrNull(String key) {
     if (!containsKey(key)) return null;
     return _asBool(this[key]);
@@ -413,6 +423,7 @@ extension JsonGetters<K, V> on Map<K, V> {
   DateTime getDateTime(String key, {required DateTime value}) =>
       getDateTimeOrNull(key) ?? value;
 
+  /// Returns value at [key] as [DateTime], or `null` when conversion is not possible.
   DateTime? getDateTimeOrNull(String key) {
     if (!containsKey(key)) return null;
 
@@ -425,6 +436,11 @@ extension JsonGetters<K, V> on Map<K, V> {
   List<T> getList<T>(String key, {required List<T> value}) =>
       getListOrNull<T>(key) ?? value;
 
+  /// Returns value at [key] as `List<T>`, or `null` when conversion is not possible.
+  ///
+  /// Accepts:
+  /// - a list value
+  /// - a JSON string that decodes to a list
   List<T>? getListOrNull<T>(String key) {
     if (!containsKey(key)) return null;
 
@@ -447,6 +463,11 @@ extension JsonGetters<K, V> on Map<K, V> {
     required Map<String, dynamic> value,
   }) => getMapOrNull(key) ?? value;
 
+  /// Returns value at [key] as `Map<String, dynamic>`, or `null` on failure.
+  ///
+  /// Accepts:
+  /// - a map value
+  /// - a JSON string that decodes to a map
   Map<String, dynamic>? getMapOrNull(String key) {
     if (!containsKey(key)) return null;
 
@@ -465,6 +486,7 @@ extension JsonGetters<K, V> on Map<K, V> {
   }
 }
 
+/// Miscellaneous helpers for map joining, counting, and typed access.
 extension MapExt<K, V> on Map<K, V> {
   /// Returns typed value at [key], or [defaultValue] if absent or wrong type.
   T? getValue<T>(K key, {T? defaultValue}) {

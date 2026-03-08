@@ -5,26 +5,48 @@ import '../date/index.dart';
 import 'operators.dart';
 import 'validators.dart';
 
+/// Conversion and formatting helpers for nullable numbers.
 extension NumConverters on num? {
-  /// Get or default given double is not null and returns given value if null.
+  /// Returns this value, or [value] when `null`.
+  ///
+  /// Example:
+  /// ```dart
+  /// final num? input = null;
+  /// final resolved = input.getOr(10); // 10
+  /// ```
   num getOr([num value = 0]) => this ?? value;
 
+  /// Returns this value as [double], or `0` when `null`.
   double toDouble() => toDoubleOr(0);
 
+  /// Returns this value as [double], or `null` when `null`.
   double? toDoubleOrNull() => this?.toDouble();
 
+  /// Returns this value as [double], or [value] when `null`.
   double toDoubleOr(double value) => toDoubleOrNull() ?? value;
 
+  /// Returns this value as [int], or `0` when `null`.
   int toInt() => toIntOr(0);
 
+  /// Returns this value as [int], or `null` when `null`.
   int? toIntOrNull() => this?.toInt();
 
+  /// Returns this value as [int], or [value] when `null`.
   int toIntOr(int value) => toIntOrNull() ?? value;
 
+  /// Converts this number to [bool], or `false` when `null`.
+  ///
+  /// Uses [toBoolOrNull] semantics: only numeric value `1` maps to `true`.
   bool toBool() => toBoolOr(false);
 
+  /// Converts this number to [bool] using `1 => true`, all other non-null values => `false`.
+  ///
+  /// Returns `null` when this value is `null`.
   bool? toBoolOrNull() => isNotNull ? this == 1 : null;
 
+  /// Converts this number to [bool], or [value] when `null`.
+  ///
+  /// Uses [toBoolOrNull] semantics: only numeric value `1` maps to `true`.
   bool toBoolOr(bool value) => toBoolOrNull() ?? value;
 
   /// Converts degrees to radians.
@@ -33,7 +55,15 @@ extension NumConverters on num? {
   /// Converts radians to degrees.
   double? radiansToDegrees() => isNotNull ? this! * (180.0 / pi) : null;
 
-  /// Converts this double to a fraction string representation.
+  /// Converts this number to a simplified mixed-fraction string.
+  ///
+  /// Fraction precision is based on a fixed denominator of `1,000,000`.
+  ///
+  /// Example:
+  /// ```dart
+  /// print(2.5.asFraction()); // 2 1/2
+  /// print(0.75.asFraction()); // 3/4
+  /// ```
   String asFraction() {
     final intPart = getOr().truncate();
     final fraction = getOr() - intPart;
@@ -48,14 +78,27 @@ extension NumConverters on num? {
   /// Converts this integer to a hexadecimal string.
   String toHexString() => toInt().toRadixString(16).toUpperCase();
 
-  /// Returns the number of set bits in this integer's binary representation.
+  /// Returns the count of `'1'` digits in [toBinaryString] output.
   int bitCount() => toInt().toBinaryString().replaceAll('0', '').length;
 
+  /// Converts `50` to `0.5`.
   double asPercentage() => getOr() / 100.0;
 
+  /// Returns `[percentage]%` of this number.
+  ///
+  /// Example:
+  /// ```dart
+  /// final tax = 200.percentageOf(15); // 30
+  /// ```
   double percentageOf(double percentage) => (getOr() * percentage) / 100.0;
 
-  /// Returns the percentage of `this` value relative to [total], optionally allowing decimals.
+  /// Returns this value as a percentage of [total].
+  ///
+  /// Example:
+  /// ```dart
+  /// final a = 25.percentage(200); // 12.5
+  /// final b = 25.percentage(200, allowDecimals: false); // 12
+  /// ```
   num percentage(num total, {bool allowDecimals = true, int dp = 2}) {
     if (isNull) return 0;
     if (total == 0) {
@@ -70,43 +113,26 @@ extension NumConverters on num? {
     return result.toInt();
   }
 
-  /// Converts a file size (in bytes) to a specified unit (Bytes, KB, MB, GB, TB).
+  /// Converts a byte value to the requested [unit].
   ///
-  /// The function takes an optional parameter [unit] which specifies the unit to convert the file size to.
-  /// The default unit is megabytes (MB).
-  ///
-  /// If the file size is less than or equal to zero, the function returns 0.
-  ///
-  /// - Parameter [unit]: An enum value of [SizeUnit] specifying the unit to convert the file size to (default is [SizeUnit.MB]).
-  ///
-  /// Returns:
-  /// - A double representing the file size in the specified unit.
+  /// Returns `0` for `null` or non-positive values.
   ///
   /// Example:
   /// ```dart
-  /// int fileSizeInBytes = 1048576;
-  /// double fileSizeInMB = fileSizeInBytes.fileSize(unit: SizeUnit.MB); // 1.048576
+  /// final mb = 1048576.fileSize(unit: SizeUnit.MB); // 1.0
   /// ```
   double fileSize({SizeUnit unit = SizeUnit.MB}) {
     if (isNull || getOr() <= 0) return 0;
     return this! / pow(1024, unit.id);
   }
 
-  /// Converts a file size (in bytes) to a human-readable string with appropriate suffix (Bytes, KB, MB, GB, TB).
+  /// Converts a byte value to a human-readable size string.
   ///
-  /// The function takes an optional parameter [dp] which specifies the number of decimal places to include in the output.
-  ///
-  /// If the file size is less than or equal to zero, the function returns "0 Bytes".
-  ///
-  /// - Parameter [dp]: An integer specifying the number of decimal places to include in the output (default is 0).
-  ///
-  /// Returns:
-  /// - A string representing the file size in a human-readable format with an appropriate suffix.
+  /// Returns `'0 bytes'` for `null` or non-positive values.
   ///
   /// Example:
   /// ```dart
-  /// int fileSize = 1048576;
-  /// String readableSize = fileSize.fileSizeWithSuffix(dp: 2); // "1.00 MB"
+  /// final label = 1048576.fileSizeWithSuffix(dp: 2); // 1.00 MB
   /// ```
   String fileSizeWithSuffix({int dp = 0}) {
     if (isNull || getOr() <= 0) return '0 bytes';
@@ -116,22 +142,21 @@ extension NumConverters on num? {
     return '${(this! / pow(1024, i)).toStringAsFixed(dp)} ${suffixes[i]}';
   }
 
+  /// Formats this value using compact notation (for example `1.2M`).
   String get compact => NumberFormat.compact().format(this);
 
+  /// Formats this value with locale-aware grouping separators.
   String get formatComma => NumberFormat().format(this);
 
-  /// Formats the number to a specified number of significant digits.
+  /// Formats this number with [digit] significant digits.
   ///
-  /// The [digit] parameter determines the number of significant digits to retain.
-  /// By default, it is set to `2`.
+  /// Trailing decimal zeros are removed for non-exponent output.
   ///
   /// Example:
   /// ```dart
-  /// print(3.14159.toSignificantDigits(digit: 3)); // "3.14"
-  /// print(1.toSignificantDigits(digit: 2)); // "01"
+  /// print(3.14159.toSignificantDigits(digit: 3)); // 3.14
+  /// print(1.toSignificantDigits(digit: 2)); // 1
   /// ```
-  ///
-  /// Returns a string representation of the number with the specified precision.
   String toSignificantDigits({int digit = 2}) {
     if (digit < 1) {
       throw ArgumentError.value(digit, 'digit', 'must be greater than zero');
@@ -146,7 +171,9 @@ extension NumConverters on num? {
     return result.replaceFirst(RegExp(r'\.?0+$'), '');
   }
 
-  /// Returns the ordinal suffix for the integer (e.g., 1st, 2nd, 3rd, 4th, etc.).
+  /// Returns this number as an English ordinal string.
+  ///
+  /// Example: `1st`, `2nd`, `3rd`, `4th`.
   String get ordinal {
     if (isNull) return '0';
 
@@ -164,7 +191,7 @@ extension NumConverters on num? {
     }
   }
 
-  /// Returns the Roman numeral representation of an integer from 1 to 3999
+  /// Returns the Roman numeral representation for integers in `1..3999`.
   ///
   /// ```dart
   /// print(12.roman);   // XII
@@ -210,17 +237,21 @@ extension NumConverters on num? {
     return buffer.toString();
   }
 
+  /// Rounds this number to [digit] decimal places.
   double roundWithDigit(int digit) {
     final digitValue = pow(10, digit);
     return (getOr() * digitValue).roundToDouble() / digitValue;
   }
 
-  /// Rounds value [nthPosition] number of fraction points.
+  /// Rounds this number to [nthPosition] fractional digits.
+  ///
   /// Example:
-  /// 2.1234567890.roundToPrecision(0)=> 2
-  /// 2.1234567890.roundToPrecision(1)=> 2.1
-  /// 2.1234567890.roundToPrecision(2)=> 2.12
-  /// 2.1234567890.roundToPrecision(3)=> 2.123
+  /// ```dart
+  /// 2.123456789.roundToPrecision(0); // 2.0
+  /// 2.123456789.roundToPrecision(1); // 2.1
+  /// 2.123456789.roundToPrecision(2); // 2.12
+  /// 2.123456789.roundToPrecision(3); // 2.123
+  /// ```
   double roundToPrecision(int nthPosition) {
     if (nthPosition < 0) {
       throw ArgumentError.value(
@@ -240,20 +271,24 @@ extension NumConverters on num? {
     return (this! * factor).roundToDouble() / factor;
   }
 
+  /// Floors this number to [digit] decimal places.
   double floorWithDigit(int digit) {
     final digitValue = pow(10, digit);
     return (getOr() * digitValue).floorToDouble() / digitValue;
   }
 
-  /// Returns integer as string which has a zero appended as prefix if this value
-  /// is a single digit value.
+  /// Returns this integer as a 2-character string with leading zero if needed.
   String twoDigits() {
     final value = toInt();
     return value.abs() < 10 ? '0$value' : value.toString();
   }
 
-  /// get last charts of give value
-  /// 'I  like dart language'.lastChars(13) // dart language
+  /// Returns the last [n] digits from this integer value.
+  ///
+  /// Example:
+  /// ```dart
+  /// 123456.lastDigits(3); // 456
+  /// ```
   int lastDigits(int n) {
     if (n <= 0) {
       throw ArgumentError.value(n, 'n', 'must be greater than zero');
@@ -264,8 +299,9 @@ extension NumConverters on num? {
     return value % pow(10, n).toInt();
   }
 
-  /// Convert the number to a [String] with the specified [precision].
-  /// If [precision] is not specified, the default is 2.
+  /// Returns a fixed-decimal string using [precision] digits after the decimal.
+  ///
+  /// A trailing `.00` is removed.
   String toPrecision([int precision = 2]) {
     var result = getOr().toStringAsFixed(precision);
     if (result.endsWith('.00')) {
@@ -274,8 +310,7 @@ extension NumConverters on num? {
     return result;
   }
 
-  /// Get count of a [substring] in the number.
-  /// Returns the count of [substring] in the number.
+  /// Returns how many times [substring] appears in this number's string form.
   int count(num substring) {
     var count = 0;
     var index = 0;
@@ -288,7 +323,7 @@ extension NumConverters on num? {
     return count;
   }
 
-  /// get the index of all occurrences of [substring] in the number.
+  /// Returns indexes of all occurrences of [substring] in this number's string form.
   List<int> indexesOf(num substring) {
     final indexes = <int>[];
     var index = 0;
@@ -319,9 +354,9 @@ extension NumConverters on num? {
   String padRight(int width, [String padding = '0']) =>
       toString().padRight(width, padding);
 
-  /// Returns list of digits of this number.
-  /// e.g   12345.digits    // returns [1, 2, 3, 4, 5]
-  /// e.g   8564.digits    // returns [8, 5, 6, 4]
+  /// Returns all numeric digits from this number as a list.
+  ///
+  /// Non-digit characters (including sign and decimal separator) are ignored.
   List<int> get digits {
     if (isNull) return const <int>[];
 
@@ -330,22 +365,22 @@ extension NumConverters on num? {
     return raw.split('').map(int.parse).toList();
   }
 
-  /// Returns number of digits in this number
+  /// Returns [digits].length.
   int get numberOfDigits => digits.length;
 
-  /// Ensures that this value lies in the specified range
-  /// [min]..[max].
+  /// Clamps this value to the inclusive range `[min, max]`.
   ///
-  /// Return this value if it's in the range, or [min] if this value
-  /// is less than [min], or [max] if this value is greater
-  /// than [max].
+  /// Returns:
+  /// - this value when inside range
+  /// - [min] when below range
+  /// - [max] when above range
   ///
   /// ```dart
-  /// print(10.coerceIn(1, 100)) // 10
-  /// print(0.coerceIn(1, 100)) // 1
-  /// print(500.coerceIn(1, 100)) // 100
+  /// print(10.coerceIn(1, 100)); // 10
+  /// print(0.coerceIn(1, 100)); // 1
+  /// print(500.coerceIn(1, 100)); // 100
   /// 10.coerceIn(100, 0) // will fail with ArgumentError
-  /// ````
+  /// ```
   num coerceIn(num min, num max) {
     if (min > max) throw ArgumentError('min must be smaller the max');
 
@@ -356,10 +391,7 @@ extension NumConverters on num? {
     return value;
   }
 
-  /// Ensures that this value is not less than the specified [min].
-  ///
-  /// Return this value if it's greater than or equal to the [min]
-  /// or the [min] otherwise.
+  /// Returns this value if it is at least [min], otherwise [min].
   ///
   /// ```dart
   /// print(10.coerceAtLeast(5)) // 10
@@ -371,10 +403,7 @@ extension NumConverters on num? {
     return value < min ? min : value;
   }
 
-  /// Ensures that this value is not greater than the specified [max].
-  ///
-  /// Return this value if it's less than or equal to the [max] or the
-  /// [max] otherwise.
+  /// Returns this value if it is at most [max], otherwise [max].
   ///
   /// ```dart
   /// print(10.coerceAtMost(5)) // 5
@@ -387,7 +416,17 @@ extension NumConverters on num? {
   }
 }
 
+/// Time and duration helpers for nullable numeric values.
+///
+/// Values are interpreted in seconds for [timeAgo] and [toClockFormat].
 extension NumTimeConverters on num? {
+  /// Returns a relative-duration label from a seconds value.
+  ///
+  /// Example:
+  /// ```dart
+  /// 90.timeAgo(); // 1 minute ago
+  /// 90.timeAgo(addAgo: false); // 1 minute
+  /// ```
   String timeAgo({bool addAgo = true}) {
     if (isNull) return '';
 
@@ -415,13 +454,10 @@ extension NumTimeConverters on num? {
     }
   }
 
-  /// Converts an integer to the corresponding month's name.
+  /// Converts month number (`1..12`) to a month name.
   ///
-  /// If [Abbreviation] is [Abbreviation.none], returns the normal form of the month's name.
-  ///
-  /// If [Abbreviation] is [Abbreviation.full], returns the abbreviated form of the month's name.
-  ///
-  /// Returns the full or abbreviated month name as a string.
+  /// - [Abbreviation.none] => full month (`January`)
+  /// - [Abbreviation.semi]/[Abbreviation.full] => short month (`Jan`)
   String toMonth({Abbreviation style = Abbreviation.none}) {
     if (isNull) return '';
     final month = toInt();
@@ -434,16 +470,11 @@ extension NumTimeConverters on num? {
         : MyDateFormats.months[month - 1];
   }
 
-  /// Converts an integer representing the day of the week (1 for Monday through 7 for Sunday)
-  /// to the corresponding day's name.
+  /// Converts weekday number (`1..7`, Monday..Sunday) to a day name.
   ///
-  /// If [Abbreviation] is [Abbreviation.none], returns the normal form of the day's name (e.g., Monday).
-  ///
-  /// If [Abbreviation] is [Abbreviation.semi], returns the abbreviated form of the day's name (e.g., "Mon" for Monday).
-  ///
-  /// If [Abbreviation] is [Abbreviation.full], returns a very short form of the day's name (e.g., "M" for Monday).
-  ///
-  /// Returns the full, abbreviated, or very short day name as a string.
+  /// - [Abbreviation.none] => full day (`Monday`)
+  /// - [Abbreviation.semi] => short day (`Mon`)
+  /// - [Abbreviation.full] => very short day (`M`)
   ///
   /// Example:
   /// ```dart
@@ -467,6 +498,13 @@ extension NumTimeConverters on num? {
     }
   }
 
+  /// Formats a seconds value as `HH:mm` or `HH:mm:ss`.
+  ///
+  /// Example:
+  /// ```dart
+  /// 3661.toClockFormat(); // 01:01
+  /// 3661.toClockFormat(showSeconds: true); // 01:01:01
+  /// ```
   String toClockFormat({bool showSeconds = false}) {
     if (isNull) return '00:00';
     if (this! < 0) {
@@ -497,83 +535,83 @@ extension NumTimeConverters on num? {
     return result;
   }
 
-  /// Returns microseconds duration
-  /// 5.microseconds
+  /// Returns a [Duration] in microseconds.
   Duration get microseconds => Duration(microseconds: toInt());
 
-  /// Returns milliseconds duration
+  /// Returns a [Duration] in milliseconds.
   /// ```dart
   /// 5.milliseconds
   /// ```
   Duration get milliseconds => Duration(milliseconds: toInt());
 
-  /// Returns seconds duration
+  /// Returns a [Duration] in seconds.
   /// ```dart
   /// 5.seconds
   /// ```
   Duration get seconds => Duration(seconds: toInt());
 
-  /// Returns minutes duration
+  /// Returns a [Duration] in minutes.
   /// ```dart
   /// 5.minutes
   /// ```
   Duration get minutes => Duration(minutes: toInt());
 
-  /// Returns [DateTime] with time that is this value in minutes ago.
+  /// Returns `DateTime.now() - this.minutes`.
   DateTime get minutesAgo => DateTime.now() - Duration(minutes: toInt());
 
-  /// Returns [DateTime] with time that is this value in minutes after now.
+  /// Returns `DateTime.now() + this.minutes`.
   DateTime get minutesAfter => DateTime.now() + Duration(minutes: toInt());
 
-  /// Returns hours duration
+  /// Returns a [Duration] in hours.
   /// ```dart
   /// 5.hours
   /// ```
   Duration get hours => Duration(hours: toInt());
 
-  /// Returns [DateTime] with time that is this value in hours ago.
+  /// Returns `DateTime.now() - this.hours`.
   DateTime get hoursAgo => DateTime.now() - Duration(hours: toInt());
 
-  /// Returns [DateTime] with time that is this value in hours after now.
+  /// Returns `DateTime.now() + this.hours`.
   DateTime get hoursAfter => DateTime.now() + Duration(hours: toInt());
 
-  /// Returns days duration
+  /// Returns a [Duration] in days.
   /// ```dart
   /// 5.days
   /// ```
   Duration get days => Duration(days: toInt());
 
-  /// Returns [DateTime] with date that is this value in days ago.
+  /// Returns `DateTime.now() - this.days`.
   DateTime get daysAgo => DateTime.now() - Duration(days: toInt());
 
-  /// Returns [DateTime] with date that is this value in days after now.
+  /// Returns `DateTime.now() + this.days`.
   DateTime get daysAfter => DateTime.now() + Duration(days: toInt());
 
-  /// Returns month duration
+  /// Returns a [Duration] in weeks.
   /// ```dart
   /// 5.weeks
   /// ```
   Duration get weeks => Duration(days: toInt() * 7);
 
-  /// Returns [DateTime] with date that is this value in weeks ago.
+  /// Returns `DateTime.now() - this.weeks`.
   DateTime get weeksAgo => DateTime.now() - Duration(days: toInt() * 7);
 
-  /// Returns [DateTime] with date that is this value in weeks after now.
+  /// Returns `DateTime.now() + this.weeks`.
   DateTime get weeksAfter => DateTime.now() + Duration(days: toInt() * 7);
 
-  /// Returns month duration
+  /// Returns an approximate month [Duration] (`30` days each).
   /// ```dart
-  /// 5.months
+  /// 5.month
   /// ```
   Duration get month => Duration(days: toInt() * 30);
 
-  /// Returns years duration
+  /// Returns an approximate year [Duration] (`365` days each).
   /// ```dart
   /// 5.years
   /// ```
   Duration get years => Duration(days: toInt() * 365);
 }
 
+/// Converts numeric values to English words.
 extension HumanReadableWords on num? {
   static final List<String> _units = [
     'zero',
@@ -624,22 +662,17 @@ extension HumanReadableWords on num? {
     'quintillion',
   ];
 
-  /// Converts the number to a human-readable form as words.
+  /// Converts this value to English words.
   ///
   /// Example:
   /// ```dart
-  /// print(13578921.toWords()); // Output: 'thirteen million five hundred seventy-eight thousand nine hundred twenty-one'
-  /// print(1234.56.toWords()); // Output: 'one thousand two hundred and thirty-four point five six'
+  /// print(13578921.toWords());
+  /// // thirteen million five hundred seventy-eight thousand nine hundred twenty-one
+  /// print(1234.56.toWords());
+  /// // one thousand two hundred thirty-four point five six
   /// ```
   ///
-  /// Returns the string representation of the number as words.
-  ///
-  /// set [useAnd] to true if you want proper conversion
-  ///
-  /// ```dart
-  /// print(13578921.toWords(useAnd: true)); // Output: 'thirteen million five hundred and seventy-eight thousand nine hundred and twenty-one'
-  /// ```
-  ///
+  /// Set [useAnd] to include "and" style joining (common in British English).
   String toWords({bool useAnd = false}) {
     if (getOr() == 0) return _units[0];
 
@@ -712,6 +745,7 @@ extension HumanReadableWords on num? {
   }
 }
 
+/// File-size unit for [NumConverters.fileSize].
 enum SizeUnit {
   BYTES(0),
   KB(1),
@@ -721,5 +755,6 @@ enum SizeUnit {
 
   const SizeUnit(this.id);
 
+  /// Base-1024 exponent used for conversion.
   final int id;
 }

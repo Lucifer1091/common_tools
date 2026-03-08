@@ -1,49 +1,45 @@
 import 'package:flutter/widgets.dart';
 
-/// An extension on [AsyncSnapshot] providing a [when] method.
+/// Convenience branching helpers for [AsyncSnapshot].
+///
+/// These helpers map snapshot states to callbacks and expose an `isComplete`
+/// flag for data callbacks:
+/// - `true` for [ConnectionState.none] and [ConnectionState.done]
+/// - `false` for [ConnectionState.active]
 extension AsyncSnapshotExt<T> on AsyncSnapshot<T> {
+  /// Returns `true` when no asynchronous computation is connected.
   bool get isNone => connectionState == ConnectionState.none;
 
+  /// Returns `true` while waiting for the first value.
   bool get isWaiting => connectionState == ConnectionState.waiting;
 
+  /// Returns `true` while an active stream is emitting values.
   bool get isActive => connectionState == ConnectionState.active;
 
+  /// Returns `true` when the asynchronous computation is complete.
   bool get isDone => connectionState == ConnectionState.done;
 
-  ///  **Perform conditional actions based on the state of the [AsyncSnapshot].**
+  /// Branches by state similarly to [when], but makes [data] optional.
   ///
-  /// **Key points:**
+  /// If [data] is omitted and snapshot contains data, [loading] is used.
+  /// The second `data` argument (`isComplete`) is `true` for
+  /// [ConnectionState.none]/[ConnectionState.done], and `false` for
+  /// [ConnectionState.active].
   ///
-  /// - Similar to [when], but allows [data] callback to be optional.
-  /// - If no [data] callback, calls [loading] callback instead.
-  /// - `isComplete` signifies a closed connection/stream.
-  ///
-  ///  **Example:**
-  ///
+  /// Example:
   /// ```dart
-  /// StreamBuilder(
-  ///   stream: incomingMessagesStream,
+  /// StreamBuilder<String>(
+  ///   stream: messageStream,
   ///   builder: (context, snapshot) {
   ///     return snapshot.maybeWhen(
-  ///       data: (data, isComplete) {
-  ///         return Column(
-  ///           children: [
-  ///             Text('Latest Message: $data'),
-  ///             if (isComplete) Text('Messages are complete'),
-  ///           ],
-  ///         );
-  ///       },
-  ///       error: (error, stackTrace) {
-  ///         return Text('We have an error');
-  ///       },
-  ///       loading: () {
-  ///         return CircularProgressIndicator();
-  ///       },
+  ///       loading: () => const CircularProgressIndicator(),
+  ///       error: (error, stackTrace) => Text('Error: $error'),
+  ///       data: (value, isComplete) =>
+  ///           Text(isComplete ? 'Final: $value' : 'Live: $value'),
   ///     );
   ///   },
   /// );
   /// ```
-
   R maybeWhen<R>({
     required R Function() loading,
     required R Function(Object error, StackTrace? stackTrace) error,
@@ -70,40 +66,21 @@ extension AsyncSnapshotExt<T> on AsyncSnapshot<T> {
     }
   }
 
-  /// Perform actions conditionally based on the state of the [AsyncSnapshot].
+  /// Branches by snapshot state with required handlers for all outcomes.
   ///
-  /// All cases are required, which allows returning a non-nullable value.
+  /// Unlike [maybeWhen], [data] is required. Use [maybeWhen] when you want to
+  /// treat data and loading the same.
   ///
-  /// The [data] callback is called once the [AsyncSnapshot] has data.
-  /// The isComplete parameter wiil be true if the connection/stream is closed.
-  ///
-  /// The [error] callback is called when the [AsyncSnapshot] has an error.
-  ///
-  /// The [loading] callback is called when the [AsyncSnapshot] is still waiting for data.
-  ///
+  /// The second `data` argument (`isComplete`) is `true` for
+  /// [ConnectionState.none]/[ConnectionState.done], and `false` for
+  /// [ConnectionState.active].
   ///
   /// Example:
   /// ```dart
-  /// StreamBuilder(
-  ///   stream: incomingMessagesStream,
-  ///   builder: (context, snapshot) {
-  ///     snapshot.when(
-  ///       data: (data, isComplete) {
-  ///         return Column(
-  ///           children: [
-  ///             Text('Latest Message: $data'),
-  ///             if (isComplete) Text('Messages are complete'),
-  ///           ]
-  ///         );
-  ///       },
-  ///       error: (error, stackTrace) {
-  ///         return Text('We have an error');
-  ///       },
-  ///       loading: () {
-  ///         return CircularProgressIndicator();
-  ///       },
-  ///     );
-  ///   },
+  /// final text = snapshot.when(
+  ///   loading: () => 'Loading...',
+  ///   data: (value, isComplete) => isComplete ? 'Done: $value' : 'Data: $value',
+  ///   error: (error, stackTrace) => 'Error: $error',
   /// );
   /// ```
   R when<R>({

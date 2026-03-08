@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'index.dart';
 
+/// Miscellaneous analytics and conditional helpers for nullable strings.
 extension MiscExtensions on String? {
   /// Returns the average read time duration of the given `String` in seconds.
   ///
@@ -28,13 +29,13 @@ extension MiscExtensions on String? {
     return (minutes * 60).ceil();
   }
 
-  /// Returns the word count in the given `String`.
+  /// Returns an approximate word count.
   ///
-  /// The pattern is based on spaces.
-  /// ### Example
+  /// Splits by whitespace and counts only tokens containing Latin letters.
+  ///
+  /// Example:
   /// ```dart
-  ///  String foo = 'Hello dear friend how you doing ?';
-  ///  int count = foo.wordCount; // returns 6 words.
+  /// final count = 'Hello dear friend how are you doing ?'.wordCount; // 7
   /// ```
   int get wordCount {
     if (isBlank) return 0;
@@ -45,19 +46,13 @@ extension MiscExtensions on String? {
     return filteredWords.length;
   }
 
-  /// Returns the digit count of the `String`.
+  /// Returns the count of numeric digits in this string.
   ///
-  ///### Example
-  ///
-  ///```dart
-  ///  String foo = 'Hello World';
-  ///  int digitCount = foo.getDigitCount; // returns 0;
-  ///```
-  ///
-  ///```dart
-  ///  String foo = 'Hello World 123';
-  ///  int digitCount = foo.getDigitCount; // returns 3;
-  ///```
+  /// Example:
+  /// ```dart
+  /// 'Hello World'.digitCount; // 0
+  /// 'Hello World 123'.digitCount; // 3
+  /// ```
   int get digitCount {
     if (isBlank) return 0;
 
@@ -65,15 +60,14 @@ extension MiscExtensions on String? {
     return digitsOnly.allMatches(this!).length;
   }
 
-  /// return string lines count
+  /// Returns line count using `\n` as separator.
   int get linesCount => isBlank ? 0 : this!.split('\n').length;
 
-  /// Finds a specific's character occurrence in the `String`.
+  /// Counts occurrences of a single-character [char].
   ///
-  /// ### Example
+  /// Example:
   /// ```dart
-  ///  String foo = 'foo';
-  ///  int occ = foo.charCount('o'); // returns 2
+  /// 'foo'.charCount('o'); // 2
   /// ```
   int charCount(String char) {
     if (isBlank) return 0;
@@ -86,20 +80,11 @@ extension MiscExtensions on String? {
         );
   }
 
-  /// Counts the number of occurrences of a specific word in the string.
-  ///
-  /// This method uses a regular expression to find all occurrences of the
-  /// specified word in the string and returns the count of these occurrences.
-  ///
-  /// - Parameter [word]: The word to count within the string.
-  ///
-  /// Returns:
-  /// - The number of occurrences of the specified word in the string.
+  /// Counts whole-word matches of [word], case-insensitively.
   ///
   /// Example:
   /// ```dart
-  ///  String text = "hello world, hello!";
-  ///  int count = text.countWords("hello"); // 2
+  /// 'hello world, hello!'.countWords('hello'); // 2
   /// ```
   int countWords(String word) {
     if (isBlank || word.isEmpty) return 0;
@@ -112,14 +97,11 @@ extension MiscExtensions on String? {
     return pattern.allMatches(this!).length;
   }
 
-  /// Finds all character occurrences and returns count as:
+  /// Returns sorted character frequency as a list of single-entry maps.
+  ///
+  /// Example:
   /// ```dart
-  /// List<Map<dynamic,dynamic>>
-  /// ```
-  /// ### Example 1
-  /// ```dart
-  ///  String foo = 'esentis';
-  ///  List occurrences = foo.charOccurrences; // returns '[{e:2},{i:1},{n:1},{s:2},]'
+  /// 'esentis'.charOccurrences; // [{'e': 2}, {'i': 1}, {'n': 1}, {'s': 2}]
   /// ```
   List<Map<String, int>> get charOccurrences {
     if (isBlank) return [];
@@ -145,11 +127,13 @@ extension MiscExtensions on String? {
     return occurrences;
   }
 
-  /// Finds the most frequent character in the `String`.
-  /// ### Example 1
+  /// Returns the most frequent character.
+  ///
+  /// Returns this value unchanged when blank (`null`/empty/whitespace).
+  ///
+  /// Example:
   /// ```dart
-  ///  String foo = 'Hello World';
-  ///  String mostFrequent = foo.mostFrequent; // returns 'l'
+  /// 'Hello World'.mostFrequent(); // 'l'
   /// ```
   String? mostFrequent({bool ignoreSpaces = false}) {
     if (isBlank) return this;
@@ -187,20 +171,14 @@ extension MiscExtensions on String? {
     return mostFrequent;
   }
 
-  /// Returns a `Set` of the common characters between the two `String`s.
+  /// Returns common characters between this string and [otherString].
   ///
-  /// The `String` is case sensitive & sorted by default.
+  /// Case-sensitive and sorted by default.
   ///
-  /// ### Example
-  ///
+  /// Example:
   /// ```dart
-  /// String foo = 'Hello World';
-  /// List<String> commonLetters = foo.commonCharacters('World Hello'); // returns ['H', 'e', 'l', 'o', 'r', 'w', 'd'];
-  /// ```
-  ///
-  /// ```dart
-  /// String foo = 'Hello World';
-  /// List<String> commonLetters = foo.commonCharacters('World Hello!'); // returns ['H', 'e', 'l', 'o', 'r', 'w', 'd'];
+  /// 'Hello World'.commonCharacters('World Hello!');
+  /// // {' ', 'H', 'W', 'd', 'e', 'l', 'o', 'r'}
   /// ```
   Set<String> commonCharacters(
     String otherString, {
@@ -234,20 +212,13 @@ extension MiscExtensions on String? {
     }
   }
 
-  /// Returns a Set of the uncommon characters between the two `String`s.
+  /// Returns symmetric difference of characters between this string and [otherString].
   ///
-  /// The `String` is case sensitive & sorted by default.
+  /// Case-sensitive by default.
   ///
-  /// ### Example
-  ///
+  /// Example:
   /// ```dart
-  /// String foo = 'Hello World';
-  /// List<String> uncommonLetters = foo.uncommonCharacters('World Hello'); // returns {};
-  /// ```
-  ///
-  /// ```dart
-  /// String foo = 'Hello World';
-  /// List<String> uncommonLetters = foo.uncommonCharacters('World Hello!'); // returns {'!'};
+  /// 'Hello'.uncommonCharacters('World'); // {'H', 'W', 'r', 'd'}
   /// ```
   Set<String> uncommonCharacters(
     String otherString, {
@@ -273,12 +244,13 @@ extension MiscExtensions on String? {
     return uncommonSet;
   }
 
-  /// If the provided `String` is empty do something.
+  /// Returns [act] when this value is empty after trim.
   ///
-  /// ### Example
+  /// Returns `null` when this value is `null`.
+  ///
+  /// Example:
   /// ```dart
-  /// String foo = '';
-  /// foo.ifEmpty(()=>print('String is empty'));
+  /// ''.ifEmpty(() => 'fallback'); // fallback
   /// ```
   String? ifEmpty(ValueGetter<String?> act) {
     if (isNull) return null;
@@ -286,12 +258,14 @@ extension MiscExtensions on String? {
     return this!.trim().isEmpty ? act() : this;
   }
 
-  /// If the provided `String` is `null` do something.
+  /// Returns [act] when this value is blank.
   ///
-  /// ### Example
+  /// If this value is non-blank, returns it unchanged.
+  ///
+  /// Example:
   /// ```dart
-  /// String foo = ''
-  /// foo.ifNull('dont be null'); // returns 'dont be null'
+  /// ''.ifNull(() => 'fallback'); // fallback
+  /// 'ok'.ifNull(() => 'fallback'); // ok
   /// ```
   String ifNull(ValueGetter<String> act) {
     if (isNotBlank) return this!;
@@ -319,12 +293,13 @@ extension MiscExtensions on String? {
   /// ```
   String? nullIf(String? other) => asIf((s) => s == other, null, this);
 
-  /// Return this if not blank. Otherwise return [other].
+  /// Returns this value when non-blank, otherwise [other].
   String? ifBlank(String? other) => asIf((s) => s.isNotBlank, this, other);
 
+  /// Returns [other] when this value is non-blank, otherwise this value.
   String? ifNotBlank(String? other) => asIf((s) => s.isNotBlank, other, this);
 
-  /// Compares this using [comparison] and returns [trueString] if true, otherwise return [falseString].
+  /// Returns [trueString] when [comparison] passes, otherwise [falseString].
   ///
   /// ### Example
   ///
