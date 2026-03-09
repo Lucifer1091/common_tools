@@ -29,7 +29,9 @@ class MyPicker {
     return showModalBottomSheet<T>(
       context: context,
       backgroundColor: Colors.transparent,
-      barrierColor: barrierColor ?? const Color.fromRGBO(0, 0, 0, 0.5),
+      barrierColor:
+          barrierColor ??
+          context.themed(MyColors.lightScrim, MyColors.darkScrim),
       builder: (context) {
         return MyMultiPicker(
           title: title,
@@ -73,7 +75,9 @@ class MyPicker {
     return showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
-      barrierColor: barrierColor ?? const Color.fromRGBO(0, 0, 0, 0.5),
+      barrierColor:
+          barrierColor ??
+          context.themed(MyColors.lightScrim, MyColors.darkScrim),
       builder: (context) {
         return MyMultiLinkedPicker(
           title: title,

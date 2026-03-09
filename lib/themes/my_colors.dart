@@ -17,6 +17,10 @@ class MyColors {
   static const warning = orange;
 
   static const error = red;
+  
+  static const lightScrim = Color(0x4C000000);
+  
+  static const darkScrim = Color(0xCC000000);
 
   static const List<MaterialColor> values = [
     slate,

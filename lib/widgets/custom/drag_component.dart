@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../index.dart';
-import '../layout/spaces.dart';
 
 class DragComponent extends StatefulWidget {
   const DragComponent({
@@ -75,7 +74,7 @@ class _DragComponentState extends State<DragComponent> {
             const Space.w12(),
             Text(
               widget.title,
-              style: context.titleSmall?.copyWith(
+              style: context.titleSmall.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.w600,
               ),

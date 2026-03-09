@@ -5,8 +5,8 @@ import '../../index.dart';
 /// Enum representing types of bottom sheet dialogs.
 enum BottomSheetDialog { dialog, bottomSheet }
 
-class BottomSheets {
-  BottomSheets._();
+class MyBottomSheet {
+  MyBottomSheet._();
 
   static Future<T?> show<T>(
     BuildContext context, {
@@ -96,17 +96,107 @@ class BottomSheets {
   );
 
   /// Shows a bottom sheet or a dialog based on the specified type.
-  Future<dynamic> showBottomSheetOrDialog({
+  static Future<dynamic> showBottomSheetOrDialog({
     required BuildContext context,
     required Widget child,
     BottomSheetDialog bottomSheetDialog = BottomSheetDialog.dialog,
+    bool floating = false,
   }) {
     if (bottomSheetDialog == BottomSheetDialog.bottomSheet) {
-      // Show a bottom sheet.
+      if (floating) {
+        return MyBottomSheet.floating(context: context, builder: (_) => child);
+      }
       return showModalBottomSheet(context: context, builder: (_) => child);
     } else {
       // Show a dialog.
       return MyDialog.show(context: context, builder: (_) => child);
     }
+  }
+
+  static Future<T?> floating<T>({
+    required BuildContext context,
+    required WidgetBuilder builder,
+    String? barrierLabel,
+    ShapeBorder? shape,
+    Clip? clipBehavior,
+    BoxConstraints? constraints,
+    bool isScrollControlled = false,
+    bool useRootNavigator = false,
+    bool isDismissible = true,
+    bool enableDrag = true,
+    bool useSafeArea = false,
+    RouteSettings? routeSettings,
+  }) {
+    final navigator = Navigator.of(context, rootNavigator: useRootNavigator);
+    final localizations = MaterialLocalizations.of(context);
+
+    return navigator.push(
+      BottomSheetRoute<T>(
+        builder: builder,
+        capturedThemes: InheritedTheme.capture(
+          from: context,
+          to: navigator.context,
+        ),
+        isScrollControlled: isScrollControlled,
+        barrierLabel: barrierLabel ?? localizations.scrimLabel,
+        barrierOnTapHint: localizations.scrimOnTapHint(
+          localizations.bottomSheetLabel,
+        ),
+        shape: shape,
+        clipBehavior: clipBehavior,
+        constraints: constraints,
+        isDismissible: isDismissible,
+        enableDrag: enableDrag,
+        settings: routeSettings,
+      ),
+    );
+  }
+}
+
+class BottomSheetRoute<T> extends ModalBottomSheetRoute<T> {
+  BottomSheetRoute({
+    required super.builder,
+    required super.isScrollControlled,
+    super.capturedThemes,
+    super.barrierLabel,
+    super.barrierOnTapHint,
+    super.shape,
+    super.clipBehavior,
+    super.constraints,
+    super.isDismissible = true,
+    super.enableDrag = true,
+    super.settings,
+  }) : super(
+         backgroundColor: Colors.transparent,
+         sheetAnimationStyle: const AnimationStyle(
+           duration: Duration(milliseconds: 200),
+           reverseDuration: Duration(milliseconds: 200),
+         ),
+       );
+
+  @override
+  Widget buildModalBarrier() {
+    return Builder(
+      builder: (context) {
+        final barrierColor = context.themed(
+          MyColors.lightScrim,
+          MyColors.darkScrim,
+        );
+
+        final color = animation!.drive(
+          ColorTween(
+            begin: barrierColor.withAlpha(0),
+            end: barrierColor,
+          ).chain(CurveTween(curve: barrierCurve)),
+        );
+
+        return AnimatedModalBarrier(
+          color: color,
+          dismissible: barrierDismissible,
+          semanticsLabel: barrierLabel,
+          barrierSemanticsDismissible: semanticsDismissible,
+        );
+      },
+    );
   }
 }
