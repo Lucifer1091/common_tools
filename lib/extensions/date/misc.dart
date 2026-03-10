@@ -148,7 +148,7 @@ extension DateTimeIterables on DateTime {
 }
 
 /// Static helpers for constructing and comparing [DateTime] values.
-extension Date on DateTime {
+extension MyDate on DateTime {
   /// Current date/time (same as [DateTime.now]).
   static DateTime now() => DateTime.now();
 

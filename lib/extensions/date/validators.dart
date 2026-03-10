@@ -239,7 +239,7 @@ extension DateValidators on DateTime? {
     final DateTime a = DateTime.utc(this!.year, this!.month, this!.day);
     final DateTime b = DateTime.utc(other.year, other.month, other.day);
 
-    return a.weekNumber == b.weekNumber && a.isoWeekYear == b.isoWeekYear;
+    return a.weekNumber == b.weekNumber && a.weekNumber == b.weekNumber;
   }
 
   /// Returns `true` if this date and [other] are in the same month and year.

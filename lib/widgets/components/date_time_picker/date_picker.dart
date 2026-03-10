@@ -181,7 +181,7 @@ class MyDatePicker {
     firstDate = DateUtils.dateOnly(firstDate);
     lastDate = DateUtils.dateOnly(lastDate);
 
-    currentDate = DateUtils.dateOnly(currentDate ?? Date.now());
+    currentDate = DateUtils.dateOnly(currentDate ?? MyDate.now());
 
     SelectableDayForRangePredicate? combinedSelectable;
 

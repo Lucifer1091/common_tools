@@ -108,8 +108,8 @@ extension DateRangeConversions on DateTimeRange {
   DateTimeRange union(DateTimeRange other) {
     if (!cross(other)) throw RangeError("DateTimeRanges don't cross");
 
-    final DateTime unionStart = Date.min(start, other.start);
-    final DateTime unionEnd = Date.max(end, other.end);
+    final DateTime unionStart = MyDate.min(start, other.start);
+    final DateTime unionEnd = MyDate.max(end, other.end);
 
     return DateRange.set(unionStart, unionEnd);
   }
@@ -121,8 +121,8 @@ extension DateRangeConversions on DateTimeRange {
   DateTimeRange intersection(DateTimeRange other) {
     if (!cross(other)) throw RangeError("DateTimeRanges don't cross");
 
-    final intersectionStart = Date.max(start, other.start);
-    final intersectionEnd = Date.min(end, other.end);
+    final intersectionStart = MyDate.max(start, other.start);
+    final intersectionEnd = MyDate.min(end, other.end);
 
     return DateRange.set(intersectionStart, intersectionEnd);
   }

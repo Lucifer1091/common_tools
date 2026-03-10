@@ -203,7 +203,7 @@ class _CalendarRangePickerDialog extends StatelessWidget {
       localizations,
       selectedStartDate,
       selectedEndDate,
-      Date.now(),
+      MyDate.now(),
     );
 
     final TextStyle startDateStyle = headlineStyle.apply(
@@ -314,51 +314,51 @@ class _QuickSelectorWidget extends StatelessWidget {
     MyQuickDateRange(
       label: 'Last 3 days',
       range: DateTimeRange(
-        start: Date.now().subtractDays(3).truncateTime(),
-        end: Date.yesterday().truncateTime(),
+        start: MyDate.now().subtractDays(3).truncateTime(),
+        end: MyDate.yesterday().truncateTime(),
       ),
     ),
     MyQuickDateRange(
       label: 'Last 7 days',
       range: DateTimeRange(
-        start: Date.now().subtractDays(7).truncateTime(),
-        end: Date.yesterday().truncateTime(),
+        start: MyDate.now().subtractDays(7).truncateTime(),
+        end: MyDate.yesterday().truncateTime(),
       ),
     ),
     MyQuickDateRange(
       label: 'Last 15 days',
       range: DateTimeRange(
-        start: Date.now().subtractDays(15).truncateTime(),
-        end: Date.yesterday().truncateTime(),
+        start: MyDate.now().subtractDays(15).truncateTime(),
+        end: MyDate.yesterday().truncateTime(),
       ),
     ),
     MyQuickDateRange(
       label: 'Last 30 days',
       range: DateTimeRange(
-        start: Date.now().subtractDays(30).truncateTime(),
-        end: Date.yesterday().truncateTime(),
+        start: MyDate.now().subtractDays(30).truncateTime(),
+        end: MyDate.yesterday().truncateTime(),
       ),
     ),
     MyQuickDateRange(
       label: 'This Month',
       range: DateTimeRange(
-        start: Date.now().startOfMonth.truncateTime(),
-        end: Date.now().truncateTime(),
+        start: MyDate.now().startOfMonth.truncateTime(),
+        end: MyDate.now().truncateTime(),
       ),
     ),
     MyQuickDateRange(
       label: 'Last Month',
       range: DateTimeRange(
-        start: Date.now().previousMonth.startOfMonth.truncateTime(),
-        end: Date.now().startOfMonth.subtractDays(1).truncateTime(),
+        start: MyDate.now().previousMonth.startOfMonth.truncateTime(),
+        end: MyDate.now().startOfMonth.subtractDays(1).truncateTime(),
       ),
     ),
     MyQuickDateRange(
       label: 'Last 3 Months',
       range: DateTimeRange(
-        start: Date.now().subtractMonths(3).startOfMonth.truncateTime(),
+        start: MyDate.now().subtractMonths(3).startOfMonth.truncateTime(),
         end:
-            Date.now().startOfMonth
+            MyDate.now().startOfMonth
                 .subtract(const Duration(days: 1))
                 .truncateTime(),
       ),
@@ -366,22 +366,22 @@ class _QuickSelectorWidget extends StatelessWidget {
     MyQuickDateRange(
       label: 'Last 6 Months',
       range: DateTimeRange(
-        start: Date.now().subtractMonths(6).startOfMonth.truncateTime(),
-        end: Date.now().startOfMonth.subtractDays(1).truncateTime(),
+        start: MyDate.now().subtractMonths(6).startOfMonth.truncateTime(),
+        end: MyDate.now().startOfMonth.subtractDays(1).truncateTime(),
       ),
     ),
     MyQuickDateRange(
       label: 'This Year',
       range: DateTimeRange(
-        start: Date.now().startOfYear.truncateTime(),
-        end: Date.now().truncateTime(),
+        start: MyDate.now().startOfYear.truncateTime(),
+        end: MyDate.now().truncateTime(),
       ),
     ),
     MyQuickDateRange(
       label: 'Last Year',
       range: DateTimeRange(
-        start: Date.now().previousYear.startOfYear.truncateTime(),
-        end: Date.now().previousYear.endOfYear.truncateTime(),
+        start: MyDate.now().previousYear.startOfYear.truncateTime(),
+        end: MyDate.now().previousYear.endOfYear.truncateTime(),
       ),
     ),
   ];
@@ -500,7 +500,7 @@ class _CalendarDateRangePicker extends StatefulWidget {
            initialEndDate != null ? DateUtils.dateOnly(initialEndDate) : null,
        firstDate = DateUtils.dateOnly(firstDate),
        lastDate = DateUtils.dateOnly(lastDate),
-       currentDate = DateUtils.dateOnly(currentDate ?? Date.now()) {
+       currentDate = DateUtils.dateOnly(currentDate ?? MyDate.now()) {
     assert(
       this.initialStartDate == null ||
           this.initialEndDate == null ||

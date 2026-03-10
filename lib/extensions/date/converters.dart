@@ -26,31 +26,18 @@ class MyDateFormats {
   MyDateFormats._();
 
   static const defaultDateTime = 'yyyy-MM-dd HH:mm:ss';
-
   static const defaultDate = 'yyyy-MM-dd';
-
   static const dateTime = 'MMM dd, yyyy hh:mm a';
-
   static const date = 'MMM dd, yyyy';
-
   static const time = 'hh:mm a';
-
   static const time24 = 'HH:mm:ss';
-
   static const month = 'MMMM';
-
   static const year = 'yyyy';
-
   static const monthYear = 'MMMM, yyyy';
-
   static const monthDay = 'MMM dd';
-
   static const day = 'dd';
-
   static const fullDay = 'EEEE';
-
   static const shortDay = 'EEE';
-
   static const fullDate = 'EEE MMM dd, yyyy';
 
   static const List<String> months = [
@@ -186,9 +173,8 @@ extension DateConversions on DateTime {
   /// Returns the formatted time ago string.
   /// Example: "3 days ago", "1 year ago", etc.
   String get timeAgo {
-    final now = DateTime.now().toUtc();
-    final self = toUtc();
-    final diff = now.difference(self);
+    final now = DateTime.now();
+    final diff = now.difference(this);
     final sec = diff.inSeconds;
 
     if (sec < 0) return format(pattern: MyDateFormats.date);
@@ -253,17 +239,6 @@ extension DateConversions on DateTime {
     return woy;
   }
 
-  /// Returns the ISO week-numbering year for this [DateTime].
-  ///
-  /// This can differ from the calendar year near new year boundaries.
-  int get isoWeekYear {
-    final DateTime utcDate = DateTime.utc(year, month, day);
-    final DateTime thursday = utcDate.add(
-      Duration(days: DateTime.thursday - utcDate.weekday),
-    );
-    return thursday.year;
-  }
-
   /// Calculates approximate age in years from this date until now.
   ///
   /// This uses a simple `inDays ~/ 365` calculation.
@@ -314,61 +289,10 @@ extension DateConversions on DateTime {
   /// and December 31st returns 365 (or 366 in a leap year).
   int get dayOfYear {
     // Get the date of January 1st of the current year
-    final DateTime jan1st = (isUtc ? DateTime.utc : DateTime.new)(year);
-
-    // Calculate the difference in days between the current date and January 1st
-    final int difference = differenceInDays(jan1st);
+    final DateTime jan1st = DateTime(year);
 
     // Add 1 because differenceInDays returns a 0-based difference
-    return difference + 1;
-  }
-
-  /// Calculates the difference in years between this date and [other].
-  ///
-  /// Uses a rough conversion (`inDays ~/ 365`), so this is approximate.
-  int differenceInYear(DateTime other) {
-    final Duration difference = this.difference(other);
-    final int years = difference.inDays ~/ 365;
-
-    return years;
-  }
-
-  /// Calculates the difference in months between this date and [other].
-  ///
-  /// Uses rough day-based math and returns only the month remainder after full
-  /// 365-day years are removed.
-  int differenceInMonth(DateTime other) {
-    final Duration difference = this.difference(other);
-    final int months = (difference.inDays % 365) ~/ 30;
-
-    return months;
-  }
-
-  /// Calculates the difference in days between two DateTime objects.
-  ///
-  /// Returns the difference in days as an integer. The calculation is based on
-  /// the difference between the dates at midnight, ignoring any time component.
-  int differenceInDays(DateTime other) {
-    final DateTime a = this;
-
-    // Convert both dates to midnight for accurate day difference calculation
-    final DateTime aMidnight = (a.isUtc ? DateTime.utc : DateTime.new)(
-      a.year,
-      a.month,
-      a.day,
-    );
-    final DateTime bMidnight = (other.isUtc ? DateTime.utc : DateTime.new)(
-      other.year,
-      other.month,
-      other.day,
-    );
-
-    // Calculate the difference in milliseconds
-    final int differenceInMilliseconds =
-        aMidnight.difference(bMidnight).inMilliseconds;
-
-    // Convert milliseconds to days
-    return (differenceInMilliseconds / (24 * 60 * 60 * 1000)).round();
+    return difference(jan1st).inDays + 1;
   }
 
   /// Returns the duration difference between this value and current time.
@@ -425,7 +349,7 @@ extension DateConversions on DateTime {
   /// If [utc] is `true`, converts this value to UTC before formatting.
   ///
   /// The returned value drops fractional seconds by splitting at `.`.
-  String toUtcString({bool utc = true}) {
+  String toUtcString({bool utc = false}) {
     if (utc) {
       return toUtc().toString().split('.')[0];
     }
@@ -502,7 +426,7 @@ extension ParseDateTime on String? {
   /// When [utc] is `true`, output is converted to UTC; otherwise local time is used.
   /// Returns `null` if parsing fails.
   String? toUtcString({
-    bool utc = true,
+    bool utc = false,
     String format = 'MMM dd, yyyy h:mm a',
   }) {
     final DateTime? parsed = parse(this, format: format, utc: utc);
