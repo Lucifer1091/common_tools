@@ -244,7 +244,7 @@ extension MiscExtensions on String? {
     return uncommonSet;
   }
 
-  /// Returns [act] when this value is empty after trim.
+  /// Returns [action] when this value is empty after trim.
   ///
   /// Returns `null` when this value is `null`.
   ///
@@ -252,13 +252,13 @@ extension MiscExtensions on String? {
   /// ```dart
   /// ''.ifEmpty(() => 'fallback'); // fallback
   /// ```
-  String? ifEmpty(ValueGetter<String?> act) {
+  String? ifEmpty(ValueGetter<String?> action) {
     if (isNull) return null;
 
-    return this!.trim().isEmpty ? act() : this;
+    return this!.trim().isEmpty ? action() : this;
   }
 
-  /// Returns [act] when this value is blank.
+  /// Returns [action] when this value is blank.
   ///
   /// If this value is non-blank, returns it unchanged.
   ///
@@ -267,10 +267,10 @@ extension MiscExtensions on String? {
   /// ''.ifNull(() => 'fallback'); // fallback
   /// 'ok'.ifNull(() => 'fallback'); // ok
   /// ```
-  String ifNull(ValueGetter<String> act) {
+  String ifNull(ValueGetter<String> action) {
     if (isNotBlank) return this!;
 
-    return act();
+    return action();
   }
 
   /// Return a empty `String` if this equals [other]. Otherwise return this.

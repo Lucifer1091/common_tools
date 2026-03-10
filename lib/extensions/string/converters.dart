@@ -37,9 +37,6 @@ extension StringConversions on String? {
   /// Parses this value as `double`, or [value] on failure.
   double toDoubleOr(double value) => toDoubleOrNull() ?? value;
 
-  /// Parses this value as [DateTime], or `DateTime.now()` on failure.
-  DateTime toDate() => toDateOrNow();
-
   /// Parses this value as [DateTime], or `null` on failure.
   DateTime? toDateOrNull() => isNotBlank ? DateTime.tryParse(this!) : null;
 
