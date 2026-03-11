@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../badge/my_badge.dart';
-import 'td_action_sheet.dart';
+import 'my_action_sheet.dart';
 
 class ActionSheetItem {
   ActionSheetItem({
@@ -27,7 +27,7 @@ class ActionSheetItem {
   final double? iconSize;
 
   /// Group, used for multi-line scroll grid with description.
-  /// Only effective when [TDActionSheet.theme] equals [TDActionSheetTheme.group].
+  /// Only effective when [MyActionSheet.theme] equals [MyActionSheetTheme.group].
   /// If this value is not set, the entire [ActionSheetItem] will be ignored and not displayed.
   final String? group;
 }

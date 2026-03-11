@@ -22,159 +22,146 @@ class IconWithBackground extends StatelessWidget {
   }
 }
 
-const _nums = ['一', '二', '三', '四'];
+const _nums = ['One', 'Two', 'Three', 'Four'];
+
 List<ActionSheetItem> _gridItems = [
   ActionSheetItem(
-    label: '微信',
+    label: 'WeChat',
     icon: Image.asset('assets/img/td_action_sheet_1.png'),
-    group: '分享至',
+    group: 'Share to',
   ),
   ActionSheetItem(
-    label: '朋友圈',
+    label: 'Moments',
     icon: Image.asset('assets/img/td_action_sheet_2.png'),
-    group: '分享至',
+    group: 'Share to',
   ),
   ActionSheetItem(
     label: 'QQ',
     icon: Image.asset('assets/img/td_action_sheet_3.png'),
-    group: '分享至',
+    group: 'Share to',
   ),
   ActionSheetItem(
-    label: '企业微信',
+    label: 'WeChat for Business',
     icon: Image.asset('assets/img/td_action_sheet_4.png'),
-    group: '分享至',
+    group: 'Share to',
   ),
   ActionSheetItem(
-    label: '收藏',
+    label: 'Favorites',
     icon: const IconWithBackground(icon: Icons.star),
-    group: '分享至',
+    group: 'Share to',
   ),
   ActionSheetItem(
-    label: '刷新',
+    label: 'Refresh',
     icon: const IconWithBackground(icon: Icons.refresh),
-    group: '分享至',
+    group: 'Share to',
   ),
   ActionSheetItem(
-    label: '下载',
+    label: 'Download',
     icon: const IconWithBackground(icon: Icons.download),
-    group: '分享至',
+    group: 'Share to',
   ),
   ActionSheetItem(
-    label: '复制',
+    label: 'Copy',
     icon: const IconWithBackground(icon: Icons.queue),
-    group: '分享至',
+    group: 'Share to',
   ),
 ];
 
-class TDActionSheetPage extends StatelessWidget {
-  const TDActionSheetPage({super.key});
+class MyActionSheetPage extends StatelessWidget {
+  const MyActionSheetPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: ThemeColors.neutral.shade100,
-      child: ExamplePage(
-        title: myTitle(context),
-        desc: '从底部弹出的模态框，提供和当前场景相关的操作动作，也支持提供信息输入和描述。',
-        exampleCodeGroup: 'action_sheet',
-        children: [
-          ExampleModule(
-            title: 'Component Types',
-            children: [
-              ExampleItem(
-                ignoreCode: true,
-                desc: '列表型动作面板',
-                builder: (BuildContext context) {
-                  return Column(
-                    children: [
-                      _buildBaseListActionSheet(context),
-                      SizedBox(height: 16),
-                      _buildDescListActionSheet(context),
-                      SizedBox(height: 16),
-                      _buildIconListActionSheet(context),
-                      SizedBox(height: 16),
-                      _buildBadgeListActionSheet(context),
-                    ],
-                  );
-                },
-              ),
-              ExampleItem(
-                ignoreCode: true,
-                desc: '宫格型动作面板',
-                builder: (BuildContext context) {
-                  return Column(
-                    children: [
-                      _buildBaseGridActionSheet(context),
-                      SizedBox(height: 16),
-                      _buildDescGridActionSheet(context),
-                      SizedBox(height: 16),
-                      _buildPaginationGridActionSheet(context),
-                      SizedBox(height: 16),
-                      _buildScrollGridActionSheet(context),
-                      SizedBox(height: 16),
-                      _buildMultiScrollGridActionSheet(context),
-                      SizedBox(height: 16),
-                      _buildBadgeGridActionSheet(context),
-                    ],
-                  );
-                },
-              ),
-            ],
-          ),
-          ExampleModule(
-            title: 'Component State',
-            children: [
-              ExampleItem(
-                ignoreCode: true,
-                desc: '列表型Options状态',
-                builder: (BuildContext context) {
-                  return Column(
-                    children: [
-                      _buildBaseListStateActionSheet(context),
-                      SizedBox(height: 16),
-                      _buildIconListStateActionSheet(context),
-                    ],
-                  );
-                },
-              ),
-            ],
-          ),
-          ExampleModule(
-            title: 'Component Style',
-            children: [
-              ExampleItem(
-                ignoreCode: true,
-                desc: '列表型对齐方式',
-                builder: (BuildContext context) {
-                  return Column(
-                    children: [
-                      _buildBadgeListCenterActionSheet(context),
-                      SizedBox(height: 16),
-                      _buildIconListCenterActionSheet(context),
-                      SizedBox(height: 16),
-                      _buildBadgeListLeftActionSheet(context),
-                      SizedBox(height: 16),
-                      _buildIconListLeftActionSheet(context),
-                    ],
-                  );
-                },
-              ),
-            ],
-          ),
-        ],
-      ),
+    return ExamplePage(
+      title: myTitle(context),
+      desc:
+          "A modal window pops up from the bottom, providing actions related to the current scene, and also supporting information input and descriptions.",
+      exampleCodeGroup: 'action_sheet',
+      children: [
+        ExampleModule(
+          title: 'Component Types',
+          children: [
+            ExampleItem(
+              desc: 'List-style action panel',
+              builder: (BuildContext context) {
+                return Column(
+                  spacing: 16,
+                  children: [
+                    _buildBaseListActionSheet(context),
+                    _buildDescListActionSheet(context),
+                    _buildIconListActionSheet(context),
+                    _buildBadgeListActionSheet(context),
+                  ],
+                );
+              },
+            ),
+            ExampleItem(
+              desc: 'Grid-style Action Panel',
+              builder: (BuildContext context) {
+                return Column(
+                  spacing: 16,
+                  children: [
+                    _buildBaseGridActionSheet(context),
+                    _buildDescGridActionSheet(context),
+                    _buildPaginationGridActionSheet(context),
+                    _buildScrollGridActionSheet(context),
+                    _buildMultiScrollGridActionSheet(context),
+                    _buildBadgeGridActionSheet(context),
+                  ],
+                );
+              },
+            ),
+          ],
+        ),
+        ExampleModule(
+          title: 'Component State',
+          children: [
+            ExampleItem(
+              desc: 'List-type Options state',
+              builder: (BuildContext context) {
+                return Column(
+                  spacing: 16,
+                  children: [
+                    _buildBaseListStateActionSheet(context),
+                    _buildIconListStateActionSheet(context),
+                  ],
+                );
+              },
+            ),
+          ],
+        ),
+        ExampleModule(
+          title: 'Component Style',
+          children: [
+            ExampleItem(
+              desc: 'List alignment',
+              builder: (BuildContext context) {
+                return Column(
+                  spacing: 16,
+                  children: [
+                    _buildBadgeListCenterActionSheet(context),
+                    _buildIconListCenterActionSheet(context),
+                    _buildBadgeListLeftActionSheet(context),
+                    _buildIconListLeftActionSheet(context),
+                  ],
+                );
+              },
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
 
 Widget _buildBaseListActionSheet(BuildContext context) {
   return MyButton(
-    text: '常规列表',
+    text: 'Regular List',
     isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
     onTap: () {
-      TDActionSheet(
+      MyActionSheet(
         context,
         visible: true,
         items: _nums.map((e) => ActionSheetItem(label: 'Options$e')).toList(),
@@ -185,15 +172,15 @@ Widget _buildBaseListActionSheet(BuildContext context) {
 
 Widget _buildDescListActionSheet(BuildContext context) {
   return MyButton(
-    text: '带描述列表',
+    text: 'List with description',
     isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
     onTap: () {
-      TDActionSheet(
+      MyActionSheet(
         context,
         visible: true,
-        description: '动作面板描述文字',
+        description: 'Action panel description text',
         items: _nums.map((e) => ActionSheetItem(label: 'Options$e')).toList(),
       );
     },
@@ -202,12 +189,12 @@ Widget _buildDescListActionSheet(BuildContext context) {
 
 Widget _buildIconListActionSheet(BuildContext context) {
   return MyButton(
-    text: '带图标列表',
+    text: 'With icon list',
     isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
     onTap: () {
-      TDActionSheet(
+      MyActionSheet(
         context,
         visible: true,
         items: _nums
@@ -225,29 +212,29 @@ Widget _buildIconListActionSheet(BuildContext context) {
 
 Widget _buildBadgeListActionSheet(BuildContext context) {
   return MyButton(
-    text: '带徽标列表',
+    text: 'With logo list',
     isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
     onTap: () {
-      TDActionSheet(
+      MyActionSheet(
         context,
         visible: true,
         items: [
           ActionSheetItem(
-            label: 'Options一',
+            label: 'Options 1',
             badge: const MyBadge(MyBadgeType.redPoint),
           ),
           ActionSheetItem(
-            label: 'Options二',
+            label: 'Options 2',
             badge: const MyBadge(MyBadgeType.message, count: 8),
           ),
           ActionSheetItem(
-            label: 'Options三',
+            label: 'Options 3',
             badge: const MyBadge(MyBadgeType.message, count: 99),
           ),
           ActionSheetItem(
-            label: 'Options四',
+            label: 'Options 4',
             badge: const MyBadge(MyBadgeType.message, message: '99+'),
           ),
         ],
@@ -258,15 +245,15 @@ Widget _buildBadgeListActionSheet(BuildContext context) {
 
 Widget _buildBaseGridActionSheet(BuildContext context) {
   return MyButton(
-    text: '常规宫格',
+    text: 'Regular palace grid',
     isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
     onTap: () {
-      TDActionSheet(
+      MyActionSheet(
         context,
         visible: true,
-        theme: TDActionSheetTheme.grid,
+        theme: MyActionSheetTheme.grid,
         count: 8,
         items: _gridItems,
       );
@@ -276,17 +263,17 @@ Widget _buildBaseGridActionSheet(BuildContext context) {
 
 Widget _buildDescGridActionSheet(BuildContext context) {
   return MyButton(
-    text: '带描述宫格',
+    text: 'Grid with description',
     isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
     onTap: () {
-      TDActionSheet(
+      MyActionSheet(
         context,
         visible: true,
-        theme: TDActionSheetTheme.grid,
+        theme: MyActionSheetTheme.grid,
         count: 8,
-        description: '动作面板描述文字',
+        description: 'Action panel description text',
         items: _gridItems,
       );
     },
@@ -295,21 +282,21 @@ Widget _buildDescGridActionSheet(BuildContext context) {
 
 Widget _buildPaginationGridActionSheet(BuildContext context) {
   return MyButton(
-    text: '带翻页宫格',
+    text: 'Page-turning grid',
     isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
     onTap: () {
-      TDActionSheet(
+      MyActionSheet(
         context,
         visible: true,
-        theme: TDActionSheetTheme.grid,
+        theme: MyActionSheetTheme.grid,
         count: 8,
         showPagination: true,
         items: [
           ..._gridItems,
           ActionSheetItem(
-            label: '安卓',
+            label: 'Android',
             icon: const IconWithBackground(icon: Icons.android),
           ),
           ActionSheetItem(
@@ -332,21 +319,21 @@ Widget _buildPaginationGridActionSheet(BuildContext context) {
 
 Widget _buildScrollGridActionSheet(BuildContext context) {
   return MyButton(
-    text: '多行滚动宫格',
+    text: 'Multi-line scrolling grid',
     isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
     onTap: () {
-      TDActionSheet(
+      MyActionSheet(
         context,
         visible: true,
-        theme: TDActionSheetTheme.grid,
+        theme: MyActionSheetTheme.grid,
         count: 8,
         scrollable: true,
         items: [
           ..._gridItems,
           ActionSheetItem(
-            label: '安卓',
+            label: 'Android',
             icon: const IconWithBackground(icon: Icons.android),
           ),
           ActionSheetItem(
@@ -373,43 +360,43 @@ Widget _buildScrollGridActionSheet(BuildContext context) {
 
 Widget _buildMultiScrollGridActionSheet(BuildContext context) {
   return MyButton(
-    text: '带描述多行滚动宫格',
+    text: 'Multi-line scrolling grid with description',
     isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
     onTap: () {
-      TDActionSheet.showGroupActionSheet(
+      MyActionSheet.showGroupActionSheet(
         context,
         items: [
           ActionSheetItem(
             label: 'Allen',
             icon: Image.asset('assets/img/td_action_sheet_5.png'),
-            group: '分享给好友',
+            group: 'Share with friends',
           ),
           ActionSheetItem(
             label: 'Nick',
             icon: Image.asset('assets/img/td_action_sheet_6.png'),
-            group: '分享给好友',
+            group: 'Share with friends',
           ),
           ActionSheetItem(
             label: 'Jacky',
             icon: Image.asset('assets/img/td_action_sheet_7.png'),
-            group: '分享给好友',
+            group: 'Share with friends',
           ),
           ActionSheetItem(
             label: 'Eric',
             icon: Image.asset('assets/img/td_action_sheet_8.png'),
-            group: '分享给好友',
+            group: 'Share with friends',
           ),
           ActionSheetItem(
             label: 'Johnsc',
             icon: Image.asset('assets/img/td_action_sheet_5.png'),
-            group: '分享给好友',
+            group: 'Share with friends',
           ),
           ActionSheetItem(
             label: 'Kevin',
             icon: Image.asset('assets/img/td_action_sheet_6.png'),
-            group: '分享给好友',
+            group: 'Share with friends',
           ),
           ..._gridItems,
         ],
@@ -420,21 +407,21 @@ Widget _buildMultiScrollGridActionSheet(BuildContext context) {
 
 Widget _buildBadgeGridActionSheet(BuildContext context) {
   return MyButton(
-    text: '带徽标宫格型',
+    text: 'Logo-patterned grid',
     isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
     onTap: () {
-      TDActionSheet.showGridActionSheet(
+      MyActionSheet.showGridActionSheet(
         context,
         items: [
           ActionSheetItem(
-            label: '微信',
+            label: 'WeChat',
             icon: Image.asset('assets/img/td_action_sheet_1.png'),
             badge: const MyBadge(MyBadgeType.message, message: 'NEW'),
           ),
           ActionSheetItem(
-            label: '朋友圈',
+            label: 'Friends Circle',
             icon: Image.asset('assets/img/td_action_sheet_2.png'),
           ),
           ActionSheetItem(
@@ -442,25 +429,25 @@ Widget _buildBadgeGridActionSheet(BuildContext context) {
             icon: Image.asset('assets/img/td_action_sheet_3.png'),
           ),
           ActionSheetItem(
-            label: '企业微信',
+            label: 'Enterprise WeChat',
             icon: Image.asset('assets/img/td_action_sheet_4.png'),
           ),
           ActionSheetItem(
-            label: '收藏',
+            label: 'Collection',
             icon: const IconWithBackground(icon: Icons.star),
             badge: const MyBadge(MyBadgeType.redPoint),
           ),
           ActionSheetItem(
-            label: '刷新',
+            label: 'Refresh',
             icon: const IconWithBackground(icon: Icons.refresh),
           ),
           ActionSheetItem(
-            label: '下载',
+            label: 'Download',
             icon: const IconWithBackground(icon: Icons.download),
             badge: const MyBadge(MyBadgeType.message, count: 8),
           ),
           ActionSheetItem(
-            label: '复制',
+            label: 'Copy',
             icon: const IconWithBackground(icon: Icons.queue),
           ),
         ],
@@ -471,28 +458,28 @@ Widget _buildBadgeGridActionSheet(BuildContext context) {
 
 Widget _buildBaseListStateActionSheet(BuildContext context) {
   return MyButton(
-    text: '列表型Options状态',
+    text: 'List-type Options state',
     isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
     onTap: () {
-      TDActionSheet(
+      MyActionSheet(
         context,
         visible: true,
         items: [
-          ActionSheetItem(label: '默认Options'),
+          ActionSheetItem(label: 'Default Options'),
           ActionSheetItem(
-            label: '自定义Options',
+            label: 'Custom Options',
             textStyle: TextStyle(color: context.colorScheme.primary),
           ),
-          ActionSheetItem(label: '失效Options', disabled: true),
+          ActionSheetItem(label: 'Disabled Options', disabled: true),
           ActionSheetItem(
-            label: '警告Options',
+            label: 'Warning Options',
             textStyle: const TextStyle(color: Colors.red),
           ),
         ],
         onSelected: (item, index) {
-          print('选中了：${item.label}');
+          print('Selected: ${item.label}');
         },
       );
     },
@@ -501,37 +488,37 @@ Widget _buildBaseListStateActionSheet(BuildContext context) {
 
 Widget _buildIconListStateActionSheet(BuildContext context) {
   return MyButton(
-    text: '列表型带图标状态',
+    text: 'List-type status with icons',
     isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
     onTap: () {
-      TDActionSheet(
+      MyActionSheet(
         context,
         visible: true,
         items: [
           ActionSheetItem(
-            label: '默认Options',
+            label: 'Default Options',
             icon: const Icon(Icons.dashboard_rounded),
           ),
           ActionSheetItem(
-            label: '自定义Options',
+            label: 'Custom Options',
             icon: const Icon(Icons.dashboard_rounded),
             textStyle: TextStyle(color: context.colorScheme.primary),
           ),
           ActionSheetItem(
-            label: '失效Options',
+            label: 'Invalid Options',
             icon: const Icon(Icons.dashboard_rounded),
             disabled: true,
           ),
           ActionSheetItem(
-            label: '警告Options',
+            label: 'Warning Options',
             icon: const Icon(Icons.dashboard_rounded),
             textStyle: const TextStyle(color: Colors.red),
           ),
         ],
         onSelected: (item, index) {
-          print('选中了：${item.label}');
+          print('Selected: ${item.label}');
         },
       );
     },
@@ -540,26 +527,26 @@ Widget _buildIconListStateActionSheet(BuildContext context) {
 
 Widget _buildBadgeListCenterActionSheet(BuildContext context) {
   return MyButton(
-    text: '居中带徽标列表',
+    text: 'Centered list with logo',
     isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
     onTap: () {
-      TDActionSheet(
+      MyActionSheet(
         context,
         visible: true,
-        description: '动作面板描述文字',
+        description: 'Action Sheet Description Text',
         items: [
           ActionSheetItem(
-            label: 'Options一',
+            label: 'Options One',
             badge: const MyBadge(MyBadgeType.redPoint),
           ),
           ActionSheetItem(
-            label: 'Options二',
+            label: 'Options Two',
             badge: const MyBadge(MyBadgeType.message, count: 8),
           ),
           ActionSheetItem(
-            label: 'Options三',
+            label: 'Options Three',
             badge: const MyBadge(MyBadgeType.message, message: '99'),
           ),
         ],
@@ -570,15 +557,15 @@ Widget _buildBadgeListCenterActionSheet(BuildContext context) {
 
 Widget _buildIconListCenterActionSheet(BuildContext context) {
   return MyButton(
-    text: '居中带图标列表',
+    text: 'Centered list with icons',
     isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
     onTap: () {
-      TDActionSheet(
+      MyActionSheet(
         context,
         visible: true,
-        description: '动作面板描述文字',
+        description: 'Action panel description text',
         items: _nums
             .map(
               (e) => ActionSheetItem(
@@ -594,16 +581,16 @@ Widget _buildIconListCenterActionSheet(BuildContext context) {
 
 Widget _buildBadgeListLeftActionSheet(BuildContext context) {
   return MyButton(
-    text: '左对齐带徽标列表',
+    text: 'Left-aligned list with logo',
     isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
     onTap: () {
-      TDActionSheet(
+      MyActionSheet(
         context,
         visible: true,
-        description: '动作面板描述文字',
-        align: TDActionSheetAlign.left,
+        description: 'Action panel description text',
+        align: MyActionSheetAlign.left,
         items: _nums
             .map(
               (e) => ActionSheetItem(
@@ -619,16 +606,16 @@ Widget _buildBadgeListLeftActionSheet(BuildContext context) {
 
 Widget _buildIconListLeftActionSheet(BuildContext context) {
   return MyButton(
-    text: '左对齐带图标列表',
+    text: 'Left-aligned list with icons',
     isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
     onTap: () {
-      TDActionSheet(
+      MyActionSheet(
         context,
         visible: true,
-        description: '动作面板描述文字',
-        align: TDActionSheetAlign.left,
+        description: 'Action panel description text',
+        align: MyActionSheetAlign.left,
         items: _nums
             .map(
               (e) => ActionSheetItem(

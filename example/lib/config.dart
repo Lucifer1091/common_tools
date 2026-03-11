@@ -12,7 +12,7 @@ import 'page/sidebar/my_sidebar_page_icon.dart';
 import 'page/sidebar/my_sidebar_page_loading.dart';
 import 'page/sidebar/my_sidebar_page_outline.dart';
 import 'page/sidebar/my_sidebar_page_pagination.dart';
-import 'page/td_action_sheet_page.dart';
+import 'page/my_action_sheet_page.dart';
 import 'page/my_avatar_page.dart';
 import 'page/my_badge_page.dart';
 import 'page/my_cell_page.dart';
@@ -330,7 +330,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
       text: 'ActionSheet',
       name: 'action-sheet',
       pageName: 'action_sheet',
-      pageBuilder: _wrapInheritedTheme((context) => const TDActionSheetPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyActionSheetPage()),
     ),
     ExamplePageModel(
       text: 'Dialog',

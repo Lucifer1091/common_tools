@@ -3,13 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../../index.dart';
-import '../../layout/no_widget.dart';
-import '../../layout/spaces.dart';
-import '../text/my_text.dart';
-import 'td_action_sheet.dart';
 
-class TDActionSheetItemWidget extends StatelessWidget {
-  const TDActionSheetItemWidget({
+class MyActionSheetItemWidget extends StatelessWidget {
+  const MyActionSheetItemWidget({
     required this.index,
     super.key,
     this.item,
@@ -18,7 +14,7 @@ class TDActionSheetItemWidget extends StatelessWidget {
 
   final ActionSheetItem? item;
   final int index;
-  final TDActionSheetItemCallback? onSelected;
+  final MyActionSheetItemCallback? onSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +67,7 @@ class TDActionSheetItemWidget extends StatelessWidget {
           ],
           MyText(
             item!.label,
-            fontSize: context.bodySmall?.fontSize,
+            fontSize: context.bodySmall.fontSize,
             textColor: ThemeColors.neutral.shade900,
             style: item!.textStyle,
           ),
@@ -97,13 +93,13 @@ class TDActionSheetItemWidget extends StatelessWidget {
   }
 }
 
-MainAxisAlignment getMainAxisAlignment(TDActionSheetAlign align) {
+MainAxisAlignment getMainAxisAlignment(MyActionSheetAlign align) {
   switch (align) {
-    case TDActionSheetAlign.left:
+    case MyActionSheetAlign.left:
       return MainAxisAlignment.start;
-    case TDActionSheetAlign.right:
+    case MyActionSheetAlign.right:
       return MainAxisAlignment.end;
-    case TDActionSheetAlign.center:
+    case MyActionSheetAlign.center:
       return MainAxisAlignment.center;
   }
 }
@@ -132,7 +128,7 @@ Widget buildCancelButton(
         child: Center(
           child: MyText(
             cancelText,
-            fontSize: context.bodyLarge?.fontSize,
+            fontSize: context.bodyLarge.fontSize,
             textColor: ThemeColors.neutral.shade900,
           ),
         ),

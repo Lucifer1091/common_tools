@@ -3,25 +3,25 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../popup/my_popup_route.dart';
-import 'td_action_sheet.dart';
-import 'td_action_sheet_grid.dart';
-import 'td_action_sheet_group.dart';
-import 'td_action_sheet_list.dart';
+import 'my_action_sheet.dart';
+import 'my_action_sheet_grid.dart';
+import 'my_action_sheet_group.dart';
+import 'my_action_sheet_list.dart';
 
-export 'td_action_sheet_item.dart';
+export 'my_action_sheet_item.dart';
 
-typedef TDActionSheetItemCallback =
+typedef MyActionSheetItemCallback =
     void Function(ActionSheetItem item, int index);
 
-enum TDActionSheetTheme { list, grid, group }
+enum MyActionSheetTheme { list, grid, group }
 
-enum TDActionSheetAlign { center, left, right }
+enum MyActionSheetAlign { center, left, right }
 
-class TDActionSheet {
-  TDActionSheet(
+class MyActionSheet {
+  MyActionSheet(
     this.context, {
     required this.items,
-    this.align = TDActionSheetAlign.center,
+    this.align = MyActionSheetAlign.center,
     this.cancelText = 'Cancel',
     this.count = 8,
     this.rows = 2,
@@ -31,7 +31,7 @@ class TDActionSheet {
     this.showCancel = true,
     this.showPagination = false,
     this.scrollable = false,
-    this.theme = TDActionSheetTheme.list,
+    this.theme = MyActionSheetTheme.list,
     this.visible = false,
     this.onCancel,
     this.onClose,
@@ -45,29 +45,29 @@ class TDActionSheet {
 
   final BuildContext context;
 
-  final TDActionSheetAlign align;
+  final MyActionSheetAlign align;
 
   final String cancelText;
 
   /// 每页显示的项目数
-  /// 当[theme]等于[TDActionSheetTheme.grid]且[showPagination]为true时有效
+  /// 当[theme]等于[MyActionSheetTheme.grid]且[showPagination]为true时有效
   final int count;
 
   /// 显示的行数
-  /// 当[theme]等于[TDActionSheetTheme.grid]时有效
+  /// 当[theme]等于[MyActionSheetTheme.grid]时有效
   final int rows;
 
   /// 项目的行高
-  /// 当[theme]等于[TDActionSheetTheme.grid]或[theme]等于[TDActionSheetTheme.group]时有效
+  /// 当[theme]等于[MyActionSheetTheme.grid]或[theme]等于[MyActionSheetTheme.group]时有效
   final double itemHeight;
 
   /// 项目的最小宽度
-  /// 当[theme]等于[TDActionSheetTheme.grid]且[scrollable]为true时有效
-  /// 或当[theme]等于[TDActionSheetTheme.group]时有效
+  /// 当[theme]等于[MyActionSheetTheme.grid]且[scrollable]为true时有效
+  /// 或当[theme]等于[MyActionSheetTheme.group]时有效
   final double itemMinWidth;
 
   /// 描述文本
-  /// 当[theme]等于[TDActionSheetTheme.grid]或[theme]等于[TDActionSheetTheme.list]时有效
+  /// 当[theme]等于[MyActionSheetTheme.grid]或[theme]等于[MyActionSheetTheme.list]时有效
   final String? description;
 
   final List<ActionSheetItem> items;
@@ -78,23 +78,23 @@ class TDActionSheet {
 
   final bool closeOnOverlayClick;
 
-  final TDActionSheetTheme theme;
+  final MyActionSheetTheme theme;
 
   final bool visible;
 
   /// 是否显示分页
-  /// 当[theme]等于[TDActionSheetTheme.grid]时有效
+  /// 当[theme]等于[MyActionSheetTheme.grid]时有效
   final bool showPagination;
 
   /// 是否可以横向滚动
-  /// 当[theme]等于[TDActionSheetTheme.grid]且[showPagination]为false时有效
+  /// 当[theme]等于[MyActionSheetTheme.grid]且[showPagination]为false时有效
   final bool scrollable;
 
   final VoidCallback? onCancel;
 
   final VoidCallback? onClose;
 
-  final TDActionSheetItemCallback? onSelected;
+  final MyActionSheetItemCallback? onSelected;
 
   final bool useSafeArea;
 
@@ -103,11 +103,11 @@ class TDActionSheet {
   static void showListActionSheet(
     BuildContext context, {
     required List<ActionSheetItem> items,
-    TDActionSheetAlign align = TDActionSheetAlign.center,
+    MyActionSheetAlign align = MyActionSheetAlign.center,
     String cancelText = 'Cancel',
     bool showCancel = true,
     VoidCallback? onCancel,
-    TDActionSheetItemCallback? onSelected,
+    MyActionSheetItemCallback? onSelected,
     bool showOverlay = true,
     bool closeOnOverlayClick = true,
     VoidCallback? onClose,
@@ -115,7 +115,7 @@ class TDActionSheet {
   }) {
     _createRoute(
       context,
-      theme: TDActionSheetTheme.list,
+      theme: MyActionSheetTheme.list,
       items: items,
       align: align,
       cancelText: cancelText,
@@ -132,10 +132,10 @@ class TDActionSheet {
   static void showGridActionSheet(
     BuildContext context, {
     required List<ActionSheetItem> items,
-    TDActionSheetAlign align = TDActionSheetAlign.center,
+    MyActionSheetAlign align = MyActionSheetAlign.center,
     String cancelText = 'Cancel',
     bool showCancel = true,
-    TDActionSheetItemCallback? onSelected,
+    MyActionSheetItemCallback? onSelected,
     bool showOverlay = true,
     bool closeOnOverlayClick = true,
     int count = 8,
@@ -151,7 +151,7 @@ class TDActionSheet {
   }) {
     _createRoute(
       context,
-      theme: TDActionSheetTheme.grid,
+      theme: MyActionSheetTheme.grid,
       items: items,
       align: align,
       cancelText: cancelText,
@@ -175,10 +175,10 @@ class TDActionSheet {
   static void showGroupActionSheet(
     BuildContext context, {
     required List<ActionSheetItem> items,
-    TDActionSheetAlign align = TDActionSheetAlign.left,
+    MyActionSheetAlign align = MyActionSheetAlign.left,
     String cancelText = 'Cancel',
     bool showCancel = true,
-    TDActionSheetItemCallback? onSelected,
+    MyActionSheetItemCallback? onSelected,
     bool showOverlay = true,
     bool closeOnOverlayClick = true,
     double itemHeight = 96.0,
@@ -189,7 +189,7 @@ class TDActionSheet {
   }) {
     _createRoute(
       context,
-      theme: TDActionSheetTheme.group,
+      theme: MyActionSheetTheme.group,
       items: items,
       align: align,
       cancelText: cancelText,
@@ -206,7 +206,7 @@ class TDActionSheet {
   }
 
   void show() {
-    TDActionSheet._createRoute(
+    MyActionSheet._createRoute(
       context,
       theme: theme,
       items: items,
@@ -240,12 +240,12 @@ class TDActionSheet {
 
   static void _createRoute(
     BuildContext context, {
-    required TDActionSheetTheme theme,
+    required MyActionSheetTheme theme,
     required List<ActionSheetItem> items,
-    TDActionSheetAlign align = TDActionSheetAlign.center,
+    MyActionSheetAlign align = MyActionSheetAlign.center,
     String cancelText = 'Cancel',
     bool showCancel = true,
-    TDActionSheetItemCallback? onSelected,
+    MyActionSheetItemCallback? onSelected,
     bool showOverlay = true,
     bool closeOnOverlayClick = true,
     int count = 8,
@@ -266,8 +266,8 @@ class TDActionSheet {
       modalBarrierColor: showOverlay ? null : Colors.transparent,
       builder: (context) {
         switch (theme) {
-          case TDActionSheetTheme.list:
-            return TDActionSheetList(
+          case MyActionSheetTheme.list:
+            return MyActionSheetList(
               items: items,
               align: align,
               cancelText: cancelText,
@@ -277,8 +277,8 @@ class TDActionSheet {
               onSelected: onSelected,
               useSafeArea: useSafeArea,
             );
-          case TDActionSheetTheme.grid:
-            return TDActionSheetGrid(
+          case MyActionSheetTheme.grid:
+            return MyActionSheetGrid(
               items: items,
               align: align,
               onSelected: onSelected,
@@ -294,8 +294,8 @@ class TDActionSheet {
               itemMinWidth: itemMinWidth,
               useSafeArea: useSafeArea,
             );
-          case TDActionSheetTheme.group:
-            return TDActionSheetGroup(
+          case MyActionSheetTheme.group:
+            return MyActionSheetGroup(
               items: items,
               align: align,
               cancelText: cancelText,

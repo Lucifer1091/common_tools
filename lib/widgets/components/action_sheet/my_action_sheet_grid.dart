@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import '../../../index.dart';
 
-class TDActionSheetGrid extends StatefulWidget {
-  const TDActionSheetGrid({
+class MyActionSheetGrid extends StatefulWidget {
+  const MyActionSheetGrid({
     required this.items,
     super.key,
     this.description,
-    this.align = TDActionSheetAlign.center,
+    this.align = MyActionSheetAlign.center,
     this.count = 8,
     this.rows = 2,
     this.cancelText = 'Cancel',
@@ -22,7 +22,7 @@ class TDActionSheetGrid extends StatefulWidget {
 
   final List<ActionSheetItem> items;
   final String? description;
-  final TDActionSheetAlign align;
+  final MyActionSheetAlign align;
   final int count;
   final int rows;
   final String cancelText;
@@ -30,16 +30,16 @@ class TDActionSheetGrid extends StatefulWidget {
   final bool showPagination;
   final bool scrollable;
   final VoidCallback? onCancel;
-  final TDActionSheetItemCallback? onSelected;
+  final MyActionSheetItemCallback? onSelected;
   final double itemHeight;
   final double itemMinWidth;
   final bool useSafeArea;
 
   @override
-  _TDActionSheetGridState createState() => _TDActionSheetGridState();
+  _MyActionSheetGridState createState() => _MyActionSheetGridState();
 }
 
-class _TDActionSheetGridState extends State<TDActionSheetGrid> {
+class _MyActionSheetGridState extends State<MyActionSheetGrid> {
   int currentPage = 0;
 
   @override
@@ -90,8 +90,8 @@ class _TDActionSheetGridState extends State<TDActionSheetGrid> {
         children: [
           MyText(
             widget.description,
-            fontSize: context.bodyMedium?.fontSize,
-            textColor: context.bodyMedium?.color ?? Colors.black,
+            fontSize: context.bodyMedium.fontSize,
+            textColor: context.bodyMedium.color ?? Colors.black,
           ),
         ],
       ),
@@ -147,7 +147,7 @@ class _TDActionSheetGridState extends State<TDActionSheetGrid> {
               return SizedBox(
                 width: widget.itemMinWidth,
                 height: widget.itemHeight,
-                child: TDActionSheetItemWidget(
+                child: MyActionSheetItemWidget(
                   item: chunks[row].getOrNull(col),
                   index: index,
                   onSelected: widget.onSelected,
@@ -180,7 +180,7 @@ class _TDActionSheetGridState extends State<TDActionSheetGrid> {
         ),
         itemBuilder: (context, index) {
           final item = (items ?? widget.items)[index];
-          return TDActionSheetItemWidget(
+          return MyActionSheetItemWidget(
             item: item,
             index: pageIndex * widget.count + index,
             onSelected: widget.onSelected,

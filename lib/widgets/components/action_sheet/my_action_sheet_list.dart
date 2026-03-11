@@ -2,15 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import '../../../index.dart';
-import '../text/my_text.dart';
-import 'td_action_sheet.dart';
-import 'td_action_sheet_item_widget.dart';
 
-class TDActionSheetList extends StatelessWidget {
-  const TDActionSheetList({
+class MyActionSheetList extends StatelessWidget {
+  const MyActionSheetList({
     required this.items,
     super.key,
-    this.align = TDActionSheetAlign.center,
+    this.align = MyActionSheetAlign.center,
     this.cancelText = 'Cancel',
     this.description,
     this.showCancel = true,
@@ -21,12 +18,12 @@ class TDActionSheetList extends StatelessWidget {
   });
 
   final List<ActionSheetItem> items;
-  final TDActionSheetAlign align;
+  final MyActionSheetAlign align;
   final String cancelText;
   final String? description;
   final bool showCancel;
   final VoidCallback? onCancel;
-  final TDActionSheetItemCallback? onSelected;
+  final MyActionSheetItemCallback? onSelected;
   final bool useSafeArea;
   final double radius;
 
@@ -72,7 +69,7 @@ class TDActionSheetList extends StatelessWidget {
         children: [
           MyText(
             description!,
-            fontSize: context.bodyMedium?.fontSize,
+            fontSize: context.bodyMedium.fontSize,
             textColor: ThemeColors.neutral.shade500,
           ),
         ],
@@ -132,7 +129,7 @@ class TDActionSheetList extends StatelessWidget {
                   ],
                   MyText(
                     item.label,
-                    fontSize: context.bodyLarge?.fontSize,
+                    fontSize: context.bodyLarge.fontSize,
                     textColor:
                         item.disabled
                             ? ThemeColors.neutral.shade400
@@ -166,7 +163,7 @@ class TDActionSheetList extends StatelessWidget {
             child: Center(
               child: MyText(
                 cancelText,
-                fontSize: context.bodyLarge?.fontSize,
+                fontSize: context.bodyLarge.fontSize,
                 textColor: ThemeColors.neutral.shade900,
               ),
             ),
