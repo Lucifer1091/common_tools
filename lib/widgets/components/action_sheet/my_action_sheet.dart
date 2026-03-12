@@ -49,25 +49,25 @@ class MyActionSheet {
 
   final String cancelText;
 
-  /// 每页显示的项目数
-  /// 当[theme]等于[MyActionSheetTheme.grid]且[showPagination]为true时有效
+  /// Number of items displayed per page
+  /// Valid when [theme] equals [MyActionSheetTheme.grid] and [showPagination] is true
   final int count;
 
-  /// 显示的行数
-  /// 当[theme]等于[MyActionSheetTheme.grid]时有效
+  /// Number of rows displayed
+  /// Valid when [theme] equals [MyActionSheetTheme.grid]
   final int rows;
 
-  /// 项目的行高
-  /// 当[theme]等于[MyActionSheetTheme.grid]或[theme]等于[MyActionSheetTheme.group]时有效
+  /// Row height of items
+  /// Valid when [theme] equals [MyActionSheetTheme.grid] or [theme] equals [MyActionSheetTheme.group]
   final double itemHeight;
 
-  /// 项目的最小宽度
-  /// 当[theme]等于[MyActionSheetTheme.grid]且[scrollable]为true时有效
-  /// 或当[theme]等于[MyActionSheetTheme.group]时有效
+  /// Minimum width of items
+  /// Valid when [theme] equals [MyActionSheetTheme.grid] and [scrollable] is true
+  /// Or valid when [theme] equals [MyActionSheetTheme.group]
   final double itemMinWidth;
 
-  /// 描述文本
-  /// 当[theme]等于[MyActionSheetTheme.grid]或[theme]等于[MyActionSheetTheme.list]时有效
+  /// Description text
+  /// This is valid when [theme] equals [MyActionSheetTheme.grid] or [theme] equals [MyActionSheetTheme.list].
   final String? description;
 
   final List<ActionSheetItem> items;
@@ -82,12 +82,12 @@ class MyActionSheet {
 
   final bool visible;
 
-  /// 是否显示分页
-  /// 当[theme]等于[MyActionSheetTheme.grid]时有效
+  /// Whether to display pagination
+  /// Effective when [theme] equals [MyActionSheetTheme.grid]
   final bool showPagination;
 
-  /// 是否可以横向滚动
-  /// 当[theme]等于[MyActionSheetTheme.grid]且[showPagination]为false时有效
+  /// Whether to allow horizontal scrolling
+  /// Effective when [theme] equals [MyActionSheetTheme.grid] and [showPagination] is false
   final bool scrollable;
 
   final VoidCallback? onCancel;

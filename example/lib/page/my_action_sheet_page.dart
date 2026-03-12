@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:common_tools/index.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../base/example_widget.dart';
 
 class IconWithBackground extends StatelessWidget {
   final IconData icon;
 
-  const IconWithBackground({Key? key, required this.icon}) : super(key: key);
+  const IconWithBackground({super.key, required this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -14,15 +15,21 @@ class IconWithBackground extends StatelessWidget {
       width: 40.0,
       height: 40.0,
       decoration: BoxDecoration(
-        color: ThemeColors.neutral.shade50,
+        color: context.colorScheme.secondary,
         borderRadius: BorderRadius.circular(MyRadius.medium),
       ),
-      child: Center(child: Icon(icon, size: 24.0)),
+      child: Center(
+        child: Icon(
+          icon,
+          size: 24.0,
+          color: context.colorScheme.secondaryForeground,
+        ),
+      ),
     );
   }
 }
 
-const _nums = ['One', 'Two', 'Three', 'Four'];
+const _nums = ['1', '2', '3', '4'];
 
 List<ActionSheetItem> _gridItems = [
   ActionSheetItem(
@@ -41,28 +48,28 @@ List<ActionSheetItem> _gridItems = [
     group: 'Share to',
   ),
   ActionSheetItem(
-    label: 'WeChat for Business',
+    label: 'WeChat',
     icon: Image.asset('assets/img/td_action_sheet_4.png'),
     group: 'Share to',
   ),
   ActionSheetItem(
     label: 'Favorites',
-    icon: const IconWithBackground(icon: Icons.star),
+    icon: const IconWithBackground(icon: LucideIcons.star),
     group: 'Share to',
   ),
   ActionSheetItem(
     label: 'Refresh',
-    icon: const IconWithBackground(icon: Icons.refresh),
+    icon: const IconWithBackground(icon: LucideIcons.refreshCcw),
     group: 'Share to',
   ),
   ActionSheetItem(
     label: 'Download',
-    icon: const IconWithBackground(icon: Icons.download),
+    icon: const IconWithBackground(icon: LucideIcons.download),
     group: 'Share to',
   ),
   ActionSheetItem(
     label: 'Copy',
-    icon: const IconWithBackground(icon: Icons.queue),
+    icon: const IconWithBackground(icon: LucideIcons.copy),
     group: 'Share to',
   ),
 ];
@@ -82,7 +89,7 @@ class MyActionSheetPage extends StatelessWidget {
           title: 'Component Types',
           children: [
             ExampleItem(
-              desc: 'List-style action panel',
+              desc: 'List Style Action Panel',
               builder: (BuildContext context) {
                 return Column(
                   spacing: 16,
@@ -96,7 +103,7 @@ class MyActionSheetPage extends StatelessWidget {
               },
             ),
             ExampleItem(
-              desc: 'Grid-style Action Panel',
+              desc: 'Grid Style Action Panel',
               builder: (BuildContext context) {
                 return Column(
                   spacing: 16,
@@ -117,7 +124,7 @@ class MyActionSheetPage extends StatelessWidget {
           title: 'Component State',
           children: [
             ExampleItem(
-              desc: 'List-type Options state',
+              desc: 'List Type Options state',
               builder: (BuildContext context) {
                 return Column(
                   spacing: 16,
@@ -134,7 +141,7 @@ class MyActionSheetPage extends StatelessWidget {
           title: 'Component Style',
           children: [
             ExampleItem(
-              desc: 'List alignment',
+              desc: 'List Alignment',
               builder: (BuildContext context) {
                 return Column(
                   spacing: 16,
@@ -164,7 +171,7 @@ Widget _buildBaseListActionSheet(BuildContext context) {
       MyActionSheet(
         context,
         visible: true,
-        items: _nums.map((e) => ActionSheetItem(label: 'Options$e')).toList(),
+        items: _nums.map((e) => ActionSheetItem(label: 'Options $e')).toList(),
       );
     },
   );
@@ -172,7 +179,7 @@ Widget _buildBaseListActionSheet(BuildContext context) {
 
 Widget _buildDescListActionSheet(BuildContext context) {
   return MyButton(
-    text: 'List with description',
+    text: 'List With Description',
     isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
@@ -180,8 +187,8 @@ Widget _buildDescListActionSheet(BuildContext context) {
       MyActionSheet(
         context,
         visible: true,
-        description: 'Action panel description text',
-        items: _nums.map((e) => ActionSheetItem(label: 'Options$e')).toList(),
+        description: 'Action Panel',
+        items: _nums.map((e) => ActionSheetItem(label: 'Options $e')).toList(),
       );
     },
   );
@@ -189,7 +196,7 @@ Widget _buildDescListActionSheet(BuildContext context) {
 
 Widget _buildIconListActionSheet(BuildContext context) {
   return MyButton(
-    text: 'With icon list',
+    text: 'With Icons',
     isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
@@ -200,8 +207,8 @@ Widget _buildIconListActionSheet(BuildContext context) {
         items: _nums
             .map(
               (e) => ActionSheetItem(
-                label: 'Options$e',
-                icon: const Icon(Icons.dashboard_rounded),
+                label: 'Options $e',
+                icon: const Icon(LucideIcons.layoutDashboard),
               ),
             )
             .toList(),
@@ -212,7 +219,7 @@ Widget _buildIconListActionSheet(BuildContext context) {
 
 Widget _buildBadgeListActionSheet(BuildContext context) {
   return MyButton(
-    text: 'With logo list',
+    text: 'With Badge',
     isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
@@ -245,7 +252,7 @@ Widget _buildBadgeListActionSheet(BuildContext context) {
 
 Widget _buildBaseGridActionSheet(BuildContext context) {
   return MyButton(
-    text: 'Regular palace grid',
+    text: 'Regular Grid',
     isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
@@ -263,7 +270,7 @@ Widget _buildBaseGridActionSheet(BuildContext context) {
 
 Widget _buildDescGridActionSheet(BuildContext context) {
   return MyButton(
-    text: 'Grid with description',
+    text: 'Grid With Description',
     isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
@@ -273,7 +280,7 @@ Widget _buildDescGridActionSheet(BuildContext context) {
         visible: true,
         theme: MyActionSheetTheme.grid,
         count: 8,
-        description: 'Action panel description text',
+        description: 'Action Panel',
         items: _gridItems,
       );
     },
@@ -282,7 +289,7 @@ Widget _buildDescGridActionSheet(BuildContext context) {
 
 Widget _buildPaginationGridActionSheet(BuildContext context) {
   return MyButton(
-    text: 'Page-turning grid',
+    text: 'Pagination grid',
     isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
@@ -297,19 +304,19 @@ Widget _buildPaginationGridActionSheet(BuildContext context) {
           ..._gridItems,
           ActionSheetItem(
             label: 'Android',
-            icon: const IconWithBackground(icon: Icons.android),
+            icon: const IconWithBackground(icon: LucideIcons.play),
           ),
           ActionSheetItem(
             label: 'Apple',
-            icon: const IconWithBackground(icon: Icons.apple),
+            icon: const IconWithBackground(icon: LucideIcons.apple),
           ),
           ActionSheetItem(
             label: 'Chrome',
-            icon: const IconWithBackground(icon: Icons.chrome_reader_mode),
+            icon: const IconWithBackground(icon: LucideIcons.chromium),
           ),
           ActionSheetItem(
             label: 'Github',
-            icon: const IconWithBackground(icon: Icons.star),
+            icon: const IconWithBackground(icon: LucideIcons.star),
           ),
         ],
       );
@@ -319,7 +326,7 @@ Widget _buildPaginationGridActionSheet(BuildContext context) {
 
 Widget _buildScrollGridActionSheet(BuildContext context) {
   return MyButton(
-    text: 'Multi-line scrolling grid',
+    text: 'Multi Line Scrollable Grid',
     isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
@@ -334,23 +341,23 @@ Widget _buildScrollGridActionSheet(BuildContext context) {
           ..._gridItems,
           ActionSheetItem(
             label: 'Android',
-            icon: const IconWithBackground(icon: Icons.android),
+            icon: const IconWithBackground(icon: LucideIcons.play),
           ),
           ActionSheetItem(
             label: 'Apple',
-            icon: const IconWithBackground(icon: Icons.apple),
+            icon: const IconWithBackground(icon: LucideIcons.apple),
           ),
           ActionSheetItem(
             label: 'Chrome',
-            icon: const IconWithBackground(icon: Icons.chrome_reader_mode),
+            icon: const IconWithBackground(icon: LucideIcons.chromium),
           ),
           ActionSheetItem(
             label: 'Github',
-            icon: const IconWithBackground(icon: Icons.star),
+            icon: const IconWithBackground(icon: LucideIcons.star),
           ),
           ActionSheetItem(
             label: 'Github',
-            icon: const IconWithBackground(icon: Icons.airplane_ticket),
+            icon: const IconWithBackground(icon: LucideIcons.github),
           ),
         ],
       );
@@ -360,7 +367,7 @@ Widget _buildScrollGridActionSheet(BuildContext context) {
 
 Widget _buildMultiScrollGridActionSheet(BuildContext context) {
   return MyButton(
-    text: 'Multi-line scrolling grid with description',
+    text: 'Multi Line Scrollable Grid With Description',
     isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
@@ -407,7 +414,7 @@ Widget _buildMultiScrollGridActionSheet(BuildContext context) {
 
 Widget _buildBadgeGridActionSheet(BuildContext context) {
   return MyButton(
-    text: 'Logo-patterned grid',
+    text: 'With Badge',
     isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
@@ -434,21 +441,21 @@ Widget _buildBadgeGridActionSheet(BuildContext context) {
           ),
           ActionSheetItem(
             label: 'Collection',
-            icon: const IconWithBackground(icon: Icons.star),
+            icon: const IconWithBackground(icon: LucideIcons.star),
             badge: const MyBadge(MyBadgeType.redPoint),
           ),
           ActionSheetItem(
             label: 'Refresh',
-            icon: const IconWithBackground(icon: Icons.refresh),
+            icon: const IconWithBackground(icon: LucideIcons.refreshCcw),
           ),
           ActionSheetItem(
             label: 'Download',
-            icon: const IconWithBackground(icon: Icons.download),
+            icon: const IconWithBackground(icon: LucideIcons.download),
             badge: const MyBadge(MyBadgeType.message, count: 8),
           ),
           ActionSheetItem(
             label: 'Copy',
-            icon: const IconWithBackground(icon: Icons.queue),
+            icon: const IconWithBackground(icon: LucideIcons.copy),
           ),
         ],
       );
@@ -458,7 +465,7 @@ Widget _buildBadgeGridActionSheet(BuildContext context) {
 
 Widget _buildBaseListStateActionSheet(BuildContext context) {
   return MyButton(
-    text: 'List-type Options state',
+    text: 'List Type Options State',
     isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
@@ -475,11 +482,11 @@ Widget _buildBaseListStateActionSheet(BuildContext context) {
           ActionSheetItem(label: 'Disabled Options', disabled: true),
           ActionSheetItem(
             label: 'Warning Options',
-            textStyle: const TextStyle(color: Colors.red),
+            textStyle: TextStyle(color: context.colorScheme.destructive),
           ),
         ],
         onSelected: (item, index) {
-          print('Selected: ${item.label}');
+          debugPrint('Selected: ${item.label}');
         },
       );
     },
@@ -488,7 +495,7 @@ Widget _buildBaseListStateActionSheet(BuildContext context) {
 
 Widget _buildIconListStateActionSheet(BuildContext context) {
   return MyButton(
-    text: 'List-type status with icons',
+    text: 'List Type Status With Icons',
     isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
@@ -499,26 +506,26 @@ Widget _buildIconListStateActionSheet(BuildContext context) {
         items: [
           ActionSheetItem(
             label: 'Default Options',
-            icon: const Icon(Icons.dashboard_rounded),
+            icon: const Icon(LucideIcons.layoutDashboard),
           ),
           ActionSheetItem(
             label: 'Custom Options',
-            icon: const Icon(Icons.dashboard_rounded),
+            icon: const Icon(LucideIcons.layoutDashboard),
             textStyle: TextStyle(color: context.colorScheme.primary),
           ),
           ActionSheetItem(
             label: 'Invalid Options',
-            icon: const Icon(Icons.dashboard_rounded),
+            icon: const Icon(LucideIcons.layoutDashboard),
             disabled: true,
           ),
           ActionSheetItem(
             label: 'Warning Options',
-            icon: const Icon(Icons.dashboard_rounded),
+            icon: const Icon(LucideIcons.layoutDashboard),
             textStyle: const TextStyle(color: Colors.red),
           ),
         ],
         onSelected: (item, index) {
-          print('Selected: ${item.label}');
+          debugPrint('Selected: ${item.label}');
         },
       );
     },
@@ -527,7 +534,7 @@ Widget _buildIconListStateActionSheet(BuildContext context) {
 
 Widget _buildBadgeListCenterActionSheet(BuildContext context) {
   return MyButton(
-    text: 'Centered list with logo',
+    text: 'Centered List With Badge',
     isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
@@ -535,7 +542,7 @@ Widget _buildBadgeListCenterActionSheet(BuildContext context) {
       MyActionSheet(
         context,
         visible: true,
-        description: 'Action Sheet Description Text',
+        description: 'Action Sheet',
         items: [
           ActionSheetItem(
             label: 'Options One',
@@ -557,7 +564,7 @@ Widget _buildBadgeListCenterActionSheet(BuildContext context) {
 
 Widget _buildIconListCenterActionSheet(BuildContext context) {
   return MyButton(
-    text: 'Centered list with icons',
+    text: 'Centered List With Icons',
     isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
@@ -565,12 +572,12 @@ Widget _buildIconListCenterActionSheet(BuildContext context) {
       MyActionSheet(
         context,
         visible: true,
-        description: 'Action panel description text',
+        description: 'Action Panel',
         items: _nums
             .map(
               (e) => ActionSheetItem(
-                label: 'Options$e',
-                icon: const Icon(Icons.dashboard_rounded),
+                label: 'Options $e',
+                icon: const Icon(LucideIcons.layoutDashboard),
               ),
             )
             .toList(),
@@ -581,7 +588,7 @@ Widget _buildIconListCenterActionSheet(BuildContext context) {
 
 Widget _buildBadgeListLeftActionSheet(BuildContext context) {
   return MyButton(
-    text: 'Left-aligned list with logo',
+    text: 'Left Aligned List With Badge',
     isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
@@ -589,12 +596,12 @@ Widget _buildBadgeListLeftActionSheet(BuildContext context) {
       MyActionSheet(
         context,
         visible: true,
-        description: 'Action panel description text',
+        description: 'Action Panel',
         align: MyActionSheetAlign.left,
         items: _nums
             .map(
               (e) => ActionSheetItem(
-                label: 'Options$e',
+                label: 'Options $e',
                 badge: const MyBadge(MyBadgeType.redPoint),
               ),
             )
@@ -606,7 +613,7 @@ Widget _buildBadgeListLeftActionSheet(BuildContext context) {
 
 Widget _buildIconListLeftActionSheet(BuildContext context) {
   return MyButton(
-    text: 'Left-aligned list with icons',
+    text: 'Left Aligned List With Icons',
     isExpanded: true,
     type: MyButtonType.outline,
     size: MyButtonSize.large,
@@ -614,13 +621,13 @@ Widget _buildIconListLeftActionSheet(BuildContext context) {
       MyActionSheet(
         context,
         visible: true,
-        description: 'Action panel description text',
+        description: 'Action Panel',
         align: MyActionSheetAlign.left,
         items: _nums
             .map(
               (e) => ActionSheetItem(
-                label: 'Options$e',
-                icon: const Icon(Icons.dashboard_rounded),
+                label: 'Options $e',
+                icon: const Icon(LucideIcons.layoutDashboard),
               ),
             )
             .toList(),

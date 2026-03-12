@@ -36,7 +36,7 @@ class MyActionSheetList extends StatelessWidget {
           topLeft: borderRadius,
           topRight: borderRadius,
         ),
-        color: ThemeColors.neutral.shade100,
+        color: context.colorScheme.secondary,
       ),
       clipBehavior: Clip.antiAlias,
       padding:
@@ -54,40 +54,38 @@ class MyActionSheetList extends StatelessWidget {
     );
   }
 
-  /// 构建描述文本
   Widget _buildDescription(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: ThemeColors.neutral.shade300,
+        color: context.colorScheme.background,
         border: Border(
-          bottom: BorderSide(color: ThemeColors.neutral.shade100, width: 0.5),
+          bottom: BorderSide(color: context.colorScheme.border, width: 0.5),
         ),
       ),
       child: Row(
         mainAxisAlignment: getMainAxisAlignment(align),
         children: [
           MyText(
-            description!,
+            description,
             fontSize: context.bodyMedium.fontSize,
-            textColor: ThemeColors.neutral.shade500,
+            textColor: context.colorScheme.mutedForeground,
           ),
         ],
       ),
     );
   }
 
-  /// 构建Options列表
   Widget _buildOptionsList(BuildContext context) {
     return ColoredBox(
-      color: ThemeColors.neutral.shade300,
+      color: context.colorScheme.background,
       child: ListView.builder(
         shrinkWrap: true,
         itemCount: items.length,
         padding: EdgeInsets.zero,
         itemBuilder: (context, index) {
           final item = items[index];
-          return GestureDetector(
+          return MyGestureDetector(
             onTap:
                 item.disabled
                     ? null
@@ -101,7 +99,7 @@ class MyActionSheetList extends StatelessWidget {
               decoration: BoxDecoration(
                 border: Border(
                   bottom: BorderSide(
-                    color: ThemeColors.neutral.shade100,
+                    color: context.colorScheme.border,
                     width: 0.5,
                   ),
                 ),
@@ -114,30 +112,33 @@ class MyActionSheetList extends StatelessWidget {
                       data: IconThemeData(
                         color:
                             item.disabled
-                                ? ThemeColors.neutral.shade400
+                                ? context.colorScheme.mutedForeground
+                                    .scaleAlpha(0.8)
                                 : (item.textStyle?.color ??
-                                    ThemeColors.neutral.shade100),
+                                    context.colorScheme.foreground),
                         size: item.textStyle?.fontSize,
                       ),
                       child: SizedBox(
                         width: item.iconSize ?? 24,
                         height: item.iconSize ?? 24,
-                        child: item.icon!,
+                        child: item.icon,
                       ),
                     ),
-                    SizedBox(width: 8),
+                    const Gap(8),
                   ],
                   MyText(
                     item.label,
                     fontSize: context.bodyLarge.fontSize,
                     textColor:
                         item.disabled
-                            ? ThemeColors.neutral.shade400
+                            ? context.colorScheme.mutedForeground.scaleAlpha(
+                              0.8,
+                            )
                             : (item.textStyle?.color ??
-                                ThemeColors.neutral.shade100),
+                                context.colorScheme.foreground),
                     style: item.textStyle,
                   ),
-                  if (item.badge != null) ...[SizedBox(width: 8), item.badge!],
+                  if (item.badge != null) ...[const Gap(8), item.badge!],
                 ],
               ),
             ),
@@ -147,24 +148,23 @@ class MyActionSheetList extends StatelessWidget {
     );
   }
 
-  /// 构建取消按钮
   Widget _buildCancelButton(BuildContext context) {
     return Column(
       children: [
-        SizedBox(height: 8),
-        GestureDetector(
+        const Gap(8),
+        MyGestureDetector(
           onTap: () {
             onCancel?.call();
             unawaited(Navigator.maybePop(context));
           },
           child: Container(
-            color: ThemeColors.neutral.shade300,
+            color: context.colorScheme.background,
             height: 48,
             child: Center(
               child: MyText(
                 cancelText,
                 fontSize: context.bodyLarge.fontSize,
-                textColor: ThemeColors.neutral.shade900,
+                textColor: context.colorScheme.foreground,
               ),
             ),
           ),

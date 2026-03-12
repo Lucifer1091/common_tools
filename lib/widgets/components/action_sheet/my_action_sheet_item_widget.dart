@@ -28,7 +28,7 @@ class MyActionSheetItemWidget extends StatelessWidget {
       offsetKey = GlobalKey();
     }
 
-    return GestureDetector(
+    return MyGestureDetector(
       onTap:
           item!.disabled
               ? null
@@ -63,12 +63,12 @@ class MyActionSheetItemWidget extends StatelessWidget {
                   ),
               ],
             ),
-            const Space.h8(),
+            const Gap(8),
           ],
           MyText(
             item!.label,
             fontSize: context.bodySmall.fontSize,
-            textColor: ThemeColors.neutral.shade900,
+            textColor: context.colorScheme.foreground,
             style: item!.textStyle,
           ),
         ],
@@ -112,16 +112,16 @@ Widget buildCancelButton(
 ) {
   return Padding(
     padding: EdgeInsets.only(top: showPagination ? 16 : 8),
-    child: GestureDetector(
+    child: MyGestureDetector(
       onTap: () {
         onCancel?.call();
         unawaited(Navigator.maybePop(context));
       },
       child: Container(
         decoration: BoxDecoration(
-          color: ThemeColors.neutral.shade200,
+          color: context.colorScheme.background,
           border: Border(
-            top: BorderSide(color: ThemeColors.neutral.shade400, width: 0.5),
+            top: BorderSide(color: context.colorScheme.border, width: 0.5),
           ),
         ),
         height: 48,
@@ -129,7 +129,7 @@ Widget buildCancelButton(
           child: MyText(
             cancelText,
             fontSize: context.bodyLarge.fontSize,
-            textColor: ThemeColors.neutral.shade900,
+            textColor: context.colorScheme.foreground,
           ),
         ),
       ),

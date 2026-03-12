@@ -51,7 +51,7 @@ class _MyActionSheetGridState extends State<MyActionSheetGrid> {
           topLeft: borderRadius,
           topRight: borderRadius,
         ),
-        color: Colors.white,
+        color: context.colorScheme.background,
       ),
       clipBehavior: Clip.antiAlias,
       padding:
@@ -61,7 +61,7 @@ class _MyActionSheetGridState extends State<MyActionSheetGrid> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Space.h8(),
+          const Gap(8),
           if (widget.description != null) _buildDescription(context),
           if (widget.showPagination) ...[
             _buildPaginationGrid(context),
@@ -91,7 +91,8 @@ class _MyActionSheetGridState extends State<MyActionSheetGrid> {
           MyText(
             widget.description,
             fontSize: context.bodyMedium.fontSize,
-            textColor: context.bodyMedium.color ?? Colors.black,
+            textColor:
+                context.bodyMedium.color ?? context.colorScheme.mutedForeground,
           ),
         ],
       ),
@@ -106,7 +107,6 @@ class _MyActionSheetGridState extends State<MyActionSheetGrid> {
     return _gridWrap(
       PageView.builder(
         itemCount: (widget.items.length / widget.count).ceil(),
-        // 当页面改变时更新当前页码
         onPageChanged:
             widget.showPagination
                 ? (index) {
@@ -116,7 +116,6 @@ class _MyActionSheetGridState extends State<MyActionSheetGrid> {
                 }
                 : null,
         itemBuilder: (context, pageIndex) {
-          // 获取当前页面的项目
           final pageItems =
               widget.items
                   .skip(pageIndex * widget.count)
@@ -205,7 +204,7 @@ class _MyActionSheetGridState extends State<MyActionSheetGrid> {
             color:
                 currentPage == index
                     ? context.colorScheme.primary
-                    : ThemeColors.neutral.shade400,
+                    : context.colorScheme.mutedForeground,
           ),
         );
       }),

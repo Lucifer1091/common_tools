@@ -327,7 +327,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
   ],
   'Feedback': [
     ExamplePageModel(
-      text: 'ActionSheet',
+      text: 'Action Sheet',
       name: 'action-sheet',
       pageName: 'action_sheet',
       pageBuilder: _wrapInheritedTheme((context) => const MyActionSheetPage()),

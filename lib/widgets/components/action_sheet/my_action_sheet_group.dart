@@ -44,7 +44,7 @@ class MyActionSheetGroup extends StatelessWidget {
           topLeft: borderRadius,
           topRight: borderRadius,
         ),
-        color: Colors.white,
+        color: context.colorScheme.background,
       ),
       clipBehavior: Clip.antiAlias,
       padding:
@@ -67,7 +67,7 @@ class MyActionSheetGroup extends StatelessWidget {
                       MyText(
                         k,
                         fontSize: context.bodyMedium.fontSize,
-                        textColor: ThemeColors.neutral.shade300,
+                        textColor: context.colorScheme.mutedForeground,
                       ),
                     ],
                   ),
@@ -93,10 +93,9 @@ class MyActionSheetGroup extends StatelessWidget {
                 if (i != groupKeys.length - 1)
                   Container(
                     decoration: BoxDecoration(
-                      color: ThemeColors.neutral.shade700,
                       border: Border(
                         top: BorderSide(
-                          color: ThemeColors.neutral.shade300,
+                          color: context.colorScheme.border,
                           width: 0.5,
                         ),
                       ),
