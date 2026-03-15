@@ -37,10 +37,26 @@ class MyColorScheme {
     Brightness brightness = Brightness.light,
   }) {
     return switch (name.lowercase) {
+      'amber' =>
+        brightness == Brightness.light
+            ? const MyAmberColorScheme.light()
+            : const MyAmberColorScheme.dark(),
       'blue' =>
         brightness == Brightness.light
             ? const MyBlueColorScheme.light()
             : const MyBlueColorScheme.dark(),
+      'cyan' =>
+        brightness == Brightness.light
+            ? const MyCyanColorScheme.light()
+            : const MyCyanColorScheme.dark(),
+      'emerald' =>
+        brightness == Brightness.light
+            ? const MyEmeraldColorScheme.light()
+            : const MyEmeraldColorScheme.dark(),
+      'fuchsia' =>
+        brightness == Brightness.light
+            ? const MyFuchsiaColorScheme.light()
+            : const MyFuchsiaColorScheme.dark(),
       'gray' =>
         brightness == Brightness.light
             ? const MyGrayColorScheme.light()
@@ -49,6 +65,14 @@ class MyColorScheme {
         brightness == Brightness.light
             ? const MyGreenColorScheme.light()
             : const MyGreenColorScheme.dark(),
+      'indigo' =>
+        brightness == Brightness.light
+            ? const MyIndigoColorScheme.light()
+            : const MyIndigoColorScheme.dark(),
+      'lime' =>
+        brightness == Brightness.light
+            ? const MyLimeColorScheme.light()
+            : const MyLimeColorScheme.dark(),
       'neutral' =>
         brightness == Brightness.light
             ? const MyNeutralColorScheme.light()
@@ -57,6 +81,14 @@ class MyColorScheme {
         brightness == Brightness.light
             ? const MyOrangeColorScheme.light()
             : const MyOrangeColorScheme.dark(),
+      'pink' =>
+        brightness == Brightness.light
+            ? const MyPinkColorScheme.light()
+            : const MyPinkColorScheme.dark(),
+      'purple' =>
+        brightness == Brightness.light
+            ? const MyPurpleColorScheme.light()
+            : const MyPurpleColorScheme.dark(),
       'red' =>
         brightness == Brightness.light
             ? const MyRedColorScheme.light()
@@ -65,6 +97,10 @@ class MyColorScheme {
         brightness == Brightness.light
             ? const MyRoseColorScheme.light()
             : const MyRoseColorScheme.dark(),
+      'sky' =>
+        brightness == Brightness.light
+            ? const MySkyColorScheme.light()
+            : const MySkyColorScheme.dark(),
       'slate' =>
         brightness == Brightness.light
             ? const MySlateColorScheme.light()
@@ -73,6 +109,10 @@ class MyColorScheme {
         brightness == Brightness.light
             ? const MyStoneColorScheme.light()
             : const MyStoneColorScheme.dark(),
+      'teal' =>
+        brightness == Brightness.light
+            ? const MyTealColorScheme.light()
+            : const MyTealColorScheme.dark(),
       'violet' =>
         brightness == Brightness.light
             ? const MyVioletColorScheme.light()
@@ -408,15 +448,25 @@ class MyColorScheme {
   }
 
   static const List<String> schemes = <String>[
+    'amber',
     'blue',
+    'cyan',
+    'emerald',
+    'fuchsia',
     'gray',
     'green',
+    'indigo',
+    'lime',
     'neutral',
     'orange',
+    'pink',
+    'purple',
     'red',
     'rose',
+    'sky',
     'slate',
     'stone',
+    'teal',
     'violet',
     'yellow',
     'zinc',
