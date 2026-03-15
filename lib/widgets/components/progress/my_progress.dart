@@ -286,7 +286,7 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
       case MyProgressStatus.primary:
         return context.colorScheme.primary;
       case MyProgressStatus.warning:
-        return ThemeColors.warning;
+        return MyColors.warning;
       case MyProgressStatus.danger:
         return context.colorScheme.destructive;
       case MyProgressStatus.success:
@@ -469,11 +469,11 @@ class _ProgressIndicatorState extends State<ProgressIndicator>
             ),
           ),
         ),
-        if (widget.showLabel)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: _buildLabelWidget(ThemeColors.neutral.shade900),
-          ),
+        // if (widget.showLabel)
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: _buildLabelWidget(context.colorScheme.foreground),
+        ),
       ],
     );
   }

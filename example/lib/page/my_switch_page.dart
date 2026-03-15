@@ -58,53 +58,6 @@ class MySwitchPageState extends State<MySwitchPage> {
     return current;
   }
 
-  Widget demoRow(
-    BuildContext context,
-    String? title, {
-    String? desc,
-    bool on = true,
-    bool enable = true,
-    Color? trackOnColor,
-    Color? trackOffColor,
-    Color? thumbContentOnColor,
-    Color? thumbContentOffColor,
-    MySwitchSize? size,
-    MySwitchType? type,
-  }) {
-    Widget current = Row(
-      children: [
-        Expanded(child: MyText(title, textColor: ThemeColors.neutral.shade900)),
-        MyText(desc ?? '', textColor: ThemeColors.neutral.shade500),
-        SizedBox(
-          child: _buildSwitch(
-            on: on,
-            enable: enable,
-            trackOnColor: trackOnColor,
-            trackOffColor: trackOffColor,
-            thumbContentOnColor: thumbContentOnColor,
-            thumbContentOffColor: thumbContentOffColor,
-            size: size,
-            type: type,
-          ),
-        ),
-      ],
-    );
-    current = Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: SizedBox(
-        height: 56,
-        child: Container(
-          color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: current,
-          ),
-        ),
-      ),
-    );
-    return current;
-  }
-
   Widget _buildItem(
     BuildContext context,
     Widget switchItem, {
@@ -207,28 +160,6 @@ class MySwitchPageState extends State<MySwitchPage> {
       context,
       const MySwitch(isOn: true, size: MySwitchSize.small),
       title: 'Small size 24',
-    );
-  }
-
-  Widget _buildSwitch({
-    bool on = true,
-    bool enable = true,
-    Color? trackOnColor,
-    Color? trackOffColor,
-    Color? thumbContentOnColor,
-    Color? thumbContentOffColor,
-    MySwitchSize? size,
-    MySwitchType? type,
-  }) {
-    return MySwitch(
-      isOn: on,
-      trackOnColor: trackOnColor,
-      trackOffColor: trackOffColor,
-      thumbContentOnColor: thumbContentOnColor,
-      thumbContentOffColor: thumbContentOffColor,
-      enable: enable,
-      size: size,
-      type: type,
     );
   }
 

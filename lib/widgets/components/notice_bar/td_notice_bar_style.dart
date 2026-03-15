@@ -21,8 +21,8 @@ class TDNoticeBarStyle {
 
     switch (theme) {
       case TDNoticeBarTheme.warning:
-        leftIconColor = ThemeColors.warning.shade400;
-        backgroundColor = ThemeColors.warning.shade50;
+        leftIconColor = MyColors.warning.shade400;
+        backgroundColor = MyColors.warning.shade50;
       case TDNoticeBarTheme.error:
         leftIconColor = ThemeColors.error.shade500;
         backgroundColor = ThemeColors.error.shade50;

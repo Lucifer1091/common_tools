@@ -140,8 +140,8 @@ class _TDPopoverWidgetState extends State<TDPopoverWidget> {
         _color = ThemeColors.success.shade400;
         _backgroundColor = ThemeColors.success.shade50;
       case TDPopoverTheme.warning:
-        _color = ThemeColors.warning.shade400;
-        _backgroundColor = ThemeColors.warning.shade50;
+        _color = MyColors.warning.shade400;
+        _backgroundColor = MyColors.warning.shade50;
       case TDPopoverTheme.error:
         _color = ThemeColors.error.shade500;
         _backgroundColor = ThemeColors.error.shade50;

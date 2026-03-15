@@ -103,7 +103,7 @@ class TDSwipeCellPage extends StatelessWidget {
         children: [
           TDSwipeCellAction(
             flex: 60,
-            backgroundColor: ThemeColors.warning.shade300,
+            backgroundColor: MyColors.warning.shade300,
             label: '编辑',
           ),
           TDSwipeCellAction(
@@ -132,7 +132,7 @@ class TDSwipeCellPage extends StatelessWidget {
           ),
           TDSwipeCellAction(
             flex: 60,
-            backgroundColor: ThemeColors.warning.shade300,
+            backgroundColor: MyColors.warning.shade300,
             label: '编辑',
           ),
           TDSwipeCellAction(
@@ -183,7 +183,7 @@ class TDSwipeCellPage extends StatelessWidget {
         children: [
           TDSwipeCellAction(
             flex: 60,
-            backgroundColor: ThemeColors.warning.shade300,
+            backgroundColor: MyColors.warning.shade300,
             label: '编辑',
           ),
           TDSwipeCellAction(
@@ -213,7 +213,7 @@ class TDSwipeCellPage extends StatelessWidget {
               children: [
                 TDSwipeCellAction(
                   flex: 80,
-                  backgroundColor: ThemeColors.warning.shade300,
+                  backgroundColor: MyColors.warning.shade300,
                   icon: Icons.edit,
                   label: '编辑',
                 ),
@@ -235,7 +235,7 @@ class TDSwipeCellPage extends StatelessWidget {
               children: [
                 TDSwipeCellAction(
                   flex: 60,
-                  backgroundColor: ThemeColors.warning.shade300,
+                  backgroundColor: MyColors.warning.shade300,
                   icon: Icons.edit,
                 ),
                 TDSwipeCellAction(
@@ -255,7 +255,7 @@ class TDSwipeCellPage extends StatelessWidget {
               children: [
                 TDSwipeCellAction(
                   flex: 60,
-                  backgroundColor: ThemeColors.warning.shade300,
+                  backgroundColor: MyColors.warning.shade300,
                   direction: Axis.vertical,
                   icon: Icons.edit,
                   label: '编辑',
@@ -293,7 +293,7 @@ class TDSwipeCellPage extends StatelessWidget {
         children: [
           TDSwipeCellAction(
             flex: 60,
-            backgroundColor: ThemeColors.warning.shade300,
+            backgroundColor: MyColors.warning.shade300,
             label: '编辑',
           ),
           TDSwipeCellAction(
