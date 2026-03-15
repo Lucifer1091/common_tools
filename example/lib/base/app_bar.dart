@@ -76,6 +76,7 @@ class MyAppBar extends ConsumerWidget implements PreferredSizeWidget {
   Future<void> _showColorSwitcher(BuildContext context) async {
     await MyBottomSheet.floating(
       context: context,
+      isScrollControlled: true,
       builder: (context) {
         return SafeArea(
           minimum: const EdgeInsets.only(bottom: 34),
