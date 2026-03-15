@@ -798,25 +798,27 @@ class MySelectState<T> extends State<MySelect<T>> {
         widget.variant == MySelectVariant.multiple ||
         widget.variant == MySelectVariant.multipleWithSearch;
 
-    final prevList = controller.value.toList(growable: false);
+    final prevSelection = controller.value.toSet();
     if (widget.closeOnSelect) popoverController.hide();
     setState(() {
       if (!isMultiSelection) controller.value.clear();
-      if (widget.allowDeselection && prevList.contains(value)) {
+      if (widget.allowDeselection && prevSelection.contains(value)) {
         controller.value.remove(value);
       } else {
         controller.value.add(value);
       }
     });
 
-    final newList = controller.value.toList(growable: false);
-    final changed = prevList.contentEquals(newList);
+    final nextSelection = controller.value.toSet();
+    final selectionChanged =
+        prevSelection.length != nextSelection.length ||
+        !prevSelection.containsAll(nextSelection);
 
     if (widget.closeOnSelect) {
       focusNode.requestFocus();
     }
 
-    if (changed) {
+    if (selectionChanged) {
       // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
       controller.notifyListeners();
       if (isMultiSelection) {

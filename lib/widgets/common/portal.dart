@@ -141,6 +141,7 @@ class _MyPortalState extends State<MyPortal> {
   final overlayKey = GlobalKey();
 
   Offset? _calculatedTarget;
+  bool _calculatedPreferBelow = true;
 
   @override
   void initState() {
@@ -169,7 +170,10 @@ class _MyPortalState extends State<MyPortal> {
         show();
       } else {
         if (_calculatedTarget != null && mounted) {
-          setState(() => _calculatedTarget = null);
+          setState(() {
+            _calculatedTarget = null;
+            _calculatedPreferBelow = true;
+          });
         }
         hide();
       }
@@ -214,38 +218,68 @@ class _MyPortalState extends State<MyPortal> {
 
     final overlay = overlayKey.currentContext?.findRenderObject() as RenderBox?;
     final overlaySize = (true == overlay?.hasSize) ? overlay!.size : Size.zero;
+    final verticalGap = anchor.offset.dy.abs();
 
-    final targetOffset = switch (anchor.targetAnchor) {
-      Alignment.topLeft => box.size.topLeft(Offset.zero),
-      Alignment.topCenter => box.size.topCenter(Offset.zero),
-      Alignment.topRight => box.size.topRight(Offset.zero),
-      Alignment.centerLeft => box.size.centerLeft(Offset.zero),
-      Alignment.center => box.size.center(Offset.zero),
-      Alignment.centerRight => box.size.centerRight(Offset.zero),
-      Alignment.bottomLeft => box.size.bottomLeft(Offset.zero),
-      Alignment.bottomCenter => box.size.bottomCenter(Offset.zero),
-      Alignment.bottomRight => box.size.bottomRight(Offset.zero),
-      final alignment =>
+    final topLeft = box.localToGlobal(Offset.zero, ancestor: overlayAncestor);
+    final bottomRight = box.localToGlobal(
+      box.size.bottomRight(Offset.zero),
+      ancestor: overlayAncestor,
+    );
+
+    final availableBelow =
+        overlayAncestor.size.height - bottomRight.dy - verticalGap;
+    final availableAbove = topLeft.dy - verticalGap;
+    final shouldOpenAbove =
+        overlaySize.height > availableBelow &&
+        (overlaySize.height <= availableAbove ||
+            availableAbove > availableBelow);
+
+    final targetOffset = switch ((anchor.targetAnchor, shouldOpenAbove)) {
+      (
+        (Alignment.topLeft || Alignment.centerLeft || Alignment.bottomLeft),
+        true,
+      ) =>
+        box.size.topLeft(Offset.zero),
+      (
+        (Alignment.topCenter || Alignment.center || Alignment.bottomCenter),
+        true,
+      ) =>
+        box.size.topCenter(Offset.zero),
+      (
+        (Alignment.topRight || Alignment.centerRight || Alignment.bottomRight),
+        true,
+      ) =>
+        box.size.topRight(Offset.zero),
+      (
+        (Alignment.topLeft || Alignment.centerLeft || Alignment.bottomLeft),
+        false,
+      ) =>
+        box.size.bottomLeft(Offset.zero),
+      (
+        (Alignment.topCenter || Alignment.center || Alignment.bottomCenter),
+        false,
+      ) =>
+        box.size.bottomCenter(Offset.zero),
+      (
+        (Alignment.topRight || Alignment.centerRight || Alignment.bottomRight),
+        false,
+      ) =>
+        box.size.bottomRight(Offset.zero),
+      (final alignment, _) =>
         throw Exception(
           """MyAnchorAuto doesn't support the alignment $alignment you provided""",
         ),
     };
 
     var followerOffset = switch (anchor.followerAnchor) {
-      Alignment.topLeft => Offset(-overlaySize.width / 2, -overlaySize.height),
-      Alignment.topCenter => Offset(0, -overlaySize.height),
-      Alignment.topRight => Offset(overlaySize.width / 2, -overlaySize.height),
-      Alignment.centerLeft => Offset(
-        -overlaySize.width / 2,
-        -overlaySize.height / 2,
-      ),
-      Alignment.center => Offset(0, -overlaySize.height / 2),
-      Alignment.centerRight => Offset(
-        overlaySize.width / 2,
-        -overlaySize.height / 2,
-      ),
+      Alignment.topLeft ||
+      Alignment.centerLeft ||
       Alignment.bottomLeft => Offset(-overlaySize.width / 2, 0),
+      Alignment.topCenter ||
+      Alignment.center ||
       Alignment.bottomCenter => Offset.zero,
+      Alignment.topRight ||
+      Alignment.centerRight ||
       Alignment.bottomRight => Offset(overlaySize.width / 2, 0),
       final alignment =>
         throw Exception(
@@ -253,14 +287,17 @@ class _MyPortalState extends State<MyPortal> {
         ),
     };
 
-    followerOffset += targetOffset + anchor.offset;
+    followerOffset += targetOffset;
+    followerOffset += Offset(anchor.offset.dx, 0);
 
     final target = box.localToGlobal(followerOffset, ancestor: overlayAncestor);
 
-    if (target != _calculatedTarget) {
+    if (target != _calculatedTarget ||
+        _calculatedPreferBelow != !shouldOpenAbove) {
       if (mounted) {
         setState(() {
           _calculatedTarget = target;
+          _calculatedPreferBelow = !shouldOpenAbove;
         });
       }
     } else if (overlay == null) {
@@ -293,8 +330,8 @@ class _MyPortalState extends State<MyPortal> {
     return CustomSingleChildLayout(
       delegate: MyPositionDelegate(
         target: target,
-        verticalOffset: 0,
-        preferBelow: true,
+        verticalOffset: anchor.offset.dy.abs(),
+        preferBelow: _calculatedPreferBelow,
       ),
       child: KeyedSubtree(
         key: overlayKey,

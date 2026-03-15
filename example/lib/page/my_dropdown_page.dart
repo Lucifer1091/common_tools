@@ -41,9 +41,10 @@ class _MyDropdownPageState extends State<MyDropdownPage> {
               desc: 'Scrollable Single Select',
               builder: _scrollableSingleSelect,
             ),
-            ExampleItem(desc: 'Form', builder: _formSingleSelect),
+            ExampleItem(desc: 'Select Form Field', builder: _formSingleSelect),
             ExampleItem(desc: 'Single Select Search', builder: _singleSearch),
             ExampleItem(desc: 'Multi Select', builder: _multiSelect),
+            ExampleItem(desc: 'Async Select', builder: _asyncSelect),
           ],
         ),
       ],
@@ -187,7 +188,6 @@ class _MyDropdownPageState extends State<MyDropdownPage> {
                 : Text(value),
             placeholder: const Text('Select a verified email to display'),
             validator: (v) {
-              print('sadsad $v');
               if (v == null) {
                 return 'Please select an email to display';
               }
@@ -259,7 +259,40 @@ class _MyDropdownPageState extends State<MyDropdownPage> {
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
           child: Text(
             'Fruits',
-            style: context.bodyLarge,
+            style: context.bodyMedium.copyWith(
+              fontWeight: FontWeight.w600,
+              color: context.colorScheme.popoverForeground,
+            ),
+            textAlign: TextAlign.start,
+          ),
+        ),
+        ...fruits.entries.map(
+          (e) => MyOption(
+            value: e.key,
+            direction: TextDirection.rtl,
+            child: Text(e.value),
+          ),
+        ),
+      ],
+      selectedOptionsBuilder: (context, values) =>
+          Text(values.map((v) => v.capitalize).join(', ')),
+    );
+  }
+
+  Widget _asyncSelect(BuildContext context) {
+    return MySelect<String>.multipleWithSearch(
+      minWidth: 340,
+      onChanged: print,
+      placeholder: const Text('Select multiple fruits'),
+      options: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+          child: Text(
+            'Fruits',
+            style: context.bodyMedium.copyWith(
+              fontWeight: FontWeight.w600,
+              color: context.colorScheme.popoverForeground,
+            ),
             textAlign: TextAlign.start,
           ),
         ),
@@ -267,6 +300,7 @@ class _MyDropdownPageState extends State<MyDropdownPage> {
           (e) => MyOption(value: e.key, child: Text(e.value)),
         ),
       ],
+      onSearchChanged: (value) {},
       selectedOptionsBuilder: (context, values) =>
           Text(values.map((v) => v.capitalize).join(', ')),
     );

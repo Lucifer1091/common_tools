@@ -147,6 +147,7 @@ class MySelectFormField<T> extends MyFormBuilderField<T> {
     super.id,
     super.key,
     super.onSaved,
+    super.forceErrorText,
     super.label,
     super.error,
     super.description,
@@ -271,6 +272,7 @@ class MySelectFormField<T> extends MyFormBuilderField<T> {
     super.id,
     super.key,
     super.onSaved,
+    super.forceErrorText,
     super.label,
     super.error,
     super.description,
@@ -404,6 +406,7 @@ class MySelectFormField<T> extends MyFormBuilderField<T> {
 class _MyFormBuilderSelectState<T>
     extends MyFormBuilderFieldState<MySelectFormField<T>, T> {
   MySelectController<T>? _controller;
+  bool _isSyncingController = false;
 
   MySelectController<T> get controller =>
       widget.controller ??
@@ -415,6 +418,49 @@ class _MyFormBuilderSelectState<T>
   void initState() {
     super.initState();
     controller.addListener(onControllerChange);
+    if (widget.controller != null) {
+      onControllerChange();
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant MySelectFormField<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller == widget.controller) return;
+
+    oldWidget.controller?.removeListener(onControllerChange);
+
+    if (oldWidget.controller == null && widget.controller != null) {
+      _controller?.dispose();
+      _controller = null;
+    } else if (oldWidget.controller != null && widget.controller == null) {
+      _controller = MySelectController<T>(initialValue: _fieldValueAsSet());
+    }
+
+    controller.addListener(onControllerChange);
+
+    if (widget.controller != null) {
+      onControllerChange();
+    } else {
+      _syncControllerWithValue();
+    }
+  }
+
+  @override
+  void didChange(T? value) {
+    super.didChange(value);
+    if (!_isSyncingController) {
+      _syncControllerWithValue();
+    }
+  }
+
+  void onControllerChange() {
+    if (_isSyncingController) return;
+
+    final controllerValue = controller.value.firstOrNull;
+    if (controllerValue != value) {
+      didChange(controllerValue);
+    }
   }
 
   @override
@@ -424,14 +470,19 @@ class _MyFormBuilderSelectState<T>
     super.dispose();
   }
 
-  void onControllerChange() {
-    didChange(controller.value.firstOrNull);
+  Set<T> _fieldValueAsSet() => value is T ? <T>{value as T} : <T>{};
+
+  void _syncControllerWithValue() {
+    final nextValue = _fieldValueAsSet();
+    if (_sameSelection(controller.value, nextValue)) return;
+
+    _isSyncingController = true;
+    controller.value = nextValue;
+    _isSyncingController = false;
   }
 
-  @override
-  void reset() {
-    super.reset();
-    controller.value = initialValue is T ? <T>{initialValue as T} : <T>{};
+  bool _sameSelection(Set<T> a, Set<T> b) {
+    return identical(a, b) || (a.length == b.length && a.containsAll(b));
   }
 }
 
@@ -441,6 +492,7 @@ class MySelectMultipleFormField<T> extends MyFormBuilderField<Set<T>> {
     super.id,
     super.key,
     super.onSaved,
+    super.forceErrorText,
     super.label,
     super.error,
     super.description,
@@ -529,6 +581,7 @@ class MySelectMultipleFormField<T> extends MyFormBuilderField<Set<T>> {
     super.id,
     super.key,
     super.onSaved,
+    super.forceErrorText,
     super.label,
     super.error,
     super.description,
@@ -640,6 +693,7 @@ class MySelectMultipleFormField<T> extends MyFormBuilderField<Set<T>> {
     super.id,
     super.key,
     super.onSaved,
+    super.forceErrorText,
     super.label,
     super.error,
     super.description,
@@ -758,6 +812,7 @@ class MySelectMultipleFormField<T> extends MyFormBuilderField<Set<T>> {
 class _MyFormBuilderSelectMultipleState<T>
     extends MyFormBuilderFieldState<MySelectMultipleFormField<T>, Set<T>> {
   MySelectController<T>? _controller;
+  bool _isSyncingController = false;
 
   MySelectController<T> get controller =>
       widget.controller ??
@@ -767,6 +822,49 @@ class _MyFormBuilderSelectMultipleState<T>
   void initState() {
     super.initState();
     controller.addListener(onControllerChange);
+    if (widget.controller != null) {
+      onControllerChange();
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant MySelectMultipleFormField<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller == widget.controller) return;
+
+    oldWidget.controller?.removeListener(onControllerChange);
+
+    if (oldWidget.controller == null && widget.controller != null) {
+      _controller?.dispose();
+      _controller = null;
+    } else if (oldWidget.controller != null && widget.controller == null) {
+      _controller = MySelectController<T>(initialValue: _fieldValueAsSet());
+    }
+
+    controller.addListener(onControllerChange);
+
+    if (widget.controller != null) {
+      onControllerChange();
+    } else {
+      _syncControllerWithValue();
+    }
+  }
+
+  @override
+  void didChange(Set<T>? value) {
+    super.didChange(value);
+    if (!_isSyncingController) {
+      _syncControllerWithValue();
+    }
+  }
+
+  void onControllerChange() {
+    if (_isSyncingController) return;
+
+    final controllerValue = controller.value.toSet();
+    if (!_sameSelection(controllerValue, _fieldValueAsSet())) {
+      didChange(controllerValue);
+    }
   }
 
   @override
@@ -776,13 +874,18 @@ class _MyFormBuilderSelectMultipleState<T>
     super.dispose();
   }
 
-  void onControllerChange() {
-    didChange(controller.value.toSet());
+  Set<T> _fieldValueAsSet() => (value ?? <T>{}).toSet();
+
+  void _syncControllerWithValue() {
+    final nextValue = _fieldValueAsSet();
+    if (_sameSelection(controller.value, nextValue)) return;
+
+    _isSyncingController = true;
+    controller.value = nextValue;
+    _isSyncingController = false;
   }
 
-  @override
-  void reset() {
-    super.reset();
-    controller.value = initialValue ?? {};
+  bool _sameSelection(Set<T> a, Set<T> b) {
+    return identical(a, b) || (a.length == b.length && a.containsAll(b));
   }
 }
