@@ -177,9 +177,8 @@ class _MyDropdownPageState extends State<MyDropdownPage> {
         spacing: 16,
         children: [
           MySelectFormField<String>(
-            id: 'email',
             minWidth: 350,
-            initialValue: null,
+            label: const Text('Email'),
             options: verifiedEmails
                 .map((email) => MyOption(value: email, child: Text(email)))
                 .toList(),
@@ -188,6 +187,7 @@ class _MyDropdownPageState extends State<MyDropdownPage> {
                 : Text(value),
             placeholder: const Text('Select a verified email to display'),
             validator: (v) {
+              print('sadsad $v');
               if (v == null) {
                 return 'Please select an email to display';
               }

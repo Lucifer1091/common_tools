@@ -174,9 +174,7 @@ class _MyPopoverState extends State<MyPopover>
     }
     animationController = AnimationController(
       vsync: this,
-      // This duration will be overridden later
-      // by the [Animate] widget based on the effects.
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 150),
     );
     controller.addListener(_onPopoverToggle);
 
@@ -230,7 +228,13 @@ class _MyPopoverState extends State<MyPopover>
     final effectiveReverseDuration =
         widget.reverseDuration ?? const Duration(milliseconds: 150);
 
+    animationController.duration = const Duration(milliseconds: 150);
     animationController.reverseDuration = effectiveReverseDuration;
+    final popoverAnimation = CurvedAnimation(
+      parent: animationController,
+      curve: Curves.easeInOut,
+      reverseCurve: Curves.easeInOut,
+    );
 
     final effectivePadding =
         widget.padding ??
@@ -285,9 +289,9 @@ class _MyPopoverState extends State<MyPopover>
       );
     }
 
-    popover = AnimatedFadeScale(
-      key: _popoverKey,
-      duration: Duration(milliseconds: 150),
+    popover = FadeTransition(opacity: popoverAnimation, child: popover);
+    popover = ScaleTransition(
+      scale: Tween<double>(begin: 0.92, end: 1).animate(popoverAnimation),
       child: popover,
     );
 
