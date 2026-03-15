@@ -25,7 +25,7 @@ class MySideBarCustomPageState extends State<MySideBarCustomPage> {
 
   Widget buildWidget(BuildContext context) {
     return ExamplePage(
-      title: 'SideBar 自定义样式',
+      title: 'SideBar Custom',
       exampleCodeGroup: 'sideBar',
       showSingleChild: true,
       singleChild: _buildCustomSideBar,

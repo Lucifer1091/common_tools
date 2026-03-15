@@ -10,6 +10,7 @@ export 'date_time_picker/index.dart';
 export 'dialog/index.dart';
 export 'divider/index.dart';
 export 'drawer/index.dart';
+export 'select/index.dart';
 export 'error/index.dart';
 export 'footer/index.dart';
 export 'image/index.dart';

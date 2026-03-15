@@ -72,7 +72,7 @@ class MySideBarLoadingPageState extends State<MySideBarLoadingPage> {
 
   Widget buildWidget(BuildContext context) {
     return ExamplePage(
-      title: 'SideBar 延迟加载',
+      title: 'SideBar Loading',
       exampleCodeGroup: 'sideBar',
       showSingleChild: true,
       singleChild: _buildLoadingSideBar,
