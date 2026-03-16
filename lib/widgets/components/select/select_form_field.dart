@@ -31,6 +31,12 @@ class MySelectFormField<T> extends MyFormBuilderField<T> {
     /// {@macro MySelect.optionsBuilder}
     Widget? Function(BuildContext, int)? optionsBuilder,
 
+    /// {@macro MySelect.items}
+    MySelectItemDelegate? items,
+
+    /// {@macro MySelect.itemsBuilder}
+    MySelectItemsBuilder<T>? itemsBuilder,
+
     /// {@macro MySelect.placeholder}
     Widget? placeholder,
 
@@ -96,6 +102,18 @@ class MySelectFormField<T> extends MyFormBuilderField<T> {
 
     /// {@macro MySelect.shrinkWrap}
     bool? shrinkWrap,
+
+    /// {@macro MySelect.popupWidth}
+    MySelectPopupWidth popupWidth = MySelectPopupWidth.matchTrigger,
+
+    /// {@macro MySelect.loadingBuilder}
+    WidgetBuilder? loadingBuilder,
+
+    /// {@macro MySelect.emptyBuilder}
+    WidgetBuilder? emptyBuilder,
+
+    /// {@macro MySelect.errorBuilder}
+    MySelectErrorBuilder? errorBuilder,
     this.controller,
 
     /// {@macro MySelect.ensureSelectedVisible}
@@ -108,6 +126,8 @@ class MySelectFormField<T> extends MyFormBuilderField<T> {
 
            return MySelect<T>(
              options: options,
+             items: items,
+             itemsBuilder: itemsBuilder,
              allowDeselection: allowDeselection,
              optionsBuilder: optionsBuilder,
              selectedOptionBuilder: selectedOptionBuilder,
@@ -136,6 +156,10 @@ class MySelectFormField<T> extends MyFormBuilderField<T> {
              groupId: groupId,
              itemCount: itemCount,
              shrinkWrap: shrinkWrap,
+             popupWidth: popupWidth,
+             loadingBuilder: loadingBuilder,
+             emptyBuilder: emptyBuilder,
+             errorBuilder: errorBuilder,
              controller: state.controller,
              ensureSelectedVisible: ensureSelectedVisible,
            );
@@ -164,6 +188,8 @@ class MySelectFormField<T> extends MyFormBuilderField<T> {
 
     /// The builder for the options of the [MySelect].
     Widget? Function(BuildContext, int)? optionsBuilder,
+    MySelectItemDelegate? items,
+    MySelectItemsBuilder<T>? itemsBuilder,
     ValueChanged<String>? onSearchChanged,
     Widget? placeholder,
     bool closeOnTapOutside = true,
@@ -184,6 +210,7 @@ class MySelectFormField<T> extends MyFormBuilderField<T> {
     String? searchPlaceholder,
     EdgeInsetsGeometry? searchPadding,
     Widget? search,
+    TextEditingController? searchController,
     bool? clearSearchOnClose,
     MyPopoverController? popoverController,
 
@@ -204,6 +231,18 @@ class MySelectFormField<T> extends MyFormBuilderField<T> {
     /// {@macro MySelect.shrinkWrap}
     bool? shrinkWrap,
 
+    /// {@macro MySelect.popupWidth}
+    MySelectPopupWidth popupWidth = MySelectPopupWidth.matchTrigger,
+
+    /// {@macro MySelect.loadingBuilder}
+    WidgetBuilder? loadingBuilder,
+
+    /// {@macro MySelect.emptyBuilder}
+    WidgetBuilder? emptyBuilder,
+
+    /// {@macro MySelect.errorBuilder}
+    MySelectErrorBuilder? errorBuilder,
+
     /// {@macro MySelect.controller}
     this.controller,
 
@@ -223,6 +262,8 @@ class MySelectFormField<T> extends MyFormBuilderField<T> {
 
            return MySelect<T>.withSearch(
              options: options,
+             items: items,
+             itemsBuilder: itemsBuilder,
              allowDeselection: allowDeselection,
              optionsBuilder: optionsBuilder,
              selectedOptionBuilder: selectedOptionBuilder,
@@ -250,6 +291,7 @@ class MySelectFormField<T> extends MyFormBuilderField<T> {
              searchPlaceholder: searchPlaceholder,
              searchPadding: searchPadding,
              search: search,
+             searchController: searchController,
              clearSearchOnClose: clearSearchOnClose,
              popoverController: popoverController,
              header: header,
@@ -258,6 +300,10 @@ class MySelectFormField<T> extends MyFormBuilderField<T> {
              groupId: groupId,
              itemCount: itemCount,
              shrinkWrap: shrinkWrap,
+             popupWidth: popupWidth,
+             loadingBuilder: loadingBuilder,
+             emptyBuilder: emptyBuilder,
+             errorBuilder: errorBuilder,
              controller: state.controller,
              ensureSelectedVisible: ensureSelectedVisible,
              searchFocusNode: searchFocusNode,
@@ -289,10 +335,13 @@ class MySelectFormField<T> extends MyFormBuilderField<T> {
 
     /// The builder for the options of the [MySelect].
     Widget? Function(BuildContext, int)? optionsBuilder,
+    MySelectItemDelegate? items,
+    MySelectItemsBuilder<T>? itemsBuilder,
     ValueChanged<String>? onSearchChanged,
     Widget? placeholder,
     bool closeOnTapOutside = true,
     double? minWidth,
+    double? maxWidth,
     double? maxHeight,
     MyDecoration? decoration,
     Widget? trailing,
@@ -308,6 +357,7 @@ class MySelectFormField<T> extends MyFormBuilderField<T> {
     String? searchPlaceholder,
     EdgeInsetsGeometry? searchPadding,
     Widget? search,
+    TextEditingController? searchController,
     bool? clearSearchOnClose,
     MyPopoverController? popoverController,
 
@@ -327,6 +377,18 @@ class MySelectFormField<T> extends MyFormBuilderField<T> {
 
     /// {@macro MySelect.shrinkWrap}
     bool? shrinkWrap,
+
+    /// {@macro MySelect.popupWidth}
+    MySelectPopupWidth popupWidth = MySelectPopupWidth.matchTrigger,
+
+    /// {@macro MySelect.loadingBuilder}
+    WidgetBuilder? loadingBuilder,
+
+    /// {@macro MySelect.emptyBuilder}
+    WidgetBuilder? emptyBuilder,
+
+    /// {@macro MySelect.errorBuilder}
+    MySelectErrorBuilder? errorBuilder,
 
     /// {@macro MySelect.controller}
     this.controller,
@@ -353,6 +415,8 @@ class MySelectFormField<T> extends MyFormBuilderField<T> {
            return MySelect<T>.raw(
              variant: variant,
              options: options,
+             items: items,
+             itemsBuilder: itemsBuilder,
              optionsBuilder: optionsBuilder,
              selectedOptionBuilder: selectedOptionBuilder,
              focusNode: state.focusNode,
@@ -363,6 +427,7 @@ class MySelectFormField<T> extends MyFormBuilderField<T> {
              closeOnTapOutside: closeOnTapOutside,
              anchor: anchor,
              minWidth: minWidth,
+             maxWidth: maxWidth,
              maxHeight: maxHeight,
              decoration: state.decoration,
              trailing: trailing,
@@ -378,6 +443,7 @@ class MySelectFormField<T> extends MyFormBuilderField<T> {
              searchPlaceholder: searchPlaceholder,
              searchPadding: searchPadding,
              search: search,
+             searchController: searchController,
              clearSearchOnClose: clearSearchOnClose,
              popoverController: popoverController,
              header: header,
@@ -387,6 +453,10 @@ class MySelectFormField<T> extends MyFormBuilderField<T> {
              groupId: groupId,
              itemCount: itemCount,
              shrinkWrap: shrinkWrap,
+             popupWidth: popupWidth,
+             loadingBuilder: loadingBuilder,
+             emptyBuilder: emptyBuilder,
+             errorBuilder: errorBuilder,
              controller: state.controller,
              ensureSelectedVisible: ensureSelectedVisible,
              searchFocusNode: searchFocusNode,
@@ -509,6 +579,8 @@ class MySelectMultipleFormField<T> extends MyFormBuilderField<Set<T>> {
 
     /// The builder for the options of the [MySelect].
     Widget? Function(BuildContext, int)? optionsBuilder,
+    MySelectItemDelegate? items,
+    MySelectItemsBuilder<T>? itemsBuilder,
     Widget? placeholder,
     bool closeOnTapOutside = true,
     double? minWidth,
@@ -538,6 +610,18 @@ class MySelectMultipleFormField<T> extends MyFormBuilderField<Set<T>> {
 
     /// {@macro MySelect.ensureSelectedVisible}
     bool? ensureSelectedVisible,
+
+    /// {@macro MySelect.popupWidth}
+    MySelectPopupWidth popupWidth = MySelectPopupWidth.matchTrigger,
+
+    /// {@macro MySelect.loadingBuilder}
+    WidgetBuilder? loadingBuilder,
+
+    /// {@macro MySelect.emptyBuilder}
+    WidgetBuilder? emptyBuilder,
+
+    /// {@macro MySelect.errorBuilder}
+    MySelectErrorBuilder? errorBuilder,
   }) : super(
          decorationBuilder:
              (context) => (const MyDecoration()).merge(decoration),
@@ -546,6 +630,8 @@ class MySelectMultipleFormField<T> extends MyFormBuilderField<Set<T>> {
 
            return MySelect<T>.multiple(
              options: options,
+             items: items,
+             itemsBuilder: itemsBuilder,
              optionsBuilder: optionsBuilder,
              selectedOptionsBuilder: selectedOptionsBuilder,
              focusNode: state.focusNode,
@@ -570,6 +656,10 @@ class MySelectMultipleFormField<T> extends MyFormBuilderField<Set<T>> {
              footer: footer,
              closeOnSelect: closeOnSelect,
              allowDeselection: allowDeselection,
+             popupWidth: popupWidth,
+             loadingBuilder: loadingBuilder,
+             emptyBuilder: emptyBuilder,
+             errorBuilder: errorBuilder,
              controller: state.controller,
              ensureSelectedVisible: ensureSelectedVisible,
            );
@@ -598,6 +688,8 @@ class MySelectMultipleFormField<T> extends MyFormBuilderField<Set<T>> {
 
     /// The builder for the options of the [MySelect].
     Widget? Function(BuildContext, int)? optionsBuilder,
+    MySelectItemDelegate? items,
+    MySelectItemsBuilder<T>? itemsBuilder,
     ValueChanged<String>? onSearchChanged,
     Widget? placeholder,
     bool closeOnTapOutside = true,
@@ -618,6 +710,7 @@ class MySelectMultipleFormField<T> extends MyFormBuilderField<Set<T>> {
     String? searchPlaceholder,
     EdgeInsetsGeometry? searchPadding,
     Widget? search,
+    TextEditingController? searchController,
     bool? clearSearchOnClose,
     MyPopoverController? popoverController,
 
@@ -630,6 +723,18 @@ class MySelectMultipleFormField<T> extends MyFormBuilderField<Set<T>> {
 
     /// {@macro MySelect.allowDeselection}
     bool allowDeselection = true,
+
+    /// {@macro MySelect.popupWidth}
+    MySelectPopupWidth popupWidth = MySelectPopupWidth.matchTrigger,
+
+    /// {@macro MySelect.loadingBuilder}
+    WidgetBuilder? loadingBuilder,
+
+    /// {@macro MySelect.emptyBuilder}
+    WidgetBuilder? emptyBuilder,
+
+    /// {@macro MySelect.errorBuilder}
+    MySelectErrorBuilder? errorBuilder,
     this.controller,
 
     /// {@macro MySelect.ensureSelectedVisible}
@@ -648,6 +753,8 @@ class MySelectMultipleFormField<T> extends MyFormBuilderField<Set<T>> {
 
            return MySelect<T>.multipleWithSearch(
              options: options,
+             items: items,
+             itemsBuilder: itemsBuilder,
              optionsBuilder: optionsBuilder,
              selectedOptionsBuilder: selectedOptionsBuilder,
              focusNode: state.focusNode,
@@ -673,12 +780,17 @@ class MySelectMultipleFormField<T> extends MyFormBuilderField<Set<T>> {
              searchPlaceholder: searchPlaceholder,
              searchPadding: searchPadding,
              search: search,
+             searchController: searchController,
              clearSearchOnClose: clearSearchOnClose,
              popoverController: popoverController,
              header: header,
              footer: footer,
              closeOnSelect: closeOnSelect,
              allowDeselection: allowDeselection,
+             popupWidth: popupWidth,
+             loadingBuilder: loadingBuilder,
+             emptyBuilder: emptyBuilder,
+             errorBuilder: errorBuilder,
              controller: state.controller,
              ensureSelectedVisible: ensureSelectedVisible,
              searchFocusNode: searchFocusNode,
@@ -710,10 +822,13 @@ class MySelectMultipleFormField<T> extends MyFormBuilderField<Set<T>> {
 
     /// The builder for the options of the [MySelect].
     Widget? Function(BuildContext, int)? optionsBuilder,
+    MySelectItemDelegate? items,
+    MySelectItemsBuilder<T>? itemsBuilder,
     ValueChanged<String>? onSearchChanged,
     Widget? placeholder,
     bool closeOnTapOutside = true,
     double? minWidth,
+    double? maxWidth,
     double? maxHeight,
     MyDecoration? decoration,
     Widget? trailing,
@@ -729,6 +844,7 @@ class MySelectMultipleFormField<T> extends MyFormBuilderField<Set<T>> {
     String? searchPlaceholder,
     EdgeInsetsGeometry? searchPadding,
     Widget? search,
+    TextEditingController? searchController,
     bool? clearSearchOnClose,
     MyPopoverController? popoverController,
 
@@ -749,6 +865,18 @@ class MySelectMultipleFormField<T> extends MyFormBuilderField<Set<T>> {
 
     /// {@macro MySelect.onSearchSubmitted}
     ValueChanged<String>? onSearchSubmitted,
+
+    /// {@macro MySelect.popupWidth}
+    MySelectPopupWidth popupWidth = MySelectPopupWidth.matchTrigger,
+
+    /// {@macro MySelect.loadingBuilder}
+    WidgetBuilder? loadingBuilder,
+
+    /// {@macro MySelect.emptyBuilder}
+    WidgetBuilder? emptyBuilder,
+
+    /// {@macro MySelect.errorBuilder}
+    MySelectErrorBuilder? errorBuilder,
   }) : assert(
          variant == MySelectVariant.multiple ||
              variant == MySelectVariant.multipleWithSearch,
@@ -763,6 +891,8 @@ class MySelectMultipleFormField<T> extends MyFormBuilderField<Set<T>> {
            return MySelect<T>.raw(
              variant: variant,
              options: options,
+             items: items,
+             itemsBuilder: itemsBuilder,
              optionsBuilder: optionsBuilder,
              selectedOptionsBuilder: selectedOptionsBuilder,
              focusNode: state.focusNode,
@@ -772,6 +902,7 @@ class MySelectMultipleFormField<T> extends MyFormBuilderField<Set<T>> {
              closeOnTapOutside: closeOnTapOutside,
              anchor: anchor,
              minWidth: minWidth,
+             maxWidth: maxWidth,
              maxHeight: maxHeight,
              decoration: state.decoration,
              trailing: trailing,
@@ -787,12 +918,17 @@ class MySelectMultipleFormField<T> extends MyFormBuilderField<Set<T>> {
              searchPlaceholder: searchPlaceholder,
              searchPadding: searchPadding,
              search: search,
+             searchController: searchController,
              clearSearchOnClose: clearSearchOnClose,
              popoverController: popoverController,
              header: header,
              footer: footer,
              allowDeselection: allowDeselection,
              closeOnSelect: closeOnSelect,
+             popupWidth: popupWidth,
+             loadingBuilder: loadingBuilder,
+             emptyBuilder: emptyBuilder,
+             errorBuilder: errorBuilder,
              controller: state.controller,
              ensureSelectedVisible: ensureSelectedVisible,
              searchFocusNode: searchFocusNode,

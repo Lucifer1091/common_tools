@@ -47,6 +47,24 @@ class _MyDropdownPageState extends State<MyDropdownPage> {
             ExampleItem(desc: 'Async Select', builder: _asyncSelect),
           ],
         ),
+        ExampleModule(
+          title: 'Advanced Usage',
+          children: [
+            ExampleItem(
+              desc: 'Builder Options',
+              builder: _builderOptionsSelect,
+            ),
+            ExampleItem(
+              desc: 'Flexible Popup Width',
+              builder: _flexiblePopupWidthSelect,
+            ),
+            ExampleItem(
+              desc: 'Custom Search UI',
+              builder: _customSearchUiSelect,
+            ),
+            ExampleItem(desc: 'Async Error State', builder: _asyncErrorSelect),
+          ],
+        ),
       ],
       test: [],
     );
@@ -58,6 +76,12 @@ class _MyDropdownPageState extends State<MyDropdownPage> {
     'blueberry': 'Blueberry',
     'grapes': 'Grapes',
     'pineapple': 'Pineapple',
+  };
+
+  final releaseChannels = {
+    'stable': 'Stable - production ready with the smallest change surface',
+    'beta': 'Beta - newer features with moderate release risk',
+    'nightly': 'Nightly - fastest updates and the widest API surface',
   };
 
   Widget _singleSelect(BuildContext context) {
@@ -223,7 +247,7 @@ class _MyDropdownPageState extends State<MyDropdownPage> {
 
   Widget _singleSearch(BuildContext context) {
     return MySelect<String>.withSearch(
-      minWidth: 180,
+      minWidth: 200,
       maxWidth: 300,
       placeholder: const Text('Select framework...'),
       onSearchChanged: (value) => setState(() => searchValue = value),
@@ -279,30 +303,217 @@ class _MyDropdownPageState extends State<MyDropdownPage> {
     );
   }
 
+  Widget _builderOptionsSelect(BuildContext context) {
+    final fruitEntries = fruits.entries.toList(growable: false);
+
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minWidth: 220),
+      child: MySelect<String>(
+        minWidth: 220,
+        itemCount: fruitEntries.length + 1,
+        placeholder: const Text('Select a fruit with optionsBuilder'),
+        optionsBuilder: (context, index) {
+          if (index == 0) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+              child: Text(
+                'Built lazily',
+                style: context.bodyMedium.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: context.colorScheme.popoverForeground,
+                ),
+                textAlign: TextAlign.start,
+              ),
+            );
+          }
+
+          final fruit = fruitEntries[index - 1];
+          return MyOption(
+            value: fruit.key,
+            child: Text('${fruit.value} (${fruit.key})'),
+          );
+        },
+        selectedOptionBuilder: (context, value) => Text(fruits[value]!),
+      ),
+    );
+  }
+
+  Widget _flexiblePopupWidthSelect(BuildContext context) {
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minWidth: 220),
+      child: MySelect<String>(
+        minWidth: 220,
+        maxWidth: 420,
+        popupWidth: MySelectPopupWidth.minTrigger,
+        placeholder: const Text('Select a release channel'),
+        items: MySelectItemList([
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+            child: Text(
+              'Release channels',
+              style: context.bodyMedium.copyWith(
+                fontWeight: FontWeight.w600,
+                color: context.colorScheme.popoverForeground,
+              ),
+              textAlign: TextAlign.start,
+            ),
+          ),
+          ...releaseChannels.entries.map(
+            (entry) => MyOption(value: entry.key, child: Text(entry.value)),
+          ),
+        ]),
+        selectedOptionBuilder: (context, value) =>
+            Text(releaseChannels[value]!.split(' - ').first),
+      ),
+    );
+  }
+
+  MySelectItemDelegate _buildTimezoneItems(
+    BuildContext context,
+    String? searchQuery,
+  ) {
+    final query = searchQuery?.trim().toLowerCase();
+    final matches = <MapEntry<String, String>>[];
+
+    for (final region in timezones.entries) {
+      for (final zone in region.value.entries) {
+        final searchableText = '${region.key} ${zone.key} ${zone.value}'
+            .toLowerCase();
+        if (query == null || query.isEmpty || searchableText.contains(query)) {
+          matches.add(MapEntry(zone.key, '${zone.value} • ${region.key}'));
+        }
+      }
+    }
+
+    if (matches.isEmpty) {
+      return MySelectItemDelegate.empty;
+    }
+
+    return MySelectItemList(
+      matches
+          .map((entry) => MyOption(value: entry.key, child: Text(entry.value)))
+          .toList(growable: false),
+    );
+  }
+
+  Widget _customSearchUiSelect(BuildContext context) {
+    return MySelect<String>.withSearch(
+      minWidth: 280,
+      maxWidth: 360,
+      placeholder: const Text('Search a timezone'),
+      searchPlaceholder: 'Search by region or timezone',
+      searchInputLeading: const Icon(Icons.travel_explore_rounded, size: 18),
+      searchPadding: const EdgeInsets.fromLTRB(12, 10, 12, 8),
+      header: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
+        child: Text(
+          'Results update as you type',
+          textAlign: TextAlign.start,
+          style: context.bodyMedium.copyWith(
+            fontWeight: FontWeight.w600,
+            color: context.colorScheme.popoverForeground,
+          ),
+        ),
+      ),
+      footer: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
+        child: Text(
+          'Tip: search by region name like Asia or by abbreviations like PST.',
+          textAlign: TextAlign.start,
+          style: context.bodySmall.copyWith(
+            color: context.colorScheme.popoverForeground.withValues(alpha: .7),
+          ),
+        ),
+      ),
+      itemsBuilder: _buildTimezoneItems,
+      emptyBuilder: (context) => const Padding(
+        padding: EdgeInsets.symmetric(vertical: 24),
+        child: Text('No timezone matched your search'),
+      ),
+      selectedOptionBuilder: (context, value) {
+        final timezone = timezones.entries
+            .firstWhere((region) => region.value.containsKey(value))
+            .value[value];
+        return Text(timezone!);
+      },
+    );
+  }
+
+  Future<MySelectItemDelegate> _buildAsyncFruitItems(
+    BuildContext context,
+    String? searchQuery,
+  ) async {
+    final headerStyle = context.bodyMedium.copyWith(
+      fontWeight: FontWeight.w600,
+      color: context.colorScheme.popoverForeground,
+    );
+    await Future<void>.delayed(const Duration(milliseconds: 450));
+
+    final query = searchQuery?.trim().toLowerCase();
+    final filteredFruits = fruits.entries
+        .where(
+          (fruit) =>
+              query == null ||
+              query.isEmpty ||
+              fruit.value.toLowerCase().contains(query),
+        )
+        .toList();
+
+    if (filteredFruits.isEmpty) {
+      return MySelectItemDelegate.empty;
+    }
+
+    return MySelectItemList([
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        child: Text('Fruits', style: headerStyle, textAlign: TextAlign.start),
+      ),
+      ...filteredFruits.map(
+        (fruit) => MyOption(value: fruit.key, child: Text(fruit.value)),
+      ),
+    ]);
+  }
+
+  Future<MySelectItemDelegate> _buildAsyncErrorItems(
+    BuildContext context,
+    String? searchQuery,
+  ) async {
+    await Future<void>.delayed(const Duration(milliseconds: 450));
+    throw StateError(
+      'This example fails intentionally so the custom error state stays visible.',
+    );
+  }
+
   Widget _asyncSelect(BuildContext context) {
     return MySelect<String>.multipleWithSearch(
       minWidth: 340,
       onChanged: print,
       placeholder: const Text('Select multiple fruits'),
-      options: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-          child: Text(
-            'Fruits',
-            style: context.bodyMedium.copyWith(
-              fontWeight: FontWeight.w600,
-              color: context.colorScheme.popoverForeground,
-            ),
-            textAlign: TextAlign.start,
-          ),
-        ),
-        ...fruits.entries.map(
-          (e) => MyOption(value: e.key, child: Text(e.value)),
-        ),
-      ],
-      onSearchChanged: (value) {},
+      itemsBuilder: _buildAsyncFruitItems,
+      searchPlaceholder: 'Search fruits',
+      emptyBuilder: (context) => const Padding(
+        padding: EdgeInsets.symmetric(vertical: 24),
+        child: Text('No fruits found'),
+      ),
       selectedOptionsBuilder: (context, values) =>
           Text(values.map((v) => v.capitalize).join(', ')),
+    );
+  }
+
+  Widget _asyncErrorSelect(BuildContext context) {
+    return MySelect<String>.withSearch(
+      minWidth: 320,
+      placeholder: const Text('Open to preview async error handling'),
+      searchPlaceholder: 'This request fails on purpose',
+      itemsBuilder: _buildAsyncErrorItems,
+      errorBuilder: (context, error, stackTrace) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 24),
+        child: Text(
+          'Could not load options.\n$error',
+          textAlign: TextAlign.center,
+        ),
+      ),
+      selectedOptionBuilder: (context, value) => Text(value),
     );
   }
 }
