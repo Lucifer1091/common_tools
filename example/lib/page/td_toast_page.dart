@@ -3,50 +3,89 @@ import 'package:common_tools/index.dart';
 
 import '../../base/example_widget.dart';
 
-class TDToastPage extends StatefulWidget {
-  const TDToastPage({Key? key}) : super(key: key);
+class TDToastPage extends StatelessWidget {
+  const TDToastPage({super.key});
 
-  @override
-  State<StatefulWidget> createState() => _TDToastPageState();
-}
+  static const msg = 'This is a regular notification message';
+  static const longMsg =
+      'This is a long toast message that wraps across multiple lines and is limited to three lines.';
 
-class _TDToastPageState extends State<TDToastPage> {
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
-      title: myTitle(),
-      desc: '用于轻量级反馈或提示，不会打断用户操作。',
+      title: myTitle(context),
+      desc:
+          'Used for lightweight feedback or prompts without interrupting the user.',
       exampleCodeGroup: 'toast',
       children: [
         ExampleModule(
           title: 'Component Types',
           children: [
-            ExampleItem(desc: '纯文字', builder: _textToast),
-            ExampleItem(desc: '多行文字', builder: _multipleToast),
-            ExampleItem(desc: '带横向图标', builder: _horizontalIconToast),
-            ExampleItem(desc: '带竖向图标', builder: _verticalIconToast),
-            ExampleItem(desc: '加载状态', builder: _loadingToast),
-            ExampleItem(desc: '加载状态自定义', builder: _loadingCustomToast),
-            ExampleItem(desc: '加载状态(无文字)', builder: _loadingWithoutTextToast),
-            ExampleItem(desc: '停止加载', builder: _dismissLoadingToast),
-            ExampleItem(desc: '自定义纯文字', builder: _textCustomToast),
+            ExampleItem(desc: 'Plain Text', builder: _textToast),
+            ExampleItem(desc: 'Multi-line Text', builder: _multipleToast),
+            ExampleItem(
+              desc: 'With Horizontal Icon',
+              builder: _horizontalIconToast,
+            ),
+            ExampleItem(
+              desc: 'With Vertical Icon',
+              builder: _verticalIconToast,
+            ),
+            ExampleItem(desc: 'Loading State', builder: _loadingToast),
+            ExampleItem(
+              desc: 'Custom Loading State',
+              builder: _loadingCustomToast,
+            ),
+            ExampleItem(
+              desc: 'Loading State (No Text)',
+              builder: _loadingWithoutTextToast,
+            ),
+            ExampleItem(desc: 'Stop Loading', builder: _dismissLoadingToast),
+            ExampleItem(desc: 'Custom Plain Text', builder: _textCustomToast),
           ],
         ),
         ExampleModule(
           title: 'Component State',
           children: [
-            ExampleItem(desc: '成功提示', builder: _successToast),
-            ExampleItem(desc: '成功提示(竖向)', builder: _successVerticalToast),
-            ExampleItem(desc: '警告提示', builder: _warningToast),
-            ExampleItem(desc: '警告提示(竖向)', builder: _warningVerticalToast),
-            ExampleItem(desc: '失败提示', builder: _failToast),
-            ExampleItem(desc: '失败提示(竖向)', builder: _failVerticalToast),
+            ExampleItem(desc: 'Default notification', builder: _successToast),
+            ExampleItem(
+              desc: 'Success notification',
+              builder: _successVerticalToast,
+            ),
+            ExampleItem(desc: 'Warning notification', builder: _warningToast),
+            ExampleItem(
+              desc: 'Error notification',
+              builder: _failVerticalToast,
+            ),
+          ],
+        ),
+        ExampleModule(
+          title: 'Component State',
+          children: [
+            ExampleItem(desc: 'Success Toast', builder: _successToast),
+            ExampleItem(
+              desc: 'Success Toast (Vertical)',
+              builder: _successVerticalToast,
+            ),
+            ExampleItem(desc: 'Warning Toast', builder: _warningToast),
+            ExampleItem(
+              desc: 'Warning Toast (Vertical)',
+              builder: _warningVerticalToast,
+            ),
+            ExampleItem(desc: 'Failure Toast', builder: _failToast),
+            ExampleItem(
+              desc: 'Failure Toast (Vertical)',
+              builder: _failVerticalToast,
+            ),
           ],
         ),
       ],
       test: [
-        ExampleItem(desc: '禁止滚动+点击', builder: _preventTapToast),
-        ExampleItem(desc: '自定义宽度+行数', builder: _customMultipleToast),
+        ExampleItem(desc: 'Prevent Scroll + Tap', builder: _preventTapToast),
+        ExampleItem(
+          desc: 'Custom Width + Line Count',
+          builder: _customMultipleToast,
+        ),
       ],
     );
   }
@@ -54,278 +93,298 @@ class _TDToastPageState extends State<TDToastPage> {
   Widget _textToast(BuildContext context) {
     return MyButton(
       onTap: () {
-        TDToast.showText('轻提示文字内容', context: context);
+        InteractiveToast.slide(
+          context: context,
+          title: Text('Hello Wrold'),
+          toastSetting: SlidingToastSetting(
+            toastAlignment: Alignment.center,
+            toastStartPosition: ToastPosition.left,
+            expandOnHover: true,
+            // displayDuration: Duration(seconds: 5),
+            maxWidth: 400,
+            // curve: Curves.linear,
+          ),
+          toastStyle: ToastStyle(progressBarColor: context.colorScheme.primary),
+        );
+
+        // TDToast.showText('Toast message', context: context);
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       isExpanded: true,
 
-      text: '纯文字',
+      text: 'Plain Text',
     );
   }
 
   Widget _textCustomToast(BuildContext context) {
     return MyButton(
       onTap: () {
-        TDToast.showText(
-          '自定义纯文字',
-          context: context,
-          customWidget: Container(
-            width: 50,
-            height: 20,
-            color: ThemeColors.blue.shade700,
-            child: const MyText('自定义纯文字'),
-          ),
-        );
+        // TDToast.showText(
+        //   'Custom plain text',
+        //   context: context,
+        //   customWidget: Container(
+        //     width: 50,
+        //     height: 20,
+        //     color: ThemeColors.blue.shade700,
+        //     child: const MyText('Custom plain text'),
+        //   ),
+        // );
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       isExpanded: true,
 
-      text: '纯文字',
+      text: 'Plain Text',
     );
   }
 
   Widget _multipleToast(BuildContext context) {
     return MyButton(
       onTap: () {
-        TDToast.showText('最多一行展示十个汉字宽度限制最多不超过三行文字', context: context);
+        // TDToast.showText(
+        //   'This is a long toast message that wraps across multiple lines and is limited to three lines.',
+        //   context: context,
+        // );
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       isExpanded: true,
 
-      text: '多行文字',
+      text: 'Multi-line Text',
     );
   }
 
   Widget _horizontalIconToast(BuildContext context) {
     return MyButton(
       onTap: () {
-        TDToast.showIconText(
-          '带横向图标',
-          icon: Icons.check_circle,
-          context: context,
-        );
+        // TDToast.showIconText(
+        //   'With horizontal icon',
+        //   icon: Icons.check_circle,
+        //   context: context,
+        // );
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       isExpanded: true,
 
-      text: '带横向图标',
+      text: 'With Horizontal Icon',
     );
   }
 
   Widget _verticalIconToast(BuildContext context) {
     return MyButton(
       onTap: () {
-        TDToast.showIconText(
-          '带竖向图标',
-          icon: Icons.check_circle,
-          direction: IconTextDirection.vertical,
-          context: context,
-        );
+        // TDToast.showIconText(
+        //   'With vertical icon',
+        //   icon: Icons.check_circle,
+        //   direction: IconTextDirection.vertical,
+        //   context: context,
+        // );
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       isExpanded: true,
 
-      text: '带竖向图标',
+      text: 'With Vertical Icon',
     );
   }
 
   Widget _loadingToast(BuildContext context) {
     return MyButton(
       onTap: () {
-        TDToast.showLoading(context: context);
+        // TDToast.showLoading(context: context);
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       isExpanded: true,
 
-      text: '加载状态',
+      text: 'Loading State',
     );
   }
 
   Widget _loadingCustomToast(BuildContext context) {
     return MyButton(
       onTap: () {
-        TDToast.showLoading(
-          context: context,
-          customWidget: Container(
-            width: 50,
-            height: 20,
-            color: ThemeColors.blue.shade50,
-            child: const MyText('自定义加载'),
-          ),
-        );
+        // TDToast.showLoading(
+        //   context: context,
+        //   customWidget: Container(
+        //     width: 50,
+        //     height: 20,
+        //     color: ThemeColors.blue.shade50,
+        //     child: const MyText('Custom loading'),
+        //   ),
+        // );
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       isExpanded: true,
 
-      text: '加载状态',
+      text: 'Custom Loading State',
     );
   }
 
   Widget _loadingWithoutTextToast(BuildContext context) {
     return MyButton(
       onTap: () {
-        TDToast.showLoadingWithoutText(context: context);
+        // TDToast.showLoadingWithoutText(context: context);
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       isExpanded: true,
 
-      text: '加载状态（无文案）',
+      text: 'Loading State (No Text)',
     );
   }
 
   Widget _dismissLoadingToast(BuildContext context) {
     return const MyButton(
-      onTap: TDToast.dismissLoading,
+      // onTap: TDToast.dismissLoading,
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       isExpanded: true,
 
-      text: '停止加载',
+      text: 'Stop Loading',
     );
   }
 
   Widget _successToast(BuildContext context) {
     return MyButton(
       onTap: () {
-        TDToast.showSuccess('成功文案', context: context);
+        // TDToast.showSuccess('Success message', context: context);
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       isExpanded: true,
 
-      text: '成功提示',
+      text: 'Success Toast',
     );
   }
 
   Widget _successVerticalToast(BuildContext context) {
     return MyButton(
       onTap: () {
-        TDToast.showSuccess(
-          '成功文案',
-          direction: IconTextDirection.vertical,
-          context: context,
-        );
+        // TDToast.showSuccess(
+        //   'Success message',
+        //   direction: IconTextDirection.vertical,
+        //   context: context,
+        // );
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       isExpanded: true,
 
-      text: '成功提示(竖向)',
+      text: 'Success Toast (Vertical)',
     );
   }
 
   Widget _warningToast(BuildContext context) {
     return MyButton(
       onTap: () {
-        TDToast.showWarning(
-          '警告文案',
-          direction: IconTextDirection.horizontal,
-          context: context,
-        );
+        // TDToast.showWarning(
+        //   'Warning message',
+        //   direction: IconTextDirection.horizontal,
+        //   context: context,
+        // );
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       isExpanded: true,
 
-      text: '警告提示',
+      text: 'Warning Toast',
     );
   }
 
   Widget _warningVerticalToast(BuildContext context) {
     return MyButton(
       onTap: () {
-        TDToast.showWarning(
-          '警告文案',
-          direction: IconTextDirection.vertical,
-          context: context,
-        );
+        // TDToast.showWarning(
+        //   'Warning message',
+        //   direction: IconTextDirection.vertical,
+        //   context: context,
+        // );
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       isExpanded: true,
 
-      text: '警告提示(竖向)',
+      text: 'Warning Toast (Vertical)',
     );
   }
 
   Widget _failToast(BuildContext context) {
     return MyButton(
       onTap: () {
-        TDToast.showFail(
-          '失败文案',
-          direction: IconTextDirection.horizontal,
-          context: context,
-        );
+        // TDToast.showFail(
+        //   'Failure message',
+        //   direction: IconTextDirection.horizontal,
+        //   context: context,
+        // );
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       isExpanded: true,
 
-      text: '失败提示',
+      text: 'Failure Toast',
     );
   }
 
   Widget _failVerticalToast(BuildContext context) {
     return MyButton(
       onTap: () {
-        TDToast.showFail(
-          '失败文案',
-          direction: IconTextDirection.vertical,
-          context: context,
-        );
+        // TDToast.showFail(
+        //   'Failure message',
+        //   direction: IconTextDirection.vertical,
+        //   context: context,
+        // );
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
 
       isExpanded: true,
 
-      text: '失败提示(竖向)',
+      text: 'Failure Toast (Vertical)',
     );
   }
 
   Widget _preventTapToast(BuildContext context) {
     return MyButton(
       onTap: () {
-        TDToast.showText(
-          '轻提示文字内容',
-          context: context,
-          preventTap: true,
-          backgroundColor: Colors.black.withValues(alpha: 0.7),
-        );
+        // TDToast.showText(
+        //   'Toast message',
+        //   context: context,
+        //   preventTap: true,
+        //   backgroundColor: Colors.black.withValues(alpha: 0.7),
+        // );
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
 
       isExpanded: true,
 
-      text: '禁止滚动+点击',
+      text: 'Prevent Scroll + Tap',
     );
   }
 
   Widget _customMultipleToast(BuildContext context) {
     return MyButton(
       onTap: () {
-        TDToast.showText(
-          '最多一行展示十个汉字宽度限制最多不超过三行文字最多一行展示十个汉字宽度限制最多不超过三行文字最多一行展示十个汉字宽度限制最多不超过三行文字最多一行展示十个汉字宽度限制最多不超过三行文字最多一行展示十个汉字宽度限制最多不超过三行文字最多一行展示十个汉字宽度限制最多不超过三行文字',
-          context: context,
-          constraints: BoxConstraints(maxWidth: 350),
-          maxLines: 5,
-        );
+        // TDToast.showText(
+        //   'This is a longer toast message used to demonstrate a custom width and line count. '
+        //   'This is a longer toast message used to demonstrate a custom width and line count. '
+        //   'This is a longer toast message used to demonstrate a custom width and line count. '
+        //   'This is a longer toast message used to demonstrate a custom width and line count.',
+        //   context: context,
+        //   constraints: BoxConstraints(maxWidth: 350),
+        //   maxLines: 5,
+        // );
       },
       size: MyButtonSize.large,
       type: MyButtonType.outline,
 
       isExpanded: true,
 
-      text: '多行文字',
+      text: 'Multi-line Text',
     );
   }
 }

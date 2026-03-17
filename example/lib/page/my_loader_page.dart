@@ -145,7 +145,7 @@ class _MyLoaderPageState extends State<MyLoaderPage> {
               textAlign: TextAlign.center,
             ),
             onTap: () {
-              TDToast.showText('Refresh', context: context);
+              // TDToast.showText('Refresh', context: context);
             },
           ),
         ),
@@ -180,7 +180,7 @@ class _MyLoaderPageState extends State<MyLoaderPage> {
               textAlign: TextAlign.center,
             ),
             onTap: () {
-              TDToast.showText('Refresh', context: context);
+              // TDToast.showText('Refresh', context: context);
             },
           ),
         ),

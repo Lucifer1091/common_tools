@@ -219,7 +219,7 @@ Widget _tapNoticeBar(BuildContext context) {
     prefixIcon: Icons.cancel_rounded,
     suffixIcon: Icons.chevron_right,
     onTap: () {
-      TDToast.showText('tap:trigger', context: context);
+      // TDToast.showText('tap:trigger', context: context);
     },
   );
 }

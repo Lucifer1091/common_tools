@@ -10,34 +10,63 @@ class TDMessagePage extends StatefulWidget {
 }
 
 class _TDMessagePageState extends State<TDMessagePage> {
-  final _commonContent = '这是一条普通的通知信息';
-  final longContent = '这是一条普通的通知信息看，这是一条普通的通知信息，这是一条普通的通知信息';
+  final _commonContent = 'This is a regular notification message';
+  final longContent =
+      'This is a regular notification message. This is a regular notification message. This is a regular notification message.';
 
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
       title: myTitle(),
       backgroundColor: Colors.white,
-      desc: '用于轻量级反馈或提示，不会打断用户操作。',
+      desc:
+          'Used for lightweight feedback or prompts without interrupting the user.',
       exampleCodeGroup: 'message',
       children: [
         ExampleModule(
           title: 'Component Types',
           children: [
-            ExampleItem(desc: '纯文字的通知', builder: _buildPlainTextMessage),
-            ExampleItem(desc: '带图标的通知', builder: _buildIconTextMessage),
-            ExampleItem(desc: '带关闭的通知', builder: _buildMessageWithCloseButton),
-            ExampleItem(desc: '可滚动的通知', builder: _buildRollingMessage),
-            ExampleItem(desc: '带按钮的通知', builder: _buildLinkMessage),
+            ExampleItem(
+              desc: 'Plain text notification',
+              builder: _buildPlainTextMessage,
+            ),
+            ExampleItem(
+              desc: 'Notification with icon',
+              builder: _buildIconTextMessage,
+            ),
+            ExampleItem(
+              desc: 'Notification with close button',
+              builder: _buildMessageWithCloseButton,
+            ),
+            ExampleItem(
+              desc: 'Scrollable notification',
+              builder: _buildRollingMessage,
+            ),
+            ExampleItem(
+              desc: 'Notification with button',
+              builder: _buildLinkMessage,
+            ),
           ],
         ),
         ExampleModule(
           title: 'Component State',
           children: [
-            ExampleItem(desc: '普通通知', builder: _buildInfoMessage),
-            ExampleItem(desc: '成功通知', builder: _buildSuccessMessage),
-            ExampleItem(desc: '警示通知', builder: _buildWarningMessage),
-            ExampleItem(desc: '错误通知', builder: _buildErrorMessage),
+            ExampleItem(
+              desc: 'Default notification',
+              builder: _buildInfoMessage,
+            ),
+            ExampleItem(
+              desc: 'Success notification',
+              builder: _buildSuccessMessage,
+            ),
+            ExampleItem(
+              desc: 'Warning notification',
+              builder: _buildWarningMessage,
+            ),
+            ExampleItem(
+              desc: 'Error notification',
+              builder: _buildErrorMessage,
+            ),
           ],
         ),
       ],
@@ -47,24 +76,24 @@ class _TDMessagePageState extends State<TDMessagePage> {
   Widget _buildPlainTextMessage(BuildContext context) {
     return MyButton(
       isExpanded: true,
-
-      text: '纯文字的通知',
+      text: 'Plain Text Notification',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       width: 450,
-
       onTap: () {
-        TDMessage.showMessage(
-          context: context,
-          content: _commonContent,
-          visible: true,
-          icon: false,
-          theme: MessageTheme.info,
-          duration: 3000,
-          onDurationEnd: () {
-            print('message end');
-          },
-        );
+        
+
+        // TDMessage.showMessage(
+        //   context: context,
+        //   content: _commonContent,
+        //   visible: true,
+        //   icon: false,
+        //   theme: MessageTheme.info,
+        //   duration: 3000,
+        //   onDurationEnd: () {
+        //     print('message end');
+        //   },
+        // );
       },
     );
   }
@@ -72,21 +101,19 @@ class _TDMessagePageState extends State<TDMessagePage> {
   Widget _buildIconTextMessage(BuildContext context) {
     return MyButton(
       isExpanded: true,
-
-      text: '带图标的通知',
+      text: 'Notification with Icon',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       width: 450,
-
       onTap: () {
-        TDMessage.showMessage(
-          context: context,
-          content: _commonContent,
-          visible: true,
-          icon: true,
-          theme: MessageTheme.info,
-          duration: 3000,
-        );
+        // TDMessage.showMessage(
+        //   context: context,
+        //   content: _commonContent,
+        //   visible: true,
+        //   icon: true,
+        //   theme: MessageTheme.info,
+        //   duration: 3000,
+        // );
       },
     );
   }
@@ -95,25 +122,25 @@ class _TDMessagePageState extends State<TDMessagePage> {
     return MyButton(
       isExpanded: true,
 
-      text: '带关闭的通知',
+      text: 'Notification with Close Button',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       width: 450,
 
       onTap: () {
-        TDMessage.showMessage(
-          context: context,
-          visible: true,
-          icon: true,
-          content: _commonContent,
-          theme: MessageTheme.info,
-          duration: 300000,
-          closeBtn: true,
-          link: MessageLink(name: '按钮', uri: Uri.parse('www.example.com')),
-          onCloseBtnClick: () {
-            print('Close button clicked!');
-          },
-        );
+        // TDMessage.showMessage(
+        //   context: context,
+        //   visible: true,
+        //   icon: true,
+        //   content: _commonContent,
+        //   theme: MessageTheme.info,
+        //   duration: 300000,
+        //   closeBtn: true,
+        //   link: MessageLink(name: 'Button', uri: Uri.parse('www.example.com')),
+        //   onCloseBtnClick: () {
+        //     print('Close button clicked!');
+        //   },
+        // );
       },
     );
   }
@@ -122,24 +149,24 @@ class _TDMessagePageState extends State<TDMessagePage> {
     return MyButton(
       isExpanded: true,
 
-      text: '可滚动的通知',
+      text: 'Scrollable Notification',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       width: 450,
 
       onTap: () {
-        TDMessage.showMessage(
-          context: context,
-          visible: true,
-          icon: false,
-          marquee: MessageMarquee(speed: 5000, loop: 1, delay: 300),
-          content: longContent,
-          theme: MessageTheme.info,
-          duration: 8000,
-          onCloseBtnClick: () {
-            print('Close button clicked!');
-          },
-        );
+        // TDMessage.showMessage(
+        //   context: context,
+        //   visible: true,
+        //   icon: false,
+        //   marquee: MessageMarquee(speed: 5000, loop: 1, delay: 300),
+        //   content: longContent,
+        //   theme: MessageTheme.info,
+        //   duration: 8000,
+        //   onCloseBtnClick: () {
+        //     print('Close button clicked!');
+        //   },
+        // );
       },
     );
   }
@@ -148,28 +175,28 @@ class _TDMessagePageState extends State<TDMessagePage> {
     return MyButton(
       isExpanded: true,
 
-      text: '带按钮的通知',
+      text: 'Notification with Button',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       width: 450,
 
       onTap: () {
-        TDMessage.showMessage(
-          context: context,
-          visible: true,
-          icon: true,
-          content: _commonContent,
-          theme: MessageTheme.info,
-          duration: 3000,
-          link: MessageLink(
-            name: '按钮',
-            uri: Uri.parse('https://tdesign.tencent.com/'),
-          ),
-          // link: '按钮',
-          onLinkClick: () {
-            print('link clicked!');
-          },
-        );
+        // TDMessage.showMessage(
+        //   context: context,
+        //   visible: true,
+        //   icon: true,
+        //   content: _commonContent,
+        //   theme: MessageTheme.info,
+        //   duration: 3000,
+        //   link: MessageLink(
+        //     name: 'Button',
+        //     uri: Uri.parse('https://tdesign.tencent.com/'),
+        //   ),
+        //   // link: 'Button',
+        //   onLinkClick: () {
+        //     print('link clicked!');
+        //   },
+        // );
       },
     );
   }
@@ -178,20 +205,20 @@ class _TDMessagePageState extends State<TDMessagePage> {
     return MyButton(
       isExpanded: true,
 
-      text: '普通通知',
+      text: 'Default Notification',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       width: 450,
 
       onTap: () {
-        TDMessage.showMessage(
-          context: context,
-          visible: true,
-          icon: true,
-          content: _commonContent,
-          theme: MessageTheme.info,
-          duration: 3000,
-        );
+        // TDMessage.showMessage(
+        //   context: context,
+        //   visible: true,
+        //   icon: true,
+        //   content: _commonContent,
+        //   theme: MessageTheme.info,
+        //   duration: 3000,
+        // );
       },
     );
   }
@@ -200,20 +227,20 @@ class _TDMessagePageState extends State<TDMessagePage> {
     return MyButton(
       isExpanded: true,
 
-      text: '成功通知',
+      text: 'Success Notification',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       width: 450,
 
       onTap: () {
-        TDMessage.showMessage(
-          context: context,
-          visible: true,
-          icon: true,
-          content: _commonContent,
-          theme: MessageTheme.success,
-          duration: 3000,
-        );
+        // TDMessage.showMessage(
+        //   context: context,
+        //   visible: true,
+        //   icon: true,
+        //   content: _commonContent,
+        //   theme: MessageTheme.success,
+        //   duration: 3000,
+        // );
       },
     );
   }
@@ -222,20 +249,20 @@ class _TDMessagePageState extends State<TDMessagePage> {
     return MyButton(
       isExpanded: true,
 
-      text: '警示通知',
+      text: 'Warning Notification',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       width: 450,
 
       onTap: () {
-        TDMessage.showMessage(
-          context: context,
-          visible: true,
-          icon: true,
-          content: _commonContent,
-          theme: MessageTheme.warning,
-          duration: 3000,
-        );
+        // TDMessage.showMessage(
+        //   context: context,
+        //   visible: true,
+        //   icon: true,
+        //   content: _commonContent,
+        //   theme: MessageTheme.warning,
+        //   duration: 3000,
+        // );
       },
     );
   }
@@ -244,20 +271,20 @@ class _TDMessagePageState extends State<TDMessagePage> {
     return MyButton(
       isExpanded: true,
 
-      text: '错误通知',
+      text: 'Error Notification',
       size: MyButtonSize.large,
       type: MyButtonType.outline,
       width: 450,
 
       onTap: () {
-        TDMessage.showMessage(
-          context: context,
-          visible: true,
-          icon: true,
-          content: _commonContent,
-          theme: MessageTheme.error,
-          duration: 3000,
-        );
+        // TDMessage.showMessage(
+        //   context: context,
+        //   visible: true,
+        //   icon: true,
+        //   content: _commonContent,
+        //   theme: MessageTheme.error,
+        //   duration: 3000,
+        // );
       },
     );
   }

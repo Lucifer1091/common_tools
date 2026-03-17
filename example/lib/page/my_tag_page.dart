@@ -201,7 +201,7 @@ class MyTagPage extends StatelessWidget {
       'label text',
       needCloseIcon: true,
       onCloseTap: () {
-        TDToast.showText('Click to close', context: context);
+        // TDToast.showText('Click to close', context: context);
       },
     );
   }
@@ -212,7 +212,7 @@ class MyTagPage extends StatelessWidget {
       needCloseIcon: true,
       isOutline: true,
       onCloseTap: () {
-        TDToast.showText('Click to close', context: context);
+        // TDToast.showText('Click to close', context: context);
       },
     );
   }

@@ -77,7 +77,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                         leftText: '点这里确认!',
                         leftTextColor: context.colorScheme.primary,
                         leftClick: () {
-                          TDToast.showText('确认', context: context);
+                          // TDToast.showText('确认', context: context);
                           Navigator.maybePop(context);
                         },
                         rightText: '关闭',
@@ -182,7 +182,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                               leftText: '点这里确认!',
                               leftTextColor: context.colorScheme.primary,
                               leftClick: () {
-                                TDToast.showText('确认', context: context);
+                                // TDToast.showText('确认', context: context);
                                 Navigator.maybePop(context);
                               },
                               rightText: '关闭',
@@ -517,7 +517,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                                 Navigator.maybePop(context);
                               },
                               rightClick: () {
-                                TDToast.showText('确定', context: context);
+                                // TDToast.showText('确定', context: context);
                                 Navigator.maybePop(context);
                               },
                               child: Container(height: 200),
@@ -666,7 +666,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                   Navigator.maybePop(context);
                 },
                 rightClick: () {
-                  TDToast.showText('确定', context: context);
+                  // TDToast.showText('确定', context: context);
                   Navigator.maybePop(context);
                 },
                 child: Container(height: 200),
@@ -696,7 +696,7 @@ class TDPopupPageState extends State<TDPopupPage> {
                   Navigator.maybePop(context);
                 },
                 rightClick: () {
-                  TDToast.showText('确定', context: context);
+                  // TDToast.showText('确定', context: context);
                   Navigator.maybePop(context);
                 },
                 child: Container(height: 200),
