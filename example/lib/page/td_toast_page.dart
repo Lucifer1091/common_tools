@@ -4,8 +4,8 @@ import 'package:common_tools/index.dart';
 
 import '../../base/example_widget.dart';
 
-class TDToastPage extends StatelessWidget {
-  const TDToastPage({super.key});
+class MyToastPage extends StatelessWidget {
+  const MyToastPage({super.key});
 
   static const msg = 'This is a regular notification message';
   static const longMsg =

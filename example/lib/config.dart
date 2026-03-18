@@ -391,7 +391,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'Toast',
       name: 'toast',
-      pageBuilder: _wrapInheritedTheme((context) => const TDToastPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyToastPage()),
     ),
   ],
   'Theme': [
