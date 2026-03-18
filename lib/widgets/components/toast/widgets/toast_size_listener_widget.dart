@@ -35,13 +35,9 @@ class _RenderToastSizeListener extends RenderProxyBox {
     super.performLayout();
 
     final Size newSize = child?.size ?? Size.zero;
-    if (_lastSize == newSize) {
-      return;
-    }
+    if (_lastSize == newSize) return;
 
     _lastSize = newSize;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      onSizeChanged(newSize);
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_) => onSizeChanged(newSize));
   }
 }

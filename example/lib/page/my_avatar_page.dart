@@ -1,3 +1,4 @@
+import 'package:common_tools/widgets/components/toast/my_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:common_tools/index.dart';
 
@@ -189,7 +190,7 @@ class _MyAvatarPageState extends State<MyAvatarPage> {
             type: MyAvatarType.operation,
             avatars: avatarList,
             onTap: () {
-              TDToast.showText('On Add User Tap', context: context);
+              MyToast.info(title: 'On Add User Tap', context: context);
             },
           ),
           MyAvatar(
@@ -197,7 +198,7 @@ class _MyAvatarPageState extends State<MyAvatarPage> {
             type: MyAvatarType.operation,
             avatars: avatarList,
             onTap: () {
-              TDToast.showText('On Add User Tap', context: context);
+              MyToast.info(title: 'On Add User Tap', context: context);
             },
           ),
         ],

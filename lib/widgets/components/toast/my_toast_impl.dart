@@ -1,11 +1,7 @@
-import 'dart:collection' show Queue;
+part of 'my_toast.dart';
 
-import 'package:flutter/material.dart';
-
-import '../../../index.dart';
-
-class InteractiveToast {
-  const InteractiveToast._();
+class _MyToastImpl {
+  const _MyToastImpl._();
 
   static final _toastControllers = Queue<ToastController>();
   static final List<_ActiveToastOverlay> _activeToasts = [];
@@ -18,9 +14,11 @@ class InteractiveToast {
   static const double _estimatedToastHeight = 72;
 
   /// Initialize context early so that toasts can be shown without context later.
+  // ignore: avoid_setters_without_getters
   static set context(BuildContext context) => _context = context;
 
   /// Initialize overlay state early so that toasts can be shown without overlay state later.
+  // ignore: avoid_setters_without_getters
   static set overlayState(OverlayState overlayState) =>
       _overlayState = overlayState;
 
@@ -315,7 +313,7 @@ class InteractiveToast {
   }
 
   /// Close all the toasts one by one
-  static void closeAllToast() {
+  static void closeAll() {
     while (_toastControllers.isNotEmpty) {
       _toastControllers.removeFirst().close();
     }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/sliding_toast_setting.dart';
-import '../models/toast_style.dart';
+import '../../../../index.dart';
 
 class ToastProgressBarWidget extends StatelessWidget {
   /// A progress bar to show the remaining time left to dismiss the toast
@@ -18,7 +17,7 @@ class ToastProgressBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color primaryColor = Theme.of(context).primaryColor;
+    final Color primaryColor = context.colorScheme.primary;
     final Color color = toastStyle.progressBarColor ?? primaryColor;
     double height = toastSetting.progressBarHeight;
     height = height.clamp(2, 8);

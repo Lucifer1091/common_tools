@@ -1,3 +1,4 @@
+import 'package:common_tools/widgets/components/toast/my_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:common_tools/index.dart';
 
@@ -91,29 +92,27 @@ class TDToastPage extends StatelessWidget {
   }
 
   Widget _textToast(BuildContext context) {
-    return MyButton(
-      onTap: () {
-        InteractiveToast.slide(
-          context: context,
-          title: Text('Hello Wrold'),
-          toastSetting: SlidingToastSetting(
-            toastAlignment: Alignment.center,
-            toastStartPosition: ToastPosition.left,
-            expandOnHover: true,
-            // displayDuration: Duration(seconds: 5),
-            maxWidth: 400,
-            // curve: Curves.linear,
-          ),
-          toastStyle: ToastStyle(progressBarColor: context.colorScheme.primary),
-        );
-
-        // TDToast.showText('Toast message', context: context);
-      },
-      size: MyButtonSize.large,
-      type: MyButtonType.outline,
-      isExpanded: true,
-
-      text: 'Plain Text',
+    return Wrap(
+      children: [
+        MyButton(
+          onTap: () {
+            MyToast.error(
+              context: context,
+              title: 'Event has been created',
+              subtitle: 'Sunday, July 07, 2024 at 12:00 PM',
+              action: MyButton(
+                text: 'Undo',
+                size: MyButtonSize.small,
+                type: MyButtonType.destructive,
+                onTap: () {},
+              ),
+            );
+          },
+          size: MyButtonSize.large,
+          type: MyButtonType.outline,
+          text: 'Default',
+        ),
+      ],
     );
   }
 
