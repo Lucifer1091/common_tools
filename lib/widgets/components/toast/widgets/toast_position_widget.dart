@@ -21,19 +21,12 @@ class ToastPositionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Defining the constraints for the toast
-    final size = MediaQuery.of(context).size;
+    final size = MediaQuery.sizeOf(context);
 
     const double minHeight = 20;
-    final double minWidth = size.width * .2;
-    double maxHeight = size.height * .4;
-    double maxWidth = size.width * 0.8;
+    final double maxHeight = size.height * .4;
 
-    if ((newMaxHeight ?? 0) > minHeight) {
-      maxHeight = newMaxHeight!;
-    }
-    if ((newMaxWidth ?? 0) > minWidth) {
-      maxWidth = newMaxWidth!;
-    }
+    final width = newMaxWidth ?? 320;
 
     // SafeArea is used to avoid the status bar and the bottom navigation bar of the device
     return SafeArea(
@@ -51,9 +44,9 @@ class ToastPositionWidget extends StatelessWidget {
             child: ConstrainedBox(
               constraints: BoxConstraints(
                 minHeight: minHeight,
-                minWidth: minWidth,
+                minWidth: width,
                 maxHeight: maxHeight,
-                maxWidth: maxWidth,
+                maxWidth: width,
               ),
               child: child,
             ),

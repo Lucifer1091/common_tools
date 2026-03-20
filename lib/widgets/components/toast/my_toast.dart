@@ -34,12 +34,32 @@ class MyToast {
     );
   }
 
+  static void simple({
+    BuildContext? context,
+    String? title,
+    String? subtitle,
+    Duration? duration,
+    Widget? action,
+    Alignment? toastAlignment,
+  }) {
+    _default(
+      context: context,
+      title: title,
+      subtitle: subtitle,
+      duration: duration,
+      action: action,
+      showProgressBar: false,
+      toastAlignment: toastAlignment,
+    );
+  }
+
   static void success({
     BuildContext? context,
     String? title,
     String? subtitle,
     Duration? duration,
     Widget? action,
+    Alignment? toastAlignment,
   }) {
     _default(
       context: context,
@@ -49,6 +69,7 @@ class MyToast {
       action: action,
       icon: LucideIcons.circleCheckBig,
       color: MyColors.success,
+      toastAlignment: toastAlignment,
     );
   }
 
@@ -58,6 +79,7 @@ class MyToast {
     String? subtitle,
     Duration? duration,
     Widget? action,
+    Alignment? toastAlignment,
   }) {
     _default(
       context: context,
@@ -67,6 +89,7 @@ class MyToast {
       action: action,
       icon: LucideIcons.info,
       color: MyColors.blue,
+      toastAlignment: toastAlignment,
     );
   }
 
@@ -76,6 +99,7 @@ class MyToast {
     String? subtitle,
     Duration? duration,
     Widget? action,
+    Alignment? toastAlignment,
   }) {
     _default(
       context: context,
@@ -85,6 +109,7 @@ class MyToast {
       action: action,
       icon: LucideIcons.triangleAlert,
       color: MyColors.warning,
+      toastAlignment: toastAlignment,
     );
   }
 
@@ -94,6 +119,7 @@ class MyToast {
     String? subtitle,
     Duration? duration,
     Widget? action,
+    Alignment? toastAlignment,
   }) {
     _default(
       context: context,
@@ -103,6 +129,7 @@ class MyToast {
       action: action,
       icon: LucideIcons.circleX,
       color: MyColors.error,
+      toastAlignment: toastAlignment,
     );
   }
 
@@ -114,6 +141,8 @@ class MyToast {
     Widget? action,
     IconData? icon,
     Color? color,
+    bool showProgressBar = true,
+    Alignment? toastAlignment,
   }) {
     show(
       context: context,
@@ -135,7 +164,12 @@ class MyToast {
         ],
       ),
       trailing: action,
-      toastSetting: _setting.copyWith(displayDuration: duration),
+      toastSetting: _setting.copyWith(
+        displayDuration: duration,
+        showProgressBar: showProgressBar,
+        toastAlignment: toastAlignment,
+        toastStartPosition: _getStartPosition(toastAlignment),
+      ),
       toastStyle: _style.copyWith(progressBarColor: color),
     );
   }
@@ -145,7 +179,10 @@ class MyToast {
   }
 
   // Global settings
-  static SlidingToastSetting _setting = const SlidingToastSetting();
+  static SlidingToastSetting _setting = const SlidingToastSetting(
+    toastAlignment: Alignment.topCenter,
+    toastStartPosition: ToastPosition.top,
+  );
   static ToastStyle _style = const ToastStyle();
 
   static void init({
@@ -158,5 +195,19 @@ class MyToast {
     if (overlayState != null) _MyToastImpl.overlayState = overlayState;
     _setting = setting ?? _setting;
     _style = style ?? _style;
+  }
+
+  static ToastPosition _getStartPosition(Alignment? align) {
+    return switch (align) {
+      Alignment.bottomLeft ||
+      Alignment.bottomRight ||
+      Alignment.bottomCenter => ToastPosition.bottom,
+      Alignment.topLeft ||
+      Alignment.topRight ||
+      Alignment.topCenter => ToastPosition.top,
+      Alignment.centerLeft => ToastPosition.left,
+      Alignment.centerRight => ToastPosition.right,
+      _ => ToastPosition.top,
+    };
   }
 }
