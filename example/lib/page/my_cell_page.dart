@@ -37,18 +37,9 @@ class MyCellPage extends StatelessWidget {
         ExampleModule(
           title: 'Component Style',
           children: [
+            ExampleItem(desc: 'Card Cell', builder: _buildCard),
             ExampleItem(
-              ignoreCode: true,
-              desc: 'Card Cell',
-              center: false,
-              builder: (BuildContext context) {
-                return _buildCard(context);
-              },
-            ),
-            ExampleItem(
-              ignoreCode: true,
               desc: 'Disabled State',
-              center: false,
               builder: (BuildContext context) {
                 return MyCell(
                   enabled: false,
@@ -193,8 +184,11 @@ Widget _buildDesSimple(BuildContext context) {
 }
 
 Widget _buildCard(BuildContext context) {
-  return const MyCellGroup(
+  return MyCellGroup(
     theme: MyCellGroupTheme.card,
+    style: MyCellStyle.style(
+      context,
+    ).copyWith(backgroundColor: context.colorScheme.secondary),
     cells: [
       MyCell(arrow: true, title: 'Single Row Title'),
       MyCell(arrow: true, title: 'Single Row Title', required: true),
@@ -204,17 +198,19 @@ Widget _buildCard(BuildContext context) {
 }
 
 Widget _buildPadding(BuildContext context) {
-  var style = MyCellStyle(context: context);
-  style.padding = const EdgeInsets.all(30);
+  var style = MyCellStyle.style(context).copyWith(
+    backgroundColor: context.colorScheme.secondary,
+    padding: const EdgeInsets.all(30),
+  );
   return MyCellGroup(
     theme: MyCellGroupTheme.card,
+    style: style,
     cells: [
       MyCell(
         arrow: true,
         title: 'padding-all-30',
-        style: style,
         onTap: (cell) {
-          print('padding-all-30');
+          debugPrint('padding-all-30');
         },
       ),
     ],

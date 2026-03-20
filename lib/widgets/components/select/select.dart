@@ -10,10 +10,15 @@ import '../../../index.dart';
 
 const kDefaultSelectMinWidth = 128.0;
 const kDefaultSelectMaxHeight = 384.0;
+const kDefaultSelectChipSpacing = 4.0;
 
 /// Builder for the selected option widget in [MySelect].
 typedef MySelectedOptionBuilder<T> =
     Widget Function(BuildContext context, T value);
+
+/// Builder for an individual selected chip in multi-select [MySelect].
+typedef MySelectedChipBuilder<T> =
+    Widget Function(BuildContext context, T value, VoidCallback? onRemoved);
 
 /// Builds a select item delegate, optionally based on a search query.
 typedef MySelectItemsBuilder<T> =
@@ -130,7 +135,7 @@ Set<T> _initialSelectionFor<T>(MySelect<T> select) {
 class MySelect<T> extends StatefulWidget {
   /// Creates a [MySelect] with the primary variant.
   const MySelect({
-    required this.selectedOptionBuilder,
+    this.selectedOptionBuilder,
     super.key,
     this.options,
     this.optionsBuilder,
@@ -179,12 +184,13 @@ class MySelect<T> extends StatefulWidget {
        searchInputLeading = null,
        onMultipleChanged = null,
        searchPadding = null,
-       selectedOptionsBuilder = null,
        search = null,
        searchController = null,
        clearSearchOnClose = false,
        searchFocusNode = null,
        onSearchSubmitted = null,
+       selectedOptionsBuilder = null,
+       selectedChipBuilder = null,
        assert(
          options != null ||
              optionsBuilder != null ||
@@ -195,7 +201,7 @@ class MySelect<T> extends StatefulWidget {
 
   /// Creates a [MySelect] with the search variant.
   const MySelect.withSearch({
-    required this.selectedOptionBuilder,
+    this.selectedOptionBuilder,
     super.key,
     this.options,
     this.optionsBuilder,
@@ -248,6 +254,7 @@ class MySelect<T> extends StatefulWidget {
     this.onSearchSubmitted,
   }) : variant = MySelectVariant.search,
        selectedOptionsBuilder = null,
+       selectedChipBuilder = null,
        onMultipleChanged = null,
        initialValues = const {},
        assert(
@@ -264,7 +271,7 @@ class MySelect<T> extends StatefulWidget {
 
   /// Creates a [MySelect] with the multiple select variant.
   const MySelect.multiple({
-    required this.selectedOptionsBuilder,
+    this.selectedOptionsBuilder,
     super.key,
     this.options,
     this.optionsBuilder,
@@ -305,6 +312,7 @@ class MySelect<T> extends StatefulWidget {
     this.loadingBuilder,
     this.emptyBuilder,
     this.errorBuilder,
+    this.selectedChipBuilder,
   }) : variant = MySelectVariant.multiple,
        onSearchChanged = null,
        initialValue = null,
@@ -330,7 +338,7 @@ class MySelect<T> extends StatefulWidget {
 
   /// Creates a [MySelect] with the multiple select and search variant.
   const MySelect.multipleWithSearch({
-    required this.selectedOptionsBuilder,
+    this.selectedOptionsBuilder,
     super.key,
     this.options,
     this.optionsBuilder,
@@ -379,6 +387,7 @@ class MySelect<T> extends StatefulWidget {
     this.loadingBuilder,
     this.emptyBuilder,
     this.errorBuilder,
+    this.selectedChipBuilder,
     this.searchFocusNode,
     this.onSearchSubmitted,
   }) : variant = MySelectVariant.multipleWithSearch,
@@ -453,6 +462,7 @@ class MySelect<T> extends StatefulWidget {
     this.loadingBuilder,
     this.emptyBuilder,
     this.errorBuilder,
+    this.selectedChipBuilder,
     this.searchFocusNode,
     this.onSearchSubmitted,
   }) : assert(
@@ -471,8 +481,15 @@ class MySelect<T> extends StatefulWidget {
          'One of options, optionsBuilder, items, or itemsBuilder must be provided',
        ),
        assert(
-         (selectedOptionBuilder != null) ^ (selectedOptionsBuilder != null),
-         '''Either selectedOptionBuilder or selectedOptionsBuilder must be provided''',
+         ((variant == MySelectVariant.primary ||
+                     variant == MySelectVariant.search) &&
+                 selectedOptionBuilder != null &&
+                 selectedOptionsBuilder == null &&
+                 selectedChipBuilder == null) ||
+             ((variant == MySelectVariant.multiple ||
+                     variant == MySelectVariant.multipleWithSearch) &&
+                 selectedOptionBuilder == null),
+         '''Use selectedOptionBuilder for single-select variants. Multi-select variants use selectedOptionsBuilder, selectedChipBuilder, or the default chip renderer.''',
        );
 
   /// {@template MySelect.controller}
@@ -550,6 +567,14 @@ class MySelect<T> extends StatefulWidget {
   /// selected values of type `T`.
   /// {@endtemplate}
   final MySelectedOptionBuilder<List<T>>? selectedOptionsBuilder;
+
+  /// Builder used for individual selected chips in multi-select variants.
+  ///
+  /// When [selectedOptionsBuilder] is not provided, [MySelect] renders the
+  /// selected values as a wrapping list of chips. This builder can customize
+  /// each chip while still receiving a removal callback when deselection is
+  /// allowed.
+  final MySelectedChipBuilder<T>? selectedChipBuilder;
 
   /// {@template MySelect.options}
   /// An iterable of widgets representing the selectable options.
@@ -1207,6 +1232,56 @@ class MySelectState<T> extends State<MySelect<T>> {
     }
   }
 
+  void deselect(T value) {
+    if (!isMultiSelection ||
+        !widget.allowDeselection ||
+        !controller.value.contains(value)) {
+      return;
+    }
+
+    final nextSelection = controller.value.toSet()..remove(value);
+    controller.value = nextSelection;
+    widget.onMultipleChanged?.call(nextSelection);
+  }
+
+  Widget _buildDefaultSelectedChip(
+    BuildContext context,
+    T value,
+    VoidCallback? onRemoved,
+  ) {
+    return MyTag(
+      '$value',
+      size: MyTagSize.small,
+      needCloseIcon: onRemoved != null,
+      onCloseTap: onRemoved,
+      overflow: TextOverflow.ellipsis,
+    );
+  }
+
+  Widget _buildSelectedChips(BuildContext context, List<T> values) {
+    final onRemoved =
+        widget.enabled && widget.allowDeselection ? deselect : null;
+
+    return Wrap(
+      spacing: kDefaultSelectChipSpacing,
+      runSpacing: kDefaultSelectChipSpacing,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        for (final value in values)
+          widget.selectedChipBuilder?.call(
+                context,
+                value,
+                onRemoved == null ? null : () => onRemoved(value),
+              ) ??
+              _buildDefaultSelectedChip(
+                context,
+                value,
+                onRemoved == null ? null : () => onRemoved(value),
+              ),
+      ],
+    );
+  }
+
   FutureOr<MySelectItemDelegate?> _resolveItems(
     BuildContext context,
     String? searchQuery,
@@ -1409,7 +1484,7 @@ class MySelectState<T> extends State<MySelect<T>> {
     final effectiveMaxHeight = widget.maxHeight ?? kDefaultSelectMaxHeight;
     final effectiveOptionsPadding =
         widget.optionsPadding ?? const EdgeInsets.all(4);
-    final isMultiSelect = widget.selectedOptionsBuilder != null;
+    final isMultiSelect = isMultiSelection;
 
     final effectiveText = ListenableBuilder(
       listenable: controller,
@@ -1423,15 +1498,17 @@ class MySelectState<T> extends State<MySelect<T>> {
           );
           switch (isMultiSelect) {
             case true:
-              result = widget.selectedOptionsBuilder!(
-                context,
-                controller.value.toList(),
-              );
+              final values = controller.value.toList(growable: false);
+              result =
+                  widget.selectedOptionsBuilder?.call(context, values) ??
+                  _buildSelectedChips(context, values);
             case false:
-              result = widget.selectedOptionBuilder!(
-                context,
-                controller.value.first,
-              );
+              result =
+                  widget.selectedOptionBuilder?.call(
+                    context,
+                    controller.value.first,
+                  ) ??
+                  Text('${controller.value.first}');
           }
         } else {
           assert(

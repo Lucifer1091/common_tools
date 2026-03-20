@@ -86,7 +86,7 @@ class FileService {
         return await _pickUsingFilePicker(maxSizeInBytes: maxSizeInBytes);
       }
     } on PlatformException catch (_) {
-      SnackBars.error(title: 'Failed to pick Image.');
+      MyToast.error(title: 'Failed to pick Image.');
     }
     return null;
   }
@@ -108,7 +108,7 @@ class FileService {
     if (image == null) return null;
 
     if (!_isValidImageFormat(image)) {
-      SnackBars.error(title: 'Invalid File Format.');
+      MyToast.error(title: 'Invalid File Format.');
       return null;
     }
 
@@ -128,7 +128,7 @@ class FileService {
     final file = XFile(result.files.single.path!);
 
     if (!_isValidImageFormat(file)) {
-      SnackBars.error(title: 'Invalid File Format.');
+      MyToast.error(title: 'Invalid File Format.');
       return null;
     }
 
@@ -177,7 +177,7 @@ class FileService {
       final fileExt = file.extension?.toLowerCase();
 
       if (!_isValidFileExtension(fileExt, extensions: allowedExtensions)) {
-        SnackBars.error(title: 'Invalid File Format.');
+        MyToast.error(title: 'Invalid File Format.');
         return null;
       }
 
@@ -190,7 +190,7 @@ class FileService {
           ? XFile.fromData(file.bytes!, mimeType: fileExt, name: file.name)
           : XFile(file.path!, mimeType: fileExt, name: file.name);
     } on PlatformException catch (_) {
-      SnackBars.error(title: 'Failed to pick file.');
+      MyToast.error(title: 'Failed to pick file.');
     }
     return null;
   }
@@ -223,7 +223,7 @@ class FileService {
         return files?.sublist(0, maxLimit ?? files.length);
       }
     } on PlatformException catch (_) {
-      SnackBars.error(title: 'Failed to pick Image.');
+      MyToast.error(title: 'Failed to pick Image.');
     }
     return null;
   }
@@ -244,7 +244,7 @@ class FileService {
         return await _pickVideoUsingFilePicker(maxSizeInBytes: maxSizeInBytes);
       }
     } on PlatformException catch (_) {
-      SnackBars.error(title: 'Failed to pick Video.');
+      MyToast.error(title: 'Failed to pick Video.');
     }
     return null;
   }
@@ -262,7 +262,7 @@ class FileService {
     if (video == null) return null;
 
     if (!_isValidVideoFormat(video)) {
-      SnackBars.error(title: 'Invalid Video Format.');
+      MyToast.error(title: 'Invalid Video Format.');
       return null;
     }
 
@@ -282,7 +282,7 @@ class FileService {
     final file = XFile(result.files.single.path!);
 
     if (!_isValidVideoFormat(file)) {
-      SnackBars.error(title: 'Invalid Video Format.');
+      MyToast.error(title: 'Invalid Video Format.');
       return null;
     }
 
@@ -315,7 +315,7 @@ class FileService {
 
         for (final video in videos) {
           if (!_isValidVideoFormat(video)) {
-            SnackBars.error(title: 'Invalid Video Format.');
+            MyToast.error(title: 'Invalid Video Format.');
             return null;
           }
         }
@@ -326,7 +326,7 @@ class FileService {
         ).sublist(0, maxLimit ?? videos.length);
       }
     } on PlatformException catch (_) {
-      SnackBars.error(title: 'Failed to pick Videos.');
+      MyToast.error(title: 'Failed to pick Videos.');
     }
     return null;
   }
@@ -348,14 +348,14 @@ class FileService {
       for (final file in result.files) {
         final fileExt = file.extension?.toLowerCase();
         if (!_isValidFileExtension(fileExt)) {
-          SnackBars.error(title: 'Invalid File Format.');
+          MyToast.error(title: 'Invalid File Format.');
           return null;
         }
       }
 
       return _buildXFilesList(result.files, maxSizeInBytes);
     } on PlatformException catch (_) {
-      SnackBars.error(title: 'Failed to pick Files.');
+      MyToast.error(title: 'Failed to pick Files.');
     }
     return null;
   }
@@ -441,7 +441,7 @@ class FileService {
   );
 
   static void _showMediaSizeExceedError(int sizeInBytes) {
-    SnackBars.error(
+    MyToast.error(
       title: 'Image size exceeds ${sizeInBytes ~/ (1024 * 1024)} MB limit.',
     );
   }

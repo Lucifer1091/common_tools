@@ -22,7 +22,6 @@ class MyBottomSheet {
     bool isDismissible = true,
     bool showTopBar = true,
   }) async {
-    SnackBars.closeAllSnackBars();
 
     return showModalBottomSheet<T>(
       isDismissible: isDismissible,

@@ -71,10 +71,9 @@ Widget _textNoticeBar(BuildContext context) {
 
 Widget _scrollNoticeBar(BuildContext context) {
   return const MyNoticeBar(
+    marquee: true,
     content:
         'Informational message description informational message description informational message description informational message description informational message',
-    marquee: true,
-    speed: 50,
   );
 }
 
@@ -82,11 +81,10 @@ Widget _scrollIconNoticeBar(BuildContext context) {
   return const Padding(
     padding: EdgeInsets.only(top: 16),
     child: MyNoticeBar(
-      content:
-          'Informational message description informational message description informational message description informational message description informational message',
-      speed: 50,
       prefixIcon: LucideIcons.megaphone,
       marquee: true,
+      content:
+          'Informational message description informational message description informational message description informational message description informational message',
     ),
   );
 }

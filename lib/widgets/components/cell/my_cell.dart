@@ -35,53 +35,29 @@ class MyCell extends StatefulWidget {
   });
 
   final MyCellAlignment? align;
-
   final bool? arrow;
-
   final bool? bordered;
-
   final String? description;
-
   final Widget? descriptionWidget;
-
   final bool hover;
-
   final ImageProvider? image;
-
   final double? imageSize;
-
   final double? imageRadius;
-
   final Widget? imageWidget;
-
   final IconData? leftIcon;
-
   final Widget? leftIconWidget;
-
   final String? note;
-
   final Widget? noteWidget;
-
   final bool? required;
-
   final IconData? rightIcon;
-
   final Widget? rightIconWidget;
-
   final String? title;
-
   final Widget? titleWidget;
-
   final ValueChanged<MyCell>? onTap;
-
   final ValueChanged<MyCell>? onLongPress;
-
   final MyCellStyle? style;
-
   final bool enabled;
-
   final bool? showBottomBorder;
-
   final double? height;
 
   @override

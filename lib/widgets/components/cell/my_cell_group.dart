@@ -22,21 +22,13 @@ class MyCellGroup extends StatefulWidget {
   });
 
   final bool? bordered;
-
   final MyCellGroupTheme? theme;
-
   final String? title;
-
   final Widget? titleWidget;
-
   final List<MyCell> cells;
-
   final MyCellBuilder? builder;
-
   final MyCellStyle? style;
-
   final bool? scrollable;
-
   final bool? showLastBorder;
 
   @override

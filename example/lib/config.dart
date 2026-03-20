@@ -22,7 +22,7 @@ import 'page/my_date_picker_page.dart';
 import 'page/my_dialog_page.dart';
 import 'page/my_divider_page.dart';
 import 'page/my_drawer_page.dart';
-import 'page/my_dropdown_page.dart';
+import 'page/my_select_page.dart';
 import 'page/my_errors_page.dart';
 import 'page/td_font_page.dart';
 import 'page/my_footer_page.dart';
@@ -338,10 +338,10 @@ Map<String, List<ExamplePageModel>> exampleMap = {
       pageBuilder: _wrapInheritedTheme((context) => const MyDialogPage()),
     ),
     ExamplePageModel(
-      text: 'Dropdown',
-      name: 'dropdown-menu',
-      pageName: 'dropdown_menu',
-      pageBuilder: _wrapInheritedTheme((context) => const MyDropdownPage()),
+      text: 'Select',
+      name: 'select',
+      pageName: 'select',
+      pageBuilder: _wrapInheritedTheme((context) => const MyelectPage()),
     ),
     ExamplePageModel(
       text: 'Loading',

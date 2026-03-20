@@ -31,39 +31,22 @@ class MyCellStyle {
   }
 
   BuildContext? context;
-
   Color? leftIconColor;
-
   Color? rightIconColor;
-
   TextStyle? titleStyle;
-
   TextStyle? requiredStyle;
-
   TextStyle? descriptionStyle;
-
   TextStyle? noteStyle;
-
   Color? arrowColor;
-
   Color? borderedColor;
-
   Color? groupBorderedColor;
-
   Color? backgroundColor;
-
   Color? hoverColor;
-
   TextStyle? groupTitleStyle;
-
   EdgeInsetsGeometry? padding;
-
   BorderRadius? cardBorderRadius;
-
   EdgeInsetsGeometry? cardPadding;
-
   EdgeInsetsGeometry? titlePadding;
-
   Color? titleBackgroundColor;
 
   void defaultStyle(BuildContext context) {

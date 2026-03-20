@@ -16,11 +16,6 @@ class MySideBarPage extends StatefulWidget {
 class MySideBarPageState extends State<MySideBarPage> {
   @override
   Widget build(BuildContext context) {
-    var current = buildWidget(context);
-    return current;
-  }
-
-  Widget buildWidget(BuildContext context) {
     return ExamplePage(
       title: myTitle(),
       exampleCodeGroup: 'sideBar',

@@ -9,14 +9,14 @@ class UserModel {
   UserModel({this.id, this.title});
 }
 
-class MyDropdownPage extends StatefulWidget {
-  const MyDropdownPage({super.key});
+class MyelectPage extends StatefulWidget {
+  const MyelectPage({super.key});
 
   @override
-  State<MyDropdownPage> createState() => _MyDropdownPageState();
+  State<MyelectPage> createState() => _MyelectPageState();
 }
 
-class _MyDropdownPageState extends State<MyDropdownPage> {
+class _MyelectPageState extends State<MyelectPage> {
   late final GlobalKey<MyFormState> _formKey;
 
   @override
@@ -70,13 +70,25 @@ class _MyDropdownPageState extends State<MyDropdownPage> {
     );
   }
 
-  final fruits = {
-    'apple': 'Apple',
-    'banana': 'Banana',
-    'blueberry': 'Blueberry',
-    'grapes': 'Grapes',
-    'pineapple': 'Pineapple',
-  };
+  final List<String> fruits = [
+    'Apple',
+    'Banana',
+    'Blueberry',
+    'Grapes',
+    'Pineapple',
+    'Mango',
+    'Strawberry',
+    'Orange',
+    'Watermelon',
+    'Kiwi',
+    'Peach',
+    'Pear',
+    'Pomegranate',
+    'Papaya',
+    'Cherry',
+    'Lemon',
+    'Coconut',
+  ];
 
   final releaseChannels = {
     'stable': 'Stable - production ready with the smallest change surface',
@@ -101,11 +113,10 @@ class _MyDropdownPageState extends State<MyDropdownPage> {
               textAlign: TextAlign.start,
             ),
           ),
-          ...fruits.entries.map(
-            (e) => MyOption(value: e.key, child: Text(e.value)),
-          ),
+          ...fruits
+              .sublist(0, 5)
+              .map((e) => MyOption(value: e, child: Text(e))),
         ],
-        selectedOptionBuilder: (context, value) => Text(fruits[value]!),
         onChanged: print,
       ),
     );
@@ -290,21 +301,16 @@ class _MyDropdownPageState extends State<MyDropdownPage> {
             textAlign: TextAlign.start,
           ),
         ),
-        ...fruits.entries.map(
-          (e) => MyOption(
-            value: e.key,
-            direction: TextDirection.rtl,
-            child: Text(e.value),
-          ),
+        ...fruits.map(
+          (e) =>
+              MyOption(value: e, direction: TextDirection.rtl, child: Text(e)),
         ),
       ],
-      selectedOptionsBuilder: (context, values) =>
-          Text(values.map((v) => v.capitalize).join(', ')),
     );
   }
 
   Widget _builderOptionsSelect(BuildContext context) {
-    final fruitEntries = fruits.entries.toList(growable: false);
+    final fruitEntries = fruits.toList(growable: false);
 
     return ConstrainedBox(
       constraints: const BoxConstraints(minWidth: 220),
@@ -328,12 +334,8 @@ class _MyDropdownPageState extends State<MyDropdownPage> {
           }
 
           final fruit = fruitEntries[index - 1];
-          return MyOption(
-            value: fruit.key,
-            child: Text('${fruit.value} (${fruit.key})'),
-          );
+          return MyOption(value: fruit, child: Text('$fruit)'));
         },
-        selectedOptionBuilder: (context, value) => Text(fruits[value]!),
       ),
     );
   }
@@ -450,12 +452,12 @@ class _MyDropdownPageState extends State<MyDropdownPage> {
     await Future<void>.delayed(const Duration(milliseconds: 450));
 
     final query = searchQuery?.trim().toLowerCase();
-    final filteredFruits = fruits.entries
+    final filteredFruits = fruits
         .where(
           (fruit) =>
               query == null ||
               query.isEmpty ||
-              fruit.value.toLowerCase().contains(query),
+              fruit.toLowerCase().contains(query),
         )
         .toList();
 
@@ -469,7 +471,7 @@ class _MyDropdownPageState extends State<MyDropdownPage> {
         child: Text('Fruits', style: headerStyle, textAlign: TextAlign.start),
       ),
       ...filteredFruits.map(
-        (fruit) => MyOption(value: fruit.key, child: Text(fruit.value)),
+        (fruit) => MyOption(value: fruit, child: Text(fruit)),
       ),
     ]);
   }
@@ -495,8 +497,6 @@ class _MyDropdownPageState extends State<MyDropdownPage> {
         padding: EdgeInsets.symmetric(vertical: 24),
         child: Text('No fruits found'),
       ),
-      selectedOptionsBuilder: (context, values) =>
-          Text(values.map((v) => v.capitalize).join(', ')),
     );
   }
 
@@ -513,7 +513,6 @@ class _MyDropdownPageState extends State<MyDropdownPage> {
           textAlign: TextAlign.center,
         ),
       ),
-      selectedOptionBuilder: (context, value) => Text(value),
     );
   }
 }

@@ -558,7 +558,7 @@ class _MyFormBuilderSelectState<T>
 
 class MySelectMultipleFormField<T> extends MyFormBuilderField<Set<T>> {
   MySelectMultipleFormField({
-    required MySelectedOptionBuilder<List<T>> selectedOptionsBuilder,
+    MySelectedOptionBuilder<List<T>>? selectedOptionsBuilder,
     super.id,
     super.key,
     super.onSaved,
@@ -622,6 +622,9 @@ class MySelectMultipleFormField<T> extends MyFormBuilderField<Set<T>> {
 
     /// {@macro MySelect.errorBuilder}
     MySelectErrorBuilder? errorBuilder,
+
+    /// {@macro MySelect.selectedChipBuilder}
+    MySelectedChipBuilder<T>? selectedChipBuilder,
   }) : super(
          decorationBuilder:
              (context) => (const MyDecoration()).merge(decoration),
@@ -634,6 +637,7 @@ class MySelectMultipleFormField<T> extends MyFormBuilderField<Set<T>> {
              itemsBuilder: itemsBuilder,
              optionsBuilder: optionsBuilder,
              selectedOptionsBuilder: selectedOptionsBuilder,
+             selectedChipBuilder: selectedChipBuilder,
              focusNode: state.focusNode,
              placeholder: placeholder,
              enabled: state.enabled,
@@ -667,7 +671,7 @@ class MySelectMultipleFormField<T> extends MyFormBuilderField<Set<T>> {
        );
 
   MySelectMultipleFormField.withSearch({
-    required MySelectedOptionBuilder<List<T>> selectedOptionsBuilder,
+    MySelectedOptionBuilder<List<T>>? selectedOptionsBuilder,
     super.id,
     super.key,
     super.onSaved,
@@ -735,6 +739,9 @@ class MySelectMultipleFormField<T> extends MyFormBuilderField<Set<T>> {
 
     /// {@macro MySelect.errorBuilder}
     MySelectErrorBuilder? errorBuilder,
+
+    /// {@macro MySelect.selectedChipBuilder}
+    MySelectedChipBuilder<T>? selectedChipBuilder,
     this.controller,
 
     /// {@macro MySelect.ensureSelectedVisible}
@@ -757,6 +764,7 @@ class MySelectMultipleFormField<T> extends MyFormBuilderField<Set<T>> {
              itemsBuilder: itemsBuilder,
              optionsBuilder: optionsBuilder,
              selectedOptionsBuilder: selectedOptionsBuilder,
+             selectedChipBuilder: selectedChipBuilder,
              focusNode: state.focusNode,
              placeholder: placeholder,
              enabled: state.enabled,
@@ -801,7 +809,7 @@ class MySelectMultipleFormField<T> extends MyFormBuilderField<Set<T>> {
 
   MySelectMultipleFormField.raw({
     required MySelectVariant variant,
-    required MySelectedOptionBuilder<List<T>> selectedOptionsBuilder,
+    MySelectedOptionBuilder<List<T>>? selectedOptionsBuilder,
     super.id,
     super.key,
     super.onSaved,
@@ -877,6 +885,9 @@ class MySelectMultipleFormField<T> extends MyFormBuilderField<Set<T>> {
 
     /// {@macro MySelect.errorBuilder}
     MySelectErrorBuilder? errorBuilder,
+
+    /// {@macro MySelect.selectedChipBuilder}
+    MySelectedChipBuilder<T>? selectedChipBuilder,
   }) : assert(
          variant == MySelectVariant.multiple ||
              variant == MySelectVariant.multipleWithSearch,
@@ -895,6 +906,7 @@ class MySelectMultipleFormField<T> extends MyFormBuilderField<Set<T>> {
              itemsBuilder: itemsBuilder,
              optionsBuilder: optionsBuilder,
              selectedOptionsBuilder: selectedOptionsBuilder,
+             selectedChipBuilder: selectedChipBuilder,
              focusNode: state.focusNode,
              placeholder: placeholder,
              enabled: state.enabled,

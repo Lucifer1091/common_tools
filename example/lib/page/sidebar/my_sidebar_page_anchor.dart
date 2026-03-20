@@ -43,7 +43,7 @@ class MySideBarAnchorPageState extends State<MySideBarAnchorPage> {
       });
 
       for (var i = 0; i < 20; i++) {
-        list.add(MySideItemProps(index: i, label: '选项', value: i));
+        list.add(MySideItemProps(index: i, label: 'Option', value: i));
         pages.add(getAnchorDemo(i));
       }
 
