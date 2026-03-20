@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../../index.dart';
 
-enum TDNoticeBarTheme { info, success, warning, error }
+enum MyNoticeBarTheme { info, success, warning, error }
 
-class TDNoticeBarStyle {
-  TDNoticeBarStyle({
+class MyNoticeBarStyle {
+  MyNoticeBarStyle({
     this.context,
     this.backgroundColor,
     this.textStyle,
@@ -14,22 +14,22 @@ class TDNoticeBarStyle {
     this.padding,
   });
 
-  TDNoticeBarStyle.generateTheme({
-    TDNoticeBarTheme? theme = TDNoticeBarTheme.info,
+  MyNoticeBarStyle.generateTheme({
+    MyNoticeBarTheme? theme = MyNoticeBarTheme.info,
   }) {
     rightIconColor = ThemeColors.neutral.shade600;
 
     switch (theme) {
-      case TDNoticeBarTheme.warning:
+      case MyNoticeBarTheme.warning:
         leftIconColor = MyColors.warning.shade400;
         backgroundColor = MyColors.warning.shade50;
-      case TDNoticeBarTheme.error:
+      case MyNoticeBarTheme.error:
         leftIconColor = ThemeColors.error.shade500;
         backgroundColor = ThemeColors.error.shade50;
-      case TDNoticeBarTheme.success:
+      case MyNoticeBarTheme.success:
         leftIconColor = ThemeColors.success.shade400;
         backgroundColor = ThemeColors.success.shade50;
-      case TDNoticeBarTheme.info:
+      case MyNoticeBarTheme.info:
       case null:
         leftIconColor = ThemeColors.blue.shade600;
         backgroundColor = ThemeColors.blue.shade50;
@@ -37,15 +37,10 @@ class TDNoticeBarStyle {
   }
 
   BuildContext? context;
-
   Color? backgroundColor;
-
   Color? leftIconColor;
-
   Color? rightIconColor;
-
   EdgeInsetsGeometry? padding;
-
   TextStyle? textStyle;
 
   EdgeInsetsGeometry get getPadding =>

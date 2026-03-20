@@ -1,65 +1,82 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:common_tools/index.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../base/example_widget.dart';
 
-class TDNoticeBarPage extends StatelessWidget {
-  const TDNoticeBarPage({super.key});
+class MyNoticeBarPage extends StatelessWidget {
+  const MyNoticeBarPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
       title: myTitle(context),
       exampleCodeGroup: 'noticeBar',
-      desc: '在导航栏下方，用于给用户显示提示消息。',
-      backgroundColor: Colors.white,
+      desc:
+          'Displayed below the navigation bar to show helpful messages to users.',
       children: [
         ExampleModule(
           title: 'Component Types',
           children: [
-            ExampleItem(desc: '纯文字的公告栏', builder: _textNoticeBar),
-            ExampleItem(desc: '可滚动的公告栏', builder: _scrollNoticeBar),
+            ExampleItem(desc: 'Plain Text Notice Bar', builder: _textNoticeBar),
+            ExampleItem(
+              desc: 'Scrollable Notice Bar',
+              builder: _scrollNoticeBar,
+            ),
             ExampleItem(builder: _scrollIconNoticeBar),
-            ExampleItem(desc: '带图标的公告栏', builder: _iconNoticeBar),
-            ExampleItem(desc: '带关闭的公告栏', builder: _closeNoticeBar),
-            ExampleItem(desc: '带入口的公告栏', builder: _entranceNoticeBar1),
+            ExampleItem(desc: 'Notice Bar with Icon', builder: _iconNoticeBar),
+            ExampleItem(
+              desc: 'Notice Bar with Close Button',
+              builder: _closeNoticeBar,
+            ),
+            ExampleItem(
+              desc: 'Notice Bar with Action',
+              builder: _entranceNoticeBar1,
+            ),
             ExampleItem(builder: _entranceNoticeBar2),
-            ExampleItem(desc: '自定义样式的公告栏', builder: _customNoticeBar),
+            ExampleItem(
+              desc: 'Custom Styled Notice Bar',
+              builder: _customNoticeBar,
+            ),
           ],
         ),
         ExampleModule(
           title: 'Component State',
           children: [
-            ExampleItem(desc: '普通通知', builder: _normalNoticeBar),
-            ExampleItem(desc: '成功通知', builder: _successNoticeBar),
-            ExampleItem(desc: '警示通知', builder: _warningNoticeBar),
-            ExampleItem(desc: '错误通知', builder: _errorNoticeBar),
+            ExampleItem(desc: 'Default Notice', builder: _normalNoticeBar),
+            ExampleItem(desc: 'Success Notice', builder: _successNoticeBar),
+            ExampleItem(desc: 'Warning Notice', builder: _warningNoticeBar),
+            ExampleItem(desc: 'Error Notice', builder: _errorNoticeBar),
           ],
         ),
         ExampleModule(
           title: 'Component Style',
-          children: [ExampleItem(desc: '卡片顶部', builder: _cardNoticeBar)],
+          children: [ExampleItem(desc: 'Top of Card', builder: _cardNoticeBar)],
         ),
       ],
       test: [
-        ExampleItem(desc: '带点击事件的公告栏', builder: _tapNoticeBar),
-        ExampleItem(desc: '自定义左侧内容的公告栏', builder: _leftNoticeBar),
-        ExampleItem(desc: '垂直滚动的公告栏', builder: _stepNoticeBar),
+        ExampleItem(desc: 'Clickable Notice Bar', builder: _tapNoticeBar),
+        ExampleItem(
+          desc: 'Notice Bar with Custom Left Content',
+          builder: _leftNoticeBar,
+        ),
+        ExampleItem(
+          desc: 'Vertical Scrolling Notice Bar',
+          builder: _stepNoticeBar,
+        ),
       ],
     );
   }
 }
 
 Widget _textNoticeBar(BuildContext context) {
-  return const TDNoticeBar(content: '这是一条普通的通知信息');
+  return const MyNoticeBar(content: 'This is a regular notification message');
 }
 
 Widget _scrollNoticeBar(BuildContext context) {
-  return const TDNoticeBar(
-    content: '提示文字描述提示文字描述提示文字描述提示文字描述提示文字',
+  return const MyNoticeBar(
+    content:
+        'Informational message description informational message description informational message description informational message description informational message',
     marquee: true,
     speed: 50,
   );
@@ -68,8 +85,9 @@ Widget _scrollNoticeBar(BuildContext context) {
 Widget _scrollIconNoticeBar(BuildContext context) {
   return const Padding(
     padding: EdgeInsets.only(top: 16),
-    child: TDNoticeBar(
-      content: '提示文字描述提示文字描述提示文字描述提示文字描述提示文字',
+    child: MyNoticeBar(
+      content:
+          'Informational message description informational message description informational message description informational message description informational message',
       speed: 50,
       prefixIcon: Icons.speaker_rounded,
       marquee: true,
@@ -78,26 +96,26 @@ Widget _scrollIconNoticeBar(BuildContext context) {
 }
 
 Widget _iconNoticeBar(BuildContext context) {
-  return const TDNoticeBar(
-    content: '这是一条普通的通知信息',
+  return const MyNoticeBar(
+    content: 'This is a regular notification message',
     prefixIcon: Icons.cancel_rounded,
   );
 }
 
 Widget _closeNoticeBar(BuildContext context) {
-  return const TDNoticeBar(
-    content: '这是一条普通的通知信息',
+  return const MyNoticeBar(
+    content: 'This is a regular notification message',
     prefixIcon: Icons.cancel_rounded,
     suffixIcon: Icons.close,
   );
 }
 
 Widget _entranceNoticeBar1(BuildContext context) {
-  return const TDNoticeBar(
-    content: '这是一条普通的通知信息',
+  return const MyNoticeBar(
+    content: 'This is a regular notification message',
     prefixIcon: Icons.cancel_rounded,
     right: MyButton(
-      text: '文字按钮',
+      text: 'Text Button',
       type: MyButtonType.text,
 
       size: MyButtonSize.extraSmall,
@@ -110,8 +128,8 @@ Widget _entranceNoticeBar1(BuildContext context) {
 Widget _entranceNoticeBar2(BuildContext context) {
   return const Padding(
     padding: EdgeInsets.only(top: 16),
-    child: TDNoticeBar(
-      content: '这是一条普通的通知信息',
+    child: MyNoticeBar(
+      content: 'This is a regular notification message',
       prefixIcon: Icons.cancel_rounded,
       suffixIcon: Icons.chevron_right,
     ),
@@ -119,43 +137,43 @@ Widget _entranceNoticeBar2(BuildContext context) {
 }
 
 Widget _customNoticeBar(BuildContext context) {
-  return TDNoticeBar(
-    content: '这是一条普通的通知信息',
+  return MyNoticeBar(
+    content: 'This is a regular notification message',
     prefixIcon: LucideIcons.bell,
     suffixIcon: Icons.chevron_right,
-    style: TDNoticeBarStyle(backgroundColor: ThemeColors.neutral.shade200),
+    style: MyNoticeBarStyle(backgroundColor: ThemeColors.neutral.shade200),
   );
 }
 
 Widget _normalNoticeBar(BuildContext context) {
-  return const TDNoticeBar(
-    content: '这是一条普通的通知信息',
+  return const MyNoticeBar(
+    content: 'This is a regular notification message',
     prefixIcon: Icons.cancel_rounded,
-    theme: TDNoticeBarTheme.info,
+    theme: MyNoticeBarTheme.info,
   );
 }
 
 Widget _successNoticeBar(BuildContext context) {
-  return const TDNoticeBar(
-    content: '这是一条普通的通知信息',
+  return const MyNoticeBar(
+    content: 'This is a regular notification message',
     prefixIcon: Icons.cancel_rounded,
-    theme: TDNoticeBarTheme.success,
+    theme: MyNoticeBarTheme.success,
   );
 }
 
 Widget _warningNoticeBar(BuildContext context) {
-  return const TDNoticeBar(
-    content: '这是一条普通的通知信息',
+  return const MyNoticeBar(
+    content: 'This is a regular notification message',
     prefixIcon: Icons.cancel_rounded,
-    theme: TDNoticeBarTheme.warning,
+    theme: MyNoticeBarTheme.warning,
   );
 }
 
 Widget _errorNoticeBar(BuildContext context) {
-  return const TDNoticeBar(
-    content: '这是一条普通的通知信息',
+  return const MyNoticeBar(
+    content: 'This is a regular notification message',
     prefixIcon: Icons.cancel_rounded,
-    theme: TDNoticeBarTheme.error,
+    theme: MyNoticeBarTheme.error,
   );
 }
 
@@ -164,7 +182,7 @@ Widget _cardNoticeBar(BuildContext context) {
   return Container(
     margin: const EdgeInsets.symmetric(horizontal: 16),
     decoration: BoxDecoration(
-      color: TDNoticeBarStyle.generateTheme().backgroundColor,
+      color: MyNoticeBarStyle.generateTheme().backgroundColor,
       borderRadius: const BorderRadius.all(Radius.circular(9)),
       boxShadow: const [
         BoxShadow(
@@ -195,8 +213,8 @@ Widget _cardNoticeBar(BuildContext context) {
             borderRadius: BorderRadius.all(Radius.circular(12)),
           ),
           clipBehavior: Clip.hardEdge,
-          child: const TDNoticeBar(
-            content: '这是一条普通的通知信息',
+          child: const MyNoticeBar(
+            content: 'This is a regular notification message',
             prefixIcon: Icons.cancel_rounded,
             suffixIcon: Icons.chevron_right,
           ),
@@ -214,8 +232,8 @@ Widget _cardNoticeBar(BuildContext context) {
 }
 
 Widget _tapNoticeBar(BuildContext context) {
-  return TDNoticeBar(
-    content: '这是一条普通的通知信息',
+  return MyNoticeBar(
+    content: 'This is a regular notification message',
     prefixIcon: Icons.cancel_rounded,
     suffixIcon: Icons.chevron_right,
     onTap: () {
@@ -225,11 +243,11 @@ Widget _tapNoticeBar(BuildContext context) {
 }
 
 Widget _leftNoticeBar(BuildContext context) {
-  return const TDNoticeBar(
-    content: '这是一条普通的通知信息',
+  return const MyNoticeBar(
+    content: 'This is a regular notification message',
     suffixIcon: Icons.chevron_right,
     left: MyButton(
-      text: '文本',
+      text: 'Text',
       type: MyButtonType.text,
 
       size: MyButtonSize.extraSmall,
@@ -240,8 +258,12 @@ Widget _leftNoticeBar(BuildContext context) {
 }
 
 Widget _stepNoticeBar(BuildContext context) {
-  return const TDNoticeBar(
-    content: ['君不见黄河之水天上来', '奔流到海不复回', '君不见'],
+  return const MyNoticeBar(
+    content: [
+      'Have you not seen the Yellow River descending from the sky',
+      'Rushing to the sea, never to return',
+      'Have you not seen',
+    ],
     direction: Axis.vertical,
     prefixIcon: Icons.speaker_rounded,
     marquee: true,

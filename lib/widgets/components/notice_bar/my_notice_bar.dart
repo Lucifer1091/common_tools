@@ -6,8 +6,8 @@ import 'package:flutter/widgets.dart';
 
 import '../../../index.dart';
 
-class TDNoticeBar extends StatefulWidget {
-  const TDNoticeBar({
+class MyNoticeBar extends StatefulWidget {
+  const MyNoticeBar({
     super.key,
     this.content,
     this.style,
@@ -17,7 +17,7 @@ class TDNoticeBar extends StatefulWidget {
     this.interval = 3000,
     this.marquee = false,
     this.direction = Axis.horizontal,
-    this.theme = TDNoticeBarTheme.info,
+    this.theme = MyNoticeBarTheme.info,
     this.prefixIcon,
     this.suffixIcon,
     this.onTap,
@@ -29,7 +29,7 @@ class TDNoticeBar extends StatefulWidget {
 
   final Object? content;
 
-  final TDNoticeBarStyle? style;
+  final MyNoticeBarStyle? style;
 
   /// Left content (custom left content, higher priority than prefixIcon)
   final Widget? left;
@@ -46,7 +46,7 @@ class TDNoticeBar extends StatefulWidget {
 
   final Axis? direction;
 
-  final TDNoticeBarTheme? theme;
+  final MyNoticeBarTheme? theme;
 
   final IconData? prefixIcon;
 
@@ -65,14 +65,14 @@ class TDNoticeBar extends StatefulWidget {
   final int? maxLines;
 
   @override
-  State<StatefulWidget> createState() => _TDNoticeBarState();
+  State<StatefulWidget> createState() => _MyNoticeBarState();
 }
 
-class _TDNoticeBarState extends State<TDNoticeBar> {
+class _MyNoticeBarState extends State<MyNoticeBar> {
   ScrollController? _scrollController;
   Timer? _timer;
   Size? size0;
-  TDNoticeBarStyle? _style;
+  MyNoticeBarStyle? _style;
   Color? _backgroundColor;
   Widget? _left;
   Widget? _right;
@@ -112,7 +112,7 @@ class _TDNoticeBarState extends State<TDNoticeBar> {
     if (widget.style != null) {
       _style = widget.style;
     } else {
-      _style = TDNoticeBarStyle.generateTheme(theme: widget.theme);
+      _style = MyNoticeBarStyle.generateTheme(theme: widget.theme);
     }
 
     _backgroundColor = _style!.backgroundColor;

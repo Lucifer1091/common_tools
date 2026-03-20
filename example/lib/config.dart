@@ -34,7 +34,7 @@ import 'page/my_link_page.dart';
 import 'page/my_loader_page.dart';
 import 'page/td_message_page.dart';
 import 'page/td_navbar_page.dart';
-import 'page/td_notice_bar_page.dart';
+import 'page/my_notice_bar_page.dart';
 import 'page/my_picker_page.dart';
 import 'page/td_popover_page.dart';
 import 'page/td_popup_page.dart';
@@ -356,7 +356,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'NoticeBar',
       name: 'notice-bar',
-      pageBuilder: _wrapInheritedTheme((context) => const TDNoticeBarPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyNoticeBarPage()),
     ),
     ExamplePageModel(
       text: 'Overlay',
