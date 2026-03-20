@@ -39,14 +39,14 @@ class MyNoticeBar extends StatefulWidget {
 
   final bool marquee;
 
-  final double? speed;
+  final double speed;
 
   /// Step scrolling interval (milliseconds)
-  final int? interval;
+  final int interval;
 
-  final Axis? direction;
+  final Axis direction;
 
-  final MyNoticeBarTheme? theme;
+  final MyNoticeBarTheme theme;
 
   final IconData? prefixIcon;
 
@@ -62,350 +62,452 @@ class MyNoticeBar extends StatefulWidget {
   /// is equal to this attribute)
   final double height;
 
-  final int? maxLines;
+  final int maxLines;
 
   @override
   State<StatefulWidget> createState() => _MyNoticeBarState();
 }
 
 class _MyNoticeBarState extends State<MyNoticeBar> {
-  ScrollController? _scrollController;
+  late final ScrollController _scrollController;
   Timer? _timer;
-  Size? size0;
-  MyNoticeBarStyle? _style;
-  Color? _backgroundColor;
-  Widget? _left;
-  Widget? _right;
-  final GlobalKey _key = GlobalKey();
-  final GlobalKey _contextKey = GlobalKey();
+  int _marqueeSession = 0;
+
+  final GlobalKey _contentKey = GlobalKey();
+  final GlobalKey _viewportKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
-
-    if (widget.speed! < 0) {
-      throw Exception('speed must not be less than 0');
-    }
-
-    if (widget.interval! <= 0) {
-      throw Exception('interval must not be less than 0');
-    }
-
     _scrollController = ScrollController();
+    _validateConfiguration();
+    _scheduleMarqueeRestart();
+  }
 
-    // Initialize the style and left and right widgets
-    _init();
+  @override
+  void didUpdateWidget(covariant MyNoticeBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _validateConfiguration();
 
-    WidgetsBinding.instance.addPostFrameCallback((time) {
-      if (widget.marquee) _startTimer();
-    });
+    if (_shouldRestartMarquee(oldWidget)) {
+      _scheduleMarqueeRestart();
+    }
   }
 
   @override
   void dispose() {
+    _stopMarquee();
+    _scrollController.dispose();
     super.dispose();
+  }
+
+  void _validateConfiguration() {
+    final content = widget.content;
+    if (content != null && content is! String && content is! List<String>) {
+      throw ArgumentError.value(
+        content,
+        'content',
+        'must be a String or List<String>',
+      );
+    }
+
+    if (widget.speed <= 0) {
+      throw ArgumentError.value(
+        widget.speed,
+        'speed',
+        'must be greater than 0',
+      );
+    }
+
+    if (widget.interval <= 0) {
+      throw ArgumentError.value(
+        widget.interval,
+        'interval',
+        'must be greater than 0',
+      );
+    }
+
+    if (widget.maxLines <= 0) {
+      throw ArgumentError.value(
+        widget.maxLines,
+        'maxLines',
+        'must be greater than 0',
+      );
+    }
+  }
+
+  bool _shouldRestartMarquee(MyNoticeBar oldWidget) {
+    return oldWidget.content != widget.content ||
+        oldWidget.style != widget.style ||
+        oldWidget.theme != widget.theme ||
+        oldWidget.left != widget.left ||
+        oldWidget.right != widget.right ||
+        oldWidget.prefixIcon != widget.prefixIcon ||
+        oldWidget.suffixIcon != widget.suffixIcon ||
+        oldWidget.marquee != widget.marquee ||
+        oldWidget.speed != widget.speed ||
+        oldWidget.interval != widget.interval ||
+        oldWidget.direction != widget.direction ||
+        oldWidget.height != widget.height ||
+        oldWidget.maxLines != widget.maxLines;
+  }
+
+  void _scheduleMarqueeRestart() {
+    _stopMarquee();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+
+      _restartMarquee();
+    });
+  }
+
+  void _restartMarquee() {
+    _stopMarquee();
+    _marqueeSession++;
+
+    if (!widget.marquee || _contents.isEmpty || !_scrollController.hasClients) {
+      _safeJumpTo(0);
+      return;
+    }
+
+    switch (widget.direction) {
+      case Axis.horizontal:
+        unawaited(_runHorizontalMarquee(_marqueeSession));
+      case Axis.vertical:
+        if (_contents.length > 1) {
+          _runVerticalMarquee(_marqueeSession);
+        }
+    }
+  }
+
+  void _stopMarquee() {
+    _marqueeSession++;
     _timer?.cancel();
-    _scrollController?.dispose();
+    _timer = null;
   }
 
-  void _init() {
-    if (widget.style != null) {
-      _style = widget.style;
-    } else {
-      _style = MyNoticeBarStyle.generateTheme(theme: widget.theme);
+  MyNoticeBarStyle get _style =>
+      widget.style ??
+      MyNoticeBarStyle.generateTheme(context: context, theme: widget.theme);
+
+  EdgeInsets get _resolvedPadding =>
+      _style.getPadding.resolve(Directionality.of(context));
+
+  List<String> get _contents {
+    final content = widget.content;
+    if (content == null) return const [];
+    if (content is String) return [content];
+    if (content is List<String>) return content;
+
+    throw StateError('content must be a String or List<String>');
+  }
+
+  String get _primaryContent => _contents.isEmpty ? '' : _contents.first;
+
+  Widget? get _leftWidget {
+    if (widget.left != null) return widget.left;
+    if (widget.prefixIcon == null) return null;
+
+    return Icon(
+      widget.prefixIcon,
+      color: _style.leftIconColor,
+      size: widget.height,
+    );
+  }
+
+  Widget? get _rightWidget {
+    if (widget.right != null) return widget.right;
+    if (widget.suffixIcon == null) return null;
+
+    return Icon(
+      widget.suffixIcon,
+      color: _style.rightIconColor,
+      size: widget.height,
+    );
+  }
+
+  Future<void> _runHorizontalMarquee(int session) async {
+    final double scrollDistance = _getContentWidth() + _getEmptyWidth();
+    if (scrollDistance <= 0) return;
+
+    _safeJumpTo(0);
+
+    while (mounted &&
+        session == _marqueeSession &&
+        widget.marquee &&
+        widget.direction == Axis.horizontal &&
+        _scrollController.hasClients) {
+      await _safeAnimateTo(
+        scrollDistance,
+        duration: _durationForDistance(scrollDistance),
+      );
+
+      if (!mounted ||
+          session != _marqueeSession ||
+          !_scrollController.hasClients) {
+        return;
+      }
+
+      _safeJumpTo(0);
     }
-
-    _backgroundColor = _style!.backgroundColor;
-    _setLeftWidget();
-    _setRightWidget();
   }
 
-  void _startTimer() {
-    if (widget.direction == Axis.horizontal) {
-      _scroll();
-    } else if (widget.direction == Axis.vertical) {
-      _step();
-    }
-  }
+  void _runVerticalMarquee(int session) {
+    int step = 0;
 
-  void _scroll() {
-    final scrollDistance =
-        _getContentWidth() + (size0!.width - _style!.getPadding.horizontal);
+    _timer = Timer.periodic(Duration(milliseconds: widget.interval), (
+      timer,
+    ) async {
+      if (!mounted ||
+          session != _marqueeSession ||
+          !_scrollController.hasClients) {
+        timer.cancel();
+        return;
+      }
 
-    var remainder = scrollDistance % widget.speed!;
-    _scrollController!.jumpTo(0);
-    var offset = 0.0 + widget.speed!;
+      final int nextStep = step + 1;
+      final double offset = nextStep * widget.height;
 
-    unawaited(
-      _scrollController!.animateTo(
+      await _safeAnimateTo(
         offset,
-        duration: const Duration(seconds: 1),
-        curve: Curves.linear,
-      ),
+        duration: _durationForDistance(widget.height),
+      );
+
+      if (!mounted ||
+          session != _marqueeSession ||
+          !_scrollController.hasClients) {
+        return;
+      }
+
+      if (nextStep >= _contents.length) {
+        _safeJumpTo(0);
+        step = 0;
+      } else {
+        step = nextStep;
+      }
+    });
+  }
+
+  Duration _durationForDistance(double distance) {
+    final int milliseconds = (distance / widget.speed * 1000).round();
+    return Duration(milliseconds: milliseconds <= 0 ? 1 : milliseconds);
+  }
+
+  Future<void> _safeAnimateTo(
+    double offset, {
+    required Duration duration,
+    Curve curve = Curves.linear,
+  }) async {
+    if (!mounted || !_scrollController.hasClients) return;
+
+    final position = _scrollController.position;
+    final double target = offset.clamp(
+      position.minScrollExtent,
+      position.maxScrollExtent,
     );
 
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
-      if (offset < scrollDistance - remainder) {
-        offset += widget.speed!;
-        await _scrollController!.animateTo(
-          offset,
-          duration: const Duration(seconds: 1),
-          curve: Curves.linear,
-        );
-      } else {
-        // If the remaining distance is less than 50, scroll this part first
-        // and then scroll the remaining part
-        // The time required to scroll the remaining distance
-        final time = (remainder / widget.speed! * 1000).round();
+    if ((position.pixels - target).abs() < 0.5) return;
 
-        // Scroll the last part (bottom out)
-        await _scrollController!.animateTo(
-          scrollDistance,
-          duration: Duration(milliseconds: time),
-          curve: Curves.linear,
-        );
-
-        // Back to top (connection)
-        _scrollController!.jumpTo(0);
-
-        // Modify the starting position
-        offset = widget.speed! - remainder;
-
-        // Calculate the final scrolling distance of the new starting point
-        remainder = (scrollDistance - offset) % widget.speed!;
-
-        // Scroll to the new starting point (to make up for the bottoming speed scrolling length)
-        await _scrollController!.animateTo(
-          offset,
-          duration: Duration(milliseconds: 1000 - time),
-          curve: Curves.linear,
-        );
-      }
-    });
-  }
-
-  void _step() {
-    var step = 0;
-    var offset = 0.0;
-    _timer = Timer.periodic(Duration(milliseconds: widget.interval!), (timer) {
-      final time = (widget.height / widget.speed! * 1000).round();
-      if (step >= (widget.content.cast<String>()?.length ?? 0)) {
-        step = 0;
-        offset = 0;
-        _scrollController!.jumpTo(0);
-      }
-      step++;
-      // Fixed scroll row height (22)
-      offset += widget.height;
-      unawaited(
-        _scrollController!.animateTo(
-          offset,
-          duration: Duration(milliseconds: time),
-          curve: Curves.linear,
-        ),
+    try {
+      await _scrollController.animateTo(
+        target,
+        duration: duration,
+        curve: curve,
       );
-    });
+    } catch (_) {
+      // Ignore scroll errors during disposal or interrupted layout changes.
+    }
   }
 
-  Size _getFontSize() {
-    String text = widget.content.toString();
+  void _safeJumpTo(double offset) {
+    if (!mounted || !_scrollController.hasClients) return;
 
-    if (widget.content is List<String>) {
-      text = widget.content.cast<List<String>>()![0];
+    final position = _scrollController.position;
+    final double target = offset.clamp(
+      position.minScrollExtent,
+      position.maxScrollExtent,
+    );
+
+    if ((position.pixels - target).abs() < 0.5) return;
+
+    try {
+      _scrollController.jumpTo(target);
+    } catch (_) {
+      // Ignore scroll errors during disposal or interrupted layout changes.
     }
+  }
 
+  Size _measureText({
+    required String text,
+    required int maxLines,
+    required double maxWidth,
+  }) {
     final textPainter = TextPainter(
-      text: TextSpan(text: text, style: _style!.getTextStyle),
+      text: TextSpan(text: text, style: _style.getTextStyle),
       locale: Localizations.localeOf(context),
       textDirection: TextDirection.ltr,
-      maxLines: widget.marquee ? 1 : widget.maxLines,
-    )..layout(maxWidth: size0!.width);
+      maxLines: maxLines,
+    )..layout(maxWidth: maxWidth);
 
     return textPainter.size;
   }
 
-  void _setLeftWidget() {
-    if (widget.prefixIcon != null) {
-      _left = Icon(
-        widget.prefixIcon,
-        color: _style!.leftIconColor,
-        size: widget.height,
-      );
+  double _getViewportWidth() {
+    final renderObject = _viewportKey.currentContext?.findRenderObject();
+    if (renderObject is RenderBox) {
+      return renderObject.size.width;
     }
 
-    if (widget.left != null) _left = widget.left;
-  }
-
-  void _setRightWidget() {
-    if (widget.suffixIcon != null) {
-      _right = Icon(
-        widget.suffixIcon,
-        color: _style!.rightIconColor,
-        size: widget.height,
-      );
-    }
-    if (widget.right != null) {
-      _right = widget.right;
-    }
+    final width =
+        MediaQuery.of(context).size.width - _resolvedPadding.horizontal;
+    return width > 0 ? width : 0;
   }
 
   double _getContentWidth() {
-    var contentWidth =
-        _key.currentContext?.findRenderObject()?.paintBounds.size.width ?? 0;
+    final renderObject = _contentKey.currentContext?.findRenderObject();
+    if (renderObject is RenderBox && renderObject.size.width > 0) {
+      return renderObject.size.width;
+    }
 
-    if (contentWidth == 0) contentWidth = _getFontSize().width;
-
-    return contentWidth;
+    return _measureText(
+      text: _primaryContent,
+      maxLines: 1,
+      maxWidth: double.infinity,
+    ).width;
   }
 
   double _getEmptyWidth() {
-    return _contextKey.currentContext
-            ?.findRenderObject()
-            ?.paintBounds
-            .size
-            .width ??
-        (size0!.width - _style!.getPadding.horizontal);
+    final double viewportWidth = _getViewportWidth();
+    return viewportWidth > 0 ? viewportWidth : 0;
   }
 
   double _getTextHeight() {
-    return _getFontSize().height;
+    return _measureText(
+      text: _primaryContent,
+      maxLines: widget.marquee ? 1 : widget.maxLines,
+      maxWidth: _getViewportWidth(),
+    ).height;
+  }
+
+  Widget _buildText(
+    String text, {
+    required int maxLines,
+    TextOverflow? overflow,
+  }) {
+    return MyText(
+      text,
+      style: _style.getTextStyle,
+      maxLines: maxLines,
+      overflow: overflow,
+    );
   }
 
   Widget _contentWidget() {
-    var valid = false;
-    Widget? textWidget;
+    if (_contents.isEmpty) return const SizedBox.shrink();
 
-    if (widget.content is String) {
-      valid = true;
-      textWidget = SizedBox(
-        height: _getTextHeight(),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: SizedBox(
-            height: _getTextHeight(),
-            child: MyText(
-              widget.content.cast<String>(),
-              style: _style?.getTextStyle,
-              maxLines: widget.marquee ? 1 : widget.maxLines,
-            ),
+    final double textHeight = _getTextHeight();
+    final Widget baseText = SizedBox(
+      height: textHeight,
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: SizedBox(
+          height: textHeight,
+          child: _buildText(
+            _primaryContent,
+            maxLines: widget.marquee ? 1 : widget.maxLines,
           ),
         ),
-      );
-    }
-    if (widget.content is List<String>) {
-      valid = true;
-      textWidget = SizedBox(
-        height: _getTextHeight(),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: SizedBox(
-            height: _getTextHeight(),
-            child: MyText(
-              widget.content.cast<List<String>>()![0],
-              style: _style?.getTextStyle,
-              maxLines: 1,
-            ),
-          ),
-        ),
-      );
-    }
+      ),
+    );
 
-    if (!valid) throw Exception('context must be String or List<String>');
-
-    if (!widget.marquee) return textWidget!;
-
-    Widget? child;
+    if (!widget.marquee) return baseText;
 
     switch (widget.direction) {
       case Axis.horizontal:
-        child = SingleChildScrollView(
+        final double emptyWidth = _getEmptyWidth();
+        final double contentWidth = _getContentWidth();
+
+        return SingleChildScrollView(
           controller: _scrollController,
           scrollDirection: Axis.horizontal,
           physics: const NeverScrollableScrollPhysics(),
           child: Row(
             children: [
-              SizedBox(key: _key, height: _getTextHeight(), child: textWidget),
-              SizedBox(width: _getEmptyWidth()),
+              SizedBox(key: _contentKey, height: textHeight, child: baseText),
+              SizedBox(width: emptyWidth),
               SizedBox(
-                width:
-                    _getEmptyWidth() > _getContentWidth()
-                        ? _getEmptyWidth()
-                        : _getContentWidth(),
-                height: _getTextHeight(),
-                child: textWidget,
+                width: emptyWidth > contentWidth ? emptyWidth : contentWidth,
+                height: textHeight,
+                child: baseText,
               ),
             ],
           ),
         );
       case Axis.vertical:
-        final contents = widget.content! as List<String>;
-        child = SizedBox(
+        return SizedBox(
           height: widget.height,
-          child: SingleChildScrollView(
-            controller: _scrollController,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                for (int i = 0; i < contents.length; i++)
+          child: DisableScrollbar(
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              physics: const NeverScrollableScrollPhysics(),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  for (final content in _contents)
+                    SizedBox(
+                      height: widget.height,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: _buildText(
+                          content,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
                   SizedBox(
+                    key: _contentKey,
                     height: widget.height,
                     child: Align(
                       alignment: Alignment.centerLeft,
-                      child: MyText(
-                        contents[i],
-                        style: _style!.getTextStyle,
+                      child: _buildText(
+                        _contents.first,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ),
-                SizedBox(
-                  key: _key,
-                  height: widget.height,
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: MyText(
-                      contents[0],
-                      style: _style?.getTextStyle,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );
-      case null:
-        child = textWidget;
     }
-    return child!;
   }
 
   @override
   Widget build(BuildContext context) {
-    size0 = MediaQuery.of(context).size;
+    final leftWidget = _leftWidget;
+    final rightWidget = _rightWidget;
+
     return Container(
-      padding: _style!.getPadding,
-      decoration: BoxDecoration(color: _backgroundColor),
+      padding: _style.getPadding,
+      decoration: BoxDecoration(color: _style.backgroundColor),
       child: Row(
         children: [
-          Visibility(
-            visible: _left != null,
-            child: Container(
+          if (leftWidget != null)
+            Container(
               margin: const EdgeInsets.only(right: 8),
-              child: _left,
-            ).clickable(onTap: widget.onTap),
-          ),
+              child: leftWidget,
+            ).clickable(onTap: widget.onPrefixTap ?? widget.onTap),
           Expanded(
-            key: _contextKey,
+            key: _viewportKey,
             child: _contentWidget().clickable(onTap: widget.onTap),
           ),
-          Visibility(
-            visible: _right != null,
-            child: _right!.clickable(onTap: widget.onSuffixTap),
-          ),
+          if (rightWidget != null)
+            rightWidget.clickable(onTap: widget.onSuffixTap ?? widget.onTap),
         ],
       ),
     );

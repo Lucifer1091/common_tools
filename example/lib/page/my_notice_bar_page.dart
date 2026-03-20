@@ -51,18 +51,14 @@ class MyNoticeBarPage extends StatelessWidget {
         ),
         ExampleModule(
           title: 'Component Style',
-          children: [ExampleItem(desc: 'Top of Card', builder: _cardNoticeBar)],
-        ),
-      ],
-      test: [
-        ExampleItem(desc: 'Clickable Notice Bar', builder: _tapNoticeBar),
-        ExampleItem(
-          desc: 'Notice Bar with Custom Left Content',
-          builder: _leftNoticeBar,
-        ),
-        ExampleItem(
-          desc: 'Vertical Scrolling Notice Bar',
-          builder: _stepNoticeBar,
+          children: [
+            ExampleItem(desc: 'Top of Card', builder: _cardNoticeBar),
+            ExampleItem(desc: 'Clickable Notice Bar', builder: _tapNoticeBar),
+            ExampleItem(
+              desc: 'Vertical Scrolling Notice Bar',
+              builder: _stepNoticeBar,
+            ),
+          ],
         ),
       ],
     );
@@ -89,7 +85,7 @@ Widget _scrollIconNoticeBar(BuildContext context) {
       content:
           'Informational message description informational message description informational message description informational message description informational message',
       speed: 50,
-      prefixIcon: Icons.speaker_rounded,
+      prefixIcon: LucideIcons.megaphone,
       marquee: true,
     ),
   );
@@ -98,14 +94,14 @@ Widget _scrollIconNoticeBar(BuildContext context) {
 Widget _iconNoticeBar(BuildContext context) {
   return const MyNoticeBar(
     content: 'This is a regular notification message',
-    prefixIcon: Icons.cancel_rounded,
+    prefixIcon: Icons.info_rounded,
   );
 }
 
 Widget _closeNoticeBar(BuildContext context) {
   return const MyNoticeBar(
     content: 'This is a regular notification message',
-    prefixIcon: Icons.cancel_rounded,
+    prefixIcon: Icons.info_rounded,
     suffixIcon: Icons.close,
   );
 }
@@ -113,13 +109,12 @@ Widget _closeNoticeBar(BuildContext context) {
 Widget _entranceNoticeBar1(BuildContext context) {
   return const MyNoticeBar(
     content: 'This is a regular notification message',
-    prefixIcon: Icons.cancel_rounded,
+    prefixIcon: Icons.info_rounded,
     right: MyButton(
       text: 'Text Button',
-      type: MyButtonType.text,
-
-      size: MyButtonSize.extraSmall,
       height: 22,
+      type: MyButtonType.text,
+      size: MyButtonSize.extraSmall,
       padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
     ),
   );
@@ -130,8 +125,8 @@ Widget _entranceNoticeBar2(BuildContext context) {
     padding: EdgeInsets.only(top: 16),
     child: MyNoticeBar(
       content: 'This is a regular notification message',
-      prefixIcon: Icons.cancel_rounded,
-      suffixIcon: Icons.chevron_right,
+      prefixIcon: Icons.info_rounded,
+      suffixIcon: LucideIcons.chevronRight,
     ),
   );
 }
@@ -140,15 +135,18 @@ Widget _customNoticeBar(BuildContext context) {
   return MyNoticeBar(
     content: 'This is a regular notification message',
     prefixIcon: LucideIcons.bell,
-    suffixIcon: Icons.chevron_right,
-    style: MyNoticeBarStyle(backgroundColor: ThemeColors.neutral.shade200),
+    suffixIcon: LucideIcons.chevronRight,
+    style: MyNoticeBarStyle(
+      context: context,
+      backgroundColor: context.colorScheme.secondary,
+    ),
   );
 }
 
 Widget _normalNoticeBar(BuildContext context) {
   return const MyNoticeBar(
     content: 'This is a regular notification message',
-    prefixIcon: Icons.cancel_rounded,
+    prefixIcon: Icons.info_rounded,
     theme: MyNoticeBarTheme.info,
   );
 }
@@ -156,7 +154,7 @@ Widget _normalNoticeBar(BuildContext context) {
 Widget _successNoticeBar(BuildContext context) {
   return const MyNoticeBar(
     content: 'This is a regular notification message',
-    prefixIcon: Icons.cancel_rounded,
+    prefixIcon: Icons.info_rounded,
     theme: MyNoticeBarTheme.success,
   );
 }
@@ -164,7 +162,7 @@ Widget _successNoticeBar(BuildContext context) {
 Widget _warningNoticeBar(BuildContext context) {
   return const MyNoticeBar(
     content: 'This is a regular notification message',
-    prefixIcon: Icons.cancel_rounded,
+    prefixIcon: Icons.info_rounded,
     theme: MyNoticeBarTheme.warning,
   );
 }
@@ -172,7 +170,7 @@ Widget _warningNoticeBar(BuildContext context) {
 Widget _errorNoticeBar(BuildContext context) {
   return const MyNoticeBar(
     content: 'This is a regular notification message',
-    prefixIcon: Icons.cancel_rounded,
+    prefixIcon: Icons.info_rounded,
     theme: MyNoticeBarTheme.error,
   );
 }
@@ -182,48 +180,27 @@ Widget _cardNoticeBar(BuildContext context) {
   return Container(
     margin: const EdgeInsets.symmetric(horizontal: 16),
     decoration: BoxDecoration(
-      color: MyNoticeBarStyle.generateTheme().backgroundColor,
-      borderRadius: const BorderRadius.all(Radius.circular(9)),
-      boxShadow: const [
-        BoxShadow(
-          color: Color(0x0d000000),
-          blurRadius: 8,
-          spreadRadius: 2,
-          offset: Offset(0, 2),
-        ),
-        BoxShadow(
-          color: Color(0x0f000000),
-          blurRadius: 10,
-          spreadRadius: 1,
-          offset: Offset(0, 8),
-        ),
-        BoxShadow(
-          color: Color(0x1a000000),
-          blurRadius: 5,
-          spreadRadius: -3,
-          offset: Offset(0, 5),
-        ),
-      ],
+      color: MyNoticeBarStyle.generateTheme(context: context).backgroundColor,
+      borderRadius: MyBorderRadius.extraLarge,
+      boxShadow: MyBoxShadows.all,
     ),
     child: Column(
       children: [
         Container(
           width: size.width - 32,
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(12)),
-          ),
-          clipBehavior: Clip.hardEdge,
+          decoration: const BoxDecoration(borderRadius: MyBorderRadius.large),
+          clipBehavior: Clip.antiAliasWithSaveLayer,
           child: const MyNoticeBar(
             content: 'This is a regular notification message',
-            prefixIcon: Icons.cancel_rounded,
-            suffixIcon: Icons.chevron_right,
+            prefixIcon: Icons.info_rounded,
+            suffixIcon: LucideIcons.chevronRight,
           ),
         ),
         Container(
           height: 150,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(12)),
+          decoration: BoxDecoration(
+            color: context.colorScheme.secondary,
+            borderRadius: MyBorderRadius.large,
           ),
         ),
       ],
@@ -234,26 +211,11 @@ Widget _cardNoticeBar(BuildContext context) {
 Widget _tapNoticeBar(BuildContext context) {
   return MyNoticeBar(
     content: 'This is a regular notification message',
-    prefixIcon: Icons.cancel_rounded,
-    suffixIcon: Icons.chevron_right,
+    prefixIcon: Icons.info_rounded,
+    suffixIcon: LucideIcons.chevronRight,
     onTap: () {
-      // TDToast.showText('tap:trigger', context: context);
+      MyToast.info(context: context, title: 'tap:trigger');
     },
-  );
-}
-
-Widget _leftNoticeBar(BuildContext context) {
-  return const MyNoticeBar(
-    content: 'This is a regular notification message',
-    suffixIcon: Icons.chevron_right,
-    left: MyButton(
-      text: 'Text',
-      type: MyButtonType.text,
-
-      size: MyButtonSize.extraSmall,
-      height: 22,
-      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-    ),
   );
 }
 
@@ -265,7 +227,7 @@ Widget _stepNoticeBar(BuildContext context) {
       'Have you not seen',
     ],
     direction: Axis.vertical,
-    prefixIcon: Icons.speaker_rounded,
+    prefixIcon: LucideIcons.volume2,
     marquee: true,
   );
 }

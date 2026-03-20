@@ -6,7 +6,7 @@ enum MyNoticeBarTheme { info, success, warning, error }
 
 class MyNoticeBarStyle {
   MyNoticeBarStyle({
-    this.context,
+    required this.context,
     this.backgroundColor,
     this.textStyle,
     this.leftIconColor,
@@ -15,28 +15,49 @@ class MyNoticeBarStyle {
   });
 
   MyNoticeBarStyle.generateTheme({
+    required this.context,
     MyNoticeBarTheme? theme = MyNoticeBarTheme.info,
   }) {
-    rightIconColor = ThemeColors.neutral.shade600;
+    rightIconColor = context.colorScheme.secondaryForeground;
 
     switch (theme) {
       case MyNoticeBarTheme.warning:
-        leftIconColor = MyColors.warning.shade400;
-        backgroundColor = MyColors.warning.shade50;
+        if (context.colorScheme.brightness == Brightness.dark) {
+          leftIconColor = MyColors.warning.shade50;
+          backgroundColor = MyColors.warning.shade900;
+        } else {
+          leftIconColor = MyColors.warning;
+          backgroundColor = MyColors.warning.shade50;
+        }
       case MyNoticeBarTheme.error:
-        leftIconColor = ThemeColors.error.shade500;
-        backgroundColor = ThemeColors.error.shade50;
+        if (context.colorScheme.brightness == Brightness.dark) {
+          leftIconColor = MyColors.error.shade50;
+          backgroundColor = MyColors.error.shade700;
+        } else {
+          leftIconColor = MyColors.error.shade500;
+          backgroundColor = MyColors.error.shade50;
+        }
       case MyNoticeBarTheme.success:
-        leftIconColor = ThemeColors.success.shade400;
-        backgroundColor = ThemeColors.success.shade50;
+        if (context.colorScheme.brightness == Brightness.dark) {
+          leftIconColor = MyColors.green.shade50;
+          backgroundColor = MyColors.green.shade900;
+        } else {
+          leftIconColor = MyColors.green.shade600;
+          backgroundColor = MyColors.green.shade50;
+        }
       case MyNoticeBarTheme.info:
       case null:
-        leftIconColor = ThemeColors.blue.shade600;
-        backgroundColor = ThemeColors.blue.shade50;
+        if (context.colorScheme.brightness == Brightness.dark) {
+          leftIconColor = MyColors.blue.shade50;
+          backgroundColor = MyColors.blue.shade900;
+        } else {
+          leftIconColor = MyColors.blue;
+          backgroundColor = MyColors.blue.shade50;
+        }
     }
   }
 
-  BuildContext? context;
+  BuildContext context;
   Color? backgroundColor;
   Color? leftIconColor;
   Color? rightIconColor;
@@ -49,11 +70,5 @@ class MyNoticeBarStyle {
 
   TextStyle get getTextStyle =>
       textStyle ??
-      TextStyle(
-        color: ThemeColors.neutral.shade900,
-        fontSize: 14,
-        height: 1,
-        fontWeight: FontWeight.normal,
-        fontStyle: FontStyle.normal,
-      );
+      context.bodyMedium.copyWith(color: context.colorScheme.foreground);
 }
