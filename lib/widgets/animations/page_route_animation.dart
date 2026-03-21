@@ -54,8 +54,8 @@ class PageRoute<T> {
           transitionsBuilder: (c, anim, a2, child) {
             return SlideTransition(
               position: Tween(
-                begin: Offset(1.0, 0.0),
-                end: Offset(0.0, 0.0),
+                begin: Offset(1, 0),
+                end: Offset(0, 0),
               ).animate(anim),
               child: child,
             );
@@ -69,8 +69,8 @@ class PageRoute<T> {
           transitionsBuilder: (c, anim, a2, child) {
             return SlideTransition(
               position: Tween(
-                begin: Offset(0.0, 1.0),
-                end: Offset(0.0, 0.0),
+                begin: Offset(0, 1),
+                end: Offset(0, 0),
               ).animate(anim),
               child: child,
             );

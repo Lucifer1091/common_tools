@@ -179,7 +179,7 @@ class _ColorItemState extends State<_ColorItem> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final colors = context.colorScheme;
 
-    return OnTapScaler(
+    return AnimatedOnTap(
       onTap: widget.onTap,
       child: CustomPaint(
         foregroundPainter: _BorderPainter(
@@ -302,7 +302,7 @@ class _CloseButton extends StatelessWidget {
     final colors = context.colorScheme;
 
     return ClipOval(
-      child: OnTapScaler(
+      child: AnimatedOnTap(
         onTap: onTap,
         child: SizedBox.square(
           dimension: 32,

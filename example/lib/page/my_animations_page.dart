@@ -15,10 +15,8 @@ class MyAnimationsPage extends StatefulWidget {
 class _MyAnimationsPageState extends State<MyAnimationsPage> {
   int _bounceSeed = 0;
   int _metricIndex = 1;
-  int _profileIndex = 0;
   int _storyIndex = 0;
   int _tapCount = 14;
-  int _reactCount = 3;
   bool _isShaking = true;
 
   static const List<_MockInsightCard> _insightCards = [
@@ -52,27 +50,6 @@ class _MyAnimationsPageState extends State<MyAnimationsPage> {
     _MockMetric(label: 'Low', value: 28, color: Color(0xFF8ECAE6)),
     _MockMetric(label: 'Medium', value: 64, color: Color(0xFF219EBC)),
     _MockMetric(label: 'High', value: 92, color: Color(0xFF023047)),
-  ];
-
-  static const List<_MockProfile> _profiles = [
-    _MockProfile(
-      name: 'Nora S.',
-      role: 'Design systems lead',
-      summary: 'Prefers quiet transitions that still read as intentional.',
-      color: Color(0xFFD7E3FC),
-    ),
-    _MockProfile(
-      name: 'Miles T.',
-      role: 'Growth engineer',
-      summary: 'Uses motion to spotlight changes in live dashboards.',
-      color: Color(0xFFFFE0B2),
-    ),
-    _MockProfile(
-      name: 'Ava K.',
-      role: 'Product designer',
-      summary: 'Pairs typography and movement to guide scan order.',
-      color: Color(0xFFC8E6C9),
-    ),
   ];
 
   static const List<_MockStory> _stories = [
@@ -154,6 +131,7 @@ class _MyAnimationsPageState extends State<MyAnimationsPage> {
         ExampleModule(
           title: 'Entry & Reveal',
           children: [
+            ExampleItem(desc: 'Animated Blur', builder: _buildAnimatedBlur),
             ExampleItem(
               desc: 'Animated Fade Scale Transition',
               builder: _buildFadeScaleDemo,
@@ -169,16 +147,13 @@ class _MyAnimationsPageState extends State<MyAnimationsPage> {
               builder: _buildAnimatedValueDemo,
             ),
             ExampleItem(
+              desc:
+                  'AnimatedValueBuilder.raw exposes the starting value, target value, and eased progress.',
+              builder: _buildAnimatedValueRawDemo,
+            ),
+            ExampleItem(
               desc: 'Repeated Animation Builder',
               builder: _buildRepeatedAnimationDemo,
-            ),
-            ExampleItem(
-              desc: 'AnimationBuilder with IntervalDuration stages a pulse.',
-              builder: _buildAnimationBuilderDemo,
-            ),
-            ExampleItem(
-              desc: 'CrossFadedTransition swaps between mocked team profiles.',
-              builder: _buildCrossFadeDemo,
             ),
             ExampleItem(
               desc:
@@ -188,6 +163,12 @@ class _MyAnimationsPageState extends State<MyAnimationsPage> {
             ExampleItem(
               desc: 'AnimatedTextKit renders TypewriterAnimatedText messages.',
               builder: _buildAnimatedTextDemo,
+              center: false,
+            ),
+            ExampleItem(
+              desc:
+                  'AnimatedTextReveal scrambles unrevealed characters before settling on the final message.',
+              builder: _buildAnimatedTextRevealDemo,
               center: false,
             ),
           ],
@@ -207,17 +188,6 @@ class _MyAnimationsPageState extends State<MyAnimationsPage> {
             ),
             ExampleItem(
               desc:
-                  'ReactOnTap shows combined, scale-only, and opacity-only feedback.',
-              builder: _buildReactOnTapDemo,
-              center: false,
-            ),
-            ExampleItem(
-              desc: 'TranslateOnClick adds a press lift to a mocked CTA.',
-              builder: _buildTranslateOnClickDemo,
-              center: false,
-            ),
-            ExampleItem(
-              desc:
                   'PageRoute.build previews every PageRouteAnimation variant.',
               builder: _buildRouteAnimationDemo,
               center: false,
@@ -225,6 +195,36 @@ class _MyAnimationsPageState extends State<MyAnimationsPage> {
           ],
         ),
       ],
+    );
+  }
+
+  Widget _buildAnimatedBlur(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          MyImage(
+            height: 500,
+            width: double.maxFinite,
+            source: 'https://i.ibb.co/T1Fz7gL/big-cat.jpg',
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: SizedBox(
+              width: 400,
+              height: 400,
+              child: Column(
+                children: [
+                  Expanded(child: _BlurredCard(blurAmount: 8)),
+                  SizedBox(height: 20),
+                  Expanded(child: _BlurredCard(blurAmount: 40)),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -410,50 +410,10 @@ class _MyAnimationsPageState extends State<MyAnimationsPage> {
     );
   }
 
-  Widget _buildAnimationBuilderDemo(BuildContext context) {
+  Widget _buildAnimatedValueRawDemo(BuildContext context) {
     return const Padding(
       padding: EdgeInsets.symmetric(horizontal: 16),
-      child: _AnimationBuilderPulseDemo(),
-    );
-  }
-
-  Widget _buildCrossFadeDemo(BuildContext context) {
-    final profile = _profiles[_profileIndex];
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 360,
-            child: CrossFadedTransition(
-              duration: const Duration(milliseconds: 350),
-              child: _ProfileCard(
-                key: ValueKey(profile.name),
-                profile: profile,
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              for (var index = 0; index < _profiles.length; index++)
-                ChoiceChip(
-                  label: Text(_profiles[index].name),
-                  selected: index == _profileIndex,
-                  onSelected: (_) {
-                    setState(() {
-                      _profileIndex = index;
-                    });
-                  },
-                ),
-            ],
-          ),
-        ],
-      ),
+      child: _AnimatedValueRawDemo(),
     );
   }
 
@@ -465,7 +425,7 @@ class _MyAnimationsPageState extends State<MyAnimationsPage> {
         children: [
           SizedBox(
             width: 360,
-            child: FadeSlideTransition(
+            child: AnimatedFadeSlide(
               transitionKey: ValueKey(_storyIndex),
               child: _StoryCard(story: _stories[_storyIndex]),
             ),
@@ -508,9 +468,47 @@ class _MyAnimationsPageState extends State<MyAnimationsPage> {
             displayFullTextOnTap: true,
             stopPauseOnTap: true,
             texts: [
-              TypewriterAnimatedText('Syncing animation tokens...'),
-              TypewriterAnimatedText('Preparing mock route previews...'),
-              TypewriterAnimatedText('Animations now live in Base section.'),
+              AnimatedTypewriter('Syncing animation tokens...'),
+              AnimatedTypewriter('Preparing mock route previews...'),
+              AnimatedTypewriter('Animations now live in Base section.'),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAnimatedTextRevealDemo(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: _SurfaceCard(
+        color: const Color(0xFF111827),
+        child: DefaultTextStyle(
+          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+            color: const Color(0xFFF9FAFB),
+            fontWeight: FontWeight.w700,
+            fontFamily: 'GeistMono',
+            letterSpacing: 0.5,
+          ),
+          child: AnimatedTextKit(
+            repeatForever: true,
+            pause: const Duration(milliseconds: 800),
+            texts: [
+              AnimatedTextReveal(
+                'SECURING CONNECTION',
+                duration: const Duration(milliseconds: 1400),
+                characters: '01',
+              ),
+              AnimatedTextReveal(
+                'DEPLOYMENT READY',
+                duration: const Duration(milliseconds: 1200),
+                characters: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
+              ),
+              AnimatedTextReveal(
+                'COMMON TOOLS ONLINE',
+                duration: const Duration(milliseconds: 1300),
+                characters: '#%&@!?ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+              ),
             ],
           ),
         ),
@@ -557,7 +555,7 @@ class _MyAnimationsPageState extends State<MyAnimationsPage> {
   Widget _buildOnTapScalerDemo(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: OnTapScaler(
+      child: AnimatedOnTap(
         onTap: () {
           setState(() {
             _tapCount++;
@@ -598,76 +596,6 @@ class _MyAnimationsPageState extends State<MyAnimationsPage> {
     );
   }
 
-  Widget _buildReactOnTapDemo(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Wrap(
-        spacing: 12,
-        runSpacing: 12,
-        children: [
-          ReactOnTap(
-            onTap: () {
-              setState(() {
-                _reactCount++;
-              });
-            },
-            child: _ReactionChip(
-              label: 'Default reaction',
-              count: _reactCount,
-              color: const Color(0xFFE3F2FD),
-            ),
-          ),
-          ReactOnTap.scale(
-            onTap: () {
-              setState(() {
-                _reactCount++;
-              });
-            },
-            child: _ReactionChip(
-              label: 'Scale only',
-              count: _reactCount + 4,
-              color: const Color(0xFFFFF3E0),
-            ),
-          ),
-          ReactOnTap.opacity(
-            onTap: () {
-              setState(() {
-                _reactCount++;
-              });
-            },
-            child: _ReactionChip(
-              label: 'Opacity only',
-              count: _reactCount + 9,
-              color: const Color(0xFFF3E5F5),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTranslateOnClickDemo(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: TranslateOnClick(
-        child: _SurfaceCard(
-          color: const Color(0xFFFFF8E1),
-          child: const Row(
-            children: [
-              Icon(Icons.rocket_launch_rounded),
-              SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  'Press and hold this CTA card to preview the translate effect.',
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildRouteAnimationDemo(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -696,95 +624,86 @@ class _MyAnimationsPageState extends State<MyAnimationsPage> {
   }
 }
 
-class _AnimationBuilderPulseDemo extends StatefulWidget {
-  const _AnimationBuilderPulseDemo();
+class _AnimatedValueRawDemo extends StatefulWidget {
+  const _AnimatedValueRawDemo();
 
   @override
-  State<_AnimationBuilderPulseDemo> createState() =>
-      _AnimationBuilderPulseDemoState();
+  State<_AnimatedValueRawDemo> createState() => _AnimatedValueRawDemoState();
 }
 
-class _AnimationBuilderPulseDemoState
-    extends State<_AnimationBuilderPulseDemo> {
-  bool _started = false;
+class _AnimatedValueRawDemoState extends State<_AnimatedValueRawDemo> {
+  static const _targets = <double>[18, 54, 91];
+
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    return _SurfaceCard(
-      child: SizedBox(
-        height: 132,
-        child: AnimationBuilder(
-          duration: const Duration(milliseconds: 1800),
-          builder: (context, controller) {
-            if (!_started) {
-              _started = true;
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                if (mounted && !controller.isAnimating) {
-                  controller.repeat(reverse: true);
-                }
-              });
-            }
+    final target = _targets[_selectedIndex];
 
-            final progress = IntervalDuration(
-              duration: const Duration(milliseconds: 1800),
-              start: const Duration(milliseconds: 250),
-              end: const Duration(milliseconds: 1500),
-              curve: Curves.easeInOut,
-            ).transform(controller.value);
-
-            return Stack(
-              alignment: Alignment.centerLeft,
-              children: [
-                Positioned.fill(
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(24),
-                      color: const Color(0xFFF8FAFC),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _SurfaceCard(
+          child: AnimatedValueBuilder<double>.raw(
+            initialValue: _targets.first,
+            value: target,
+            duration: const Duration(milliseconds: 650),
+            curve: Curves.easeOutCubic,
+            builder: (context, oldValue, newValue, t, child) {
+              final currentValue = oldValue + ((newValue - oldValue) * t);
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Raw animation telemetry',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
-                ),
-                Positioned(
-                  left: 12 + (progress * 180),
-                  child: Container(
-                    width: 54 + (progress * 18),
-                    height: 54 + (progress * 18),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: const Color(
-                        0xFF4F46E5,
-                      ).withValues(alpha: 0.20 + (progress * 0.25)),
+                  const SizedBox(height: 8),
+                  Text('from ${oldValue.toStringAsFixed(0)}'),
+                  Text('to ${newValue.toStringAsFixed(0)}'),
+                  Text('t ${t.toStringAsFixed(2)}'),
+                  const SizedBox(height: 12),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(999),
+                    child: LinearProgressIndicator(
+                      value: currentValue / 100,
+                      minHeight: 12,
+                      color: const Color(0xFF2563EB),
+                      backgroundColor: const Color(
+                        0xFF2563EB,
+                      ).withValues(alpha: 0.12),
                     ),
                   ),
-                ),
-                Positioned(
-                  left: 24,
-                  right: 24,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Staged pulse',
-                        style: TextStyle(fontWeight: FontWeight.w700),
-                      ),
-                      const SizedBox(height: 8),
-                      LinearProgressIndicator(
-                        value: progress,
-                        minHeight: 10,
-                        borderRadius: BorderRadius.circular(999),
-                        color: const Color(0xFF4F46E5),
-                        backgroundColor: const Color(
-                          0xFF4F46E5,
-                        ).withValues(alpha: 0.12),
-                      ),
-                    ],
+                  const SizedBox(height: 12),
+                  Text(
+                    'current ${currentValue.toStringAsFixed(0)}%',
+                    style: Theme.of(context).textTheme.headlineSmall,
                   ),
-                ),
-              ],
-            );
-          },
+                ],
+              );
+            },
+          ),
         ),
-      ),
+        const SizedBox(height: 16),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            for (var index = 0; index < _targets.length; index++)
+              ChoiceChip(
+                label: Text('${_targets[index].toStringAsFixed(0)}%'),
+                selected: index == _selectedIndex,
+                onSelected: (_) {
+                  setState(() {
+                    _selectedIndex = index;
+                  });
+                },
+              ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -855,48 +774,6 @@ class _FeatureCard extends StatelessWidget {
   }
 }
 
-class _ProfileCard extends StatelessWidget {
-  const _ProfileCard({super.key, required this.profile});
-
-  final _MockProfile profile;
-
-  @override
-  Widget build(BuildContext context) {
-    return _SurfaceCard(
-      color: profile.color,
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 28,
-            backgroundColor: Colors.white.withValues(alpha: 0.85),
-            child: Text(
-              profile.name.characters.first,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  profile.name,
-                  style: const TextStyle(fontWeight: FontWeight.w700),
-                ),
-                const SizedBox(height: 4),
-                Text(profile.role),
-                const SizedBox(height: 8),
-                Text(profile.summary),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _StoryCard extends StatelessWidget {
   const _StoryCard({required this.story});
 
@@ -938,30 +815,6 @@ class _StoryCard extends StatelessWidget {
           Text(story.body),
         ],
       ),
-    );
-  }
-}
-
-class _ReactionChip extends StatelessWidget {
-  const _ReactionChip({
-    required this.label,
-    required this.count,
-    required this.color,
-  });
-
-  final String label;
-  final int count;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Text('$label  $count'),
     );
   }
 }
@@ -1110,20 +963,6 @@ class _MockMetric {
   final Color color;
 }
 
-class _MockProfile {
-  const _MockProfile({
-    required this.name,
-    required this.role,
-    required this.summary,
-    required this.color,
-  });
-
-  final String name;
-  final String role;
-  final String summary;
-  final Color color;
-}
-
 class _MockStory {
   const _MockStory({
     required this.title,
@@ -1158,4 +997,66 @@ class _MockAppIcon {
   final String title;
   final IconData icon;
   final Color color;
+}
+
+class _BlurredCard extends StatefulWidget {
+  final double? blurAmount;
+
+  const _BlurredCard({this.blurAmount});
+
+  @override
+  State<_BlurredCard> createState() => _BlurredCardState();
+}
+
+class _BlurredCardState extends State<_BlurredCard> {
+  bool _isBlurred = false;
+
+  void toggleBlur() {
+    _isBlurred = !_isBlurred;
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    double maxBlurAmount = widget.blurAmount ?? 8;
+    double minBlurAmount = 0;
+
+    return Container(
+      // Make sure to use a Clip setting other than none. Otherwise, the blurring will be applied to whole background.
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        color: Color(0x1FFFFFFF),
+        borderRadius: MyBorderRadius.large,
+      ),
+      child: AnimatedBlur(
+        blur: _isBlurred ? maxBlurAmount : minBlurAmount,
+        duration: Duration(milliseconds: 200),
+        curve: Curves.linear,
+        child: MyGestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: toggleBlur,
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              width: double.maxFinite,
+              constraints: BoxConstraints(maxHeight: 40),
+              decoration: BoxDecoration(color: Color(0xC2000000)),
+              padding: EdgeInsets.all(8),
+              child: Align(
+                alignment: Alignment.center,
+                child: Text(
+                  'Tap to Toggle Blur',
+                  style: TextStyle(
+                    fontSize: 16,
+                    letterSpacing: -0.5,
+                    color: Color(0xFFFFFFFF),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
