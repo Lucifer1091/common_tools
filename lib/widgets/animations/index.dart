@@ -3,6 +3,7 @@ export 'animated_bounce.dart';
 export 'animated_fade_scale.dart';
 export 'animated_fade_slide.dart';
 export 'animated_on_tap.dart';
+export 'animated_ripple.dart';
 export 'animated_shake.dart';
 export 'animated_text.dart';
 export 'animated_value_builder.dart';

@@ -137,6 +137,7 @@ class _MyAnimationsPageState extends State<MyAnimationsPage> {
               builder: _buildFadeScaleDemo,
             ),
             ExampleItem(desc: 'Animated Bounce', builder: _buildBounceDemo),
+            ExampleItem(desc: 'Animated Ripple', builder: _buildRippleDemo),
           ],
         ),
         ExampleModule(
@@ -279,6 +280,16 @@ class _MyAnimationsPageState extends State<MyAnimationsPage> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildRippleDemo(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: RippleWave(
+        color: context.colorScheme.primary,
+        child: MyAvatar(type: MyAvatarType.initials, initials: 'AA'),
+      ).sizedBox(height: 200, width: 200),
     );
   }
 
