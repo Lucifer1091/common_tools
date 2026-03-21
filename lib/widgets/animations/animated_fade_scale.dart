@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
-/// A widget that applies a fade and scale animation to its child.
+/// A convenience wrapper around Flutter's built-in [FadeTransition] and
+/// [ScaleTransition].
 ///
 /// The animation starts with the child being invisible and scaled down,
 /// and then fades in and scales up to its normal size.
@@ -13,6 +16,10 @@ class AnimatedFadeScale extends StatefulWidget {
     this.curve = Curves.easeInOut,
     this.beginScale = 0.92,
     this.endScale = 1.0,
+    this.beginOpacity = 0.0,
+    this.endOpacity = 1.0,
+    this.alignment = Alignment.center,
+    this.reverseCurve,
     this.value,
   });
 
@@ -28,11 +35,23 @@ class AnimatedFadeScale extends StatefulWidget {
   /// The curve of the animation.
   final Curve curve;
 
+  /// The curve to use when running the animation in reverse.
+  final Curve? reverseCurve;
+
   /// The starting scale of the child widget.
   final double beginScale;
 
   /// The ending scale of the child widget.
   final double endScale;
+
+  /// The starting opacity of the child widget.
+  final double beginOpacity;
+
+  /// The ending opacity of the child widget.
+  final double endOpacity;
+
+  /// The alignment used for the scale transition.
+  final Alignment alignment;
 
   /// An optional value that controls the animation progress directly.
   ///
@@ -49,8 +68,10 @@ class AnimatedFadeScale extends StatefulWidget {
 class _AnimatedFadeScaleState extends State<AnimatedFadeScale>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+  late CurvedAnimation _curvedAnimation;
   late Animation<double> _opacityAnimation;
   late Animation<double> _scaleAnimation;
+  Timer? _delayTimer;
 
   @override
   void initState() {
@@ -62,63 +83,107 @@ class _AnimatedFadeScaleState extends State<AnimatedFadeScale>
       debugLabel: 'AnimatedFadeScale',
     );
 
-    _opacityAnimation = Tween<double>(
-      begin: 0,
-      end: 1,
-    ).animate(CurvedAnimation(parent: _controller, curve: widget.curve));
-
-    _scaleAnimation = Tween<double>(
-      begin: widget.beginScale,
-      end: widget.endScale,
-    ).animate(CurvedAnimation(parent: _controller, curve: widget.curve));
-
-    if (widget.value != null) {
-      _controller.value = widget.value!;
-    } else {
-      void startAnimation() {
-        if (mounted) _controller.forward(from: 0);
-      }
-
-      if (widget.delay != Duration.zero) {
-        Future.delayed(widget.delay, startAnimation);
-      } else {
-        WidgetsBinding.instance.addPostFrameCallback((_) => startAnimation());
-      }
-    }
+    _createAnimations();
+    _syncAnimation(restartFromBeginning: true);
   }
 
   @override
   void didUpdateWidget(AnimatedFadeScale oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (oldWidget.child != widget.child || oldWidget.value != widget.value) {
-      if (widget.value != null) {
-        _controller.value = widget.value!;
-      } else {
-        _controller
-          ..reset()
-          ..forward();
-      }
+    if (oldWidget.duration != widget.duration) {
+      _controller.duration = widget.duration;
+    }
+
+    final transitionConfigChanged =
+        oldWidget.curve != widget.curve ||
+        oldWidget.reverseCurve != widget.reverseCurve ||
+        oldWidget.beginScale != widget.beginScale ||
+        oldWidget.endScale != widget.endScale ||
+        oldWidget.beginOpacity != widget.beginOpacity ||
+        oldWidget.endOpacity != widget.endOpacity;
+
+    if (transitionConfigChanged) {
+      _curvedAnimation.dispose();
+      _createAnimations();
+    }
+
+    final shouldRestartAutoAnimation =
+        widget.value == null &&
+        (oldWidget.value != widget.value ||
+            oldWidget.child != widget.child ||
+            oldWidget.delay != widget.delay);
+
+    final shouldSyncValue =
+        widget.value != null &&
+        (oldWidget.value != widget.value || transitionConfigChanged);
+
+    if (shouldRestartAutoAnimation || shouldSyncValue) {
+      _syncAnimation(restartFromBeginning: shouldRestartAutoAnimation);
     }
   }
 
   @override
   void dispose() {
+    _delayTimer?.cancel();
+    _curvedAnimation.dispose();
     _controller.dispose();
     super.dispose();
   }
 
+  void _createAnimations() {
+    _curvedAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: widget.curve,
+      reverseCurve: widget.reverseCurve,
+    );
+
+    _opacityAnimation = Tween<double>(
+      begin: widget.beginOpacity,
+      end: widget.endOpacity,
+    ).animate(_curvedAnimation);
+
+    _scaleAnimation = Tween<double>(
+      begin: widget.beginScale,
+      end: widget.endScale,
+    ).animate(_curvedAnimation);
+  }
+
+  void _syncAnimation({required bool restartFromBeginning}) {
+    _delayTimer?.cancel();
+
+    if (widget.value != null) {
+      _controller.value = _normalizedValue(widget.value!);
+      return;
+    }
+
+    void startAnimation() {
+      if (!mounted || widget.value != null) return;
+      unawaited(
+        _controller.forward(from: restartFromBeginning ? 0 : _controller.value),
+      );
+    }
+
+    if (widget.delay > Duration.zero) {
+      _delayTimer = Timer(widget.delay, startAnimation);
+    } else {
+      startAnimation();
+    }
+  }
+
+  double _normalizedValue(double value) {
+    return value.clamp(0.0, 1.0);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) {
-        return Opacity(
-          opacity: _opacityAnimation.value,
-          child: Transform.scale(scale: _scaleAnimation.value, child: child),
-        );
-      },
-      child: Material(type: MaterialType.transparency, child: widget.child),
+    return FadeTransition(
+      opacity: _opacityAnimation,
+      child: ScaleTransition(
+        scale: _scaleAnimation,
+        alignment: widget.alignment,
+        child: widget.child,
+      ),
     );
   }
 }

@@ -1,11 +1,10 @@
-export 'anim_search_bar.dart';
 export 'animated_fade_scale.dart';
+export 'animated_shake.dart';
 export 'animated_text.dart';
-export 'animated_visibility.dart';
 export 'animation.dart';
 export 'animation_builder.dart';
 export 'api_animator.dart';
-export 'bounce_animation.dart';
+export 'animated_bounce.dart';
 export 'click_translate.dart';
 export 'fade_slide_transition.dart';
 export 'on_tap_scaler.dart';

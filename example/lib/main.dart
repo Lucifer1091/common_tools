@@ -39,7 +39,7 @@ class MyApp extends ConsumerWidget {
           child: child,
         );
       },
-      home: MyHomePage(title: 'My Flutter Example'),
+      home: MyHomePage(title: 'My Components'),
       onGenerateRoute: MyRoute.onGenerateRoute,
     );
   }

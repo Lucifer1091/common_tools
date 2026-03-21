@@ -13,6 +13,7 @@ import 'page/sidebar/my_sidebar_page_loading.dart';
 import 'page/sidebar/my_sidebar_page_outline.dart';
 import 'page/sidebar/my_sidebar_page_pagination.dart';
 import 'page/my_action_sheet_page.dart';
+import 'page/my_animations_page.dart';
 import 'page/my_avatar_page.dart';
 import 'page/my_badge_page.dart';
 import 'page/my_cell_page.dart';
@@ -105,6 +106,11 @@ Map<String, List<ExamplePageModel>> exampleMap = {
       text: 'Text',
       name: 'text',
       pageBuilder: _wrapInheritedTheme((context) => const MyTextPage()),
+    ),
+    ExamplePageModel(
+      text: 'Animations',
+      name: 'animations',
+      pageBuilder: _wrapInheritedTheme((context) => const MyAnimationsPage()),
     ),
   ],
   'Navigation': [
