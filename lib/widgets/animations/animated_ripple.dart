@@ -3,12 +3,14 @@ import 'dart:math' as math show max, min, pi, sin;
 
 import 'package:flutter/material.dart';
 
+import '../../index.dart';
+
 /// Paints expanding ripple waves behind a centered child widget.
 class RippleWave extends StatefulWidget {
   const RippleWave({
     required this.child,
     super.key,
-    this.color = Colors.teal,
+    this.color,
     this.duration = const Duration(milliseconds: 1500),
     this.repeat = true,
     this.childTween,
@@ -18,7 +20,7 @@ class RippleWave extends StatefulWidget {
        assert(duration > Duration.zero, 'duration must be greater than zero.');
 
   /// Color used for the ripple waves and the radial glow behind [child].
-  final Color color;
+  final Color? color;
 
   /// Widget displayed at the center of the ripple animation.
   final Widget child;
@@ -130,11 +132,12 @@ class RippleWaveState extends State<RippleWave>
 
   @override
   Widget build(BuildContext context) {
+    final color = widget.color ?? context.colorScheme.primary;
     return CustomPaint(
       painter: _RipplePainter(
         animation: _controller,
         waveCount: widget.waveCount,
-        color: widget.color,
+        color: color,
       ),
       child: Center(
         child: ClipRRect(
@@ -142,7 +145,7 @@ class RippleWaveState extends State<RippleWave>
           child: DecoratedBox(
             decoration: BoxDecoration(
               gradient: RadialGradient(
-                colors: <Color>[widget.color, Colors.transparent],
+                colors: <Color>[color, Colors.transparent],
               ),
             ),
             child: ScaleTransition(

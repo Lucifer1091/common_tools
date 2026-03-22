@@ -20,8 +20,8 @@ class AnimatedShake extends StatefulWidget {
     this.settleDuration = const Duration(milliseconds: 120),
     this.settleCurve = Curves.easeOut,
     this.rotationDegrees = 2,
-    this.horizontalOffset = 0,
-    this.verticalOffset = 0,
+    this.horizontalOffset = 0.4,
+    this.verticalOffset = 0.6,
     this.alignment = Alignment.center,
   });
 

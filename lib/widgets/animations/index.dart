@@ -2,6 +2,7 @@ export 'animated_blur.dart';
 export 'animated_bounce.dart';
 export 'animated_fade_scale.dart';
 export 'animated_fade_slide.dart';
+export 'animated_hover.dart';
 export 'animated_on_tap.dart';
 export 'animated_ripple.dart';
 export 'animated_shake.dart';

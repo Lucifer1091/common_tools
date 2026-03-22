@@ -117,6 +117,7 @@ class MyRadioGroup extends MyCheckboxGroup {
     bool?
     passThrough, // Non-throughout radio selection style. For use with child or direction == Axis.vertical
     bool cardMode = false,
+    EdgeInsets? margin,
     this.strictMode = false,
     this.radioCheckStyle,
     super.titleMaxLine, // Number of item lines
@@ -201,9 +202,10 @@ class MyRadioGroup extends MyCheckboxGroup {
                            return Container(
                              margin:
                                  cardMode
-                                     ? const EdgeInsets.symmetric(
-                                       horizontal: 16,
-                                     )
+                                     ? margin ??
+                                         const EdgeInsets.symmetric(
+                                           horizontal: 16,
+                                         )
                                      : null,
                              height: cardMode ? 82 : null,
                              child: directionalTdRadios[index],
@@ -220,7 +222,8 @@ class MyRadioGroup extends MyCheckboxGroup {
                        : Container(
                          margin:
                              cardMode
-                                 ? const EdgeInsets.symmetric(horizontal: 16)
+                                 ? margin ??
+                                     const EdgeInsets.symmetric(horizontal: 16)
                                  : null,
                          height:
                              cardMode

@@ -86,10 +86,10 @@ class CommonUtils {
   }
 
   /// returns random bool.
-  bool randomBool([int? seed]) => Random(seed).nextBool();
+  static bool randomBool([int? seed]) => Random(seed).nextBool();
 
   /// returns random int between [min] (inclusive, default 0) and [max] (exclusive, default 100).
-  int randomInt(int max, [int? min, int? seed]) {
+  static int randomInt(int max, [int? min, int? seed]) {
     if (min != null) {
       assert(max > min, 'max must be greater than min');
     }
@@ -98,7 +98,7 @@ class CommonUtils {
   }
 
   /// returns random double between [min] (inclusive, default 0) and [max] (exclusive, default 1).
-  double randomDouble([double? max, double? min, int? seed]) {
+  static double randomDouble([double? max, double? min, int? seed]) {
     if (min != null && max != null) {
       assert(max > min, 'max must be greater than min');
     }
@@ -107,7 +107,7 @@ class CommonUtils {
   }
 
   /// returns random string.
-  String randomString(int length, [int? seed]) {
+  static String randomString(int length, [int? seed]) {
     const characters =
         'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     return List.generate(

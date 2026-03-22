@@ -62,6 +62,7 @@ class _RepeatedAnimationBuilderState<T>
   late final AnimationController _controller;
   late CurvedAnimation _curvedAnimation;
   late Animation<T> _animation;
+  bool _isReversing = false;
 
   bool get _startsReversed =>
       widget.mode == RepeatMode.reverse ||
@@ -79,7 +80,7 @@ class _RepeatedAnimationBuilderState<T>
     _configureAnimation();
 
     if (widget.play) {
-      _restartPlayback();
+      _resumePlayback();
     }
   }
 
@@ -102,9 +103,9 @@ class _RepeatedAnimationBuilderState<T>
       _configureAnimation();
     }
 
-    if (animationConfigChanged || oldWidget.play != widget.play) {
+    if (oldWidget.play != widget.play) {
       if (widget.play) {
-        _restartPlayback();
+        _resumePlayback();
       } else {
         _controller.stop();
       }
@@ -148,21 +149,46 @@ class _RepeatedAnimationBuilderState<T>
     _curvedAnimation.dispose();
   }
 
-  void _restartPlayback() {
-    _controller.reset();
-    unawaited(_controller.forward());
+  void _resumePlayback() {
+    if (_isReversing) {
+      final resumeValue = _controller.value == 0 ? 1.0 : _controller.value;
+      unawaited(_controller.reverse(from: resumeValue));
+      return;
+    }
+
+    final resumeValue = _controller.value == 1 ? 0.0 : _controller.value;
+    unawaited(_controller.forward(from: resumeValue));
   }
 
   void _handleStatusChanged(AnimationStatus status) {
+    if (status == AnimationStatus.forward) {
+      _isReversing = false;
+      return;
+    }
+
+    if (status == AnimationStatus.reverse) {
+      _isReversing = true;
+      return;
+    }
+
     if (status == AnimationStatus.completed) {
       if (_pingPong) {
+        _isReversing = true;
         unawaited(_controller.reverse());
+      } else {
+        _isReversing = false;
+        _controller.reset();
+        unawaited(_controller.forward());
+      }
+    } else if (status == AnimationStatus.dismissed) {
+      _isReversing = false;
+
+      if (_pingPong) {
+        unawaited(_controller.forward());
       } else {
         _controller.reset();
         unawaited(_controller.forward());
       }
-    } else if (status == AnimationStatus.dismissed && _pingPong) {
-      unawaited(_controller.forward());
     }
   }
 
