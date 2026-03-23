@@ -1,6 +1,5 @@
 import 'package:common_tools/index.dart';
-import 'package:common_tools/widgets/animations/page_route_animation.dart'
-    as route_animation;
+import 'package:example/base/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
@@ -15,30 +14,16 @@ class MyAnimationsPage extends StatefulWidget {
 
 class _MyAnimationsPageState extends State<MyAnimationsPage> {
   static const List<_RouteAnimationOption> _routeOptions = [
-    _RouteAnimationOption(
-      label: 'Fade',
-      animation: route_animation.PageRouteAnimation.Fade,
-      color: Color(0xFFE3F2FD),
-    ),
-    _RouteAnimationOption(
-      label: 'Scale',
-      animation: route_animation.PageRouteAnimation.Scale,
-      color: Color(0xFFFFF3E0),
-    ),
+    _RouteAnimationOption(label: 'Fade', animation: PageRouteAnimation.Fade),
+    _RouteAnimationOption(label: 'Scale', animation: PageRouteAnimation.Scale),
     _RouteAnimationOption(
       label: 'Rotate',
-      animation: route_animation.PageRouteAnimation.Rotate,
-      color: Color(0xFFF3E5F5),
+      animation: PageRouteAnimation.Rotate,
     ),
-    _RouteAnimationOption(
-      label: 'Slide',
-      animation: route_animation.PageRouteAnimation.Slide,
-      color: Color(0xFFE8F5E9),
-    ),
+    _RouteAnimationOption(label: 'Slide', animation: PageRouteAnimation.Slide),
     _RouteAnimationOption(
       label: 'Bottom Top',
-      animation: route_animation.PageRouteAnimation.SlideBottomTop,
-      color: Color(0xFFFFEBEE),
+      animation: PageRouteAnimation.SlideBottomTop,
     ),
   ];
 
@@ -62,12 +47,15 @@ class _MyAnimationsPageState extends State<MyAnimationsPage> {
               builder: _buildBounceDemo,
               center: false,
             ),
-            ExampleItem(desc: 'Animated Ripple', builder: _buildRippleDemo),
-            ExampleItem(desc: 'Animated Blur', builder: _buildAnimatedBlur),
+            ExampleItem(
+              desc: 'Animated Fade Slide',
+              builder: _buildFadeSlideDemo,
+              center: false,
+            ),
           ],
         ),
         ExampleModule(
-          title: 'Builders & Transitions',
+          title: 'Builders & Utilities',
           children: [
             ExampleItem(
               desc: 'Animated Value Builder',
@@ -78,11 +66,11 @@ class _MyAnimationsPageState extends State<MyAnimationsPage> {
               desc: 'Repeated Animation Builder',
               builder: _buildRepeatedAnimationDemo,
             ),
-            ExampleItem(
-              desc: 'Animated Fade Slide',
-              builder: _buildFadeSlideDemo,
-              center: false,
-            ),
+          ],
+        ),
+        ExampleModule(
+          title: 'Text Animations',
+          children: [
             ExampleItem(
               desc: 'Animated Typewriter',
               builder: _buildAnimatedTextDemo,
@@ -96,14 +84,20 @@ class _MyAnimationsPageState extends State<MyAnimationsPage> {
           ],
         ),
         ExampleModule(
-          title: 'Touch & Routes',
+          title: 'Effects & Feedback',
           children: [
+            ExampleItem(desc: 'Animated Ripple', builder: _buildRippleDemo),
+            ExampleItem(desc: 'Animated Blur', builder: _buildAnimatedBlur),
             ExampleItem(desc: 'Animated Hover', builder: _buildHoverDemo),
             ExampleItem(desc: 'Animated Shake', builder: _buildShakeDemo),
             ExampleItem(desc: 'Animated OnTap', builder: _buildOnTapScalerDemo),
+          ],
+        ),
+        ExampleModule(
+          title: 'Routes',
+          children: [
             ExampleItem(
-              desc:
-                  'PageRoute.build previews every PageRouteAnimation variant.',
+              desc: 'Page Route Animation',
               builder: _buildRouteAnimationDemo,
               center: false,
             ),
@@ -291,10 +285,9 @@ class _MyAnimationsPageState extends State<MyAnimationsPage> {
             MyButton(
               text: option.label,
               type: MyButtonType.outline,
-              shape: MyButtonShape.round,
               onTap: () {
                 Navigator.of(context).push(
-                  route_animation.PageRoute.build<void>(
+                  MyPageRoute.build<void>(
                     _RoutePreviewPage(option: option),
                     option.animation,
                     const Duration(milliseconds: 360),
@@ -779,10 +772,9 @@ class _OnTapScalerDemoState extends State<_OnTapScalerDemo> {
 }
 
 class _SurfaceCard extends StatelessWidget {
-  const _SurfaceCard({required this.child, this.color});
+  const _SurfaceCard({required this.child});
 
   final Widget child;
-  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -790,7 +782,7 @@ class _SurfaceCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: color ?? context.colorScheme.secondary,
+        color: context.colorScheme.secondary,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: context.colorScheme.border),
         boxShadow: [
@@ -927,8 +919,11 @@ class _RoutePreviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final foreground = context.colorScheme.secondaryForeground;
+
     return Scaffold(
-      appBar: AppBar(title: Text('${option.label} Preview')),
+      backgroundColor: context.colorScheme.background,
+      appBar: MyAppBar(title: '${option.label} Preview'),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -936,24 +931,26 @@ class _RoutePreviewPage extends StatelessWidget {
             width: 320,
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: option.color,
+              color: context.colorScheme.secondary,
               borderRadius: BorderRadius.circular(28),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Icons.slideshow_rounded, size: 32),
+                Icon(Icons.slideshow_rounded, size: 32, color: foreground),
                 const SizedBox(height: 16),
                 Text(
                   option.label,
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  style: context.headlineSmall.copyWith(
                     fontWeight: FontWeight.w700,
+                    color: foreground,
                   ),
                 ),
                 const SizedBox(height: 10),
-                const Text(
+                Text(
                   'This preview page uses the selected route animation to enter the stack.',
+                  style: context.bodyMedium.copyWith(color: foreground),
                 ),
                 const SizedBox(height: 20),
                 MyButton(
@@ -995,15 +992,10 @@ class _MockMetric {
 }
 
 class _RouteAnimationOption {
-  const _RouteAnimationOption({
-    required this.label,
-    required this.animation,
-    required this.color,
-  });
+  const _RouteAnimationOption({required this.label, required this.animation});
 
   final String label;
-  final route_animation.PageRouteAnimation animation;
-  final Color color;
+  final PageRouteAnimation animation;
 }
 
 class _MockAppIcon {

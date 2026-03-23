@@ -5,19 +5,19 @@ import '../../index.dart';
 /// Enum for page route
 enum PageRouteAnimation { Fade, Scale, Rotate, Slide, SlideBottomTop }
 
-class PageRoute<T> {
-  PageRoute._();
+class MyPageRoute<T> {
+  MyPageRoute._();
 
   static Duration kDefaultTransitionDuration = 400.milliseconds;
 
   /// Builds a page route with the specified animation.
   static Route<T> build<T>(
     Widget child,
-    PageRouteAnimation? pageRouteAnimation,
+    PageRouteAnimation? animation,
     Duration? duration,
   ) {
-    if (pageRouteAnimation != null) {
-      if (pageRouteAnimation == PageRouteAnimation.Fade) {
+    if (animation != null) {
+      if (animation == PageRouteAnimation.Fade) {
         // Fade animation for page route.
         return PageRouteBuilder(
           pageBuilder: (c, a1, a2) => child,
@@ -26,7 +26,7 @@ class PageRoute<T> {
           },
           transitionDuration: duration ?? kDefaultTransitionDuration,
         );
-      } else if (pageRouteAnimation == PageRouteAnimation.Rotate) {
+      } else if (animation == PageRouteAnimation.Rotate) {
         // Rotation animation for page route.
         return PageRouteBuilder(
           pageBuilder: (c, a1, a2) => child,
@@ -38,7 +38,7 @@ class PageRoute<T> {
           },
           transitionDuration: duration ?? kDefaultTransitionDuration,
         );
-      } else if (pageRouteAnimation == PageRouteAnimation.Scale) {
+      } else if (animation == PageRouteAnimation.Scale) {
         // Scale animation for page route.
         return PageRouteBuilder(
           pageBuilder: (c, a1, a2) => child,
@@ -47,7 +47,7 @@ class PageRoute<T> {
           },
           transitionDuration: duration ?? kDefaultTransitionDuration,
         );
-      } else if (pageRouteAnimation == PageRouteAnimation.Slide) {
+      } else if (animation == PageRouteAnimation.Slide) {
         // Slide animation for page route.
         return PageRouteBuilder(
           pageBuilder: (c, a1, a2) => child,
@@ -62,7 +62,7 @@ class PageRoute<T> {
           },
           transitionDuration: duration ?? kDefaultTransitionDuration,
         );
-      } else if (pageRouteAnimation == PageRouteAnimation.SlideBottomTop) {
+      } else if (animation == PageRouteAnimation.SlideBottomTop) {
         // Slide from bottom to top animation for page route.
         return PageRouteBuilder(
           pageBuilder: (c, a1, a2) => child,
