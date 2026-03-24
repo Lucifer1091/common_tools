@@ -14,7 +14,6 @@ class MyUILayer extends StatelessWidget {
     this.themeMode = ThemeMode.system,
     this.typography,
     this.enableThemeAnimation = true,
-    this.enableScrollInterception = false,
     this.enableFocusOutline = true,
     this.duration,
   });
@@ -25,7 +24,6 @@ class MyUILayer extends StatelessWidget {
   final MyTypography? typography;
   final ThemeMode themeMode;
   final Widget Function(BuildContext context, Widget? child)? builder;
-  final bool enableScrollInterception;
   final bool enableThemeAnimation;
   final bool enableFocusOutline;
   final Duration? duration;
@@ -53,17 +51,12 @@ class MyUILayer extends StatelessWidget {
           final theme = MyTheme.of(context);
           return MyScrollWrapper(
             scrollbars: MyPlatform.isDesktopOrWeb,
-            child: ScrollViewInterceptor(
-              enabled: enableScrollInterception,
-              child: IconTheme.merge(
-                data: IconThemeData(color: theme.colorScheme.foreground),
-                child:
-                    builder != null
-                        ? Builder(
-                          builder: (context) => builder!(context, child),
-                        )
-                        : child ?? const NoWidget(),
-              ),
+            child: IconTheme.merge(
+              data: IconThemeData(color: theme.colorScheme.foreground),
+              child:
+                  builder != null
+                      ? Builder(builder: (context) => builder!(context, child))
+                      : child ?? const NoWidget(),
             ),
           );
         },

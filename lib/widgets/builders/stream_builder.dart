@@ -2,8 +2,8 @@ import 'package:flutter/widgets.dart';
 
 import '../../index.dart';
 
-class EnhancedStreamBuilder<T> extends StatelessWidget {
-  const EnhancedStreamBuilder({
+class MyStreamBuilder<T> extends StatelessWidget {
+  const MyStreamBuilder({
     required this.stream,
     required this.onSuccess,
     required this.inProgress,

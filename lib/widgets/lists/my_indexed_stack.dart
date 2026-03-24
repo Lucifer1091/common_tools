@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
@@ -62,7 +63,7 @@ class _MyIndexedStackState extends State<MyIndexedStack>
           totalPages: widget.children.length,
         );
     _animation = AnimationController(vsync: this, duration: widget.duration);
-    _animation.forward();
+    unawaited(_animation.forward());
     super.initState();
   }
 
@@ -85,7 +86,7 @@ class _MyIndexedStackState extends State<MyIndexedStack>
 
     // Animate if index changes
     if (widget.index != oldWidget.index && widget.animate) {
-      _animation.forward(from: 0);
+      unawaited(_animation.forward(from: 0));
       if (widget.index != null) _controller.jumpTo(widget.index!);
     } else if (widget.index != oldWidget.index && widget.index != null) {
       _controller.jumpTo(widget.index!);

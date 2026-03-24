@@ -43,7 +43,7 @@ class FutureOrBuilder<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (future is Future<T>) {
-      return EnhancedFutureBuilder<T>(
+      return MyFutureBuilder<T>(
         future: future as Future<T>,
         initialData: initialData,
         onSuccess: onSuccess,
@@ -65,8 +65,8 @@ class FutureOrBuilder<T> extends StatelessWidget {
   }
 }
 
-class EnhancedFutureBuilder<T> extends StatefulWidget {
-  const EnhancedFutureBuilder({
+class MyFutureBuilder<T> extends StatefulWidget {
+  const MyFutureBuilder({
     required this.future,
     required this.onSuccess,
     required this.inProgress,
@@ -102,11 +102,10 @@ class EnhancedFutureBuilder<T> extends StatefulWidget {
   final T? initialData;
 
   @override
-  State<EnhancedFutureBuilder<T>> createState() =>
-      _EnhancedFutureBuilderState<T>();
+  State<MyFutureBuilder<T>> createState() => _MyFutureBuilderState<T>();
 }
 
-class _EnhancedFutureBuilderState<T> extends State<EnhancedFutureBuilder<T>> {
+class _MyFutureBuilderState<T> extends State<MyFutureBuilder<T>> {
   Future<T>? _cachedFuture;
 
   @override
@@ -125,7 +124,7 @@ class _EnhancedFutureBuilderState<T> extends State<EnhancedFutureBuilder<T>> {
   }
 
   @override
-  void didUpdateWidget(covariant EnhancedFutureBuilder<T> oldWidget) {
+  void didUpdateWidget(covariant MyFutureBuilder<T> oldWidget) {
     if (widget.rememberFutureResult) {
       // If rememberFutureResult is true, we need to update the cached future
       // to the new future provided in the widget.

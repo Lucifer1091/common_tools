@@ -16,6 +16,7 @@ import 'page/my_action_sheet_page.dart';
 import 'page/my_animations_page.dart';
 import 'page/my_avatar_page.dart';
 import 'page/my_badge_page.dart';
+import 'page/my_builders_page.dart';
 import 'page/my_cell_page.dart';
 import 'page/my_checkbox_page.dart';
 import 'page/my_collapse_page.dart';
@@ -111,6 +112,11 @@ Map<String, List<ExamplePageModel>> exampleMap = {
       text: 'Animations',
       name: 'animations',
       pageBuilder: _wrapInheritedTheme((context) => const MyAnimationsPage()),
+    ),
+    ExamplePageModel(
+      text: 'Builders',
+      name: 'builders',
+      pageBuilder: _wrapInheritedTheme((context) => const MyBuildersPage()),
     ),
   ],
   'Navigation': [
