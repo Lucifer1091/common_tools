@@ -1,9 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 /// A widget that handles double press back navigation.
 ///
 /// This widget allows users to navigate back by pressing the back button
-/// twice within a 1-second window. It displays a customizable message
+/// twice within a 2-second window. It displays a customizable message
 /// prompting the user for the second press.
 class DoublePressBackWidget extends StatefulWidget {
   const DoublePressBackWidget({
@@ -28,6 +30,15 @@ class DoublePressBackWidget extends StatefulWidget {
 
 class _DoublePressBackWidgetState extends State<DoublePressBackWidget> {
   DateTime? _currentBackPressTime;
+  Timer? _resetTimer;
+
+  static const _timeout = Duration(seconds: 2);
+
+  @override
+  void dispose() {
+    _resetTimer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,17 +47,26 @@ class _DoublePressBackWidgetState extends State<DoublePressBackWidget> {
       canPop: _currentBackPressTime != null,
       onPopInvokedWithResult: (bool didPop, _) async {
         if (didPop) {
-          // User confirmed with double press within 2 seconds
-          widget.onWillPop?.call(); // Call the user-defined callback
-          Navigator.pop(context); // Assuming this triggers back navigation
+          widget.onWillPop?.call();
           return;
         }
 
         _currentBackPressTime = DateTime.now();
         setState(() {});
 
+        ScaffoldMessenger.maybeOf(context)
+          ?..hideCurrentSnackBar()
+          ..showSnackBar(
+            SnackBar(
+              content: Text(widget.message ?? 'Press back again to exit'),
+              duration: _timeout,
+            ),
+          );
+
         // Start a timer to reset state after 2 seconds
-        Future.delayed(const Duration(seconds: 2), () {
+        _resetTimer?.cancel();
+        _resetTimer = Timer(_timeout, () {
+          if (!mounted) return;
           _currentBackPressTime = null;
           setState(() {});
         });

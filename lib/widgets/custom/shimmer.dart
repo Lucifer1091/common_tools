@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 class Shimmer extends StatefulWidget {
@@ -35,7 +37,7 @@ class ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
       setState(() {});
     });
 
-    _controller!.repeat();
+    unawaited(_controller!.repeat());
   }
 
   @override

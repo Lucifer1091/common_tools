@@ -20,6 +20,7 @@ import 'page/my_builders_page.dart';
 import 'page/my_cell_page.dart';
 import 'page/my_checkbox_page.dart';
 import 'page/my_collapse_page.dart';
+import 'page/my_custom_page.dart';
 import 'page/my_date_picker_page.dart';
 import 'page/my_dialog_page.dart';
 import 'page/my_divider_page.dart';
@@ -117,6 +118,11 @@ Map<String, List<ExamplePageModel>> exampleMap = {
       text: 'Builders',
       name: 'builders',
       pageBuilder: _wrapInheritedTheme((context) => const MyBuildersPage()),
+    ),
+    ExamplePageModel(
+      text: 'Custom',
+      name: 'custom',
+      pageBuilder: _wrapInheritedTheme((context) => const MyCustomPage()),
     ),
   ],
   'Navigation': [

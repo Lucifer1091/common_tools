@@ -6,7 +6,6 @@ import 'dart:async';
 
 import 'package:common_tools/index.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 
 class MyBuildersPage extends StatelessWidget {
   const MyBuildersPage({super.key});
@@ -57,13 +56,6 @@ class MyBuildersPage extends StatelessWidget {
             pageDescription:
                 'Exposes a simple hover boolean so widgets can react to pointer entry and exit without managing MouseRegion state directly.',
             demoBuilder: _buildHoverDemo,
-          ),
-          BuilderDemoEntry(
-            title: 'MyFocusable',
-            subtitle: 'Focusable wrapper with a focused-state builder.',
-            pageDescription:
-                'Wraps Focus and forwards the current focused state into a builder, which is useful for keyboard-first UI affordances.',
-            demoBuilder: _buildMyFocusableDemo,
           ),
           BuilderDemoEntry(
             title: 'FocusableControlBuilder',
@@ -159,8 +151,6 @@ Widget _buildEnhancedStreamDemo(BuildContext context) =>
     const EnhancedStreamBuilderDemo();
 
 Widget _buildHoverDemo(BuildContext context) => const HoverBuilderDemo();
-
-Widget _buildMyFocusableDemo(BuildContext context) => const MyFocusableDemo();
 
 Widget _buildFocusableControlDemo(BuildContext context) =>
     const FocusableControlBuilderDemo();
@@ -922,131 +912,6 @@ class HoverBuilderDemo extends StatelessWidget {
             ),
           );
         },
-      ),
-    );
-  }
-}
-
-class MyFocusableDemo extends StatefulWidget {
-  const MyFocusableDemo({super.key});
-
-  @override
-  State<MyFocusableDemo> createState() => _MyFocusableDemoState();
-}
-
-class _MyFocusableDemoState extends State<MyFocusableDemo> {
-  late final FocusNode _focusNode;
-  String _lastAction = 'No key pressed yet.';
-
-  @override
-  void initState() {
-    super.initState();
-    _focusNode = FocusNode(debugLabel: 'builders_focus_demo');
-  }
-
-  @override
-  void dispose() {
-    _focusNode.dispose();
-    super.dispose();
-  }
-
-  KeyEventResult _handleKeyEvent(FocusNode node, KeyEvent event) {
-    if (event is! KeyDownEvent) return KeyEventResult.ignored;
-
-    final key = event.logicalKey;
-    if (key == LogicalKeyboardKey.escape) {
-      _focusNode.unfocus();
-      setState(() {
-        _lastAction = 'Escape cleared focus.';
-      });
-      return KeyEventResult.handled;
-    }
-
-    if (key == LogicalKeyboardKey.enter || key == LogicalKeyboardKey.space) {
-      setState(() {
-        _lastAction =
-            'Activated with ${key == LogicalKeyboardKey.enter ? "Enter" : "Space"}.';
-      });
-      return KeyEventResult.handled;
-    }
-
-    setState(() {
-      _lastAction =
-          'Pressed ${key.keyLabel.isNotEmpty ? key.keyLabel : "an unnamed key"}.';
-    });
-    return KeyEventResult.ignored;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          MyFocusable(
-            params: MyFocusableParams(
-              focusNode: _focusNode,
-              focusOutline: false,
-            ),
-            onKeyEvent: _handleKeyEvent,
-            builder: (context, focused, child) {
-              return AnimatedContainer(
-                duration: const Duration(milliseconds: 180),
-                padding: const EdgeInsets.all(18),
-                decoration: BoxDecoration(
-                  color: context.colorScheme.secondary,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: focused
-                        ? context.colorScheme.primary
-                        : context.colorScheme.border,
-                    width: focused ? 2 : 1,
-                  ),
-                  boxShadow: focused ? MyBoxShadows.sm : null,
-                ),
-                child: child,
-              );
-            },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Keyboard focus target',
-                  style: context.titleMedium.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: context.colorScheme.secondaryForeground,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Use Tab to focus this panel, then press Enter, Space, or Escape.',
-                  style: context.bodyMedium.copyWith(
-                    color: context.colorScheme.secondaryForeground,
-                  ),
-                ),
-                const SizedBox(height: 14),
-                StateBadge(_lastAction, active: true),
-              ],
-            ),
-          ),
-          const Gap(16),
-          Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            children: [
-              MyButton(
-                text: 'Request focus',
-                onTap: () => _focusNode.requestFocus(),
-              ),
-              MyButton(
-                text: 'Clear focus',
-                type: MyButtonType.outline,
-                onTap: () => _focusNode.unfocus(),
-              ),
-            ],
-          ),
-        ],
       ),
     );
   }
