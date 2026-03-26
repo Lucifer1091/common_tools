@@ -312,7 +312,7 @@ Widget _buildPaginationGridActionSheet(BuildContext context) {
           ),
           ActionSheetItem(
             label: 'Chrome',
-            icon: const IconWithBackground(icon: LucideIcons.chromium),
+            icon: const IconWithBackground(icon: LucideIcons.globe),
           ),
           ActionSheetItem(
             label: 'Github',
@@ -349,7 +349,7 @@ Widget _buildScrollGridActionSheet(BuildContext context) {
           ),
           ActionSheetItem(
             label: 'Chrome',
-            icon: const IconWithBackground(icon: LucideIcons.chromium),
+            icon: const IconWithBackground(icon: LucideIcons.globe),
           ),
           ActionSheetItem(
             label: 'Github',
@@ -357,7 +357,7 @@ Widget _buildScrollGridActionSheet(BuildContext context) {
           ),
           ActionSheetItem(
             label: 'Github',
-            icon: const IconWithBackground(icon: LucideIcons.github),
+            icon: const IconWithBackground(icon: LucideIcons.gitFork),
           ),
         ],
       );

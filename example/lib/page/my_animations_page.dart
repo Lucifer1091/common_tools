@@ -546,7 +546,7 @@ class _RepeatedAnimationDemoState extends State<_RepeatedAnimationDemo> {
                     reverseDuration: const Duration(seconds: 5),
                     curve: Curves.linear,
                     reverseCurve: Curves.easeInOutCubic,
-                    mode: RepeatMode.pingPong,
+                    mode: MyRepeatMode.pingPong,
                     child: const SizedBox(
                       width: 100,
                       height: 100,

@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 
 import '../../index.dart';
 
-enum RepeatMode { repeat, reverse, pingPong, pingPongReverse }
+enum MyRepeatMode { repeat, reverse, pingPong, pingPongReverse }
 
 class RepeatedAnimationBuilder<T> extends StatefulWidget {
   const RepeatedAnimationBuilder({
@@ -15,7 +15,7 @@ class RepeatedAnimationBuilder<T> extends StatefulWidget {
     super.key,
     this.curve = Curves.linear,
     this.reverseCurve,
-    this.mode = RepeatMode.repeat,
+    this.mode = MyRepeatMode.repeat,
     this.child,
     this.lerp,
     this.play = true,
@@ -30,7 +30,7 @@ class RepeatedAnimationBuilder<T> extends StatefulWidget {
     super.key,
     this.curve = Curves.linear,
     this.reverseCurve,
-    this.mode = RepeatMode.repeat,
+    this.mode = MyRepeatMode.repeat,
     this.child,
     this.lerp,
     this.play = true,
@@ -43,7 +43,7 @@ class RepeatedAnimationBuilder<T> extends StatefulWidget {
   final Duration? reverseDuration;
   final Curve curve;
   final Curve? reverseCurve;
-  final RepeatMode mode;
+  final MyRepeatMode mode;
   final Widget Function(BuildContext context, T value, Widget? child)? builder;
   final Widget Function(BuildContext context, Animation<T> animation)?
   animationBuilder;
@@ -65,12 +65,12 @@ class _RepeatedAnimationBuilderState<T>
   bool _isReversing = false;
 
   bool get _startsReversed =>
-      widget.mode == RepeatMode.reverse ||
-      widget.mode == RepeatMode.pingPongReverse;
+      widget.mode == MyRepeatMode.reverse ||
+      widget.mode == MyRepeatMode.pingPongReverse;
 
   bool get _pingPong =>
-      widget.mode == RepeatMode.pingPong ||
-      widget.mode == RepeatMode.pingPongReverse;
+      widget.mode == MyRepeatMode.pingPong ||
+      widget.mode == MyRepeatMode.pingPongReverse;
 
   @override
   void initState() {
