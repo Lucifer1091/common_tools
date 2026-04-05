@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 enum TrimMode { Length, Line }
 
 /// Add read more button to a long text
-class ReadMoreText extends StatefulWidget {
-  const ReadMoreText(
+class MyReadMoreText extends StatefulWidget {
+  const MyReadMoreText(
     this.data, {
     super.key,
     this.trimExpandedText = ' read less',
@@ -38,14 +38,14 @@ class ReadMoreText extends StatefulWidget {
   final String? semanticsLabel;
 
   @override
-  ReadMoreTextState createState() => ReadMoreTextState();
+  MyReadMoreTextState createState() => MyReadMoreTextState();
 }
 
 const String _kEllipsis = '\u2026';
 
 const String _kLineSeparator = '\u2028';
 
-class ReadMoreTextState extends State<ReadMoreText> {
+class MyReadMoreTextState extends State<MyReadMoreText> {
   bool _readMore = true;
 
   void _onTapLink() {

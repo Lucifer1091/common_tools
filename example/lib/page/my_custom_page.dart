@@ -1,7 +1,12 @@
 import 'package:common_tools/index.dart';
+import 'package:common_tools/widgets/display/border_beam.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../base/example_widget.dart';
+
+const _displayTileWidth = 300.0;
+const _imageAssetPath = 'assets/img/image.png';
 
 class MyCustomPage extends StatelessWidget {
   const MyCustomPage({super.key});
@@ -12,15 +17,13 @@ class MyCustomPage extends StatelessWidget {
       title: myTitle(context),
       exampleCodeGroup: 'custom',
       desc:
-          'Utility widgets from the custom directory, with full-page demos only where route-level behavior matters.',
+          'Utility widgets from the custom and display directories, with route-level demos where navigation behavior matters.',
       children: [
         ExampleModule(
           title: 'Playgrounds',
           children: [
             ExampleItem(
-              desc:
-                  'These helpers make the most sense when they control a full route or subtree.',
-              center: false,
+              padding: EdgeInsets.only(top: 16),
               builder: (context) => const _CustomPlaygroundLinks(),
             ),
           ],
@@ -29,26 +32,256 @@ class MyCustomPage extends StatelessWidget {
           title: 'Inline Demos',
           children: [
             ExampleItem(
-              desc: 'LimitTextScaleWidget',
-              ignoreCode: true,
-              center: false,
+              desc: 'Limit Text Scale',
               builder: (context) => const _LimitTextScaleDemo(),
             ),
+          ],
+        ),
+        ExampleModule(
+          title: 'Display Effects',
+          children: [
+            ExampleItem(desc: 'Gradient Widget', builder: _buildGradientText),
             ExampleItem(
-              desc: 'MyDisabled',
-              ignoreCode: true,
-              center: false,
-              builder: (context) => const _MyDisabledDemo(),
+              desc: 'Gradient Container',
+              builder: _buildGradientContainer,
             ),
+            ExampleItem(desc: 'Gradient Border', builder: _buildGradientBorder),
+            ExampleItem(desc: 'Dotted Border', builder: _buildDottedBorder),
+            ExampleItem(desc: 'Clip Shadow', builder: _buildClipShadow),
+            ExampleItem(desc: 'Border Beam', builder: _buildBorderBeam),
+            ExampleItem(desc: 'Blur', builder: _buildBlur),
+          ],
+        ),
+        ExampleModule(
+          title: 'Rich Content',
+          children: [
             ExampleItem(
-              desc: 'Shimmer',
+              desc: 'Hyper Link Widget & Link Text',
               ignoreCode: true,
               center: false,
-              builder: (context) => const _ShimmerDemo(),
+              builder: (context) => const _DisplayRichContentDemo(),
             ),
           ],
         ),
       ],
+    );
+  }
+
+  Widget _buildGradientText(BuildContext context) {
+    return GradientWidget(
+      gradient: const LinearGradient(
+        colors: [Color(0xFF38BDF8), Color(0xFF8B5CF6), Color(0xFFF43F5E)],
+      ),
+      child: Text(
+        'Signal Boost',
+        style: context.headlineLarge.copyWith(
+          color: Colors.white,
+          fontWeight: FontWeight.w800,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGradientContainer(BuildContext context) {
+    return GradientBorder(
+      gradient: const LinearGradient(
+        colors: [Color(0xFF34D399), Color(0xFF22D3EE)],
+      ),
+      borderRadius: 999,
+      strokeWidth: 2,
+      padding: 12,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.auto_awesome_rounded, color: Colors.black),
+          const SizedBox(width: 10),
+          Text(
+            'Gradient Container',
+            style: context.titleSmall.copyWith(
+              fontWeight: FontWeight.w700,
+              color: Colors.black,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildGradientBorder(BuildContext context) {
+    return GradientBorder(
+      gradient: const LinearGradient(
+        colors: [Color(0xFF38BDF8), Color(0xFF8B5CF6), Color(0xFFF43F5E)],
+      ),
+      borderRadius: 999,
+      strokeWidth: 3,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: context.colorScheme.background,
+          borderRadius: MyBorderRadius.round,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.auto_awesome_rounded,
+              color: context.colorScheme.foreground,
+            ),
+            const SizedBox(width: 10),
+            Text(
+              'Gradient Border',
+              style: context.titleSmall.copyWith(
+                fontWeight: FontWeight.w700,
+                color: context.colorScheme.foreground,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDottedBorder(BuildContext context) {
+    return MyDottedBorder(
+      color: context.colorScheme.primary,
+      radius: 18,
+      dotsWidth: 8,
+      gap: 5,
+      strokeWidth: 2,
+      padding: const EdgeInsets.all(14),
+      child: Row(
+        children: [
+          Icon(
+            Icons.auto_awesome_rounded,
+            size: 32,
+            color: context.colorScheme.primary,
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Text(
+              MyFaker.generateLoremIpsumWords(20),
+              style: context.bodyMedium.copyWith(
+                color: context.colorScheme.secondaryForeground,
+              ),
+            ),
+          ),
+        ],
+      ).sizedBox(width: 280),
+    );
+  }
+
+  Widget _buildClipShadow(BuildContext context) {
+    return MyClipShadow(
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withValues(alpha: 0.14),
+          blurRadius: 18,
+          offset: const Offset(0, 12),
+        ),
+      ],
+      clipper: const _TicketClipper(),
+      child: Container(
+        width: 300,
+        padding: const EdgeInsets.all(16),
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFECFCCB), Color(0xFFBBF7D0)],
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'ClipShadow',
+              style: context.titleSmall.copyWith(
+                fontWeight: FontWeight.w800,
+                color: const Color(0xFF14532D),
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              'The shadow follows the custom ticket-style path.',
+              style: context.bodyMedium.copyWith(
+                color: const Color(0xFF166534),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBorderBeam(BuildContext context) {
+    return MyBorderBeam(
+      colorFrom: Colors.blue,
+      colorTo: Colors.purple,
+      staticBorderColor: context.colorScheme.border,
+      borderWidth: 2,
+      duration: 7,
+      borderRadius: BorderRadius.circular(20),
+      padding: EdgeInsets.all(5),
+      child: Container(
+        width: 300,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: context.colorScheme.secondary,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              Icons.auto_awesome_rounded,
+              size: 32,
+              color: context.colorScheme.primary,
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                'Border beam keeps a moving accent around the panel.',
+                style: context.bodyMedium.copyWith(
+                  color: context.colorScheme.secondaryForeground,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBlur(BuildContext context) {
+    return _BackdropFrame(
+      label: 'Blur',
+      child: Center(
+        child: MyBlur(
+          width: 210,
+          blur: 10,
+          elevation: 2,
+          padding: const EdgeInsets.all(16),
+          borderRadius: BorderRadius.circular(18),
+          color: Colors.white.withValues(alpha: 0.16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Glass panel',
+                style: context.titleSmall.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'BackdropFilter only applies inside this card.',
+                style: context.bodySmall.copyWith(
+                  color: Colors.white.withValues(alpha: 0.9),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -68,18 +301,6 @@ class _CustomPlaygroundLinks extends StatelessWidget {
         ).copyWith(cardPadding: EdgeInsets.zero),
         cells: [
           MyCell(
-            title: 'DismissKeyboard',
-            description: 'Tap outside a field to clear focus.',
-            arrow: true,
-            onTap: (_) {
-              Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder: (_) => const _DismissKeyboardDemoPage(),
-                ),
-              );
-            },
-          ),
-          MyCell(
             title: 'DoublePressBackWidget',
             description: 'Requires a route to demonstrate back handling.',
             arrow: true,
@@ -91,121 +312,7 @@ class _CustomPlaygroundLinks extends StatelessWidget {
               );
             },
           ),
-          MyCell(
-            title: 'RestartAppWidget',
-            description: 'Best shown by resetting a live subtree.',
-            arrow: true,
-            onTap: (_) {
-              Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder: (_) => const _RestartAppDemoPage(),
-                ),
-              );
-            },
-          ),
         ],
-      ),
-    );
-  }
-}
-
-class _DismissKeyboardDemoPage extends StatelessWidget {
-  const _DismissKeyboardDemoPage();
-
-  @override
-  Widget build(BuildContext context) {
-    return ExamplePage(
-      title: 'DismissKeyboard',
-      desc:
-          'Wrap a tappable surface and it will unfocus the current field when the user taps outside.',
-      exampleCodeGroup: 'custom',
-      children: [
-        ExampleModule(
-          title: 'Live Example',
-          children: [
-            ExampleItem(
-              ignoreCode: true,
-              center: false,
-              builder: (context) => const _DismissKeyboardPlayground(),
-            ),
-          ],
-        ),
-        ExampleModule(
-          title: 'Navigator Observer',
-          children: [
-            ExampleItem(
-              ignoreCode: true,
-              center: false,
-              builder: (context) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: _DemoSurface(
-                    child: Text(
-                      'This file also includes KeyboardDismissalNavigatorObserver for dismissing focus automatically on push and pop.',
-                      style: context.bodyMedium.copyWith(
-                        color: context.colorScheme.secondaryForeground,
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class _DismissKeyboardPlayground extends StatelessWidget {
-  const _DismissKeyboardPlayground();
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: SizedBox(
-        height: 360,
-        child: _DemoSurface(
-          child: DismissKeyboard(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: [
-                Text(
-                  'Tap a field, then tap the empty space in this card.',
-                  style: context.bodyMedium.copyWith(
-                    color: context.colorScheme.secondaryForeground,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                const TextField(
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                const TextField(
-                  decoration: InputDecoration(
-                    labelText: 'Notes',
-                    border: OutlineInputBorder(),
-                  ),
-                  maxLines: 3,
-                ),
-                const SizedBox(height: 16),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: StateBadge(
-                    'DismissKeyboard only clears focus when something is focused.',
-                    active: true,
-                    color: context.colorScheme.primary,
-                  ),
-                ),
-                const SizedBox(height: 140),
-              ],
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -228,8 +335,8 @@ class _DoublePressBackDemoPage extends StatelessWidget {
             title: 'Live Example',
             children: [
               ExampleItem(
-                ignoreCode: true,
                 center: false,
+                padding: EdgeInsets.only(top: 16),
                 builder: (context) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -256,130 +363,6 @@ class _DoublePressBackDemoPage extends StatelessWidget {
                     ),
                   );
                 },
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _RestartAppDemoPage extends StatelessWidget {
-  const _RestartAppDemoPage();
-
-  @override
-  Widget build(BuildContext context) {
-    return ExamplePage(
-      title: 'RestartAppWidget',
-      desc:
-          'Wrap a subtree with RestartAppWidget and call RestartAppWidget.init(context) to rebuild it from scratch.',
-      exampleCodeGroup: 'custom',
-      children: [
-        ExampleModule(
-          title: 'Live Example',
-          children: [
-            ExampleItem(
-              ignoreCode: true,
-              center: false,
-              builder: (context) => const _RestartAppSandbox(),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class _RestartAppSandbox extends StatelessWidget {
-  const _RestartAppSandbox();
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: RestartAppWidget(child: const _RestartableLab()),
-    );
-  }
-}
-
-class _RestartableLab extends StatefulWidget {
-  const _RestartableLab();
-
-  @override
-  State<_RestartableLab> createState() => _RestartableLabState();
-}
-
-class _RestartableLabState extends State<_RestartableLab> {
-  late final TextEditingController _controller;
-  int _counter = 0;
-  late final String _seed;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = TextEditingController();
-    _seed = DateTime.now().toIso8601String().substring(11, 19);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return _DemoSurface(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Restartable subtree',
-            style: context.titleMedium.copyWith(
-              fontWeight: FontWeight.w700,
-              color: context.colorScheme.secondaryForeground,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            'Seed: $_seed',
-            style: context.bodyMedium.copyWith(
-              color: context.colorScheme.secondaryForeground,
-            ),
-          ),
-          const SizedBox(height: 12),
-          TextField(
-            controller: _controller,
-            decoration: const InputDecoration(
-              labelText: 'Local draft text',
-              border: OutlineInputBorder(),
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            'Counter: $_counter',
-            style: context.bodyMedium.copyWith(
-              color: context.colorScheme.secondaryForeground,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            children: [
-              MyButton(
-                text: 'Increment',
-                onTap: () {
-                  setState(() {
-                    _counter++;
-                  });
-                },
-              ),
-              MyButton(
-                text: 'Restart subtree',
-                type: MyButtonType.outline,
-                onTap: () => RestartAppWidget.init(context),
               ),
             ],
           ),
@@ -433,43 +416,42 @@ class _LimitTextScaleDemo extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: MediaQuery(
         data: scaledData,
-        child: _DemoSurface(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              panel(
-                context: context,
-                title: 'Uncapped',
-                child: const Text(
-                  'This copy uses the full inherited text scale factor.',
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            panel(
+              context: context,
+              title: 'Uncapped - 1.8x',
+              child: Text(
+                'This copy uses the full inherited text scale factor.',
+                style: context.bodyMedium.copyWith(
+                  color: context.colorScheme.foreground,
                 ),
               ),
-              const SizedBox(width: 12),
-              panel(
-                context: context,
-                title: 'Capped at 1.2x',
-                child: const LimitTextScaleWidget(
-                  maxTextScaleFactor: 1.2,
-                  child: Text('This copy is clamped by LimitTextScaleWidget.'),
+            ),
+            const SizedBox(width: 12),
+            panel(
+              context: context,
+              title: 'Capped - 1.2x',
+              child: LimitTextScaleWidget(
+                maxTextScaleFactor: 1.2,
+                child: Text(
+                  'This copy is clamped by LimitTextScaleWidget.',
+                  style: context.bodyMedium.copyWith(
+                    color: context.colorScheme.foreground,
+                  ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
 
-class _MyDisabledDemo extends StatefulWidget {
-  const _MyDisabledDemo();
-
-  @override
-  State<_MyDisabledDemo> createState() => _MyDisabledDemoState();
-}
-
-class _MyDisabledDemoState extends State<_MyDisabledDemo> {
-  bool _disabled = true;
+class _DisplayRichContentDemo extends StatelessWidget {
+  const _DisplayRichContentDemo();
 
   @override
   Widget build(BuildContext context) {
@@ -478,49 +460,11 @@ class _MyDisabledDemoState extends State<_MyDisabledDemo> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _DemoSurface(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Toggle disabled state',
-                  style: context.titleMedium.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: context.colorScheme.secondaryForeground,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: MyDisabled(
-                        disabled: _disabled,
-                        showForbiddenCursor: true,
-                        child: MyButton(
-                          text: 'Primary Action',
-                          isExpanded: true,
-                          onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Action triggered')),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-          MyButton(
-            text: _disabled ? 'Enable action' : 'Disable action',
-            type: MyButtonType.outline,
-            onTap: () {
-              setState(() {
-                _disabled = !_disabled;
-              });
-            },
+          const _PreviewCard(
+            title: 'HyperLinkWidget and LinkText',
+            note:
+                'The demo intercepts taps locally so you can verify behavior without leaving the app.',
+            child: _HyperLinkShowcase(),
           ),
         ],
       ),
@@ -528,46 +472,221 @@ class _MyDisabledDemoState extends State<_MyDisabledDemo> {
   }
 }
 
-class _ShimmerDemo extends StatelessWidget {
-  const _ShimmerDemo();
+class _PreviewCard extends StatelessWidget {
+  const _PreviewCard({required this.title, required this.child, this.note});
+
+  final String title;
+  final String? note;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: _DemoSurface(
-        child: Column(
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Shimmer(height: 56, width: 56, radius: 999),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Shimmer(height: 18, width: 220, radius: 999),
-                      SizedBox(height: 10),
-                      Shimmer(height: 14, width: 180, radius: 999),
-                      SizedBox(height: 10),
-                      Shimmer(height: 14, width: 140, radius: 999),
+    final card = _DemoSurface(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: context.titleMedium.copyWith(
+              fontWeight: FontWeight.w700,
+              color: context.colorScheme.secondaryForeground,
+            ),
+          ),
+          if (note != null) ...[
+            const SizedBox(height: 8),
+            Text(
+              note!,
+              style: context.bodySmall.copyWith(
+                color: context.colorScheme.secondaryForeground.withValues(
+                  alpha: 0.75,
+                ),
+              ),
+            ),
+          ],
+          const SizedBox(height: 16),
+          child,
+        ],
+      ),
+    );
+
+    return SizedBox(width: double.infinity, child: card);
+  }
+}
+
+class _BackdropFrame extends StatelessWidget {
+  const _BackdropFrame({required this.label, required this.child});
+
+  final String label;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: _displayTileWidth,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(22),
+        child: SizedBox(
+          height: 200,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Image.asset(_imageAssetPath, fit: BoxFit.cover),
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.black.withValues(alpha: 0.08),
+                      Colors.black.withValues(alpha: 0.45),
                     ],
                   ),
                 ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            const Shimmer(height: 14, width: 320, radius: 999),
-            const SizedBox(height: 10),
-            const Shimmer(height: 14, width: 280, radius: 999),
-            const SizedBox(height: 10),
-            const Shimmer(height: 14, width: 240, radius: 999),
-          ],
+              ),
+              Positioned(
+                top: 16,
+                right: 16,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.16),
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                  child: Text(
+                    label,
+                    style: context.bodySmall.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+              child,
+            ],
+          ),
         ),
       ),
     );
   }
+}
+
+class _HyperLinkShowcase extends StatefulWidget {
+  const _HyperLinkShowcase();
+
+  @override
+  State<_HyperLinkShowcase> createState() => _HyperLinkShowcaseState();
+}
+
+class _HyperLinkShowcaseState extends State<_HyperLinkShowcase> {
+  late final TapGestureRecognizer _docsRecognizer;
+  late final TapGestureRecognizer _supportRecognizer;
+  late final TapGestureRecognizer _statusRecognizer;
+
+  @override
+  void initState() {
+    super.initState();
+    _docsRecognizer = TapGestureRecognizer()..onTap = () => _showTap('Docs');
+    _supportRecognizer = TapGestureRecognizer()
+      ..onTap = () => _showTap('Support');
+    _statusRecognizer = TapGestureRecognizer()
+      ..onTap = () => _showTap('Status');
+  }
+
+  void _showTap(String label) {
+    ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+      SnackBar(content: Text('$label tapped from the display demo.')),
+    );
+  }
+
+  @override
+  void dispose() {
+    _docsRecognizer.dispose();
+    _supportRecognizer.dispose();
+    _statusRecognizer.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'HyperLinkWidget',
+          style: context.titleSmall.copyWith(
+            fontWeight: FontWeight.w700,
+            color: context.colorScheme.secondaryForeground,
+          ),
+        ),
+        const SizedBox(height: 8),
+        HyperLinkWidget(
+          maxLines: 1,
+          style: context.bodyMedium.copyWith(
+            color: context.colorScheme.primary,
+            fontWeight: FontWeight.w700,
+          ),
+          text: TextSpan(
+            children: [
+              TextSpan(text: 'Docs', recognizer: _docsRecognizer),
+              const TextSpan(text: '  •  '),
+              TextSpan(text: 'Support', recognizer: _supportRecognizer),
+              const TextSpan(text: '  •  '),
+              TextSpan(text: 'Status', recognizer: _statusRecognizer),
+            ],
+          ),
+        ),
+        const SizedBox(height: 18),
+        Text(
+          'LinkText',
+          style: context.titleSmall.copyWith(
+            fontWeight: FontWeight.w700,
+            color: context.colorScheme.secondaryForeground,
+          ),
+        ),
+        const SizedBox(height: 8),
+        LinkText(
+          'Read the docs at https://example.com/docs?source=display-demo or send feedback to https://example.com/feedback.',
+          shouldTrimParams: true,
+          maxLines: 4,
+          textStyle: context.bodyMedium.copyWith(
+            color: context.colorScheme.secondaryForeground,
+          ),
+          linkStyle: context.bodyMedium.copyWith(
+            color: context.colorScheme.primary,
+            fontWeight: FontWeight.w700,
+            decoration: TextDecoration.underline,
+          ),
+          onLinkTap: (url) {
+            final host = Uri.tryParse(url)?.host ?? url;
+            _showTap(host);
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class _TicketClipper extends CustomClipper<Path> {
+  const _TicketClipper();
+
+  @override
+  Path getClip(Size size) {
+    return Path()
+      ..moveTo(0, 16)
+      ..quadraticBezierTo(0, 0, 16, 0)
+      ..lineTo(size.width - 28, 0)
+      ..lineTo(size.width, size.height / 2)
+      ..lineTo(size.width - 28, size.height)
+      ..lineTo(16, size.height)
+      ..quadraticBezierTo(0, size.height, 0, size.height - 16)
+      ..close();
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
 }
 
 class _DemoSurface extends StatelessWidget {
@@ -593,44 +712,6 @@ class _DemoSurface extends StatelessWidget {
         ],
       ),
       child: child,
-    );
-  }
-}
-
-class StateBadge extends StatelessWidget {
-  const StateBadge(
-    this.label, {
-    required this.active,
-    required this.color,
-    super.key,
-  });
-
-  final String label;
-  final bool active;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: active
-            ? color.withValues(alpha: 0.12)
-            : context.colorScheme.background,
-        borderRadius: BorderRadius.circular(999),
-        border: Border.all(
-          color: active
-              ? color.withValues(alpha: 0.3)
-              : context.colorScheme.border,
-        ),
-      ),
-      child: Text(
-        label,
-        style: context.bodySmall.copyWith(
-          fontWeight: FontWeight.w600,
-          color: context.colorScheme.foreground,
-        ),
-      ),
     );
   }
 }

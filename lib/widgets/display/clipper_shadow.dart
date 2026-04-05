@@ -32,8 +32,8 @@ class _ClipShadowPainter extends CustomPainter {
   }
 }
 
-class ClipShadow extends StatelessWidget {
-  const ClipShadow({
+class MyClipShadow extends StatelessWidget {
+  const MyClipShadow({
     required this.boxShadow,
     required this.clipper,
     required this.child,

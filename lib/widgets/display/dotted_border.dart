@@ -2,11 +2,12 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-// DottedBorderWidget
-class DottedBorderWidget extends StatefulWidget {
-  const DottedBorderWidget({
+import '../../index.dart';
+
+class MyDottedBorder extends StatefulWidget {
+  const MyDottedBorder({
     required this.child,
-    this.color = Colors.black,
+    this.color,
     this.dotsWidth = 5.0,
     this.gap = 3.0,
     this.radius = 0,
@@ -24,15 +25,15 @@ class DottedBorderWidget extends StatefulWidget {
   final EdgeInsets? padding;
 
   @override
-  _DottedBorderWidgetState createState() => _DottedBorderWidgetState();
+  _MyDottedBorderState createState() => _MyDottedBorderState();
 }
 
-class _DottedBorderWidgetState extends State<DottedBorderWidget> {
+class _MyDottedBorderState extends State<MyDottedBorder> {
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
       painter: _DottedCustomPaint(
-        color: widget.color,
+        color: widget.color ?? context.colorScheme.primary,
         dottedLength: widget.dotsWidth,
         space: widget.gap,
         strokeWidth: widget.strokeWidth,

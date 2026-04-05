@@ -3,8 +3,8 @@ import 'dart:ui' show ImageFilter;
 import 'package:flutter/material.dart';
 
 /// Blur any widget
-class Blur extends StatelessWidget {
-  const Blur({
+class MyBlur extends StatelessWidget {
+  const MyBlur({
     this.child,
     this.height,
     this.width,
@@ -47,40 +47,6 @@ class Blur extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class BlurWidget extends StatelessWidget {
-  const BlurWidget({
-    required this.child,
-    super.key,
-    this.sigma = 1.5,
-    this.enabled = true,
-  });
-  final bool enabled;
-  final Widget child;
-  final double sigma;
-
-  @override
-  Widget build(BuildContext context) {
-    if (!enabled) return child;
-
-    return Stack(
-      children: [
-        child,
-        Positioned.fill(
-          child: Material(
-            color: Colors.transparent,
-            child: ClipRect(
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: sigma, sigmaY: sigma),
-                child: Container(color: Colors.black.withValues(alpha: 0)),
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

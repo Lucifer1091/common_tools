@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 
 class AnimatedBlur extends ImplicitlyAnimatedWidget {
   const AnimatedBlur({
-    this.child,
-    this.blur = 8,
     this.enabled = true,
+    this.blur = 8,
+    this.child,
     super.duration = const Duration(milliseconds: 200),
     super.key,
     this.blendMode = BlendMode.srcOver,

@@ -25,9 +25,9 @@ class GradientBorder extends StatelessWidget {
         strokeWidth: strokeWidth,
         borderRadius: borderRadius ?? 8,
       ),
-      child: Container(
+      child: Padding(
         padding: EdgeInsets.all(padding + strokeWidth),
-        child: IntrinsicWidth(child: child),
+        child: child,
       ),
     );
   }

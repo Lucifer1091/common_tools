@@ -3,15 +3,17 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
-class BorderBeam extends StatefulWidget {
-  const BorderBeam({
+import '../../index.dart';
+
+class MyBorderBeam extends StatefulWidget {
+  const MyBorderBeam({
     required this.child,
     super.key,
     this.duration = 15,
     this.borderWidth = 1.5,
     this.colorFrom = const Color(0xFFFFAA40),
     this.colorTo = const Color(0xFF9C40FF),
-    this.staticBorderColor = const Color(0xFFCCCCCC),
+    this.staticBorderColor,
     this.borderRadius = const BorderRadius.all(Radius.circular(12)),
     this.padding = EdgeInsets.zero,
   });
@@ -21,15 +23,15 @@ class BorderBeam extends StatefulWidget {
   final double borderWidth;
   final Color colorFrom;
   final Color colorTo;
-  final Color staticBorderColor;
+  final Color? staticBorderColor;
   final BorderRadius borderRadius;
   final EdgeInsetsGeometry padding;
 
   @override
-  _BorderBeamState createState() => _BorderBeamState();
+  _MyBorderBeamState createState() => _MyBorderBeamState();
 }
 
-class _BorderBeamState extends State<BorderBeam>
+class _MyBorderBeamState extends State<MyBorderBeam>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
@@ -57,12 +59,13 @@ class _BorderBeamState extends State<BorderBeam>
       animation: _animation,
       builder: (context, child) {
         return CustomPaint(
-          painter: BorderBeamPainter(
+          painter: _BorderBeamPainter(
             progress: _animation.value,
             borderWidth: widget.borderWidth,
             colorFrom: widget.colorFrom,
             colorTo: widget.colorTo,
-            staticBorderColor: widget.staticBorderColor,
+            staticBorderColor:
+                widget.staticBorderColor ?? context.colorScheme.border,
             borderRadius: widget.borderRadius,
           ),
           child: Padding(padding: widget.padding, child: widget.child),
@@ -72,8 +75,8 @@ class _BorderBeamState extends State<BorderBeam>
   }
 }
 
-class BorderBeamPainter extends CustomPainter {
-  BorderBeamPainter({
+class _BorderBeamPainter extends CustomPainter {
+  _BorderBeamPainter({
     required this.progress,
     required this.borderWidth,
     required this.colorFrom,
@@ -81,6 +84,7 @@ class BorderBeamPainter extends CustomPainter {
     required this.staticBorderColor,
     required this.borderRadius,
   });
+
   final double progress;
   final double borderWidth;
   final Color colorFrom;
@@ -143,41 +147,7 @@ class BorderBeamPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant BorderBeamPainter oldDelegate) {
+  bool shouldRepaint(covariant _BorderBeamPainter oldDelegate) {
     return oldDelegate.progress != progress;
   }
 }
-
-
-// import 'package:flutter/material.dart';
-// import 'package:fx_2_folder/fx_7_border_beam/border_beam.dart';
-
-// class BorderBeamHomeWidget extends StatelessWidget {
-//   const BorderBeamHomeWidget({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Colors.black,
-//       body: Center(
-//         child: BorderBeam(
-//           duration: 7,
-//           colorFrom: Colors.blue,
-//           colorTo: Colors.purple,
-//           staticBorderColor:
-//               const Color.fromARGB(255, 39, 39, 42), //rgb(39 39 42)
-//           borderRadius: BorderRadius.circular(20),
-//           padding: EdgeInsets.all(16),
-//           child: Container(
-//             width: 200,
-//             height: 200,
-//             child: const Center(
-//               child: Text('Border Beam',
-//                   style: TextStyle(fontSize: 24, color: Colors.white)),
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }

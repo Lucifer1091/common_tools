@@ -88,6 +88,38 @@ class _MyBadgePageState extends State<MyBadgePage> {
             ),
           ],
         ),
+        ExampleModule(
+          title: 'Banners',
+          children: [
+            ExampleItem(
+              padding: EdgeInsets.symmetric(horizontal: 16).except(top: 16),
+              builder: (context) {
+                return Column(
+                  spacing: 12,
+                  children: [
+                    MyBanner(
+                      label: 'New',
+                      bannerColor: const Color(0xFF2563EB),
+                      child: _BannerPreviewCard(
+                        title: 'Analytics',
+                        subtitle: MyFaker.generateLoremIpsumWords(),
+                      ),
+                    ),
+                    MyBanner(
+                      label: 'Beta',
+                      position: MyBannerPosition.topRight,
+                      bannerColor: const Color(0xFFF97316),
+                      child: _BannerPreviewCard(
+                        title: 'Preview',
+                        subtitle: MyFaker.generateLoremIpsumWords(),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ],
+        ),
       ],
       test: [
         ExampleItem(
@@ -445,6 +477,44 @@ class _MyBadgePageState extends State<MyBadgePage> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _BannerPreviewCard extends StatelessWidget {
+  const _BannerPreviewCard({required this.title, required this.subtitle});
+
+  final String title;
+  final String subtitle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.maxFinite,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: context.colorScheme.secondary,
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: context.titleSmall.copyWith(
+              fontWeight: FontWeight.w700,
+              color: context.colorScheme.foreground,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            subtitle,
+            style: context.bodySmall.copyWith(
+              color: context.colorScheme.mutedForeground,
+            ),
+          ),
+        ],
       ),
     );
   }

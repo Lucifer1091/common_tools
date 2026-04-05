@@ -17,6 +17,12 @@ class _MyTextPageState extends State<MyTextPage> {
   int _number = 0;
   final NumEditController _controller = NumEditController();
 
+  final _readMoreCopy =
+      'Display widgets cover a lot of ground: banners, notes, blur effects, '
+      'gradient treatments, richer links, image transitions, and text helpers. '
+      'This page keeps them together so you can compare each behavior in one '
+      'place before dropping the widget into a real screen.';
+
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
@@ -34,6 +40,7 @@ class _MyTextPageState extends State<MyTextPage> {
             ExampleItem(desc: 'Number Ticker', builder: _buildNumberTicker),
             ExampleItem(desc: 'Circular Text', builder: _buildCircularText),
             ExampleItem(desc: 'Drop Cap Text', builder: _buildDropCapText),
+            ExampleItem(desc: 'Read Mode Text', builder: _buildReadMoreText),
           ],
         ),
       ],
@@ -198,6 +205,58 @@ class _MyTextPageState extends State<MyTextPage> {
       child: MyDropCapText(
         MyFaker.generateLoremIpsumWords(200),
         style: TextStyle(fontStyle: FontStyle.italic),
+      ),
+    );
+  }
+
+  Widget _buildReadMoreText(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'TrimMode.Length',
+            style: context.titleSmall.copyWith(
+              fontWeight: FontWeight.w700,
+              color: context.colorScheme.secondaryForeground,
+            ),
+          ),
+          const SizedBox(height: 8),
+          SizedBox(
+            width: double.infinity,
+            child: MyReadMoreText(
+              _readMoreCopy,
+              trimMode: TrimMode.Length,
+              trimLength: 120,
+              style: context.bodyMedium.copyWith(
+                color: context.colorScheme.secondaryForeground,
+              ),
+              colorClickableText: context.colorScheme.primary,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'TrimMode.Line',
+            style: context.titleSmall.copyWith(
+              fontWeight: FontWeight.w700,
+              color: context.colorScheme.secondaryForeground,
+            ),
+          ),
+          const SizedBox(height: 8),
+          SizedBox(
+            width: double.infinity,
+            child: MyReadMoreText(
+              _readMoreCopy,
+              trimMode: TrimMode.Line,
+              trimLines: 2,
+              style: context.bodyMedium.copyWith(
+                color: context.colorScheme.secondaryForeground,
+              ),
+              colorClickableText: context.colorScheme.primary,
+            ),
+          ),
+        ],
       ),
     );
   }
