@@ -1,10 +1,11 @@
-import 'dart:ui';
+import 'dart:math' as math;
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
 import '../../index.dart';
 
-class MyDottedBorder extends StatefulWidget {
+class MyDottedBorder extends StatelessWidget {
   const MyDottedBorder({
     required this.child,
     this.color,
@@ -14,7 +15,10 @@ class MyDottedBorder extends StatefulWidget {
     this.strokeWidth = 1.0,
     this.padding,
     super.key,
-  });
+  }) : assert(dotsWidth > 0, 'dotsWidth must be greater than zero'),
+       assert(gap >= 0, 'gap must be non-negative'),
+       assert(radius >= 0, 'radius must be non-negative'),
+       assert(strokeWidth >= 0, 'strokeWidth must be non-negative');
 
   final Color? color;
   final double strokeWidth;
@@ -25,81 +29,92 @@ class MyDottedBorder extends StatefulWidget {
   final EdgeInsets? padding;
 
   @override
-  _MyDottedBorderState createState() => _MyDottedBorderState();
-}
-
-class _MyDottedBorderState extends State<MyDottedBorder> {
-  @override
   Widget build(BuildContext context) {
+    final resolvedColor = color ?? context.colorScheme.primary;
+    final content = Padding(
+      padding: padding ?? const EdgeInsets.all(2),
+      child: RepaintBoundary(child: child),
+    );
+
+    if (strokeWidth <= 0) return content;
+
     return CustomPaint(
+      isComplex: true,
       painter: _DottedCustomPaint(
-        color: widget.color ?? context.colorScheme.primary,
-        dottedLength: widget.dotsWidth,
-        space: widget.gap,
-        strokeWidth: widget.strokeWidth,
-        radius: widget.radius,
+        color: resolvedColor,
+        dottedLength: dotsWidth,
+        space: gap,
+        strokeWidth: strokeWidth,
+        radius: radius,
       ),
-      child: Container(
-        padding: widget.padding ?? EdgeInsets.all(2),
-        child: widget.child,
-      ),
+      child: content,
     );
   }
 }
 
 class _DottedCustomPaint extends CustomPainter {
   _DottedCustomPaint({
-    this.color,
-    this.dottedLength,
-    this.space,
-    this.strokeWidth,
-    this.radius,
-  });
+    required this.color,
+    required this.dottedLength,
+    required this.space,
+    required this.strokeWidth,
+    required this.radius,
+  }) : _paint =
+           Paint()
+             ..isAntiAlias = true
+             ..style = PaintingStyle.stroke;
 
-  Color? color;
-  double? dottedLength;
-  double? space;
-  double? strokeWidth;
-  double? radius;
+  final Color color;
+  final double dottedLength;
+  final double space;
+  final double strokeWidth;
+  final double radius;
+  final Paint _paint;
+  Size? _cachedSize;
+  Path? _cachedDashedPath;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final Paint paint =
-        Paint()
-          ..isAntiAlias = true
-          ..filterQuality = FilterQuality.high
-          ..color = color!
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = strokeWidth!;
+    if (size.isEmpty || strokeWidth <= 0) return;
 
-    final Path path =
-        Path()..addRRect(
-          RRect.fromLTRBR(
-            0,
-            0,
-            size.width,
-            size.height,
-            Radius.circular(radius!),
-          ),
-        );
+    _paint
+      ..color = color
+      ..strokeWidth = strokeWidth;
 
-    final Path draw = buildDashPath(path, dottedLength!, space!);
-    canvas.drawPath(draw, paint);
+    canvas.drawPath(_dashPathFor(size), _paint);
   }
 
-  Path buildDashPath(Path path, double dottedLength, double space) {
-    final Path r = Path();
-    for (final PathMetric metric in path.computeMetrics()) {
+  Path _dashPathFor(Size size) {
+    if (_cachedSize == size && _cachedDashedPath != null) {
+      return _cachedDashedPath!;
+    }
+
+    final path =
+        Path()..addRRect(
+          RRect.fromRectAndRadius(Offset.zero & size, Radius.circular(radius)),
+        );
+
+    final dashedPath = Path();
+    for (final ui.PathMetric metric in path.computeMetrics()) {
       double start = 0;
       while (start < metric.length) {
-        final double end = start + dottedLength;
-        r.addPath(metric.extractPath(start, end), Offset.zero);
+        final end = math.min(start + dottedLength, metric.length);
+        dashedPath.addPath(metric.extractPath(start, end), Offset.zero);
         start = end + space;
       }
     }
-    return r;
+
+    _cachedSize = size;
+    _cachedDashedPath = dashedPath;
+    return dashedPath;
   }
 
   @override
-  bool shouldRepaint(_DottedCustomPaint oldDelegate) => true;
+  bool shouldRepaint(covariant _DottedCustomPaint oldDelegate) {
+    return oldDelegate.color != color ||
+        oldDelegate.dottedLength != dottedLength ||
+        oldDelegate.space != space ||
+        oldDelegate.strokeWidth != strokeWidth ||
+        oldDelegate.radius != radius;
+  }
 }

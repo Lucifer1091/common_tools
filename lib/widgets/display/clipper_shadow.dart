@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class _ClipShadowPainter extends CustomPainter {
@@ -8,27 +9,31 @@ class _ClipShadowPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    if (boxShadows.isEmpty || size.isEmpty) return;
+
     for (final shadow in boxShadows) {
+      final spreadRadius = shadow.spreadRadius;
       final spreadSize = Size(
-        size.width + shadow.spreadRadius * 2,
-        size.height + shadow.spreadRadius * 2,
+        (size.width + spreadRadius * 2).clamp(0.0, double.infinity),
+        (size.height + spreadRadius * 2).clamp(0.0, double.infinity),
       );
       final clipPath = clipper
           .getClip(spreadSize)
           .shift(
             Offset(
-              shadow.offset.dx - shadow.spreadRadius,
-              shadow.offset.dy - shadow.spreadRadius,
+              shadow.offset.dx - spreadRadius,
+              shadow.offset.dy - spreadRadius,
             ),
           );
-      final paint = shadow.toPaint();
-      canvas.drawPath(clipPath, paint);
+      canvas.drawPath(clipPath, shadow.toPaint());
     }
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return true;
+  bool shouldRepaint(covariant _ClipShadowPainter oldDelegate) {
+    return clipper != oldDelegate.clipper ||
+        clipper.shouldReclip(oldDelegate.clipper) ||
+        !listEquals(boxShadows, oldDelegate.boxShadows);
   }
 }
 
@@ -51,9 +56,17 @@ class MyClipShadow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final clippedChild = ClipPath(
+      clipper: clipper,
+      child: RepaintBoundary(child: child),
+    );
+
+    if (boxShadow.isEmpty) return clippedChild;
+
     return CustomPaint(
+      isComplex: true,
       painter: _ClipShadowPainter(boxShadows: boxShadow, clipper: clipper),
-      child: ClipPath(clipper: clipper, child: child),
+      child: clippedChild,
     );
   }
 }

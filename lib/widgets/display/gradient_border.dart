@@ -9,7 +9,12 @@ class GradientBorder extends StatelessWidget {
     this.borderRadius,
     this.padding = 0,
     super.key,
-  });
+  }) : assert(strokeWidth >= 0, 'strokeWidth must be non-negative'),
+       assert(
+         borderRadius == null || borderRadius >= 0,
+         'borderRadius must be non-negative',
+       ),
+       assert(padding >= 0, 'padding must be non-negative');
 
   final Gradient gradient;
   final Widget child;
@@ -19,11 +24,18 @@ class GradientBorder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final resolvedRadius = borderRadius ?? 8;
+
+    if (strokeWidth <= 0) {
+      return Padding(padding: EdgeInsets.all(padding), child: child);
+    }
+
     return CustomPaint(
+      isComplex: true,
       painter: _GradientBorderPainter(
         gradient: gradient,
         strokeWidth: strokeWidth,
-        borderRadius: borderRadius ?? 8,
+        borderRadius: resolvedRadius,
       ),
       child: Padding(
         padding: EdgeInsets.all(padding + strokeWidth),
@@ -39,46 +51,45 @@ class _GradientBorderPainter extends CustomPainter {
     required this.gradient,
     required this.strokeWidth,
     required this.borderRadius,
-  });
+  }) : _paint = Paint()..isAntiAlias = true;
 
   final Gradient gradient;
   final double strokeWidth;
   final double borderRadius;
-  final Paint paintObject = Paint();
+  final Paint _paint;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final Rect innerRect = Rect.fromLTRB(
-      strokeWidth,
-      strokeWidth,
-      size.width - strokeWidth,
-      size.height - strokeWidth,
-    );
-    final RRect innerRoundedRect = RRect.fromRectAndRadius(
-      innerRect,
-      Radius.circular(borderRadius),
-    );
+    if (size.isEmpty || strokeWidth <= 0) return;
 
-    final Rect outerRect = Offset.zero & size;
-    final RRect outerRoundedRect = RRect.fromRectAndRadius(
+    final outerRect = Offset.zero & size;
+    final inset = strokeWidth.clamp(0.0, size.shortestSide / 2);
+    final innerRect = outerRect.deflate(inset);
+    final outerRoundedRect = RRect.fromRectAndRadius(
       outerRect,
       Radius.circular(borderRadius),
     );
 
-    paintObject.shader = gradient.createShader(outerRect);
-    final Path borderPath = _calculateBorderPath(
-      outerRoundedRect,
-      innerRoundedRect,
-    );
-    canvas.drawPath(borderPath, paintObject);
-  }
+    _paint.shader = gradient.createShader(outerRect);
 
-  Path _calculateBorderPath(RRect outerRRect, RRect innerRRect) {
-    final Path outerRectPath = Path()..addRRect(outerRRect);
-    final Path innerRectPath = Path()..addRRect(innerRRect);
-    return Path.combine(PathOperation.difference, outerRectPath, innerRectPath);
+    if (innerRect.isEmpty) {
+      canvas.drawRRect(outerRoundedRect, _paint);
+      return;
+    }
+
+    final innerRadius = (borderRadius - inset).clamp(0.0, double.infinity);
+    final innerRoundedRect = RRect.fromRectAndRadius(
+      innerRect,
+      Radius.circular(innerRadius),
+    );
+
+    canvas.drawDRRect(outerRoundedRect, innerRoundedRect, _paint);
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant _GradientBorderPainter oldDelegate) {
+    return oldDelegate.gradient != gradient ||
+        oldDelegate.strokeWidth != strokeWidth ||
+        oldDelegate.borderRadius != borderRadius;
+  }
 }

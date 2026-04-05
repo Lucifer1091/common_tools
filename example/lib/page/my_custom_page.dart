@@ -1,6 +1,4 @@
 import 'package:common_tools/index.dart';
-import 'package:common_tools/widgets/display/border_beam.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../base/example_widget.dart';
@@ -50,17 +48,6 @@ class MyCustomPage extends StatelessWidget {
             ExampleItem(desc: 'Clip Shadow', builder: _buildClipShadow),
             ExampleItem(desc: 'Border Beam', builder: _buildBorderBeam),
             ExampleItem(desc: 'Blur', builder: _buildBlur),
-          ],
-        ),
-        ExampleModule(
-          title: 'Rich Content',
-          children: [
-            ExampleItem(
-              desc: 'Hyper Link Widget & Link Text',
-              ignoreCode: true,
-              center: false,
-              builder: (context) => const _DisplayRichContentDemo(),
-            ),
           ],
         ),
       ],
@@ -217,7 +204,7 @@ class MyCustomPage extends StatelessWidget {
       colorTo: Colors.purple,
       staticBorderColor: context.colorScheme.border,
       borderWidth: 2,
-      duration: 7,
+      duration: const Duration(seconds: 5),
       borderRadius: BorderRadius.circular(20),
       padding: EdgeInsets.all(5),
       child: Container(
@@ -450,69 +437,6 @@ class _LimitTextScaleDemo extends StatelessWidget {
   }
 }
 
-class _DisplayRichContentDemo extends StatelessWidget {
-  const _DisplayRichContentDemo();
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const _PreviewCard(
-            title: 'HyperLinkWidget and LinkText',
-            note:
-                'The demo intercepts taps locally so you can verify behavior without leaving the app.',
-            child: _HyperLinkShowcase(),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _PreviewCard extends StatelessWidget {
-  const _PreviewCard({required this.title, required this.child, this.note});
-
-  final String title;
-  final String? note;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    final card = _DemoSurface(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: context.titleMedium.copyWith(
-              fontWeight: FontWeight.w700,
-              color: context.colorScheme.secondaryForeground,
-            ),
-          ),
-          if (note != null) ...[
-            const SizedBox(height: 8),
-            Text(
-              note!,
-              style: context.bodySmall.copyWith(
-                color: context.colorScheme.secondaryForeground.withValues(
-                  alpha: 0.75,
-                ),
-              ),
-            ),
-          ],
-          const SizedBox(height: 16),
-          child,
-        ],
-      ),
-    );
-
-    return SizedBox(width: double.infinity, child: card);
-  }
-}
-
 class _BackdropFrame extends StatelessWidget {
   const _BackdropFrame({required this.label, required this.child});
 
@@ -569,102 +493,6 @@ class _BackdropFrame extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _HyperLinkShowcase extends StatefulWidget {
-  const _HyperLinkShowcase();
-
-  @override
-  State<_HyperLinkShowcase> createState() => _HyperLinkShowcaseState();
-}
-
-class _HyperLinkShowcaseState extends State<_HyperLinkShowcase> {
-  late final TapGestureRecognizer _docsRecognizer;
-  late final TapGestureRecognizer _supportRecognizer;
-  late final TapGestureRecognizer _statusRecognizer;
-
-  @override
-  void initState() {
-    super.initState();
-    _docsRecognizer = TapGestureRecognizer()..onTap = () => _showTap('Docs');
-    _supportRecognizer = TapGestureRecognizer()
-      ..onTap = () => _showTap('Support');
-    _statusRecognizer = TapGestureRecognizer()
-      ..onTap = () => _showTap('Status');
-  }
-
-  void _showTap(String label) {
-    ScaffoldMessenger.maybeOf(context)?.showSnackBar(
-      SnackBar(content: Text('$label tapped from the display demo.')),
-    );
-  }
-
-  @override
-  void dispose() {
-    _docsRecognizer.dispose();
-    _supportRecognizer.dispose();
-    _statusRecognizer.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'HyperLinkWidget',
-          style: context.titleSmall.copyWith(
-            fontWeight: FontWeight.w700,
-            color: context.colorScheme.secondaryForeground,
-          ),
-        ),
-        const SizedBox(height: 8),
-        HyperLinkWidget(
-          maxLines: 1,
-          style: context.bodyMedium.copyWith(
-            color: context.colorScheme.primary,
-            fontWeight: FontWeight.w700,
-          ),
-          text: TextSpan(
-            children: [
-              TextSpan(text: 'Docs', recognizer: _docsRecognizer),
-              const TextSpan(text: '  •  '),
-              TextSpan(text: 'Support', recognizer: _supportRecognizer),
-              const TextSpan(text: '  •  '),
-              TextSpan(text: 'Status', recognizer: _statusRecognizer),
-            ],
-          ),
-        ),
-        const SizedBox(height: 18),
-        Text(
-          'LinkText',
-          style: context.titleSmall.copyWith(
-            fontWeight: FontWeight.w700,
-            color: context.colorScheme.secondaryForeground,
-          ),
-        ),
-        const SizedBox(height: 8),
-        LinkText(
-          'Read the docs at https://example.com/docs?source=display-demo or send feedback to https://example.com/feedback.',
-          shouldTrimParams: true,
-          maxLines: 4,
-          textStyle: context.bodyMedium.copyWith(
-            color: context.colorScheme.secondaryForeground,
-          ),
-          linkStyle: context.bodyMedium.copyWith(
-            color: context.colorScheme.primary,
-            fontWeight: FontWeight.w700,
-            decoration: TextDecoration.underline,
-          ),
-          onLinkTap: (url) {
-            final host = Uri.tryParse(url)?.host ?? url;
-            _showTap(host);
-          },
-        ),
-      ],
     );
   }
 }

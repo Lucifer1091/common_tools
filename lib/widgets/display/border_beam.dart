@@ -9,17 +9,17 @@ class MyBorderBeam extends StatefulWidget {
   const MyBorderBeam({
     required this.child,
     super.key,
-    this.duration = 15,
+    this.duration = const Duration(seconds: 5),
     this.borderWidth = 1.5,
     this.colorFrom = const Color(0xFFFFAA40),
     this.colorTo = const Color(0xFF9C40FF),
     this.staticBorderColor,
     this.borderRadius = const BorderRadius.all(Radius.circular(12)),
     this.padding = EdgeInsets.zero,
-  });
+  }) : assert(borderWidth >= 0, 'borderWidth must be non-negative');
 
   final Widget child;
-  final double duration;
+  final Duration duration;
   final double borderWidth;
   final Color colorFrom;
   final Color colorTo;
@@ -33,18 +33,25 @@ class MyBorderBeam extends StatefulWidget {
 
 class _MyBorderBeamState extends State<MyBorderBeam>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
+  late final AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      duration: Duration(seconds: widget.duration.toInt()),
-      vsync: this,
-    );
-    _animation = Tween<double>(begin: 0, end: 1).animate(_controller);
+    _controller = AnimationController(duration: widget.duration, vsync: this);
     unawaited(_controller.repeat());
+  }
+
+  @override
+  void didUpdateWidget(covariant MyBorderBeam oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (_controller.duration != widget.duration) {
+      _controller.duration = widget.duration;
+      if (_controller.isAnimating) {
+        unawaited(_controller.repeat(min: _controller.value));
+      }
+    }
   }
 
   @override
@@ -55,22 +62,22 @@ class _MyBorderBeamState extends State<MyBorderBeam>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _animation,
-      builder: (context, child) {
-        return CustomPaint(
-          painter: _BorderBeamPainter(
-            progress: _animation.value,
-            borderWidth: widget.borderWidth,
-            colorFrom: widget.colorFrom,
-            colorTo: widget.colorTo,
-            staticBorderColor:
-                widget.staticBorderColor ?? context.colorScheme.border,
-            borderRadius: widget.borderRadius,
-          ),
-          child: Padding(padding: widget.padding, child: widget.child),
-        );
-      },
+    return CustomPaint(
+      painter: _BorderBeamPainter(
+        progress: _controller,
+        borderWidth: widget.borderWidth,
+        colorFrom: widget.colorFrom,
+        colorTo: widget.colorTo,
+        staticBorderColor:
+            widget.staticBorderColor ?? context.colorScheme.border,
+        borderRadius: widget.borderRadius,
+      ),
+      isComplex: true,
+      willChange: true,
+      child: Padding(
+        padding: widget.padding,
+        child: RepaintBoundary(child: widget.child),
+      ),
     );
   }
 }
@@ -83,71 +90,97 @@ class _BorderBeamPainter extends CustomPainter {
     required this.colorTo,
     required this.staticBorderColor,
     required this.borderRadius,
-  });
+  }) : _staticPaint =
+           Paint()
+             ..style = PaintingStyle.stroke
+             ..isAntiAlias = true,
+       _beamPaint =
+           Paint()
+             ..style = PaintingStyle.stroke
+             ..isAntiAlias = true,
+       super(repaint: progress);
 
-  final double progress;
+  final Animation<double> progress;
   final double borderWidth;
   final Color colorFrom;
   final Color colorTo;
   final Color staticBorderColor;
   final BorderRadius borderRadius;
+  final Paint _staticPaint;
+  final Paint _beamPaint;
+
+  static const _beamCoverage = 0.25;
+  static const _gradientCoverage = 0.125;
+
+  Size? _cachedSize;
+  late RRect _cachedRRect;
+  late ui.PathMetric _cachedMetric;
+  late double _cachedPathLength;
+
+  void _updateCachedGeometry(Size size) {
+    if (_cachedSize == size) return;
+
+    final rect = Offset.zero & size;
+    _cachedRRect = borderRadius.toRRect(rect);
+    final path = Path()..addRRect(_cachedRRect);
+    _cachedMetric = path.computeMetrics().first;
+    _cachedPathLength = _cachedMetric.length;
+    _cachedSize = size;
+  }
 
   @override
   void paint(Canvas canvas, Size size) {
-    final rect = Rect.fromLTWH(0, 0, size.width, size.height);
-    final rrect = borderRadius.toRRect(rect);
+    if (size.isEmpty || borderWidth <= 0) return;
 
-    // Draw static border
-    final staticPaint =
-        Paint()
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = borderWidth
-          ..color = staticBorderColor;
-    canvas.drawRRect(rrect, staticPaint);
+    _updateCachedGeometry(size);
 
-    final path = Path()..addRRect(rrect);
+    _staticPaint
+      ..strokeWidth = borderWidth
+      ..color = staticBorderColor;
+    canvas.drawRRect(_cachedRRect, _staticPaint);
 
-    final pathMetrics = path.computeMetrics().first;
-    final pathLength = pathMetrics.length;
-
-    // Adjust the animation to prevent the jump
-    final animationProgress = progress % 1.0;
+    final pathLength = _cachedPathLength;
+    final animationProgress = progress.value % 1.0;
     final start = animationProgress * pathLength;
-    final end = (start + pathLength / 4) % pathLength;
+    final end = (start + pathLength * _beamCoverage) % pathLength;
 
     Path extractPath;
     if (end > start) {
-      extractPath = pathMetrics.extractPath(start, end);
+      extractPath = _cachedMetric.extractPath(start, end);
     } else {
-      extractPath = pathMetrics.extractPath(start, pathLength)
-        ..addPath(pathMetrics.extractPath(0, end), Offset.zero);
+      extractPath = _cachedMetric.extractPath(start, pathLength)
+        ..addPath(_cachedMetric.extractPath(0, end), Offset.zero);
     }
 
-    // Calculate gradient start and end points
     final gradientStart =
-        pathMetrics.getTangentForOffset(start)?.position ?? Offset.zero;
+        _cachedMetric.getTangentForOffset(start)?.position ?? Offset.zero;
     final gradientEnd =
-        pathMetrics
-            .getTangentForOffset((start + pathLength / 8) % pathLength)
+        _cachedMetric
+            .getTangentForOffset(
+              (start + pathLength * _gradientCoverage) % pathLength,
+            )
             ?.position ??
         Offset.zero;
 
-    final paint =
-        Paint()
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = borderWidth
-          ..shader = ui.Gradient.linear(
-            gradientStart,
-            gradientEnd,
-            [colorTo.withValues(alpha: 0), colorTo, colorFrom],
-            [0.0, 0.3, 1.0],
-          );
+    _beamPaint
+      ..strokeWidth = borderWidth
+      ..shader = ui.Gradient.linear(
+        gradientStart,
+        gradientEnd,
+        [colorTo.withValues(alpha: 0), colorTo, colorFrom],
+        const [0.0, 0.3, 1.0],
+      );
 
-    canvas.drawPath(extractPath, paint);
+    canvas.drawPath(extractPath, _beamPaint);
   }
 
   @override
   bool shouldRepaint(covariant _BorderBeamPainter oldDelegate) {
-    return oldDelegate.progress != progress;
+    return oldDelegate.borderWidth != borderWidth ||
+        oldDelegate.colorFrom != colorFrom ||
+        oldDelegate.colorTo != colorTo ||
+        oldDelegate.staticBorderColor != staticBorderColor ||
+        oldDelegate.borderRadius != borderRadius ||
+        oldDelegate.progress != progress;
   }
 }

@@ -34,11 +34,11 @@ class GradientWidget extends StatelessWidget {
     required this.child,
     required this.gradient,
     this.blendMode = BlendMode.srcIn,
-    this.opacity = 1.0,
+    this.opacity,
     this.alignment = AlignmentDirectional.center,
     super.key,
   }) : assert(
-         opacity >= 0.0 && opacity <= 1.0,
+         opacity == null || (opacity >= 0 && opacity <= 1),
          'Opacity must be between 0.0 and 1.0',
        );
 
@@ -56,7 +56,7 @@ class GradientWidget extends StatelessWidget {
 
   /// The opacity of the gradient, ranging from 0.0 (fully transparent)
   /// to 1.0 (fully opaque). Defaults to 1.0.
-  final double opacity;
+  final double? opacity;
 
   /// The alignment of the child within the widget. Useful if the child does not
   /// fill the entire available space. Defaults to [AlignmentDirectional.center].
@@ -64,13 +64,18 @@ class GradientWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Opacity(
-      opacity: opacity,
-      child: ShaderMask(
-        blendMode: blendMode,
-        shaderCallback: gradient.createShader,
-        child: Align(alignment: alignment, child: child),
-      ),
+    final alignedChild = Align(alignment: alignment, child: child);
+
+    if (opacity == 0) return Opacity(opacity: 0, child: alignedChild);
+
+    final maskedChild = ShaderMask(
+      blendMode: blendMode,
+      shaderCallback: gradient.createShader,
+      child: alignedChild,
     );
+
+    if (opacity == null || opacity! >= 1) return maskedChild;
+
+    return Opacity(opacity: opacity!, child: maskedChild);
   }
 }

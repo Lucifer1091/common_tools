@@ -45,7 +45,10 @@ class MyLinkPage extends StatelessWidget {
         ),
         ExampleModule(
           title: 'Component Style',
-          children: [ExampleItem(desc: 'Link Sizes', builder: _buildLinkSizes)],
+          children: [
+            ExampleItem(desc: 'Link Sizes', builder: _buildLinkSizes),
+            ExampleItem(desc: 'Link Text', builder: _buildLinkText),
+          ],
         ),
       ],
     );
@@ -182,6 +185,26 @@ class MyLinkPage extends StatelessWidget {
       style: style,
       type: MyLinkType.withSuffix,
       size: size,
+    );
+  }
+
+  Widget _buildLinkText(BuildContext context) {
+    return MyLinkText(
+      'Read the docs at https://example.com/docs?source=display-demo or send feedback to https://example.com/feedback.',
+      shouldTrimParams: true,
+      maxLines: 4,
+      textStyle: context.bodyMedium.copyWith(
+        color: context.colorScheme.secondaryForeground,
+      ),
+      linkStyle: context.bodyMedium.copyWith(
+        color: context.colorScheme.primary,
+        fontWeight: FontWeight.w700,
+        decoration: TextDecoration.underline,
+      ),
+      onLinkTap: (url) {
+        final host = Uri.tryParse(url)?.host ?? url;
+        MyToast.info(context: context, title: host);
+      },
     );
   }
 }

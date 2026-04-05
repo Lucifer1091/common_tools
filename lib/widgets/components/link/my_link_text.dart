@@ -2,71 +2,13 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../index.dart';
-
-/// HyperLinkWidget
-class HyperLinkWidget extends StatefulWidget {
-  const HyperLinkWidget({
-    required this.text,
-    super.key,
-    this.style,
-    this.maxLines = 1,
-  });
-
-  final TextSpan text;
-  final TextStyle? style;
-  final int maxLines;
-
-  @override
-  State<HyperLinkWidget> createState() => _HyperLinkWidgetState();
-}
-
-class _HyperLinkWidgetState extends State<HyperLinkWidget> {
-  String hover = '0';
-
-  @override
-  Widget build(BuildContext context) {
-    return RichText(
-      maxLines: widget.maxLines,
-      overflow: TextOverflow.ellipsis,
-      text: TextSpan(
-        style: widget.style,
-        children:
-            widget.text.children
-                ?.map(
-                  (e) => TextSpan(
-                    text: (e as TextSpan).text,
-                    style:
-                        e.recognizer != null
-                            ? widget.style?.copyWith(
-                              decoration:
-                                  hover == e.text!
-                                      ? TextDecoration.underline
-                                      : null,
-                            )
-                            : null,
-                    recognizer: e.recognizer,
-                    onEnter: (_) {
-                      hover = e.text!;
-                      setState(() {});
-                    },
-                    onExit: (_) {
-                      hover = '0';
-                      setState(() {});
-                    },
-                  ),
-                )
-                .toList(),
-      ),
-    );
-  }
-}
+import '../../../index.dart';
 
 /// Easy to use text widget, which converts inlined urls into clickable links.
 /// Allows custom styling.
-class LinkText extends StatefulWidget {
-  /// Creates a [LinkText] widget, used for inlined urls.
-  const LinkText(
+class MyLinkText extends StatefulWidget {
+  /// Creates a [MyLinkText] widget, used for inlined urls.
+  const MyLinkText(
     this.text, {
     super.key,
     this.textStyle,
@@ -101,22 +43,61 @@ class LinkText extends StatefulWidget {
   final void Function(String url)? onLinkTap;
 
   @override
-  State<LinkText> createState() => _LinkTextState();
+  State<MyLinkText> createState() => _MyLinkTextState();
 }
 
-class _LinkTextState extends State<LinkText> {
-  final _gestureRecognizers = <TapGestureRecognizer>[];
-  final _regex = RegExp(
+class _MyLinkTextState extends State<MyLinkText> {
+  static final _regex = RegExp(
     r'https?:\/\/(www\.)?[-a-zA-Z0-9@:%.,_\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\,+.~#?&//=]*)',
   );
-  final _shortenedRegex = RegExp(r'(.*)\?');
+  static final _shortenedRegex = RegExp(r'(.*)\?');
+
+  final _gestureRecognizers = <TapGestureRecognizer>[];
+  List<String> _textParts = const [];
+  List<String> _links = const [];
+
+  @override
+  void initState() {
+    super.initState();
+    _rebuildParsedText();
+  }
+
+  @override
+  void didUpdateWidget(covariant MyLinkText oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.text != oldWidget.text) {
+      _rebuildParsedText();
+    }
+  }
 
   @override
   void dispose() {
+    _disposeRecognizers();
+    super.dispose();
+  }
+
+  void _disposeRecognizers() {
     for (final recognizer in _gestureRecognizers) {
       recognizer.dispose();
     }
-    super.dispose();
+    _gestureRecognizers.clear();
+  }
+
+  void _rebuildParsedText() {
+    _disposeRecognizers();
+
+    final matches = _regex.allMatches(widget.text).toList(growable: false);
+    _textParts = widget.text.split(_regex);
+    _links = [
+      for (final match in matches)
+        if ((match.group(0) ?? '').isNotEmpty) match.group(0)!,
+    ];
+
+    for (final link in _links) {
+      _gestureRecognizers.add(
+        TapGestureRecognizer()..onTap = () => _launchUrl(link),
+      );
+    }
   }
 
   Future<void> _launchUrl(String url) async {
@@ -148,41 +129,35 @@ class _LinkTextState extends State<LinkText> {
               thickness: 2,
             );
 
-    final links = _regex.allMatches(widget.text);
-
-    if (links.isEmpty) {
+    if (_links.isEmpty) {
       return Text(
         widget.text,
         style: textStyle,
         textAlign: widget.textAlign,
         maxLines: widget.maxLines,
+        overflow: TextOverflow.ellipsis,
       );
     }
 
-    final textParts = widget.text.split(_regex);
     final textSpans = <TextSpan>[];
 
     int i = 0;
-    for (final part in textParts) {
+    for (final part in _textParts) {
       textSpans.add(TextSpan(text: part, style: textStyle));
 
-      if (i < links.length) {
-        final link = links.elementAt(i).group(0) ?? '';
+      if (i < _links.length) {
+        final link = _links[i];
         String? shortenedLink;
-
-        final recognizer =
-            TapGestureRecognizer()..onTap = () => _launchUrl(link);
 
         if (widget.shouldTrimParams) {
           shortenedLink = _shortenedRegex.firstMatch(link)?.group(1);
         }
 
-        _gestureRecognizers.add(recognizer);
         textSpans.add(
           TextSpan(
             text: shortenedLink ?? link,
             style: linkStyle,
-            recognizer: recognizer,
+            recognizer: _gestureRecognizers[i],
           ),
         );
 
@@ -194,6 +169,7 @@ class _LinkTextState extends State<LinkText> {
       TextSpan(children: textSpans),
       textAlign: widget.textAlign,
       maxLines: widget.maxLines,
+      overflow: TextOverflow.ellipsis,
     );
   }
 }
