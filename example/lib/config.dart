@@ -35,6 +35,7 @@ import 'page/my_indexes_page.dart';
 import 'page/my_input_page.dart';
 import 'page/my_link_page.dart';
 import 'page/my_loader_page.dart';
+import 'page/my_lists_page.dart';
 import 'page/td_message_page.dart';
 import 'page/td_navbar_page.dart';
 import 'page/my_notice_bar_page.dart';
@@ -118,6 +119,11 @@ Map<String, List<ExamplePageModel>> exampleMap = {
       text: 'Builders',
       name: 'builders',
       pageBuilder: _wrapInheritedTheme((context) => const MyBuildersPage()),
+    ),
+    ExamplePageModel(
+      text: 'Lists',
+      name: 'lists',
+      pageBuilder: _wrapInheritedTheme((context) => const MyListsPage()),
     ),
     ExamplePageModel(
       text: 'Custom',

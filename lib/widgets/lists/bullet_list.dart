@@ -2,17 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../../index.dart';
 
-enum SymbolType { Bullet, Numbered, Custom }
+enum SymbolType { bullet, numbered, custom }
 
-/// Add UL to its children
 class BulletList extends StatelessWidget {
-  // Used when SymbolType is Numbered
-
   const BulletList({
     this.children,
     this.padding = 8,
     this.spacing = 8,
-    this.symbolType = SymbolType.Bullet,
+    this.symbolType = SymbolType.bullet,
     this.symbolColor,
     this.textColor,
     this.customSymbol,
@@ -56,19 +53,19 @@ class BulletList extends StatelessWidget {
 
   /// Returns a symbol widget
   Widget symbolWidget(BuildContext context, int index) {
-    if (symbolType == SymbolType.Numbered && customSymbol != null) {
+    if (symbolType == SymbolType.numbered && customSymbol != null) {
       return customSymbol!;
-    } else if (symbolType == SymbolType.Bullet) {
+    } else if (symbolType == SymbolType.bullet) {
       return Text(
         '•',
-        style: context.bodyMedium?.copyWith(
+        style: context.bodyMedium.copyWith(
           color: symbolColor ?? context.colorScheme.primary,
         ),
       );
-    } else if (symbolType == SymbolType.Numbered) {
+    } else if (symbolType == SymbolType.numbered) {
       return Text(
-        '$prefixText ${index + 1}.',
-        style: context.bodyMedium?.copyWith(
+        '${prefixText ?? ''}${index + 1}.',
+        style: context.bodyMedium.copyWith(
           color: symbolColor ?? context.colorScheme.primary,
         ),
       );
