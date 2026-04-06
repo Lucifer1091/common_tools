@@ -39,10 +39,6 @@ class MyCustomPage extends StatelessWidget {
           title: 'Display Effects',
           children: [
             ExampleItem(desc: 'Gradient Widget', builder: _buildGradientText),
-            ExampleItem(
-              desc: 'Gradient Container',
-              builder: _buildGradientContainer,
-            ),
             ExampleItem(desc: 'Gradient Border', builder: _buildGradientBorder),
             ExampleItem(desc: 'Dotted Border', builder: _buildDottedBorder),
             ExampleItem(desc: 'Clip Shadow', builder: _buildClipShadow),
