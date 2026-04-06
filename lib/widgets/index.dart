@@ -4,7 +4,6 @@ export 'common/index.dart';
 export 'components/index.dart';
 export 'custom/index.dart';
 export 'display/index.dart';
-export 'exceptions/index.dart';
 export 'form/index.dart';
 export 'layout/index.dart';
 export 'lists/index.dart';

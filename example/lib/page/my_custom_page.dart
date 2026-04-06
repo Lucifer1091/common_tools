@@ -69,31 +69,6 @@ class MyCustomPage extends StatelessWidget {
     );
   }
 
-  Widget _buildGradientContainer(BuildContext context) {
-    return GradientBorder(
-      gradient: const LinearGradient(
-        colors: [Color(0xFF34D399), Color(0xFF22D3EE)],
-      ),
-      borderRadius: 999,
-      strokeWidth: 2,
-      padding: 12,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.auto_awesome_rounded, color: Colors.black),
-          const SizedBox(width: 10),
-          Text(
-            'Gradient Container',
-            style: context.titleSmall.copyWith(
-              fontWeight: FontWeight.w700,
-              color: Colors.black,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildGradientBorder(BuildContext context) {
     return GradientBorder(
       gradient: const LinearGradient(

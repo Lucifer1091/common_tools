@@ -205,6 +205,6 @@ class MyLinkPage extends StatelessWidget {
         final host = Uri.tryParse(url)?.host ?? url;
         MyToast.info(context: context, title: host);
       },
-    );
+    ).padding(horizontal: 16, bottom: 16);
   }
 }
