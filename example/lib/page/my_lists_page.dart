@@ -52,26 +52,12 @@ class MyListsPage extends StatelessWidget {
   }
 
   Widget _buildBulletList(BuildContext context) {
-    final textStyle = context.bodyMedium.copyWith(
-      color: context.colorScheme.foreground,
-    );
-
-    return BulletList(
-      symbolType: SymbolType.bullet,
-      edgeInsets: const EdgeInsets.only(bottom: 4),
+    return MyBulletList(
+      rowPadding: const EdgeInsets.only(bottom: 4),
       children: [
-        Text(
-          'Audit item spacing and padding in the final layout.',
-          style: textStyle,
-        ),
-        Text(
-          'Choose the right indicator style for paging or steps.',
-          style: textStyle,
-        ),
-        Text(
-          'Add expansion behavior only where extra detail is useful.',
-          style: textStyle,
-        ),
+        MyText('Audit item spacing and padding in the final layout.'),
+        MyText('Choose the right indicator style for paging or steps.'),
+        MyText('Add expansion behavior only where extra detail is useful.'),
       ],
     );
   }
@@ -378,11 +364,11 @@ Widget _buildBulletListDemo(BuildContext context) {
             ),
           ),
           const SizedBox(height: 12),
-          BulletList(
-            symbolType: SymbolType.numbered,
+          MyBulletList(
+            symbolType: MySymbolType.numbered,
             prefixText: 'Step',
             padding: 12,
-            edgeInsets: const EdgeInsets.only(bottom: 10),
+            rowPadding: const EdgeInsets.only(bottom: 10),
             children: [
               Text(
                 'Audit item spacing and padding in the final layout.',

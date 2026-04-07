@@ -141,37 +141,21 @@ class MyText extends StatelessWidget {
   }
 
   TextStyle _getTextStyle(BuildContext context) {
-    final defaults = context.bodyLarge;
-
-    return TextStyle(
-      inherit: style?.inherit ?? true,
-      overflow: style?.overflow ?? overflow ?? defaults.overflow,
-      color: style?.color ?? textColor ?? context.colorScheme.foreground,
-      backgroundColor: style?.backgroundColor ?? backgroundColor,
-      fontSize: style?.fontSize ?? fontSize ?? defaults.fontSize,
-      fontWeight: style?.fontWeight ?? fontWeight ?? defaults.fontWeight,
-      fontStyle: style?.fontStyle,
-      letterSpacing: style?.letterSpacing,
-      wordSpacing: style?.wordSpacing,
-      textBaseline: style?.textBaseline,
-      height: style?.height ?? defaults.height,
-      leadingDistribution: style?.leadingDistribution,
-      locale: style?.locale,
-      foreground: style?.foreground,
-      background: style?.background,
-      shadows: style?.shadows,
-      fontFeatures: style?.fontFeatures,
-      decoration:
-          style?.decoration ??
-          (isTextThrough ? TextDecoration.lineThrough : TextDecoration.none),
-      decorationColor: style?.decorationColor ?? lineThroughColor,
-      decorationStyle: style?.decorationStyle,
-      decorationThickness: style?.decorationThickness,
-      debugLabel: style?.debugLabel,
-      fontFamily: style?.fontFamily ?? fontFamily ?? defaults.fontFamily,
-      fontFamilyFallback:
-          style?.fontFamilyFallback ?? defaults.fontFamilyFallback,
+    final defaults = context.bodyMedium;
+    final baseStyle = defaults.copyWith(color: context.colorScheme.foreground);
+    final inheritedStyle = DefaultTextStyle.of(context).style;
+    final parameterStyle = TextStyle(
+      overflow: overflow,
+      color: textColor,
+      backgroundColor: backgroundColor,
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      fontFamily: fontFamily,
+      decoration: isTextThrough ? TextDecoration.lineThrough : null,
+      decorationColor: isTextThrough ? lineThroughColor : null,
     );
+
+    return baseStyle.merge(inheritedStyle).merge(parameterStyle).merge(style);
   }
 }
 
@@ -216,35 +200,19 @@ class MyTextSpan extends TextSpan {
     bool isTextThrough,
     Color? lineThroughColor,
   ) {
-    final defaults = context?.bodyLarge ?? MyTypography.geist().bodyLarge;
-
-    return TextStyle(
-      inherit: style?.inherit ?? true,
-      color: style?.color ?? textColor ?? context?.colorScheme.foreground,
-      backgroundColor: style?.backgroundColor,
-      fontSize: style?.fontSize ?? fontSize ?? defaults.fontSize,
-      fontWeight: style?.fontWeight ?? fontWeight ?? defaults.fontWeight,
-      fontStyle: style?.fontStyle,
-      letterSpacing: style?.letterSpacing,
-      wordSpacing: style?.wordSpacing,
-      textBaseline: style?.textBaseline,
-      height: style?.height ?? defaults.height,
-      leadingDistribution: style?.leadingDistribution,
-      locale: style?.locale,
-      foreground: style?.foreground,
-      background: style?.background,
-      shadows: style?.shadows,
-      fontFeatures: style?.fontFeatures,
-      decoration:
-          style?.decoration ??
-          (isTextThrough ? TextDecoration.lineThrough : TextDecoration.none),
-      decorationColor: style?.decorationColor ?? lineThroughColor,
-      decorationStyle: style?.decorationStyle,
-      decorationThickness: style?.decorationThickness,
-      debugLabel: style?.debugLabel,
-      fontFamily: style?.fontFamily ?? fontFamily ?? defaults.fontFamily,
-      fontFamilyFallback:
-          style?.fontFamilyFallback ?? defaults.fontFamilyFallback,
+    final defaults = context?.bodyMedium ?? MyTypography.geist().bodyMedium;
+    final baseStyle = defaults.copyWith(color: context?.colorScheme.foreground);
+    final inheritedStyle =
+        context == null ? null : DefaultTextStyle.of(context).style;
+    final parameterStyle = TextStyle(
+      color: textColor,
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      fontFamily: fontFamily,
+      decoration: isTextThrough ? TextDecoration.lineThrough : null,
+      decorationColor: isTextThrough ? lineThroughColor : null,
     );
+
+    return baseStyle.merge(inheritedStyle).merge(parameterStyle).merge(style);
   }
 }

@@ -24,18 +24,25 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ThemeState theme = ref.watch(themeProvider);
+    final themeState = ref.watch(themeProvider);
+    final typography = const MyTypography.geist();
+    final lightScheme = MyColorScheme.fromName(themeState.color);
+    final darkScheme = MyColorScheme.fromName(
+      themeState.color,
+      brightness: Brightness.dark,
+    );
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: lightScheme.toMaterialTheme(typography: typography),
+      darkTheme: darkScheme.toMaterialTheme(typography: typography),
+      themeMode: themeState.mode,
       builder: (context, child) {
         return MyUILayer(
-          themeMode: theme.mode,
-          theme: MyColorScheme.fromName(theme.color),
-          darkTheme: MyColorScheme.fromName(
-            theme.color,
-            brightness: Brightness.dark,
-          ),
+          themeMode: themeState.mode,
+          theme: lightScheme,
+          darkTheme: darkScheme,
+          typography: typography,
           child: child,
         );
       },

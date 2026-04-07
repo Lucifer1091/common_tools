@@ -2,48 +2,80 @@ import 'package:flutter/material.dart';
 
 import '../../index.dart';
 
-enum SymbolType { bullet, numbered, custom }
+enum MySymbolType { bullet, numbered, custom }
 
-class BulletList extends StatelessWidget {
-  const BulletList({
+class MyBulletList extends StatelessWidget {
+  const MyBulletList({
     this.children,
     this.padding = 8,
     this.spacing = 8,
-    this.symbolType = SymbolType.bullet,
+    this.symbolType = MySymbolType.bullet,
     this.symbolColor,
     this.textColor,
     this.customSymbol,
     this.prefixText,
-    this.edgeInsets,
+    this.rowPadding,
     this.symbolCrossAxisAlignment,
     super.key,
-  });
+  }) : assert(padding >= 0, 'padding must be greater than or equal to 0.'),
+       assert(spacing >= 0, 'spacing must be greater than or equal to 0.'),
+       assert(
+         symbolType != MySymbolType.custom || customSymbol != null,
+         'customSymbol must be provided when symbolType is SymbolType.custom.',
+       );
 
   final List<Widget>? children;
   final double padding;
   final double spacing;
-  final SymbolType symbolType;
+  final MySymbolType symbolType;
   final Color? symbolColor;
   final Color? textColor;
-  final EdgeInsets? edgeInsets;
+  final EdgeInsets? rowPadding;
   final Widget? customSymbol;
   final CrossAxisAlignment? symbolCrossAxisAlignment;
   final String? prefixText;
 
   @override
   Widget build(BuildContext context) {
+    final children = this.children;
+    if (children == null || children.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    final symbolStyle = context.bodyMedium.copyWith(
+      color: symbolColor ?? context.colorScheme.primary,
+    );
+    final crossAxisAlignment =
+        symbolCrossAxisAlignment ?? CrossAxisAlignment.start;
+
+    final childTextStyle =
+        textColor == null
+            ? null
+            : context.bodyMedium.copyWith(color: textColor);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: List.generate(children?.length ?? 0, (index) {
+      children: List<Widget>.generate(children.length, (index) {
+        final child =
+            childTextStyle == null
+                ? children[index]
+                : DefaultTextStyle.merge(
+                  style: childTextStyle,
+                  child: children[index],
+                );
+
+        final effectivePadding =
+            rowPadding ??
+            EdgeInsets.only(bottom: index == children.length - 1 ? 0 : spacing);
+
         return Padding(
-          padding: edgeInsets ?? EdgeInsets.zero,
+          padding: effectivePadding,
           child: Row(
-            crossAxisAlignment:
-                symbolCrossAxisAlignment ?? CrossAxisAlignment.start,
+            crossAxisAlignment: crossAxisAlignment,
             children: [
-              symbolWidget(context, index),
+              _buildSymbol(index, symbolStyle),
               SizedBox(width: padding),
-              children![index].expanded(),
+              Expanded(child: child),
             ],
           ),
         );
@@ -51,26 +83,19 @@ class BulletList extends StatelessWidget {
     );
   }
 
-  /// Returns a symbol widget
-  Widget symbolWidget(BuildContext context, int index) {
-    if (symbolType == SymbolType.numbered && customSymbol != null) {
-      return customSymbol!;
-    } else if (symbolType == SymbolType.bullet) {
-      return Text(
-        '•',
-        style: context.bodyMedium.copyWith(
-          color: symbolColor ?? context.colorScheme.primary,
-        ),
-      );
-    } else if (symbolType == SymbolType.numbered) {
-      return Text(
-        '${prefixText ?? ''}${index + 1}.',
-        style: context.bodyMedium.copyWith(
-          color: symbolColor ?? context.colorScheme.primary,
-        ),
-      );
+  Widget _buildSymbol(int index, TextStyle symbolStyle) {
+    switch (symbolType) {
+      case MySymbolType.bullet:
+        return Text('\u2022', style: symbolStyle);
+      case MySymbolType.numbered:
+        final prefix = prefixText;
+        final label =
+            prefix == null || prefix.isEmpty
+                ? '${index + 1}.'
+                : '$prefix ${index + 1}.';
+        return Text(label, style: symbolStyle);
+      case MySymbolType.custom:
+        return customSymbol ?? const SizedBox.shrink();
     }
-
-    return Offstage();
   }
 }
