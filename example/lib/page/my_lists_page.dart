@@ -25,13 +25,12 @@ class MyListsPage extends StatelessWidget {
               builder: _buildBulletList,
             ),
             ExampleItem(
-              desc: 'Custom List Tile',
+              desc: 'Marquee Widget',
               padding: EdgeInsets.symmetric(horizontal: 16),
-              builder: _buildCustomListTile,
+              builder: _buildMarqueeWidgetDemo,
             ),
           ],
         ),
-        _buildModule('Tiles & Expansion', _tileEntries),
         _buildModule('Scroll & Content', _contentEntries),
         _buildModule('Paging & State', _pagingEntries),
       ],
@@ -62,71 +61,55 @@ class MyListsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildCustomListTile(BuildContext context) {
-    final textStyle = context.bodyMedium.copyWith(
-      color: context.colorScheme.foreground,
-    );
+  Widget _buildMarqueeWidgetDemo(BuildContext context) {
+    final labels = [
+      'Long-running sync completed',
+      '3 list demos added',
+      'Reorder enabled',
+      'Page cache warmed',
+    ];
 
     return Column(
-      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CustomListTile(
-          inkwellRadius: BorderRadius.circular(18),
-          leading: CircleAvatar(
-            backgroundColor: context.colorScheme.primary.withValues(
-              alpha: 0.14,
+        Container(
+          height: 60,
+          decoration: BoxDecoration(
+            color: context.colorScheme.background,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: context.colorScheme.border),
+          ),
+          child: MyMarqueeWidget(
+            animationDuration: const Duration(seconds: 8),
+            backDuration: const Duration(seconds: 8),
+            pauseDuration: const Duration(milliseconds: 600),
+            child: Row(
+              children: [
+                const SizedBox(width: 12),
+                for (final label in labels) ...[
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: context.colorScheme.primary.withValues(
+                        alpha: 0.12,
+                      ),
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                    child: Text(
+                      label,
+                      style: context.bodyMedium.copyWith(
+                        color: context.colorScheme.foreground,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                ],
+              ],
             ),
-            child: Icon(
-              Icons.layers_outlined,
-              color: context.colorScheme.primary,
-            ),
-          ),
-          title: Text(
-            'Design system',
-            style: context.titleSmall.copyWith(
-              fontWeight: FontWeight.w700,
-              color: context.colorScheme.foreground,
-            ),
-          ),
-          subtitle: Text(
-            'Shared styles, tokens, and spacing presets.',
-            style: context.bodySmall.copyWith(
-              color: context.colorScheme.secondaryForeground,
-            ),
-          ),
-          trailing: Icon(
-            Icons.chevron_right_rounded,
-            color: context.colorScheme.secondaryForeground,
-          ),
-          onTap: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('CustomListTile tapped')),
-            );
-          },
-        ),
-        MyDivider(height: 1, color: context.colorScheme.border),
-        CustomListTile(
-          leading: CircleAvatar(
-            backgroundColor: const Color(0xFF92400E).withValues(alpha: 0.14),
-            child: const Icon(Icons.bolt_rounded, color: Color(0xFF92400E)),
-          ),
-          title: Text(
-            'Quick actions',
-            style: context.titleSmall.copyWith(
-              fontWeight: FontWeight.w700,
-              color: context.colorScheme.foreground,
-            ),
-          ),
-          subtitle: Text(
-            'The trailing widget can be anything, not just an icon.',
-            style: context.bodySmall.copyWith(
-              color: context.colorScheme.secondaryForeground,
-            ),
-          ),
-          trailing: _StatusChip(
-            label: 'New',
-            active: true,
-            color: context.colorScheme.primary,
           ),
         ),
       ],
@@ -210,80 +193,7 @@ class _ListExamplePage extends StatelessWidget {
   }
 }
 
-final List<ListDemoEntry> _tileEntries = [
-  ListDemoEntry(
-    title: 'CustomListTile',
-    subtitle: 'A more configurable ListTile with custom inkwell radius.',
-    pageDescription:
-        'CustomListTile mirrors Flutter ListTile but exposes a few styling knobs that make card and menu layouts easier to tune.',
-    demoBuilder: _buildCustomListTileDemo,
-  ),
-  ListDemoEntry(
-    title: 'CustomExpansionTile',
-    subtitle: 'Expansion tile with decoration and radius control.',
-    pageDescription:
-        'CustomExpansionTile gives expansion panels a more card-like presentation with decoration, padding, and custom tile corners.',
-    demoBuilder: _buildCustomExpansionTileDemo,
-  ),
-  ListDemoEntry(
-    title: 'ExpandableListTile',
-    subtitle: 'Compact expand and collapse behavior in a custom row.',
-    pageDescription:
-        'ExpandableListTile is a simpler custom expansion row that works well for compact settings, FAQs, and secondary detail blocks.',
-    demoBuilder: _buildExpandableListTileDemo,
-  ),
-  ListDemoEntry(
-    title: 'ExpansionWidget',
-    subtitle: 'Flexible title row plus expandable body content.',
-    pageDescription:
-        'ExpansionWidget is useful for form sections and optional controls where you want the title bar and body styling to stay separate.',
-    demoBuilder: _buildExpansionWidgetDemo,
-  ),
-  ListDemoEntry(
-    title: 'OptimizedCard',
-    subtitle: 'Card wrapper with a softer, customizable shadow treatment.',
-    pageDescription:
-        'OptimizedCard keeps Material card behavior while adding a more adjustable outer shadow for elevated content panels.',
-    demoBuilder: _buildOptimizedCardDemo,
-  ),
-  ListDemoEntry(
-    title: 'OptimizedListTile',
-    subtitle: 'List-tile layout already wrapped in an OptimizedCard.',
-    pageDescription:
-        'OptimizedListTile is handy when you want title, subtitle, leading, and trailing content in a padded card with minimal setup.',
-    demoBuilder: _buildOptimizedListTileDemo,
-  ),
-];
-
 final List<ListDemoEntry> _contentEntries = [
-  ListDemoEntry(
-    title: 'HorizontalList',
-    subtitle: 'Wrap-like horizontal scroller for variable-width children.',
-    pageDescription:
-        'HorizontalList works well when your items do not share a fixed width and you still want an easy horizontal scroller.',
-    demoBuilder: _buildHorizontalListDemo,
-  ),
-  ListDemoEntry(
-    title: 'HorizontalListView',
-    subtitle: 'Fixed-size horizontal builder for repeated cards.',
-    pageDescription:
-        'HorizontalListView is a builder-based horizontal row with per-item width and height, useful for repeating card rails.',
-    demoBuilder: _buildHorizontalListViewDemo,
-  ),
-  ListDemoEntry(
-    title: 'MarqueeWidget',
-    subtitle: 'Auto-scroll overflowing content in one or two directions.',
-    pageDescription:
-        'MarqueeWidget keeps long text or chip rows moving automatically when the content is wider than the available space.',
-    demoBuilder: _buildMarqueeWidgetDemo,
-  ),
-  ListDemoEntry(
-    title: 'OptimizedScrollView',
-    subtitle: 'Fill the viewport while keeping the child scrollable.',
-    pageDescription:
-        'OptimizedScrollView is useful for full-height detail views where the content should stretch to the viewport and still scroll naturally.',
-    demoBuilder: _buildOptimizedScrollViewDemo,
-  ),
   ListDemoEntry(
     title: 'TypedListView',
     subtitle: 'Type-safe ListView with header, footer, separators, and paging.',
@@ -345,642 +255,6 @@ final List<ListDemoEntry> _pagingEntries = [
   ),
 ];
 
-Widget _buildBulletListDemo(BuildContext context) {
-  final textStyle = context.bodyMedium.copyWith(
-    color: context.colorScheme.secondaryForeground,
-  );
-
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    child: _DemoCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Release checklist',
-            style: context.titleMedium.copyWith(
-              fontWeight: FontWeight.w700,
-              color: context.colorScheme.foreground,
-            ),
-          ),
-          const SizedBox(height: 12),
-          MyBulletList(
-            symbolType: MySymbolType.numbered,
-            prefixText: 'Step',
-            padding: 12,
-            rowPadding: const EdgeInsets.only(bottom: 10),
-            children: [
-              Text(
-                'Audit item spacing and padding in the final layout.',
-                style: textStyle,
-              ),
-              Text(
-                'Choose the right indicator style for paging or steps.',
-                style: textStyle,
-              ),
-              Text(
-                'Add expansion behavior only where extra detail is useful.',
-                style: textStyle,
-              ),
-            ],
-          ),
-        ],
-      ),
-    ),
-  );
-}
-
-Widget _buildCustomListTileDemo(BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    child: _DemoCard(
-      child: Material(
-        color: Colors.transparent,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(18),
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: context.colorScheme.background,
-              border: Border.all(color: context.colorScheme.border),
-              borderRadius: BorderRadius.circular(18),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CustomListTile(
-                  inkwellRadius: BorderRadius.circular(18),
-                  leading: CircleAvatar(
-                    backgroundColor: context.colorScheme.primary.withValues(
-                      alpha: 0.14,
-                    ),
-                    child: Icon(
-                      Icons.layers_outlined,
-                      color: context.colorScheme.primary,
-                    ),
-                  ),
-                  title: Text(
-                    'Design system',
-                    style: context.titleSmall.copyWith(
-                      fontWeight: FontWeight.w700,
-                      color: context.colorScheme.foreground,
-                    ),
-                  ),
-                  subtitle: Text(
-                    'Shared styles, tokens, and spacing presets.',
-                    style: context.bodySmall.copyWith(
-                      color: context.colorScheme.secondaryForeground,
-                    ),
-                  ),
-                  trailing: Icon(
-                    Icons.chevron_right_rounded,
-                    color: context.colorScheme.secondaryForeground,
-                  ),
-                  onTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('CustomListTile tapped')),
-                    );
-                  },
-                ),
-                MyDivider(height: 1, color: context.colorScheme.border),
-                CustomListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: const Color(
-                      0xFF92400E,
-                    ).withValues(alpha: 0.14),
-                    child: const Icon(
-                      Icons.bolt_rounded,
-                      color: Color(0xFF92400E),
-                    ),
-                  ),
-                  title: Text(
-                    'Quick actions',
-                    style: context.titleSmall.copyWith(
-                      fontWeight: FontWeight.w700,
-                      color: context.colorScheme.foreground,
-                    ),
-                  ),
-                  subtitle: Text(
-                    'The trailing widget can be anything, not just an icon.',
-                    style: context.bodySmall.copyWith(
-                      color: context.colorScheme.secondaryForeground,
-                    ),
-                  ),
-                  trailing: _StatusChip(
-                    label: 'New',
-                    active: true,
-                    color: context.colorScheme.primary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    ),
-  );
-}
-
-Widget _buildCustomExpansionTileDemo(BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    child: _DemoCard(
-      child: Material(
-        color: Colors.transparent,
-        child: CustomExpansionTile(
-          title: Text(
-            'Project handoff',
-            style: context.titleSmall.copyWith(
-              fontWeight: FontWeight.w700,
-              color: context.colorScheme.foreground,
-            ),
-          ),
-          subtitle: Text(
-            'Expand to see the final delivery checklist.',
-            style: context.bodySmall.copyWith(
-              color: context.colorScheme.secondaryForeground,
-            ),
-          ),
-          leading: Icon(
-            Icons.assignment_turned_in_outlined,
-            color: context.colorScheme.primary,
-          ),
-          decoration: BoxDecoration(
-            color: context.colorScheme.background,
-            borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: context.colorScheme.border),
-          ),
-          inkwellRadius: BorderRadius.circular(18),
-          tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-          children: [
-            _detailRow(
-              context,
-              icon: Icons.check_circle_outline_rounded,
-              text: 'Exported the final list widget examples page.',
-            ),
-            _detailRow(
-              context,
-              icon: Icons.check_circle_outline_rounded,
-              text: 'Registered the route under the Base section.',
-            ),
-            _detailRow(
-              context,
-              icon: Icons.check_circle_outline_rounded,
-              text: 'Verified the demos with formatter and analyzer.',
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
-}
-
-Widget _buildExpandableListTileDemo(BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    child: _DemoCard(
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(18),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: context.colorScheme.background,
-            border: Border.all(color: context.colorScheme.border),
-            borderRadius: BorderRadius.circular(18),
-          ),
-          child: ExpandableListTile(
-            backgroundColor: context.colorScheme.background,
-            leading: Padding(
-              padding: const EdgeInsets.only(left: 12),
-              child: Icon(
-                Icons.tune_rounded,
-                color: context.colorScheme.primary,
-              ),
-            ),
-            title: Text(
-              'Filter presets',
-              style: context.titleSmall.copyWith(
-                fontWeight: FontWeight.w700,
-                color: context.colorScheme.foreground,
-              ),
-            ),
-            subtitle: Text(
-              'Open this row to reveal quick preset combinations.',
-              style: context.bodySmall.copyWith(
-                color: context.colorScheme.secondaryForeground,
-              ),
-            ),
-            children: const [
-              _SimpleListLine(label: 'Only show recently updated items'),
-              _SimpleListLine(label: 'Pin critical alerts to the top'),
-              _SimpleListLine(label: 'Hide archived results by default'),
-            ],
-          ),
-        ),
-      ),
-    ),
-  );
-}
-
-Widget _buildExpansionWidgetDemo(BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    child: _DemoCard(
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(18),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: context.colorScheme.background,
-            border: Border.all(color: context.colorScheme.border),
-            borderRadius: BorderRadius.circular(18),
-          ),
-          child: ExpansionWidget(
-            title: Text(
-              'Advanced layout controls',
-              style: context.titleSmall.copyWith(
-                fontWeight: FontWeight.w700,
-                color: context.colorScheme.foreground,
-              ),
-            ),
-            tooltip: 'Tap to show optional list tuning controls.',
-            showDivider: true,
-            childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-            children: [
-              Wrap(
-                spacing: 10,
-                runSpacing: 10,
-                children: [
-                  _StatusChip(
-                    label: 'Dense spacing',
-                    active: true,
-                    color: context.colorScheme.primary,
-                  ),
-                  const _StatusChip(label: 'Sticky header'),
-                  const _StatusChip(label: 'Page preload'),
-                  const _StatusChip(label: 'Animated switch'),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    ),
-  );
-}
-
-Widget _buildOptimizedCardDemo(BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    child: SizedBox(
-      width: double.infinity,
-      child: OptimizedCard(
-        padding: const EdgeInsets.all(20),
-        borderRadius: BorderRadius.circular(22),
-        color: context.colorScheme.background,
-        onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('OptimizedCard pressed')),
-          );
-        },
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.auto_awesome_rounded,
-                  color: context.colorScheme.primary,
-                ),
-                const SizedBox(width: 10),
-                Text(
-                  'Elevated summary',
-                  style: context.titleMedium.copyWith(
-                    fontWeight: FontWeight.w800,
-                    color: context.colorScheme.foreground,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Text(
-              'This card uses the custom shadow path from OptimizedCard to create a softer surface than a plain Material card.',
-              style: context.bodyMedium.copyWith(
-                color: context.colorScheme.secondaryForeground,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Wrap(
-              spacing: 10,
-              runSpacing: 10,
-              children: [
-                _StatusChip(
-                  label: 'Pressable',
-                  active: true,
-                  color: context.colorScheme.primary,
-                ),
-                const _StatusChip(label: 'Soft shadow'),
-                const _StatusChip(label: 'Rounded corners'),
-              ],
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
-}
-
-Widget _buildOptimizedListTileDemo(BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    child: OptimizedListTile(
-      leading: CircleAvatar(
-        backgroundColor: context.colorScheme.primary.withValues(alpha: 0.14),
-        child: Icon(Icons.insights_rounded, color: context.colorScheme.primary),
-      ),
-      title: Text(
-        'List performance',
-        style: context.titleSmall.copyWith(
-          fontWeight: FontWeight.w700,
-          color: context.colorScheme.foreground,
-        ),
-      ),
-      subtitle: Padding(
-        padding: const EdgeInsets.only(top: 6),
-        child: Text(
-          'Pairs card styling with a ready-to-use leading, content, and trailing row.',
-          style: context.bodySmall.copyWith(
-            color: context.colorScheme.secondaryForeground,
-          ),
-        ),
-      ),
-      trailing: Icon(
-        Icons.arrow_forward_ios_rounded,
-        size: 18,
-        color: context.colorScheme.secondaryForeground,
-      ),
-      margin: const EdgeInsets.all(0),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-    ),
-  );
-}
-
-Widget _buildHorizontalListDemo(BuildContext context) {
-  final items = [
-    ('Overview', 130.0),
-    ('Pinned updates', 170.0),
-    ('Needs review', 150.0),
-    ('Ready to ship', 145.0),
-  ];
-
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    child: _DemoCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Variable-width cards',
-            style: context.titleMedium.copyWith(
-              fontWeight: FontWeight.w700,
-              color: context.colorScheme.foreground,
-            ),
-          ),
-          const SizedBox(height: 14),
-          HorizontalList(
-            itemCount: items.length,
-            spacing: 12,
-            padding: EdgeInsets.zero,
-            itemBuilder: (context, index) {
-              final item = items[index];
-              return Container(
-                width: item.$2,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: _palette[index].withValues(alpha: 0.14),
-                  borderRadius: BorderRadius.circular(18),
-                  border: Border.all(
-                    color: _palette[index].withValues(alpha: 0.24),
-                  ),
-                ),
-                child: Text(
-                  item.$1,
-                  style: context.titleSmall.copyWith(
-                    color: context.colorScheme.foreground,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-    ),
-  );
-}
-
-Widget _buildHorizontalListViewDemo(BuildContext context) {
-  final items = ['Queue', 'Drafts', 'Review', 'Published'];
-
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    child: _DemoCard(
-      child: HorizontalListView<String>(
-        itemCount: items.length,
-        listHeight: 136,
-        itemWidth: 170,
-        padding: EdgeInsets.zero,
-        builder: (context, index) {
-          return Padding(
-            padding: EdgeInsets.only(right: index == items.length - 1 ? 0 : 12),
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: context.colorScheme.background,
-                borderRadius: BorderRadius.circular(18),
-                border: Border.all(color: context.colorScheme.border),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _StatusChip(
-                    label: '${index + 1} of ${items.length}',
-                    active: true,
-                    color: _palette[index],
-                  ),
-                  const Spacer(),
-                  Text(
-                    items[index],
-                    style: context.titleMedium.copyWith(
-                      fontWeight: FontWeight.w800,
-                      color: context.colorScheme.foreground,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    'Fixed-width builder item',
-                    style: context.bodySmall.copyWith(
-                      color: context.colorScheme.secondaryForeground,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
-    ),
-  );
-}
-
-Widget _buildMarqueeWidgetDemo(BuildContext context) {
-  final labels = [
-    'Long-running sync completed',
-    '3 list demos added',
-    'Reorder enabled',
-    'Page cache warmed',
-  ];
-
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    child: _DemoCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Scrolling headline',
-            style: context.titleMedium.copyWith(
-              fontWeight: FontWeight.w700,
-              color: context.colorScheme.foreground,
-            ),
-          ),
-          const SizedBox(height: 14),
-          Container(
-            height: 60,
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-            decoration: BoxDecoration(
-              color: context.colorScheme.background,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: context.colorScheme.border),
-            ),
-            child: ClipRect(
-              child: MarqueeWidget(
-                animationDuration: const Duration(seconds: 8),
-                backDuration: const Duration(seconds: 8),
-                pauseDuration: const Duration(milliseconds: 600),
-                child: Row(
-                  children: [
-                    for (final label in labels) ...[
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 14,
-                          vertical: 8,
-                        ),
-                        decoration: BoxDecoration(
-                          color: context.colorScheme.primary.withValues(
-                            alpha: 0.12,
-                          ),
-                          borderRadius: BorderRadius.circular(999),
-                        ),
-                        child: Text(
-                          label,
-                          style: context.bodyMedium.copyWith(
-                            color: context.colorScheme.foreground,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                    ],
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
-}
-
-Widget _buildOptimizedScrollViewDemo(BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    child: SizedBox(
-      height: 300,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: context.colorScheme.secondary,
-            border: Border.all(color: context.colorScheme.border),
-          ),
-          child: OptimizedScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(18),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Viewport-aware panel',
-                    style: context.titleMedium.copyWith(
-                      fontWeight: FontWeight.w800,
-                      color: context.colorScheme.foreground,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'The body stretches to fill the available height, then still scrolls naturally when the content grows.',
-                    style: context.bodyMedium.copyWith(
-                      color: context.colorScheme.secondaryForeground,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  for (final label in [
-                    'Sticky controls',
-                    'Persistent composer',
-                    'Safe bottom spacing',
-                  ])
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: _StatusChip(label: label, active: true),
-                    ),
-                  const Spacer(),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(14),
-                    decoration: BoxDecoration(
-                      color: context.colorScheme.background,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: context.colorScheme.border),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.edit_note_rounded,
-                          color: context.colorScheme.primary,
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
-                            'Bottom actions stay visually anchored even inside a scroll view.',
-                            style: context.bodyMedium.copyWith(
-                              color: context.colorScheme.secondaryForeground,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    ),
-  );
-}
-
 Widget _buildTypedListViewDemo(BuildContext context) {
   final items = ['Inbox', 'Scheduled', 'In review', 'Approved'];
 
@@ -1027,7 +301,7 @@ Widget _buildTypedListViewDemo(BuildContext context) {
             color: context.colorScheme.background,
             border: Border.all(color: context.colorScheme.border),
           ),
-          child: TypedListView<String>(
+          child: MyListView<String>(
             items: items,
             header: header,
             footer: footer,
@@ -1836,37 +1110,6 @@ class _StatusChip extends StatelessWidget {
   }
 }
 
-class _SimpleListLine extends StatelessWidget {
-  const _SimpleListLine({required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
-      child: Row(
-        children: [
-          Icon(
-            Icons.chevron_right_rounded,
-            color: context.colorScheme.primary,
-            size: 18,
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              label,
-              style: context.bodyMedium.copyWith(
-                color: context.colorScheme.secondaryForeground,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _PagerCard extends StatelessWidget {
   const _PagerCard({
     required this.title,
@@ -1963,31 +1206,6 @@ class _StackPage extends StatelessWidget {
       ),
     );
   }
-}
-
-Widget _detailRow(
-  BuildContext context, {
-  required IconData icon,
-  required String text,
-}) {
-  return Padding(
-    padding: const EdgeInsets.only(bottom: 10),
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Icon(icon, size: 18, color: context.colorScheme.primary),
-        const SizedBox(width: 10),
-        Expanded(
-          child: Text(
-            text,
-            style: context.bodyMedium.copyWith(
-              color: context.colorScheme.secondaryForeground,
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
 }
 
 const List<Color> _palette = [
