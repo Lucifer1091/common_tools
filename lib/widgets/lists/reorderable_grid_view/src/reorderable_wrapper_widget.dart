@@ -5,19 +5,17 @@ import '../reorderable_grid_view.dart';
 import 'reorderable_grid_mixin.dart';
 import 'reorderable_item.dart';
 
-// why you want the __items?
 class GridChildPosDelegate extends ReorderableChildPosDelegate {
-  final int crossAxisCount;
-  final double crossAxisSpacing;
-  final double mainAxisSpacing;
-  final double childAspectRatio;
-
   const GridChildPosDelegate({
     required this.crossAxisCount,
     this.mainAxisSpacing = 0.0,
     this.crossAxisSpacing = 0.0,
     this.childAspectRatio = 1.0,
   });
+  final int crossAxisCount;
+  final double crossAxisSpacing;
+  final double mainAxisSpacing;
+  final double childAspectRatio;
 
   @override
   Offset getPos(
@@ -26,21 +24,21 @@ class GridChildPosDelegate extends ReorderableChildPosDelegate {
     BuildContext context,
   ) {
     // can I get pos by child?
-    var child = items[index];
+    final child = items[index];
     // I think the better is use the sliverGrid?
-    var childObject = child?.context.findRenderObject();
+    final childObject = child?.context.findRenderObject();
 
     // so from the childObject, I still can't get pos?
     if (childObject == null) {
-      debugPrint("index: $index is null");
+      debugPrint('index: $index is null');
     } else {
       if (childObject is RenderSliver) {
-        debugPrint("index: $index, pos: ${childObject.constraints}");
+        debugPrint('index: $index, pos: ${childObject.constraints}');
       } else if (childObject is RenderBox) {
         // childObject.localToGlobal(point)
-        debugPrint("index: $index, pos: ${childObject.semanticBounds}");
+        debugPrint('index: $index, pos: ${childObject.semanticBounds}');
       } else {
-        debugPrint("index: $index, $childObject");
+        debugPrint('index: $index, $childObject');
       }
     }
 
@@ -49,7 +47,7 @@ class GridChildPosDelegate extends ReorderableChildPosDelegate {
     // ok, but let's do it
 
     double width;
-    RenderObject? renderObject = context.findRenderObject();
+    final RenderObject? renderObject = context.findRenderObject();
 
     if (renderObject == null) {
       return Offset.zero;
@@ -61,14 +59,15 @@ class GridChildPosDelegate extends ReorderableChildPosDelegate {
       width = (renderObject as RenderBox).size.width;
     }
 
-    double itemWidth =
+    final double itemWidth =
         (width - (crossAxisCount - 1) * crossAxisSpacing) / crossAxisCount;
 
-    int row = index ~/ crossAxisCount;
-    int col = index % crossAxisCount;
+    final int row = index ~/ crossAxisCount;
+    final int col = index % crossAxisCount;
 
-    double x = (col - 1) * (itemWidth + crossAxisSpacing);
-    double y = (row - 1) * (itemWidth / (childAspectRatio) + mainAxisSpacing);
+    final double x = (col - 1) * (itemWidth + crossAxisSpacing);
+    final double y =
+        (row - 1) * (itemWidth / childAspectRatio + mainAxisSpacing);
 
     return Offset(x, y);
   }
@@ -76,6 +75,23 @@ class GridChildPosDelegate extends ReorderableChildPosDelegate {
 
 class ReorderableWrapperWidget extends StatefulWidget
     with ReorderableGridWidgetMixin {
+  const ReorderableWrapperWidget({
+    required this.child,
+    required this.onReorder,
+    super.key,
+    this.dragEnableConfig,
+    this.restrictDragScope = false,
+    this.dragWidgetBuilder,
+    this.scrollSpeedController,
+    this.placeholderBuilder,
+    this.posDelegate,
+    this.onDragStart,
+    this.onDragUpdate,
+    this.dragEnabled,
+    this.dragStartDelay,
+    this.isSliver,
+    this.onDropIndexChange,
+  });
   @override
   final DragEnableConfig? dragEnableConfig;
 
@@ -117,24 +133,6 @@ class ReorderableWrapperWidget extends StatefulWidget
   @override
   // every time an animation occurs begin
   final OnDropIndexChange? onDropIndexChange;
-
-  const ReorderableWrapperWidget({
-    super.key,
-    required this.child,
-    required this.onReorder,
-    this.dragEnableConfig,
-    this.restrictDragScope = false,
-    this.dragWidgetBuilder,
-    this.scrollSpeedController,
-    this.placeholderBuilder,
-    this.posDelegate,
-    this.onDragStart,
-    this.onDragUpdate,
-    this.dragEnabled,
-    this.dragStartDelay,
-    this.isSliver,
-    this.onDropIndexChange,
-  });
 
   @override
   ReorderableWrapperWidgetState createState() {

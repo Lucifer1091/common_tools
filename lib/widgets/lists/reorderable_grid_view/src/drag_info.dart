@@ -10,11 +10,8 @@ import 'package:flutter/rendering.dart';
 import '../reorderable_grid_view.dart';
 import 'reorderable_item.dart';
 
-typedef DragItemUpdate = void Function(
-  DragInfo item,
-  Offset position,
-  Offset delta,
-);
+typedef DragItemUpdate =
+    void Function(DragInfo item, Offset position, Offset delta);
 
 typedef DragItemCallback = void Function(DragInfo item);
 
@@ -24,6 +21,39 @@ typedef DragWidgetReadyCallback = void Function();
 // Strange that you are create at onStart?
 // It's boring that pass you so many params
 class DragInfo extends Drag {
+  DragInfo({
+    required this.readyCallback,
+    required this.item,
+    required this.tickerProvider,
+    required this.onStart,
+    required this.dragPosition,
+    required this.context,
+    this.overlay,
+    this.scrollSpeedController,
+    this.dragWidgetBuilder,
+    this.onUpdate,
+    this.onCancel,
+    this.onEnd,
+  }) {
+    index = item.index;
+    child = item.widget.child;
+    itemSize = item.context.size!;
+    // screenshotKey = item.repaintKey;
+
+    // why global to is is zero??
+    final overlayRenderObject = _getOverlay().context.findRenderObject();
+    if (overlayRenderObject is RenderBox) {
+      zeroOffset = overlayRenderObject.globalToLocal(Offset.zero);
+    }
+
+    final RenderBox renderBox = item.context.findRenderObject()! as RenderBox;
+    dragOffset = renderBox.globalToLocal(dragPosition);
+    dragExtent = renderBox.size.height;
+    dragSize = renderBox.size;
+
+    // you can not delete !, because in some flutter version is option.
+    scrollable = Scrollable.of(item.context);
+  }
   late int index;
   final DragItemUpdate? onUpdate;
   final DragItemCallback? onCancel;
@@ -57,45 +87,13 @@ class DragInfo extends Drag {
   OverlayEntry? _overlayEntry;
   BuildContext context;
   OverlayState? overlay;
-  var hasEnd = false;
+  bool hasEnd = false;
 
   // zero pos in global, offset to navigation.
   // Fix issue #49
   Offset? zeroOffset;
 
   ImageProvider? dragWidgetScreenShot;
-
-  DragInfo({
-    required this.readyCallback,
-    required this.item,
-    required this.tickerProvider,
-    required this.onStart,
-    required this.dragPosition,
-    required this.context,
-    this.overlay,
-    this.scrollSpeedController,
-    this.dragWidgetBuilder,
-    this.onUpdate,
-    this.onCancel,
-    this.onEnd,
-  }) {
-    index = item.index;
-    child = item.widget.child;
-    itemSize = item.context.size!;
-    // screenshotKey = item.repaintKey;
-
-    // why global to is is zero??
-    zeroOffset = (_getOverlay().context.findRenderObject() as RenderBox)
-        .globalToLocal(Offset.zero);
-
-    final RenderBox renderBox = item.context.findRenderObject()! as RenderBox;
-    dragOffset = renderBox.globalToLocal(dragPosition);
-    dragExtent = renderBox.size.height;
-    dragSize = renderBox.size;
-
-    // you can not delete !, because in some flutter version is option.
-    scrollable = Scrollable.of(item.context);
-  }
 
   NavigatorState? findNavigator(BuildContext context) {
     NavigatorState? navigator;
@@ -133,12 +131,10 @@ class DragInfo extends Drag {
       child: SizedBox(
         width: itemSize.width,
         height: itemSize.height,
-        child: dragWidgetBuilder != null
-            ? dragWidgetBuilder!.builder(index, child, dragWidgetScreenShot)
-            : Material(
-                elevation: 3.0,
-                child: _defaultDragWidget(context),
-              ),
+        child:
+            dragWidgetBuilder != null
+                ? dragWidgetBuilder!.builder(index, child, dragWidgetScreenShot)
+                : Material(elevation: 3, child: _defaultDragWidget(context)),
       ),
     );
   }
@@ -158,9 +154,8 @@ class DragInfo extends Drag {
     _overlayEntry = OverlayEntry(builder: createProxy);
 
     // Can you give the overlay to _Drag?
-    final OverlayState overlay = _getOverlay();
-    overlay.insert(_overlayEntry!);
-    _scrollIfNeed();
+    _getOverlay().insert(_overlayEntry!);
+    unawaited(_scrollIfNeed());
   }
 
   @override
@@ -169,7 +164,7 @@ class DragInfo extends Drag {
     onUpdate?.call(this, dragPosition, details.delta);
 
     _overlayEntry?.markNeedsBuild();
-    _scrollIfNeed();
+    unawaited(_scrollIfNeed());
   }
 
   var _autoScrolling = false;
@@ -178,7 +173,7 @@ class DragInfo extends Drag {
 
   static const defaultScrollDuration = 14;
 
-  void _scrollIfNeed() async {
+  Future<void> _scrollIfNeed() async {
     if (hasEnd) {
       _scrollBeginTime = 0;
       return;
@@ -225,7 +220,7 @@ class DragInfo extends Drag {
         scroll = min(overSize, oneStepMax);
       }
 
-      calcOffset() {
+      void calcOffset() {
         if (needScrollBottom) {
           newOffset = min(position.maxScrollExtent, position.pixels + scroll);
         } else if (needScrollTop) {
@@ -262,7 +257,7 @@ class DragInfo extends Drag {
 
         _autoScrolling = false;
 
-        _scrollIfNeed();
+        unawaited(_scrollIfNeed());
       } else {
         // don't need scroll
         _scrollBeginTime = 0;
@@ -288,45 +283,41 @@ class DragInfo extends Drag {
 }
 
 class ScreenshotWidget extends StatefulWidget {
-  final RenderRepaintBoundary renderRepaintBoundary;
-  final DragWidgetReadyCallback dragWidgetCallback;
-  final double devicePixelRatio;
-
   const ScreenshotWidget({
-    super.key,
     required this.renderRepaintBoundary,
     required this.dragWidgetCallback,
     required this.devicePixelRatio,
+    super.key,
   });
+  final RenderRepaintBoundary renderRepaintBoundary;
+  final DragWidgetReadyCallback dragWidgetCallback;
+  final double devicePixelRatio;
 
   @override
   State<ScreenshotWidget> createState() => _ScreenshotWidgetState();
 }
 
 class _ScreenshotWidgetState extends State<ScreenshotWidget> {
-  ImageProvider? imageProvider;
-
   _ScreenshotWidgetState();
+  ImageProvider? imageProvider;
 
   @override
   void initState() {
     super.initState();
-    _load();
+    unawaited(_load());
   }
 
-  _load() async {
+  Future<void> _load() async {
     if (widget.renderRepaintBoundary.debugNeedsPaint) {
-      Timer(const Duration(microseconds: 1), () => _load());
+      Timer(const Duration(microseconds: 1), _load);
       return;
     }
 
-    debugPrint("devicePixelRatio: ${widget.devicePixelRatio}");
-
-    var image = await widget.renderRepaintBoundary.toImage(
+    final image = await widget.renderRepaintBoundary.toImage(
       pixelRatio: widget.devicePixelRatio,
     );
 
-    var byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
 
     widget.dragWidgetCallback();
 
@@ -334,16 +325,15 @@ class _ScreenshotWidgetState extends State<ScreenshotWidget> {
       if (byteData != null) {
         imageProvider = MemoryImage(Uint8List.view(byteData.buffer));
       } else {
-        debugPrint("why byteData is null?");
+        debugPrint('why byteData is null?');
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (imageProvider == null) {
-      return Container();
-    }
+    if (imageProvider == null) return const SizedBox.shrink();
+
     return Image(image: imageProvider!);
   }
 }

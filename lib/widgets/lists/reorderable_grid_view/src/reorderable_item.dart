@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -22,10 +24,9 @@ class ReorderableItemView extends StatefulWidget {
     List<Widget> children,
     List<Widget>? footer,
   ) {
-    var rst = <Widget>[];
-    rst.addAll(header ?? []);
+    final rst = <Widget>[...?header];
     for (var i = 0; i < children.length; i++) {
-      var child = children[i];
+      final child = children[i];
 
       assert(() {
         if (child.key == null) {
@@ -116,25 +117,27 @@ class ReorderableItemViewState extends State<ReorderableItemView>
     }
 
     // debug("called getOffsetInDrag index $index");
-    Offset newOffset = _listState.getOffsetInDrag(index);
+    final Offset newOffset = _listState.getOffsetInDrag(index);
     if (newOffset != _targetOffset) {
       _targetOffset = newOffset;
 
       if (_offsetAnimation == null) {
-        _offsetAnimation = AnimationController(vsync: _listState)
-          ..duration = const Duration(milliseconds: 250)
-          ..addListener(rebuild)
-          ..addStatusListener((status) {
-            if (status == AnimationStatus.completed) {
-              _startOffset = _targetOffset;
-              _offsetAnimation?.dispose();
-              _offsetAnimation = null;
-            }
-          })
-          ..forward(from: 0.0);
+        final controller =
+            AnimationController(vsync: _listState)
+              ..duration = const Duration(milliseconds: 250)
+              ..addListener(rebuild)
+              ..addStatusListener((status) {
+                if (status == AnimationStatus.completed) {
+                  _startOffset = _targetOffset;
+                  _offsetAnimation?.dispose();
+                  _offsetAnimation = null;
+                }
+              });
+        _offsetAnimation = controller;
+        unawaited(controller.forward(from: 0));
       } else {
         _startOffset = offset;
-        _offsetAnimation?.forward(from: 0.0);
+        unawaited(_offsetAnimation?.forward(from: 0));
       }
     }
   }
@@ -164,7 +167,8 @@ class ReorderableItemViewState extends State<ReorderableItemView>
         // debugPrint(
         //     "_buildPlaceHolder for index $index, _offset: $_placeholderOffset, _targetPos: $targetPos");
 
-        _placeholderOffset = _listState.getPosByIndex(targetPos) -
+        _placeholderOffset =
+            _listState.getPosByIndex(targetPos) -
             _listState.getPosByIndex(selfPos);
       });
     }
@@ -197,9 +201,9 @@ class ReorderableItemViewState extends State<ReorderableItemView>
 
   @override
   void initState() {
+    super.initState();
     _listState = ReorderableGridStateMixin.of(context);
     _listState.registerItem(this);
-    super.initState();
   }
 
   Offset get offset {
@@ -216,6 +220,8 @@ class ReorderableItemViewState extends State<ReorderableItemView>
 
   @override
   void dispose() {
+    _offsetAnimation?.dispose();
+    _offsetAnimation = null;
     _listState.unRegisterItem(index, this);
     super.dispose();
   }
@@ -224,8 +230,9 @@ class ReorderableItemViewState extends State<ReorderableItemView>
   void didUpdateWidget(covariant ReorderableItemView oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.index != widget.index) {
-      _listState.unRegisterItem(oldWidget.index, this);
-      _listState.registerItem(this);
+      _listState
+        ..unRegisterItem(oldWidget.index, this)
+        ..registerItem(this);
     }
   }
 
@@ -255,7 +262,7 @@ class ReorderableItemViewState extends State<ReorderableItemView>
     return RepaintBoundary(
       child: Listener(
         onPointerDown: (PointerDownEvent e) {
-          var listState = ReorderableGridStateMixin.of(context);
+          final listState = ReorderableGridStateMixin.of(context);
           if (_listState.dragEnabled && _canDrag()) {
             listState.startDragRecognizer(index, e, _createDragRecognizer());
           }
@@ -263,9 +270,10 @@ class ReorderableItemViewState extends State<ReorderableItemView>
         child: LayoutBuilder(
           builder: (context, constraint) {
             return Transform(
-              transform: _canDrag()
-                  ? Matrix4.translationValues(offset.dx, offset.dy, 0)
-                  : Matrix4.identity(),
+              transform:
+                  _canDrag()
+                      ? Matrix4.translationValues(offset.dx, offset.dy, 0)
+                      : Matrix4.identity(),
               child: Stack(
                 children: [
                   Offstage(
@@ -277,11 +285,8 @@ class ReorderableItemViewState extends State<ReorderableItemView>
                   ),
                   Offstage(
                     offstage: _dragging,
-                    child: Container(
-                      constraints: constraint,
-                      child: child,
-                    ),
-                  )
+                    child: Container(constraints: constraint, child: child),
+                  ),
                 ],
               ),
             );

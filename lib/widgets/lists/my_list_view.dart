@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show ItemExtentBuilder;
 
 typedef MyListViewBuilder<T> = Widget Function(int index, T item);
 
@@ -20,9 +21,13 @@ typedef MyListViewBuilder<T> = Widget Function(int index, T item);
 /// The `separatorBuilder` parameter is also optional and allows you to add
 /// separators between items in the list.
 ///
+/// If you need keyed child reordering, prefer `findItemIndexCallback`. It maps
+/// your data-item index back to the correct visible child index even when
+/// headers or separators are enabled.
+///
 /// Example usage:
 /// ```dart
-/// TypedListView<String>(
+/// MyListView<String>(
 ///   items: ['Item 1', 'Item 2', 'Item 3'],
 ///   itemBuilder: (index, item) => ListTile(title: Text(item)),
 ///   header: const Text('Header'),
@@ -51,8 +56,9 @@ class MyListView<T> extends StatelessWidget {
     ScrollController? controller,
     bool? primary,
     double? itemExtent,
+    ItemExtentBuilder? itemExtentBuilder,
     Widget? prototypeItem,
-    ChildIndexGetter? findChildIndexCallback,
+    ChildIndexGetter? findItemIndexCallback,
     double? cacheExtent,
     int? semanticChildCount,
     DragStartBehavior dragStartBehavior = DragStartBehavior.start,
@@ -60,7 +66,13 @@ class MyListView<T> extends StatelessWidget {
         ScrollViewKeyboardDismissBehavior.manual,
     String? restorationId,
     Clip clipBehavior = Clip.hardEdge,
-  }) : _items = items,
+  }) : assert(
+         (itemExtent == null && prototypeItem == null) ||
+             (itemExtent == null && itemExtentBuilder == null) ||
+             (prototypeItem == null && itemExtentBuilder == null),
+         'You can only pass one of itemExtent, prototypeItem and itemExtentBuilder.',
+       ),
+       _items = items,
        _itemBuilder = itemBuilder,
        _header = header,
        _footer = footer,
@@ -77,8 +89,9 @@ class MyListView<T> extends StatelessWidget {
        _controller = controller,
        _primary = primary,
        _itemExtent = itemExtent,
+       _itemExtentBuilder = itemExtentBuilder,
        _prototypeItem = prototypeItem,
-       _findChildIndexCallback = findChildIndexCallback,
+       _findItemIndexCallback = findItemIndexCallback,
        _cacheExtent = cacheExtent,
        _semanticChildCount = semanticChildCount,
        _dragStartBehavior = dragStartBehavior,
@@ -104,8 +117,9 @@ class MyListView<T> extends StatelessWidget {
   final ScrollController? _controller;
   final bool? _primary;
   final double? _itemExtent;
+  final ItemExtentBuilder? _itemExtentBuilder;
   final Widget? _prototypeItem;
-  final ChildIndexGetter? _findChildIndexCallback;
+  final ChildIndexGetter? _findItemIndexCallback;
   final double? _cacheExtent;
   final int? _semanticChildCount;
   final DragStartBehavior _dragStartBehavior;
@@ -128,6 +142,12 @@ class MyListView<T> extends StatelessWidget {
     final footerOffset = hasFooter ? 1 : 0;
     final paginationOffset = hasPagination ? 1 : 0;
     final separatorCount = hasSeparators ? items.length - 1 : 0;
+    final effectiveFindChildIndexCallback = _resolveFindChildIndexCallback(
+      itemCount: items.length,
+      headerOffset: headerOffset,
+      hasSeparators: hasSeparators,
+      findItemIndexCallback: _findItemIndexCallback,
+    );
     final totalItemCount =
         headerOffset +
         items.length +
@@ -150,8 +170,9 @@ class MyListView<T> extends StatelessWidget {
         controller: _controller,
         primary: _primary,
         itemExtent: _itemExtent,
+        itemExtentBuilder: _itemExtentBuilder,
         prototypeItem: _prototypeItem,
-        findChildIndexCallback: _findChildIndexCallback,
+        findChildIndexCallback: effectiveFindChildIndexCallback,
         cacheExtent: _cacheExtent,
         semanticChildCount: _semanticChildCount,
         dragStartBehavior: _dragStartBehavior,
@@ -188,8 +209,9 @@ class MyListView<T> extends StatelessWidget {
       controller: _controller,
       primary: _primary,
       itemExtent: _itemExtent,
+      itemExtentBuilder: _itemExtentBuilder,
       prototypeItem: _prototypeItem,
-      findChildIndexCallback: _findChildIndexCallback,
+      findChildIndexCallback: effectiveFindChildIndexCallback,
       cacheExtent: _cacheExtent,
       semanticChildCount: _semanticChildCount,
       dragStartBehavior: _dragStartBehavior,
@@ -248,5 +270,23 @@ class MyListView<T> extends StatelessWidget {
 
     // This should be unreachable when itemCount math is correct.
     return const SizedBox.shrink();
+  }
+
+  static ChildIndexGetter? _resolveFindChildIndexCallback({
+    required int itemCount,
+    required int headerOffset,
+    required bool hasSeparators,
+    ChildIndexGetter? findItemIndexCallback,
+  }) {
+    if (findItemIndexCallback != null) {
+      return (Key key) {
+        final itemIndex = findItemIndexCallback(key);
+        if (itemIndex == null || itemIndex < 0 || itemIndex >= itemCount) {
+          return null;
+        }
+        return headerOffset + (hasSeparators ? itemIndex * 2 : itemIndex);
+      };
+    }
+    return null;
   }
 }

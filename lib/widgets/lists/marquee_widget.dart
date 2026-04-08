@@ -30,6 +30,8 @@ class MyMarqueeWidget extends StatefulWidget {
 class _MyMarqueeWidgetState extends State<MyMarqueeWidget> {
   late final ScrollController _controller;
   int _scrollSession = 0;
+  double? _lastMaxScrollExtent;
+  double? _lastViewportDimension;
 
   @override
   void initState() {
@@ -57,13 +59,25 @@ class _MyMarqueeWidgetState extends State<MyMarqueeWidget> {
   }
 
   void _scheduleScrollRestart() {
-    _scrollSession++;
+    final session = ++_scrollSession;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) {
         return;
       }
-      unawaited(_startScrollLoop(_scrollSession));
+      unawaited(_startScrollLoop(session));
     });
+  }
+
+  bool _shouldRestartForMetrics(ScrollMetrics metrics) {
+    final maxScrollExtent = metrics.maxScrollExtent;
+    final viewportDimension = metrics.viewportDimension;
+    final hasChanged =
+        _lastMaxScrollExtent != maxScrollExtent ||
+        _lastViewportDimension != viewportDimension;
+
+    _lastMaxScrollExtent = maxScrollExtent;
+    _lastViewportDimension = viewportDimension;
+    return hasChanged;
   }
 
   Future<void> _startScrollLoop(int session) async {
@@ -112,7 +126,9 @@ class _MyMarqueeWidgetState extends State<MyMarqueeWidget> {
       textDirection: widget.textDirection,
       child: NotificationListener<ScrollMetricsNotification>(
         onNotification: (notification) {
-          _scheduleScrollRestart();
+          if (_shouldRestartForMetrics(notification.metrics)) {
+            _scheduleScrollRestart();
+          }
           return false;
         },
         child: SingleChildScrollView(

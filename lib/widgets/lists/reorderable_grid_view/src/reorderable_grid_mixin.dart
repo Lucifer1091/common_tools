@@ -1,6 +1,7 @@
+import 'dart:async';
+import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui' as ui show Image, ImageByteFormat;
-import 'dart:math';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -56,19 +57,21 @@ mixin ReorderableGridStateMixin<T extends ReorderableGridWidgetMixin>
   Duration get dragStartDelay => widget.dragStartDelay ?? kLongPressTimeout;
   bool get dragEnabled => widget.dragEnabled ?? true;
   // it's not as drag start?
-  void startDragRecognizer(int index, PointerDownEvent event,
-      MultiDragGestureRecognizer recognizer) {
+  void startDragRecognizer(
+    int index,
+    PointerDownEvent event,
+    MultiDragGestureRecognizer recognizer,
+  ) {
     // how to fix enter this twice?
-    setState(() {
-      if (_dragIndex != null) {
-        _dragReset();
-      }
+    if (_dragIndex != null) {
+      _dragReset();
+    }
 
-      _dragIndex = index;
-      _recognizer = recognizer
-        ..onStart = _onDragStart
-        ..addPointer(event);
-    });
+    _dragIndex = index;
+    _recognizer =
+        recognizer
+          ..onStart = _onDragStart
+          ..addPointer(event);
   }
 
   int? _dragIndex;
@@ -89,7 +92,7 @@ mixin ReorderableGridStateMixin<T extends ReorderableGridWidgetMixin>
 
   Offset getPosByOffset(int index, int dIndex) {
     // how to do to this?
-    var keys = __items.keys.toList();
+    final keys = __items.keys.toList();
     var keyIndex = keys.indexOf(index);
     keyIndex = keyIndex + dIndex;
     if (keyIndex < 0) {
@@ -99,7 +102,7 @@ mixin ReorderableGridStateMixin<T extends ReorderableGridWidgetMixin>
       keyIndex = keys.length - 1;
     }
 
-    return getPosByIndex(keys[keyIndex], safe: true);
+    return getPosByIndex(keys[keyIndex]);
   }
 
   // The pos is relate to the container's 0, 0
@@ -114,44 +117,49 @@ mixin ReorderableGridStateMixin<T extends ReorderableGridWidgetMixin>
       return Offset.zero;
     }
 
-    var child = __items[index];
+    final child = __items[index];
 
     if (child == null) {
-      debugPrint("why child is null for index: $index, and __item: $__items");
+      debugPrint('why child is null for index: $index, and __item: $__items');
     }
 
     // how to do?
-    var thisRenderObject = context.findRenderObject();
+    final thisRenderObject = context.findRenderObject();
     // RenderSliverGrid
 
     if (thisRenderObject is RenderSliverGrid) {
-      var renderObject = thisRenderObject;
+      final renderObject = thisRenderObject;
 
       final SliverConstraints constraints = renderObject.constraints;
-      final SliverGridLayout layout =
-          renderObject.gridDelegate.getLayout(constraints);
+      final SliverGridLayout layout = renderObject.gridDelegate.getLayout(
+        constraints,
+      );
 
       // SliverGridGeometry(scrollOffset: 0.0, crossAxisOffset: 0.0, mainAxisExtent: 217.46031746031747, crossAxisExtent: 130.47619047619048), index: 0
       // SliverGridGeometry(scrollOffset: 0.0, crossAxisOffset: 140.47619047619048, mainAxisExtent: 217.46031746031747, crossAxisExtent: 130.47619047619048), index: 1
       // SliverGridGeometry(scrollOffset: 227.46031746031747, crossAxisOffset: 0.0, mainAxisExtent: 217.46031746031747, crossAxisExtent: 130.47619047619048), index: 3
       // index is not the right index!!!
       final fixedIndex = child!.indexInAll ?? child.index;
-      final SliverGridGeometry gridGeometry =
-          layout.getGeometryForChildIndex(fixedIndex);
-      final rst =
-          Offset(gridGeometry.crossAxisOffset, gridGeometry.scrollOffset);
+      final SliverGridGeometry gridGeometry = layout.getGeometryForChildIndex(
+        fixedIndex,
+      );
+      final rst = Offset(
+        gridGeometry.crossAxisOffset,
+        gridGeometry.scrollOffset,
+      );
       return rst;
     }
 
-    var renderObject = child?.context.findRenderObject();
+    final renderObject = child?.context.findRenderObject();
     if (renderObject == null) {
       return Offset.zero;
     }
-    RenderBox box = renderObject as RenderBox;
+    final RenderBox box = renderObject as RenderBox;
 
-    var parentRenderObject = context.findRenderObject() as RenderBox;
-    final pos =
-        parentRenderObject.globalToLocal(box.localToGlobal(Offset.zero));
+    final parentRenderObject = context.findRenderObject() as RenderBox;
+    final pos = parentRenderObject.globalToLocal(
+      box.localToGlobal(Offset.zero),
+    );
     return pos;
   }
 
@@ -163,9 +171,9 @@ mixin ReorderableGridStateMixin<T extends ReorderableGridWidgetMixin>
       return defaultIndex;
     }
 
-    for (var item in __items.values) {
-      RenderBox box = item.context.findRenderObject() as RenderBox;
-      Offset pos = box.globalToLocal(_dragInfo!.getCenterInGlobal());
+    for (final item in __items.values) {
+      final RenderBox box = item.context.findRenderObject() as RenderBox;
+      final Offset pos = box.globalToLocal(_dragInfo!.getCenterInGlobal());
       if (pos.dx > 0 &&
           pos.dy > 0 &&
           pos.dx < box.size.width &&
@@ -185,10 +193,10 @@ mixin ReorderableGridStateMixin<T extends ReorderableGridWidgetMixin>
 
     // ok now we check.
     bool inDragRange = false;
-    bool isMoveLeft = _dropIndex! > _dragIndex!;
+    final bool isMoveLeft = _dropIndex! > _dragIndex!;
 
-    int minPos = min(_dragIndex!, _dropIndex!);
-    int maxPos = max(_dragIndex!, _dropIndex!);
+    final int minPos = min(_dragIndex!, _dropIndex!);
+    final int maxPos = max(_dragIndex!, _dropIndex!);
 
     if (index >= minPos && index <= maxPos) {
       inDragRange = true;
@@ -197,8 +205,8 @@ mixin ReorderableGridStateMixin<T extends ReorderableGridWidgetMixin>
     if (!inDragRange) {
       return Offset.zero;
     } else {
-      var preIndex = _findPreviousCanDrag(index);
-      var nextIndex = _findNextCanDrag(index);
+      final preIndex = _findPreviousCanDrag(index);
+      final nextIndex = _findNextCanDrag(index);
       if (isMoveLeft) {
         if (!containsByIndex(preIndex) || !containsByIndex(index)) {
           return Offset.zero;
@@ -223,7 +231,7 @@ mixin ReorderableGridStateMixin<T extends ReorderableGridWidgetMixin>
   }
 
   int _findNextCanDrag(int start) {
-    var max = __items.keys.reduce((a, b) => a > b ? a : b);
+    final max = __items.keys.reduce((a, b) => a > b ? a : b);
     for (var i = start + 1; i <= max; i++) {
       if (dragEnableConfig(i)) {
         return i;
@@ -237,18 +245,13 @@ mixin ReorderableGridStateMixin<T extends ReorderableGridWidgetMixin>
     if (widget.isSliver ?? false || !(widget.restrictDragScope ?? false)) {
       return widget.child;
     }
-    return Stack(
-      children: [
-        widget.child,
-        Overlay(key: overlayKey),
-      ],
-    );
+    return Stack(children: [widget.child, Overlay(key: overlayKey)]);
   }
 
   // position is the global position
   Drag _onDragStart(Offset position) {
     // how can I delay for take snapshot?
-    debugPrint("_onDragStart: $position, __dragIndex: $_dragIndex");
+    debugPrint('_onDragStart: $position, __dragIndex: $_dragIndex');
     assert(_dragInfo == null);
     widget.onDragStart?.call(_dragIndex!);
 
@@ -273,68 +276,68 @@ mixin ReorderableGridStateMixin<T extends ReorderableGridWidgetMixin>
       onCancel: _onDragCancel,
       onEnd: _onDragEnd,
       readyCallback: () {
-        item.dragging = true;
-        item.rebuild();
-        updateDragTarget();
+        item
+          ..dragging = true
+          ..rebuild();
+        unawaited(updateDragTarget());
       },
     );
 
     // ok, how about at here, do a capture?
     // _dragInfo!.startDrag();
-    _startDrag(item);
+    unawaited(_startDrag(item));
 
     return _dragInfo!;
   }
 
-  void _startDrag(ReorderableItemViewState item) async {
-    if (_dragInfo == null) {
-      // should never happen
-      return;
-    }
+  Future<void> _startDrag(ReorderableItemViewState item) async {
+    if (_dragInfo == null) return;
+
     if (widget.dragWidgetBuilder?.takeScreenshot ?? false) {
-      ui.Image? screenshot = await takeScreenShot(item);
+      final ui.Image? screenshot = await takeScreenShot(item);
 
-      ByteData? byteData =
-          await screenshot?.toByteData(format: ui.ImageByteFormat.png);
-
-      debugPrint("screen shot is null: $screenshot, byteData: $byteData");
+      final ByteData? byteData = await screenshot?.toByteData(
+        format: ui.ImageByteFormat.png,
+      );
 
       if (byteData != null) {
         _dragInfo?.startDrag(MemoryImage(byteData.buffer.asUint8List()));
+        return;
       }
-    } else {
-      _dragInfo?.startDrag(null);
     }
+
+    _dragInfo?.startDrag(null);
   }
 
-  _onDragUpdate(DragInfo item, Offset position, Offset delta) {
+  void _onDragUpdate(DragInfo item, Offset position, Offset delta) {
     widget.onDragUpdate?.call(_dragIndex!, position, delta);
-    updateDragTarget();
+    unawaited(updateDragTarget());
   }
 
-  _onDragCancel(DragInfo item) {
+  void _onDragCancel(DragInfo item) {
     _dragReset();
     setState(() {});
   }
 
-  _onDragEnd(DragInfo item) {
+  void _onDragEnd(DragInfo item) {
     widget.onReorder(_dragIndex!, _dropIndex!);
     _dragReset();
   }
 
   // ok, drag is end.
-  _dragReset() {
+  void _dragReset() {
     if (_dragIndex != null) {
       if (__items.containsKey(_dragIndex!)) {
-        final ReorderableItemViewState item = __items[_dragIndex!]!;
-        item.dragging = false;
-        item.rebuild();
+        final ReorderableItemViewState _ =
+            __items[_dragIndex!]!
+              ..dragging = false
+              ..rebuild();
       }
 
       _dragIndex = null;
       _dropIndex = null;
 
-      for (var item in __items.values) {
+      for (final item in __items.values) {
         item.resetGap();
       }
     }
@@ -368,25 +371,26 @@ mixin ReorderableGridStateMixin<T extends ReorderableGridWidgetMixin>
   void registerItem(ReorderableItemViewState item) {
     __items[item.index] = item;
     if (item.index == _dragInfo?.index) {
-      item.dragging = true;
-      item.rebuild();
+      item
+        ..dragging = true
+        ..rebuild();
     }
   }
 
   void unRegisterItem(int index, ReorderableItemViewState item) {
     // why you check the item?
-    var current = __items[index];
+    final current = __items[index];
     if (current == item) {
       __items.remove(index);
     }
   }
 
   Future<void> updateDragTarget() async {
-    int newTargetIndex = _calcDropIndex(_dropIndex!);
+    final int newTargetIndex = _calcDropIndex(_dropIndex!);
     if (newTargetIndex != _dropIndex) {
       widget.onDropIndexChange?.call(newTargetIndex, _dropIndex);
       _dropIndex = newTargetIndex;
-      for (var item in __items.values) {
+      for (final item in __items.values) {
         item.updateForGap(_dropIndex!);
       }
     }

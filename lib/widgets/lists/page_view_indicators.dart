@@ -2,71 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-class PageViewIndicators extends StatelessWidget {
-  const PageViewIndicators({
-    required this.index,
-    required this.length,
-    super.key,
-    this.space,
-    this.width,
-    this.height,
-    this.shrinkIndicator = false,
-    this.selectedColor,
-    this.unselectedColor,
-  });
-
-  final int index;
-  final int length;
-  final double? space;
-  final double? width;
-  final double? height;
-  final bool shrinkIndicator;
-  final Color? selectedColor;
-  final Color? unselectedColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: List.generate(
-          length,
-          (index) => Container(
-            margin: EdgeInsets.only(right: space ?? 8),
-            child: _buildIndicator(index),
-          ),
-        ),
-      ),
-    );
-  }
-
-  AnimatedContainer _buildIndicator(int i) {
-    return AnimatedContainer(
-      duration: Durations.short4,
-      height: _height,
-      width: _width(i),
-      decoration: BoxDecoration(
-        color: i == index ? _selected : _unselected,
-        borderRadius: BorderRadius.circular(3),
-      ),
-    );
-  }
-
-  Color get _selected => selectedColor ?? Colors.blue;
-
-  Color get _unselected => unselectedColor ?? Colors.grey;
-
-  double _width(int i) =>
-      shrinkIndicator
-          ? i == index
-              ? width ?? 40
-              : height ?? 5
-          : width ?? 30;
-
-  double get _height => height ?? (shrinkIndicator ? 5 : 3);
-}
-
 /// A widget that displays a smooth, timer-based page indicator.
 ///
 /// This indicator shows a sequence of circles that grow and shrink to represent
@@ -74,6 +9,24 @@ class PageViewIndicators extends StatelessWidget {
 /// a carousel-like UI. The widget can be customized with parameters like
 /// duration, size, and colors.
 class TimerSmoothPageIndicator extends StatefulWidget {
+  /// Creates a [TimerSmoothPageIndicator] widget.
+  ///
+  /// The [totalLength] is required and represents the number of indicators.
+  /// The [durationInSeconds] is the time each indicator takes to complete.
+  const TimerSmoothPageIndicator({
+    required this.totalLength,
+    super.key,
+    this.durationInSeconds = 3,
+    this.indicatorWidth = 25,
+    this.activeIndicatorWidth = 45,
+    this.indicatorHeight = 8,
+    this.indicatorColor = const Color(0xFFE0E0E0),
+    this.progressColor = Colors.black,
+    this.spacing = 4,
+    this.curve = Curves.linear,
+    this.autoPlay = true,
+  });
+
   /// The total number of indicators to be displayed.
   final int totalLength;
 
@@ -103,24 +56,6 @@ class TimerSmoothPageIndicator extends StatefulWidget {
 
   /// Whether the indicator should auto-play and move to the next indicator.
   final bool autoPlay;
-
-  /// Creates a [TimerSmoothPageIndicator] widget.
-  ///
-  /// The [totalLength] is required and represents the number of indicators.
-  /// The [durationInSeconds] is the time each indicator takes to complete.
-  const TimerSmoothPageIndicator({
-    super.key,
-    required this.totalLength,
-    this.durationInSeconds = 3,
-    this.indicatorWidth = 25,
-    this.activeIndicatorWidth = 45,
-    this.indicatorHeight = 8,
-    this.indicatorColor = const Color(0xFFE0E0E0),
-    this.progressColor = Colors.black,
-    this.spacing = 4,
-    this.curve = Curves.linear,
-    this.autoPlay = true,
-  });
 
   @override
   State<TimerSmoothPageIndicator> createState() =>
@@ -169,8 +104,8 @@ class _TimerSmoothPageIndicatorState extends State<TimerSmoothPageIndicator>
 
   /// Starts the animations for the indicator's progress and width.
   void _startAnimations() {
-    _progressController.forward(from: 0.0);
-    _widthController.forward();
+    unawaited(_progressController.forward(from: 0));
+    unawaited(_widthController.forward());
 
     if (widget.autoPlay) {
       _startAutoPlay();
@@ -194,13 +129,13 @@ class _TimerSmoothPageIndicatorState extends State<TimerSmoothPageIndicator>
 
     setState(() {
       _currentIndex = (_currentIndex + 1) % widget.totalLength;
-      _progressController
-        ..reset()
-        ..forward();
-      _widthController
-        ..reset()
-        ..forward();
     });
+
+    _progressController.reset();
+    unawaited(_progressController.forward());
+
+    _widthController.reset();
+    unawaited(_widthController.forward());
   }
 
   @override
@@ -209,15 +144,11 @@ class _TimerSmoothPageIndicatorState extends State<TimerSmoothPageIndicator>
       case AppLifecycleState.inactive:
       case AppLifecycleState.paused:
         _handleAppPaused();
-        break;
       case AppLifecycleState.resumed:
         _handleAppResumed();
-        break;
       case AppLifecycleState.detached:
         _handleAppDetached();
-        break;
       case AppLifecycleState.hidden:
-        // TODO: Handle this case.
         break;
     }
   }
@@ -237,10 +168,12 @@ class _TimerSmoothPageIndicatorState extends State<TimerSmoothPageIndicator>
       final remainingDuration =
           Duration(seconds: widget.durationInSeconds) - _elapsedBeforePause;
 
-      _progressController.forward(
-        from:
-            _elapsedBeforePause.inMilliseconds /
-            _progressController.duration!.inMilliseconds,
+      unawaited(
+        _progressController.forward(
+          from:
+              _elapsedBeforePause.inMilliseconds /
+              _progressController.duration!.inMilliseconds,
+        ),
       );
 
       if (widget.autoPlay) {
@@ -287,7 +220,6 @@ class _TimerSmoothPageIndicatorState extends State<TimerSmoothPageIndicator>
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
         children: List.generate(widget.totalLength, (index) {
           final isActive = index == _currentIndex;
           double width = widget.indicatorWidth;

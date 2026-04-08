@@ -27,11 +27,37 @@ class MyListsPage extends StatelessWidget {
             ExampleItem(
               desc: 'Marquee Widget',
               padding: EdgeInsets.symmetric(horizontal: 16),
-              builder: _buildMarqueeWidgetDemo,
+              builder: _buildMarqueeWidget,
             ),
           ],
         ),
-        _buildModule('Scroll & Content', _contentEntries),
+        ExampleModule(
+          title: 'Scroll & Content',
+          children: [
+            ExampleItem(
+              desc: 'List View - Header , Footer & Pagination',
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              builder: _buildMyListView,
+            ),
+            ExampleItem(
+              desc: 'Grid View - Header , Footer & Pagination',
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              builder: _buildMyGridView,
+            ),
+            ExampleItem(
+              desc: 'Reorderable Grid View',
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              builder: _buildReorderableGridView,
+            ),
+          ],
+        ),
+        ExampleModule(
+          title: 'Paging & State',
+          children: [
+            ExampleItem(desc: 'Dot Indicator', builder: _buildDotIndicator),
+            ExampleItem(desc: 'Bar Indicator', builder: _buildBarIndicator),
+          ],
+        ),
         _buildModule('Paging & State', _pagingEntries),
       ],
     );
@@ -61,7 +87,7 @@ class MyListsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildMarqueeWidgetDemo(BuildContext context) {
+  Widget _buildMarqueeWidget(BuildContext context) {
     final labels = [
       'Long-running sync completed',
       '3 list demos added',
@@ -76,13 +102,10 @@ class MyListsPage extends StatelessWidget {
           height: 60,
           decoration: BoxDecoration(
             color: context.colorScheme.background,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: MyBorderRadius.large,
             border: Border.all(color: context.colorScheme.border),
           ),
           child: MyMarqueeWidget(
-            animationDuration: const Duration(seconds: 8),
-            backDuration: const Duration(seconds: 8),
-            pauseDuration: const Duration(milliseconds: 600),
             child: Row(
               children: [
                 const SizedBox(width: 12),
@@ -113,6 +136,214 @@ class MyListsPage extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildMyListView(BuildContext context) {
+    final items = ['Inbox', 'Scheduled', 'In review', 'Approved'];
+
+    Widget header = Padding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+      child: Text(
+        'Pipeline',
+        style: context.titleMedium.copyWith(
+          fontWeight: FontWeight.w800,
+          color: context.colorScheme.foreground,
+        ),
+      ),
+    );
+
+    Widget footer = Padding(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+      child: Text(
+        'Footer slot: helpful for totals, captions, or next actions.',
+        style: context.bodySmall.copyWith(
+          color: context.colorScheme.secondaryForeground,
+        ),
+      ),
+    );
+
+    Widget pagination = Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Center(
+        child: _StatusChip(
+          label: 'Loading next page',
+          active: true,
+          color: context.colorScheme.primary,
+        ),
+      ),
+    );
+
+    return SizedBox(
+      height: 320,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: context.colorScheme.background,
+          borderRadius: MyBorderRadius.large,
+          border: Border.all(color: context.colorScheme.border),
+        ),
+        child: MyListView<String>(
+          items: items,
+          header: header,
+          footer: footer,
+          paginationWidget: pagination,
+          separatorBuilder: (_, __) => const MyDivider(),
+          itemBuilder: (index, item) {
+            return ListTile(
+              leading: CircleAvatar(
+                backgroundColor: _palette[index].withValues(alpha: 0.14),
+                child: Text(
+                  '${index + 1}',
+                  style: TextStyle(
+                    color: _palette[index],
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              title: Text(
+                item,
+                style: context.titleSmall.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: context.colorScheme.foreground,
+                ),
+              ),
+              subtitle: Text(
+                'Typed item builder receives index and value together.',
+                style: context.bodySmall.copyWith(
+                  color: context.colorScheme.secondaryForeground,
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMyGridView(BuildContext context) {
+    final items = ['Backlog', 'Planning', 'In progress', 'Ready to ship'];
+
+    Widget header = Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Text(
+        'Board snapshot',
+        style: context.titleMedium.copyWith(
+          fontWeight: FontWeight.w800,
+          color: context.colorScheme.foreground,
+        ),
+      ),
+    );
+
+    Widget pagination = Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Center(
+        child: _StatusChip(
+          label: 'Fetching next cards',
+          active: true,
+          color: context.colorScheme.primary,
+        ),
+      ),
+    );
+
+    Widget footer = Padding(
+      padding: const EdgeInsets.only(top: 12),
+      child: Text(
+        'Header, loading state, and footer stay full-width while items remain in a true sliver grid.',
+        style: context.bodySmall.copyWith(
+          color: context.colorScheme.secondaryForeground,
+        ),
+      ),
+    );
+
+    return SizedBox(
+      height: 420,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: context.colorScheme.background,
+          borderRadius: MyBorderRadius.large,
+          border: Border.all(color: context.colorScheme.border),
+        ),
+        child: MyGridView<String>(
+          items: items,
+          padding: const EdgeInsets.all(16),
+          header: header,
+          paginationWidget: pagination,
+          footer: footer,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
+            childAspectRatio: 1.5,
+          ),
+          itemBuilder: (index, item) {
+            final color = _palette[index % _palette.length];
+            return DecoratedBox(
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.10),
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(color: color.withValues(alpha: 0.24)),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(14),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 36,
+                      width: 36,
+                      decoration: BoxDecoration(
+                        color: color.withValues(alpha: 0.14),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        '${index + 1}',
+                        style: context.titleSmall.copyWith(
+                          fontWeight: FontWeight.w800,
+                          color: color,
+                        ),
+                      ),
+                    ),
+                    const Spacer(),
+                    Text(
+                      item,
+                      style: context.titleSmall.copyWith(
+                        fontWeight: FontWeight.w800,
+                        color: context.colorScheme.foreground,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Grid builder receives the typed value and index together.',
+                      style: context.bodySmall.copyWith(
+                        color: context.colorScheme.secondaryForeground,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildReorderableGridView(BuildContext context) {
+    return const _ReorderableGridViewDemo();
+  }
+
+  Widget _buildDotIndicator(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      child: _PageIndicatorDemo(),
+    );
+  }
+
+  Widget _buildBarIndicator(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      child: _PageIndicatorDemo(type: MyPageIndicatorType.bar),
     );
   }
 }
@@ -193,38 +424,7 @@ class _ListExamplePage extends StatelessWidget {
   }
 }
 
-final List<ListDemoEntry> _contentEntries = [
-  ListDemoEntry(
-    title: 'TypedListView',
-    subtitle: 'Type-safe ListView with header, footer, separators, and paging.',
-    pageDescription:
-        'TypedListView reduces repetitive casting and boilerplate while still supporting headers, separators, footers, and loading rows.',
-    demoBuilder: _buildTypedListViewDemo,
-  ),
-  ListDemoEntry(
-    title: 'ReorderableGridView',
-    subtitle: 'Drag-and-drop reordering for grid layouts.',
-    pageDescription:
-        'ReorderableGridView makes it easy to build rearrangeable dashboards, favorite collections, and media boards.',
-    demoBuilder: _buildReorderableGridViewDemo,
-  ),
-];
-
 final List<ListDemoEntry> _pagingEntries = [
-  ListDemoEntry(
-    title: 'DotIndicator',
-    subtitle: 'Interactive dots that sync with a PageController.',
-    pageDescription:
-        'DotIndicator pairs with PageView and lets people tap a dot to jump directly to a page.',
-    demoBuilder: _buildDotIndicatorDemo,
-  ),
-  ListDemoEntry(
-    title: 'PageViewIndicators',
-    subtitle: 'Simple linear page bars for a current index.',
-    pageDescription:
-        'PageViewIndicators renders a compact strip of bars driven by the current page index from your own controller or state.',
-    demoBuilder: _buildPageViewIndicatorsDemo,
-  ),
   ListDemoEntry(
     title: 'TimerSmoothPageIndicator',
     subtitle: 'Animated progress bars for timed carousels or stories.',
@@ -254,114 +454,6 @@ final List<ListDemoEntry> _pagingEntries = [
     demoBuilder: _buildStoryboardDemo,
   ),
 ];
-
-Widget _buildTypedListViewDemo(BuildContext context) {
-  final items = ['Inbox', 'Scheduled', 'In review', 'Approved'];
-
-  Widget header = Padding(
-    padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-    child: Text(
-      'Pipeline',
-      style: context.titleMedium.copyWith(
-        fontWeight: FontWeight.w800,
-        color: context.colorScheme.foreground,
-      ),
-    ),
-  );
-
-  Widget footer = Padding(
-    padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-    child: Text(
-      'Footer slot: helpful for totals, captions, or next actions.',
-      style: context.bodySmall.copyWith(
-        color: context.colorScheme.secondaryForeground,
-      ),
-    ),
-  );
-
-  Widget pagination = Padding(
-    padding: const EdgeInsets.symmetric(vertical: 12),
-    child: Center(
-      child: _StatusChip(
-        label: 'Loading next page',
-        active: true,
-        color: context.colorScheme.primary,
-      ),
-    ),
-  );
-
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    child: SizedBox(
-      height: 320,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: context.colorScheme.background,
-            border: Border.all(color: context.colorScheme.border),
-          ),
-          child: MyListView<String>(
-            items: items,
-            header: header,
-            footer: footer,
-            paginationWidget: pagination,
-            separatorBuilder: (_, __) =>
-                Divider(height: 1, color: context.colorScheme.border),
-            itemBuilder: (index, item) {
-              return ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: _palette[index].withValues(alpha: 0.14),
-                  child: Text(
-                    '${index + 1}',
-                    style: TextStyle(
-                      color: _palette[index],
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-                title: Text(
-                  item,
-                  style: context.titleSmall.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: context.colorScheme.foreground,
-                  ),
-                ),
-                subtitle: Text(
-                  'Typed item builder receives index and value together.',
-                  style: context.bodySmall.copyWith(
-                    color: context.colorScheme.secondaryForeground,
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-      ),
-    ),
-  );
-}
-
-Widget _buildReorderableGridViewDemo(BuildContext context) {
-  return const Padding(
-    padding: EdgeInsets.symmetric(horizontal: 16),
-    child: _ReorderableGridViewDemo(),
-  );
-}
-
-Widget _buildDotIndicatorDemo(BuildContext context) {
-  return const Padding(
-    padding: EdgeInsets.symmetric(horizontal: 16),
-    child: _DotIndicatorDemo(),
-  );
-}
-
-Widget _buildPageViewIndicatorsDemo(BuildContext context) {
-  return const Padding(
-    padding: EdgeInsets.symmetric(horizontal: 16),
-    child: _PageViewIndicatorsDemo(),
-  );
-}
 
 Widget _buildTimerSmoothPageIndicatorDemo(BuildContext context) {
   return Padding(
@@ -440,173 +532,82 @@ class _ReorderableGridViewDemoState extends State<_ReorderableGridViewDemo> {
 
   @override
   Widget build(BuildContext context) {
-    return _DemoCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Drag to reorder',
-            style: context.titleMedium.copyWith(
-              fontWeight: FontWeight.w700,
-              color: context.colorScheme.foreground,
-            ),
+    return Container(
+      padding: EdgeInsets.all(16).except(bottom: 0),
+      decoration: BoxDecoration(
+        color: context.colorScheme.background,
+        borderRadius: MyBorderRadius.large,
+        border: Border.all(color: context.colorScheme.border),
+      ),
+      child: SizedBox(
+        height: 350,
+        child: ReorderableGridView.builder(
+          shrinkWrap: true,
+          itemCount: _items.length,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
+            childAspectRatio: 1.5,
           ),
-          const SizedBox(height: 10),
-          Text(
-            'Press and drag a card to rearrange the grid.',
-            style: context.bodyMedium.copyWith(
-              color: context.colorScheme.secondaryForeground,
-            ),
-          ),
-          const SizedBox(height: 14),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              for (int index = 0; index < _items.length; index++)
-                _StatusChip(
-                  label: '${index + 1}: ${_items[index]}',
-                  active: true,
-                  color: _palette[index % _palette.length],
-                ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          SizedBox(
-            height: 280,
-            child: ReorderableGridView.builder(
-              dragStartDelay: Duration.zero,
-              itemCount: _items.length,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              padding: EdgeInsets.zero,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                childAspectRatio: 1.35,
+          onReorder: (oldIndex, newIndex) {
+            setState(() {
+              if (newIndex > oldIndex) {
+                newIndex -= 1;
+              }
+              final item = _items.removeAt(oldIndex);
+              _items.insert(newIndex, item);
+            });
+          },
+          itemBuilder: (context, index) {
+            final color = _palette[index % _palette.length];
+            return Container(
+              key: ValueKey(_items[index]),
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.14),
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(color: color.withValues(alpha: 0.24)),
               ),
-              onReorder: (oldIndex, newIndex) {
-                setState(() {
-                  if (newIndex > oldIndex) {
-                    newIndex -= 1;
-                  }
-                  final item = _items.removeAt(oldIndex);
-                  _items.insert(newIndex, item);
-                });
-              },
-              itemBuilder: (context, index) {
-                final color = _palette[index % _palette.length];
-                return Container(
-                  key: ValueKey(_items[index]),
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: color.withValues(alpha: 0.14),
-                    borderRadius: BorderRadius.circular(18),
-                    border: Border.all(color: color.withValues(alpha: 0.24)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(Icons.drag_indicator_rounded, color: color),
+                  const Spacer(),
+                  Text(
+                    _items[index],
+                    style: context.titleSmall.copyWith(
+                      fontWeight: FontWeight.w800,
+                      color: context.colorScheme.foreground,
+                    ),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Icon(Icons.drag_indicator_rounded, color: color),
-                      const Spacer(),
-                      Text(
-                        _items[index],
-                        style: context.titleSmall.copyWith(
-                          fontWeight: FontWeight.w800,
-                          color: context.colorScheme.foreground,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        'Hold and move',
-                        style: context.bodySmall.copyWith(
-                          color: context.colorScheme.secondaryForeground,
-                        ),
-                      ),
-                    ],
+                  const SizedBox(height: 6),
+                  Text(
+                    'Hold and move',
+                    style: context.bodySmall.copyWith(
+                      color: context.colorScheme.secondaryForeground,
+                    ),
                   ),
-                );
-              },
-            ),
-          ),
-        ],
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
 }
 
-class _DotIndicatorDemo extends StatefulWidget {
-  const _DotIndicatorDemo();
+class _PageIndicatorDemo extends StatefulWidget {
+  final MyPageIndicatorType type;
+
+  const _PageIndicatorDemo({this.type = MyPageIndicatorType.dot});
 
   @override
-  State<_DotIndicatorDemo> createState() => _DotIndicatorDemoState();
+  State<_PageIndicatorDemo> createState() => _PageIndicatorDemoState();
 }
 
-class _DotIndicatorDemoState extends State<_DotIndicatorDemo> {
-  late final PageController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = PageController();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final pages = List.generate(4, (index) => index);
-    return _DemoCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: 180,
-            child: PageView.builder(
-              controller: _controller,
-              itemCount: pages.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: _PagerCard(
-                    title: 'Page ${index + 1}',
-                    message: 'Tap a dot below to jump directly to this panel.',
-                    color: _palette[index],
-                  ),
-                );
-              },
-            ),
-          ),
-          DotIndicator<int>(
-            pageController: _controller,
-            pages: pages,
-            indicatorColor: context.colorScheme.primary,
-            unselectedIndicatorColor: context.colorScheme.primary.withValues(
-              alpha: 0.18,
-            ),
-            selectedSize: 14,
-            size: 8,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _PageViewIndicatorsDemo extends StatefulWidget {
-  const _PageViewIndicatorsDemo();
-
-  @override
-  State<_PageViewIndicatorsDemo> createState() =>
-      _PageViewIndicatorsDemoState();
-}
-
-class _PageViewIndicatorsDemoState extends State<_PageViewIndicatorsDemo> {
+class _PageIndicatorDemoState extends State<_PageIndicatorDemo> {
   late final PageController _controller;
   int _index = 0;
 
@@ -622,47 +623,64 @@ class _PageViewIndicatorsDemoState extends State<_PageViewIndicatorsDemo> {
     super.dispose();
   }
 
+  Future<void> _animateTo(int page) async {
+    if (!_controller.hasClients) return;
+    await _controller.animateToPage(
+      page,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOutCubic,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return _DemoCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: 180,
-            child: PageView.builder(
-              controller: _controller,
-              onPageChanged: (value) {
-                setState(() {
-                  _index = value;
-                });
-              },
-              itemCount: 3,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: _PagerCard(
-                    title: 'State ${index + 1}',
-                    message:
-                        'This indicator is driven by a page index in state.',
-                    color: _palette[index],
-                  ),
-                );
-              },
-            ),
+    bool isDot = widget.type == MyPageIndicatorType.dot;
+    final pages = List.generate(4, (index) => index);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          height: 180,
+          child: PageView.builder(
+            controller: _controller,
+            onPageChanged: (value) {
+              setState(() {
+                _index = value;
+              });
+            },
+            itemCount: pages.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 8, left: 8, right: 8),
+                child: _PagerCard(
+                  title: 'Page ${index + 1}',
+                  message: isDot
+                      ? 'Tap a dot below to jump directly to this panel.'
+                      : 'This indicator is driven by a page index in state.',
+                  color: _palette[index],
+                ),
+              );
+            },
           ),
-          PageViewIndicators(
-            index: _index,
-            length: 3,
-            width: 36,
-            height: 6,
-            selectedColor: context.colorScheme.primary,
-            unselectedColor: context.colorScheme.primary.withValues(
-              alpha: 0.16,
-            ),
-          ),
-        ],
-      ),
+        ),
+        MyPageIndicator(
+          length: pages.length,
+          currentIndex: _index,
+          type: widget.type,
+          height: 4,
+          width: 36,
+          shrinkIndicator: !isDot,
+          onTap: isDot
+              ? (page) {
+                  setState(() {
+                    _index = page;
+                  });
+                  unawaited(_animateTo(page));
+                }
+              : null,
+        ),
+      ],
     );
   }
 }
@@ -745,9 +763,16 @@ class _PreloadPageViewDemoState extends State<_PreloadPageViewDemo> {
             ),
           ),
           const SizedBox(height: 12),
-          PageViewIndicators(
-            index: _index,
+          MyPageIndicator(
             length: 4,
+            currentIndex: _index,
+            type: MyPageIndicatorType.bar,
+            onTap: (page) {
+              setState(() {
+                _index = page;
+              });
+              unawaited(_animateTo(page));
+            },
             width: 28,
             height: 6,
             selectedColor: context.colorScheme.primary,
@@ -1103,7 +1128,7 @@ class _StatusChip extends StatelessWidget {
         label,
         style: context.bodySmall.copyWith(
           fontWeight: FontWeight.w600,
-          color: context.colorScheme.foreground,
+          color: color ?? context.colorScheme.foreground,
         ),
       ),
     );
