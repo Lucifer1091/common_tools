@@ -3,8 +3,6 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 
-import '../layout/no_widget.dart';
-
 /// A custom [IndexedStack] implementation with optional fade transition
 /// and page caching logic controlled by optional [MyIndexedStackController].
 ///
@@ -49,12 +47,14 @@ class MyIndexedStack extends StatefulWidget {
 
 class _MyIndexedStackState extends State<MyIndexedStack>
     with SingleTickerProviderStateMixin {
-  late final MyIndexedStackController _controller;
+  late MyIndexedStackController _controller;
   late final AnimationController _animation;
   late bool _internal;
+  late int _lastAnimatedIndex;
 
   @override
   void initState() {
+    super.initState();
     _internal = widget.controller == null;
     _controller =
         widget.controller ??
@@ -62,58 +62,111 @@ class _MyIndexedStackState extends State<MyIndexedStack>
           initialIndex: widget.index ?? 0,
           totalPages: widget.children.length,
         );
+    _controller.addListener(_handleControllerChanged);
     _animation = AnimationController(vsync: this, duration: widget.duration);
-    unawaited(_animation.forward());
-    super.initState();
+    _lastAnimatedIndex = _resolvedIndex;
+
+    if (widget.animate) {
+      unawaited(_animation.forward());
+    } else {
+      _animation.value = 1;
+    }
   }
 
   @override
   void didUpdateWidget(MyIndexedStack oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    // If controller changed, update listener
-    if (widget.controller != oldWidget.controller) {
-      if (_internal) _controller.dispose();
+    if (widget.duration != oldWidget.duration) {
+      _animation.duration = widget.duration;
+    }
 
+    if (_shouldRecreateController(oldWidget)) {
+      final previousController = _controller;
+      final wasInternal = _internal;
+
+      previousController.removeListener(_handleControllerChanged);
       _internal = widget.controller == null;
       _controller =
           widget.controller ??
           MyIndexedStackController(
-            initialIndex: widget.index ?? 0,
+            initialIndex: _clampIndex(
+              widget.index ?? previousController.currentIndex,
+            ),
             totalPages: widget.children.length,
           );
+      _controller.addListener(_handleControllerChanged);
+
+      if (wasInternal) {
+        previousController.dispose();
+      }
     }
 
-    // Animate if index changes
-    if (widget.index != oldWidget.index && widget.animate) {
-      unawaited(_animation.forward(from: 0));
-      if (widget.index != null) _controller.jumpTo(widget.index!);
-    } else if (widget.index != oldWidget.index && widget.index != null) {
-      _controller.jumpTo(widget.index!);
+    final nextIndex = widget.index;
+    if (nextIndex != null && nextIndex != oldWidget.index) {
+      _controller.jumpTo(_clampIndex(nextIndex));
     }
+
+    if (!widget.animate) {
+      _animation.value = 1;
+    }
+
+    _syncAnimation(forceAnimate: widget.controller != oldWidget.controller);
   }
 
-  List<Widget> get children {
-    final currentIndex = widget.index ?? _controller.currentIndex;
-    final loadedIndexes = _controller.loadedIndexes;
-    final children = List<Widget>.filled(
+  bool _shouldRecreateController(MyIndexedStack oldWidget) {
+    return widget.controller != oldWidget.controller ||
+        (widget.controller == null &&
+            oldWidget.children.length != widget.children.length);
+  }
+
+  int get _resolvedIndex {
+    if (widget.children.isEmpty) return 0;
+    return _clampIndex(widget.index ?? _controller.currentIndex);
+  }
+
+  int _clampIndex(int index) {
+    if (widget.children.isEmpty) return 0;
+    if (index < 0) return 0;
+    if (index >= widget.children.length) return widget.children.length - 1;
+    return index;
+  }
+
+  void _handleControllerChanged() {
+    if (widget.index != null) return;
+    _syncAnimation();
+  }
+
+  void _syncAnimation({bool forceAnimate = false}) {
+    final currentIndex = _resolvedIndex;
+    final didChange = currentIndex != _lastAnimatedIndex;
+
+    if (widget.animate && (forceAnimate || didChange)) {
+      unawaited(_animation.forward(from: 0));
+    }
+
+    _lastAnimatedIndex = currentIndex;
+  }
+
+  List<Widget> _buildChildren(int currentIndex) {
+    final builtChildren = List<Widget>.filled(
       widget.children.length,
-      const NoWidget(),
+      const SizedBox.shrink(),
     );
 
-    for (final i in loadedIndexes) {
-      if (i >= 0 && i < widget.children.length) {
-        children[i] = KeyedSubtree(
-          key: ValueKey('lc$i'),
+    for (final index in _controller.loadedIndexes) {
+      if (index >= 0 && index < widget.children.length) {
+        builtChildren[index] = KeyedSubtree(
+          key: ValueKey<int>(index),
           child: TickerMode(
-            enabled: i == currentIndex,
-            child: widget.children[i],
+            enabled: index == currentIndex,
+            child: widget.children[index],
           ),
         );
       }
     }
 
-    return children;
+    return builtChildren;
   }
 
   @override
@@ -121,12 +174,7 @@ class _MyIndexedStackState extends State<MyIndexedStack>
     final stack = ListenableBuilder(
       listenable: _controller,
       builder: (context, _) {
-        // Safe Index Check
-        final currentIndex = widget.index ?? _controller.currentIndex;
-        final safeIndex =
-            (currentIndex >= 0 && currentIndex < widget.children.length)
-                ? currentIndex
-                : 0;
+        final safeIndex = _resolvedIndex;
 
         return IndexedStack(
           index: safeIndex,
@@ -134,7 +182,7 @@ class _MyIndexedStackState extends State<MyIndexedStack>
           clipBehavior: widget.clipBehavior,
           textDirection: widget.textDirection,
           sizing: widget.fit,
-          children: children,
+          children: _buildChildren(safeIndex),
         );
       },
     );
@@ -148,6 +196,7 @@ class _MyIndexedStackState extends State<MyIndexedStack>
 
   @override
   void dispose() {
+    _controller.removeListener(_handleControllerChanged);
     _animation.dispose();
     if (_internal) _controller.dispose();
     super.dispose();
@@ -194,12 +243,15 @@ class MyIndexedStackController extends ChangeNotifier
   final List<int> removableIndexes;
   final bool isListenMemoryPressure;
 
-  final LinkedHashMap<int, bool> _loadedPages = LinkedHashMap<int, bool>();
+  final LinkedHashSet<int> _loadedPages = LinkedHashSet<int>();
+  late final Set<int> _loadedIndexesView = UnmodifiableSetView<int>(
+    _loadedPages,
+  );
 
-  Set<int> get loadedIndexes => _loadedPages.keys.toSet();
+  Set<int> get loadedIndexes => _loadedIndexesView;
   int get currentIndex => _currentIndex;
   bool get canGoBack => _currentIndex > 0;
-  bool isLoaded(int index) => _loadedPages.containsKey(index);
+  bool isLoaded(int index) => _loadedPages.contains(index);
 
   @override
   void didHaveMemoryPressure() {
@@ -211,9 +263,7 @@ class MyIndexedStackController extends ChangeNotifier
     final protectedIndexes = {_currentIndex, ...preloadIndexes};
 
     for (final index in removableIndexes) {
-      if (!protectedIndexes.contains(index) &&
-          _loadedPages.containsKey(index)) {
-        _loadedPages.remove(index);
+      if (!protectedIndexes.contains(index) && _loadedPages.remove(index)) {
         changed = true;
       }
     }
@@ -224,10 +274,13 @@ class MyIndexedStackController extends ChangeNotifier
   void _markAsUsed(int index) {
     if (index < 0) return;
 
-    _loadedPages.remove(index);
-    _loadedPages[index] = true;
+    _loadedPages
+      ..remove(index)
+      ..add(index);
 
-    if (_loadedPages.length > maxCachedPages) _enforceMaxSize();
+    if (_loadedPages.length > maxCachedPages) {
+      _enforceMaxSize();
+    }
   }
 
   /// Switch to a given index, only if it's valid.
@@ -244,17 +297,19 @@ class MyIndexedStackController extends ChangeNotifier
 
     if (disposeUnused) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        _enforceMaxSize();
-        notifyListeners();
+        if (!hasListeners) return;
+        if (_enforceMaxSize()) {
+          notifyListeners();
+        }
       });
     }
   }
 
-  void _enforceMaxSize() {
-    if (_loadedPages.length <= maxCachedPages) return;
+  bool _enforceMaxSize() {
+    if (_loadedPages.length <= maxCachedPages) return false;
 
     final protectedIndexes = {_currentIndex, ...preloadIndexes};
-    final iterator = _loadedPages.keys.iterator;
+    final iterator = _loadedPages.iterator;
     final toRemove = <int>[];
 
     while (iterator.moveNext() &&
@@ -266,6 +321,8 @@ class MyIndexedStackController extends ChangeNotifier
     }
 
     toRemove.forEach(_loadedPages.remove);
+
+    return toRemove.isNotEmpty;
   }
 
   void reset() {
@@ -280,7 +337,7 @@ class MyIndexedStackController extends ChangeNotifier
       return;
     }
 
-    if (_loadedPages.remove(index) != null) notifyListeners();
+    if (_loadedPages.remove(index)) notifyListeners();
   }
 
   void disposePages(List<int> indexes) {
@@ -288,8 +345,7 @@ class MyIndexedStackController extends ChangeNotifier
     final protectedIndexes = {_currentIndex, ...preloadIndexes};
 
     for (final index in indexes) {
-      if (!protectedIndexes.contains(index) &&
-          _loadedPages.remove(index) != null) {
+      if (!protectedIndexes.contains(index) && _loadedPages.remove(index)) {
         changed = true;
       }
     }
@@ -300,7 +356,7 @@ class MyIndexedStackController extends ChangeNotifier
   void preloadPage(int index) {
     if (index < 0 ||
         (totalPages != null && index >= totalPages!) ||
-        _loadedPages.containsKey(index)) {
+        _loadedPages.contains(index)) {
       return;
     }
 
@@ -320,12 +376,12 @@ class MyIndexedStackController extends ChangeNotifier
       final nextIndex = _currentIndex + i;
       final prevIndex = _currentIndex - i;
 
-      if (nextIndex < totalPages! && !_loadedPages.containsKey(nextIndex)) {
+      if (nextIndex < totalPages! && !_loadedPages.contains(nextIndex)) {
         _markAsUsed(nextIndex);
         changed = true;
       }
 
-      if (prevIndex >= 0 && !_loadedPages.containsKey(prevIndex)) {
+      if (prevIndex >= 0 && !_loadedPages.contains(prevIndex)) {
         _markAsUsed(prevIndex);
         changed = true;
       }

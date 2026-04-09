@@ -2,29 +2,32 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../../index.dart';
+
 /// A widget that displays a smooth, timer-based page indicator.
 ///
 /// This indicator shows a sequence of circles that grow and shrink to represent
 /// a progress bar. It is useful for displaying timed steps or progress in
 /// a carousel-like UI. The widget can be customized with parameters like
 /// duration, size, and colors.
-class TimerSmoothPageIndicator extends StatefulWidget {
-  /// Creates a [TimerSmoothPageIndicator] widget.
+class MyTimerPageIndicator extends StatefulWidget {
+  /// Creates a [MyTimerPageIndicator] widget.
   ///
   /// The [totalLength] is required and represents the number of indicators.
   /// The [durationInSeconds] is the time each indicator takes to complete.
-  const TimerSmoothPageIndicator({
+  const MyTimerPageIndicator({
     required this.totalLength,
     super.key,
     this.durationInSeconds = 3,
     this.indicatorWidth = 25,
     this.activeIndicatorWidth = 45,
     this.indicatorHeight = 8,
-    this.indicatorColor = const Color(0xFFE0E0E0),
-    this.progressColor = Colors.black,
+    this.indicatorColor,
+    this.progressColor,
     this.spacing = 4,
     this.curve = Curves.linear,
     this.autoPlay = true,
+    this.onStepChanged,
   });
 
   /// The total number of indicators to be displayed.
@@ -43,10 +46,10 @@ class TimerSmoothPageIndicator extends StatefulWidget {
   final double indicatorHeight;
 
   /// The color of the inactive indicators.
-  final Color indicatorColor;
+  final Color? indicatorColor;
 
   /// The color of the active indicator's progress.
-  final Color progressColor;
+  final Color? progressColor;
 
   /// The spacing between each indicator.
   final double spacing;
@@ -57,16 +60,18 @@ class TimerSmoothPageIndicator extends StatefulWidget {
   /// Whether the indicator should auto-play and move to the next indicator.
   final bool autoPlay;
 
+  /// Called whenever the active step changes.
+  final ValueChanged<int>? onStepChanged;
+
   @override
-  State<TimerSmoothPageIndicator> createState() =>
-      _TimerSmoothPageIndicatorState();
+  State<MyTimerPageIndicator> createState() => _MyTimerPageIndicatorState();
 }
 
-/// The state for the [TimerSmoothPageIndicator] widget.
+/// The state for the [MyTimerPageIndicator] widget.
 ///
 /// This class manages the animations for the indicator progress and width changes,
 /// as well as handling auto-play and app lifecycle events (e.g., pause, resume).
-class _TimerSmoothPageIndicatorState extends State<TimerSmoothPageIndicator>
+class _MyTimerPageIndicatorState extends State<MyTimerPageIndicator>
     with TickerProviderStateMixin, WidgetsBindingObserver {
   int _currentIndex = 0;
   late AnimationController _progressController;
@@ -127,9 +132,13 @@ class _TimerSmoothPageIndicatorState extends State<TimerSmoothPageIndicator>
   void _nextIndicator() {
     if (!mounted) return;
 
+    final nextIndex = (_currentIndex + 1) % widget.totalLength;
+    if (nextIndex == _currentIndex) return;
+
     setState(() {
-      _currentIndex = (_currentIndex + 1) % widget.totalLength;
+      _currentIndex = nextIndex;
     });
+    widget.onStepChanged?.call(nextIndex);
 
     _progressController.reset();
     unawaited(_progressController.forward());
@@ -246,7 +255,7 @@ class _TimerSmoothPageIndicatorState extends State<TimerSmoothPageIndicator>
             height: widget.indicatorHeight,
             margin: EdgeInsets.symmetric(horizontal: widget.spacing),
             decoration: BoxDecoration(
-              color: widget.indicatorColor,
+              color: widget.indicatorColor ?? context.colorScheme.secondary,
               borderRadius: BorderRadius.circular(widget.indicatorHeight / 2),
             ),
             child:
@@ -257,7 +266,9 @@ class _TimerSmoothPageIndicatorState extends State<TimerSmoothPageIndicator>
                         widthFactor: _progressController.value,
                         child: Container(
                           decoration: BoxDecoration(
-                            color: widget.progressColor,
+                            color:
+                                widget.progressColor ??
+                                context.colorScheme.primary,
                             borderRadius: BorderRadius.circular(
                               widget.indicatorHeight / 2,
                             ),

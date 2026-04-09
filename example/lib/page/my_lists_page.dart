@@ -54,8 +54,14 @@ class MyListsPage extends StatelessWidget {
         ExampleModule(
           title: 'Paging & State',
           children: [
-            ExampleItem(desc: 'Dot Indicator', builder: _buildDotIndicator),
-            ExampleItem(desc: 'Bar Indicator', builder: _buildBarIndicator),
+            ExampleItem(
+              desc: 'Page Indicators - Dot, Bar & Shrink',
+              builder: _buildPageIndicators,
+            ),
+            ExampleItem(
+              desc: 'My Timer Page Indicator',
+              builder: _buildTimerPageIndicator,
+            ),
           ],
         ),
         _buildModule('Paging & State', _pagingEntries),
@@ -333,18 +339,12 @@ class MyListsPage extends StatelessWidget {
     return const _ReorderableGridViewDemo();
   }
 
-  Widget _buildDotIndicator(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      child: _PageIndicatorDemo(),
-    );
+  Widget _buildPageIndicators(BuildContext context) {
+    return _PageIndicatorDemo();
   }
 
-  Widget _buildBarIndicator(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      child: _PageIndicatorDemo(type: MyPageIndicatorType.bar),
-    );
+  Widget _buildTimerPageIndicator(BuildContext context) {
+    return _TimerSmoothPageIndicatorDemo();
   }
 }
 
@@ -426,20 +426,6 @@ class _ListExamplePage extends StatelessWidget {
 
 final List<ListDemoEntry> _pagingEntries = [
   ListDemoEntry(
-    title: 'TimerSmoothPageIndicator',
-    subtitle: 'Animated progress bars for timed carousels or stories.',
-    pageDescription:
-        'TimerSmoothPageIndicator is useful when each step advances on a timer and the indicator should show elapsed progress, not just position.',
-    demoBuilder: _buildTimerSmoothPageIndicatorDemo,
-  ),
-  ListDemoEntry(
-    title: 'PreloadPageView',
-    subtitle: 'PageView variant that preloads adjacent pages.',
-    pageDescription:
-        'PreloadPageView helps smooth out image-heavy or expensive pages by building nearby pages ahead of time.',
-    demoBuilder: _buildPreloadPageViewDemo,
-  ),
-  ListDemoEntry(
     title: 'MyIndexedStack',
     subtitle: 'Indexed stack with caching and preload controls.',
     pageDescription:
@@ -454,50 +440,6 @@ final List<ListDemoEntry> _pagingEntries = [
     demoBuilder: _buildStoryboardDemo,
   ),
 ];
-
-Widget _buildTimerSmoothPageIndicatorDemo(BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    child: _DemoCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Timed progression',
-            style: context.titleMedium.copyWith(
-              fontWeight: FontWeight.w700,
-              color: context.colorScheme.foreground,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            'Each segment expands and fills automatically over two seconds.',
-            style: context.bodyMedium.copyWith(
-              color: context.colorScheme.secondaryForeground,
-            ),
-          ),
-          const SizedBox(height: 18),
-          TimerSmoothPageIndicator(
-            totalLength: 4,
-            durationInSeconds: 2,
-            indicatorWidth: 28,
-            activeIndicatorWidth: 56,
-            indicatorHeight: 8,
-            indicatorColor: context.colorScheme.primary.withValues(alpha: 0.18),
-            progressColor: context.colorScheme.primary,
-          ),
-        ],
-      ),
-    ),
-  );
-}
-
-Widget _buildPreloadPageViewDemo(BuildContext context) {
-  return const Padding(
-    padding: EdgeInsets.symmetric(horizontal: 16),
-    child: _PreloadPageViewDemo(),
-  );
-}
 
 Widget _buildMyIndexedStackDemo(BuildContext context) {
   return const Padding(
@@ -599,9 +541,7 @@ class _ReorderableGridViewDemoState extends State<_ReorderableGridViewDemo> {
 }
 
 class _PageIndicatorDemo extends StatefulWidget {
-  final MyPageIndicatorType type;
-
-  const _PageIndicatorDemo({this.type = MyPageIndicatorType.dot});
+  const _PageIndicatorDemo();
 
   @override
   State<_PageIndicatorDemo> createState() => _PageIndicatorDemoState();
@@ -634,7 +574,6 @@ class _PageIndicatorDemoState extends State<_PageIndicatorDemo> {
 
   @override
   Widget build(BuildContext context) {
-    bool isDot = widget.type == MyPageIndicatorType.dot;
     final pages = List.generate(4, (index) => index);
 
     return Column(
@@ -652,54 +591,81 @@ class _PageIndicatorDemoState extends State<_PageIndicatorDemo> {
             itemCount: pages.length,
             itemBuilder: (context, index) {
               return Padding(
-                padding: const EdgeInsets.only(bottom: 8, left: 8, right: 8),
+                padding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
                 child: _PagerCard(
                   title: 'Page ${index + 1}',
-                  message: isDot
-                      ? 'Tap a dot below to jump directly to this panel.'
-                      : 'This indicator is driven by a page index in state.',
+                  message: 'Tap a dot below to jump directly to this panel.',
                   color: _palette[index],
                 ),
               );
             },
           ),
         ),
-        MyPageIndicator(
-          length: pages.length,
-          currentIndex: _index,
-          type: widget.type,
-          height: 4,
-          width: 36,
-          shrinkIndicator: !isDot,
-          onTap: isDot
-              ? (page) {
-                  setState(() {
-                    _index = page;
-                  });
-                  unawaited(_animateTo(page));
-                }
-              : null,
-        ),
+        Gap(4),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            MyPageIndicator(
+              length: pages.length,
+              currentIndex: _index,
+              height: 6,
+              width: 6,
+              selectedHeight: 12,
+              selectedWidth: 12,
+              spacing: 6,
+              onTap: (page) {
+                setState(() {
+                  _index = page;
+                });
+                unawaited(_animateTo(page));
+              },
+            ).sizedBox(height: 12),
+            MyPageIndicator(
+              length: pages.length,
+              currentIndex: _index,
+              onTap: (page) {
+                setState(() {
+                  _index = page;
+                });
+                unawaited(_animateTo(page));
+              },
+            ),
+            MyPageIndicator(
+              length: pages.length,
+              currentIndex: _index,
+              height: 4,
+              width: 36,
+              shrinkIndicator: true,
+              onTap: (page) {
+                setState(() {
+                  _index = page;
+                });
+                unawaited(_animateTo(page));
+              },
+            ),
+          ],
+        ).padding(horizontal: 16),
       ],
     );
   }
 }
 
-class _PreloadPageViewDemo extends StatefulWidget {
-  const _PreloadPageViewDemo();
+class _TimerSmoothPageIndicatorDemo extends StatefulWidget {
+  const _TimerSmoothPageIndicatorDemo();
 
   @override
-  State<_PreloadPageViewDemo> createState() => _PreloadPageViewDemoState();
+  State<_TimerSmoothPageIndicatorDemo> createState() =>
+      _TimerSmoothPageIndicatorDemoState();
 }
 
-class _PreloadPageViewDemoState extends State<_PreloadPageViewDemo> {
-  late final PreloadPageController _controller;
-  int _index = 0;
+class _TimerSmoothPageIndicatorDemoState
+    extends State<_TimerSmoothPageIndicatorDemo> {
+  late final PageController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = PreloadPageController(viewportFraction: 0.9);
+    _controller = PageController();
   }
 
   @override
@@ -712,96 +678,45 @@ class _PreloadPageViewDemoState extends State<_PreloadPageViewDemo> {
     if (!_controller.hasClients) return;
     await _controller.animateToPage(
       page,
-      duration: const Duration(milliseconds: 320),
+      duration: const Duration(milliseconds: 360),
       curve: Curves.easeOutCubic,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return _DemoCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Preloaded pages',
-            style: context.titleMedium.copyWith(
-              fontWeight: FontWeight.w700,
-              color: context.colorScheme.foreground,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            'Nearby pages are built ahead of time, which helps expensive carousels feel smoother.',
-            style: context.bodyMedium.copyWith(
-              color: context.colorScheme.secondaryForeground,
-            ),
-          ),
-          const SizedBox(height: 16),
-          SizedBox(
-            height: 220,
-            child: PreloadPageView.builder(
-              controller: _controller,
-              itemCount: 4,
-              preloadPagesCount: 2,
-              onPageChanged: (page) {
-                setState(() {
-                  _index = page;
-                });
-              },
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.only(right: 12),
-                  child: _PagerCard(
-                    title: 'Preloaded ${index + 1}',
-                    message:
-                        'This page is created early when it moves into the preload window.',
-                    color: _palette[index],
-                  ),
-                );
-              },
-            ),
-          ),
-          const SizedBox(height: 12),
-          MyPageIndicator(
-            length: 4,
-            currentIndex: _index,
-            type: MyPageIndicatorType.bar,
-            onTap: (page) {
-              setState(() {
-                _index = page;
-              });
-              unawaited(_animateTo(page));
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          height: 180,
+          child: PageView.builder(
+            controller: _controller,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: 4,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
+                child: _PagerCard(
+                  title: 'Step ${index + 1}',
+                  message:
+                      'This panel advances when TimerSmoothPageIndicator changes to the next step.',
+                  color: _palette[index],
+                ),
+              );
             },
-            width: 28,
-            height: 6,
-            selectedColor: context.colorScheme.primary,
-            unselectedColor: context.colorScheme.primary.withValues(
-              alpha: 0.16,
-            ),
           ),
-          const SizedBox(height: 16),
-          Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            children: [
-              MyButton(
-                text: 'Previous',
-                type: MyButtonType.outline,
-                onTap: _index == 0
-                    ? null
-                    : () => unawaited(_animateTo(_index - 1)),
-              ),
-              MyButton(
-                text: 'Next',
-                onTap: _index == 3
-                    ? null
-                    : () => unawaited(_animateTo(_index + 1)),
-              ),
-            ],
-          ),
-        ],
-      ),
+        ),
+        const SizedBox(height: 16),
+        MyTimerPageIndicator(
+          totalLength: 4,
+          durationInSeconds: 2,
+          indicatorWidth: 28,
+          activeIndicatorWidth: 56,
+          indicatorHeight: 8,
+          onStepChanged: (step) => unawaited(_animateTo(step)),
+        ).padding(horizontal: 16),
+      ],
     );
   }
 }
