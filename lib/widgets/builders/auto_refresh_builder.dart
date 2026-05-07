@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-import '../../index.dart';
-
 class AutoRefreshBuilder extends StatefulWidget {
   const AutoRefreshBuilder({
     super.key,
@@ -110,6 +108,8 @@ class _AutoRefreshBuilderState extends State<AutoRefreshBuilder>
 
   @override
   Widget build(BuildContext context) {
-    return widget.builder?.call(_tick) ?? widget.child ?? const NoWidget();
+    return widget.builder?.call(_tick) ??
+        widget.child ??
+        const SizedBox.shrink();
   }
 }

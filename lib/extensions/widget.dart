@@ -187,7 +187,7 @@ extension WidgetExtensions on Widget {
   Widget showIfOrEmpty(bool condition) {
     if (condition) return this;
 
-    return const NoWidget();
+    return const SizedBox.shrink();
   }
 
   /// Returns a widget that is disabled based on the [disable] parameter.

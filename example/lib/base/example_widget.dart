@@ -81,7 +81,7 @@ class _ExamplePageState extends State<ExamplePage> {
                         return _buildHeader(context);
                       }
                       if (index == widget.children.length + 2) {
-                        return const NoWidget();
+                        return const SizedBox.shrink();
                       }
                       ExampleModule? data;
                       if (index <= widget.children.length) {
@@ -133,7 +133,7 @@ class _ExamplePageState extends State<ExamplePage> {
   }
 
   Widget _buildHeader(BuildContext context) {
-    if (widget.showSingleChild) return const NoWidget();
+    if (widget.showSingleChild) return const SizedBox.shrink();
 
     return Container(
       margin: const EdgeInsets.only(left: 16, right: 16),

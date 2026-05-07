@@ -172,7 +172,7 @@ class MyAvatar extends StatelessWidget {
   Widget _buildOperationAvatar(BuildContext context) {
     final bgColor = context.colorScheme.primary.withValues(alpha: 0.15);
 
-    if (avatars.isBlank) return const NoWidget();
+    if (avatars.isBlank) return const SizedBox.shrink();
 
     final list = <Widget>[];
     var length = 0;
@@ -283,7 +283,7 @@ class MyAvatar extends StatelessWidget {
   Widget _buildDisplayAvatar(BuildContext context) {
     final bgColor = context.colorScheme.primary.withValues(alpha: 0.15);
 
-    if (avatars.isBlank) return const NoWidget();
+    if (avatars.isBlank) return const SizedBox.shrink();
 
     final list = <Widget>[];
     var length = 0;

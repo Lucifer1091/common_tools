@@ -56,7 +56,7 @@ class MyUILayer extends StatelessWidget {
               child:
                   builder != null
                       ? Builder(builder: (context) => builder!(context, child))
-                      : child ?? const NoWidget(),
+                      : child ?? const SizedBox.shrink(),
             ),
           );
         },

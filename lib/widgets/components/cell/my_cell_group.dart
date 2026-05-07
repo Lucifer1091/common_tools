@@ -91,7 +91,7 @@ class _MyCellGroupState extends State<MyCellGroup> {
                   },
                   separatorBuilder: (context, index) {
                     if (!(widget.cells[index].bordered ?? true)) {
-                      return const NoWidget();
+                      return const SizedBox.shrink();
                     }
                     return _borderWidget(style);
                   },

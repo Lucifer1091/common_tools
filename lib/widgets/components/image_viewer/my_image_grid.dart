@@ -41,7 +41,7 @@ class MyImageGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return images.isEmpty
-        ? const NoWidget()
+        ? const SizedBox.shrink()
         : GridView.builder(
           primary: false,
           shrinkWrap: true,

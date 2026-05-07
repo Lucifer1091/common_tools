@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../index.dart';
-import 'adaptive_ui.dart';
-import 'adaptive_widget.dart';
 
 /// A widget that manages UI responsiveness based on predefined breakpoints.
 ///

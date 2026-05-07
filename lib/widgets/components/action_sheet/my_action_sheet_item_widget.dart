@@ -18,7 +18,7 @@ class MyActionSheetItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (item == null) return const NoWidget();
+    if (item == null) return const SizedBox.shrink();
 
     late ValueNotifier<List<double>> offsetValue;
     late GlobalKey offsetKey;

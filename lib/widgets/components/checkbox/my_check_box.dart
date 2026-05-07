@@ -100,7 +100,7 @@ class MyCheckbox extends StatefulWidget {
     MyCheckboxGroupState? groupState,
     bool? isChecked,
   ) {
-    if (cardMode) return const NoWidget();
+    if (cardMode) return const SizedBox.shrink();
 
     final shape =
         this.shape ?? groupState?.widget.shape ?? MyCheckboxShape.circle;

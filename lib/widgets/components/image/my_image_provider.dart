@@ -516,7 +516,7 @@ class MyImageProvider extends StatelessWidget {
     }
 
     if (image == null) {
-      return error ?? const NoWidget();
+      return error ?? const SizedBox.shrink();
     }
 
     // Builds the image content with optional zoom functionality.

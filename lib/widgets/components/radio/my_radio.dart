@@ -39,7 +39,7 @@ class MyRadio extends MyCheckbox {
     MyCheckboxGroupState? groupState,
     bool? isSelected,
   ) {
-    if (cardMode) return const NoWidget();
+    if (cardMode) return const SizedBox.shrink();
 
     MyRadioStyle? style;
     if (groupState is MyRadioGroupState) {

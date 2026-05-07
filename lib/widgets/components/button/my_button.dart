@@ -244,7 +244,7 @@ class _MyButtonState extends State<MyButton> {
   Widget _getChild(MyButtonStyle style) {
     final icon = getIcon(style);
 
-    if (widget.text == null && icon == null) return const NoWidget();
+    if (widget.text == null && icon == null) return const SizedBox.shrink();
 
     final children = <Widget>[];
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Shows navigation beside content when enough width is available.
 class SplitView extends StatelessWidget {
   const SplitView({
     required this.navigationBuilder,
@@ -7,8 +8,9 @@ class SplitView extends StatelessWidget {
     super.key,
     this.breakpoint = 600,
     this.navigationWidth = 300,
-  });
-  
+  }) : assert(breakpoint >= 0, 'breakpoint must be non-negative'),
+       assert(navigationWidth >= 0, 'navigationWidth must be non-negative');
+
   final WidgetBuilder navigationBuilder;
   final WidgetBuilder contentBuilder;
   final double breakpoint;
@@ -16,19 +18,28 @@ class SplitView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.sizeOf(context).width;
-    if (screenWidth >= breakpoint) {
-      // * wide screen: navigation on the left, content on the right
-      return Row(
-        children: [
-          SizedBox(width: navigationWidth, child: navigationBuilder(context)),
-          // if you want, add a divider here
-          Expanded(child: contentBuilder(context)),
-        ],
-      );
-    } else {
-      // * show content only (handle navigation with a drawer or similar)
-      return contentBuilder(context);
-    }
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final useSplitLayout =
+            constraints.hasBoundedWidth && constraints.maxWidth >= breakpoint;
+
+        if (!useSplitLayout) return contentBuilder(context);
+
+        final effectiveNavigationWidth = navigationWidth.clamp(
+          0.0,
+          constraints.maxWidth,
+        );
+
+        return Row(
+          children: [
+            SizedBox(
+              width: effectiveNavigationWidth,
+              child: navigationBuilder(context),
+            ),
+            Expanded(child: contentBuilder(context)),
+          ],
+        );
+      },
+    );
   }
 }

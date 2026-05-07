@@ -191,7 +191,7 @@ class MyMultiPicker extends StatelessWidget {
           Expanded(
             child:
                 title == null
-                    ? const NoWidget()
+                    ? const SizedBox.shrink()
                     : Center(
                       child: MyText(
                         title,
@@ -506,7 +506,7 @@ class _MyMultiLinkedPickerState extends State<MyMultiLinkedPicker> {
           Expanded(
             child:
                 widget.title == null
-                    ? const NoWidget()
+                    ? const SizedBox.shrink()
                     : Center(
                       child: MyText(
                         widget.title,

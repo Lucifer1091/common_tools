@@ -83,7 +83,7 @@ class MyText extends StatelessWidget {
     final bgColor = style?.backgroundColor ?? backgroundColor;
 
     if (text == null && textSpan == null) {
-      return const NoWidget();
+      return const SizedBox.shrink();
     }
 
     final textWidget = _getRawText(context: context);
