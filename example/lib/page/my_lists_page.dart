@@ -62,21 +62,12 @@ class MyListsPage extends StatelessWidget {
               desc: 'My Timer Page Indicator',
               builder: _buildTimerPageIndicator,
             ),
+            ExampleItem(
+              desc: 'My Story Board',
+              // 'Storyboard creates Instagram-style slides that auto-advance, support previous and next taps, and pause while pressed.',
+              builder: _buildStoryboard,
+            ),
           ],
-        ),
-        _buildModule('Paging & State', _pagingEntries),
-      ],
-    );
-  }
-
-  ExampleModule _buildModule(String title, List<ListDemoEntry> entries) {
-    return ExampleModule(
-      title: title,
-      children: [
-        ExampleItem(
-          center: false,
-          padding: EdgeInsets.only(top: 16),
-          builder: (context) => _ListEntryGroup(entries: entries),
         ),
       ],
     );
@@ -346,113 +337,13 @@ class MyListsPage extends StatelessWidget {
   Widget _buildTimerPageIndicator(BuildContext context) {
     return _TimerSmoothPageIndicatorDemo();
   }
-}
 
-class ListDemoEntry {
-  const ListDemoEntry({
-    required this.title,
-    required this.subtitle,
-    required this.pageDescription,
-    required this.demoBuilder,
-  });
-
-  final String title;
-  final String subtitle;
-  final String pageDescription;
-  final WidgetBuilder demoBuilder;
-}
-
-class _ListEntryGroup extends StatelessWidget {
-  const _ListEntryGroup({required this.entries});
-
-  final List<ListDemoEntry> entries;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: MyCellGroup(
-        bordered: true,
-        theme: MyCellGroupTheme.card,
-        style: MyCellStyle.style(
-          context,
-        ).copyWith(cardPadding: EdgeInsets.zero),
-        cells: [
-          for (final entry in entries)
-            MyCell(
-              title: entry.title,
-              description: entry.subtitle,
-              arrow: true,
-              onTap: (_) => _openListEntry(context, entry),
-            ),
-        ],
-      ),
+  Widget _buildStoryboard(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      child: _StoryboardDemo(),
     );
   }
-}
-
-void _openListEntry(BuildContext context, ListDemoEntry entry) {
-  Navigator.of(context).push(
-    MaterialPageRoute<void>(builder: (_) => _ListExamplePage(entry: entry)),
-  );
-}
-
-class _ListExamplePage extends StatelessWidget {
-  const _ListExamplePage({required this.entry});
-
-  final ListDemoEntry entry;
-
-  @override
-  Widget build(BuildContext context) {
-    return ExamplePage(
-      title: entry.title,
-      desc: entry.pageDescription,
-      exampleCodeGroup: 'lists',
-      children: [
-        ExampleModule(
-          title: 'Live Example',
-          children: [
-            ExampleItem(
-              center: false,
-              padding: EdgeInsets.only(top: 16),
-              builder: entry.demoBuilder,
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-final List<ListDemoEntry> _pagingEntries = [
-  ListDemoEntry(
-    title: 'MyIndexedStack',
-    subtitle: 'Indexed stack with caching and preload controls.',
-    pageDescription:
-        'MyIndexedStack is useful for tab and section switching when you want tighter control over page caching and disposal.',
-    demoBuilder: _buildMyIndexedStackDemo,
-  ),
-  ListDemoEntry(
-    title: 'Storyboard',
-    subtitle: 'Story-style timed sequence with tap and hold controls.',
-    pageDescription:
-        'Storyboard creates Instagram-style slides that auto-advance, support previous and next taps, and pause while pressed.',
-    demoBuilder: _buildStoryboardDemo,
-  ),
-];
-
-Widget _buildMyIndexedStackDemo(BuildContext context) {
-  return const Padding(
-    padding: EdgeInsets.symmetric(horizontal: 16),
-    child: _MyIndexedStackDemo(),
-  );
-}
-
-Widget _buildStoryboardDemo(BuildContext context) {
-  return const Padding(
-    padding: EdgeInsets.symmetric(horizontal: 16),
-    child: _StoryboardDemo(),
-  );
 }
 
 class _ReorderableGridViewDemo extends StatefulWidget {
@@ -721,123 +612,6 @@ class _TimerSmoothPageIndicatorDemoState
   }
 }
 
-class _MyIndexedStackDemo extends StatefulWidget {
-  const _MyIndexedStackDemo();
-
-  @override
-  State<_MyIndexedStackDemo> createState() => _MyIndexedStackDemoState();
-}
-
-class _MyIndexedStackDemoState extends State<_MyIndexedStackDemo> {
-  late final MyIndexedStackController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = MyIndexedStackController(
-      initialIndex: 0,
-      totalPages: 3,
-      preloadIndexes: const [0],
-      disposeUnused: true,
-      maxCachedPages: 2,
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return _DemoCard(
-      child: ListenableBuilder(
-        listenable: _controller,
-        builder: (context, _) {
-          final currentIndex = _controller.currentIndex;
-          final loaded = _controller.loadedIndexes.toList()..sort();
-
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Cached pages: ${loaded.join(", ")}',
-                style: context.bodyMedium.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: context.colorScheme.foreground,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  for (final index in loaded)
-                    _StatusChip(
-                      label: 'Loaded $index',
-                      active: true,
-                      color: _palette[index % _palette.length],
-                    ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              SizedBox(
-                height: 220,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: MyIndexedStack(
-                    controller: _controller,
-                    children: [
-                      _StackPage(
-                        title: 'Overview',
-                        color: _palette[0],
-                        message: 'Always preloaded as the first visible page.',
-                      ),
-                      _StackPage(
-                        title: 'Insights',
-                        color: _palette[1],
-                        message:
-                            'Moves in when selected and can be cached briefly.',
-                      ),
-                      _StackPage(
-                        title: 'Settings',
-                        color: _palette[2],
-                        message:
-                            'Older pages are disposed when the cache limit is reached.',
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Wrap(
-                spacing: 12,
-                runSpacing: 12,
-                children: [
-                  for (int index = 0; index < 3; index++)
-                    MyButton(
-                      text: 'Page ${index + 1}',
-                      type: index == currentIndex
-                          ? MyButtonType.primary
-                          : MyButtonType.outline,
-                      onTap: () => _controller.jumpTo(index),
-                    ),
-                  MyButton(
-                    text: 'Preload adjacent',
-                    type: MyButtonType.outline,
-                    onTap: () => _controller.preloadAdjacentPages(),
-                  ),
-                ],
-              ),
-            ],
-          );
-        },
-      ),
-    );
-  }
-}
-
 class _StoryboardDemo extends StatefulWidget {
   const _StoryboardDemo();
 
@@ -851,79 +625,76 @@ class _StoryboardDemoState extends State<_StoryboardDemo> {
 
   @override
   Widget build(BuildContext context) {
-    return _DemoCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              _StatusChip(
-                label: _ended ? 'Sequence finished' : 'Playing',
-                active: true,
-                color: _ended ? MyColors.green : context.colorScheme.primary,
-              ),
-              const _StatusChip(label: 'Tap left or right'),
-              const _StatusChip(label: 'Hold to pause'),
-            ],
-          ),
-          const SizedBox(height: 16),
-          SizedBox(
-            height: 420,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(22),
-              child: Storyboard(
-                key: ValueKey(_seed),
-                storyDuration: const Duration(seconds: 2),
-                onEnd: () {
-                  if (!mounted) return;
-                  setState(() {
-                    _ended = true;
-                  });
-                },
-                stories: [
-                  _storySlide(
-                    title: 'Morning brief',
-                    message: 'Review the overnight queue and priorities.',
-                    color: const Color(0xFF2563EB),
-                    icon: Icons.wb_sunny_outlined,
-                  ),
-                  _storySlide(
-                    title: 'Refine the layout',
-                    message: 'Adjust spacing, density, and expansion defaults.',
-                    color: const Color(0xFF0F766E),
-                    icon: Icons.tune_rounded,
-                  ),
-                  _storySlide(
-                    title: 'Ship the update',
-                    message:
-                        'Run analysis, sanity check the flows, and publish.',
-                    color: const Color(0xFF7C3AED),
-                    icon: Icons.rocket_launch_outlined,
-                  ),
-                ],
-              ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            _StatusChip(
+              label: _ended ? 'Sequence finished' : 'Playing',
+              active: true,
+              color: _ended ? MyColors.green : context.colorScheme.primary,
+            ),
+            const _StatusChip(label: 'Tap left or right'),
+            const _StatusChip(label: 'Hold to pause'),
+          ],
+        ),
+        const SizedBox(height: 16),
+        SizedBox(
+          height: 420,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(22),
+            child: MyStoryboard(
+              key: ValueKey(_seed),
+              storyDuration: const Duration(seconds: 2),
+              onEnd: () {
+                if (!mounted) return;
+                setState(() {
+                  _ended = true;
+                });
+              },
+              stories: [
+                _storySlide(
+                  title: 'Morning brief',
+                  message: 'Review the overnight queue and priorities.',
+                  color: const Color(0xFF2563EB),
+                  icon: Icons.wb_sunny_outlined,
+                ),
+                _storySlide(
+                  title: 'Refine the layout',
+                  message: 'Adjust spacing, density, and expansion defaults.',
+                  color: const Color(0xFF0F766E),
+                  icon: Icons.tune_rounded,
+                ),
+                _storySlide(
+                  title: 'Ship the update',
+                  message: 'Run analysis, sanity check the flows, and publish.',
+                  color: const Color(0xFF7C3AED),
+                  icon: Icons.rocket_launch_outlined,
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 16),
-          MyButton(
-            text: 'Replay stories',
-            type: MyButtonType.outline,
-            onTap: () {
-              setState(() {
-                _seed++;
-                _ended = false;
-              });
-            },
-          ),
-        ],
-      ),
+        ),
+        const SizedBox(height: 16),
+        MyButton(
+          text: 'Replay stories',
+          type: MyButtonType.outline,
+          onTap: () {
+            setState(() {
+              _seed++;
+              _ended = false;
+            });
+          },
+        ),
+      ],
     );
   }
 }
 
-StoryBuilder _storySlide({
+MyStoryBuilder _storySlide({
   required String title,
   required String message,
   required Color color,
@@ -987,33 +758,6 @@ StoryBuilder _storySlide({
       ),
     );
   };
-}
-
-class _DemoCard extends StatelessWidget {
-  const _DemoCard({required this.child});
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: context.colorScheme.secondary,
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: context.colorScheme.border),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 18,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
-      child: child,
-    );
-  }
 }
 
 class _StatusChip extends StatelessWidget {
@@ -1094,55 +838,6 @@ class _PagerCard extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _StackPage extends StatelessWidget {
-  const _StackPage({
-    required this.title,
-    required this.message,
-    required this.color,
-  });
-
-  final String title;
-  final String message;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [color, color.withValues(alpha: 0.76)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _StatusChip(label: title, active: true, color: Colors.white),
-            const Spacer(),
-            Text(
-              title,
-              style: context.headlineSmall.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              message,
-              style: context.bodyMedium.copyWith(
-                color: Colors.white.withValues(alpha: 0.92),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

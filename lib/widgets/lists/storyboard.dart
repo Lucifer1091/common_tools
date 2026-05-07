@@ -1,9 +1,9 @@
-import 'dart:developer';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 
 /// Builder for the stories.
-typedef StoryBuilder =
+typedef MyStoryBuilder =
     Widget Function(
       BuildContext context,
       AnimationController controller,
@@ -16,9 +16,9 @@ typedef StoryBuilder =
 /// each represented by a custom widget. It provides functionality for
 /// auto-play, manual navigation between stories, and displaying
 /// an optional header.
-class Storyboard extends StatefulWidget {
+class MyStoryboard extends StatefulWidget {
   /// Default and only constructor
-  const Storyboard({
+  const MyStoryboard({
     required this.stories,
     this.storyDuration = const Duration(seconds: 3),
     this.unselectedIndicatorDecoration = const BoxDecoration(
@@ -31,10 +31,13 @@ class Storyboard extends StatefulWidget {
     super.key,
     this.header,
     this.onEnd,
-  });
+  }) : assert(stories.length > 0, 'stories must not be empty'),
+       assert(storyDuration > Duration.zero, 'storyDuration must be positive'),
+       assert(indicatorHeight >= 0, 'indicatorHeight cannot be negative'),
+       assert(indicatorGap >= 0, 'indicatorGap cannot be negative');
 
   /// A list of `StoryBuilder` functions that define each story's content.
-  final List<StoryBuilder> stories;
+  final List<MyStoryBuilder> stories;
 
   /// The duration each story is displayed during auto-play.
   ///
@@ -71,14 +74,15 @@ class Storyboard extends StatefulWidget {
   final VoidCallback? onEnd;
 
   @override
-  State<Storyboard> createState() => _StoryboardState();
+  State<MyStoryboard> createState() => _MyStoryboardState();
 }
 
-class _StoryboardState extends State<Storyboard>
+class _MyStoryboardState extends State<MyStoryboard>
     with SingleTickerProviderStateMixin {
   late final AnimationController controller;
-
   late final ValueNotifier<int> index;
+
+  int get _storyCount => widget.stories.length;
 
   @override
   void initState() {
@@ -90,7 +94,29 @@ class _StoryboardState extends State<Storyboard>
     index = ValueNotifier(0);
 
     if (widget.autoPlay) {
-      controller.forward();
+      unawaited(controller.forward());
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant MyStoryboard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.storyDuration != oldWidget.storyDuration) {
+      controller.duration = widget.storyDuration;
+    }
+
+    if (_storyCount != oldWidget.stories.length && index.value >= _storyCount) {
+      index.value = _storyCount - 1;
+      controller.value = 0;
+    }
+
+    if (widget.autoPlay != oldWidget.autoPlay) {
+      if (widget.autoPlay) {
+        unawaited(controller.forward());
+      } else {
+        controller.stop();
+      }
     }
   }
 
@@ -101,23 +127,22 @@ class _StoryboardState extends State<Storyboard>
   }
 
   void onEnd() {
-    log('END');
     widget.onEnd?.call();
   }
 
   void nextStory() {
-    final nextValue = (index.value + 1).clamp(0, widget.stories.length - 1);
+    final nextValue = (index.value + 1).clamp(0, _storyCount - 1);
     if (index.value == nextValue) return onEnd();
     index.value = nextValue;
-    controller.forward(from: 0);
+    unawaited(controller.forward(from: 0));
   }
 
   void prevStory() {
     final shouldChangeStory = controller.value < .2;
     if (shouldChangeStory) {
-      index.value = (index.value - 1).clamp(0, widget.stories.length);
+      index.value = (index.value - 1).clamp(0, _storyCount - 1);
     }
-    controller.forward(from: 0);
+    unawaited(controller.forward(from: 0));
   }
 
   void pause() {
@@ -125,10 +150,11 @@ class _StoryboardState extends State<Storyboard>
   }
 
   void play() {
-    controller.forward();
+    if (!widget.autoPlay) return;
+    unawaited(controller.forward());
   }
 
-  void restart() => controller.forward(from: 0);
+  void restart() => unawaited(controller.forward(from: 0));
 
   @override
   void dispose() {
@@ -157,21 +183,15 @@ class _StoryboardState extends State<Storyboard>
                     onTapUp: (details) {
                       final midWidth = constraints.maxWidth * .5;
                       if (details.localPosition.dx > midWidth) {
-                        log(' NEXT STORY');
                         nextStory();
                       } else {
-                        log(' PREV STORY');
                         prevStory();
                       }
                     },
                     onLongPressDown: (details) {
-                      log('PAUSE');
                       pause();
                     },
-                    onLongPressUp: () {
-                      log('PLAY');
-                      play();
-                    },
+                    onLongPressUp: play,
                     child: widget.stories[value](
                       context,
                       controller,
@@ -197,7 +217,7 @@ class _StoryboardState extends State<Storyboard>
                 children: [
                   Row(
                     children: List.generate(
-                      widget.stories.length,
+                      _storyCount,
                       (i) => Expanded(
                         child: Container(
                           decoration: widget.unselectedIndicatorDecoration,
