@@ -1,25 +1,17 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../../index.dart';
+import '../../utilities/my_platform.dart';
 
 enum BreakpointType { compact, medium, expanded, large, extraLarge }
 
-/// https://m3.material.io/foundations/layout/understanding-layout/overview
+/// Material 3 adaptive layout breakpoint.
 ///
-/// Layout Breakpoints applied according to the material 3 UI standards
-///
-/// This will handle devices from mobile to large desktops in portrait,
-/// landscape and folded devices.
-///
-/// Base class for defining breakpoints.
-///
-/// A breakpoint represents a specific screen size that can be used to
-/// implement responsive design in a Flutter application. This class
-/// provides various helpers for comparing breakpoints, checking orientation,
-/// and working with responsive layouts.
+/// Breakpoints are selected by the highest [start] value that is less than or
+/// equal to the current logical screen width.
 @immutable
 class Breakpoint {
-  /// Creates an instance of [Breakpoint] with a specific width and name.
+  /// Creates an instance of [Breakpoint] with a specific width and type.
   const Breakpoint({required this.start, required this.type, this.end});
 
   const Breakpoint.compact({
@@ -52,13 +44,13 @@ class Breakpoint {
     this.type = BreakpointType.extraLarge,
   });
 
-  /// The staring width of the breakpoint.
+  /// The starting width for this breakpoint.
   final double start;
 
-  /// The ending width of the breakpoint.
+  /// The ending width for this breakpoint.
   final double? end;
 
-  /// The name of the breakpoint.
+  /// The breakpoint category.
   final BreakpointType type;
 
   bool get isCompact => type == BreakpointType.compact;
@@ -71,47 +63,32 @@ class Breakpoint {
 
   bool get isExtraLarge => type == BreakpointType.extraLarge;
 
-  /// Returns true if the breakpoint matches the provided [type].
+  /// Returns true if the breakpoint matches the provided [name].
   bool match(String name) => type.name == name.toLowerCase();
 
-  // Comparison and Range Helpers
-
   /// Returns true if this breakpoint is larger than the [other] breakpoint.
-  bool isLargerThan(Breakpoint other) {
-    return start > other.start;
-  }
+  bool isLargerThan(Breakpoint other) => start > other.start;
 
-  /// Returns true if this breakpoint is larger than or equal to the [other] breakpoint.
-  bool isLargerThanOrEqual(Breakpoint other) {
-    return start >= other.start;
-  }
+  /// Returns true if this breakpoint is larger than or equal to [other].
+  bool isLargerThanOrEqual(Breakpoint other) => start >= other.start;
 
   /// Returns true if this breakpoint is smaller than the [other] breakpoint.
-  bool isSmallerThan(Breakpoint other) {
-    return start < other.start;
-  }
+  bool isSmallerThan(Breakpoint other) => start < other.start;
 
-  /// Returns true if this breakpoint is smaller than or equal to the [other] breakpoint.
-  bool isSmallerThanOrEqual(Breakpoint other) {
-    return start <= other.start;
-  }
+  /// Returns true if this breakpoint is smaller than or equal to [other].
+  bool isSmallerThanOrEqual(Breakpoint other) => start <= other.start;
 
-  /// Returns true if this breakpoint is equal to the [other] breakpoint.
-  bool isEqualTo(Breakpoint other) {
-    return start == other.start;
-  }
+  /// Returns true if this breakpoint starts at the same width as [other].
+  bool isEqualTo(Breakpoint other) => start == other.start;
 
-  /// Returns true if this breakpoint is not equal to the [other] breakpoint.
-  bool isNotEqualTo(Breakpoint other) {
-    return !isEqualTo(other);
-  }
+  /// Returns true if this breakpoint does not start at the same width as [other].
+  bool isNotEqualTo(Breakpoint other) => !isEqualTo(other);
 
-  /// Returns true if this breakpoint is between the [lower] and [upper] breakpoints.
+  /// Returns true if this breakpoint is between [lower] and [upper].
   bool isBetween(Breakpoint lower, Breakpoint upper) {
     return isLargerThanOrEqual(lower) && isSmallerThanOrEqual(upper);
   }
 
-  // Logical Operators
   /// Compares this breakpoint with [other] to check if it is larger.
   bool operator >(Breakpoint other) => isLargerThan(other);
 
@@ -124,15 +101,10 @@ class Breakpoint {
   /// Compares this breakpoint with [other] to check if it is smaller or equal.
   bool operator <=(Breakpoint other) => isSmallerThanOrEqual(other);
 
-  // Orientation Helpers
-
-  /// Returns true if this breakpoint is the active one in the given [context].
+  /// Returns true if this breakpoint is the active one in [context].
   bool isActive(BuildContext context) => this == of(context);
 
   /// Creates a copy of this breakpoint with modified properties.
-  ///
-  /// You can provide a new [type], [start] or [end] to create a new instance
-  /// of [Breakpoint] with the updated values.
   Breakpoint copyWith({
     required BreakpointType type,
     double? start,
@@ -145,55 +117,73 @@ class Breakpoint {
     );
   }
 
-  /// Retrieves the active breakpoint from the context.
-  ///
-  /// If [listen] is `true` (the default), the widget calling this method will
-  /// rebuild whenever the breakpoint changes.
-  ///
-  /// If [listen] is `false`, the breakpoint is retrieved without establishing a
-  /// dependency, preventing unnecessary rebuilds.
-  ///
-  /// Throws a [FlutterError] if the context does not contain a `PlatformTypeProvider`.
+  /// Resolves a value using this breakpoint's fallback chain.
+  T resolve<T>({
+    required T compact,
+    T? medium,
+    T? expanded,
+    T? large,
+    T? extraLarge,
+  }) {
+    return switch (type) {
+      BreakpointType.compact => compact,
+      BreakpointType.medium => medium ?? compact,
+      BreakpointType.expanded => expanded ?? medium ?? compact,
+      BreakpointType.large => large ?? expanded ?? medium ?? compact,
+      BreakpointType.extraLarge =>
+        extraLarge ?? large ?? expanded ?? medium ?? compact,
+    };
+  }
+
+  /// Retrieves the active breakpoint from the nearest [BreakpointProvider].
   static Breakpoint of(BuildContext context, {bool listen = true}) {
     final result = maybeOf(context, listen: listen);
     if (result != null) return result;
 
     throw FlutterError(
-      'Breakpoint.of() called with a context that does not contain a PlatformTypeProvider.',
+      'Breakpoint.of() called with a context that does not contain a '
+      'BreakpointProvider.',
     );
   }
 
-  /// Retrieves the active breakpoint from the context if available.
+  /// Retrieves the active breakpoint from the nearest [BreakpointProvider].
   ///
-  /// Returns `null` when no [PlatformTypeProvider] is found.
+  /// Returns `null` when no [BreakpointProvider] is found.
   static Breakpoint? maybeOf(BuildContext context, {bool listen = true}) {
     if (listen) {
       return context
-          .dependOnInheritedWidgetOfExactType<_PlatformTypeInherited>()
+          .dependOnInheritedWidgetOfExactType<_BreakpointInherited>()
           ?.breakpoint;
-    } else {
-      final inheritedElement =
-          context
-              .getElementForInheritedWidgetOfExactType<
-                _PlatformTypeInherited
-              >();
-      final result = inheritedElement?.widget as _PlatformTypeInherited?;
-      return result?.breakpoint;
     }
+
+    final inheritedElement =
+        context.getElementForInheritedWidgetOfExactType<_BreakpointInherited>();
+    final result = inheritedElement?.widget as _BreakpointInherited?;
+    return result?.breakpoint;
   }
 
-  /// Resolves a breakpoint from raw [width].
+  /// Resolves a breakpoint from a sorted non-empty [breakpoints] list.
   ///
   /// The highest breakpoint with `start <= width` is selected.
   static Breakpoint forWidth(
     double width, {
     List<Breakpoint> breakpoints = defaults,
   }) {
-    final sorted = List<Breakpoint>.of(breakpoints)
-      ..sort((a, b) => a.start.compareTo(b.start));
+    assert(breakpoints.isNotEmpty, 'breakpoints must not be empty');
+    assert(
+      _debugIsSortedByStart(breakpoints),
+      'breakpoints must be sorted by start in ascending order',
+    );
+    if (breakpoints.isEmpty) {
+      throw ArgumentError.value(
+        breakpoints,
+        'breakpoints',
+        'must not be empty',
+      );
+    }
 
-    var result = sorted.first;
-    for (final breakpoint in sorted) {
+    var result = breakpoints.first;
+    for (final breakpoint in breakpoints) {
       if (width >= breakpoint.start) {
         result = breakpoint;
       } else {
@@ -203,11 +193,19 @@ class Breakpoint {
     return result;
   }
 
-  // String Representation
-  /// Returns a human-readable string representation of this breakpoint.
-  /// e.g. "compact: 0, 600".
+  /// Returns a human-readable representation, e.g. `compact: 0, 600`.
   String toPrettyString() => '${type.name}: $start, $end';
 
+  static bool _debugIsSortedByStart(List<Breakpoint> breakpoints) {
+    for (var index = 1; index < breakpoints.length; index++) {
+      if (breakpoints[index].start < breakpoints[index - 1].start) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /// The default Material 3 width breakpoints.
   static const List<Breakpoint> defaults = [
     Breakpoint.compact(),
     Breakpoint.medium(),
@@ -227,13 +225,13 @@ class Breakpoint {
   }
 
   @override
-  int get hashCode => start.hashCode * end.hashCode * type.hashCode;
+  int get hashCode => Object.hash(start, end, type);
 }
 
 /// Provides information about the current platform size and orientation.
 class PlatformSizeInfo {
   /// Creates an instance of [PlatformSizeInfo].
-  PlatformSizeInfo({
+  const PlatformSizeInfo({
     required this.platform,
     required this.breakpoint,
     required this.orientation,
@@ -244,55 +242,36 @@ class PlatformSizeInfo {
   final TargetPlatform platform;
 }
 
-/// An inherited widget that holds the current [Breakpoint] for its descendants.
-class _PlatformTypeInherited extends InheritedWidget {
-  /// Creates an instance of [_PlatformTypeInherited].
-  const _PlatformTypeInherited({
-    required this.breakpoint,
-    required super.child,
-  });
+/// An inherited widget that holds the current [Breakpoint] for descendants.
+class _BreakpointInherited extends InheritedWidget {
+  /// Creates an instance of [_BreakpointInherited].
+  const _BreakpointInherited({required this.breakpoint, required super.child});
 
   /// The current breakpoint.
   final Breakpoint breakpoint;
 
   @override
-  bool updateShouldNotify(_PlatformTypeInherited oldWidget) =>
-      breakpoint != oldWidget.breakpoint;
+  bool updateShouldNotify(_BreakpointInherited oldWidget) {
+    return breakpoint != oldWidget.breakpoint;
+  }
 }
 
-/// A widget that provides the current [Breakpoint] and [Orientation] to its descendants.
-/// Wrap this around the root of your application to make platform and orientation information
-/// available throughout the widget tree.
+/// Provides the active [Breakpoint] to descendants.
 ///
-/// Example usage:
+/// Place this below a [MediaQuery], for example in [MaterialApp.builder]:
+///
 /// ```dart
-/// runApp(PlatformTypeProvider(
-///     breakpoints: Breakpoint.defaults,
-///     child: MyApp(),
-/// ));
+/// MaterialApp(
+///   builder: (context, child) {
+///     return BreakpointProvider(
+///       child: child ?? const SizedBox.shrink(),
+///     );
+///   },
+/// );
 /// ```
-/// You can also customize the breakpoints by providing a list of [Breakpoint]s.
-/// This is useful for applications that need to support custom breakpoints for different devices.
-/// Example usage:
-/// ```dart
-/// void main() {
-///   runApp(
-///     const PlatformTypeProvider(
-///       breakpoints: [
-///        Breakpoint(width: 200, name: 'Watch'),
-///         ...Breakpoint.defaults,
-///       ],
-///       child: MyApp(),
-///     ),
-///   );
-/// }
-/// ```
-class PlatformTypeProvider extends StatefulWidget {
-  /// Creates an instance of [PlatformTypeProvider].
-  ///
-  /// [child] - The widget below this widget in the tree.
-  /// [breakpoints] - Defines the breakpoints used for platform type detection.
-  const PlatformTypeProvider({
+class BreakpointProvider extends StatefulWidget {
+  /// Creates an instance of [BreakpointProvider].
+  const BreakpointProvider({
     required this.child,
     this.breakpoints = Breakpoint.defaults,
     super.key,
@@ -301,84 +280,84 @@ class PlatformTypeProvider extends StatefulWidget {
   /// The widget below this widget in the tree.
   final Widget child;
 
-  /// Defines the breakpoints used for platform type detection.
+  /// Defines the breakpoints used for width detection.
   final List<Breakpoint> breakpoints;
 
   @override
-  State<PlatformTypeProvider> createState() => _PlatformTypeProviderState();
+  State<BreakpointProvider> createState() => _BreakpointProviderState();
 }
 
-class _PlatformTypeProviderState extends State<PlatformTypeProvider> {
-  late Breakpoint _currentBreakpoint;
-  final List<Breakpoint> breakpoints = [];
+class _BreakpointProviderState extends State<BreakpointProvider> {
+  late List<Breakpoint> _breakpoints;
 
   @override
   void initState() {
     super.initState();
-
-    breakpoints
-      ..clear()
-      ..addAll(widget.breakpoints)
-      ..sort((a, b) {
-        return a.start.compareTo(b.start);
-      });
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _updatePlatformType();
-    });
+    _breakpoints = _sortBreakpoints(widget.breakpoints);
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _updatePlatformType();
-  }
-
-  void _updatePlatformType() {
-    setState(() {
-      _currentBreakpoint = getBreakpoint(
-        MediaQuery.sizeOf(context),
-        breakpoints,
-      );
-    });
+  void didUpdateWidget(covariant BreakpointProvider oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!listEquals(oldWidget.breakpoints, widget.breakpoints)) {
+      _breakpoints = _sortBreakpoints(widget.breakpoints);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return _PlatformTypeInherited(
-      breakpoint: _currentBreakpoint,
-      child: widget.child,
+    final size = MediaQuery.maybeSizeOf(context);
+    if (size == null) {
+      throw FlutterError(
+        'BreakpointProvider requires a MediaQuery ancestor. Place it inside '
+        'MaterialApp.builder or below another widget that provides MediaQuery.',
+      );
+    }
+
+    final breakpoint = Breakpoint.forWidth(
+      size.width,
+      breakpoints: _breakpoints,
     );
+
+    return _BreakpointInherited(breakpoint: breakpoint, child: widget.child);
   }
 
-  Breakpoint getBreakpoint(Size size, List<Breakpoint> breakpoints) {
-    return Breakpoint.forWidth(size.width, breakpoints: breakpoints);
+  List<Breakpoint> _sortBreakpoints(List<Breakpoint> breakpoints) {
+    assert(breakpoints.isNotEmpty, 'breakpoints must not be empty');
+    if (breakpoints.isEmpty) {
+      throw ArgumentError.value(
+        breakpoints,
+        'breakpoints',
+        'must not be empty',
+      );
+    }
+
+    final sorted = List<Breakpoint>.of(breakpoints)
+      ..sort((a, b) => a.start.compareTo(b.start));
+    return List<Breakpoint>.unmodifiable(sorted);
   }
 }
 
-/// Extension methods on [BuildContext] for easy access to [Breakpoint] and [Orientation].
+/// Extension methods on [BuildContext] for breakpoint and platform info.
 extension BuildContextPlatformExtension on BuildContext {
-  /// Gets the current [Breakpoint] for the given [BuildContext] if available,
-  /// and establishes a dependency.
+  /// Gets the current [Breakpoint] if available and establishes a dependency.
   Breakpoint? get maybeWatchBreakpoint => Breakpoint.maybeOf(this);
 
-  /// Gets the current [Breakpoint] for the given [BuildContext] if available
-  /// without establishing a dependency.
-  Breakpoint? get maybeReadBreakpoint => Breakpoint.maybeOf(this, listen: false);
+  /// Gets the current [Breakpoint] if available without establishing a dependency.
+  Breakpoint? get maybeReadBreakpoint =>
+      Breakpoint.maybeOf(this, listen: false);
 
-  /// Gets the current [Breakpoint] for the given [BuildContext] and establishes
-  /// a dependency, causing the widget to rebuild whenever the breakpoint changes.
+  /// Gets the current [Breakpoint] and establishes a dependency.
   ///
-  /// Throws a [FlutterError] if no [PlatformTypeProvider] is found in the widget tree.
+  /// Throws a [FlutterError] if no [BreakpointProvider] is found.
   Breakpoint get watchBreakpoint => Breakpoint.of(this);
 
-  /// Gets the current [Breakpoint] for the given [BuildContext] without
-  /// establishing a dependency, preventing unnecessary rebuilds.
+  /// Gets the current [Breakpoint] without establishing a dependency.
   ///
-  /// Throws a [FlutterError] if no [PlatformTypeProvider] is found in the widget tree.
+  /// Throws a [FlutterError] if no [BreakpointProvider] is found.
   Breakpoint get readBreakpoint => Breakpoint.of(this, listen: false);
 
-  /// Gets the current [PlatformSizeInfo] for the given [BuildContext].
+  /// Gets the current [PlatformSizeInfo].
   PlatformSizeInfo get platformSizeInfo => PlatformSizeInfo(
     breakpoint: watchBreakpoint,
     orientation: MediaQuery.orientationOf(this),
@@ -388,9 +367,6 @@ extension BuildContextPlatformExtension on BuildContext {
 
 class PlatformInfoLayoutBuilder extends StatelessWidget {
   /// Creates an instance of [PlatformInfoLayoutBuilder].
-  ///
-  /// [builder] - A function that takes the [BuildContext] and [PlatformSizeInfo] to build the widget.
-  /// [Breakpoint] - Defines the breakpoints used for platform type detection.
   const PlatformInfoLayoutBuilder({required this.builder, super.key});
 
   final Widget Function(BuildContext, PlatformSizeInfo) builder;
@@ -403,8 +379,6 @@ class PlatformInfoLayoutBuilder extends StatelessWidget {
 
 class BreakpointLayoutBuilder extends StatelessWidget {
   /// Creates an instance of [BreakpointLayoutBuilder].
-  ///
-  /// [builder] - A function that takes the [BuildContext] and [Breakpoint] to build the widget.
   const BreakpointLayoutBuilder({required this.builder, super.key});
 
   final Widget Function(BuildContext, Breakpoint) builder;

@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../index.dart';
+import 'adaptive_ui.dart';
+import 'adaptive_widget.dart';
 
-/// A widget that manages UI responsiveness based on predefined breakpoints.
-///
-/// This class provides utility methods to determine the current device size
-/// and select appropriate widgets to render based on those sizes.
-///
-/// [showDeviceLogs] when set to true will print exact breakpoints in console
-///
+/// Renders the nearest matching widget for the active breakpoint.
 class Responsive extends AdaptiveWidget {
   const Responsive({
     required this.compact,
@@ -16,7 +11,6 @@ class Responsive extends AdaptiveWidget {
     this.expanded,
     this.large,
     this.extraLarge,
-    this.showDeviceLogs = false,
     super.key,
   });
 
@@ -26,11 +20,24 @@ class Responsive extends AdaptiveWidget {
   final Widget? large;
   final Widget? extraLarge;
 
-  final bool showDeviceLogs;
+  /// Lazily builds only the selected breakpoint branch.
+  static Widget builder({
+    required WidgetBuilder compact,
+    WidgetBuilder? medium,
+    WidgetBuilder? expanded,
+    WidgetBuilder? large,
+    WidgetBuilder? extraLarge,
+  }) {
+    return _ResponsiveBuilder(
+      compact: compact,
+      medium: medium,
+      expanded: expanded,
+      large: large,
+      extraLarge: extraLarge,
+    );
+  }
 
-  /// Retrieves a value based on the current device size.
-  ///
-  /// Returns the appropriate value based on the current device size category.
+  /// Retrieves a value for the active breakpoint.
   static T value<T>(
     BuildContext context, {
     required T compact,
@@ -38,25 +45,19 @@ class Responsive extends AdaptiveWidget {
     T? expanded,
     T? large,
     T? extraLarge,
+    bool listen = true,
   }) {
-    final Breakpoint breakpoint = context.readBreakpoint;
-
-    if (breakpoint.isExtraLarge) {
-      return extraLarge ?? large ?? expanded ?? medium ?? compact;
-    } else if (breakpoint.isLarge) {
-      return large ?? expanded ?? medium ?? compact;
-    } else if (breakpoint.isExpanded) {
-      return expanded ?? medium ?? compact;
-    } else if (breakpoint.isMedium) {
-      return medium ?? compact;
-    } else {
-      return compact;
-    }
+    final breakpoint = Breakpoint.of(context, listen: listen);
+    return breakpoint.resolve<T>(
+      compact: compact,
+      medium: medium,
+      expanded: expanded,
+      large: large,
+      extraLarge: extraLarge,
+    );
   }
 
-  /// Executes a callback based on the current device size.
-  ///
-  /// Calls the appropriate callback function based on the current device size category.
+  /// Executes a callback for the active breakpoint.
   static void callback(
     BuildContext context, {
     required VoidCallback compact,
@@ -64,64 +65,22 @@ class Responsive extends AdaptiveWidget {
     VoidCallback? expanded,
     VoidCallback? large,
     VoidCallback? extraLarge,
+    bool listen = false,
   }) {
-    final Breakpoint breakpoint = context.readBreakpoint;
-
-    if (breakpoint.isExtraLarge) {
-      (extraLarge ?? large ?? expanded ?? medium ?? compact)();
-    } else if (breakpoint.isLarge) {
-      (large ?? expanded ?? medium ?? compact)();
-    } else if (breakpoint.isExpanded) {
-      (expanded ?? medium ?? compact)();
-    } else if (breakpoint.isMedium) {
-      (medium ?? compact)();
-    } else {
-      compact();
-    }
-  }
-
-  /// Creates a sample `Responsive` widget for testing purposes.
-  static Responsive test() {
-    return const Responsive(
-      showDeviceLogs: true,
-      compact: ColoredBox(color: Colors.red, child: Text('COMPACT')),
-      medium: ColoredBox(color: Colors.blue, child: Text('MEDIUM')),
-      expanded: ColoredBox(color: Colors.green, child: Text('EXPANDED')),
-      large: ColoredBox(color: Colors.yellow, child: Text('LARGE')),
-      extraLarge: ColoredBox(
-        color: Colors.deepPurpleAccent,
-        child: Text('EXTRA LARGE'),
-      ),
-    );
+    final breakpoint = Breakpoint.of(context, listen: listen);
+    breakpoint
+        .resolve<VoidCallback>(
+          compact: compact,
+          medium: medium,
+          expanded: expanded,
+          large: large,
+          extraLarge: extraLarge,
+        )
+        .call();
   }
 
   @override
-  Widget build(BuildContext context) {
-    _showLog(context);
-    return super.build(context);
-  }
-
-  void _showLog(BuildContext context) {
-    if (!showDeviceLogs) return;
-
-    final double height = context.height, width = context.width;
-
-    String size(String title) => '$title => Width: $width, Height: $height';
-
-    final String message = value<String>(
-      context,
-      compact: size('COMPACT'),
-      medium: size('MEDIUM'),
-      expanded: size('EXPANDED'),
-      large: size('LARGE'),
-      extraLarge: size('EXTRA LARGE'),
-    );
-
-    log.i(message);
-  }
-
-  @override
-  Widget buildCopmact(BuildContext context) => compact;
+  Widget buildCompact(BuildContext context) => compact;
 
   @override
   Widget? buildMedium(BuildContext context) => medium;
@@ -134,4 +93,35 @@ class Responsive extends AdaptiveWidget {
 
   @override
   Widget? buildExtraLarge(BuildContext context) => extraLarge;
+}
+
+class _ResponsiveBuilder extends AdaptiveWidget {
+  const _ResponsiveBuilder({
+    required this.compact,
+    this.medium,
+    this.expanded,
+    this.large,
+    this.extraLarge,
+  });
+
+  final WidgetBuilder compact;
+  final WidgetBuilder? medium;
+  final WidgetBuilder? expanded;
+  final WidgetBuilder? large;
+  final WidgetBuilder? extraLarge;
+
+  @override
+  Widget buildCompact(BuildContext context) => compact(context);
+
+  @override
+  Widget? buildMedium(BuildContext context) => medium?.call(context);
+
+  @override
+  Widget? buildExpanded(BuildContext context) => expanded?.call(context);
+
+  @override
+  Widget? buildLarge(BuildContext context) => large?.call(context);
+
+  @override
+  Widget? buildExtraLarge(BuildContext context) => extraLarge?.call(context);
 }

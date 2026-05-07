@@ -70,26 +70,21 @@ extension ContextSizeExtension on BuildContext {
   bool get isPortrait => orientation == Orientation.portrait;
 
   /// Returns the active adaptive [Breakpoint].
-  ///
-  /// If an inherited breakpoint is available it is used, otherwise a breakpoint
-  /// is computed from the current [width].
-  Breakpoint get _currentBreakpoint =>
-      maybeReadBreakpoint ?? Breakpoint.forWidth(width);
 
   /// Returns `true` when the active breakpoint is compact.
-  bool get isCompact => _currentBreakpoint.isCompact;
+  bool get isCompact => watchBreakpoint.isCompact;
 
   /// Returns `true` when the active breakpoint is medium.
-  bool get isMedium => _currentBreakpoint.isMedium;
+  bool get isMedium => watchBreakpoint.isMedium;
 
   /// Returns `true` when the active breakpoint is expanded.
-  bool get isExpanded => _currentBreakpoint.isExpanded;
+  bool get isExpanded => watchBreakpoint.isExpanded;
 
   /// Returns `true` when the active breakpoint is large.
-  bool get isLarge => _currentBreakpoint.isLarge;
+  bool get isLarge => watchBreakpoint.isLarge;
 
   /// Returns `true` when the active breakpoint is extra large.
-  bool get isExtraLarge => _currentBreakpoint.isExtraLarge;
+  bool get isExtraLarge => watchBreakpoint.isExtraLarge;
 
   /// Resolves a value based on the current adaptive breakpoint.
   ///
@@ -114,19 +109,16 @@ extension ContextSizeExtension on BuildContext {
     T? expanded,
     T? large,
     T? extraLarge,
+    bool listen = true,
   }) {
-    final breakpoint = _currentBreakpoint;
-    if (breakpoint.isExtraLarge) {
-      return extraLarge ?? large ?? expanded ?? medium ?? compact;
-    } else if (breakpoint.isLarge) {
-      return large ?? expanded ?? medium ?? compact;
-    } else if (breakpoint.isExpanded) {
-      return expanded ?? medium ?? compact;
-    } else if (breakpoint.isMedium) {
-      return medium ?? compact;
-    } else {
-      return compact;
-    }
+    final breakpoint = Breakpoint.of(this, listen: listen);
+    return breakpoint.resolve<T>(
+      compact: compact,
+      medium: medium,
+      expanded: expanded,
+      large: large,
+      extraLarge: extraLarge,
+    );
   }
 
   /// Executes a callback chosen by the current adaptive breakpoint.
@@ -146,19 +138,18 @@ extension ContextSizeExtension on BuildContext {
     VoidCallback? expanded,
     VoidCallback? large,
     VoidCallback? extraLarge,
+    bool listen = false,
   }) {
-    final breakpoint = _currentBreakpoint;
-    if (breakpoint.isExtraLarge) {
-      (extraLarge ?? large ?? expanded ?? medium ?? compact)();
-    } else if (breakpoint.isLarge) {
-      (large ?? expanded ?? medium ?? compact)();
-    } else if (breakpoint.isExpanded) {
-      (expanded ?? medium ?? compact)();
-    } else if (breakpoint.isMedium) {
-      (medium ?? compact)();
-    } else {
-      compact();
-    }
+    final breakpoint = Breakpoint.of(this, listen: listen);
+    breakpoint
+        .resolve<VoidCallback>(
+          compact: compact,
+          medium: medium,
+          expanded: expanded,
+          large: large,
+          extraLarge: extraLarge,
+        )
+        .call();
   }
 
   /// Returns [percent] of the current screen width.
