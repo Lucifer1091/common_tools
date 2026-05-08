@@ -5,5 +5,6 @@ export 'my_indexed_stack.dart';
 export 'my_list_view.dart';
 export 'my_page_indicator.dart';
 export 'my_timer_page_indicator.dart';
+export 'overflowable_stack.dart';
 export 'reorderable_grid_view/index.dart';
 export 'storyboard.dart';

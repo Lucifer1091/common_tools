@@ -34,6 +34,10 @@ class MyListsPage extends StatelessWidget {
         ExampleModule(
           title: 'Scroll & Content',
           children: [
+             ExampleItem(
+              desc: 'OverflowableStack',
+              builder: (context) => const _OverflowableStackDemo(),
+            ),
             ExampleItem(
               desc: 'List View - Header , Footer & Pagination',
               padding: EdgeInsets.symmetric(horizontal: 16),
@@ -849,3 +853,106 @@ const List<Color> _palette = [
   Color(0xFF7C3AED),
   Color(0xFFEA580C),
 ];
+
+
+class _OverflowableStackDemo extends StatelessWidget {
+  const _OverflowableStackDemo();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: ValueBuilder<int>(
+        initialValue: 0,
+        builder: (context, setValue, value) {
+          final count = value ?? 0;
+
+          return _DemoSurface(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 118,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: SizedBox(
+                      width: 230,
+                      height: 86,
+                      child: OverflowableStack(
+                        children: [
+                          Container(
+                            width: 170,
+                            height: 86,
+                            padding: const EdgeInsets.all(14),
+                            decoration: BoxDecoration(
+                              color: context.colorScheme.background,
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: context.colorScheme.border,
+                              ),
+                            ),
+                            child: Text(
+                              'Stack bounds',
+                              style: context.bodyMedium.copyWith(
+                                color: context.colorScheme.secondaryForeground,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            right: 0,
+                            top: 22,
+                            child: MyButton(
+                              text: 'Tap outside',
+                              size: MyButtonSize.small,
+                              type: MyButtonType.primary,
+                              onTap: () => setValue(count + 1),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Text(
+                  'Outside taps: $count',
+                  style: context.bodyMedium.copyWith(
+                    color: context.colorScheme.secondaryForeground,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+
+class _DemoSurface extends StatelessWidget {
+  const _DemoSurface({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: context.colorScheme.border),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: child,
+    );
+  }
+}

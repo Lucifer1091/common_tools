@@ -499,7 +499,6 @@ class _DemoSurface extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: context.colorScheme.secondary,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: context.colorScheme.border),
         boxShadow: [

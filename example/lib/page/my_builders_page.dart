@@ -107,6 +107,19 @@ class MyBuildersPage extends StatelessWidget {
             demoBuilder: _buildValueLayoutDemo,
           ),
         ]),
+        ExampleModule(
+          title: 'Basic',
+          children: [
+            ExampleItem(
+              desc: 'DelayedBuilder',
+              builder: (context) => const _DelayedBuilderDemo(),
+            ),
+            ExampleItem(
+              desc: 'ValueBuilder',
+              builder: (context) => const _ValueBuilderDemo(),
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -1611,5 +1624,154 @@ class _RenderValueConstraintHost<T> extends RenderProxyBox {
       parentUsesSize: true,
     );
     size = constraints.constrain(child.size);
+  }
+}
+
+class _ValueBuilderDemo extends StatelessWidget {
+  const _ValueBuilderDemo();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: ValueBuilder<int>(
+        initialValue: 1,
+        builder: (context, setValue, value) {
+          final count = value ?? 0;
+
+          return _DemoSurface(
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'Local value: $count',
+                    style: context.titleSmall.copyWith(
+                      color: context.colorScheme.secondaryForeground,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+                MyButton(
+                  text: '+1',
+                  size: MyButtonSize.small,
+                  type: MyButtonType.primary,
+                  onTap: () => setValue(count + 1),
+                ),
+                const SizedBox(width: 8),
+                MyButton(
+                  text: 'Reset',
+                  size: MyButtonSize.small,
+                  type: MyButtonType.outline,
+                  onTap: () => setValue(1),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _DemoSurface extends StatelessWidget {
+  const _DemoSurface({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: context.colorScheme.border),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: child,
+    );
+  }
+}
+
+class _DelayedBuilderDemo extends StatefulWidget {
+  const _DelayedBuilderDemo();
+
+  @override
+  State<_DelayedBuilderDemo> createState() => _DelayedBuilderDemoState();
+}
+
+class _DelayedBuilderDemoState extends State<_DelayedBuilderDemo> {
+  int _run = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: _DemoSurface(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            DelayedBuilder(
+              key: ValueKey(_run),
+              delay: const Duration(milliseconds: 700),
+              fadeDuration: const Duration(milliseconds: 250),
+              alwaysTransition: true,
+              placeholder: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox.square(
+                    dimension: 18,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    'Preparing content...',
+                    style: context.bodyMedium.copyWith(
+                      color: context.colorScheme.secondaryForeground,
+                    ),
+                  ),
+                ],
+              ),
+              builder: (context) {
+                return Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.check_circle_rounded,
+                      color: Colors.green.shade600,
+                    ),
+                    const SizedBox(width: 12),
+                    Text(
+                      'Content is ready',
+                      style: context.titleSmall.copyWith(
+                        color: context.colorScheme.secondaryForeground,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+            const SizedBox(height: 16),
+            MyButton(
+              text: 'Replay delay',
+              size: MyButtonSize.small,
+              type: MyButtonType.outline,
+              onTap: () {
+                setState(() {
+                  _run++;
+                });
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
