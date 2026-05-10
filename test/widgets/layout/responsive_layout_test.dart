@@ -65,6 +65,44 @@ void main() {
         throwsAssertionError,
       );
     });
+
+    test('compares breakpoint types in Material order', () {
+      const types = BreakpointType.values;
+
+      for (var index = 0; index < Breakpoint.defaults.length; index++) {
+        final breakpoint = Breakpoint.defaults[index];
+
+        for (var targetIndex = 0; targetIndex < types.length; targetIndex++) {
+          final type = types[targetIndex];
+
+          expect(
+            breakpoint.isAtLeast(type),
+            index >= targetIndex,
+            reason: '${breakpoint.type.name}.isAtLeast(${type.name})',
+          );
+          expect(
+            breakpoint.isAtMost(type),
+            index <= targetIndex,
+            reason: '${breakpoint.type.name}.isAtMost(${type.name})',
+          );
+        }
+      }
+
+      expect(
+        const Breakpoint.expanded().isBetweenTypes(
+          BreakpointType.medium,
+          BreakpointType.large,
+        ),
+        true,
+      );
+      expect(
+        const Breakpoint.extraLarge().isBetweenTypes(
+          BreakpointType.medium,
+          BreakpointType.large,
+        ),
+        false,
+      );
+    });
   });
 
   group('BreakpointProvider', () {
@@ -120,6 +158,37 @@ void main() {
       );
 
       expect(find.text('compact'), findsOneWidget);
+    });
+
+    testWidgets('platformSizeInfo includes the current screen size', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        _wrapWithWidth(
+          width: 840,
+          child: PlatformInfoLayoutBuilder(
+            builder: (context, info) {
+              return Text(
+                '${info.screenSize.width}:'
+                '${info.screenSize.height}:'
+                '${info.breakpoint.type.name}',
+              );
+            },
+          ),
+        ),
+      );
+
+      expect(find.text('840.0:800.0:expanded'), findsOneWidget);
+    });
+
+    test('platformSizeInfo screen size defaults to zero', () {
+      const info = PlatformSizeInfo(
+        platform: TargetPlatform.android,
+        breakpoint: Breakpoint.compact(),
+        orientation: Orientation.portrait,
+      );
+
+      expect(info.screenSize, Size.zero);
     });
   });
 
@@ -214,6 +283,169 @@ void main() {
       expect(mediumBuilds, 1);
     });
   });
+
+  group('ResponsiveVisibility', () {
+    testWidgets('throws a clear error without BreakpointProvider', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: ResponsiveVisibility(
+            builder: (context) => const Text('visible'),
+          ),
+        ),
+      );
+
+      final exception = tester.takeException();
+      expect(exception, isFlutterError);
+      expect(
+        exception.toString(),
+        contains('does not contain a BreakpointProvider'),
+      );
+    });
+
+    testWidgets('shows the child on all breakpoints by default', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        _wrapWithWidth(
+          width: 1200,
+          child: ResponsiveVisibility(
+            builder: (context) => const Text('visible'),
+          ),
+        ),
+      );
+
+      expect(find.text('visible'), findsOneWidget);
+    });
+
+    testWidgets('uses replacement and skips hidden builder', (tester) async {
+      var hiddenBuilds = 0;
+      var replacementBuilds = 0;
+
+      await tester.pumpWidget(
+        _wrapWithWidth(
+          width: 600,
+          child: ResponsiveVisibility.compact(
+            builder: (context) {
+              hiddenBuilds++;
+              return const Text('hidden');
+            },
+            replacement: (context) {
+              replacementBuilds++;
+              return const Text('replacement');
+            },
+          ),
+        ),
+      );
+
+      expect(find.text('hidden'), findsNothing);
+      expect(find.text('replacement'), findsOneWidget);
+      expect(hiddenBuilds, 0);
+      expect(replacementBuilds, 1);
+    });
+
+    testWidgets('named constructors show only their breakpoint', (
+      tester,
+    ) async {
+      final cases = <
+        ({
+          String label,
+          double width,
+          Widget Function(WidgetBuilder builder) make,
+        })
+      >[
+        (
+          label: 'compact',
+          width: 500,
+          make: (builder) => ResponsiveVisibility.compact(builder: builder),
+        ),
+        (
+          label: 'medium',
+          width: 600,
+          make: (builder) => ResponsiveVisibility.medium(builder: builder),
+        ),
+        (
+          label: 'expanded',
+          width: 840,
+          make: (builder) => ResponsiveVisibility.expanded(builder: builder),
+        ),
+        (
+          label: 'large',
+          width: 1200,
+          make: (builder) => ResponsiveVisibility.large(builder: builder),
+        ),
+        (
+          label: 'extraLarge',
+          width: 1600,
+          make: (builder) => ResponsiveVisibility.extraLarge(builder: builder),
+        ),
+      ];
+
+      for (final testCase in cases) {
+        await tester.pumpWidget(
+          _wrapWithWidth(
+            width: testCase.width,
+            child: testCase.make((context) => Text(testCase.label)),
+          ),
+        );
+
+        expect(find.text(testCase.label), findsOneWidget);
+      }
+    });
+
+    testWidgets('returns an empty box when hidden without replacement', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        _wrapWithWidth(
+          width: 600,
+          child: ResponsiveVisibility.compact(
+            builder: (context) => const Text('hidden'),
+          ),
+        ),
+      );
+
+      expect(find.text('hidden'), findsNothing);
+      expect(find.byType(SizedBox), findsWidgets);
+    });
+  });
+
+  group('SplitView', () {
+    testWidgets('shows content only below the split breakpoint', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        _wrapSplitView(
+          width: 500,
+          child: SplitView(
+            navigationBuilder: (context) => const Text('navigation'),
+            contentBuilder: (context) => const Text('content'),
+          ),
+        ),
+      );
+
+      expect(find.text('navigation'), findsNothing);
+      expect(find.text('content'), findsOneWidget);
+    });
+
+    testWidgets('shows navigation and content above the split breakpoint', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        _wrapSplitView(
+          width: 700,
+          child: SplitView(
+            navigationBuilder: (context) => const Text('navigation'),
+            contentBuilder: (context) => const Text('content'),
+          ),
+        ),
+      );
+
+      expect(find.text('navigation'), findsOneWidget);
+      expect(find.text('content'), findsOneWidget);
+    });
+  });
 }
 
 Widget _wrapWithWidth({
@@ -230,6 +462,12 @@ Widget _wrapWithWidth({
       );
     },
     home: const SizedBox.shrink(),
+  );
+}
+
+Widget _wrapSplitView({required double width, required Widget child}) {
+  return MaterialApp(
+    home: Center(child: SizedBox(width: width, height: 300, child: child)),
   );
 }
 

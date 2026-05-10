@@ -89,6 +89,17 @@ class Breakpoint {
     return isLargerThanOrEqual(lower) && isSmallerThanOrEqual(upper);
   }
 
+  /// Returns true if this breakpoint's type is at least [type].
+  bool isAtLeast(BreakpointType type) => this.type.index >= type.index;
+
+  /// Returns true if this breakpoint's type is at most [type].
+  bool isAtMost(BreakpointType type) => this.type.index <= type.index;
+
+  /// Returns true if this breakpoint's type is between [lower] and [upper].
+  bool isBetweenTypes(BreakpointType lower, BreakpointType upper) {
+    return isAtLeast(lower) && isAtMost(upper);
+  }
+
   /// Compares this breakpoint with [other] to check if it is larger.
   bool operator >(Breakpoint other) => isLargerThan(other);
 
@@ -235,11 +246,13 @@ class PlatformSizeInfo {
     required this.platform,
     required this.breakpoint,
     required this.orientation,
+    this.screenSize = Size.zero,
   });
 
   final Breakpoint breakpoint;
   final Orientation orientation;
   final TargetPlatform platform;
+  final Size screenSize;
 }
 
 /// An inherited widget that holds the current [Breakpoint] for descendants.
@@ -362,6 +375,7 @@ extension BuildContextPlatformExtension on BuildContext {
     breakpoint: watchBreakpoint,
     orientation: MediaQuery.orientationOf(this),
     platform: MyPlatform.targetPlatform,
+    screenSize: MediaQuery.sizeOf(this),
   );
 }
 
