@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show ScrollCacheExtent;
 
 typedef MyGridViewBuilder<T> = Widget Function(int index, T item);
 
@@ -93,6 +94,8 @@ class MyGridView<T> extends StatelessWidget {
     final header = _header;
     final footer = _footer;
     final paginationWidget = _paginationWidget;
+    final scrollCacheExtent =
+        _cacheExtent == null ? null : ScrollCacheExtent.pixels(_cacheExtent);
 
     final childrenDelegate = SliverChildBuilderDelegate(
       (context, index) => _itemBuilder(index, items[index]),
@@ -114,7 +117,7 @@ class MyGridView<T> extends StatelessWidget {
         primary: _primary,
         gridDelegate: _gridDelegate,
         childrenDelegate: childrenDelegate,
-        cacheExtent: _cacheExtent,
+        scrollCacheExtent: scrollCacheExtent,
         semanticChildCount: _semanticChildCount,
         dragStartBehavior: _dragStartBehavior,
         keyboardDismissBehavior: _keyboardDismissBehavior,
@@ -145,7 +148,7 @@ class MyGridView<T> extends StatelessWidget {
       reverse: _reverse,
       controller: _controller,
       primary: _primary,
-      cacheExtent: _cacheExtent,
+      scrollCacheExtent: scrollCacheExtent,
       semanticChildCount: _semanticChildCount,
       dragStartBehavior: _dragStartBehavior,
       keyboardDismissBehavior: _keyboardDismissBehavior,

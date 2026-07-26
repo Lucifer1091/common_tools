@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show ScrollCacheExtent;
 
 import 'src/reorderable_item.dart';
 import 'src/reorderable_wrapper_widget.dart';
 
+export 'src/reorderable_item.dart' show ReorderableItemView;
 export 'src/reorderable_sliver_grid_view.dart' show ReorderableSliverGridView;
 export 'src/reorderable_wrapper_widget.dart' show ReorderableWrapperWidget;
-export 'src/reorderable_item.dart' show ReorderableItemView;
 
 /// Build the drag widget under finger when dragging.
 /// The index here represents the index of current dragging widget
@@ -78,7 +79,6 @@ typedef OnDragUpdate =
 /// constraint, and that method look called by the framework.
 /// So I need the crossAxisCount, spacing to determine the pos.
 class ReorderableGridView extends StatelessWidget {
-
   const ReorderableGridView({
     required this.onReorder,
     required this.gridDelegate,
@@ -159,7 +159,7 @@ class ReorderableGridView extends StatelessWidget {
                  );
                }
                return true;
-             }());
+             }(),'');
              return ReorderableItemView(
                key: child.key!,
                index: index,
@@ -331,7 +331,8 @@ class ReorderableGridView extends StatelessWidget {
         physics: physics,
         shrinkWrap: shrinkWrap,
         padding: padding,
-        cacheExtent: cacheExtent,
+        scrollCacheExtent:
+            cacheExtent == null ? null : ScrollCacheExtent.pixels(cacheExtent!),
         semanticChildCount: semanticChildCount,
         keyboardDismissBehavior: keyboardDismissBehavior,
         restorationId: restorationId,

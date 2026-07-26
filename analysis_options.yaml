@@ -83,9 +83,6 @@ linter:
     # Avoid unused constructor parameters to reduce clutter.
     - avoid_unused_constructor_parameters
     
-    # Enforce null safety for robustness.
-    - enable_null_safety
-    
     # Use Flutter style for TODOs.
     - flutter_style_todos
     
@@ -158,12 +155,6 @@ linter:
     # Ensure end of file has a newline.
     - eol_at_end_of_file
     
-    # Avoid invariant booleans for better logic handling.
-    - invariant_booleans
-    
-    # Avoid unrelated types in iterable contains checks.
-    - iterable_contains_unrelated_type
-    
     # Join return with assignment for better readability.
     - join_return_with_assignment
     
@@ -172,9 +163,6 @@ linter:
     
     # Follow library naming conventions for consistency.
     - library_names
-    
-    # Avoid removing unrelated types from lists.
-    - list_remove_unrelated_type
     
     # Avoid literal-only boolean expressions for clarity.
     - literal_only_boolean_expressions
@@ -254,9 +242,6 @@ linter:
     # Avoid unnecessary statements for cleaner code.
     - unnecessary_statements
     
-    # Use safe HTML to prevent security issues.
-    - unsafe_html
-    
     # Use colored box for better layout management.
     - use_colored_box
     
@@ -290,12 +275,6 @@ linter:
     # Avoid classes with only static members for better design.
     - avoid_classes_with_only_static_members
     
-    # Avoid returning null for better error handling.
-    - avoid_returning_null
-    
-    # Avoid returning null for future for better async handling.
-    - avoid_returning_null_for_future
-    
     # Avoid returning this for better design.
     - avoid_returning_this
     
@@ -319,9 +298,6 @@ linter:
     
     # Only throw errors for better error handling.
     - only_throw_errors
-    
-    # Document package APIs for better documentation.
-    - package_api_docs
     
     # Prefer asserts with messages for better error handling.
     - prefer_asserts_with_message

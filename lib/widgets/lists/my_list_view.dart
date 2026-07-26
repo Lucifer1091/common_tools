@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart' show ItemExtentBuilder;
+import 'package:flutter/rendering.dart'
+    show ItemExtentBuilder, ScrollCacheExtent;
 
 typedef MyListViewBuilder<T> = Widget Function(int index, T item);
 
@@ -148,6 +149,8 @@ class MyListView<T> extends StatelessWidget {
       hasSeparators: hasSeparators,
       findItemIndexCallback: _findItemIndexCallback,
     );
+    final scrollCacheExtent =
+        _cacheExtent == null ? null : ScrollCacheExtent.pixels(_cacheExtent);
     final totalItemCount =
         headerOffset +
         items.length +
@@ -173,7 +176,7 @@ class MyListView<T> extends StatelessWidget {
         itemExtentBuilder: _itemExtentBuilder,
         prototypeItem: _prototypeItem,
         findChildIndexCallback: effectiveFindChildIndexCallback,
-        cacheExtent: _cacheExtent,
+        scrollCacheExtent: scrollCacheExtent,
         semanticChildCount: _semanticChildCount,
         dragStartBehavior: _dragStartBehavior,
         keyboardDismissBehavior: _keyboardDismissBehavior,
@@ -212,7 +215,7 @@ class MyListView<T> extends StatelessWidget {
       itemExtentBuilder: _itemExtentBuilder,
       prototypeItem: _prototypeItem,
       findChildIndexCallback: effectiveFindChildIndexCallback,
-      cacheExtent: _cacheExtent,
+      scrollCacheExtent: scrollCacheExtent,
       semanticChildCount: _semanticChildCount,
       dragStartBehavior: _dragStartBehavior,
       keyboardDismissBehavior: _keyboardDismissBehavior,

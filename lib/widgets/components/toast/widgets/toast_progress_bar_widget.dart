@@ -29,7 +29,7 @@ class ToastProgressBarWidget extends StatelessWidget {
       child: SizeTransition(
         sizeFactor: animation,
         axis: Axis.horizontal,
-        axisAlignment: -1,
+        alignment: AlignmentDirectional.topStart,
         child: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
