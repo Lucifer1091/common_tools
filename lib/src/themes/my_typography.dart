@@ -1,6 +1,36 @@
 import 'package:flutter/widgets.dart';
 
 class MyTypography {
+  /// The package that owns the bundled Geist font assets.
+  static const String fontPackage = 'common_tools';
+
+  static const String _sans = 'Geist';
+  static const String _mono = 'GeistMono';
+
+  /// The resolved family name for the bundled Geist Sans font.
+  ///
+  /// Use this value in APIs that only accept a font-family string. Prefer
+  /// [geistSansStyle] when an API accepts a [TextStyle].
+  static const String kDefaultFontFamily = 'packages/$fontPackage/$_sans';
+
+  /// The resolved family name for the bundled Geist Mono font.
+  ///
+  /// Use this value in APIs that only accept a font-family string. Prefer
+  /// [geistMonoStyle] when an API accepts a [TextStyle].
+  static const String kDefaultFontFamilyMono = 'packages/$fontPackage/$_mono';
+
+  /// A package-qualified base style for the bundled Geist Sans font.
+  static const TextStyle geistSansStyle = TextStyle(
+    fontFamily: _sans,
+    package: fontPackage,
+  );
+
+  /// A package-qualified base style for the bundled Geist Mono font.
+  static const TextStyle geistMonoStyle = TextStyle(
+    fontFamily: _mono,
+    package: fontPackage,
+  );
+
   const MyTypography({
     required this.displayLarge,
     required this.displayMedium,
@@ -25,113 +55,134 @@ class MyTypography {
       fontSize: 57,
       height: 64 / 57,
       fontWeight: FontWeight.w400,
-      fontFamily: kDefaultFontFamily,
+      fontFamily: _sans,
+      package: fontPackage,
     ),
     this.displayMedium = const TextStyle(
       fontSize: 45,
       height: 52 / 45,
       fontWeight: FontWeight.w400,
-      fontFamily: kDefaultFontFamily,
+      fontFamily: _sans,
+      package: fontPackage,
     ),
     this.displaySmall = const TextStyle(
       fontSize: 36,
       height: 44 / 36,
       fontWeight: FontWeight.w400,
-      fontFamily: kDefaultFontFamily,
+      fontFamily: _sans,
+      package: fontPackage,
     ),
     this.headlineLarge = const TextStyle(
       fontSize: 32,
       height: 40 / 32,
       fontWeight: FontWeight.w400,
-      fontFamily: kDefaultFontFamily,
+      fontFamily: _sans,
+      package: fontPackage,
     ),
     this.headlineMedium = const TextStyle(
       fontSize: 28,
       height: 36 / 28,
       fontWeight: FontWeight.w400,
-      fontFamily: kDefaultFontFamily,
+      fontFamily: _sans,
+      package: fontPackage,
     ),
     this.headlineSmall = const TextStyle(
       fontSize: 24,
       height: 32 / 24,
       fontWeight: FontWeight.w400,
-      fontFamily: kDefaultFontFamily,
+      fontFamily: _sans,
+      package: fontPackage,
     ),
     this.titleLarge = const TextStyle(
       fontSize: 22,
       height: 28 / 22,
       fontWeight: FontWeight.w500,
-      fontFamily: kDefaultFontFamily,
+      fontFamily: _sans,
+      package: fontPackage,
     ),
     this.titleMedium = const TextStyle(
       fontSize: 16,
       height: 24 / 16,
       fontWeight: FontWeight.w500,
-      fontFamily: kDefaultFontFamily,
+      fontFamily: _sans,
+      package: fontPackage,
     ),
     this.titleSmall = const TextStyle(
       fontSize: 14,
       height: 20 / 14,
       fontWeight: FontWeight.w500,
-      fontFamily: kDefaultFontFamily,
+      fontFamily: _sans,
+      package: fontPackage,
     ),
     this.bodyLarge = const TextStyle(
       fontSize: 16,
       height: 24 / 16,
       fontWeight: FontWeight.w400,
-      fontFamily: kDefaultFontFamily,
+      fontFamily: _sans,
+      package: fontPackage,
     ),
     this.bodyMedium = const TextStyle(
       fontSize: 14,
       height: 20 / 14,
       fontWeight: FontWeight.w400,
-      fontFamily: kDefaultFontFamily,
+      fontFamily: _sans,
+      package: fontPackage,
     ),
     this.bodySmall = const TextStyle(
       fontSize: 12,
       height: 16 / 12,
       fontWeight: FontWeight.w400,
-      fontFamily: kDefaultFontFamily,
+      fontFamily: _sans,
+      package: fontPackage,
     ),
     this.labelLarge = const TextStyle(
       fontSize: 14,
       height: 20 / 14,
       fontWeight: FontWeight.w500,
-      fontFamily: kDefaultFontFamily,
+      fontFamily: _sans,
+      package: fontPackage,
     ),
     this.labelMedium = const TextStyle(
       fontSize: 12,
       height: 16 / 12,
       fontWeight: FontWeight.w500,
-      fontFamily: kDefaultFontFamily,
+      fontFamily: _sans,
+      package: fontPackage,
     ),
     this.labelSmall = const TextStyle(
       fontSize: 11,
       height: 16 / 11,
       fontWeight: FontWeight.w500,
-      fontFamily: kDefaultFontFamily,
+      fontFamily: _sans,
+      package: fontPackage,
     ),
   });
 
-  /// Custom font family constructor
-  factory MyTypography.custom(String fontFamily) {
-    final base = MyTypography.geist();
+  /// Creates typography using a host or third-party font family.
+  ///
+  /// Leave [package] null for a font declared by the consuming application.
+  /// Supply the owning package name when the font comes from another package.
+  factory MyTypography.custom(String fontFamily, {String? package}) {
+    const base = MyTypography.geist();
+    TextStyle withCustomFont(TextStyle style) =>
+        style._withFontFamily(fontFamily, package: package);
+
     return base.copyWith(
-      displayLarge: base.displayLarge.copyWith(fontFamily: fontFamily),
-      displayMedium: base.displayMedium.copyWith(fontFamily: fontFamily),
-      displaySmall: base.displaySmall.copyWith(fontFamily: fontFamily),
-      headlineLarge: base.headlineLarge.copyWith(fontFamily: fontFamily),
-      headlineMedium: base.headlineMedium.copyWith(fontFamily: fontFamily),
-      headlineSmall: base.headlineSmall.copyWith(fontFamily: fontFamily),
-      titleLarge: base.titleLarge.copyWith(fontFamily: fontFamily),
-      titleMedium: base.titleMedium.copyWith(fontFamily: fontFamily),
-      titleSmall: base.titleSmall.copyWith(fontFamily: fontFamily),
-      bodyLarge: base.bodyLarge.copyWith(fontFamily: fontFamily),
-      bodyMedium: base.bodyMedium.copyWith(fontFamily: fontFamily),
-      bodySmall: base.bodySmall.copyWith(fontFamily: fontFamily),
-      labelLarge: base.labelLarge.copyWith(fontFamily: fontFamily),
-      labelMedium: base.labelMedium.copyWith(fontFamily: fontFamily),
-      labelSmall: base.labelSmall.copyWith(fontFamily: fontFamily),
+      displayLarge: withCustomFont(base.displayLarge),
+      displayMedium: withCustomFont(base.displayMedium),
+      displaySmall: withCustomFont(base.displaySmall),
+      headlineLarge: withCustomFont(base.headlineLarge),
+      headlineMedium: withCustomFont(base.headlineMedium),
+      headlineSmall: withCustomFont(base.headlineSmall),
+      titleLarge: withCustomFont(base.titleLarge),
+      titleMedium: withCustomFont(base.titleMedium),
+      titleSmall: withCustomFont(base.titleSmall),
+      bodyLarge: withCustomFont(base.bodyLarge),
+      bodyMedium: withCustomFont(base.bodyMedium),
+      bodySmall: withCustomFont(base.bodySmall),
+      labelLarge: withCustomFont(base.labelLarge),
+      labelMedium: withCustomFont(base.labelMedium),
+      labelSmall: withCustomFont(base.labelSmall),
     );
   }
 
@@ -192,12 +243,6 @@ class MyTypography {
     );
   }
 
-  static const _sans = 'Geist';
-  static const _mono = 'GeistMono';
-
-  static const kDefaultFontFamily = _sans;
-  static const kDefaultFontFamilyMono = _mono;
-
   final TextStyle displayLarge;
   final TextStyle displayMedium;
   final TextStyle displaySmall;
@@ -236,6 +281,37 @@ class MyTypography {
 }
 
 extension on TextStyle {
+  TextStyle _withFontFamily(String fontFamily, {String? package}) {
+    return TextStyle(
+      inherit: inherit,
+      color: color,
+      backgroundColor: backgroundColor,
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      fontStyle: fontStyle,
+      letterSpacing: letterSpacing,
+      wordSpacing: wordSpacing,
+      textBaseline: textBaseline,
+      height: height,
+      leadingDistribution: leadingDistribution,
+      locale: locale,
+      foreground: foreground,
+      background: background,
+      shadows: shadows,
+      fontFeatures: fontFeatures,
+      fontVariations: fontVariations,
+      decoration: decoration,
+      decorationColor: decorationColor,
+      decorationStyle: decorationStyle,
+      decorationThickness: decorationThickness,
+      debugLabel: debugLabel,
+      fontFamily: fontFamily,
+      fontFamilyFallback: fontFamilyFallback,
+      package: package,
+      overflow: overflow,
+    );
+  }
+
   TextStyle scale(double factor) {
     return copyWith(fontSize: fontSize != null ? fontSize! * factor : null);
   }

@@ -255,13 +255,14 @@ class _MyStepsItems extends StatelessWidget {
       // Default icon widget if not set
       iconWidget ??= MyText(
         (index + 1).toString(),
-        style: indexStyle(context).copyWith(
-          color: textColor,
-          fontWeight: type == MyStepType.steps ? FontWeight.w700 : null,
-          fontFamily: type == MyStepType.steps
-              ? MyTypography.kDefaultFontFamilyMono
-              : null,
-        ),
+        style:
+            (type == MyStepType.steps
+                    ? indexStyle(context).merge(MyTypography.geistMonoStyle)
+                    : indexStyle(context))
+                .copyWith(
+                  color: textColor,
+                  fontWeight: type == MyStepType.steps ? FontWeight.w700 : null,
+                ),
       );
     }
 

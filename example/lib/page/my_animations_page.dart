@@ -197,12 +197,13 @@ class _MyAnimationsPageState extends State<MyAnimationsPage> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: _SurfaceCard(
         child: DefaultTextStyle(
-          style: context.titleMedium.copyWith(
-            color: context.colorScheme.secondaryForeground,
-            fontWeight: FontWeight.w700,
-            fontFamily: MyTypography.kDefaultFontFamilyMono,
-            letterSpacing: 0.5,
-          ),
+          style: context.titleMedium
+              .merge(MyTypography.geistMonoStyle)
+              .copyWith(
+                color: context.colorScheme.secondaryForeground,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 0.5,
+              ),
           child: AnimatedTextKit(
             repeatForever: true,
             pause: const Duration(milliseconds: 800),

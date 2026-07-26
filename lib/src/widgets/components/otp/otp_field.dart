@@ -419,10 +419,9 @@ class _MyOtpSlotState extends State<MyOtpSlot> {
 
     final defaultStyle =
         widget.style ??
-        context.bodyMedium.copyWith(
-          color: theme.colorScheme.foreground,
-          fontFamily: MyTypography.kDefaultFontFamilyMono,
-        );
+        context.bodyMedium
+            .merge(MyTypography.geistMonoStyle)
+            .copyWith(color: theme.colorScheme.foreground);
 
     final firstRadius =
         widget.firstRadius ??

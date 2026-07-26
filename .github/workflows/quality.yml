@@ -60,6 +60,8 @@ jobs:
       - if: matrix.target == 'web'
         run: flutter build web --release
         working-directory: example
+      - if: matrix.target == 'web'
+        run: dart run tool/check_font_manifest.dart example/build/web/assets/FontManifest.json
       - if: matrix.target == 'linux'
         run: flutter build linux --debug
         working-directory: example
