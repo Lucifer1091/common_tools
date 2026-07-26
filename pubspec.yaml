@@ -10,13 +10,13 @@ environment:
 dependencies:
 
   #--- UI packages ---#
-  cross_file: ^0.3.5+2
+  cross_file: ^0.3.5+4
   cached_network_image: ^3.4.1
   cached_network_image_platform_interface: ^4.1.1
   flutter_svg: ^2.3.0
   easy_refresh: ^3.4.0
   flutter_slidable: ^4.0.3
-  lucide_icons_flutter: ^3.1.14+2
+  lucide_icons_flutter: ^3.1.15
   
   #--- Form packages ---#
   form_field_validator: ^1.1.0
@@ -24,18 +24,16 @@ dependencies:
 
   #--- Logic packages ---#
   intl: ^0.20.2
-  encrypt: ^5.0.3
 
   #--- Http packages ---#
-  dio: ^5.9.2
+  dio: ^5.11.0
   url_launcher: ^6.3.2
 
   #--- Hardware packages ---#
-  local_auth: ^3.0.1 # biometric authentication
-  image_picker: ^1.2.2
-  file_picker: ^10.3.10
+  local_auth: ^3.0.2
+  image_picker: ^1.2.3
+  file_picker: ^11.0.2
   mime: ^2.0.0
-  mobile_scanner: ^7.2.0
   path: ^1.9.1
 
   #--- Misc packages ---#

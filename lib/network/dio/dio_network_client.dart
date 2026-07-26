@@ -16,21 +16,20 @@ class DioNetworkClient implements NetworkClient {
     required NetworkConfig config,
     Dio? dio,
     DioDownloadDelegate? downloadDelegate,
-  })
-    : _config = config,
-      _downloadDelegate = downloadDelegate ?? createDioDownloadDelegate(),
-      _dio =
-          dio ??
-          Dio(
-            BaseOptions(
-              baseUrl: config.baseUrl,
-              connectTimeout: config.defaultTimeout,
-              receiveTimeout: config.defaultTimeout,
-              sendTimeout: config.defaultTimeout,
-              headers: config.defaultHeaders,
-              validateStatus: (_) => true,
-            ),
-          ) {
+  }) : _config = config,
+       _downloadDelegate = downloadDelegate ?? createDioDownloadDelegate(),
+       _dio =
+           dio ??
+           Dio(
+             BaseOptions(
+               baseUrl: config.baseUrl,
+               connectTimeout: config.defaultTimeout,
+               receiveTimeout: config.defaultTimeout,
+               sendTimeout: config.defaultTimeout,
+               headers: config.defaultHeaders,
+               validateStatus: (_) => true,
+             ),
+           ) {
     if (_config.loggerConfig.isEnabled) {
       _dio.interceptors.add(NetworkLogInterceptor(_config.loggerConfig));
     }
@@ -633,6 +632,7 @@ class DioNetworkClient implements NetworkClient {
           cause: error,
           stackTrace: stackTrace,
         );
+      case DioExceptionType.transformTimeout:
       case DioExceptionType.connectionTimeout:
       case DioExceptionType.sendTimeout:
       case DioExceptionType.receiveTimeout:
@@ -817,9 +817,8 @@ class DioNetworkClient implements NetworkClient {
   }
 
   Map<String, Object?> _removeInternalExtra(Map<String, Object?> extra) {
-    final Map<String, Object?> sanitized =
-        <String, Object?>{...extra}
-          ..remove(_operationExtraKey);
+    final Map<String, Object?> sanitized = <String, Object?>{...extra}
+      ..remove(_operationExtraKey);
     return Map<String, Object?>.unmodifiable(sanitized);
   }
 

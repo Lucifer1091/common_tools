@@ -118,7 +118,7 @@ class FileService {
   }
 
   static Future<XFile?> _pickUsingFilePicker({int? maxSizeInBytes}) async {
-    final FilePickerResult? result = await FilePicker.platform.pickFiles(
+    final FilePickerResult? result = await FilePicker.pickFiles(
       type: FileType.custom,
       allowedExtensions: _imageExtensions,
     );
@@ -165,7 +165,7 @@ class FileService {
     int? maxSizeInBytes,
   }) async {
     try {
-      final FilePickerResult? result = await FilePicker.platform.pickFiles(
+      final FilePickerResult? result = await FilePicker.pickFiles(
         type: FileType.custom,
         allowedExtensions:
             allowedExtensions ?? [..._imageExtensions, ..._documentExtensions],
@@ -215,7 +215,7 @@ class FileService {
           limit: maxLimit,
         );
       } else {
-        final FilePickerResult? result = await FilePicker.platform.pickFiles(
+        final FilePickerResult? result = await FilePicker.pickFiles(
           type: FileType.image,
           allowMultiple: true,
         );
@@ -272,7 +272,7 @@ class FileService {
   }
 
   static Future<XFile?> _pickVideoUsingFilePicker({int? maxSizeInBytes}) async {
-    final FilePickerResult? result = await FilePicker.platform.pickFiles(
+    final FilePickerResult? result = await FilePicker.pickFiles(
       type: FileType.custom,
       allowedExtensions: _videoExtensions,
     );
@@ -303,7 +303,7 @@ class FileService {
           maxDuration: maxDuration,
         );
       } else {
-        final FilePickerResult? result = await FilePicker.platform.pickFiles(
+        final FilePickerResult? result = await FilePicker.pickFiles(
           allowMultiple: true,
           type: FileType.custom,
           allowedExtensions: _videoExtensions,
@@ -336,7 +336,7 @@ class FileService {
     int? maxSizeInBytes,
   }) async {
     try {
-      final FilePickerResult? result = await FilePicker.platform.pickFiles(
+      final FilePickerResult? result = await FilePicker.pickFiles(
         type: FileType.custom,
         allowMultiple: true,
         allowedExtensions: allowedExtensions ?? _allExtensions,
