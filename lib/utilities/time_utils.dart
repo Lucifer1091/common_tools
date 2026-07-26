@@ -2,6 +2,8 @@ import 'dart:async';
 
 /// A utility class that provides helper methods for working with time.
 abstract class TimeUtils {
+  TimeUtils._();
+
   /// Calculates the execution duration of a task, accommodating both synchronous
   /// and asynchronous operations.
   ///

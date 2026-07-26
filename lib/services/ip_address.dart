@@ -1,78 +1,144 @@
-// import 'package:http/http.dart';
+import '../network/index.dart';
 
-// /// Enum representing the format in which the IP address should be retrieved.
-// enum IPAddressFormat {
-//   /// IP address will be returned in JSON format.
-//   json,
+/// Enum representing the format in which the IP address should be returned.
+enum IPAddressFormat {
+  /// IP address will be wrapped in a response map.
+  json,
 
-//   /// IP address will be returned as a string.
-//   string,
-// }
+  /// IP address will be returned as a string.
+  string,
+}
 
-// enum IPAddressVersion { v4, v6, v64 }
+/// IP protocol endpoint to use when resolving the public address.
+enum IPAddressVersion {
+  /// Resolve through the IPv4-only endpoint.
+  v4,
 
-// /// Retrieves the public IP address using the ipify API.
-// ///
-// /// Parameters:
-// ///   - ipAddressFormat: (Optional) The format in which the IP address should be retrieved,
-// ///                      defaults to IPAddressFormat.json.
-// ///   - defaultErrorMessage: (Optional) The default error message to return if IP address retrieval fails,
-// ///                          defaults to 'Not able to find the IP Address.'.
-// ///
-// /// Returns:
-// ///   A Future containing the IP address in the specified format,
-// ///   or a default error message if retrieval fails.
-// Future<dynamic> getIPAddress({
-//   IPAddressFormat ipAddressFormat = IPAddressFormat.string,
-//   String defaultErrorMessage = 'Not able to find the IP Address.',
-//   IPAddressVersion ipAddressVersion = IPAddressVersion.v64,
-// }) async {
-//   try {
-//     var response = await get(Uri.parse(_getURl(ipAddressVersion)));
+  /// Resolve through the IPv6-only endpoint.
+  v6,
 
-//     if (ipAddressFormat == IPAddressFormat.json) {
-//       if (response.statusCode == 200) {
-//         return handleJSONResponse(status: true, value: response.body);
-//       } else {
-//         return handleJSONResponse(status: false, value: defaultErrorMessage);
-//       }
-//     } else if (ipAddressFormat == IPAddressFormat.string) {
-//       if (response.statusCode == 200) {
-//         return response.body;
-//       } else {
-//         throw defaultErrorMessage;
-//       }
-//     }
-//   } catch (_) {
-//     if (ipAddressFormat == IPAddressFormat.json) {
-//       return handleJSONResponse(status: false, value: defaultErrorMessage);
-//     } else {
-//       throw defaultErrorMessage;
-//     }
-//   }
-// }
+  /// Resolve through the dual-stack endpoint.
+  v64,
+}
 
-// /// Handles the JSON response for IP address retrieval.
-// ///
-// /// Returns:
-// ///   A Map representing the JSON response with 'status' and 'ip_address' keys.
-// Map<String, dynamic> handleJSONResponse({
-//   bool status = false,
-//   String value = '',
-// }) {
-//   return {
-//     'status': status,
-//     'ip_address': value,
-//   };
-// }
+/// Exception thrown when an IP address cannot be resolved as a string.
+class IPAddressException implements Exception {
+  /// Creates an IP address lookup exception.
+  const IPAddressException(this.message, {this.cause});
 
-// String _getURl(IPAddressVersion ipAddressVersion) {
-//   if (ipAddressVersion == IPAddressVersion.v64) {
-//     return 'https://api64.ipify.org';
-//   } else if (ipAddressVersion == IPAddressVersion.v4) {
-//     return 'https://api4.ipify.org';
-//   } else if (ipAddressVersion == IPAddressVersion.v6) {
-//     return 'https://api6.ipify.org';
-//   }
-//   return 'https://api64.ipify.org';
-// }
+  /// Human-readable error message.
+  final String message;
+
+  /// Original failure reported by the network layer, when available.
+  final Object? cause;
+
+  @override
+  String toString() {
+    return message;
+  }
+}
+
+/// Retrieves the public IP address using the package network layer.
+class IPAddressService {
+  /// Creates an IP address service.
+  IPAddressService({NetworkClient? networkClient})
+    : _networkClient =
+          networkClient ?? DioNetworkClient(config: const NetworkConfig());
+
+  final NetworkClient _networkClient;
+
+  /// Retrieves the public IP address using the ipify API.
+  ///
+  /// Returns either a string IP address or a response map depending on
+  /// [ipAddressFormat]. When [ipAddressFormat] is [IPAddressFormat.string],
+  /// failures throw [IPAddressException]. When it is [IPAddressFormat.json],
+  /// failures return a map with `status: false`.
+  Future<Object> getIPAddress({
+    IPAddressFormat ipAddressFormat = IPAddressFormat.string,
+    String defaultErrorMessage = 'Not able to find the IP Address.',
+    IPAddressVersion ipAddressVersion = IPAddressVersion.v64,
+  }) async {
+    try {
+      final NetworkResponse<String> response = await _networkClient
+          .send<String>(
+            NetworkRequest(path: _getUrl(ipAddressVersion)),
+            decoder: _decodeIPAddress,
+          );
+
+      return switch (ipAddressFormat) {
+        IPAddressFormat.json => handleJSONResponse(
+          status: true,
+          value: response.data,
+        ),
+        IPAddressFormat.string => response.data,
+      };
+    } on NetworkException catch (error) {
+      return _handleFailure(
+        ipAddressFormat: ipAddressFormat,
+        defaultErrorMessage: defaultErrorMessage,
+        cause: error,
+      );
+    } catch (error) {
+      return _handleFailure(
+        ipAddressFormat: ipAddressFormat,
+        defaultErrorMessage: defaultErrorMessage,
+        cause: error,
+      );
+    }
+  }
+}
+
+/// Retrieves the public IP address using the package network layer.
+///
+/// This top-level helper preserves the previous API while allowing callers to
+/// inject a custom [networkClient] for shared configuration or tests.
+Future<Object> getIPAddress({
+  IPAddressFormat ipAddressFormat = IPAddressFormat.string,
+  String defaultErrorMessage = 'Not able to find the IP Address.',
+  IPAddressVersion ipAddressVersion = IPAddressVersion.v64,
+  NetworkClient? networkClient,
+}) {
+  return IPAddressService(networkClient: networkClient).getIPAddress(
+    ipAddressFormat: ipAddressFormat,
+    defaultErrorMessage: defaultErrorMessage,
+    ipAddressVersion: ipAddressVersion,
+  );
+}
+
+/// Handles the JSON response for IP address retrieval.
+///
+/// Returns a map with `status` and `ip_address` keys.
+Map<String, Object> handleJSONResponse({
+  bool status = false,
+  String value = '',
+}) {
+  return <String, Object>{'status': status, 'ip_address': value};
+}
+
+Object _handleFailure({
+  required IPAddressFormat ipAddressFormat,
+  required String defaultErrorMessage,
+  required Object cause,
+}) {
+  return switch (ipAddressFormat) {
+    IPAddressFormat.json => handleJSONResponse(value: defaultErrorMessage),
+    IPAddressFormat.string =>
+      throw IPAddressException(defaultErrorMessage, cause: cause),
+  };
+}
+
+String _decodeIPAddress(Object? rawData) {
+  if (rawData == null) return '';
+
+  if (rawData is String) return rawData.trim();
+
+  return rawData.toString().trim();
+}
+
+String _getUrl(IPAddressVersion ipAddressVersion) {
+  return switch (ipAddressVersion) {
+    IPAddressVersion.v64 => 'https://api64.ipify.org',
+    IPAddressVersion.v4 => 'https://api4.ipify.org',
+    IPAddressVersion.v6 => 'https://api6.ipify.org',
+  };
+}

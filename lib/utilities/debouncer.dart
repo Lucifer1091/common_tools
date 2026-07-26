@@ -113,7 +113,7 @@ final class Debouncer {
   }
 }
 
-class Throttler {
+final class Throttler {
   Throttler([Duration? duration, this.immediateFirstRun = false])
     : duration = duration ?? const Duration(milliseconds: 300);
 

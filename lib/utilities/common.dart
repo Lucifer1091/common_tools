@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 class CommonUtils {
@@ -57,32 +56,6 @@ class CommonUtils {
     makeNullable(
       SchedulerBinding.instance,
     )?.addPostFrameCallback((_) => onCreated?.call());
-  }
-
-  /// mailto: function to open native email app
-  static Uri mailTo({
-    required List<String> to,
-    String subject = '',
-    String body = '',
-    List<String> cc = const [],
-    List<String> bcc = const [],
-  }) {
-    String subject0 = '';
-    if (subject.isNotEmpty) subject0 = '&subject=$subject';
-
-    String body0 = '';
-    if (body.isNotEmpty) body0 = '&body=$body';
-
-    String cc0 = '';
-    if (cc.isNotEmpty) cc0 = '&cc=${cc.join(',')}';
-
-    String bcc0 = '';
-    if (bcc.isNotEmpty) bcc0 = '&bcc=${bcc.join(',')}';
-
-    return Uri(
-      scheme: 'mailto',
-      query: 'to=${to.join(',')}$subject0$body0$cc0$bcc0',
-    );
   }
 
   /// returns random bool.
