@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:common_tools/index.dart';
+import 'package:example/common_tools_catalog.dart';
 
 import '../../base/example_widget.dart';
 

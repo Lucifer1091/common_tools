@@ -1,18 +1,19 @@
 name: common_tools
-description: "A new Flutter package project."
-version: 0.0.1
+description: "Private reusable Flutter design system, components, and application tools."
+version: 0.1.0
 homepage: https://github.com/Lucifer1091/common_tools
+repository: https://github.com/Lucifer1091/common_tools
+publish_to: none
 
 environment:
-  sdk: '>=3.7.2 <4.0.0'
-  flutter: ">=1.17.0"
+  sdk: '>=3.12.0 <4.0.0'
+  flutter: '>=3.44.0'
 
 dependencies:
 
   #--- UI packages ---#
   cross_file: ^0.3.5+4
   cached_network_image: ^3.4.1
-  cached_network_image_platform_interface: ^4.1.1
   flutter_svg: ^2.3.0
   easy_refresh: ^3.4.0
   flutter_slidable: ^4.0.3
@@ -20,7 +21,6 @@ dependencies:
   
   #--- Form packages ---#
   form_field_validator: ^1.1.0
-  flutter_form_builder: ^10.3.0+2
 
   #--- Logic packages ---#
   intl: ^0.20.2

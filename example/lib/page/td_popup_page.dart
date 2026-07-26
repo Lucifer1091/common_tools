@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:common_tools/index.dart';
+import 'package:example/common_tools_catalog.dart';
 
 import '../base/example_widget.dart';
 
@@ -7,7 +7,7 @@ import '../base/example_widget.dart';
 /// TDPopup演示
 ///
 class TDPopupPage extends StatefulWidget {
-  const TDPopupPage({Key? key}) : super(key: key);
+  const TDPopupPage({super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -549,10 +549,10 @@ class TDPopupPageState extends State<TDPopupPage> {
             modalBarrierColor: ThemeColors.neutral.shade800,
             slideTransitionFrom: MySlideFrom.top,
             open: () {
-              print('open');
+              debugPrint('open');
             },
             opened: () {
-              print('opened');
+              debugPrint('opened');
             },
             builder: (context) {
               return Container(color: Colors.white, height: 240);

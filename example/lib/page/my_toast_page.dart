@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:common_tools/index.dart';
+import 'package:example/common_tools_catalog.dart';
 
 import '../../base/example_widget.dart';
 
@@ -246,6 +246,7 @@ class MyToastPage extends StatelessWidget {
           ),
         );
         MyToast.simple(
+          context: context,
           title: 'Event has been created',
           subtitle: 'Sunday, July 07, 2024 at 12:00 PM',
         );
@@ -269,6 +270,7 @@ class MyToastPage extends StatelessWidget {
         );
 
         MyToast.success(
+          context: context,
           title: 'Event has been created',
           subtitle: 'Sunday, July 07, 2024 at 12:00 PM',
         );

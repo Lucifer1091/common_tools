@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:common_tools/index.dart';
+import 'package:example/common_tools_catalog.dart';
 
 import '../../base/example_widget.dart';
 
@@ -88,8 +88,8 @@ class MySideBarCustomPageState extends State<MySideBarCustomPage> {
             child: PageView(
               controller: _pageController,
               scrollDirection: Axis.vertical,
-              children: pages,
               physics: const NeverScrollableScrollPhysics(),
+              children: pages,
             ),
           ),
         ),

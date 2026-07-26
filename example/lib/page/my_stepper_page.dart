@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:common_tools/index.dart';
+import 'package:example/common_tools_catalog.dart';
 
 import '../base/example_widget.dart';
 
@@ -131,7 +131,7 @@ class _MyStepperPageState extends State<MyStepperPage> {
   }
 
   var controller = MyStepperController()..value = 1;
-  
+
   Widget _customStepperValue(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,

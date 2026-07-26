@@ -1,47 +1,87 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
-
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
-
 # common_tools
 
-**common_tools** is a collection of common extensions and utilities for Dart and Flutter, designed to make your development process smoother and more efficient.
+Private Flutter design-system package for Flutter 3.44+ and Dart 3.12+. It
+contains the supported `My*` component families, the existing animated theme,
+layout primitives, application-scoped overlays, localization contracts,
+networking, and services.
 
-## Features
-
-- **StringExtensions**: Useful string manipulation methods.
-- **ListExtensions**: Handy list utility methods.
-- **MathUtils**: Common mathematical operations.
-- **StringUtils**: Helpful string utility functions.
-
-## Installation
-
-Add `common_tools` as a dependency in your `pubspec.yaml` file:
+## Install from a pinned Git tag
 
 ```yaml
 dependencies:
-  common_tools: ^0.0.1
+  common_tools:
+    git:
+      url: git@github.com:Lucifer1091/common_tools.git
+      ref: v0.1.0
 ```
 
-## Usage
+Do not depend on a branch or commit from a production app. Tags are the release
+contract, and this package is intentionally excluded from pub.dev with
+`publish_to: none`.
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+## Choose a public entrypoint
 
 ```dart
-const like = 'sample';
+import 'package:common_tools/common_tools.dart'; // theme, layout, components
+import 'package:common_tools/components/forms.dart';
+import 'package:common_tools/components/feedback.dart';
+import 'package:common_tools/extensions/context.dart';
+import 'package:common_tools/network.dart';
 ```
 
-## Additional information
+`common_tools.dart` is the convenient UI facade. Prefer a narrow entrypoint in
+shared features and large apps so completions stay focused and ownership is
+obvious. Never import `package:common_tools/src/...`.
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+## Install the UI layer
+
+Use `MyUILayer` from `MaterialApp.builder`. This preserves the package's
+existing inherited theme and animated interpolation while adding isolated
+toast/loading controllers and package localization.
+
+```dart
+MaterialApp(
+  builder: (context, child) => MyUILayer(
+    theme: MyColorScheme.light(),
+    darkTheme: MyColorScheme.dark(),
+    child: child,
+    translationsResolver: (locale) {
+      // Return null to use the built-in English fallback.
+      return null;
+    },
+  ),
+);
+```
+
+Overlay calls require a context below `MyUILayer`:
+
+```dart
+MyToast.success(context: context, title: 'Saved');
+await MyLoadingOverlay.async(
+  context,
+  future: repository.refresh,
+);
+```
+
+## Files and dependency boundaries
+
+Picker and download APIs return `MyPickedFile`; consumers do not need to import
+or depend on `XFile`. Component APIs similarly avoid re-exporting dependency
+packages. Supply caller-owned widgets through the documented widget slots when
+customizing icons or content.
+
+## Platforms
+
+The supported matrix is Android, iOS, web, Windows, macOS, and Linux. A feature
+can still be platform-limited when its underlying OS capability is unavailable
+(for example biometrics).
+
+## Version policy
+
+The redesigned API starts at `0.1.0`. Before `1.0.0`, minor versions may contain
+breaking changes and patch versions contain compatible fixes. Every consuming
+app should pin an exact Git tag and review `CHANGELOG.md` plus
+`MIGRATION.md` before updating.
+
+The example application is the component catalog and uses only supported public
+entrypoints.

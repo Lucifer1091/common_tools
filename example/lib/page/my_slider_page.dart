@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:common_tools/index.dart';
+import 'package:example/common_tools_catalog.dart';
 
 import '../../base/example_widget.dart';
 
@@ -262,7 +262,7 @@ class _MySliderPageState extends State<MySliderPage> {
                   currentValue = value;
                   tapOffset = offset;
                 });
-                print('onTap  offset: $offset, value: $value');
+                debugPrint('onTap  offset: $offset, value: $value');
               },
             ),
           ],
@@ -319,7 +319,7 @@ class _MySliderPageState extends State<MySliderPage> {
               currentTapValue: value,
               tapOffset: offset,
             );
-            print('onTap offset: $offset, value: $value');
+            debugPrint('onTap offset: $offset, value: $value');
           },
         ),
       ],
@@ -362,7 +362,7 @@ class _MySliderPageState extends State<MySliderPage> {
                   currentValue = value;
                   tapOffset = offset;
                 });
-                print('onTap  offset: $offset, value: $value');
+                debugPrint('onTap  offset: $offset, value: $value');
               },
             ),
           ],
@@ -419,7 +419,7 @@ class _MySliderPageState extends State<MySliderPage> {
               currentTapValue: value,
               tapOffset: offset,
             );
-            print('onTap offset: $offset, value: $value');
+            debugPrint('onTap offset: $offset, value: $value');
           },
         ),
       ],

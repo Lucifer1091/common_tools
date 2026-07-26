@@ -1,0 +1,9 @@
+dartdoc:
+  ignore:
+    # These references originate in Flutter's inherited API documentation or
+    # in intentionally overlapping package facades. They are not broken links
+    # owned by common_tools.
+    - ambiguous-reexport
+    - internal-error
+    - unknown-macro
+    - unresolved-doc-reference

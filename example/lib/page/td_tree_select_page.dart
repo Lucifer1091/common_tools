@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
-import 'package:common_tools/index.dart';
+import 'package:example/common_tools_catalog.dart';
 
 import '../base/example_widget.dart';
 
 class TDTreeSelectPage extends StatefulWidget {
-  const TDTreeSelectPage({Key? key}) : super(key: key);
+  const TDTreeSelectPage({super.key});
 
   @override
   State<StatefulWidget> createState() => _TDTreeSelectPageState();

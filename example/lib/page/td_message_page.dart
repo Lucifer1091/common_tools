@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:common_tools/index.dart';
+import 'package:example/common_tools_catalog.dart';
 import '../../base/example_widget.dart';
 
 class TDMessagePage extends StatefulWidget {
-  const TDMessagePage({Key? key}) : super(key: key);
+  const TDMessagePage({super.key});
 
   @override
   State<StatefulWidget> createState() => _TDMessagePageState();
 }
 
 class _TDMessagePageState extends State<TDMessagePage> {
-  final _commonContent = 'This is a regular notification message';
   final longContent =
       'This is a regular notification message. This is a regular notification message. This is a regular notification message.';
 
@@ -81,8 +80,6 @@ class _TDMessagePageState extends State<TDMessagePage> {
       type: MyButtonType.outline,
       width: 450,
       onTap: () {
-        
-
         // TDMessage.showMessage(
         //   context: context,
         //   content: _commonContent,

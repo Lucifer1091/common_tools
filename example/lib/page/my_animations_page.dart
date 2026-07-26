@@ -1,4 +1,4 @@
-import 'package:common_tools/index.dart';
+import 'package:example/common_tools_catalog.dart';
 import 'package:example/base/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';

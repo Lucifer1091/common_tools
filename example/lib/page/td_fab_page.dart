@@ -18,13 +18,8 @@ class _TDFabPageState extends State<TDFabPage> {
       title: myTitle(),
       exampleCodeGroup: 'fab',
       children: [
-        ExampleModule(title: 'Component types', children: [
-          ],
-        ),
-        ExampleModule(title: 'Component status', children: [
-            
-          ],
-        ),
+        ExampleModule(title: 'Component types', children: []),
+        ExampleModule(title: 'Component status', children: []),
       ],
     );
   }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:common_tools/index.dart';
 
 import '../../base/example_widget.dart';
 

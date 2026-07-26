@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
-import 'package:common_tools/index.dart';
+import 'package:example/common_tools_catalog.dart';
 
 import '../../base/example_widget.dart';
 
 class TDSearchBarPage extends StatefulWidget {
-  const TDSearchBarPage({Key? key}) : super(key: key);
+  const TDSearchBarPage({super.key});
 
   @override
   State<StatefulWidget> createState() => _TDSearchBarPageState();

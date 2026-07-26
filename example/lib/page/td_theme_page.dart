@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 
-/// 组件库相关的，只需要引入这个文件，里面暴露td前缀所有需要的类
-import 'package:common_tools/index.dart';
-
 import '../base/example_widget.dart';
 
 /// 主题颜色示例页
 class TDThemeColorsPage extends StatefulWidget {
-  const TDThemeColorsPage({Key? key}) : super(key: key);
+  const TDThemeColorsPage({super.key});
 
   @override
-  _TDThemeColorsPageState createState() => _TDThemeColorsPageState();
+  State<TDThemeColorsPage> createState() => _TDThemeColorsPageState();
 }
 
 class _TDThemeColorsPageState extends State<TDThemeColorsPage> {

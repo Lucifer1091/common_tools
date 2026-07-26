@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:common_tools/index.dart';
+import 'package:example/common_tools_catalog.dart';
 
 import '../base/example_widget.dart';
 
 class TDSwipeCellPage extends StatelessWidget {
-  const TDSwipeCellPage({Key? key}) : super(key: key);
+  const TDSwipeCellPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -61,8 +61,8 @@ class TDSwipeCellPage extends StatelessWidget {
               slidableKey: ValueKey(list[index]['id']),
               groupTag: 'test',
               onChange: (direction, open) {
-                print('打开方向：$direction');
-                print('打开转态$open');
+                debugPrint('打开方向：$direction');
+                debugPrint('打开转态$open');
               },
               right: TDSwipeCellPanel(
                 extentRatio: 60 / screenWidth,
@@ -76,9 +76,8 @@ class TDSwipeCellPage extends StatelessWidget {
                     backgroundColor: ThemeColors.error.shade500,
                     label: '删除',
                     onPressed: (context) {
-                      print('点击action');
-                      print(TDSwipeCell.of(context));
-                      print(TDSwipeCellInherited.of(context)?.controller);
+                      debugPrint('点击action');
+                      debugPrint('${TDSwipeCell.of(context)}');
                       list.removeAt(index);
                       cellLength.value = list.length;
                     },

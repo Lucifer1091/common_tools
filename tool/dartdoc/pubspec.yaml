@@ -1,0 +1,8 @@
+name: common_tools_dartdoc_runner
+publish_to: none
+
+environment:
+  sdk: '>=3.12.0 <4.0.0'
+
+dependencies:
+  dartdoc: ^9.0.8

@@ -1,4 +1,4 @@
-import 'package:common_tools/index.dart';
+import 'package:example/common_tools_catalog.dart';
 import 'package:example/theme_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

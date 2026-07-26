@@ -1,0 +1,74 @@
+name: Package quality
+
+on:
+  pull_request:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.44.0'
+          cache: true
+      - run: flutter pub get
+      - run: dart format --output=none --set-exit-if-changed .
+      - run: flutter analyze
+      - run: dart analyze lib
+      - run: flutter test --coverage
+      # Flutter 3.44 bundles Dartdoc 9.0.4, which crashes on Flutter's own
+      # @docImport metadata. Run the isolated patched Dartdoc instead.
+      - run: dart run tool/check_dartdoc.dart
+      - run: dart tool/public_api.dart --check
+      - run: dart pub publish --dry-run
+
+  platform-smoke:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: apk
+          - os: ubuntu-latest
+            target: web
+          - os: ubuntu-latest
+            target: linux
+          - os: windows-latest
+            target: windows
+          - os: macos-latest
+            target: macos
+          - os: macos-latest
+            target: ios
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.44.0'
+          cache: true
+      - if: matrix.target == 'linux'
+        run: sudo apt-get update && sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
+      - run: flutter pub get
+        working-directory: example
+      - if: matrix.target == 'apk'
+        run: flutter build apk --debug
+        working-directory: example
+      - if: matrix.target == 'web'
+        run: flutter build web --release
+        working-directory: example
+      - if: matrix.target == 'linux'
+        run: flutter build linux --debug
+        working-directory: example
+      - if: matrix.target == 'windows'
+        run: flutter build windows --debug
+        working-directory: example
+      - if: matrix.target == 'macos'
+        run: flutter build macos --debug
+        working-directory: example
+      - if: matrix.target == 'ios'
+        run: flutter build ios --simulator --debug
+        working-directory: example

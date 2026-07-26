@@ -4,7 +4,7 @@ import '../base/example_widget.dart';
 
 import 'dart:async';
 
-import 'package:common_tools/index.dart';
+import 'package:example/common_tools_catalog.dart';
 import 'package:flutter/rendering.dart';
 
 class MyBuildersPage extends StatelessWidget {

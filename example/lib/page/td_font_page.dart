@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:common_tools/index.dart';
 
 import '../../base/example_widget.dart';
 
 /// 字体示例页面
 class TDFontPage extends StatelessWidget {
-  const TDFontPage({Key? key}) : super(key: key);
+  const TDFontPage({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:common_tools/index.dart';
+import 'package:example/common_tools_catalog.dart';
 import '../../base/example_widget.dart';
 
 class MyFooterPage extends StatefulWidget {
@@ -49,7 +49,7 @@ class _MyFooterPageState extends State<MyFooterPage> {
         style: MyLinkStyle.primary,
         uri: Uri.parse('https://example.com'),
         onTap: (link) {
-          print('Clicked link $link');
+          debugPrint('Clicked link $link');
         },
       ),
     ];
@@ -68,7 +68,7 @@ class _MyFooterPageState extends State<MyFooterPage> {
         style: MyLinkStyle.primary,
         uri: Uri.parse('https://example.com'),
         onTap: (link) {
-          print('Clicked link 1 $link');
+          debugPrint('Clicked link 1 $link');
         },
       ),
       MyLink(
@@ -76,7 +76,7 @@ class _MyFooterPageState extends State<MyFooterPage> {
         style: MyLinkStyle.primary,
         uri: Uri.parse('https://example.com'),
         onTap: (link) {
-          print('Clicked link 2 $link');
+          debugPrint('Clicked link 2 $link');
         },
       ),
     ];

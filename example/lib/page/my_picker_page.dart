@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:common_tools/index.dart';
+import 'package:example/common_tools_catalog.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../base/example_widget.dart';
@@ -86,7 +86,10 @@ class _MyPickerPageState extends State<MyPickerPage> {
         ExampleModule(
           title: 'Component Style',
           children: [
-            ExampleItem(desc: 'With Title Picker', builder: _buildAreaWithTitle),
+            ExampleItem(
+              desc: 'With Title Picker',
+              builder: _buildAreaWithTitle,
+            ),
             ExampleItem(
               desc: 'Without Title Picker',
               builder: _buildAreaWithoutTitle,

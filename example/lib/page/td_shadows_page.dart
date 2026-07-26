@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:common_tools/index.dart';
+import 'package:example/common_tools_catalog.dart';
 
 import '../../base/example_widget.dart';
 
 /// 圆角示例页面
 class TDShadowsPage extends StatelessWidget {
-  const TDShadowsPage({Key? key}) : super(key: key);
+  const TDShadowsPage({super.key});
 
   @override
   Widget build(BuildContext context) {

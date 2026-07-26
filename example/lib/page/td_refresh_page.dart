@@ -7,12 +7,12 @@
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:common_tools/index.dart';
+import 'package:example/common_tools_catalog.dart';
 
 import '../../base/example_widget.dart';
 
 class TdPullDownRefreshPage extends StatefulWidget {
-  const TdPullDownRefreshPage({Key? key}) : super(key: key);
+  const TdPullDownRefreshPage({super.key});
 
   @override
   State<StatefulWidget> createState() => _TdPullDownRefreshPageState();
@@ -61,7 +61,7 @@ class _TdPullDownRefreshPageState extends State<TdPullDownRefreshPage> {
               ),
               margin: const EdgeInsets.only(top: 16, left: 16, right: 16),
               child: MyText(
-                '下拉刷新次数：${count}',
+                '下拉刷新次数：$count',
                 textColor: ThemeColors.neutral.shade600,
               ),
             ),

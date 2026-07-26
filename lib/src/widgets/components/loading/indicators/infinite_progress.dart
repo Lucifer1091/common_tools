@@ -1,0 +1,30 @@
+import 'dart:async';
+
+import 'package:flutter/widgets.dart';
+
+mixin InfiniteProgressMixin {
+  late Animation<double> _animation;
+  late AnimationController controller;
+
+  double get animationValue => _animation.value;
+
+  void startEngine(TickerProvider vsync, Duration duration) {
+    controller = AnimationController(vsync: vsync, duration: duration);
+    _animation = CurvedAnimation(parent: controller, curve: Curves.linear);
+    _animation = Tween<double>(begin: 0, end: 90).animate(_animation)
+      ..addStatusListener((AnimationStatus status) {
+        if (status == AnimationStatus.completed) {
+          unawaited(controller.reverse());
+        } else if (status == AnimationStatus.dismissed) {
+          unawaited(controller.forward());
+        }
+      });
+    unawaited(controller.forward());
+  }
+
+  Size measureSize();
+
+  void closeEngine() {
+    controller.dispose();
+  }
+}

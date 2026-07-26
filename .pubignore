@@ -1,0 +1,11 @@
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.github/
+coverage/
+doc/
+test/
+tool/
+
+example/.dart_tool/
+example/build/

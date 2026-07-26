@@ -1,0 +1,56 @@
+THIRD-PARTY NOTICES
+===================
+
+This product includes third-party software and assets. The notices below do not
+change the proprietary license of original common_tools code.
+
+Lucide icons
+------------
+Copyright (c) 2022 Lucide Contributors
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+
+lucide_icons_flutter wrapper
+----------------------------
+Copyright (c) 2024 vqhapp. MIT License.
+Source: https://pub.dev/packages/lucide_icons_flutter
+
+Geist and Geist Mono
+--------------------
+Copyright (c) 2023 Vercel, in collaboration with basement.studio.
+Licensed under the SIL Open Font License, Version 1.1. The complete license is
+included in licenses/OFL-1.1.txt.
+Source: https://github.com/vercel/geist-font
+
+Flutter-derived code
+--------------------
+Copyright 2014 The Flutter Authors. BSD 3-Clause License.
+Source: https://github.com/flutter/flutter
+
+TDesign-derived components
+--------------------------
+Copyright (c) Tencent. MIT License.
+Source: https://github.com/Tencent/tdesign-flutter
+
+flutter_swiper-derived code
+---------------------------
+Copyright (c) flutter_swiper contributors. MIT License.
+Source: https://github.com/best-flutter/flutter_swiper
+
+gap-derived code
+----------------
+Copyright (c) gap contributors. MIT License.
+Source: https://github.com/letsar/gap
+
+All direct Dart and Flutter dependencies retain their license files in the pub
+cache/package distribution and are collected by Flutter's license registry.

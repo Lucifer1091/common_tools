@@ -1,8 +1,9 @@
 import 'dart:collection';
 
+import 'package:flutter/foundation.dart';
+
 typedef Observer = void Function(dynamic arguments);
 
-/// 广播工具
 class TNotification {
   static final Map<String, Map<String, Observer>> _eventMap = HashMap();
 
@@ -34,21 +35,20 @@ class TNotification {
   static void postNotification(String eventName, dynamic arguments) {
     if (eventName.isNotEmpty) {
       var handlerArguments = {
-        'eventName':eventName,
-        'argumentsObj':arguments
+        'eventName': eventName,
+        'argumentsObj': arguments,
       };
       _postNotificationCallHandler(handlerArguments);
     }
   }
 
   static void _postNotificationCallHandler(arguments) {
-
     var observerMap = _eventMap[arguments['eventName']];
     observerMap?.forEach((key, observer) {
       try {
         observer(arguments['argumentsObj']);
       } catch (e) {
-        print('TNotification postNotificationCallHandler $key error: $e');
+        debugPrint('TNotification postNotificationCallHandler $key error: $e');
       }
     });
   }

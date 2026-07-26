@@ -1,4 +1,4 @@
-import 'package:common_tools/index.dart';
+import 'package:example/common_tools_catalog.dart';
 import 'package:flutter/material.dart';
 
 import '../../base/example_widget.dart';
@@ -95,7 +95,7 @@ class _MyLoaderPageState extends State<MyLoaderPage> {
                         text: 'Hide Loading Manually',
                         refreshWidget: MyButton(
                           text: 'Dismiss',
-                          onTap: MyLoadingOverlay.dismiss,
+                          onTap: () => MyLoadingOverlay.dismiss(context),
                         ),
                       );
                     },
