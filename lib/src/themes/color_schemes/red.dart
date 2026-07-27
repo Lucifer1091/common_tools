@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../my_color_scheme.dart';
+import 'status_colors.dart';
 
 @immutable
 class MyRedColorScheme extends MyColorScheme {
@@ -21,6 +22,10 @@ class MyRedColorScheme extends MyColorScheme {
     required super.accentForeground,
     required super.destructive,
     required super.destructiveForeground,
+    required super.warning,
+    required super.warningForeground,
+    required super.success,
+    required super.successForeground,
     required super.border,
     required super.input,
     required super.ring,
@@ -50,6 +55,10 @@ class MyRedColorScheme extends MyColorScheme {
     super.accentForeground = const Color(0xff171717),
     super.destructive = const Color(0xffef4444),
     super.destructiveForeground = const Color(0xfffafafa),
+    super.warning = MyStatusColorDefaults.warningLight,
+    super.warningForeground = MyStatusColorDefaults.warningForegroundLight,
+    super.success = MyStatusColorDefaults.successLight,
+    super.successForeground = MyStatusColorDefaults.successForegroundLight,
     super.border = const Color(0xffe5e5e5),
     super.input = const Color(0xffe5e5e5),
     super.ring = const Color(0xffdc2626),
@@ -79,6 +88,10 @@ class MyRedColorScheme extends MyColorScheme {
     super.accentForeground = const Color(0xfffafafa),
     super.destructive = const Color(0xffef4444),
     super.destructiveForeground = const Color(0xfffafafa),
+    super.warning = MyStatusColorDefaults.warningDark,
+    super.warningForeground = MyStatusColorDefaults.warningForegroundDark,
+    super.success = MyStatusColorDefaults.successDark,
+    super.successForeground = MyStatusColorDefaults.successForegroundDark,
     super.border = const Color(0xff262626),
     super.input = const Color(0xff262626),
     super.ring = const Color(0xffdc2626),

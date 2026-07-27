@@ -11,3 +11,10 @@
    `MyWebViewConfiguration`, and `MyBrowserConfiguration`.
 
 Theme construction and Lucide icon APIs are unchanged.
+
+## Unreleased color-scheme migration
+
+`MyColorScheme` now requires these additional colors:
+
+- `warning` and `warningForeground`
+- `success` and `successForeground`

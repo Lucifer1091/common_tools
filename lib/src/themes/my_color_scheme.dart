@@ -43,6 +43,10 @@ class MyColorScheme {
     required this.accentForeground,
     required this.destructive,
     required this.destructiveForeground,
+    required this.warning,
+    required this.warningForeground,
+    required this.success,
+    required this.successForeground,
     required this.border,
     required this.input,
     required this.ring,
@@ -169,6 +173,10 @@ class MyColorScheme {
       accentForeground = json._col('accentForeground'),
       destructive = json._col('destructive'),
       destructiveForeground = json._col('destructiveForeground'),
+      warning = json._col('warning'),
+      warningForeground = json._col('warningForeground'),
+      success = json._col('success'),
+      successForeground = json._col('successForeground'),
       border = json._col('border'),
       input = json._col('input'),
       ring = json._col('ring'),
@@ -205,6 +213,10 @@ class MyColorScheme {
          accentForeground: colors._col('accentForeground'),
          destructive: colors._col('destructive'),
          destructiveForeground: colors._col('destructiveForeground'),
+         warning: colors._col('warning'),
+         warningForeground: colors._col('warningForeground'),
+         success: colors._col('success'),
+         successForeground: colors._col('successForeground'),
          border: colors._col('border'),
          input: colors._col('input'),
          ring: colors._col('ring'),
@@ -233,6 +245,10 @@ class MyColorScheme {
   final Color accentForeground;
   final Color destructive;
   final Color destructiveForeground;
+  final Color warning;
+  final Color warningForeground;
+  final Color success;
+  final Color successForeground;
   final Color border;
   final Color input;
   final Color ring;
@@ -261,6 +277,10 @@ class MyColorScheme {
       'accentForeground': _hexFromColor(accentForeground),
       'destructive': _hexFromColor(destructive),
       'destructiveForeground': _hexFromColor(destructiveForeground),
+      'warning': _hexFromColor(warning),
+      'warningForeground': _hexFromColor(warningForeground),
+      'success': _hexFromColor(success),
+      'successForeground': _hexFromColor(successForeground),
       'border': _hexFromColor(border),
       'input': _hexFromColor(input),
       'ring': _hexFromColor(ring),
@@ -292,6 +312,10 @@ class MyColorScheme {
       'accentForeground': accentForeground,
       'destructive': destructive,
       'destructiveForeground': destructiveForeground,
+      'warning': warning,
+      'warningForeground': warningForeground,
+      'success': success,
+      'successForeground': successForeground,
       'border': border,
       'input': input,
       'ring': ring,
@@ -324,6 +348,10 @@ class MyColorScheme {
     Color? accentForeground,
     Color? destructive,
     Color? destructiveForeground,
+    Color? warning,
+    Color? warningForeground,
+    Color? success,
+    Color? successForeground,
     Color? border,
     Color? input,
     Color? ring,
@@ -353,6 +381,10 @@ class MyColorScheme {
       destructive: destructive ?? this.destructive,
       destructiveForeground:
           destructiveForeground ?? this.destructiveForeground,
+      warning: warning ?? this.warning,
+      warningForeground: warningForeground ?? this.warningForeground,
+      success: success ?? this.success,
+      successForeground: successForeground ?? this.successForeground,
       border: border ?? this.border,
       input: input ?? this.input,
       ring: ring ?? this.ring,
@@ -400,6 +432,18 @@ class MyColorScheme {
         b.destructiveForeground,
         t,
       )!,
+      warning: Color.lerp(a.warning, b.warning, t)!,
+      warningForeground: Color.lerp(
+        a.warningForeground,
+        b.warningForeground,
+        t,
+      )!,
+      success: Color.lerp(a.success, b.success, t)!,
+      successForeground: Color.lerp(
+        a.successForeground,
+        b.successForeground,
+        t,
+      )!,
       border: Color.lerp(a.border, b.border, t)!,
       input: Color.lerp(a.input, b.input, t)!,
       ring: Color.lerp(a.ring, b.ring, t)!,
@@ -435,6 +479,10 @@ class MyColorScheme {
         other.accentForeground == accentForeground &&
         other.destructive == destructive &&
         other.destructiveForeground == destructiveForeground &&
+        other.warning == warning &&
+        other.warningForeground == warningForeground &&
+        other.success == success &&
+        other.successForeground == successForeground &&
         other.border == border &&
         other.input == input &&
         other.ring == ring &&
@@ -465,6 +513,10 @@ class MyColorScheme {
         accentForeground.hashCode ^
         destructive.hashCode ^
         destructiveForeground.hashCode ^
+        warning.hashCode ^
+        warningForeground.hashCode ^
+        success.hashCode ^
+        successForeground.hashCode ^
         border.hashCode ^
         input.hashCode ^
         ring.hashCode ^
@@ -478,7 +530,19 @@ class MyColorScheme {
 
   @override
   String toString() {
-    return 'ColorScheme{brightness: $brightness, background: $background, foreground: $foreground, card: $card, cardForeground: $cardForeground, popover: $popover, popoverForeground: $popoverForeground, primary: $primary, primaryForeground: $primaryForeground, secondary: $secondary, secondaryForeground: $secondaryForeground, muted: $muted, mutedForeground: $mutedForeground, accent: $accent, accentForeground: $accentForeground, destructive: $destructive, destructiveForeground: $destructiveForeground, border: $border, input: $input, ring: $ring, selection: $selection, chart1: $chart1, chart2: $chart2, chart3: $chart3, chart4: $chart4, chart5: $chart5}';
+    return 'ColorScheme{brightness: $brightness, background: $background, '
+        'foreground: $foreground, card: $card, '
+        'cardForeground: $cardForeground, popover: $popover, '
+        'popoverForeground: $popoverForeground, primary: $primary, '
+        'primaryForeground: $primaryForeground, secondary: $secondary, '
+        'secondaryForeground: $secondaryForeground, muted: $muted, '
+        'mutedForeground: $mutedForeground, accent: $accent, '
+        'accentForeground: $accentForeground, destructive: $destructive, '
+        'destructiveForeground: $destructiveForeground, warning: $warning, '
+        'warningForeground: $warningForeground, success: $success, '
+        'successForeground: $successForeground, border: $border, '
+        'input: $input, ring: $ring, selection: $selection, chart1: $chart1, '
+        'chart2: $chart2, chart3: $chart3, chart4: $chart4, chart5: $chart5}';
   }
 
   static const List<String> schemes = <String>[

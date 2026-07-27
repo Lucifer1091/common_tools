@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../my_color_scheme.dart';
+import 'status_colors.dart';
 
 @immutable
 class MyStoneColorScheme extends MyColorScheme {
@@ -21,6 +22,10 @@ class MyStoneColorScheme extends MyColorScheme {
     required super.accentForeground,
     required super.destructive,
     required super.destructiveForeground,
+    required super.warning,
+    required super.warningForeground,
+    required super.success,
+    required super.successForeground,
     required super.border,
     required super.input,
     required super.ring,
@@ -50,6 +55,10 @@ class MyStoneColorScheme extends MyColorScheme {
     super.accentForeground = const Color(0xff1c1917),
     super.destructive = const Color(0xffef4444),
     super.destructiveForeground = const Color(0xfffafaf9),
+    super.warning = MyStatusColorDefaults.warningLight,
+    super.warningForeground = MyStatusColorDefaults.warningForegroundLight,
+    super.success = MyStatusColorDefaults.successLight,
+    super.successForeground = MyStatusColorDefaults.successForegroundLight,
     super.border = const Color(0xffe7e5e4),
     super.input = const Color(0xffe7e5e4),
     super.ring = const Color(0xff0c0a09),
@@ -79,6 +88,10 @@ class MyStoneColorScheme extends MyColorScheme {
     super.accentForeground = const Color(0xfffafaf9),
     super.destructive = const Color(0xffef4444),
     super.destructiveForeground = const Color(0xfffafaf9),
+    super.warning = MyStatusColorDefaults.warningDark,
+    super.warningForeground = MyStatusColorDefaults.warningForegroundDark,
+    super.success = MyStatusColorDefaults.successDark,
+    super.successForeground = MyStatusColorDefaults.successForegroundDark,
     super.border = const Color(0xff292524),
     super.input = const Color(0xff292524),
     super.ring = const Color(0xffd6d3d1),

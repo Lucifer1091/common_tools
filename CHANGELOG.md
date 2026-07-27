@@ -1,3 +1,10 @@
+## Unreleased
+
+- Expand `MyColorScheme` from 25 to 37 colors with the shadcn sidebar token
+  group and semantic warning/success foreground pairs.
+- Add matching light and dark defaults to all built-in color schemes.
+- Require the 12 new colors in direct construction and serialized color maps.
+
 ## 0.1.0
 
 - Redesign the repository as a private Git-tagged Flutter package.
