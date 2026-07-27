@@ -91,7 +91,6 @@ DateTimeIterables	lib/src/extensions/date/misc.dart
 DateTimeOperations	lib/src/extensions/date/operators.dart
 DateTimeOperators	lib/src/extensions/date/operators.dart
 DateTimeSetters	lib/src/extensions/date/sanitizers.dart
-DateValidatorX	lib/src/constants/validators.dart
 DateValidators	lib/src/extensions/date/validators.dart
 DeMessages	lib/src/utilities/timeago/messages/de_messages.dart
 DeShortMessages	lib/src/utilities/timeago/messages/de_messages.dart
@@ -138,7 +137,7 @@ FocusWidgetBuilder	lib/src/widgets/form/focusable.dart
 FocusableControlBuilder	lib/src/widgets/builders/focusable_control_builder.dart
 FocusableControlState	lib/src/widgets/builders/focusable_control_builder.dart
 ForbiddenNetworkException	lib/src/network/core/network_exception.dart
-Formatters	lib/src/constants/input_formatters.dart
+Formatters	lib/src/constants/input_format.dart
 FrMessages	lib/src/utilities/timeago/messages/fr_messages.dart
 FrShortMessages	lib/src/utilities/timeago/messages/fr_messages.dart
 FractionPaginationBuilder	lib/src/widgets/components/swiper/flutter_swiper/src/swiper_pagination.dart
@@ -182,10 +181,10 @@ IndexController	lib/src/widgets/components/swiper/flutter_swiper/src/transformer
 IndexedPredicate	lib/src/constants/types.dart
 InfiniteProgressMixin	lib/src/widgets/components/loading/indicators/infinite_progress.dart
 InfoWidget	lib/src/widgets/components/popover/info_widget.dart
-InputFormat	lib/src/constants/input_formatters.dart
+InputFormat	lib/src/constants/input_format.dart
 IntCallback	lib/src/constants/types.dart
 InvalidConfigurationError	lib/src/extensions/string/string_similarity.dart
-IpAddressInputFormatter	lib/src/constants/input_formatters.dart
+IpAddressInputFormatter	lib/src/constants/input_format.dart
 IsEqual	lib/src/constants/types.dart
 ItMessages	lib/src/utilities/timeago/messages/it_messages.dart
 ItShortMessages	lib/src/utilities/timeago/messages/it_messages.dart
@@ -236,7 +235,7 @@ LongPressEndDetailsExtension	lib/src/widgets/common/my_gesture_detector.dart
 LongPressMoveUpdateDetailsExtension	lib/src/widgets/common/my_gesture_detector.dart
 LongPressStartDetailsExtension	lib/src/widgets/common/my_gesture_detector.dart
 LookupMessages	lib/src/utilities/timeago/messages/lookupmessages.dart
-LowerCaseTextInputFormatter	lib/src/constants/input_formatters.dart
+LowerCaseTextInputFormatter	lib/src/constants/input_format.dart
 MapBasics	lib/src/extensions/map.dart
 MapExt	lib/src/extensions/map.dart
 MapGetOrElse	lib/src/extensions/map.dart
@@ -346,6 +345,7 @@ MyCollapseStyle	lib/src/widgets/components/collapse/my_collapse.dart
 MyColorScheme	lib/src/themes/my_color_scheme.dart
 MyColorSchemeMaterialExtension	lib/src/themes/my_material_theme.dart
 MyColorSwitcher	lib/src/themes/my_color_switcher.dart
+MyColorSwitcherOption	lib/src/themes/my_color_switcher.dart
 MyColors	lib/src/themes/my_colors.dart
 MyContentDirection	lib/src/widgets/components/checkbox/my_check_box.dart
 MyCupertinoSwitch	lib/src/widgets/components/switch/my_cupertino_switch.dart
@@ -690,8 +690,8 @@ NetworkRequest	lib/src/network/core/network_request.dart
 NetworkResponse	lib/src/network/core/network_response.dart
 NlMessages	lib/src/utilities/timeago/messages/nl_messages.dart
 NlShortMessages	lib/src/utilities/timeago/messages/nl_messages.dart
-NoLeadingSpaceFormatter	lib/src/constants/input_formatters.dart
-NoSpaceFormatter	lib/src/constants/input_formatters.dart
+NoLeadingSpaceFormatter	lib/src/constants/input_format.dart
+NoSpaceFormatter	lib/src/constants/input_format.dart
 NoThumbScrollBehavior	lib/src/themes/my_scroll_wrapper.dart
 NoWaveBehavior	lib/src/widgets/components/picker/no_wave_behavior.dart
 NonePainter	lib/src/widgets/components/swiper/flutter_swiper/src/flutter_page_indicator/flutter_page_indicator.dart
@@ -855,7 +855,6 @@ TextStyleX	lib/src/extensions/widget.dart
 ThMessages	lib/src/utilities/timeago/messages/th_messages.dart
 ThShortMessages	lib/src/utilities/timeago/messages/th_messages.dart
 ThemeColors	lib/src/constants/theme_colors.dart
-ThresholdValidator	lib/src/constants/validators.dart
 Throttler	lib/src/utilities/debouncer.dart
 TimeAgo	lib/src/utilities/timeago/timeago.dart
 TimeConversions	lib/src/extensions/date/time.dart
@@ -873,15 +872,13 @@ TrMessages	lib/src/utilities/timeago/messages/tr_messages.dart
 TrShortMessages	lib/src/utilities/timeago/messages/tr_messages.dart
 Transformer	lib/src/constants/types.dart
 TrimMode	lib/src/widgets/components/text/read_more_text.dart
-UnMatchValidator	lib/src/constants/validators.dart
 UnaryOperator	lib/src/constants/types.dart
 UnauthorizedNetworkException	lib/src/network/core/network_exception.dart
 UnboundedStack	lib/src/data_types/stack.dart
 UnknownNetworkException	lib/src/network/core/network_exception.dart
-UpperCaseTextInputFormatter	lib/src/constants/input_formatters.dart
+UpperCaseTextInputFormatter	lib/src/constants/input_format.dart
 UrlLauncher	lib/src/utilities/url_launcher/url_launcher.dart
 ValidationNetworkException	lib/src/network/core/network_exception.dart
-Validators	lib/src/constants/validators.dart
 ValueBuilder	lib/src/widgets/builders/value_builder.dart
 ValueBuilderCallback	lib/src/widgets/builders/value_builder.dart
 ValueLayoutBuilder	lib/src/widgets/builders/value_layout_builder.dart

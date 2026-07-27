@@ -20,16 +20,19 @@ class MyColorSwitcher extends StatelessWidget {
     required this.onChanged,
     required this.onClose,
     super.key,
+    this.options,
   });
 
   final String selectedColor;
   final ValueChanged<String> onChanged;
   final VoidCallback onClose;
+  final List<MyColorSwitcherOption>? options;
 
   @override
   Widget build(BuildContext context) {
     final colors = context.colorScheme;
     final selected = selectedColor.toLowerCase();
+    final colorOptions = options ?? MyColorSwitcherOption.defaults;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -76,16 +79,15 @@ class MyColorSwitcher extends StatelessWidget {
                   spacing: 12,
                   runSpacing: 12,
                   children: [
-                    for (final scheme in MyColorScheme.schemes)
+                    for (final option in colorOptions)
                       Builder(
                         builder: (context) {
-                          final previewColor = MyColorScheme.fromName(
-                            scheme,
-                            brightness: colors.brightness,
-                          ).primary;
+                          final previewColor = option
+                              .resolve(brightness: colors.brightness)
+                              .primary;
 
                           return _ColorItem(
-                            title: scheme.capitalize ?? scheme,
+                            title: option.label,
                             swatchColor: previewColor,
                             borderGradientColors:
                                 switch (context.colorScheme.brightness) {
@@ -96,10 +98,10 @@ class MyColorSwitcher extends StatelessWidget {
                                   Brightness.dark =>
                                     MyThemeSwitcher.darkBorderGradient,
                                 },
-                            isSelected: selected == scheme.toLowerCase(),
+                            isSelected: selected == option.value.toLowerCase(),
                             onTap: () {
-                              if (selected != scheme.toLowerCase()) {
-                                onChanged(scheme);
+                              if (selected != option.value.toLowerCase()) {
+                                onChanged(option.value);
                               }
                             },
                           );
@@ -114,6 +116,38 @@ class MyColorSwitcher extends StatelessWidget {
       ),
     );
   }
+}
+
+@immutable
+class MyColorSwitcherOption {
+  const MyColorSwitcherOption({
+    required this.value,
+    required this.label,
+    required this.schemeBuilder,
+  });
+
+  MyColorSwitcherOption.builtIn(String name)
+    : this(
+        value: name,
+        label: name.capitalize ?? name,
+        schemeBuilder: (brightness) {
+          return MyColorScheme.fromName(name, brightness: brightness);
+        },
+      );
+
+  final String value;
+  final String label;
+  final MyColorScheme Function(Brightness brightness) schemeBuilder;
+
+  MyColorScheme resolve({required Brightness brightness}) {
+    return schemeBuilder(brightness);
+  }
+
+  static final List<MyColorSwitcherOption> defaults =
+      List<MyColorSwitcherOption>.unmodifiable([
+        for (final scheme in MyColorScheme.schemes)
+          MyColorSwitcherOption.builtIn(scheme),
+      ]);
 }
 
 class _ColorItem extends StatefulWidget {
@@ -187,6 +221,7 @@ class _ColorItemState extends State<_ColorItem> with TickerProviderStateMixin {
 
     return AnimatedOnTap(
       onTap: widget.onTap,
+      behavior: HitTestBehavior.opaque,
       child: CustomPaint(
         foregroundPainter: _BorderPainter(
           colors: widget.borderGradientColors,

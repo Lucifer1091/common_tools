@@ -1,4 +1,4 @@
-export 'input_formatters.dart';
+export 'input_format.dart';
 export 'my_radius.dart';
 export 'regex.dart';
 export 'shadows.dart';

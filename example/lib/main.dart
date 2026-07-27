@@ -1,11 +1,12 @@
+import 'package:example/common_tools_catalog.dart';
 import 'package:example/theme_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'base/example_route.dart';
 import 'config.dart';
+import 'example_color_schemes.dart';
 import 'home.dart';
-import 'package:example/common_tools_catalog.dart';
 
 void main() {
   Logger.configure();
@@ -26,8 +27,11 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeState = ref.watch(themeProvider);
     final typography = const MyTypography.geist();
-    final lightScheme = MyColorScheme.fromName(themeState.color);
-    final darkScheme = MyColorScheme.fromName(
+    final lightScheme = resolveExampleColorScheme(
+      themeState.color,
+      brightness: Brightness.light,
+    );
+    final darkScheme = resolveExampleColorScheme(
       themeState.color,
       brightness: Brightness.dark,
     );

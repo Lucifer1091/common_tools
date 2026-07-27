@@ -42,8 +42,11 @@ toast/loading controllers and package localization.
 ```dart
 MaterialApp(
   builder: (context, child) => MyUILayer(
-    theme: MyColorScheme.light(),
-    darkTheme: MyColorScheme.dark(),
+    theme: MyColorScheme.fromName('blue'),
+    darkTheme: MyColorScheme.fromName(
+      'blue',
+      brightness: Brightness.dark,
+    ),
     child: child,
     translationsResolver: (locale) {
       // Return null to use the built-in English fallback.
@@ -52,6 +55,35 @@ MaterialApp(
   ),
 );
 ```
+
+## Provide an app-owned color scheme
+
+Apps can keep their own brand palettes outside this package and pass complete
+`MyColorScheme` values into both Material and `MyUILayer`:
+
+```dart
+final base = MyColorScheme.fromName('stone');
+final brandScheme = base.copyWith(
+  primary: const Color(0xFF983127),
+  primaryForeground: const Color(0xFFFAFAF9),
+  ring: const Color(0xFF983127),
+  selection: const Color(0xFF983127).withValues(alpha: .28),
+  chart1: const Color(0xFF983127),
+  chart2: const Color(0xFFB0A06C),
+  chart3: const Color(0xFF000000),
+);
+
+MaterialApp(
+  theme: brandScheme.toMaterialTheme(),
+  builder: (context, child) => MyUILayer(
+    theme: brandScheme,
+    child: child,
+  ),
+);
+```
+
+For a color picker, pass custom `MyColorSwitcherOption` values to
+`MyColorSwitcher` and resolve them in the consuming app.
 
 Overlay calls require a context below `MyUILayer`:
 

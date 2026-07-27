@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import '../example_color_schemes.dart';
+
 class MyAppBar extends ConsumerWidget implements PreferredSizeWidget {
   const MyAppBar({super.key, this.title, this.titleWidget})
     : assert(
@@ -87,6 +89,7 @@ class MyAppBar extends ConsumerWidget implements PreferredSizeWidget {
 
               return MyColorSwitcher(
                 selectedColor: theme.color,
+                options: exampleColorSwitcherOptions,
                 onChanged: notifier.setColor,
                 onClose: () => Navigator.of(context).pop(),
               );
