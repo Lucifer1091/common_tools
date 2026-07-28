@@ -27,7 +27,7 @@ import 'page/my_divider_page.dart';
 import 'page/my_drawer_page.dart';
 import 'page/my_select_page.dart';
 import 'page/my_errors_page.dart';
-import 'page/td_font_page.dart';
+import 'page/my_font_page.dart';
 import 'page/my_footer_page.dart';
 import 'page/my_image_page.dart';
 import 'page/my_image_viewer_page.dart';
