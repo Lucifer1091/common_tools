@@ -60,7 +60,7 @@ import 'page/my_tabs_page.dart';
 import 'page/my_tag_page.dart';
 import 'page/my_text_page.dart';
 import 'page/my_textarea_page.dart';
-import 'page/td_theme_page.dart';
+import 'page/my_theme_page.dart';
 import 'page/my_time_counter_page.dart';
 import 'page/my_toast_page.dart';
 // import 'page/td_tree_select_page.dart';
@@ -416,7 +416,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'Colors',
       name: 'theme_colors',
-      pageBuilder: _wrapInheritedTheme((context) => const TDThemeColorsPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyThemeColorsPage()),
     ),
     ExamplePageModel(
       text: 'Fonts',
