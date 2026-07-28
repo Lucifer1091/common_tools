@@ -119,8 +119,8 @@ class _MyThemeColorsPageState extends State<MyThemeColorsPage> {
       const _GeneratedSchemeSpec(MyBaseColor.taupe, MyAccentColor.brown),
       const _GeneratedSchemeSpec(MyBaseColor.mist, MyAccentColor.gold),
       const _GeneratedSchemeSpec(MyBaseColor.olive, MyAccentColor.lime),
-      const _GeneratedSchemeSpec(MyBaseColor.slate, MyAccentColor.red),
-      const _GeneratedSchemeSpec(MyBaseColor.gray, MyAccentColor.violet),
+      const _GeneratedSchemeSpec(MyBaseColor.zinc, MyAccentColor.red),
+      const _GeneratedSchemeSpec(MyBaseColor.stone, MyAccentColor.violet),
     ];
 
     return _Surface(

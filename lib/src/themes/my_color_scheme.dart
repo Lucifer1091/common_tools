@@ -9,7 +9,6 @@ import './color_schemes/cyan.dart';
 import './color_schemes/emerald.dart';
 import './color_schemes/fuchsia.dart';
 import './color_schemes/gold.dart';
-import './color_schemes/gray.dart';
 import './color_schemes/green.dart';
 import './color_schemes/indigo.dart';
 import './color_schemes/lime.dart';
@@ -23,7 +22,6 @@ import './color_schemes/purple.dart';
 import './color_schemes/red.dart';
 import './color_schemes/rose.dart';
 import './color_schemes/sky.dart';
-import './color_schemes/slate.dart';
 import './color_schemes/stone.dart';
 import './color_schemes/taupe.dart';
 import './color_schemes/teal.dart';
@@ -31,21 +29,9 @@ import './color_schemes/violet.dart';
 import './color_schemes/yellow.dart';
 import './color_schemes/zinc.dart';
 
-enum MyBaseColor {
-  slate,
-  gray,
-  neutral,
-  stone,
-  zinc,
-  mauve,
-  olive,
-  mist,
-  taupe,
-}
+enum MyBaseColor { neutral, stone, zinc, mauve, olive, mist, taupe }
 
 enum MyAccentColor {
-  slate,
-  gray,
   neutral,
   stone,
   zinc,
@@ -146,10 +132,6 @@ class MyColorScheme {
         brightness == Brightness.light
             ? const MyGoldColorScheme.light()
             : const MyGoldColorScheme.dark(),
-      'gray' =>
-        brightness == Brightness.light
-            ? const MyGrayColorScheme.light()
-            : const MyGrayColorScheme.dark(),
       'green' =>
         brightness == Brightness.light
             ? const MyGreenColorScheme.light()
@@ -202,10 +184,6 @@ class MyColorScheme {
         brightness == Brightness.light
             ? const MySkyColorScheme.light()
             : const MySkyColorScheme.dark(),
-      'slate' =>
-        brightness == Brightness.light
-            ? const MySlateColorScheme.light()
-            : const MySlateColorScheme.dark(),
       'stone' =>
         brightness == Brightness.light
             ? const MyStoneColorScheme.light()
@@ -230,8 +208,10 @@ class MyColorScheme {
         brightness == Brightness.light
             ? const MyZincColorScheme.light()
             : const MyZincColorScheme.dark(),
-
-      _ => throw Exception('Invalid color scheme name'),
+      _ =>
+        brightness == Brightness.light
+            ? const MyBlueColorScheme.light()
+            : const MyBlueColorScheme.dark(),
     };
   }
 
