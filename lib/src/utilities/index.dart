@@ -5,7 +5,6 @@ export 'debouncer.dart';
 export 'faker.dart';
 export 'guid.dart';
 export 'in_memory_cache.dart';
-export 'isolate_parser.dart';
 export 'logger.dart';
 export 'my_platform.dart';
 export 'system.dart';

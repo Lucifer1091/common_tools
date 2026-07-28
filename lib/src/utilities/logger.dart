@@ -1,19 +1,42 @@
-import 'package:logger/logger.dart' as logger;
+// ignore_for_file: strict_top_level_inference, inference_failure_on_untyped_parameter
 
-late logger.Logger _logger, _logger5, _logger10;
+import 'package:logger/logger.dart';
 
-logger.Logger get log => _logger;
+final logger = _Logger();
 
-logger.Logger get log5 => _logger5;
+class _Logger {
+  late Logger _logger, _logger12;
 
-logger.Logger get log10 => _logger10;
+  _Logger() {
+    _logger = Logger(printer: PrettyPrinter(methodCount: 4));
+    _logger12 = Logger(printer: PrettyPrinter(methodCount: 12));
+  }
 
-class Logger {
-  Logger._();
+  void debug(message, {bool showDetails = false}) {
+    showDetails ? _logger12.d(message) : _logger.d(message);
+  }
 
-  static void configure() {
-    _logger = logger.Logger(printer: logger.PrettyPrinter(methodCount: 0));
-    _logger5 = logger.Logger(printer: logger.PrettyPrinter(methodCount: 5));
-    _logger10 = logger.Logger(printer: logger.PrettyPrinter(methodCount: 10));
+  void trace(message, {bool showDetails = false}) {
+    showDetails ? _logger12.t(message) : _logger.t(message);
+  }
+
+  void error(message, {StackTrace? stackTrace, bool showDetails = false}) {
+    showDetails
+        ? _logger12.e(message, stackTrace: stackTrace)
+        : _logger.e(message, stackTrace: stackTrace);
+  }
+
+  void fatal(message, {StackTrace? stackTrace, bool showDetails = false}) {
+    showDetails
+        ? _logger12.f(message, stackTrace: stackTrace)
+        : _logger.f(message, stackTrace: stackTrace);
+  }
+
+  void info(message, {bool showDetails = false}) {
+    showDetails ? _logger12.i(message) : _logger.i(message);
+  }
+
+  void warn(message, {bool showDetails = false}) {
+    showDetails ? _logger12.w(message) : _logger.w(message);
   }
 }

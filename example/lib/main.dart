@@ -9,7 +9,6 @@ import 'example_color_schemes.dart';
 import 'home.dart';
 
 void main() {
-  Logger.configure();
   runApp(const ProviderScope(child: MyApp()));
 
   exampleMap.forEach((key, value) {

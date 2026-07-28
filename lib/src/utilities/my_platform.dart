@@ -62,6 +62,6 @@ class MyPlatform {
 
   /// Prints the current platform.
   static void printCurrentPlatform() {
-    log.f('Current platform: $currentPlatform');
+    logger.info('Current platform: $currentPlatform');
   }
 }
