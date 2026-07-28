@@ -43,7 +43,7 @@ import 'page/td_popover_page.dart';
 import 'page/td_popup_page.dart';
 import 'page/my_progress_page.dart';
 import 'page/my_radio_page.dart';
-import 'page/td_radius_page.dart';
+import 'page/my_radius_page.dart';
 import 'page/my_rating_page.dart';
 import 'page/td_refresh_page.dart';
 import 'page/my_result_page.dart';
@@ -421,12 +421,12 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'Fonts',
       name: 'font',
-      pageBuilder: _wrapInheritedTheme((context) => const TDFontPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyFontPage()),
     ),
     ExamplePageModel(
       text: 'Radius',
       name: 'radius',
-      pageBuilder: _wrapInheritedTheme((context) => const TDRadiusPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyRadiusPage()),
     ),
     ExamplePageModel(
       text: 'Shadows',

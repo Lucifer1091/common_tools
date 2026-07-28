@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import '../../base/example_widget.dart';
 
 /// Font example page.
-class TDFontPage extends StatelessWidget {
-  const TDFontPage({super.key});
+class MyFontPage extends StatelessWidget {
+  const MyFontPage({super.key});
 
   static const _fontWeights = <_FontWeightSpec>[
     _FontWeightSpec('100', FontWeight.w100, 'Thin'),
@@ -25,6 +25,8 @@ class TDFontPage extends StatelessWidget {
     return ExamplePage(
       padding: const EdgeInsets.all(8),
       title: myTitle(context),
+      desc:
+          'By default it uses Geist as default font family. To change it, add the local font to your project, for example in the /fonts directory. Then update your pubspec.yaml',
       exampleCodeGroup: 'fonts',
       children: [
         ExampleModule(
