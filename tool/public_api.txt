@@ -285,6 +285,7 @@ MyBadgeType	lib/src/widgets/components/badge/my_badge.dart
 MyBadgeWrapper	lib/src/widgets/components/badge/my_badge.dart
 MyBanner	lib/src/widgets/components/badge/my_banner.dart
 MyBannerPosition	lib/src/widgets/components/badge/my_banner.dart
+MyBlackColorScheme	lib/src/themes/color_schemes/black.dart
 MyBlueColorScheme	lib/src/themes/color_schemes/blue.dart
 MyBlur	lib/src/widgets/display/my_blur.dart
 MyBorder	lib/src/widgets/common/my_border.dart
@@ -295,6 +296,7 @@ MyBorderSideToBorderSide	lib/src/widgets/common/my_border.dart
 MyBorderToBorder	lib/src/widgets/common/my_border.dart
 MyBottomSheet	lib/src/overlays/bottom_sheets.dart
 MyBoxShadows	lib/src/constants/shadows.dart
+MyBrownColorScheme	lib/src/themes/color_schemes/brown.dart
 MyBrowserConfiguration	lib/src/utilities/url_launcher/url_launcher.dart
 MyBulletList	lib/src/widgets/lists/bullet_list.dart
 MyButton	lib/src/widgets/components/button/my_button.dart
@@ -410,6 +412,7 @@ MyFuchsiaColorScheme	lib/src/themes/color_schemes/fuchsia.dart
 MyFutureBuilder	lib/src/widgets/builders/future_builder.dart
 MyGestureDetector	lib/src/widgets/common/my_gesture_detector.dart
 MyGlobalAnchor	lib/src/widgets/common/portal.dart
+MyGoldColorScheme	lib/src/themes/color_schemes/gold.dart
 MyGrayColorScheme	lib/src/themes/color_schemes/gray.dart
 MyGreenColorScheme	lib/src/themes/color_schemes/green.dart
 MyGridView	lib/src/widgets/lists/my_grid_view.dart

@@ -2,10 +2,13 @@ import 'package:flutter/widgets.dart';
 
 import '../extensions/string/converters.dart';
 import './color_schemes/amber.dart';
+import './color_schemes/black.dart';
 import './color_schemes/blue.dart';
+import './color_schemes/brown.dart';
 import './color_schemes/cyan.dart';
 import './color_schemes/emerald.dart';
 import './color_schemes/fuchsia.dart';
+import './color_schemes/gold.dart';
 import './color_schemes/gray.dart';
 import './color_schemes/green.dart';
 import './color_schemes/indigo.dart';
@@ -67,10 +70,18 @@ class MyColorScheme {
         brightness == Brightness.light
             ? const MyAmberColorScheme.light()
             : const MyAmberColorScheme.dark(),
+      'black' =>
+        brightness == Brightness.light
+            ? const MyBlackColorScheme.light()
+            : const MyBlackColorScheme.dark(),
       'blue' =>
         brightness == Brightness.light
             ? const MyBlueColorScheme.light()
             : const MyBlueColorScheme.dark(),
+      'brown' =>
+        brightness == Brightness.light
+            ? const MyBrownColorScheme.light()
+            : const MyBrownColorScheme.dark(),
       'cyan' =>
         brightness == Brightness.light
             ? const MyCyanColorScheme.light()
@@ -83,6 +94,10 @@ class MyColorScheme {
         brightness == Brightness.light
             ? const MyFuchsiaColorScheme.light()
             : const MyFuchsiaColorScheme.dark(),
+      'gold' =>
+        brightness == Brightness.light
+            ? const MyGoldColorScheme.light()
+            : const MyGoldColorScheme.dark(),
       'gray' =>
         brightness == Brightness.light
             ? const MyGrayColorScheme.light()
@@ -547,10 +562,13 @@ class MyColorScheme {
 
   static const List<String> schemes = <String>[
     'amber',
+    'black',
     'blue',
+    'brown',
     'cyan',
     'emerald',
     'fuchsia',
+    'gold',
     'gray',
     'green',
     'indigo',

@@ -18,3 +18,11 @@ Theme construction and Lucide icon APIs are unchanged.
 
 - `warning` and `warningForeground`
 - `success` and `successForeground`
+
+The example-owned AAGSA color schemes are now package built-ins:
+
+- Replace `aagsa-red` with `brown`.
+- Replace `aagsa-gold` with `gold`.
+- Replace `aagsa-neutral` with `black`.
+
+The old `aagsa-*` identifiers are intentionally not kept as aliases.

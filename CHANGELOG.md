@@ -1,9 +1,14 @@
 ## Unreleased
 
-- Expand `MyColorScheme` from 25 to 37 colors with the shadcn sidebar token
-  group and semantic warning/success foreground pairs.
+- Promote the example-owned AAGSA schemes to built-in package schemes named
+  `brown`, `gold`, and `black`.
+- Remove the example app's `aagsa-red`, `aagsa-gold`, and `aagsa-neutral`
+  scheme IDs; use the new built-in names instead.
+- Expand `MyColorScheme` from 25 to 29 colors with semantic warning/success
+  foreground pairs.
 - Add matching light and dark defaults to all built-in color schemes.
-- Require the 12 new colors in direct construction and serialized color maps.
+- Require the 4 new status colors in direct construction and serialized color
+  maps.
 
 ## 0.1.0
 

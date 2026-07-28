@@ -1,8 +1,11 @@
 export 'amber.dart';
+export 'black.dart';
 export 'blue.dart';
+export 'brown.dart';
 export 'cyan.dart';
 export 'emerald.dart';
 export 'fuchsia.dart';
+export 'gold.dart';
 export 'gray.dart';
 export 'green.dart';
 export 'indigo.dart';

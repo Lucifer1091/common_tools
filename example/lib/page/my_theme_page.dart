@@ -2,7 +2,6 @@ import 'package:example/common_tools_catalog.dart';
 import 'package:flutter/material.dart';
 
 import '../base/example_widget.dart';
-import '../example_color_schemes.dart';
 
 /// Theme color example page.
 class MyThemeColorsPage extends StatefulWidget {
@@ -52,12 +51,6 @@ class _MyThemeColorsPageState extends State<MyThemeColorsPage> {
     _PaletteSpec('Rose', MyColors.rose),
   ];
 
-  static const _appSchemes = <_AppSchemeSpec>[
-    _AppSchemeSpec('AAGSA Red', aagsaRedColorValue),
-    _AppSchemeSpec('AAGSA Gold', aagsaGoldColorValue),
-    _AppSchemeSpec('AAGSA Neutral', aagsaNeutralColorValue),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return ExamplePage(
@@ -100,17 +93,6 @@ class _MyThemeColorsPageState extends State<MyThemeColorsPage> {
             ExampleItem(
               desc: 'Every package color scheme in light and dark mode.',
               builder: _buildBuiltInSchemes,
-              center: false,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-            ),
-          ],
-        ),
-        ExampleModule(
-          title: 'App color schemes',
-          children: [
-            ExampleItem(
-              desc: 'Custom schemes added by the example app.',
-              builder: _buildAppSchemes,
               center: false,
               padding: const EdgeInsets.symmetric(horizontal: 16),
             ),
@@ -217,29 +199,6 @@ class _MyThemeColorsPageState extends State<MyThemeColorsPage> {
       ),
     );
   }
-
-  Widget _buildAppSchemes(BuildContext context) {
-    return _Surface(
-      child: Wrap(
-        spacing: 12,
-        runSpacing: 12,
-        children: [
-          for (final scheme in _appSchemes)
-            _SchemeCard(
-              title: scheme.label,
-              light: resolveExampleColorScheme(
-                scheme.value,
-                brightness: Brightness.light,
-              ),
-              dark: resolveExampleColorScheme(
-                scheme.value,
-                brightness: Brightness.dark,
-              ),
-            ),
-        ],
-      ),
-    );
-  }
 }
 
 class _PaletteSpec {
@@ -247,13 +206,6 @@ class _PaletteSpec {
 
   final String name;
   final MaterialColor palette;
-}
-
-class _AppSchemeSpec {
-  const _AppSchemeSpec(this.label, this.value);
-
-  final String label;
-  final String value;
 }
 
 class _PaletteRow extends StatelessWidget {

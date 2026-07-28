@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'base/example_route.dart';
 import 'config.dart';
-import 'example_color_schemes.dart';
 import 'home.dart';
 
 void main() {
@@ -26,11 +25,11 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeState = ref.watch(themeProvider);
     final typography = const MyTypography.geist();
-    final lightScheme = resolveExampleColorScheme(
+    final lightScheme = MyColorScheme.fromName(
       themeState.color,
       brightness: Brightness.light,
     );
-    final darkScheme = resolveExampleColorScheme(
+    final darkScheme = MyColorScheme.fromName(
       themeState.color,
       brightness: Brightness.dark,
     );
