@@ -1,15 +1,13 @@
 ## Unreleased
 
-- Promote the example-owned AAGSA schemes to built-in package schemes named
-  `brown`, `gold`, and `black`.
-- Remove the example app's `aagsa-red`, `aagsa-gold`, and `aagsa-neutral`
-  scheme IDs; use the new built-in names instead.
 - Add shadcn-style base/accent color composition through `MyBaseColor`,
   `MyAccentColor`, and `MyColorScheme.fromParts`.
 - Add `mauve`, `olive`, `mist`, and `taupe` Tailwind palette constants and
   base-only color scheme presets.
 - Export `MyMauveColorScheme`, `MyOliveColorScheme`, `MyMistColorScheme`, and
   `MyTaupeColorScheme` as first-class built-in scheme classes.
+- Replace the separate `MyThemeSwitcher` and `MyColorSwitcher` widgets with a
+  single base/accent-aware `MyThemePicker` and dialog API.
 - Align overlapping built-in semantic tokens with current official shadcn
   OKLCH values converted to Flutter sRGB colors, excluding sidebar/radius.
 - Update built-in chart palettes to the official shadcn chart token values.
@@ -19,6 +17,7 @@
 - Require the 4 new status colors in direct construction and serialized color
   maps.
 - Keep official sidebar tokens out of the serialized color-scheme contract.
+- Keep `slate` and `gray` out of the base/accent picker path.
 
 ## 0.1.0
 

@@ -27,8 +27,6 @@ class _MyThemeColorsPageState extends State<MyThemeColorsPage> {
   ];
 
   static const _palettes = <_PaletteSpec>[
-    _PaletteSpec('Slate', MyColors.slate),
-    _PaletteSpec('Gray', MyColors.gray),
     _PaletteSpec('Zinc', MyColors.zinc),
     _PaletteSpec('Neutral', MyColors.neutral),
     _PaletteSpec('Stone', MyColors.stone),
@@ -154,7 +152,7 @@ class _MyThemeColorsPageState extends State<MyThemeColorsPage> {
             spacing: 10,
             runSpacing: 10,
             children: [
-              for (final accent in MyColorScheme.accentColors)
+              for (final accent in MyThemePicker.explicitAccentColors)
                 _AccentChip(accent: accent),
             ],
           ),

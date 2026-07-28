@@ -229,7 +229,6 @@ ListExtensions1	lib/src/extensions/iterable/operators.dart
 ListUtils	lib/src/extensions/iterable/operators.dart
 ListenablesBuilder	lib/src/widgets/builders/listenables_builder.dart
 LogLevel	lib/src/network/core/log_level.dart
-Logger	lib/src/utilities/logger.dart
 LongPressDownDetailsExtension	lib/src/widgets/common/my_gesture_detector.dart
 LongPressEndDetailsExtension	lib/src/widgets/common/my_gesture_detector.dart
 LongPressMoveUpdateDetailsExtension	lib/src/widgets/common/my_gesture_detector.dart
@@ -348,8 +347,6 @@ MyCollapsePanel	lib/src/widgets/components/collapse/my_collapse_panel.dart
 MyCollapseStyle	lib/src/widgets/components/collapse/my_collapse.dart
 MyColorScheme	lib/src/themes/my_color_scheme.dart
 MyColorSchemeMaterialExtension	lib/src/themes/my_material_theme.dart
-MyColorSwitcher	lib/src/themes/my_color_switcher.dart
-MyColorSwitcherOption	lib/src/themes/my_color_switcher.dart
 MyColors	lib/src/themes/my_colors.dart
 MyContentDirection	lib/src/widgets/components/checkbox/my_check_box.dart
 MyCupertinoSwitch	lib/src/widgets/components/switch/my_cupertino_switch.dart
@@ -415,7 +412,6 @@ MyFutureBuilder	lib/src/widgets/builders/future_builder.dart
 MyGestureDetector	lib/src/widgets/common/my_gesture_detector.dart
 MyGlobalAnchor	lib/src/widgets/common/portal.dart
 MyGoldColorScheme	lib/src/themes/color_schemes/gold.dart
-MyGrayColorScheme	lib/src/themes/color_schemes/gray.dart
 MyGreenColorScheme	lib/src/themes/color_schemes/green.dart
 MyGridView	lib/src/widgets/lists/my_grid_view.dart
 MyGridViewBuilder	lib/src/widgets/lists/my_grid_view.dart
@@ -574,7 +570,6 @@ MySkeletonRowColStyle	lib/src/widgets/components/skeleton/my_skeleton_rowcol.dar
 MySkeletonStyle	lib/src/widgets/components/skeleton/my_skeleton_rowcol.dart
 MySkeletonTheme	lib/src/widgets/components/skeleton/my_skeleton.dart
 MySkyColorScheme	lib/src/themes/color_schemes/sky.dart
-MySlateColorScheme	lib/src/themes/color_schemes/slate.dart
 MySlideFrom	lib/src/widgets/components/popup/my_popup_route.dart
 MySlidePopupRoute	lib/src/widgets/components/popup/my_popup_route.dart
 MySlider	lib/src/widgets/components/slider/my_slider.dart
@@ -647,7 +642,9 @@ MyTheme	lib/src/themes/my_theme.dart
 MyThemeAnimation	lib/src/themes/my_theme.dart
 MyThemeData	lib/src/themes/my_theme.dart
 MyThemeDataTween	lib/src/themes/my_theme.dart
-MyThemeSwitcher	lib/src/themes/my_theme_switcher.dart
+MyThemePicker	lib/src/themes/my_theme_picker.dart
+MyThemePickerDialog	lib/src/themes/my_theme_picker.dart
+MyThemePickerValue	lib/src/themes/my_theme_picker.dart
 MyThumbnailAlignment	lib/src/widgets/components/image_viewer/my_image_viewer.dart
 MyThumbnailShape	lib/src/widgets/components/image_viewer/my_image_viewer.dart
 MyThumbnailStyle	lib/src/widgets/components/image_viewer/my_image_viewer.dart

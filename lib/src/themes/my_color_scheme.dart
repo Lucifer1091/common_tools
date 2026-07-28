@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../extensions/string/converters.dart';
 import './color_schemes/amber.dart';
-import './color_schemes/black.dart';
 import './color_schemes/blue.dart';
 import './color_schemes/brown.dart';
 import './color_schemes/cyan.dart';
@@ -104,10 +103,6 @@ class MyColorScheme {
         brightness == Brightness.light
             ? const MyAmberColorScheme.light()
             : const MyAmberColorScheme.dark(),
-      'black' =>
-        brightness == Brightness.light
-            ? const MyBlackColorScheme.light()
-            : const MyBlackColorScheme.dark(),
       'blue' =>
         brightness == Brightness.light
             ? const MyBlueColorScheme.light()
@@ -208,10 +203,7 @@ class MyColorScheme {
         brightness == Brightness.light
             ? const MyZincColorScheme.light()
             : const MyZincColorScheme.dark(),
-      _ =>
-        brightness == Brightness.light
-            ? const MyBlueColorScheme.light()
-            : const MyBlueColorScheme.dark(),
+      _ => throw Exception('Unknown color scheme: $name'),
     };
   }
 
@@ -641,7 +633,6 @@ class MyColorScheme {
     'emerald',
     'fuchsia',
     'gold',
-    'gray',
     'green',
     'indigo',
     'lime',
@@ -655,7 +646,6 @@ class MyColorScheme {
     'red',
     'rose',
     'sky',
-    'slate',
     'stone',
     'taupe',
     'teal',

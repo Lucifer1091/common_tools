@@ -19,14 +19,6 @@ Theme construction and Lucide icon APIs are unchanged.
 - `warning` and `warningForeground`
 - `success` and `successForeground`
 
-The example-owned AAGSA color schemes are now package built-ins:
-
-- Replace `aagsa-red` with `brown`.
-- Replace `aagsa-gold` with `gold`.
-- Replace `aagsa-neutral` with `black`.
-
-The old `aagsa-*` identifiers are intentionally not kept as aliases.
-
 Base and accent colors can now be composed without changing the serialized
 color-scheme contract:
 
@@ -35,6 +27,11 @@ color-scheme contract:
 - Use `MyColorScheme.fromParts(base: MyBaseColor.mauve,
   accent: MyAccentColor.blue)` to keep mauve surfaces with blue brand tokens.
 - `MyColorScheme.toColorMap()` still emits 29 colors and no `sidebar*` keys.
+- Replace `MyThemeSwitcher` and `MyColorSwitcher` usage with `MyThemePicker`.
+  Store `ThemeMode`, `MyBaseColor`, and nullable `MyAccentColor` instead of a
+  single scheme-name string when you want shadcn-style composition.
+- Use `accentColor: null` for the picker default, which means “same as base”.
+- `slate` and `gray` are not part of the base/accent picker path.
 
 Overlapping built-in schemes now use current official shadcn token values
 converted from OKLCH to Flutter sRGB:

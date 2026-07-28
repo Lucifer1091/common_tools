@@ -29,18 +29,14 @@ class MyAppBar extends ConsumerWidget implements PreferredSizeWidget {
         Padding(
           padding: const EdgeInsets.only(right: 8),
           child: MyButton(
-            onTap: () => _showThemeSwitcher(context),
-            icon: theme.mode == ThemeMode.light
-                ? LucideIcons.sun
-                : LucideIcons.moon,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(right: 8),
-          child: MyButton(
-            onTap: () => _showColorSwitcher(context),
+            onTap: () => _showThemePicker(context),
             type: MyButtonType.primary,
-            text: theme.color.capitalize,
+            icon: switch (theme.mode) {
+              ThemeMode.system => LucideIcons.monitorSmartphone,
+              ThemeMode.light => LucideIcons.sun,
+              ThemeMode.dark => LucideIcons.moon,
+            },
+            text: theme.label,
           ),
         ),
       ],
@@ -50,50 +46,15 @@ class MyAppBar extends ConsumerWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
-  Future<void> _showThemeSwitcher(BuildContext context) async {
-    await MyBottomSheet.floating(
+  Future<void> _showThemePicker(BuildContext context) async {
+    final container = ProviderScope.containerOf(context, listen: false);
+    final notifier = container.read(themeProvider.notifier);
+    final theme = container.read(themeProvider);
+    final value = await MyThemePicker.showDialog(
       context: context,
-      builder: (context) {
-        return SafeArea(
-          minimum: const EdgeInsets.only(bottom: 34),
-          child: Consumer(
-            builder: (context, ref, _) {
-              final theme = ref.watch(themeProvider);
-              final notifier = ref.read(themeProvider.notifier);
-
-              return MyThemeSwitcher(
-                selectedMode: theme.mode,
-                onChanged: notifier.setMode,
-                onClose: () => Navigator.of(context).pop(),
-              );
-            },
-          ),
-        );
-      },
+      value: theme.pickerValue,
     );
-  }
 
-  Future<void> _showColorSwitcher(BuildContext context) async {
-    await MyBottomSheet.floating(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) {
-        return SafeArea(
-          minimum: const EdgeInsets.only(bottom: 34),
-          child: Consumer(
-            builder: (context, ref, _) {
-              final theme = ref.watch(themeProvider);
-              final notifier = ref.read(themeProvider.notifier);
-
-              return MyColorSwitcher(
-                selectedColor: theme.color,
-                onChanged: notifier.setColor,
-                onClose: () => Navigator.of(context).pop(),
-              );
-            },
-          ),
-        );
-      },
-    );
+    if (value != null) notifier.setValue(value);
   }
 }

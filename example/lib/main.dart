@@ -25,14 +25,8 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeState = ref.watch(themeProvider);
     final typography = const MyTypography.geist();
-    final lightScheme = MyColorScheme.fromName(
-      themeState.color,
-      brightness: Brightness.light,
-    );
-    final darkScheme = MyColorScheme.fromName(
-      themeState.color,
-      brightness: Brightness.dark,
-    );
+    final lightScheme = themeState.colorScheme(brightness: Brightness.light);
+    final darkScheme = themeState.colorScheme(brightness: Brightness.dark);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,

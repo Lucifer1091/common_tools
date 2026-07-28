@@ -4,82 +4,101 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('default picker includes and selects package built-in schemes', (
+  testWidgets('theme picker selects mode, base, and accent options', (
     tester,
   ) async {
-    String selectedColor = 'none';
+    var value = const ThemeState().pickerValue;
 
     tester.view.devicePixelRatio = 1;
-    tester.view.physicalSize = const Size(1200, 1000);
+    tester.view.physicalSize = const Size(1200, 1200);
     addTearDown(tester.view.resetDevicePixelRatio);
     addTearDown(tester.view.resetPhysicalSize);
 
     await tester.pumpWidget(
-      Directionality(
-        textDirection: TextDirection.ltr,
-        child: MyTheme(
+      MaterialApp(
+        home: MyTheme(
           data: MyThemeData(
-            colorScheme: MyColorScheme.fromName('blue'),
+            colorScheme: MyColorScheme.fromParts(
+              base: MyBaseColor.neutral,
+              accent: MyAccentColor.blue,
+            ),
             typography: const MyTypography.geist(),
           ),
           child: StatefulBuilder(
             builder: (context, setState) {
-              return MyColorSwitcher(
-                selectedColor: selectedColor,
-                onChanged: (value) {
-                  setState(() => selectedColor = value);
-                },
-                onClose: () {},
+              return Scaffold(
+                body: SingleChildScrollView(
+                  child: MyThemePicker(
+                    selectedMode: value.mode,
+                    selectedBaseColor: value.baseColor,
+                    selectedAccentColor: value.accentColor,
+                    onModeChanged: (mode) {
+                      setState(() => value = value.copyWith(mode: mode));
+                    },
+                    onBaseColorChanged: (baseColor) {
+                      setState(
+                        () => value = value.copyWith(baseColor: baseColor),
+                      );
+                    },
+                    onAccentColorChanged: (accentColor) {
+                      setState(
+                        () => value = value.copyWith(
+                          accentColor: accentColor,
+                          clearAccentColor: accentColor == null,
+                        ),
+                      );
+                    },
+                  ),
+                ),
               );
             },
           ),
         ),
       ),
     );
-    await tester.pump(const Duration(milliseconds: 200));
 
-    expect(find.text('Brown'), findsOneWidget);
-    expect(find.text('Gold'), findsOneWidget);
-    expect(find.text('Black'), findsOneWidget);
+    expect(find.text('System'), findsOneWidget);
+    expect(find.text('Light'), findsOneWidget);
+    expect(find.text('Dark'), findsOneWidget);
+    expect(find.text('Slate'), findsNothing);
+    expect(find.text('Gray'), findsNothing);
     expect(
-      MyColorSwitcherOption.defaults.map((option) => option.value),
-      allOf([
-        contains('brown'),
-        contains('gold'),
-        contains('black'),
-        contains('mauve'),
-        contains('olive'),
-        contains('mist'),
-        contains('taupe'),
-        isNot(contains('aagsa-red')),
-        isNot(contains('aagsa-gold')),
-        isNot(contains('aagsa-neutral')),
-      ]),
+      find.byKey(const ValueKey('my_theme_picker.accent.same_as_base')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey('my_theme_picker.accent.neutral')),
+      findsNothing,
+    );
+    expect(
+      find.byKey(const ValueKey('my_theme_picker.accent.blue')),
+      findsOneWidget,
     );
 
-    for (final value in const ['brown', 'gold', 'black']) {
-      final option = find
-          .ancestor(
-            of: find.text(_labelFor(value)),
-            matching: find.byWidgetPredicate(
-              (widget) => widget.runtimeType.toString() == 'AnimatedOnTap',
-            ),
-          )
-          .first;
+    await tester.tap(find.text('Dark'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('my_theme_picker.base.taupe')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('my_theme_picker.accent.gold')));
+    await tester.pumpAndSettle();
 
-      final optionWidget = tester.widget(option) as dynamic;
-      (optionWidget.onTap as VoidCallback)();
-      await tester.pump();
-
-      expect(selectedColor, value);
-    }
+    expect(value.mode, ThemeMode.dark);
+    expect(value.baseColor, MyBaseColor.taupe);
+    expect(value.accentColor, MyAccentColor.gold);
   });
 
-  test('example app keeps blue as fresh-launch default', () {
-    expect(const ThemeState().color, 'blue');
-  });
-}
+  test(
+    'example app keeps neutral base with blue accent as fresh-launch default',
+    () {
+      const state = ThemeState();
 
-String _labelFor(String value) {
-  return value[0].toUpperCase() + value.substring(1);
+      expect(state.mode, ThemeMode.light);
+      expect(state.baseColor, MyBaseColor.neutral);
+      expect(state.accentColor, MyAccentColor.blue);
+      expect(
+        state.colorScheme().primary,
+        MyColorScheme.fromName('blue').primary,
+      );
+    },
+  );
 }
