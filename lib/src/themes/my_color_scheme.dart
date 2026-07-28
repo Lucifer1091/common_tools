@@ -57,7 +57,6 @@ enum MyAccentColor {
   rose,
   brown,
   gold,
-  black,
 }
 
 class MyColorScheme {
@@ -626,7 +625,6 @@ class MyColorScheme {
 
   static const List<String> schemes = <String>[
     'amber',
-    'black',
     'blue',
     'brown',
     'cyan',

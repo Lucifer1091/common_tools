@@ -66,6 +66,7 @@ void main() {
       find.byKey(const ValueKey('my_theme_picker.accent.same_as_base')),
       findsOneWidget,
     );
+    expect(find.text('Base'), findsOneWidget);
     expect(
       find.byKey(const ValueKey('my_theme_picker.accent.neutral')),
       findsNothing,

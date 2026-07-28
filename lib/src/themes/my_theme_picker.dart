@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import '../constants/my_radius.dart';
 import '../extensions/context/theme.dart';
 import '../extensions/context/typography.dart';
 import '../extensions/misc/color.dart';
@@ -14,6 +15,7 @@ import '../widgets/components/divider/my_divider.dart';
 import '../widgets/packages/gap/src/widgets/gap.dart';
 import './my_color_scheme.dart';
 import './my_theme.dart';
+import 'my_colors.dart';
 
 @immutable
 class MyThemePickerValue {
@@ -160,7 +162,7 @@ class MyThemePicker extends StatelessWidget {
             'Choose how the app feels: mode, foundation, and accent.',
             style: context.bodyMedium.copyWith(color: colors.mutedForeground),
           ),
-          const Gap(20),
+          const Gap(12),
           _ThemePreview(
             scheme: previewScheme,
             baseLabel: _enumLabel(selectedBaseColor),
@@ -168,76 +170,84 @@ class MyThemePicker extends StatelessWidget {
                 ? 'Same as base'
                 : _enumLabel(selectedAccentColor!),
           ),
-          const Gap(20),
+          const Gap(12),
           const MyDivider(),
-          const Gap(20),
+          const Gap(12),
           _SectionTitle(title: 'Mode', caption: _modeCaption(selectedMode)),
           const Gap(12),
           _ModeSelector(selectedMode: selectedMode, onChanged: onModeChanged),
-          const Gap(22),
+          const Gap(16),
           const _SectionTitle(
             title: 'Base color',
             caption: 'Restrained surfaces, text, borders, and focus rings.',
           ),
           const Gap(12),
-          Wrap(
-            spacing: 10,
-            runSpacing: 10,
-            children: [
-              for (final base in MyColorScheme.baseColors)
-                _ColorChoice(
-                  key: ValueKey('my_theme_picker.base.${base.name}'),
-                  label: _enumLabel(base),
-                  color: MyColorScheme.fromParts(
-                    base: base,
-                    brightness: previewBrightness,
-                  ).primary,
-                  selected: selectedBaseColor == base,
-                  semanticLabel: '${_enumLabel(base)} base color',
-                  onTap: () {
-                    if (selectedBaseColor != base) onBaseColorChanged(base);
-                  },
-                ),
-            ],
+          _ColorChoiceGrid(
+            itemCount: MyColorScheme.baseColors.length,
+            maxCrossAxisExtent: 56,
+            itemBuilder: (context, index) {
+              final base = MyColorScheme.baseColors[index];
+
+              return _ColorChoice(
+                key: ValueKey('my_theme_picker.base.${base.name}'),
+                label: _enumLabel(base),
+                color: MyColorScheme.fromParts(
+                  base: base,
+                  brightness: previewBrightness,
+                ).primary,
+                selected: selectedBaseColor == base,
+                semanticLabel: '${_enumLabel(base)} base color',
+                onTap: () {
+                  if (selectedBaseColor != base) onBaseColorChanged(base);
+                },
+              );
+            },
           ),
-          const Gap(22),
+          const Gap(18),
           const _SectionTitle(
             title: 'Accent color',
             caption: 'Primary actions, selection, and chart palette.',
           ),
           const Gap(12),
-          Wrap(
-            spacing: 10,
-            runSpacing: 10,
-            children: [
-              _ColorChoice(
-                key: const ValueKey('my_theme_picker.accent.same_as_base'),
-                label: 'Same as base',
-                color: MyColorScheme.fromParts(
-                  base: selectedBaseColor,
-                  brightness: previewBrightness,
-                ).primary,
-                selected: selectedAccentColor == null,
-                semanticLabel: 'Use ${_enumLabel(selectedBaseColor)} as accent',
-                onTap: () => onAccentColorChanged(null),
-              ),
-              for (final accent in explicitAccentColors)
-                _ColorChoice(
-                  key: ValueKey('my_theme_picker.accent.${accent.name}'),
-                  label: _enumLabel(accent),
-                  color: MyColorScheme.fromName(
-                    accent.name,
+          _ColorChoiceGrid(
+            itemCount: explicitAccentColors.length + 1,
+            maxCrossAxisExtent: 42,
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return _ColorChoice(
+                  key: const ValueKey('my_theme_picker.accent.same_as_base'),
+                  label: 'Base',
+                  tooltip: 'Same as base',
+                  color: MyColorScheme.fromParts(
+                    base: selectedBaseColor,
                     brightness: previewBrightness,
                   ).primary,
-                  selected: selectedAccentColor == accent,
-                  semanticLabel: '${_enumLabel(accent)} accent color',
-                  onTap: () {
-                    if (selectedAccentColor != accent) {
-                      onAccentColorChanged(accent);
-                    }
-                  },
-                ),
-            ],
+                  selected: selectedAccentColor == null,
+                  semanticLabel:
+                      'Same as base accent color. Uses '
+                      '${_enumLabel(selectedBaseColor)} as accent',
+                  onTap: () => onAccentColorChanged(null),
+                );
+              }
+
+              final accent = explicitAccentColors[index - 1];
+
+              return _ColorChoice(
+                key: ValueKey('my_theme_picker.accent.${accent.name}'),
+                label: _enumLabel(accent),
+                color: MyColorScheme.fromName(
+                  accent.name,
+                  brightness: previewBrightness,
+                ).primary,
+                selected: selectedAccentColor == accent,
+                semanticLabel: '${_enumLabel(accent)} accent color',
+                onTap: () {
+                  if (selectedAccentColor != accent) {
+                    onAccentColorChanged(accent);
+                  }
+                },
+              );
+            },
           ),
         ],
       ),
@@ -327,7 +337,7 @@ class _ModeSelector extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: colors.secondary,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: MyBorderRadius.large,
         border: Border.all(color: colors.border),
       ),
       child: Padding(
@@ -379,10 +389,10 @@ class _ModeOption extends StatelessWidget {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           curve: Curves.easeOut,
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: background,
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: MyBorderRadius.medium,
             boxShadow: selected
                 ? [
                     BoxShadow(
@@ -417,6 +427,34 @@ class _ModeOption extends StatelessWidget {
   }
 }
 
+class _ColorChoiceGrid extends StatelessWidget {
+  const _ColorChoiceGrid({
+    required this.itemCount,
+    required this.itemBuilder,
+    required this.maxCrossAxisExtent,
+  });
+
+  final int itemCount;
+  final Widget Function(BuildContext context, int index) itemBuilder;
+  final double maxCrossAxisExtent;
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.zero,
+      itemCount: itemCount,
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: maxCrossAxisExtent,
+        mainAxisSpacing: 6,
+        crossAxisSpacing: 6,
+      ),
+      itemBuilder: itemBuilder,
+    );
+  }
+}
+
 class _ColorChoice extends StatelessWidget {
   const _ColorChoice({
     required this.label,
@@ -425,6 +463,7 @@ class _ColorChoice extends StatelessWidget {
     required this.semanticLabel,
     required this.onTap,
     super.key,
+    this.tooltip,
   });
 
   final String label;
@@ -432,68 +471,37 @@ class _ColorChoice extends StatelessWidget {
   final bool selected;
   final String semanticLabel;
   final VoidCallback onTap;
+  final String? tooltip;
 
   @override
   Widget build(BuildContext context) {
     final colors = context.colorScheme;
-    final borderColor = selected ? colors.ring : colors.border;
-    final textColor = selected ? colors.foreground : colors.mutedForeground;
+    final borderColor = selected ? colors.primary : MyColors.transparent;
 
     return Semantics(
       button: true,
       selected: selected,
       label: semanticLabel,
-      child: AnimatedOnTap(
-        onTap: onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
-          curve: Curves.easeOut,
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-          decoration: BoxDecoration(
-            color: selected ? colors.accent : colors.secondary,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: borderColor, width: selected ? 1.5 : 1),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  color: color,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: colors.background.scaleAlpha(.6)),
-                  boxShadow: selected
-                      ? [
-                          BoxShadow(
-                            color: color.scaleAlpha(.35),
-                            blurRadius: 14,
-                            spreadRadius: 1,
-                          ),
-                        ]
-                      : null,
-                ),
-                child: SizedBox.square(
-                  dimension: 18,
-                  child: selected
-                      ? Icon(
-                          LucideIcons.check,
-                          size: 13,
-                          color: color.isDark
-                              ? Colors.white
-                              : const Color(0xff09090b),
-                        )
-                      : null,
-                ),
+      child: Tooltip(
+        message: tooltip ?? label,
+        child: AnimatedOnTap(
+          onTap: onTap,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 150),
+            curve: Curves.easeOut,
+            padding: const EdgeInsets.all(1.5),
+            decoration: BoxDecoration(
+              color: selected ? colors.accent : colors.secondary,
+              borderRadius: MyBorderRadius.medium,
+              border: Border.all(color: borderColor, width: selected ? 1.5 : 1),
+            ),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: color,
+                borderRadius: MyBorderRadius.small,
               ),
-              const Gap(8),
-              Text(
-                label,
-                style: context.titleSmall.copyWith(
-                  color: textColor,
-                  fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
-                ),
-              ),
-            ],
+              child: const SizedBox.square(dimension: 18),
+            ),
           ),
         ),
       ),
@@ -517,7 +525,7 @@ class _ThemePreview extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: scheme.background,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: MyBorderRadius.large,
         border: Border.all(color: scheme.border),
       ),
       child: Padding(
@@ -562,7 +570,7 @@ class _ThemePreview extends StatelessWidget {
             DecoratedBox(
               decoration: BoxDecoration(
                 color: scheme.card,
-                borderRadius: BorderRadius.circular(18),
+                borderRadius: MyBorderRadius.medium,
                 border: Border.all(color: scheme.border),
               ),
               child: Padding(

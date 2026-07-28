@@ -286,7 +286,6 @@ MyBadgeWrapper	lib/src/widgets/components/badge/my_badge.dart
 MyBanner	lib/src/widgets/components/badge/my_banner.dart
 MyBannerPosition	lib/src/widgets/components/badge/my_banner.dart
 MyBaseColor	lib/src/themes/my_color_scheme.dart
-MyBlackColorScheme	lib/src/themes/color_schemes/black.dart
 MyBlueColorScheme	lib/src/themes/color_schemes/blue.dart
 MyBlur	lib/src/widgets/display/my_blur.dart
 MyBorder	lib/src/widgets/common/my_border.dart
