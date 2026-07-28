@@ -36,8 +36,7 @@ import 'page/my_input_page.dart';
 import 'page/my_link_page.dart';
 import 'page/my_loader_page.dart';
 import 'page/my_lists_page.dart';
-import 'page/td_message_page.dart';
-import 'page/td_navbar_page.dart';
+import 'page/my_navbar_page.dart';
 import 'page/my_notice_bar_page.dart';
 import 'page/my_picker_page.dart';
 import 'page/td_popover_page.dart';
@@ -371,11 +370,6 @@ Map<String, List<ExamplePageModel>> exampleMap = {
       text: 'Loading',
       name: 'loading',
       pageBuilder: _wrapInheritedTheme((context) => const MyLoaderPage()),
-    ),
-    ExamplePageModel(
-      text: 'Message',
-      name: 'message',
-      pageBuilder: _wrapInheritedTheme((context) => const TDMessagePage()),
     ),
     ExamplePageModel(
       text: 'NoticeBar',
