@@ -474,7 +474,7 @@ class _MyOtpSlotState extends State<MyOtpSlot> {
 
     final defaultDecoration = MyDecoration(
       disableSecondaryBorder: true,
-      focusedBorder: MyBorder.all(color: theme.colorScheme.ring, width: 2),
+      focusedBorder: MyBorder.all(color: theme.colorScheme.primary, width: 2),
       border: MyBorder(
         top: MyBorderSide(color: theme.colorScheme.border, width: 1),
         bottom: MyBorderSide(color: theme.colorScheme.border, width: 1),

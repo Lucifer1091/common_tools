@@ -29,6 +29,10 @@ class MyColors {
     zinc,
     neutral,
     stone,
+    mauve,
+    olive,
+    mist,
+    taupe,
     red,
     orange,
     amber,
@@ -54,6 +58,10 @@ class MyColors {
     'Zinc': MyColors.zinc,
     'Neutral': MyColors.neutral,
     'Stone': MyColors.stone,
+    'Mauve': MyColors.mauve,
+    'Olive': MyColors.olive,
+    'Mist': MyColors.mist,
+    'Taupe': MyColors.taupe,
     'Red': MyColors.red,
     'Orange': MyColors.orange,
     'Amber': MyColors.amber,
@@ -171,6 +179,62 @@ class MyColors {
     800: Color(0xff292524),
     900: Color(0xff1c1917),
     950: Color(0xff0c0a09),
+  });
+
+  static const mauve = MaterialColor(0xff81758b, {
+    50: Color(0xfffafafb),
+    100: Color(0xfff4f2f6),
+    200: Color(0xffe5e1e8),
+    300: Color(0xffd0c9d5),
+    400: Color(0xffa69bae),
+    500: Color(0xff81758b),
+    600: Color(0xff675d70),
+    700: Color(0xff524959),
+    800: Color(0xff3d3642),
+    900: Color(0xff2a252e),
+    950: Color(0xff161218),
+  });
+
+  static const olive = MaterialColor(0xff6c8072, {
+    50: Color(0xfff9faf9),
+    100: Color(0xfff1f4f2),
+    200: Color(0xffdee5e0),
+    300: Color(0xffc4cfc8),
+    400: Color(0xff94a599),
+    500: Color(0xff6c8072),
+    600: Color(0xff56675b),
+    700: Color(0xff435147),
+    800: Color(0xff313c35),
+    900: Color(0xff222a24),
+    950: Color(0xff101512),
+  });
+
+  static const mist = MaterialColor(0xff648085, {
+    50: Color(0xfff9fafb),
+    100: Color(0xfff0f4f5),
+    200: Color(0xffdce5e6),
+    300: Color(0xffc1cfd2),
+    400: Color(0xff8da5a9),
+    500: Color(0xff648085),
+    600: Color(0xff4f676b),
+    700: Color(0xff3d5155),
+    800: Color(0xff2d3c3f),
+    900: Color(0xff1e2a2c),
+    950: Color(0xff0e1517),
+  });
+
+  static const taupe = MaterialColor(0xff867865, {
+    50: Color(0xfffbfaf9),
+    100: Color(0xfff5f3f0),
+    200: Color(0xffe7e2dc),
+    300: Color(0xffd3cbc0),
+    400: Color(0xffaa9e8d),
+    500: Color(0xff867865),
+    600: Color(0xff6c6050),
+    700: Color(0xff554b3e),
+    800: Color(0xff40382d),
+    900: Color(0xff2c271f),
+    950: Color(0xff17130e),
   });
 
   static const red = MaterialColor(0xffef4444, {

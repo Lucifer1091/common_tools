@@ -32,6 +32,10 @@ class _MyThemeColorsPageState extends State<MyThemeColorsPage> {
     _PaletteSpec('Zinc', MyColors.zinc),
     _PaletteSpec('Neutral', MyColors.neutral),
     _PaletteSpec('Stone', MyColors.stone),
+    _PaletteSpec('Mauve', MyColors.mauve),
+    _PaletteSpec('Olive', MyColors.olive),
+    _PaletteSpec('Mist', MyColors.mist),
+    _PaletteSpec('Taupe', MyColors.taupe),
     _PaletteSpec('Red', MyColors.red),
     _PaletteSpec('Orange', MyColors.orange),
     _PaletteSpec('Amber', MyColors.amber),
@@ -91,6 +95,13 @@ class _MyThemeColorsPageState extends State<MyThemeColorsPage> {
           title: 'Built-in color schemes',
           children: [
             ExampleItem(
+              desc:
+                  'Generated shadcn-style schemes composed from a base color and an accent color.',
+              builder: _buildBaseAccentSchemes,
+              center: false,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+            ),
+            ExampleItem(
               desc: 'Every package color scheme in light and dark mode.',
               builder: _buildBuiltInSchemes,
               center: false,
@@ -99,6 +110,80 @@ class _MyThemeColorsPageState extends State<MyThemeColorsPage> {
           ],
         ),
       ],
+    );
+  }
+
+  Widget _buildBaseAccentSchemes(BuildContext context) {
+    final generatedExamples = <_GeneratedSchemeSpec>[
+      const _GeneratedSchemeSpec(MyBaseColor.mauve, MyAccentColor.blue),
+      const _GeneratedSchemeSpec(MyBaseColor.taupe, MyAccentColor.brown),
+      const _GeneratedSchemeSpec(MyBaseColor.mist, MyAccentColor.gold),
+      const _GeneratedSchemeSpec(MyBaseColor.olive, MyAccentColor.lime),
+      const _GeneratedSchemeSpec(MyBaseColor.slate, MyAccentColor.red),
+      const _GeneratedSchemeSpec(MyBaseColor.gray, MyAccentColor.violet),
+    ];
+
+    return _Surface(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const _SectionLabel('Base colors'),
+          const SizedBox(height: 14),
+          Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            children: [
+              for (final base in MyColorScheme.baseColors)
+                _SchemeCard(
+                  title: '${_enumTitle(base)} base',
+                  light: MyColorScheme.fromParts(
+                    base: base,
+                    brightness: Brightness.light,
+                  ),
+                  dark: MyColorScheme.fromParts(
+                    base: base,
+                    brightness: Brightness.dark,
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 22),
+          const _SectionLabel('Accent colors on neutral'),
+          const SizedBox(height: 14),
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: [
+              for (final accent in MyColorScheme.accentColors)
+                _AccentChip(accent: accent),
+            ],
+          ),
+          const SizedBox(height: 22),
+          const _SectionLabel('Generated examples'),
+          const SizedBox(height: 14),
+          Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            children: [
+              for (final spec in generatedExamples)
+                _SchemeCard(
+                  title:
+                      '${_enumTitle(spec.base)} + ${_enumTitle(spec.accent)}',
+                  light: MyColorScheme.fromParts(
+                    base: spec.base,
+                    accent: spec.accent,
+                    brightness: Brightness.light,
+                  ),
+                  dark: MyColorScheme.fromParts(
+                    base: spec.base,
+                    accent: spec.accent,
+                    brightness: Brightness.dark,
+                  ),
+                ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -206,6 +291,54 @@ class _PaletteSpec {
 
   final String name;
   final MaterialColor palette;
+}
+
+class _GeneratedSchemeSpec {
+  const _GeneratedSchemeSpec(this.base, this.accent);
+
+  final MyBaseColor base;
+  final MyAccentColor accent;
+}
+
+class _AccentChip extends StatelessWidget {
+  const _AccentChip({required this.accent});
+
+  final MyAccentColor accent;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colorScheme;
+    final scheme = MyColorScheme.fromParts(
+      base: MyBaseColor.neutral,
+      accent: accent,
+      brightness: colors.brightness,
+    );
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      decoration: BoxDecoration(
+        color: colors.background,
+        border: Border.all(color: colors.border),
+        borderRadius: MyBorderRadius.medium,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _Dot(color: scheme.primary),
+          const SizedBox(width: 8),
+          Text(
+            _enumTitle(accent),
+            style: TextStyle(
+              color: colors.foreground,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+              height: 16 / 12,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _PaletteRow extends StatelessWidget {
@@ -621,6 +754,10 @@ String _hex(Color color) {
 String _titleCase(String value) {
   if (value.isEmpty) return value;
   return '${value[0].toUpperCase()}${value.substring(1)}';
+}
+
+String _enumTitle(Enum value) {
+  return _titleCase(value.name);
 }
 
 Color _readableTextColor(Color background) {

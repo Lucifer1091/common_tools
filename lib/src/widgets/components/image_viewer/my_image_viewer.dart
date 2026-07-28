@@ -258,7 +258,7 @@ class _MyImageViewerState extends State<MyImageViewer> {
                   thumbnailBorderRadius:
                       widget.thumbnailBorderRadius ?? MyBorderRadius.medium,
                   borderColor:
-                      widget.thumbnailBorderColor ?? context.colorScheme.ring,
+                      widget.thumbnailBorderColor ?? context.colorScheme.primary,
                   borderWidth: widget.thumbnailBorderWidth,
                   paddingOfBorder: _paddingOfBorder,
                   boxFit: widget.thumbnailFit ?? BoxFit.cover,

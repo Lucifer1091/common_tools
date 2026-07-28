@@ -254,6 +254,7 @@ MouseAreaSurfaceRenderBox	lib/src/widgets/common/mouse_area.dart
 MultiCalendarValue	lib/src/widgets/components/date_time_picker/pickers/my_calendar_picker.dart
 MultiLinkedPickerModel	lib/src/widgets/components/picker/my_multi_picker.dart
 MultiPickerCallback	lib/src/widgets/components/picker/my_multi_picker.dart
+MyAccentColor	lib/src/themes/my_color_scheme.dart
 MyActionSheet	lib/src/widgets/components/action_sheet/my_action_sheet.dart
 MyActionSheetAlign	lib/src/widgets/components/action_sheet/my_action_sheet.dart
 MyActionSheetGrid	lib/src/widgets/components/action_sheet/my_action_sheet_grid.dart
@@ -285,6 +286,7 @@ MyBadgeType	lib/src/widgets/components/badge/my_badge.dart
 MyBadgeWrapper	lib/src/widgets/components/badge/my_badge.dart
 MyBanner	lib/src/widgets/components/badge/my_banner.dart
 MyBannerPosition	lib/src/widgets/components/badge/my_banner.dart
+MyBaseColor	lib/src/themes/my_color_scheme.dart
 MyBlackColorScheme	lib/src/themes/color_schemes/black.dart
 MyBlueColorScheme	lib/src/themes/color_schemes/blue.dart
 MyBlur	lib/src/widgets/display/my_blur.dart
@@ -461,6 +463,8 @@ MyLoadingOverlay	lib/src/widgets/components/loading/my_loading_overlay.dart
 MyLocalizationsDelegate	lib/src/localization/my_translations.dart
 MyMarqueeDirection	lib/src/widgets/lists/marquee_widget.dart
 MyMarqueeWidget	lib/src/widgets/lists/marquee_widget.dart
+MyMauveColorScheme	lib/src/themes/color_schemes/mauve.dart
+MyMistColorScheme	lib/src/themes/color_schemes/mist.dart
 MyMonthPickerDialog	lib/src/widgets/components/date_time_picker/pickers/my_calendar_picker.dart
 MyMouseArea	lib/src/widgets/common/mouse_area.dart
 MyMouseAreaRenderBox	lib/src/widgets/common/mouse_area.dart
@@ -477,6 +481,7 @@ MyNoticeBar	lib/src/widgets/components/notice_bar/my_notice_bar.dart
 MyNoticeBarStyle	lib/src/widgets/components/notice_bar/my_notice_bar_style.dart
 MyNoticeBarTheme	lib/src/widgets/components/notice_bar/my_notice_bar_style.dart
 MyNumberTicker	lib/src/widgets/components/numbers/my_number_ticker.dart
+MyOliveColorScheme	lib/src/themes/color_schemes/olive.dart
 MyOption	lib/src/widgets/components/select/select.dart
 MyOrangeColorScheme	lib/src/themes/color_schemes/orange.dart
 MyOtp	lib/src/widgets/components/otp/otp_field.dart
@@ -629,6 +634,7 @@ MyTagShape	lib/src/widgets/components/tag/my_tag_styles.dart
 MyTagSize	lib/src/widgets/components/tag/my_tag_styles.dart
 MyTagStyle	lib/src/widgets/components/tag/my_tag_styles.dart
 MyTagTheme	lib/src/widgets/components/tag/my_tag_styles.dart
+MyTaupeColorScheme	lib/src/themes/color_schemes/taupe.dart
 MyTealColorScheme	lib/src/themes/color_schemes/teal.dart
 MyText	lib/src/widgets/components/text/my_text.dart
 MyTextAlignment	lib/src/widgets/components/divider/my_divider.dart

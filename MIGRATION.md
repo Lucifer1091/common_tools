@@ -26,3 +26,21 @@ The example-owned AAGSA color schemes are now package built-ins:
 - Replace `aagsa-neutral` with `black`.
 
 The old `aagsa-*` identifiers are intentionally not kept as aliases.
+
+Base and accent colors can now be composed without changing the serialized
+color-scheme contract:
+
+- Use `MyColorScheme.fromParts(base: MyBaseColor.taupe)` for a base-only
+  shadcn-style scheme.
+- Use `MyColorScheme.fromParts(base: MyBaseColor.mauve,
+  accent: MyAccentColor.blue)` to keep mauve surfaces with blue brand tokens.
+- `MyColorScheme.toColorMap()` still emits 29 colors and no `sidebar*` keys.
+
+Overlapping built-in schemes now use current official shadcn token values
+converted from OKLCH to Flutter sRGB:
+
+- Existing serialized color maps remain structurally valid but may no longer
+  match the package defaults exactly.
+- Chart colors changed to official shadcn `chart-1` through `chart-5` values.
+- `fromParts` keeps focus rings base-derived and applies the selected accent to
+  primary and chart tokens.

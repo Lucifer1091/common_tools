@@ -474,7 +474,7 @@ class MyDefaultResizeGrip extends StatelessWidget {
       width: 8,
       height: 8,
       child: CustomPaint(
-        painter: MyResizeGripPainter(color: theme.colorScheme.ring),
+        painter: MyResizeGripPainter(color: theme.colorScheme.primary),
       ),
     );
   }

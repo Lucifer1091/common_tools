@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('default picker includes and selects package AAGSA schemes', (
+  testWidgets('default picker includes and selects package built-in schemes', (
     tester,
   ) async {
     String selectedColor = 'none';
@@ -43,14 +43,18 @@ void main() {
     expect(find.text('Black'), findsOneWidget);
     expect(
       MyColorSwitcherOption.defaults.map((option) => option.value),
-      allOf(
+      allOf([
         contains('brown'),
         contains('gold'),
         contains('black'),
+        contains('mauve'),
+        contains('olive'),
+        contains('mist'),
+        contains('taupe'),
         isNot(contains('aagsa-red')),
         isNot(contains('aagsa-gold')),
         isNot(contains('aagsa-neutral')),
-      ),
+      ]),
     );
 
     for (final value in const ['brown', 'gold', 'black']) {

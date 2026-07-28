@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 import '../extensions/string/converters.dart';
 import './color_schemes/amber.dart';
@@ -13,7 +13,10 @@ import './color_schemes/gray.dart';
 import './color_schemes/green.dart';
 import './color_schemes/indigo.dart';
 import './color_schemes/lime.dart';
+import './color_schemes/mauve.dart';
+import './color_schemes/mist.dart';
 import './color_schemes/neutral.dart';
+import './color_schemes/olive.dart';
 import './color_schemes/orange.dart';
 import './color_schemes/pink.dart';
 import './color_schemes/purple.dart';
@@ -22,10 +25,55 @@ import './color_schemes/rose.dart';
 import './color_schemes/sky.dart';
 import './color_schemes/slate.dart';
 import './color_schemes/stone.dart';
+import './color_schemes/taupe.dart';
 import './color_schemes/teal.dart';
 import './color_schemes/violet.dart';
 import './color_schemes/yellow.dart';
 import './color_schemes/zinc.dart';
+
+enum MyBaseColor {
+  slate,
+  gray,
+  neutral,
+  stone,
+  zinc,
+  mauve,
+  olive,
+  mist,
+  taupe,
+}
+
+enum MyAccentColor {
+  slate,
+  gray,
+  neutral,
+  stone,
+  zinc,
+  mauve,
+  olive,
+  mist,
+  taupe,
+  red,
+  orange,
+  amber,
+  yellow,
+  lime,
+  green,
+  emerald,
+  teal,
+  cyan,
+  sky,
+  blue,
+  indigo,
+  violet,
+  purple,
+  fuchsia,
+  pink,
+  rose,
+  brown,
+  gold,
+  black,
+}
 
 class MyColorScheme {
   const MyColorScheme({
@@ -114,10 +162,22 @@ class MyColorScheme {
         brightness == Brightness.light
             ? const MyLimeColorScheme.light()
             : const MyLimeColorScheme.dark(),
+      'mauve' =>
+        brightness == Brightness.light
+            ? const MyMauveColorScheme.light()
+            : const MyMauveColorScheme.dark(),
+      'mist' =>
+        brightness == Brightness.light
+            ? const MyMistColorScheme.light()
+            : const MyMistColorScheme.dark(),
       'neutral' =>
         brightness == Brightness.light
             ? const MyNeutralColorScheme.light()
             : const MyNeutralColorScheme.dark(),
+      'olive' =>
+        brightness == Brightness.light
+            ? const MyOliveColorScheme.light()
+            : const MyOliveColorScheme.dark(),
       'orange' =>
         brightness == Brightness.light
             ? const MyOrangeColorScheme.light()
@@ -150,6 +210,10 @@ class MyColorScheme {
         brightness == Brightness.light
             ? const MyStoneColorScheme.light()
             : const MyStoneColorScheme.dark(),
+      'taupe' =>
+        brightness == Brightness.light
+            ? const MyTaupeColorScheme.light()
+            : const MyTaupeColorScheme.dark(),
       'teal' =>
         brightness == Brightness.light
             ? const MyTealColorScheme.light()
@@ -169,6 +233,34 @@ class MyColorScheme {
 
       _ => throw Exception('Invalid color scheme name'),
     };
+  }
+
+  factory MyColorScheme.fromParts({
+    required MyBaseColor base,
+    MyAccentColor? accent,
+    Brightness brightness = Brightness.light,
+  }) {
+    final baseScheme = MyColorScheme.fromName(
+      base.name,
+      brightness: brightness,
+    );
+    if (accent == null) return baseScheme;
+
+    final accentScheme = MyColorScheme.fromName(
+      accent.name,
+      brightness: brightness,
+    );
+
+    return baseScheme.copyWith(
+      primary: accentScheme.primary,
+      primaryForeground: accentScheme.primaryForeground,
+      selection: accentScheme.selection,
+      chart1: accentScheme.chart1,
+      chart2: accentScheme.chart2,
+      chart3: accentScheme.chart3,
+      chart4: accentScheme.chart4,
+      chart5: accentScheme.chart5,
+    );
   }
 
   MyColorScheme.fromJson(Map<String, dynamic> json)
@@ -573,7 +665,10 @@ class MyColorScheme {
     'green',
     'indigo',
     'lime',
+    'mauve',
+    'mist',
     'neutral',
+    'olive',
     'orange',
     'pink',
     'purple',
@@ -582,11 +677,16 @@ class MyColorScheme {
     'sky',
     'slate',
     'stone',
+    'taupe',
     'teal',
     'violet',
     'yellow',
     'zinc',
   ];
+
+  static const List<MyBaseColor> baseColors = MyBaseColor.values;
+
+  static const List<MyAccentColor> accentColors = MyAccentColor.values;
 }
 
 String _hexFromColor(Color color) {
