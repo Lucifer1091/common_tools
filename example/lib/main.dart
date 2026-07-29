@@ -2,20 +2,23 @@ import 'package:example/common_tools_catalog.dart';
 import 'package:example/theme_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 
 import 'base/example_route.dart';
 import 'config.dart';
-import 'home.dart';
 
 void main() {
+  configureExampleApp();
+  usePathUrlStrategy();
   runApp(const ProviderScope(child: MyApp()));
+}
 
-  exampleMap.forEach((key, value) {
-    for (var model in value) {
-      examplePageList.add(model);
-    }
-  });
-  sideBarExamplePage.forEach(examplePageList.add);
+void configureExampleApp() {
+  examplePageList
+    ..clear()
+    ..addAll(exampleMap.values.expand((models) => models))
+    ..addAll(sideBarExamplePage);
+  MyRoute.init();
 }
 
 class MyApp extends ConsumerWidget {
@@ -42,7 +45,6 @@ class MyApp extends ConsumerWidget {
           child: child,
         );
       },
-      home: MyHomePage(title: 'My Components'),
       onGenerateRoute: MyRoute.onGenerateRoute,
     );
   }

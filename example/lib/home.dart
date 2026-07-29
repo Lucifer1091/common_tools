@@ -18,13 +18,6 @@ class _MyHomePageState extends State<MyHomePage> {
   TextEditController controller = TextEditController();
 
   @override
-  void initState() {
-    super.initState();
-    MyRoute.init();
-    sideBarExamplePage.forEach(MyRoute.add);
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: context.colorScheme.background,
@@ -83,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
               shape: MyButtonShape.filled,
               size: MyButtonSize.large,
               onTap: () {
-                Navigator.pushNamed(context, '${model.name}?showAction=1');
+                Navigator.pushNamed(context, MyRoute.pagePath(model));
               },
               text: model.text,
               icon: Icons.arrow_right_alt_rounded,

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:example/common_tools_catalog.dart';
 
+import '../../base/example_route.dart';
 import '../../base/example_widget.dart';
 
 class MySideBarPage extends StatefulWidget {
@@ -118,7 +119,7 @@ class MySideBarPageState extends State<MySideBarPage> {
       type: MyButtonType.outline,
       shape: MyButtonShape.rectangle,
       onTap: () {
-        Navigator.pushNamed(context, routeName);
+        Navigator.pushNamed(context, MyRoute.namedPagePath(routeName));
       },
     );
   }

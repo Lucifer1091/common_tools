@@ -24,6 +24,30 @@ class ExamplePageModel {
   String? pageName;
   bool isTodo;
   final PageBuilder pageBuilder;
+
+  ExamplePageModel copyWith({
+    String? text,
+    String? name,
+    String? codePath,
+    String? spline,
+    bool? apiVisible,
+    bool? showAction,
+    bool? isTodo,
+    String? pageName,
+    PageBuilder? pageBuilder,
+  }) {
+    return ExamplePageModel(
+        text: text ?? this.text,
+        name: name ?? this.name,
+        apiVisible: apiVisible ?? this.apiVisible,
+        showAction: showAction ?? this.showAction,
+        isTodo: isTodo ?? this.isTodo,
+        pageName: pageName ?? this.pageName,
+        pageBuilder: pageBuilder ?? this.pageBuilder,
+      )
+      ..codePath = codePath ?? this.codePath
+      ..spline = spline ?? this.spline;
+  }
 }
 
 class ExamplePageInheritedTheme extends InheritedWidget {
