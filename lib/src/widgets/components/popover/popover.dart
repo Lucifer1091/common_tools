@@ -184,7 +184,9 @@ class _MyPopoverState extends State<MyPopover>
       duration: const Duration(milliseconds: 150),
     );
     controller.addListener(_onPopoverToggle);
+    widget.focusNode?.addListener(_onChildFocusChange);
 
+    _onChildFocusChange();
     _onPopoverToggle();
   }
 
@@ -195,6 +197,12 @@ class _MyPopoverState extends State<MyPopover>
         widget.controller != oldWidget.controller) {
       oldWidget.controller?.removeListener(_onPopoverToggle);
       widget.controller!.addListener(_onPopoverToggle);
+    }
+
+    if (widget.focusNode != oldWidget.focusNode) {
+      oldWidget.focusNode?.removeListener(_onChildFocusChange);
+      widget.focusNode?.addListener(_onChildFocusChange);
+      _onChildFocusChange();
     }
 
     if (widget.visible != null) {
@@ -211,6 +219,7 @@ class _MyPopoverState extends State<MyPopover>
     // Remove the listener from the provided `MyPopoverController`
     // or our internal controller.
     controller.removeListener(_onPopoverToggle);
+    widget.focusNode?.removeListener(_onChildFocusChange);
 
     animationController.dispose();
     _popoverFocusNode.dispose();
@@ -227,6 +236,12 @@ class _MyPopoverState extends State<MyPopover>
       _popoverFocusNode.requestFocus();
     } else {
       unawaited(animationController.reverse());
+    }
+  }
+
+  void _onChildFocusChange() {
+    if (widget.focusNode?.hasFocus ?? false) {
+      controller.show();
     }
   }
 

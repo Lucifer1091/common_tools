@@ -142,6 +142,8 @@ class _MyPortalState extends State<MyPortal> {
 
   Offset? _calculatedTarget;
   bool _calculatedPreferBelow = true;
+  Size? _lastViewportSize;
+  bool _positionCalculationScheduled = false;
 
   @override
   void initState() {
@@ -152,7 +154,11 @@ class _MyPortalState extends State<MyPortal> {
   @override
   void didUpdateWidget(covariant MyPortal oldWidget) {
     super.didUpdateWidget(oldWidget);
-    updateVisibility();
+    if (oldWidget.visible != widget.visible) {
+      updateVisibility();
+    } else if (widget.visible && oldWidget.anchor != widget.anchor) {
+      _schedulePositionCalculation();
+    }
   }
 
   @override
@@ -165,11 +171,12 @@ class _MyPortalState extends State<MyPortal> {
     final shouldShow = widget.visible;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       if (shouldShow) {
         _calculatePosition();
         show();
       } else {
-        if (_calculatedTarget != null && mounted) {
+        if (_calculatedTarget != null) {
           setState(() {
             _calculatedTarget = null;
             _calculatedPreferBelow = true;
@@ -192,6 +199,16 @@ class _MyPortalState extends State<MyPortal> {
     }
   }
 
+  void _schedulePositionCalculation() {
+    if (_positionCalculationScheduled) return;
+    _positionCalculationScheduled = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _positionCalculationScheduled = false;
+      if (!mounted) return;
+      _calculatePosition();
+    });
+  }
+
   void _calculatePosition() {
     if (!mounted || widget.anchor is! MyAnchorAuto) return;
 
@@ -210,9 +227,7 @@ class _MyPortalState extends State<MyPortal> {
         overlayAncestor.hasSize;
 
     if (!ready) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _calculatePosition();
-      });
+      _schedulePositionCalculation();
       return;
     }
 
@@ -299,19 +314,21 @@ class _MyPortalState extends State<MyPortal> {
         });
       }
     } else if (overlay == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _calculatePosition();
-      });
+      _schedulePositionCalculation();
     }
   }
 
   Widget buildAutoPosition(BuildContext context, MyAnchorAuto anchor) {
     if (anchor.followTargetOnResize) {
-      MediaQuery.sizeOf(context);
+      final viewportSize = MediaQuery.sizeOf(context);
+      if (_lastViewportSize != viewportSize) {
+        _lastViewportSize = viewportSize;
+        _schedulePositionCalculation();
+      }
     }
 
     if (_calculatedTarget == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) => _calculatePosition());
+      _schedulePositionCalculation();
       return const SizedBox.shrink();
     }
 
@@ -320,9 +337,7 @@ class _MyPortalState extends State<MyPortal> {
     final overlay = overlayKey.currentContext?.findRenderObject() as RenderBox?;
 
     if (overlay == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _calculatePosition();
-      });
+      _schedulePositionCalculation();
     }
 
     return CustomSingleChildLayout(

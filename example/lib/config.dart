@@ -39,7 +39,7 @@ import 'page/my_lists_page.dart';
 import 'page/my_navbar_page.dart';
 import 'page/my_notice_bar_page.dart';
 import 'page/my_picker_page.dart';
-import 'page/td_popover_page.dart';
+import 'page/my_popover_page.dart';
 import 'page/td_popup_page.dart';
 import 'page/my_progress_page.dart';
 import 'page/my_radio_page.dart';
@@ -385,7 +385,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'Popover',
       name: 'popover',
-      pageBuilder: _wrapInheritedTheme((context) => const TDPopoverPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyPopoverPage()),
     ),
     ExamplePageModel(
       text: 'Popup',
