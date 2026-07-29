@@ -61,7 +61,7 @@ class MyBackTop extends StatelessWidget {
         borderRadius: BorderRadius.circular(999),
         border: Border.all(color: context.colorScheme.border, width: 0.5),
         color: _getColor(context),
-        boxShadow: MyBoxShadows.all,
+        boxShadow: MyBoxShadows.lg2,
       ),
       child: Center(
         child: Column(

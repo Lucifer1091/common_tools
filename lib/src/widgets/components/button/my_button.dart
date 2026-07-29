@@ -192,7 +192,7 @@ class _MyButtonState extends State<MyButton> {
               gradient: widget.gradient,
               boxShadow:
                   widget.shadows ??
-                  (widget.isFloating ? MyBoxShadows.all : null),
+                  (widget.isFloating ? MyBoxShadows.lg2 : null),
             ),
             child: widget.child ?? _getChild(style),
           );

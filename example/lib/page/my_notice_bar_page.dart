@@ -180,7 +180,7 @@ Widget _cardNoticeBar(BuildContext context) {
     decoration: BoxDecoration(
       color: MyNoticeBarStyle.generateTheme(context: context).backgroundColor,
       borderRadius: MyBorderRadius.extraLarge,
-      boxShadow: MyBoxShadows.all,
+      boxShadow: MyBoxShadows.lg2,
     ),
     child: Column(
       children: [

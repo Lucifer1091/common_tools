@@ -48,7 +48,7 @@ import 'page/my_rating_page.dart';
 import 'page/td_refresh_page.dart';
 import 'page/my_result_page.dart';
 // import 'page/td_search_bar_page.dart';
-import 'page/td_shadows_page.dart';
+import 'page/my_shadows_page.dart';
 import 'page/my_skeleton_page.dart';
 import 'page/my_slider_page.dart';
 import 'page/my_stepper_page.dart';
@@ -431,7 +431,7 @@ Map<String, List<ExamplePageModel>> exampleMap = {
     ExamplePageModel(
       text: 'Shadows',
       name: 'shadows',
-      pageBuilder: _wrapInheritedTheme((context) => const TDShadowsPage()),
+      pageBuilder: _wrapInheritedTheme((context) => const MyShadowsPage()),
     ),
   ],
 };
