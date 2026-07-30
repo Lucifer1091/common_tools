@@ -45,7 +45,7 @@ import 'page/my_progress_page.dart';
 import 'page/my_radio_page.dart';
 import 'page/my_radius_page.dart';
 import 'page/my_rating_page.dart';
-import 'page/td_refresh_page.dart';
+import 'page/my_refresh_page.dart';
 import 'page/my_result_page.dart';
 // import 'page/td_search_bar_page.dart';
 import 'page/my_shadows_page.dart';
@@ -393,11 +393,11 @@ Map<String, List<ExamplePageModel>> exampleMap = {
       pageBuilder: _wrapInheritedTheme((context) => const TDPopupPage()),
     ),
     ExamplePageModel(
-      text: 'PullDownRefresh',
+      text: 'Pull Down to Refresh',
       name: 'pull-down-refresh',
       pageName: 'refresh',
       pageBuilder: _wrapInheritedTheme(
-        (context) => const TdPullDownRefreshPage(),
+        (context) => const MyPullDownRefreshPage(),
       ),
     ),
     ExamplePageModel(

@@ -190,8 +190,6 @@ class _MyThemeColorsPageState extends State<MyThemeColorsPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const _SectionLabel('MyColors.values'),
-          const SizedBox(height: 14),
           for (final palette in _palettes) ...[
             _PaletteRow(spec: palette, shadeStops: _shadeStops),
             if (palette != _palettes.last)
@@ -715,11 +713,9 @@ class _SectionLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text.toUpperCase(),
-      style: TextStyle(
+      style: MyTypography.geistMonoStyle.copyWith(
         color: context.colorScheme.mutedForeground,
-        fontSize: 11,
         fontWeight: FontWeight.w700,
-        height: 16 / 11,
       ),
     );
   }

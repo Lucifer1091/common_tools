@@ -244,11 +244,9 @@ class _Label extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text.toUpperCase(),
-      style: TextStyle(
+      style: MyTypography.geistMonoStyle.copyWith(
         color: context.colorScheme.mutedForeground,
-        fontSize: 11,
         fontWeight: FontWeight.w700,
-        height: 16 / 11,
       ),
     );
   }

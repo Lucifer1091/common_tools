@@ -156,7 +156,7 @@ TextStyle(fontFamily: MyTypography.kDefaultFontFamilyMono);
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const _SectionLabel('Preferred package API'),
-          const SizedBox(height: 14),
+          const Gap(12),
           Text(
             code.trimRight(),
             style: MyTypography.geistMonoStyle.copyWith(
@@ -242,7 +242,7 @@ class _SpecimenPanel extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _SectionLabel(label),
-          const SizedBox(height: 22),
+          const Gap(12),
           Text(
             title,
             style: style.copyWith(
@@ -300,7 +300,7 @@ class _WeightRamp extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _SectionLabel(familyLabel),
-          const SizedBox(height: 8),
+          const Gap(12),
           Text(
             'Weights 100-900 are bundled in common_tools.',
             style: MyTypography.geistSansStyle.copyWith(
@@ -389,7 +389,7 @@ class _ProductTypeExample extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const _SectionLabel('Interface scale'),
-          const SizedBox(height: 18),
+          const Gap(12),
           Text(
             'Review deployment',
             style: style.copyWith(
@@ -438,7 +438,7 @@ class _TechnicalTypeExample extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const _SectionLabel('Code and data'),
-          const SizedBox(height: 18),
+          const Gap(12),
           Text(
             'GET /v1/releases',
             style: style.copyWith(
@@ -448,11 +448,11 @@ class _TechnicalTypeExample extends StatelessWidget {
               height: 28 / 20,
             ),
           ),
-          const SizedBox(height: 12),
+          const Gap(12),
           _DataRow(label: 'status', value: '200 OK'),
           _DataRow(label: 'latency', value: '42 ms'),
           _DataRow(label: 'commit', value: '7e42eff'),
-          const SizedBox(height: 12),
+          const Gap(12),
           Text(
             'const font = MyTypography.geistMonoStyle;',
             style: style.copyWith(
@@ -499,9 +499,7 @@ class _SectionLabel extends StatelessWidget {
       label.toUpperCase(),
       style: MyTypography.geistMonoStyle.copyWith(
         color: context.colorScheme.mutedForeground,
-        fontSize: 11,
         fontWeight: FontWeight.w700,
-        height: 16 / 11,
       ),
     );
   }
