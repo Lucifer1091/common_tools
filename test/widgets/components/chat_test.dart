@@ -109,6 +109,126 @@ void main() {
     expect(style.color, Colors.purple);
     expect(style.fontSize, 16);
   });
+
+  testWidgets('standalone self ChatReaction uses explicit end alignment', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _ThemeHarness(
+        child: _reactionScenario(
+          alignment: AxisAlignmentDirectional.end,
+          bubbleAlignment: AxisAlignmentDirectional.end,
+        ),
+      ),
+    );
+
+    _expectReactionLeftOfBubble(tester);
+  });
+
+  testWidgets('standalone self reaction sits opposite the end-side tail', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _ThemeHarness(
+        child: ChatReaction(
+          alignment: AxisAlignmentDirectional.end,
+          reaction: const SizedBox(key: _reactionKey, width: 24, height: 16),
+          child: ChatBubble(
+            alignment: AxisAlignmentDirectional.end,
+            type: ChatBubbleType.tail.copyWith(
+              position: () => AxisDirectional.end,
+            ),
+            child: const SizedBox(
+              key: _bubbleContentKey,
+              width: 80,
+              height: 20,
+            ),
+          ),
+        ),
+      ),
+    );
+
+    _expectReactionLeftOfBubble(tester);
+  });
+
+  testWidgets('standalone other ChatReaction uses explicit start alignment', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _ThemeHarness(
+        child: _reactionScenario(
+          alignment: AxisAlignmentDirectional.start,
+          bubbleAlignment: AxisAlignmentDirectional.start,
+        ),
+      ),
+    );
+
+    _expectReactionRightOfBubble(tester);
+  });
+
+  testWidgets('ChatReaction.corner overrides inferred alignment', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _ThemeHarness(
+        child: _reactionScenario(
+          alignment: AxisAlignmentDirectional.end,
+          bubbleAlignment: AxisAlignmentDirectional.end,
+          corner: ChatBubbleCornerDirectional.bottomEnd,
+        ),
+      ),
+    );
+
+    _expectReactionRightOfBubble(tester);
+  });
+
+  testWidgets('ChatReaction still uses inherited ChatGroup alignment', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _ThemeHarness(
+        child: ChatGroup(
+          alignment: AxisAlignmentDirectional.start,
+          children: [_reactionScenario()],
+        ),
+      ),
+    );
+
+    _expectReactionRightOfBubble(tester);
+  });
+}
+
+const _bubbleContentKey = Key('bubble-content');
+const _reactionKey = Key('reaction');
+
+Widget _reactionScenario({
+  AxisAlignmentGeometry? alignment,
+  AxisAlignmentGeometry? bubbleAlignment,
+  ChatBubbleCornerDirectional? corner,
+}) {
+  return ChatReaction(
+    alignment: alignment,
+    corner: corner,
+    reaction: const SizedBox(key: _reactionKey, width: 24, height: 16),
+    child: ChatBubble(
+      alignment: bubbleAlignment,
+      child: const SizedBox(key: _bubbleContentKey, width: 80, height: 20),
+    ),
+  );
+}
+
+void _expectReactionLeftOfBubble(WidgetTester tester) {
+  expect(
+    tester.getCenter(find.byKey(_reactionKey)).dx,
+    lessThan(tester.getCenter(find.byKey(_bubbleContentKey)).dx),
+  );
+}
+
+void _expectReactionRightOfBubble(WidgetTester tester) {
+  expect(
+    tester.getCenter(find.byKey(_reactionKey)).dx,
+    greaterThan(tester.getCenter(find.byKey(_bubbleContentKey)).dx),
+  );
 }
 
 TextStyle _renderedTextStyle(WidgetTester tester, String text) {

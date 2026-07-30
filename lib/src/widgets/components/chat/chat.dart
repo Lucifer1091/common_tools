@@ -1162,14 +1162,20 @@ class ChatBubble extends StatelessWidget {
 
 class ChatReaction extends StatelessWidget {
   final Widget child;
+
+  /// The alignment used to infer the reaction corner when [corner] is not set.
+  final AxisAlignmentGeometry? alignment;
+
   final ChatBubbleCornerDirectional? corner;
   final Widget reaction;
 
   /// The minimum extra width the bubble keeps beyond the reaction when the
   /// reaction is wider than the bubble.
   final double? extraWidth;
+
   const ChatReaction({
     super.key,
+    this.alignment,
     this.corner,
     this.extraWidth,
     required this.reaction,
@@ -1182,9 +1188,10 @@ class ChatReaction extends StatelessWidget {
     final chatTheme = context.maybeWatch<ChatTheme>() ?? const ChatTheme();
 
     // The bubble's alignment within the chat row (defaults to end/right).
-    final alignment = (chatTheme.alignment ?? AxisAlignmentDirectional.end)
-        .resolve(textDirection);
-    final alignmentValue = alignment.resolveValue(Axis.horizontal);
+    final resolvedAlignment =
+        (alignment ?? chatTheme.alignment ?? AxisAlignmentDirectional.end)
+            .resolve(textDirection);
+    final alignmentValue = resolvedAlignment.resolveValue(Axis.horizontal);
 
     // Resolve the corner: explicit widget/theme corner first, otherwise place
     // the reaction on the side opposite the bubble's alignment (a right-aligned
@@ -1215,10 +1222,15 @@ class ChatReaction extends StatelessWidget {
           top: reactionPadding.top * (2 / 3),
           bottom: reactionPadding.bottom * (2 / 3),
         );
+    final reactionChatTheme = chatTheme.copyWith(
+      alignment: () => alignment ?? chatTheme.alignment,
+      padding: () => newChatPadding,
+      widthFactor: () => 1.0,
+    );
 
     return _ChatReaction(
       corner: resolvedCorner,
-      alignment: alignment,
+      alignment: resolvedAlignment,
       extraWidth: extraWidth ?? 8,
       padding: reactionPadding,
       children: [
@@ -1226,16 +1238,8 @@ class ChatReaction extends StatelessWidget {
           // Force the bubble to hug its content (widthFactor 1.0) so it isn't
           // squeezed to half-width by its own ChatConstrainedBox when the
           // reaction render object tightens it to its natural width.
-          data: chatTheme.copyWith(
-            padding: () => newChatPadding,
-            widthFactor: () => 1.0,
-          ),
-          notifyUpdate: (oldWidget) =>
-              oldWidget.data !=
-              chatTheme.copyWith(
-                padding: () => newChatPadding,
-                widthFactor: () => 1.0,
-              ),
+          data: reactionChatTheme,
+          notifyUpdate: (oldWidget) => oldWidget.data != reactionChatTheme,
           child: child,
         ),
         reaction,

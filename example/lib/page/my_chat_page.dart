@@ -168,6 +168,7 @@ class MyChatPage extends StatelessWidget {
           ],
         ),
         ChatReaction(
+          alignment: AxisAlignmentDirectional.end,
           reaction: ChatReactionContainer(
             child: Row(
               mainAxisSize: MainAxisSize.min,
