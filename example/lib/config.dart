@@ -18,6 +18,7 @@ import 'page/my_avatar_page.dart';
 import 'page/my_badge_page.dart';
 import 'page/my_builders_page.dart';
 import 'page/my_cell_page.dart';
+import 'page/my_chat_page.dart';
 import 'page/my_checkbox_page.dart';
 import 'page/my_collapse_page.dart';
 import 'page/my_custom_page.dart';
@@ -273,6 +274,11 @@ Map<String, List<ExamplePageModel>> exampleMap = {
       text: 'Cell',
       name: 'cell',
       pageBuilder: _wrapInheritedTheme((context) => const MyCellPage()),
+    ),
+    ExamplePageModel(
+      text: 'Chat',
+      name: 'chat',
+      pageBuilder: _wrapInheritedTheme((context) => const MyChatPage()),
     ),
     ExamplePageModel(
       text: 'Time Counter',

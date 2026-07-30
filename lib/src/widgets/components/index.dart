@@ -4,6 +4,7 @@ export 'backtop/index.dart';
 export 'badge/index.dart';
 export 'button/index.dart';
 export 'cell/index.dart';
+export 'chat/index.dart';
 export 'checkbox/index.dart';
 export 'collapse/index.dart';
 export 'date_time_picker/index.dart';
