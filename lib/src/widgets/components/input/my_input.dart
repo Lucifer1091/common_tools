@@ -1392,11 +1392,14 @@ class MyInputState extends State<MyInput>
 
     return Actions(
       actions: {
-        MyAutoCompleteIntent: CallbackAction<MyAutoCompleteIntent>(
-          onInvoke: (intent) {
-            _applyAutoComplete(intent);
-            return null;
-          },
+        MyAutoCompleteIntent: Action<MyAutoCompleteIntent>.overridable(
+          context: context,
+          defaultAction: CallbackAction<MyAutoCompleteIntent>(
+            onInvoke: (intent) {
+              _applyAutoComplete(intent);
+              return null;
+            },
+          ),
         ),
       },
       child: input,

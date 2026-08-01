@@ -1,4 +1,5 @@
 import 'package:example/common_tools_catalog.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
@@ -18,7 +19,9 @@ class _MyInputViewPageState extends State<MyInputViewPage> {
   late final GlobalKey<MyFormState> _formKey;
   final _externalAutoCompleteController = TextEditingController();
   final _filteredAutoCompleteController = TextEditingController();
+  final _chipInputController = MyChipEditingController<String>();
   List<String> _externalSuggestions = const [];
+  List<String> _chipSuggestions = const [];
   MyAutoCompleteMode _autoCompleteMode = MyAutoCompleteMode.replaceWord;
   _AutoCompleteFilterMode _filterMode = _AutoCompleteFilterMode.contains;
 
@@ -46,6 +49,7 @@ class _MyInputViewPageState extends State<MyInputViewPage> {
     for (var i = 0; i < 28; i++) {
       controller.add(TextEditingController());
     }
+    _chipInputController.addListener(_updateChipSuggestions);
     super.initState();
   }
 
@@ -56,6 +60,7 @@ class _MyInputViewPageState extends State<MyInputViewPage> {
     }
     _externalAutoCompleteController.dispose();
     _filteredAutoCompleteController.dispose();
+    _chipInputController.dispose();
     super.dispose();
   }
 
@@ -191,6 +196,17 @@ class _MyInputViewPageState extends State<MyInputViewPage> {
           ],
         ),
         ExampleModule(
+          title: 'Chip Input',
+          children: [
+            ExampleItem(
+              desc: 'Inline autocomplete',
+              center: false,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              builder: _buildChipInput,
+            ),
+          ],
+        ),
+        ExampleModule(
           title: 'Autocomplete',
           children: [
             ExampleItem(
@@ -210,6 +226,56 @@ class _MyInputViewPageState extends State<MyInputViewPage> {
       ],
     );
   }
+
+  void _updateChipSuggestions() {
+    final query = _chipInputController.textAtCursor;
+    final suggestions = query.isEmpty
+        ? const <String>[]
+        : _fruits
+              .where((option) => option.toLowerCase().startsWith(query))
+              .toList(growable: false);
+    if (listEquals(suggestions, _chipSuggestions)) return;
+    setState(() => _chipSuggestions = suggestions);
+  }
+
+  Widget _buildChipInput(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      spacing: 24,
+      children: [
+        MyAutoComplete(
+          controller: _chipInputController,
+          suggestions: _chipSuggestions,
+          child: MyChipInput<String>(
+            controller: _chipInputController,
+            placeholder: 'Type a fruit and press Enter',
+            clipboardHandler: const MyDecoratedChipClipboardHandler<String>(
+              prefix: '@',
+              delimiter: ';',
+              chipDeserializer: _deserializeChip,
+            ),
+            onChipSubmitted: (value) {
+              setState(() => _chipSuggestions = const []);
+              return value;
+            },
+            chipBuilder: (context, chip) => Text('@$chip'),
+          ),
+        ),
+        ListenableBuilder(
+          listenable: _chipInputController,
+          builder: (context, child) {
+            final chips = _chipInputController.chips.join(', ');
+            return MyText(
+              chips.isEmpty ? 'Current chips: none' : 'Current chips: $chips',
+              textColor: context.colorScheme.mutedForeground,
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  static String _deserializeChip(String value) => value;
 
   void _updateExternalSuggestions(String value) {
     final currentWord = _externalAutoCompleteController.currentWord;
