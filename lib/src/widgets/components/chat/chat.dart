@@ -147,7 +147,6 @@ class _ChatConstrainedBox extends SingleChildRenderObjectWidget {
     required this.widthFactor,
     required this.alignment,
     required super.child,
-    super.key,
   });
 
   @override
