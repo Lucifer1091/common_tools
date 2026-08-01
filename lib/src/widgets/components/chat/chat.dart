@@ -135,15 +135,15 @@ Border? _borderFromSide(BorderSide? side) {
 /// - [widthFactor] (`double`, required): The fraction of the available width that the child should occupy.
 /// - [alignment] (`AxisAlignmentGeometry`, required): The alignment of the child within the available space.
 /// - [child] (`Widget`, required): The widget below this widget in the tree.
-class MyChatConstrainedBox extends SingleChildRenderObjectWidget {
+class _ChatConstrainedBox extends SingleChildRenderObjectWidget {
   /// The fraction of the available width that the child should occupy.
   final double widthFactor;
 
   /// The alignment of the child within the available space.
   final AxisAlignmentGeometry alignment;
 
-  /// Creates a [MyChatConstrainedBox].
-  const MyChatConstrainedBox({
+  /// Creates a [_ChatConstrainedBox].
+  const _ChatConstrainedBox({
     required this.widthFactor,
     required this.alignment,
     required super.child,
@@ -151,8 +151,8 @@ class MyChatConstrainedBox extends SingleChildRenderObjectWidget {
   });
 
   @override
-  MyRenderChatConstrainedBox createRenderObject(BuildContext context) {
-    return MyRenderChatConstrainedBox(
+  _RenderChatConstrainedBox createRenderObject(BuildContext context) {
+    return _RenderChatConstrainedBox(
       widthFactor: widthFactor,
       alignment: alignment.resolve(
         Directionality.maybeOf(context) ?? TextDirection.ltr,
@@ -163,7 +163,7 @@ class MyChatConstrainedBox extends SingleChildRenderObjectWidget {
   @override
   void updateRenderObject(
     BuildContext context,
-    MyRenderChatConstrainedBox renderObject,
+    _RenderChatConstrainedBox renderObject,
   ) {
     renderObject
       ..widthFactor = widthFactor
@@ -175,18 +175,18 @@ class MyChatConstrainedBox extends SingleChildRenderObjectWidget {
 
 /// A render object that constrains the width of its child and aligns it.
 ///
-/// This render object implements the layout logic for [MyChatConstrainedBox].
-class MyRenderChatConstrainedBox extends RenderShiftedBox {
+/// This render object implements the layout logic for [_ChatConstrainedBox].
+class _RenderChatConstrainedBox extends RenderShiftedBox {
   double _widthFactor;
   AxisAlignment _alignment;
 
-  /// Creates a [MyRenderChatConstrainedBox].
+  /// Creates a [_RenderChatConstrainedBox].
   ///
   /// Parameters:
   /// - [_widthFactor] (`double`, required): The fraction of the available width that the child should occupy.
   /// - [_alignment] (`AxisAlignment`, required): The alignment of the child within the available space.
   /// - [child] (`RenderBox?`, optional): The child render object.
-  MyRenderChatConstrainedBox({
+  _RenderChatConstrainedBox({
     required this._widthFactor,
     required this._alignment,
     RenderBox? child,
@@ -1090,7 +1090,7 @@ class MyChatBubble extends StatelessWidget {
     final effectiveChild = textStyle == null
         ? child
         : DefaultTextStyle.merge(style: textStyle, child: child);
-    return MyChatConstrainedBox(
+    return _ChatConstrainedBox(
       widthFactor: widthFactor,
       alignment: alignment,
       child: Builder(
@@ -1525,6 +1525,7 @@ class _ChatReactionRenderObject extends RenderBox
 class MyChatCollapsible extends StatelessWidget {
   final Widget child;
   final bool collapsed;
+
   const MyChatCollapsible({
     super.key,
     required this.collapsed,
