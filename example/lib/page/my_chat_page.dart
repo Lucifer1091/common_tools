@@ -52,25 +52,25 @@ class MyChatPage extends StatelessWidget {
   Widget _buildGroupedMessages(BuildContext context) {
     return _ChatLane(
       children: [
-        ChatGroup(
+        MyChatGroup(
           color: context.colorScheme.primary,
           textStyle: context.bodyMedium.copyWith(
             color: context.colorScheme.primaryForeground,
           ),
-          type: ChatBubbleType.tail.copyWith(
+          type: MyChatBubbleType.tail.copyWith(
             position: () => AxisDirectional.end,
           ),
           alignment: AxisAlignmentDirectional.end,
           children: [
-            ChatBubble(
+            MyChatBubble(
               child: Text(
                 'John, did you remember what time you took the call with Mrs. Smith?',
               ),
             ),
-            ChatBubble(child: Text('Reply ASAP')),
+            MyChatBubble(child: Text('Reply ASAP')),
           ],
         ),
-        ChatGroup(
+        MyChatGroup(
           color: context.colorScheme.secondary,
           textStyle: context.bodyMedium.copyWith(
             color: context.colorScheme.secondaryForeground,
@@ -81,27 +81,27 @@ class MyChatPage extends StatelessWidget {
             size: MyAvatarSize.small,
           ),
           alignment: AxisAlignmentDirectional.start,
-          type: ChatBubbleType.tail.copyWith(
+          type: MyChatBubbleType.tail.copyWith(
             position: () => AxisDirectional.start,
             tailAlignment: () => AxisAlignmentDirectional.end,
           ),
           children: const [
-            ChatBubble(child: Text('Around 6 or 7?')),
-            ChatBubble(child: Text('New phone who dis?')),
+            MyChatBubble(child: Text('Around 6 or 7?')),
+            MyChatBubble(child: Text('New phone who dis?')),
           ],
         ),
-        ChatBubble(
+        MyChatBubble(
           color: context.colorScheme.primary,
           textStyle: context.bodyMedium.copyWith(
             color: context.colorScheme.primaryForeground,
           ),
           alignment: AxisAlignmentDirectional.end,
-          type: ChatBubbleType.tail.copyWith(
+          type: MyChatBubbleType.tail.copyWith(
             position: () => AxisDirectional.end,
           ),
           child: const Text('SIX SEVENNN \u{1F924}\u{1F92A}'),
         ),
-        ChatGroup(
+        MyChatGroup(
           color: context.colorScheme.secondary,
           textStyle: context.bodyMedium.copyWith(
             color: context.colorScheme.secondaryForeground,
@@ -112,14 +112,14 @@ class MyChatPage extends StatelessWidget {
             size: MyAvatarSize.small,
           ),
           alignment: AxisAlignmentDirectional.start,
-          type: ChatBubbleType.tail.copyWith(
+          type: MyChatBubbleType.tail.copyWith(
             position: () => AxisDirectional.start,
             tailAlignment: () => AxisAlignmentDirectional.end,
           ),
           children: const [
-            ChatBubble(child: Text('?')),
-            ChatBubble(child: Text('Seriously who is this')),
-            ChatBubble(child: Text('gonna have to block you')),
+            MyChatBubble(child: Text('?')),
+            MyChatBubble(child: Text('Seriously who is this')),
+            MyChatBubble(child: Text('gonna have to block you')),
           ],
         ),
       ],
@@ -129,25 +129,25 @@ class MyChatPage extends StatelessWidget {
   Widget _buildMessageReactions(BuildContext context) {
     return _ChatLane(
       children: [
-        ChatGroup(
+        MyChatGroup(
           color: context.colorScheme.primary,
           textStyle: context.bodyMedium.copyWith(
             color: context.colorScheme.primaryForeground,
           ),
-          type: ChatBubbleType.tail.copyWith(
+          type: MyChatBubbleType.tail.copyWith(
             position: () => AxisDirectional.end,
           ),
           alignment: AxisAlignmentDirectional.end,
           children: const [
-            ChatBubble(
+            MyChatBubble(
               child: Text(
                 'John, did you remember what time you took the call with Mrs. Smith?',
               ),
             ),
-            ChatBubble(child: Text('Reply ASAP')),
+            MyChatBubble(child: Text('Reply ASAP')),
           ],
         ),
-        ChatGroup(
+        MyChatGroup(
           color: context.colorScheme.secondary,
           textStyle: context.bodyMedium.copyWith(
             color: context.colorScheme.secondaryForeground,
@@ -158,37 +158,37 @@ class MyChatPage extends StatelessWidget {
             size: MyAvatarSize.small,
           ),
           alignment: AxisAlignmentDirectional.start,
-          type: ChatBubbleType.tail.copyWith(
+          type: MyChatBubbleType.tail.copyWith(
             position: () => AxisDirectional.start,
             tailAlignment: () => AxisAlignmentDirectional.end,
           ),
           children: const [
-            ChatBubble(child: Text('Around 6 or 7?')),
-            ChatBubble(child: Text('New phone who dis?')),
+            MyChatBubble(child: Text('Around 6 or 7?')),
+            MyChatBubble(child: Text('New phone who dis?')),
           ],
         ),
-        ChatReaction(
+        MyChatReaction(
           alignment: AxisAlignmentDirectional.end,
-          reaction: ChatReactionContainer(
+          reaction: MyChatReactionContainer(
             child: Row(
               mainAxisSize: MainAxisSize.min,
               spacing: 4,
               children: const [Text('\u{2753}')],
             ),
           ),
-          child: ChatBubble(
+          child: MyChatBubble(
             color: context.colorScheme.primary,
             textStyle: context.bodyMedium.copyWith(
               color: context.colorScheme.primaryForeground,
             ),
             alignment: AxisAlignmentDirectional.end,
-            type: ChatBubbleType.tail.copyWith(
+            type: MyChatBubbleType.tail.copyWith(
               position: () => AxisDirectional.end,
             ),
             child: const Text('SIX SEVENNN \u{1F924}\u{1F92A}'),
           ),
         ),
-        ChatGroup(
+        MyChatGroup(
           color: context.colorScheme.secondary,
           textStyle: context.bodyMedium.copyWith(
             color: context.colorScheme.secondaryForeground,
@@ -199,15 +199,15 @@ class MyChatPage extends StatelessWidget {
             size: MyAvatarSize.small,
           ),
           alignment: AxisAlignmentDirectional.start,
-          type: ChatBubbleType.tail.copyWith(
+          type: MyChatBubbleType.tail.copyWith(
             position: () => AxisDirectional.start,
             tailAlignment: () => AxisAlignmentDirectional.end,
           ),
           children: [
-            const ChatBubble(child: Text('?')),
-            const ChatBubble(child: Text('Seriously who is this')),
-            ChatReaction(
-              reaction: ChatReactionContainer(
+            const MyChatBubble(child: Text('?')),
+            const MyChatBubble(child: Text('Seriously who is this')),
+            MyChatReaction(
+              reaction: MyChatReactionContainer(
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   spacing: 4,
@@ -222,7 +222,7 @@ class MyChatPage extends StatelessWidget {
                   ],
                 ),
               ),
-              child: const ChatBubble(child: Text('gonna have to block you')),
+              child: const MyChatBubble(child: Text('gonna have to block you')),
             ),
           ],
         ),
@@ -261,10 +261,10 @@ class _ChatPlaygroundExampleState extends State<_ChatPlaygroundExample> {
         (label: 'End', value: AxisAlignmentDirectional.end),
       ];
 
-  static const _tailBehaviorOptions = <({String label, TailBehavior value})>[
-    (label: 'First', value: TailBehavior.first),
-    (label: 'Middle', value: TailBehavior.middle),
-    (label: 'Last', value: TailBehavior.last),
+  static const _tailBehaviorOptions = <({String label, MyTailBehavior value})>[
+    (label: 'First', value: MyTailBehavior.first),
+    (label: 'Middle', value: MyTailBehavior.middle),
+    (label: 'Last', value: MyTailBehavior.last),
   ];
 
   AxisDirectional selfPosition = AxisDirectional.end;
@@ -273,35 +273,35 @@ class _ChatPlaygroundExampleState extends State<_ChatPlaygroundExample> {
   AxisAlignmentDirectional otherAlignment = AxisAlignmentDirectional.start;
   AxisAlignmentDirectional selfTailAlignment = AxisAlignmentDirectional.end;
   AxisAlignmentDirectional otherTailAlignment = AxisAlignmentDirectional.end;
-  TailBehavior selfBehavior = TailBehavior.last;
-  TailBehavior otherBehavior = TailBehavior.last;
+  MyTailBehavior selfBehavior = MyTailBehavior.last;
+  MyTailBehavior otherBehavior = MyTailBehavior.last;
   _ChatPlaygroundType type = _ChatPlaygroundType.tail;
 
-  ChatBubbleType get selfType {
+  MyChatBubbleType get selfType {
     return switch (type) {
-      _ChatPlaygroundType.tail => ChatBubbleType.tail.copyWith(
+      _ChatPlaygroundType.tail => MyChatBubbleType.tail.copyWith(
         position: () => selfPosition,
         tailAlignment: () => selfTailAlignment,
         tailBehavior: () => selfBehavior,
       ),
-      _ChatPlaygroundType.sharpCorner => ChatBubbleType.sharpCorner.copyWith(
+      _ChatPlaygroundType.sharpCorner => MyChatBubbleType.sharpCorner.copyWith(
         tailBehavior: () => selfBehavior,
       ),
-      _ChatPlaygroundType.plain => ChatBubbleType.plain,
+      _ChatPlaygroundType.plain => MyChatBubbleType.plain,
     };
   }
 
-  ChatBubbleType get otherType {
+  MyChatBubbleType get otherType {
     return switch (type) {
-      _ChatPlaygroundType.tail => ChatBubbleType.tail.copyWith(
+      _ChatPlaygroundType.tail => MyChatBubbleType.tail.copyWith(
         position: () => otherPosition,
         tailAlignment: () => otherTailAlignment,
         tailBehavior: () => otherBehavior,
       ),
-      _ChatPlaygroundType.sharpCorner => ChatBubbleType.sharpCorner.copyWith(
+      _ChatPlaygroundType.sharpCorner => MyChatBubbleType.sharpCorner.copyWith(
         tailBehavior: () => otherBehavior,
       ),
-      _ChatPlaygroundType.plain => ChatBubbleType.plain,
+      _ChatPlaygroundType.plain => MyChatBubbleType.plain,
     };
   }
 
@@ -313,8 +313,8 @@ class _ChatPlaygroundExampleState extends State<_ChatPlaygroundExample> {
       otherAlignment = AxisAlignmentDirectional.start;
       selfTailAlignment = AxisAlignmentDirectional.end;
       otherTailAlignment = AxisAlignmentDirectional.end;
-      selfBehavior = TailBehavior.last;
-      otherBehavior = TailBehavior.last;
+      selfBehavior = MyTailBehavior.last;
+      otherBehavior = MyTailBehavior.last;
       type = _ChatPlaygroundType.tail;
     });
   }
@@ -334,21 +334,21 @@ class _ChatPlaygroundExampleState extends State<_ChatPlaygroundExample> {
       children: [
         _ChatLane(
           children: [
-            ChatGroup(
+            MyChatGroup(
               color: context.colorScheme.primary,
               textStyle: selfTextStyle,
               type: selfType,
               alignment: selfAlignment,
               children: const [
-                ChatBubble(
+                MyChatBubble(
                   child: Text(
                     'John, did you remember what time you took the call with Mrs. Smith?',
                   ),
                 ),
-                ChatBubble(child: Text('Reply ASAP')),
+                MyChatBubble(child: Text('Reply ASAP')),
               ],
             ),
-            ChatGroup(
+            MyChatGroup(
               color: context.colorScheme.secondary,
               textStyle: otherTextStyle,
               avatarPrefix: const MyAvatar(
@@ -359,18 +359,18 @@ class _ChatPlaygroundExampleState extends State<_ChatPlaygroundExample> {
               type: otherType,
               alignment: otherAlignment,
               children: const [
-                ChatBubble(child: Text('Around 6 or 7?')),
-                ChatBubble(child: Text('New phone who dis?')),
+                MyChatBubble(child: Text('Around 6 or 7?')),
+                MyChatBubble(child: Text('New phone who dis?')),
               ],
             ),
-            ChatBubble(
+            MyChatBubble(
               color: context.colorScheme.primary,
               textStyle: selfTextStyle,
               type: selfType,
               alignment: selfAlignment,
               child: const Text('SIX SEVENNN \u{1F924}\u{1F92A}'),
             ),
-            ChatGroup(
+            MyChatGroup(
               color: context.colorScheme.secondary,
               textStyle: otherTextStyle,
               avatarPrefix: const MyAvatar(
@@ -381,9 +381,9 @@ class _ChatPlaygroundExampleState extends State<_ChatPlaygroundExample> {
               type: otherType,
               alignment: otherAlignment,
               children: const [
-                ChatBubble(child: Text('?')),
-                ChatBubble(child: Text('Seriously who is this')),
-                ChatBubble(child: Text('gonna have to block you')),
+                MyChatBubble(child: Text('?')),
+                MyChatBubble(child: Text('Seriously who is this')),
+                MyChatBubble(child: Text('gonna have to block you')),
               ],
             ),
           ],
@@ -440,14 +440,14 @@ class _ChatPlaygroundExampleState extends State<_ChatPlaygroundExample> {
               options: _alignmentOptions,
               onChanged: (value) => setState(() => otherTailAlignment = value),
             ),
-            _select<TailBehavior>(
+            _select<MyTailBehavior>(
               context: context,
               label: 'Self Behavior',
               value: selfBehavior,
               options: _tailBehaviorOptions,
               onChanged: (value) => setState(() => selfBehavior = value),
             ),
-            _select<TailBehavior>(
+            _select<MyTailBehavior>(
               context: context,
               label: 'Other Behavior',
               value: otherBehavior,

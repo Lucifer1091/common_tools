@@ -11,9 +11,9 @@ import 'axis_direction.dart';
 
 /// Scoped styling defaults for chat widgets.
 ///
-/// Values provided here are used when a [ChatBubble] does not specify the same
+/// Values provided here are used when a [MyChatBubble] does not specify the same
 /// property directly.
-class ChatTheme {
+class MyChatTheme {
   /// Default alignment for chat bubbles.
   final AxisAlignmentGeometry? alignment;
 
@@ -21,7 +21,7 @@ class ChatTheme {
   final Color? color;
 
   /// Default bubble type.
-  final ChatBubbleType? type;
+  final MyChatBubbleType? type;
 
   /// Default bubble border radius.
   final BorderRadiusGeometry? borderRadius;
@@ -39,7 +39,7 @@ class ChatTheme {
   final TextStyle? textStyle;
 
   /// Creates chat styling defaults.
-  const ChatTheme({
+  const MyChatTheme({
     this.alignment,
     this.color,
     this.type,
@@ -51,17 +51,17 @@ class ChatTheme {
   });
 
   /// Creates a copy with selected values replaced.
-  ChatTheme copyWith({
+  MyChatTheme copyWith({
     ValueGetter<AxisAlignmentGeometry?>? alignment,
     ValueGetter<Color?>? color,
-    ValueGetter<ChatBubbleType?>? type,
+    ValueGetter<MyChatBubbleType?>? type,
     ValueGetter<BorderRadiusGeometry?>? borderRadius,
     ValueGetter<EdgeInsetsGeometry?>? padding,
     ValueGetter<BorderSide?>? border,
     ValueGetter<double?>? widthFactor,
     ValueGetter<TextStyle?>? textStyle,
   }) {
-    return ChatTheme(
+    return MyChatTheme(
       alignment: alignment == null ? this.alignment : alignment(),
       color: color == null ? this.color : color(),
       type: type == null ? this.type : type(),
@@ -74,8 +74,8 @@ class ChatTheme {
   }
 
   /// Returns this theme with non-null values from [theme] layered on top.
-  ChatTheme merge(ChatTheme theme) {
-    return ChatTheme(
+  MyChatTheme merge(MyChatTheme theme) {
+    return MyChatTheme(
       alignment: theme.alignment ?? alignment,
       color: theme.color ?? color,
       type: theme.type ?? type,
@@ -90,7 +90,7 @@ class ChatTheme {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    return other is ChatTheme &&
+    return other is MyChatTheme &&
         other.alignment == alignment &&
         other.color == color &&
         other.type == type &&
@@ -128,22 +128,22 @@ Border? _borderFromSide(BorderSide? side) {
 
 /// A widget that constrains the width of its child based on a factor and aligns it.
 ///
-/// This widget is used by [ChatBubble] to limit the width of the bubble relative to
+/// This widget is used by [MyChatBubble] to limit the width of the bubble relative to
 /// the available width and to align it within that space.
 ///
 /// Parameters:
 /// - [widthFactor] (`double`, required): The fraction of the available width that the child should occupy.
 /// - [alignment] (`AxisAlignmentGeometry`, required): The alignment of the child within the available space.
 /// - [child] (`Widget`, required): The widget below this widget in the tree.
-class ChatConstrainedBox extends SingleChildRenderObjectWidget {
+class MyChatConstrainedBox extends SingleChildRenderObjectWidget {
   /// The fraction of the available width that the child should occupy.
   final double widthFactor;
 
   /// The alignment of the child within the available space.
   final AxisAlignmentGeometry alignment;
 
-  /// Creates a [ChatConstrainedBox].
-  const ChatConstrainedBox({
+  /// Creates a [MyChatConstrainedBox].
+  const MyChatConstrainedBox({
     required this.widthFactor,
     required this.alignment,
     required super.child,
@@ -151,8 +151,8 @@ class ChatConstrainedBox extends SingleChildRenderObjectWidget {
   });
 
   @override
-  RenderChatConstrainedBox createRenderObject(BuildContext context) {
-    return RenderChatConstrainedBox(
+  MyRenderChatConstrainedBox createRenderObject(BuildContext context) {
+    return MyRenderChatConstrainedBox(
       widthFactor: widthFactor,
       alignment: alignment.resolve(
         Directionality.maybeOf(context) ?? TextDirection.ltr,
@@ -163,7 +163,7 @@ class ChatConstrainedBox extends SingleChildRenderObjectWidget {
   @override
   void updateRenderObject(
     BuildContext context,
-    RenderChatConstrainedBox renderObject,
+    MyRenderChatConstrainedBox renderObject,
   ) {
     renderObject
       ..widthFactor = widthFactor
@@ -175,18 +175,18 @@ class ChatConstrainedBox extends SingleChildRenderObjectWidget {
 
 /// A render object that constrains the width of its child and aligns it.
 ///
-/// This render object implements the layout logic for [ChatConstrainedBox].
-class RenderChatConstrainedBox extends RenderShiftedBox {
+/// This render object implements the layout logic for [MyChatConstrainedBox].
+class MyRenderChatConstrainedBox extends RenderShiftedBox {
   double _widthFactor;
   AxisAlignment _alignment;
 
-  /// Creates a [RenderChatConstrainedBox].
+  /// Creates a [MyRenderChatConstrainedBox].
   ///
   /// Parameters:
   /// - [_widthFactor] (`double`, required): The fraction of the available width that the child should occupy.
   /// - [_alignment] (`AxisAlignment`, required): The alignment of the child within the available space.
   /// - [child] (`RenderBox?`, optional): The child render object.
-  RenderChatConstrainedBox({
+  MyRenderChatConstrainedBox({
     required this._widthFactor,
     required this._alignment,
     RenderBox? child,
@@ -260,7 +260,7 @@ class RenderChatConstrainedBox extends RenderShiftedBox {
   }
 }
 
-/// A widget that groups multiple [ChatBubble]s together.
+/// A widget that groups multiple [MyChatBubble]s together.
 ///
 /// This widget handles the layout and styling of a group of chat bubbles,
 /// including avatar positioning and spacing.
@@ -275,7 +275,7 @@ class RenderChatConstrainedBox extends RenderShiftedBox {
 ///   ],
 /// )
 /// ```
-class ChatGroup extends StatelessWidget {
+class MyChatGroup extends StatelessWidget {
   /// The widget to display before the chat bubbles (e.g., an avatar).
   final Widget? avatarPrefix;
 
@@ -292,7 +292,7 @@ class ChatGroup extends StatelessWidget {
   final Color? color;
 
   /// The type of the chat bubbles.
-  final ChatBubbleType? type;
+  final MyChatBubbleType? type;
 
   /// The border radius of the chat bubbles.
   final BorderRadiusGeometry? borderRadius;
@@ -315,7 +315,7 @@ class ChatGroup extends StatelessWidget {
   /// The text style for chat bubble content.
   final TextStyle? textStyle;
 
-  /// Creates a [ChatGroup].
+  /// Creates a [MyChatGroup].
   ///
   /// Parameters:
   /// - [children] (`List<Widget>`, required): The list of chat bubbles to display.
@@ -331,7 +331,7 @@ class ChatGroup extends StatelessWidget {
   /// - [avatarAlignment] (`AxisAlignmentGeometry?`, optional): The alignment of the avatar.
   /// - [avatarSpacing] (`double?`, optional): The spacing between the avatar and the chat bubbles.
   /// - [textStyle] (`TextStyle?`, optional): The text style for chat bubble content.
-  const ChatGroup({
+  const MyChatGroup({
     super.key,
     required this.children,
     this.alignment,
@@ -350,9 +350,10 @@ class ChatGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final inheritedTheme = context.maybeWatch<ChatTheme>() ?? const ChatTheme();
+    final inheritedTheme =
+        context.maybeWatch<MyChatTheme>() ?? const MyChatTheme();
     final effectiveTheme = inheritedTheme.merge(
-      ChatTheme(
+      MyChatTheme(
         alignment: alignment,
         color: color,
         type: type,
@@ -381,11 +382,11 @@ class ChatGroup extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 for (int i = 0; i < children.length; i++)
-                  MyProvider<ChatBubbleData>(
-                    data: ChatBubbleData(index: i, length: children.length),
+                  MyProvider<MyChatBubbleData>(
+                    data: MyChatBubbleData(index: i, length: children.length),
                     notifyUpdate: (oldWidget) =>
                         oldWidget.data !=
-                        ChatBubbleData(index: i, length: children.length),
+                        MyChatBubbleData(index: i, length: children.length),
                     child: children[i],
                   ),
               ],
@@ -397,7 +398,7 @@ class ChatGroup extends StatelessWidget {
       ),
     );
 
-    return MyProvider<ChatTheme>(
+    return MyProvider<MyChatTheme>(
       data: effectiveTheme,
       notifyUpdate: (oldWidget) => oldWidget.data != effectiveTheme,
       child: group,
@@ -405,22 +406,22 @@ class ChatGroup extends StatelessWidget {
   }
 }
 
-/// Defines the type of a [ChatBubble].
+/// Defines the type of a [MyChatBubble].
 ///
 /// This abstract class allows for different visual styles of chat bubbles,
 /// such as plain bubbles or bubbles with tails.
-abstract class ChatBubbleType {
+abstract class MyChatBubbleType {
   /// A plain bubble with no tail.
-  static const plain = PlainChatBubbleType();
+  static const plain = MyPlainChatBubbleType();
 
   /// A bubble with an external triangular tail.
-  static const tail = TailChatBubbleType();
+  static const tail = MyTailChatBubbleType();
 
   /// A bubble with one sharp corner instead of rounded.
-  static const sharpCorner = SharpCornerChatBubbleType();
+  static const sharpCorner = MySharpCornerChatBubbleType();
 
-  /// Creates a [ChatBubbleType].
-  const ChatBubbleType();
+  /// Creates a [MyChatBubbleType].
+  const MyChatBubbleType();
 
   /// Wraps the child widget with the bubble styling.
   ///
@@ -435,13 +436,13 @@ abstract class ChatBubbleType {
   Widget wrap(
     BuildContext context,
     Widget child,
-    ChatBubbleData data,
-    ChatBubble chat,
+    MyChatBubbleData data,
+    MyChatBubble chat,
   );
 }
 
-/// Defines the corner of a [ChatBubble] where a tail might be attached.
-enum ChatBubbleCorner {
+/// Defines the corner of a [MyChatBubble] where a tail might be attached.
+enum MyChatBubbleCorner {
   /// The top-left corner.
   topLeft,
 
@@ -455,11 +456,11 @@ enum ChatBubbleCorner {
   bottomRight,
 }
 
-/// Defines the directional corner of a [ChatBubble].
+/// Defines the directional corner of a [MyChatBubble].
 ///
 /// This is used to support RTL languages by defining corners in terms of
 /// start and end instead of left and right.
-enum ChatBubbleCornerDirectional {
+enum MyChatBubbleCornerDirectional {
   /// The top-start corner (top-left in LTR, top-right in RTL).
   topStart,
 
@@ -472,36 +473,36 @@ enum ChatBubbleCornerDirectional {
   /// The bottom-end corner (bottom-right in LTR, bottom-left in RTL).
   bottomEnd;
 
-  /// Resolves the directional corner to a concrete [ChatBubbleCorner] based on the text direction.
-  ChatBubbleCorner resolve(TextDirection direction) {
+  /// Resolves the directional corner to a concrete [MyChatBubbleCorner] based on the text direction.
+  MyChatBubbleCorner resolve(TextDirection direction) {
     return switch ((this, direction)) {
-      (ChatBubbleCornerDirectional.topStart, TextDirection.ltr) =>
-        ChatBubbleCorner.topLeft,
-      (ChatBubbleCornerDirectional.topStart, TextDirection.rtl) =>
-        ChatBubbleCorner.topRight,
-      (ChatBubbleCornerDirectional.topEnd, TextDirection.ltr) =>
-        ChatBubbleCorner.topRight,
-      (ChatBubbleCornerDirectional.topEnd, TextDirection.rtl) =>
-        ChatBubbleCorner.topLeft,
-      (ChatBubbleCornerDirectional.bottomStart, TextDirection.ltr) =>
-        ChatBubbleCorner.bottomLeft,
-      (ChatBubbleCornerDirectional.bottomStart, TextDirection.rtl) =>
-        ChatBubbleCorner.bottomRight,
-      (ChatBubbleCornerDirectional.bottomEnd, TextDirection.ltr) =>
-        ChatBubbleCorner.bottomRight,
-      (ChatBubbleCornerDirectional.bottomEnd, TextDirection.rtl) =>
-        ChatBubbleCorner.bottomLeft,
+      (MyChatBubbleCornerDirectional.topStart, TextDirection.ltr) =>
+        MyChatBubbleCorner.topLeft,
+      (MyChatBubbleCornerDirectional.topStart, TextDirection.rtl) =>
+        MyChatBubbleCorner.topRight,
+      (MyChatBubbleCornerDirectional.topEnd, TextDirection.ltr) =>
+        MyChatBubbleCorner.topRight,
+      (MyChatBubbleCornerDirectional.topEnd, TextDirection.rtl) =>
+        MyChatBubbleCorner.topLeft,
+      (MyChatBubbleCornerDirectional.bottomStart, TextDirection.ltr) =>
+        MyChatBubbleCorner.bottomLeft,
+      (MyChatBubbleCornerDirectional.bottomStart, TextDirection.rtl) =>
+        MyChatBubbleCorner.bottomRight,
+      (MyChatBubbleCornerDirectional.bottomEnd, TextDirection.ltr) =>
+        MyChatBubbleCorner.bottomRight,
+      (MyChatBubbleCornerDirectional.bottomEnd, TextDirection.rtl) =>
+        MyChatBubbleCorner.bottomLeft,
     };
   }
 }
 
-/// A [ChatBubbleType] that makes one corner sharp instead of rounded.
+/// A [MyChatBubbleType] that makes one corner sharp instead of rounded.
 ///
 /// This style modifies the border radius of one corner to create a pointed
 /// corner effect, similar to a speech bubble tail.
-class SharpCornerChatBubbleType extends ChatBubbleType {
+class MySharpCornerChatBubbleType extends MyChatBubbleType {
   /// The corner where the tail should be applied.
-  final ChatBubbleCornerDirectional? corner;
+  final MyChatBubbleCornerDirectional? corner;
 
   /// The border radius of the bubble.
   final BorderRadiusGeometry? borderRadius;
@@ -510,16 +511,16 @@ class SharpCornerChatBubbleType extends ChatBubbleType {
   final EdgeInsetsGeometry? padding;
 
   /// The behavior determining when to show the tail.
-  final TailBehavior? tailBehavior;
+  final MyTailBehavior? tailBehavior;
 
-  /// Creates a [SharpCornerChatBubbleType].
+  /// Creates a [MySharpCornerChatBubbleType].
   ///
   /// Parameters:
   /// - [corner] (`ChatBubbleCornerDirectional?`, optional): The corner that should be sharp.
   /// - [borderRadius] (`BorderRadiusGeometry?`, optional): The border radius of the bubble.
   /// - [padding] (`EdgeInsetsGeometry?`, optional): The padding inside the bubble.
   /// - [tailBehavior] (`TailBehavior?`, optional): The behavior determining when to show the sharp corner.
-  const SharpCornerChatBubbleType({
+  const MySharpCornerChatBubbleType({
     this.corner,
     this.borderRadius,
     this.padding,
@@ -535,14 +536,14 @@ class SharpCornerChatBubbleType extends ChatBubbleType {
   /// - [tailBehavior] (`ValueGetter<TailBehavior?>?`, optional): New tail behavior value.
   ///
   /// Returns:
-  /// A new [SharpCornerChatBubbleType] with the specified values updated.
-  SharpCornerChatBubbleType copyWith({
-    ValueGetter<ChatBubbleCornerDirectional?>? corner,
+  /// A new [MySharpCornerChatBubbleType] with the specified values updated.
+  MySharpCornerChatBubbleType copyWith({
+    ValueGetter<MyChatBubbleCornerDirectional?>? corner,
     ValueGetter<BorderRadiusGeometry?>? borderRadius,
     ValueGetter<EdgeInsetsGeometry?>? padding,
-    ValueGetter<TailBehavior?>? tailBehavior,
+    ValueGetter<MyTailBehavior?>? tailBehavior,
   }) {
-    return SharpCornerChatBubbleType(
+    return MySharpCornerChatBubbleType(
       corner: corner == null ? this.corner : corner(),
       borderRadius: borderRadius == null ? this.borderRadius : borderRadius(),
       padding: padding == null ? this.padding : padding(),
@@ -554,8 +555,8 @@ class SharpCornerChatBubbleType extends ChatBubbleType {
   Widget wrap(
     BuildContext context,
     Widget child,
-    ChatBubbleData data,
-    ChatBubble chat,
+    MyChatBubbleData data,
+    MyChatBubble chat,
   ) {
     final textDirection = Directionality.maybeOf(context) ?? TextDirection.ltr;
     final padding = chat.effectivePadding(context, this.padding);
@@ -564,29 +565,29 @@ class SharpCornerChatBubbleType extends ChatBubbleType {
     var radius = chat
         .effectiveBorderRadius(context, borderRadius)
         .resolve(textDirection);
-    final tailBehavior = this.tailBehavior ?? TailBehavior.last;
+    final tailBehavior = this.tailBehavior ?? MyTailBehavior.last;
     if (tailBehavior.wrapWithTail(data)) {
-      ChatBubbleCorner? corner = this.corner?.resolve(textDirection);
+      MyChatBubbleCorner? corner = this.corner?.resolve(textDirection);
       if (corner == null) {
         final alignment = (chat.alignment ?? AxisAlignmentDirectional.end)
             .resolve(textDirection);
         if (alignment.value > 0) {
-          corner = ChatBubbleCorner.bottomRight;
+          corner = MyChatBubbleCorner.bottomRight;
         } else {
-          corner = ChatBubbleCorner.bottomLeft;
+          corner = MyChatBubbleCorner.bottomLeft;
         }
       }
       switch (corner) {
-        case ChatBubbleCorner.topLeft:
+        case MyChatBubbleCorner.topLeft:
           radius = radius.copyWith(topLeft: Radius.zero);
           break;
-        case ChatBubbleCorner.topRight:
+        case MyChatBubbleCorner.topRight:
           radius = radius.copyWith(topRight: Radius.zero);
           break;
-        case ChatBubbleCorner.bottomLeft:
+        case MyChatBubbleCorner.bottomLeft:
           radius = radius.copyWith(bottomLeft: Radius.zero);
           break;
-        case ChatBubbleCorner.bottomRight:
+        case MyChatBubbleCorner.bottomRight:
           radius = radius.copyWith(bottomRight: Radius.zero);
           break;
       }
@@ -603,8 +604,8 @@ class SharpCornerChatBubbleType extends ChatBubbleType {
   }
 }
 
-/// A simple [ChatBubbleType] with no tail.
-class PlainChatBubbleType extends ChatBubbleType {
+/// A simple [MyChatBubbleType] with no tail.
+class MyPlainChatBubbleType extends MyChatBubbleType {
   /// The border radius of the bubble.
   final BorderRadiusGeometry? borderRadius;
 
@@ -614,19 +615,19 @@ class PlainChatBubbleType extends ChatBubbleType {
   /// The padding inside the bubble.
   final EdgeInsetsGeometry? padding;
 
-  /// Creates a [PlainChatBubbleType].
+  /// Creates a [MyPlainChatBubbleType].
   ///
   /// Parameters:
   /// - [borderRadius] (`BorderRadiusGeometry?`, optional): The border radius of the bubble.
   /// - [border] (`BorderSide?`, optional): The border of the bubble.
   /// - [padding] (`EdgeInsetsGeometry?`, optional): The padding inside the bubble.
-  const PlainChatBubbleType({this.borderRadius, this.border, this.padding});
+  const MyPlainChatBubbleType({this.borderRadius, this.border, this.padding});
   @override
   Widget wrap(
     BuildContext context,
     Widget child,
-    ChatBubbleData data,
-    ChatBubble chat,
+    MyChatBubbleData data,
+    MyChatBubble chat,
   ) {
     final border = chat.effectiveBorder(context, this.border);
     final padding = chat.effectivePadding(context, this.padding);
@@ -643,8 +644,8 @@ class PlainChatBubbleType extends ChatBubbleType {
   }
 }
 
-/// Defines when a tail should be shown on a [ChatBubble].
-abstract class TailBehavior {
+/// Defines when a tail should be shown on a [MyChatBubble].
+abstract class MyTailBehavior {
   /// Shows a tail on the first bubble in a group.
   static const first = _ChatTailBehavior(_first);
 
@@ -653,26 +654,26 @@ abstract class TailBehavior {
 
   /// Shows a tail on the last bubble in a group.
   static const last = _ChatTailBehavior(_last);
-  static bool _first(ChatBubbleData data) => data.index == 0;
-  static bool _middle(ChatBubbleData data) =>
+  static bool _first(MyChatBubbleData data) => data.index == 0;
+  static bool _middle(MyChatBubbleData data) =>
       data.index == (data.length - 1) ~/ 2;
-  static bool _last(ChatBubbleData data) => data.index == data.length - 1;
+  static bool _last(MyChatBubbleData data) => data.index == data.length - 1;
 
   /// Determines whether the bubble at the given index should have a tail.
-  bool wrapWithTail(ChatBubbleData data);
+  bool wrapWithTail(MyChatBubbleData data);
 }
 
-class _ChatTailBehavior implements TailBehavior {
-  final bool Function(ChatBubbleData data) shouldHaveTail;
+class _ChatTailBehavior implements MyTailBehavior {
+  final bool Function(MyChatBubbleData data) shouldHaveTail;
   const _ChatTailBehavior(this.shouldHaveTail);
   @override
-  bool wrapWithTail(ChatBubbleData data) {
+  bool wrapWithTail(MyChatBubbleData data) {
     return shouldHaveTail(data);
   }
 }
 
-/// A [ChatBubbleType] that draws an external triangular tail.
-class TailChatBubbleType extends ChatBubbleType {
+/// A [MyChatBubbleType] that draws an external triangular tail.
+class MyTailChatBubbleType extends MyChatBubbleType {
   /// The alignment of the tail along the bubble's edge.
   final AxisAlignmentGeometry? tailAlignment;
 
@@ -689,12 +690,12 @@ class TailChatBubbleType extends ChatBubbleType {
   final double? tailRadius;
 
   /// The behavior determining when to show the tail.
-  final TailBehavior? tailBehavior;
+  final MyTailBehavior? tailBehavior;
 
   /// The padding inside the bubble.
   final EdgeInsetsGeometry? padding;
 
-  /// Creates a [TailChatBubbleType].
+  /// Creates a [MyTailChatBubbleType].
   ///
   /// Parameters:
   /// - [tailAlignment] (`AxisAlignmentGeometry?`, optional): The alignment of the tail along the bubble's edge.
@@ -704,7 +705,7 @@ class TailChatBubbleType extends ChatBubbleType {
   /// - [tailRadius] (`double?`, optional): The radius of the tail's curve.
   /// - [tailBehavior] (`TailBehavior?`, optional): The behavior determining when to show the tail.
   /// - [padding] (`EdgeInsetsGeometry?`, optional): The padding inside the bubble.
-  const TailChatBubbleType({
+  const MyTailChatBubbleType({
     this.tailAlignment,
     this.position,
     this.size,
@@ -725,16 +726,16 @@ class TailChatBubbleType extends ChatBubbleType {
   /// - [tailBehavior] (`ValueGetter<TailBehavior>?`, optional): New tail behavior value.
   ///
   /// Returns:
-  /// A new [TailChatBubbleType] with the specified values updated.
-  TailChatBubbleType copyWith({
+  /// A new [MyTailChatBubbleType] with the specified values updated.
+  MyTailChatBubbleType copyWith({
     ValueGetter<AxisAlignmentGeometry>? tailAlignment,
     ValueGetter<AxisDirectional>? position,
     ValueGetter<Size>? size,
     ValueGetter<BorderRadiusGeometry>? borderRadius,
     ValueGetter<double>? tailRadius,
-    ValueGetter<TailBehavior>? tailBehavior,
+    ValueGetter<MyTailBehavior>? tailBehavior,
   }) {
-    return TailChatBubbleType(
+    return MyTailChatBubbleType(
       tailAlignment: tailAlignment?.call() ?? this.tailAlignment,
       position: position?.call() ?? this.position,
       size: size?.call() ?? this.size,
@@ -748,11 +749,11 @@ class TailChatBubbleType extends ChatBubbleType {
   Widget wrap(
     BuildContext context,
     Widget child,
-    ChatBubbleData data,
-    ChatBubble chat,
+    MyChatBubbleData data,
+    MyChatBubble chat,
   ) {
     final textDirection = Directionality.maybeOf(context) ?? TextDirection.ltr;
-    final tailBehavior = this.tailBehavior ?? TailBehavior.last;
+    final tailBehavior = this.tailBehavior ?? MyTailBehavior.last;
     final color = chat.effectiveColor(context);
     final radius = chat
         .effectiveBorderRadius(context, borderRadius)
@@ -962,20 +963,20 @@ class _TailPainter extends CustomPainter {
   }
 }
 
-/// Data associated with a [ChatBubble] within a [ChatGroup].
-class ChatBubbleData {
+/// Data associated with a [MyChatBubble] within a [MyChatGroup].
+class MyChatBubbleData {
   /// The index of the bubble in the group.
   final int index;
 
   /// The total number of bubbles in the group.
   final int length;
 
-  /// Creates a [ChatBubbleData].
+  /// Creates a [MyChatBubbleData].
   ///
   /// Parameters:
   /// - [index] (`int`, required): The index of the bubble in the group.
   /// - [length] (`int`, required): The total number of bubbles in the group.
-  const ChatBubbleData({required this.index, required this.length});
+  const MyChatBubbleData({required this.index, required this.length});
 
   /// Creates a copy of this data with the given fields replaced with the new values.
   ///
@@ -984,9 +985,9 @@ class ChatBubbleData {
   /// - [length] (`int?`, optional): New length value.
   ///
   /// Returns:
-  /// A new [ChatBubbleData] with the specified values updated.
-  ChatBubbleData copyWith({int? index, int? length}) {
-    return ChatBubbleData(
+  /// A new [MyChatBubbleData] with the specified values updated.
+  MyChatBubbleData copyWith({int? index, int? length}) {
+    return MyChatBubbleData(
       index: index ?? this.index,
       length: length ?? this.length,
     );
@@ -1000,7 +1001,7 @@ class ChatBubbleData {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    return other is ChatBubbleData &&
+    return other is MyChatBubbleData &&
         other.index == index &&
         other.length == length;
   }
@@ -1024,12 +1025,12 @@ class ChatBubbleData {
 ///   color: Colors.blue,
 /// )
 /// ```
-class ChatBubble extends StatelessWidget {
+class MyChatBubble extends StatelessWidget {
   /// The content of the chat bubble.
   final Widget child;
 
   /// The type of the chat bubble.
-  final ChatBubbleType? type;
+  final MyChatBubbleType? type;
 
   /// The background color of the chat bubble.
   final Color? color;
@@ -1052,7 +1053,7 @@ class ChatBubble extends StatelessWidget {
   /// The text style for chat bubble content.
   final TextStyle? textStyle;
 
-  /// Creates a [ChatBubble].
+  /// Creates a [MyChatBubble].
   ///
   /// Parameters:
   /// - [child] (`Widget`, required): The content of the chat bubble.
@@ -1064,7 +1065,7 @@ class ChatBubble extends StatelessWidget {
   /// - [borderRadius] (`BorderRadiusGeometry?`, optional): The border radius of the chat bubble.
   /// - [widthFactor] (`double?`, optional): The width factor of the chat bubble.
   /// - [textStyle] (`TextStyle?`, optional): The text style for chat bubble content.
-  const ChatBubble({
+  const MyChatBubble({
     super.key,
     required this.child,
     this.type,
@@ -1082,14 +1083,14 @@ class ChatBubble extends StatelessWidget {
     final alignment = effectiveAlignment(context);
     final type = effectiveType(context);
     final effectiveData =
-        context.maybeWatch<ChatBubbleData>() ??
-        const ChatBubbleData(index: 0, length: 1);
+        context.maybeWatch<MyChatBubbleData>() ??
+        const MyChatBubbleData(index: 0, length: 1);
     final widthFactor = effectiveWidthFactor(context);
     final textStyle = effectiveTextStyle(context);
     final effectiveChild = textStyle == null
         ? child
         : DefaultTextStyle.merge(style: textStyle, child: child);
-    return ChatConstrainedBox(
+    return MyChatConstrainedBox(
       widthFactor: widthFactor,
       alignment: alignment,
       child: Builder(
@@ -1104,21 +1105,23 @@ class ChatBubble extends StatelessWidget {
   /// the built-in fallback.
   AxisAlignmentGeometry effectiveAlignment(BuildContext context) {
     return alignment ??
-        context.maybeWatch<ChatTheme>()?.alignment ??
+        context.maybeWatch<MyChatTheme>()?.alignment ??
         AxisAlignmentDirectional.end;
   }
 
   /// Resolves the bubble type using direct values, scoped defaults, then the
   /// built-in fallback.
-  ChatBubbleType effectiveType(BuildContext context) {
-    return type ?? context.maybeWatch<ChatTheme>()?.type ?? ChatBubbleType.tail;
+  MyChatBubbleType effectiveType(BuildContext context) {
+    return type ??
+        context.maybeWatch<MyChatTheme>()?.type ??
+        MyChatBubbleType.tail;
   }
 
   /// Resolves the bubble color using direct values, scoped defaults, then the
   /// active design-system color.
   Color effectiveColor(BuildContext context) {
     return color ??
-        context.maybeWatch<ChatTheme>()?.color ??
+        context.maybeWatch<MyChatTheme>()?.color ??
         MyTheme.of(context).colorScheme.primary;
   }
 
@@ -1129,7 +1132,7 @@ class ChatBubble extends StatelessWidget {
   ) {
     return padding ??
         typePadding ??
-        context.maybeWatch<ChatTheme>()?.padding ??
+        context.maybeWatch<MyChatTheme>()?.padding ??
         const EdgeInsets.symmetric(horizontal: 12, vertical: 8);
   }
 
@@ -1140,40 +1143,40 @@ class ChatBubble extends StatelessWidget {
   ) {
     return borderRadius ??
         typeBorderRadius ??
-        context.maybeWatch<ChatTheme>()?.borderRadius ??
+        context.maybeWatch<MyChatTheme>()?.borderRadius ??
         MyBorderRadius.large;
   }
 
   /// Resolves the bubble border.
   BorderSide? effectiveBorder(BuildContext context, BorderSide? typeBorder) {
-    return border ?? typeBorder ?? context.maybeWatch<ChatTheme>()?.border;
+    return border ?? typeBorder ?? context.maybeWatch<MyChatTheme>()?.border;
   }
 
   /// Resolves the bubble width factor.
   double effectiveWidthFactor(BuildContext context) {
-    return widthFactor ?? context.maybeWatch<ChatTheme>()?.widthFactor ?? 0.5;
+    return widthFactor ?? context.maybeWatch<MyChatTheme>()?.widthFactor ?? 0.5;
   }
 
   /// Resolves the content text style.
   TextStyle? effectiveTextStyle(BuildContext context) {
-    return textStyle ?? context.maybeWatch<ChatTheme>()?.textStyle;
+    return textStyle ?? context.maybeWatch<MyChatTheme>()?.textStyle;
   }
 }
 
-class ChatReaction extends StatelessWidget {
+class MyChatReaction extends StatelessWidget {
   final Widget child;
 
   /// The alignment used to infer the reaction corner when [corner] is not set.
   final AxisAlignmentGeometry? alignment;
 
-  final ChatBubbleCornerDirectional? corner;
+  final MyChatBubbleCornerDirectional? corner;
   final Widget reaction;
 
   /// The minimum extra width the bubble keeps beyond the reaction when the
   /// reaction is wider than the bubble.
   final double? extraWidth;
 
-  const ChatReaction({
+  const MyChatReaction({
     super.key,
     this.alignment,
     this.corner,
@@ -1185,7 +1188,7 @@ class ChatReaction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textDirection = Directionality.maybeOf(context) ?? TextDirection.ltr;
-    final chatTheme = context.maybeWatch<ChatTheme>() ?? const ChatTheme();
+    final chatTheme = context.maybeWatch<MyChatTheme>() ?? const MyChatTheme();
 
     // The bubble's alignment within the chat row (defaults to end/right).
     final resolvedAlignment =
@@ -1197,13 +1200,13 @@ class ChatReaction extends StatelessWidget {
     // the reaction on the side opposite the bubble's alignment (a right-aligned
     // bubble gets its reaction on the left, and vice versa).
     final directionalCorner = corner;
-    final ChatBubbleCorner resolvedCorner;
+    final MyChatBubbleCorner resolvedCorner;
     if (directionalCorner != null) {
       resolvedCorner = directionalCorner.resolve(textDirection);
     } else {
       resolvedCorner = alignmentValue > 0
-          ? ChatBubbleCorner.bottomLeft
-          : ChatBubbleCorner.bottomRight;
+          ? MyChatBubbleCorner.bottomLeft
+          : MyChatBubbleCorner.bottomRight;
     }
 
     final chatPadding =
@@ -1211,10 +1214,10 @@ class ChatReaction extends StatelessWidget {
                 const EdgeInsets.symmetric(horizontal: 12, vertical: 8))
             .resolve(textDirection);
     final reactionPadding = switch (resolvedCorner) {
-      ChatBubbleCorner.topLeft => EdgeInsets.only(left: 12, top: 12),
-      ChatBubbleCorner.topRight => EdgeInsets.only(right: 12, top: 12),
-      ChatBubbleCorner.bottomLeft => EdgeInsets.only(left: 12, bottom: 12),
-      ChatBubbleCorner.bottomRight => EdgeInsets.only(right: 12, bottom: 12),
+      MyChatBubbleCorner.topLeft => EdgeInsets.only(left: 12, top: 12),
+      MyChatBubbleCorner.topRight => EdgeInsets.only(right: 12, top: 12),
+      MyChatBubbleCorner.bottomLeft => EdgeInsets.only(left: 12, bottom: 12),
+      MyChatBubbleCorner.bottomRight => EdgeInsets.only(right: 12, bottom: 12),
     };
     final newChatPadding =
         chatPadding +
@@ -1234,7 +1237,7 @@ class ChatReaction extends StatelessWidget {
       extraWidth: extraWidth ?? 8,
       padding: reactionPadding,
       children: [
-        MyProvider<ChatTheme>(
+        MyProvider<MyChatTheme>(
           // Force the bubble to hug its content (widthFactor 1.0) so it isn't
           // squeezed to half-width by its own ChatConstrainedBox when the
           // reaction render object tightens it to its natural width.
@@ -1248,9 +1251,9 @@ class ChatReaction extends StatelessWidget {
   }
 }
 
-class ChatReactionContainer extends StatelessWidget {
+class MyChatReactionContainer extends StatelessWidget {
   final Widget child;
-  const ChatReactionContainer({super.key, required this.child});
+  const MyChatReactionContainer({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -1268,7 +1271,7 @@ class ChatReactionContainer extends StatelessWidget {
 }
 
 class _ChatReaction extends MultiChildRenderObjectWidget {
-  final ChatBubbleCorner corner;
+  final MyChatBubbleCorner corner;
   final EdgeInsets padding;
   final double extraWidth;
   final AxisAlignment alignment;
@@ -1330,7 +1333,7 @@ class _ChatReactionRenderObject extends RenderBox
     with
         ContainerRenderObjectMixin<RenderBox, _ChatReactionParentData>,
         RenderBoxContainerDefaultsMixin<RenderBox, _ChatReactionParentData> {
-  ChatBubbleCorner corner;
+  MyChatBubbleCorner corner;
   EdgeInsets padding;
   double extraWidth;
   AxisAlignment alignment;
@@ -1351,37 +1354,48 @@ class _ChatReactionRenderObject extends RenderBox
   /// Computes the reaction offset relative to the bubble's top-left corner.
   Offset _reactionOffset(Size bubbleSize, Size reactionSize) {
     return switch (corner) {
-      ChatBubbleCorner.topLeft => Offset(
+      MyChatBubbleCorner.topLeft => Offset(
         padding.left,
         padding.top - reactionSize.height,
       ),
-      ChatBubbleCorner.topRight => Offset(
+      MyChatBubbleCorner.topRight => Offset(
         bubbleSize.width - reactionSize.width - padding.right,
         padding.top - reactionSize.height,
       ),
-      ChatBubbleCorner.bottomLeft => Offset(
+      MyChatBubbleCorner.bottomLeft => Offset(
         padding.left,
         bubbleSize.height - padding.bottom,
       ),
-      ChatBubbleCorner.bottomRight => Offset(
+      MyChatBubbleCorner.bottomRight => Offset(
         bubbleSize.width - reactionSize.width - padding.right,
         bubbleSize.height - padding.bottom,
       ),
     };
   }
 
+  double _constrainedBubbleWidth(
+    RenderBox bubbleChild,
+    Size reactionSize,
+    BoxConstraints constraints,
+  ) {
+    final intrinsicWidth = bubbleChild.getMaxIntrinsicWidth(double.infinity);
+    final desiredWidth = max(intrinsicWidth, reactionSize.width + extraWidth);
+    return constraints.constrainWidth(desiredWidth);
+  }
+
   @override
   void performLayout() {
     final bubbleChild = firstChild!;
     final reactionChild = childAfter(bubbleChild)!;
-    final childConstraints = constraints;
+    final childConstraints = constraints.loosen();
 
-    reactionChild.layout(childConstraints.loosen(), parentUsesSize: true);
+    reactionChild.layout(childConstraints, parentUsesSize: true);
     final reactionSize = reactionChild.size;
-    var bubbleWidth = bubbleChild.getMaxIntrinsicWidth(double.infinity);
-    if (reactionSize.width + extraWidth > bubbleWidth) {
-      bubbleWidth = reactionSize.width + extraWidth;
-    }
+    final bubbleWidth = _constrainedBubbleWidth(
+      bubbleChild,
+      reactionSize,
+      childConstraints,
+    );
     bubbleChild.layout(
       childConstraints.tighten(width: bubbleWidth),
       parentUsesSize: true,
@@ -1390,10 +1404,7 @@ class _ChatReactionRenderObject extends RenderBox
 
     // Anchor the reaction to the corner, then shift both children so the
     // combined bounds start at the origin (nothing is clipped).
-    final reactionOffset = _reactionOffset(
-      Size(bubbleWidth, bubbleSize.height),
-      reactionSize,
-    );
+    final reactionOffset = _reactionOffset(bubbleSize, reactionSize);
     final union = (Offset.zero & bubbleSize).expandToInclude(
       reactionOffset & reactionSize,
     );
@@ -1427,10 +1438,11 @@ class _ChatReactionRenderObject extends RenderBox
     final childConstraints = constraints.loosen();
 
     final reactionSize = reactionChild.getDryLayout(childConstraints);
-    var bubbleWidth = bubbleChild.getMaxIntrinsicWidth(double.infinity);
-    if (reactionSize.width + extraWidth > bubbleWidth) {
-      bubbleWidth = reactionSize.width + extraWidth;
-    }
+    final bubbleWidth = _constrainedBubbleWidth(
+      bubbleChild,
+      reactionSize,
+      childConstraints,
+    );
     final bubbleSize = bubbleChild.getDryLayout(
       childConstraints.tighten(width: bubbleWidth),
     );
@@ -1459,9 +1471,9 @@ class _ChatReactionRenderObject extends RenderBox
   /// The extra height the reaction adds beyond the bubble edge for [corner].
   double _protrusion(double reactionHeight) {
     final overlap = switch (corner) {
-      ChatBubbleCorner.topLeft || ChatBubbleCorner.topRight => padding.top,
-      ChatBubbleCorner.bottomLeft ||
-      ChatBubbleCorner.bottomRight => padding.bottom,
+      MyChatBubbleCorner.topLeft || MyChatBubbleCorner.topRight => padding.top,
+      MyChatBubbleCorner.bottomLeft ||
+      MyChatBubbleCorner.bottomRight => padding.bottom,
     };
     return max(0.0, reactionHeight - overlap);
   }
@@ -1510,10 +1522,10 @@ class _ChatReactionRenderObject extends RenderBox
   }
 }
 
-class ChatCollapsible extends StatelessWidget {
+class MyChatCollapsible extends StatelessWidget {
   final Widget child;
   final bool collapsed;
-  const ChatCollapsible({
+  const MyChatCollapsible({
     super.key,
     required this.collapsed,
     required this.child,

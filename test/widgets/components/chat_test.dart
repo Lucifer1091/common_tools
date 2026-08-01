@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:common_tools/components.dart';
 import 'package:common_tools/theme.dart';
 import 'package:flutter/material.dart';
@@ -10,9 +12,9 @@ void main() {
   ) async {
     await tester.pumpWidget(
       const _ThemeHarness(
-        child: ChatGroup(
+        child: MyChatGroup(
           textStyle: TextStyle(color: Colors.white, fontSize: 18),
-          children: [ChatBubble(child: Text('Plain message'))],
+          children: [MyChatBubble(child: Text('Plain message'))],
         ),
       ),
     );
@@ -26,9 +28,9 @@ void main() {
   testWidgets('ChatGroup.textStyle applies to MyText bubbles', (tester) async {
     await tester.pumpWidget(
       const _ThemeHarness(
-        child: ChatGroup(
+        child: MyChatGroup(
           textStyle: TextStyle(color: Colors.yellow, fontSize: 17),
-          children: [ChatBubble(child: MyText('Design-system message'))],
+          children: [MyChatBubble(child: MyText('Design-system message'))],
         ),
       ),
     );
@@ -44,10 +46,10 @@ void main() {
   ) async {
     await tester.pumpWidget(
       const _ThemeHarness(
-        child: ChatGroup(
+        child: MyChatGroup(
           textStyle: TextStyle(color: Colors.white, fontSize: 18),
           children: [
-            ChatBubble(
+            MyChatBubble(
               textStyle: TextStyle(color: Colors.black, fontSize: 14),
               child: Text('Override message'),
             ),
@@ -67,10 +69,10 @@ void main() {
   ) async {
     await tester.pumpWidget(
       const _ThemeHarness(
-        child: ChatGroup(
+        child: MyChatGroup(
           textStyle: TextStyle(color: Colors.white, fontSize: 18),
           children: [
-            ChatBubble(
+            MyChatBubble(
               child: Text(
                 'Explicit message',
                 style: TextStyle(color: Colors.green),
@@ -92,12 +94,12 @@ void main() {
   ) async {
     await tester.pumpWidget(
       const _ThemeHarness(
-        child: ChatGroup(
+        child: MyChatGroup(
           textStyle: TextStyle(color: Colors.purple, fontSize: 16),
           children: [
-            ChatReaction(
-              reaction: ChatReactionContainer(child: Text('!')),
-              child: ChatBubble(child: Text('Reacted message')),
+            MyChatReaction(
+              reaction: MyChatReactionContainer(child: Text('!')),
+              child: MyChatBubble(child: Text('Reacted message')),
             ),
           ],
         ),
@@ -115,14 +117,17 @@ void main() {
   ) async {
     await tester.pumpWidget(
       _ThemeHarness(
-        child: _reactionScenario(
-          alignment: AxisAlignmentDirectional.end,
-          bubbleAlignment: AxisAlignmentDirectional.end,
+        child: _tightLane(
+          _reactionScenario(
+            alignment: AxisAlignmentDirectional.end,
+            bubbleAlignment: AxisAlignmentDirectional.end,
+            tailPosition: AxisDirectional.end,
+          ),
         ),
       ),
     );
 
-    _expectReactionLeftOfBubble(tester);
+    _expectEndAlignedReaction(tester);
   });
 
   testWidgets('standalone self reaction sits opposite the end-side tail', (
@@ -130,25 +135,28 @@ void main() {
   ) async {
     await tester.pumpWidget(
       _ThemeHarness(
-        child: ChatReaction(
-          alignment: AxisAlignmentDirectional.end,
-          reaction: const SizedBox(key: _reactionKey, width: 24, height: 16),
-          child: ChatBubble(
+        child: _tightLane(
+          MyChatReaction(
             alignment: AxisAlignmentDirectional.end,
-            type: ChatBubbleType.tail.copyWith(
-              position: () => AxisDirectional.end,
-            ),
-            child: const SizedBox(
-              key: _bubbleContentKey,
-              width: 80,
-              height: 20,
+            reaction: const SizedBox(key: _reactionKey, width: 24, height: 16),
+            child: MyChatBubble(
+              key: _bubbleKey,
+              alignment: AxisAlignmentDirectional.end,
+              type: MyChatBubbleType.tail.copyWith(
+                position: () => AxisDirectional.end,
+              ),
+              child: const SizedBox(
+                key: _bubbleContentKey,
+                width: 80,
+                height: 20,
+              ),
             ),
           ),
         ),
       ),
     );
 
-    _expectReactionLeftOfBubble(tester);
+    _expectEndAlignedReaction(tester);
   });
 
   testWidgets('standalone other ChatReaction uses explicit start alignment', (
@@ -156,14 +164,17 @@ void main() {
   ) async {
     await tester.pumpWidget(
       _ThemeHarness(
-        child: _reactionScenario(
-          alignment: AxisAlignmentDirectional.start,
-          bubbleAlignment: AxisAlignmentDirectional.start,
+        child: _tightLane(
+          _reactionScenario(
+            alignment: AxisAlignmentDirectional.start,
+            bubbleAlignment: AxisAlignmentDirectional.start,
+            tailPosition: AxisDirectional.start,
+          ),
         ),
       ),
     );
 
-    _expectReactionRightOfBubble(tester);
+    _expectStartAlignedReaction(tester);
   });
 
   testWidgets('ChatReaction.corner overrides inferred alignment', (
@@ -171,15 +182,20 @@ void main() {
   ) async {
     await tester.pumpWidget(
       _ThemeHarness(
-        child: _reactionScenario(
-          alignment: AxisAlignmentDirectional.end,
-          bubbleAlignment: AxisAlignmentDirectional.end,
-          corner: ChatBubbleCornerDirectional.bottomEnd,
+        child: _tightLane(
+          _reactionScenario(
+            alignment: AxisAlignmentDirectional.end,
+            bubbleAlignment: AxisAlignmentDirectional.end,
+            corner: MyChatBubbleCornerDirectional.bottomEnd,
+            tailPosition: AxisDirectional.end,
+          ),
         ),
       ),
     );
 
-    _expectReactionRightOfBubble(tester);
+    final bubbleRect = tester.getRect(find.byKey(_bubbleKey));
+    final reactionRect = tester.getRect(find.byKey(_reactionKey));
+    expect(reactionRect.right, moreOrLessEquals(bubbleRect.right - 12));
   });
 
   testWidgets('ChatReaction still uses inherited ChatGroup alignment', (
@@ -187,48 +203,154 @@ void main() {
   ) async {
     await tester.pumpWidget(
       _ThemeHarness(
-        child: ChatGroup(
-          alignment: AxisAlignmentDirectional.start,
-          children: [_reactionScenario()],
+        child: _tightLane(
+          MyChatGroup(
+            alignment: AxisAlignmentDirectional.start,
+            type: MyChatBubbleType.tail.copyWith(
+              position: () => AxisDirectional.start,
+            ),
+            children: [_reactionScenario()],
+          ),
         ),
       ),
     );
 
-    _expectReactionRightOfBubble(tester);
+    _expectStartAlignedReaction(tester);
+  });
+
+  testWidgets('directional end reaction mirrors in RTL', (tester) async {
+    await tester.pumpWidget(
+      _ThemeHarness(
+        textDirection: TextDirection.rtl,
+        child: _tightLane(
+          _reactionScenario(
+            alignment: AxisAlignmentDirectional.end,
+            bubbleAlignment: AxisAlignmentDirectional.end,
+            tailPosition: AxisDirectional.end,
+          ),
+        ),
+      ),
+    );
+
+    _expectStartAlignedReaction(tester);
+  });
+
+  testWidgets('wide reaction expands a short bubble by extraWidth', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _ThemeHarness(
+        child: _tightLane(
+          _reactionScenario(
+            alignment: AxisAlignmentDirectional.end,
+            bubbleAlignment: AxisAlignmentDirectional.end,
+            tailPosition: AxisDirectional.end,
+            reactionWidth: 140,
+            bubbleContentWidth: 20,
+            extraWidth: 10,
+          ),
+        ),
+      ),
+    );
+
+    final laneRect = tester.getRect(find.byKey(_laneKey));
+    final bubbleRect = tester.getRect(find.byKey(_bubbleKey));
+    final reactionRect = tester.getRect(find.byKey(_reactionKey));
+    expect(bubbleRect.width, moreOrLessEquals(150));
+    expect(reactionRect.left, moreOrLessEquals(bubbleRect.left + 12));
+    expect(
+      max(bubbleRect.right, reactionRect.right),
+      moreOrLessEquals(laneRect.right),
+    );
+  });
+
+  testWidgets('long reacted bubble stays within the available width', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _ThemeHarness(
+        child: _tightLane(
+          _reactionScenario(
+            alignment: AxisAlignmentDirectional.end,
+            bubbleAlignment: AxisAlignmentDirectional.end,
+            tailPosition: AxisDirectional.end,
+            bubbleContentWidth: 500,
+          ),
+        ),
+      ),
+    );
+
+    final laneRect = tester.getRect(find.byKey(_laneKey));
+    final bubbleRect = tester.getRect(find.byKey(_bubbleKey));
+    expect(bubbleRect.width, lessThanOrEqualTo(laneRect.width));
+    expect(bubbleRect.left, greaterThanOrEqualTo(laneRect.left));
+    expect(bubbleRect.right, lessThanOrEqualTo(laneRect.right));
   });
 }
 
+const _laneKey = Key('reaction-lane');
+const _bubbleKey = Key('bubble');
 const _bubbleContentKey = Key('bubble-content');
 const _reactionKey = Key('reaction');
+
+Widget _tightLane(Widget child) {
+  return SizedBox(key: _laneKey, width: 320, child: child);
+}
 
 Widget _reactionScenario({
   AxisAlignmentGeometry? alignment,
   AxisAlignmentGeometry? bubbleAlignment,
-  ChatBubbleCornerDirectional? corner,
+  MyChatBubbleCornerDirectional? corner,
+  AxisDirectional? tailPosition,
+  double reactionWidth = 24,
+  double bubbleContentWidth = 80,
+  double? extraWidth,
 }) {
-  return ChatReaction(
+  return MyChatReaction(
     alignment: alignment,
     corner: corner,
-    reaction: const SizedBox(key: _reactionKey, width: 24, height: 16),
-    child: ChatBubble(
+    extraWidth: extraWidth,
+    reaction: SizedBox(key: _reactionKey, width: reactionWidth, height: 16),
+    child: MyChatBubble(
+      key: _bubbleKey,
       alignment: bubbleAlignment,
-      child: const SizedBox(key: _bubbleContentKey, width: 80, height: 20),
+      type: tailPosition == null
+          ? null
+          : MyChatBubbleType.tail.copyWith(position: () => tailPosition),
+      child: SizedBox(
+        key: _bubbleContentKey,
+        width: bubbleContentWidth,
+        height: 20,
+      ),
     ),
   );
 }
 
-void _expectReactionLeftOfBubble(WidgetTester tester) {
-  expect(
-    tester.getCenter(find.byKey(_reactionKey)).dx,
-    lessThan(tester.getCenter(find.byKey(_bubbleContentKey)).dx),
-  );
+void _expectEndAlignedReaction(
+  WidgetTester tester, {
+  double expectedInset = 12,
+}) {
+  final laneRect = tester.getRect(find.byKey(_laneKey));
+  final bubbleRect = tester.getRect(find.byKey(_bubbleKey));
+  final contentRect = tester.getRect(find.byKey(_bubbleContentKey));
+  final reactionRect = tester.getRect(find.byKey(_reactionKey));
+
+  expect(bubbleRect.width, lessThan(laneRect.width));
+  expect(bubbleRect.right, moreOrLessEquals(laneRect.right));
+  expect(reactionRect.left, moreOrLessEquals(bubbleRect.left + expectedInset));
+  expect(reactionRect.right, greaterThan(contentRect.left));
 }
 
-void _expectReactionRightOfBubble(WidgetTester tester) {
-  expect(
-    tester.getCenter(find.byKey(_reactionKey)).dx,
-    greaterThan(tester.getCenter(find.byKey(_bubbleContentKey)).dx),
-  );
+void _expectStartAlignedReaction(WidgetTester tester) {
+  final laneRect = tester.getRect(find.byKey(_laneKey));
+  final bubbleRect = tester.getRect(find.byKey(_bubbleKey));
+  final contentRect = tester.getRect(find.byKey(_bubbleContentKey));
+  final reactionRect = tester.getRect(find.byKey(_reactionKey));
+
+  expect(bubbleRect.width, lessThan(laneRect.width));
+  expect(bubbleRect.left, moreOrLessEquals(laneRect.left));
+  expect(reactionRect.right, moreOrLessEquals(bubbleRect.right - 12));
+  expect(reactionRect.left, lessThan(contentRect.right));
 }
 
 TextStyle _renderedTextStyle(WidgetTester tester, String text) {
@@ -242,9 +364,13 @@ TextStyle _renderedTextStyle(WidgetTester tester, String text) {
 }
 
 class _ThemeHarness extends StatelessWidget {
-  const _ThemeHarness({required this.child});
+  const _ThemeHarness({
+    required this.child,
+    this.textDirection = TextDirection.ltr,
+  });
 
   final Widget child;
+  final TextDirection textDirection;
 
   @override
   Widget build(BuildContext context) {
@@ -258,7 +384,10 @@ class _ThemeHarness extends StatelessWidget {
           typography: const MyTypography.geist(),
         ),
         child: Scaffold(
-          body: SizedBox(width: 400, child: Center(child: child)),
+          body: Directionality(
+            textDirection: textDirection,
+            child: SizedBox(width: 400, child: Center(child: child)),
+          ),
         ),
       ),
     );
