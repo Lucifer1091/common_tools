@@ -44,6 +44,35 @@ void main() {
     expect(afterPopoverCenter.dx, lessThan(afterTriggerCenter.dx - 100));
     expect(afterPopoverCenter.dy, beforeResize.dy + 10);
   });
+
+  testWidgets('auto anchored portal becomes interactive after measurement', (
+    tester,
+  ) async {
+    var tapped = false;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: MyPortal(
+            visible: true,
+            anchor: const MyAnchorAuto(offset: Offset(0, 4)),
+            portalBuilder: (context) => GestureDetector(
+              key: _popoverKey,
+              behavior: HitTestBehavior.opaque,
+              onTap: () => tapped = true,
+              child: const SizedBox(width: 80, height: 20),
+            ),
+            child: const SizedBox(key: _triggerKey, width: 40, height: 20),
+          ),
+        ),
+      ),
+    );
+    await _settlePortal(tester);
+
+    expect(find.byKey(_popoverKey).hitTestable(), findsOneWidget);
+    await tester.tap(find.byKey(_popoverKey));
+    expect(tapped, isTrue);
+  });
 }
 
 Future<void> _setViewport(WidgetTester tester, Size size) async {
@@ -54,9 +83,9 @@ Future<void> _setViewport(WidgetTester tester, Size size) async {
 }
 
 Future<void> _settlePortal(WidgetTester tester) async {
-  await tester.pump();
-  await tester.pump();
-  await tester.pump();
+  for (var frame = 0; frame < 5; frame++) {
+    await tester.pump();
+  }
 }
 
 class _PortalHarness extends StatelessWidget {

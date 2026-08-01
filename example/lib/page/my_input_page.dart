@@ -4,6 +4,8 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../base/example_widget.dart';
 
+enum _AutoCompleteFilterMode { contains, startsWith }
+
 class MyInputViewPage extends StatefulWidget {
   const MyInputViewPage({super.key});
 
@@ -14,6 +16,28 @@ class MyInputViewPage extends StatefulWidget {
 class _MyInputViewPageState extends State<MyInputViewPage> {
   var controller = <TextEditingController>[];
   late final GlobalKey<MyFormState> _formKey;
+  final _externalAutoCompleteController = TextEditingController();
+  final _filteredAutoCompleteController = TextEditingController();
+  List<String> _externalSuggestions = const [];
+  MyAutoCompleteMode _autoCompleteMode = MyAutoCompleteMode.replaceWord;
+  _AutoCompleteFilterMode _filterMode = _AutoCompleteFilterMode.contains;
+
+  static const _fruits = [
+    'Apple',
+    'Banana',
+    'Cherry',
+    'Date',
+    'Grape',
+    'Kiwi',
+    'Lemon',
+    'Mango',
+    'Orange',
+    'Peach',
+    'Pear',
+    'Pineapple',
+    'Strawberry',
+    'Watermelon',
+  ];
 
   @override
   void initState() {
@@ -30,6 +54,8 @@ class _MyInputViewPageState extends State<MyInputViewPage> {
     for (var e in controller) {
       e.dispose();
     }
+    _externalAutoCompleteController.dispose();
+    _filteredAutoCompleteController.dispose();
     super.dispose();
   }
 
@@ -164,6 +190,204 @@ class _MyInputViewPageState extends State<MyInputViewPage> {
             ),
           ],
         ),
+        ExampleModule(
+          title: 'Autocomplete',
+          children: [
+            ExampleItem(
+              desc: 'External suggestions',
+              center: false,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              builder: _buildExternalAutoComplete,
+            ),
+            ExampleItem(
+              desc: 'Built-in filtering playground',
+              center: false,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              builder: _buildFilteredAutoComplete,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  void _updateExternalSuggestions(String value) {
+    final currentWord = _externalAutoCompleteController.currentWord;
+    setState(() {
+      if (currentWord == null || currentWord.isEmpty) {
+        _externalSuggestions = const [];
+      } else {
+        final query = currentWord.toLowerCase();
+        _externalSuggestions = _fruits
+            .where((fruit) => fruit.toLowerCase().contains(query))
+            .toList(growable: false);
+      }
+    });
+  }
+
+  Widget _buildExternalAutoComplete(BuildContext context) {
+    return MyAutoComplete(
+      controller: _externalAutoCompleteController,
+      suggestions: _externalSuggestions,
+      child: MyInput(
+        controller: _externalAutoCompleteController,
+        placeholder: 'Type a fruit',
+        leading: Icon(
+          LucideIcons.search,
+          size: 18,
+          color: context.colorScheme.mutedForeground,
+        ),
+        trailing: ListenableBuilder(
+          listenable: _externalAutoCompleteController,
+          builder: (context, child) {
+            if (_externalAutoCompleteController.text.isEmpty) {
+              return const SizedBox.shrink();
+            }
+            return MyButton(
+              height: 28,
+              width: 28,
+              padding: EdgeInsets.zero,
+              type: MyButtonType.text,
+              shape: MyButtonShape.square,
+              icon: LucideIcons.x,
+              focus: MyFocusableParams(canRequestFocus: false),
+              onTap: () {
+                _externalAutoCompleteController.clear();
+                _updateExternalSuggestions('');
+              },
+            );
+          },
+        ),
+        onChanged: _updateExternalSuggestions,
+      ),
+    );
+  }
+
+  Widget _buildFilteredAutoComplete(BuildContext context) {
+    final filterLabel = switch (_filterMode) {
+      _AutoCompleteFilterMode.contains => 'Contains',
+      _AutoCompleteFilterMode.startsWith => 'Starts with',
+    };
+    final modeLabel = switch (_autoCompleteMode) {
+      MyAutoCompleteMode.append => 'Append',
+      MyAutoCompleteMode.replaceWord => 'Replace word',
+      MyAutoCompleteMode.replaceAll => 'Replace all',
+    };
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      spacing: 12,
+      children: [
+        Wrap(
+          spacing: 12,
+          runSpacing: 12,
+          children: [
+            SizedBox(
+              width: 180,
+              child: MySelect<MyAutoCompleteMode>(
+                initialValue: _autoCompleteMode,
+                placeholder: const Text('Completion mode'),
+                selectedOptionBuilder: (context, value) => Text(modeLabel),
+                options: const [
+                  MyOption(
+                    value: MyAutoCompleteMode.append,
+                    child: Text('Append'),
+                  ),
+                  MyOption(
+                    value: MyAutoCompleteMode.replaceWord,
+                    child: Text('Replace word'),
+                  ),
+                  MyOption(
+                    value: MyAutoCompleteMode.replaceAll,
+                    child: Text('Replace all'),
+                  ),
+                ],
+                onChanged: (value) {
+                  if (value != null) {
+                    setState(() => _autoCompleteMode = value);
+                  }
+                },
+              ),
+            ),
+            SizedBox(
+              width: 180,
+              child: MySelect<_AutoCompleteFilterMode>(
+                initialValue: _filterMode,
+                placeholder: const Text('Filter behavior'),
+                selectedOptionBuilder: (context, value) => Text(filterLabel),
+                options: const [
+                  MyOption(
+                    value: _AutoCompleteFilterMode.contains,
+                    child: Text('Contains'),
+                  ),
+                  MyOption(
+                    value: _AutoCompleteFilterMode.startsWith,
+                    child: Text('Starts with'),
+                  ),
+                ],
+                onChanged: (value) {
+                  if (value != null) setState(() => _filterMode = value);
+                },
+              ),
+            ),
+          ],
+        ),
+        MyAutoComplete.filtered(
+          controller: _filteredAutoCompleteController,
+          options: _fruits,
+          mode: _autoCompleteMode,
+          popoverConstraints: const BoxConstraints(maxHeight: 220),
+          suggestionFilter: (option, query) {
+            final normalizedOption = option.toLowerCase();
+            final normalizedQuery = query.toLowerCase();
+            return switch (_filterMode) {
+              _AutoCompleteFilterMode.contains => normalizedOption.contains(
+                normalizedQuery,
+              ),
+              _AutoCompleteFilterMode.startsWith => normalizedOption.startsWith(
+                normalizedQuery,
+              ),
+            };
+          },
+          itemBuilder: (context, suggestion, highlighted) {
+            return Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              decoration: BoxDecoration(
+                color: highlighted ? context.colorScheme.accent : null,
+                borderRadius: MyBorderRadius.small,
+              ),
+              child: Row(
+                mainAxisSize: .min,
+                children: [
+                  Icon(
+                    LucideIcons.apple,
+                    size: 16,
+                    color: context.colorScheme.mutedForeground,
+                  ),
+                  const Gap(8),
+                  Text(suggestion),
+                  const Spacer(),
+                  if (highlighted)
+                    Icon(
+                      LucideIcons.cornerDownLeft,
+                      size: 14,
+                      color: context.colorScheme.mutedForeground,
+                    ),
+                ],
+              ),
+            );
+          },
+          child: MyInput(
+            controller: _filteredAutoCompleteController,
+            placeholder: 'Try a completion mode',
+            leading: Icon(
+              LucideIcons.wandSparkles,
+              size: 18,
+              color: context.colorScheme.mutedForeground,
+            ),
+          ),
+        ),
+        const Gap(300),
       ],
     );
   }

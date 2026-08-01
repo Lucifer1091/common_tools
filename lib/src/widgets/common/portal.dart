@@ -142,6 +142,7 @@ class _MyPortalState extends State<MyPortal> {
 
   Offset? _calculatedTarget;
   bool _calculatedPreferBelow = true;
+  bool _overlayReady = false;
   Size? _lastViewportSize;
   bool _positionCalculationScheduled = false;
 
@@ -180,7 +181,10 @@ class _MyPortalState extends State<MyPortal> {
           setState(() {
             _calculatedTarget = null;
             _calculatedPreferBelow = true;
+            _overlayReady = false;
           });
+        } else if (_overlayReady) {
+          setState(() => _overlayReady = false);
         }
         hide();
       }
@@ -232,7 +236,8 @@ class _MyPortalState extends State<MyPortal> {
     }
 
     final overlay = overlayKey.currentContext?.findRenderObject() as RenderBox?;
-    final overlaySize = (true == overlay?.hasSize) ? overlay!.size : Size.zero;
+    final overlayReady = overlay != null && overlay.attached && overlay.hasSize;
+    final overlaySize = overlayReady ? overlay.size : Size.zero;
     final verticalGap = anchor.offset.dy.abs();
 
     final topLeft = box.localToGlobal(Offset.zero, ancestor: overlayAncestor);
@@ -306,14 +311,16 @@ class _MyPortalState extends State<MyPortal> {
     final target = box.localToGlobal(followerOffset, ancestor: overlayAncestor);
 
     if (target != _calculatedTarget ||
-        _calculatedPreferBelow != !shouldOpenAbove) {
+        _calculatedPreferBelow != !shouldOpenAbove ||
+        _overlayReady != overlayReady) {
       if (mounted) {
         setState(() {
           _calculatedTarget = target;
           _calculatedPreferBelow = !shouldOpenAbove;
+          _overlayReady = overlayReady;
         });
       }
-    } else if (overlay == null) {
+    } else if (!overlayReady) {
       _schedulePositionCalculation();
     }
   }
@@ -351,9 +358,9 @@ class _MyPortalState extends State<MyPortal> {
         child: Visibility.maintain(
           // The overlay layout details are available only after the view is
           // rendered, in this way we can avoid the flickering effect.
-          visible: overlay != null,
+          visible: _overlayReady,
           child: IgnorePointer(
-            ignoring: overlay == null,
+            ignoring: !_overlayReady,
             child: widget.portalBuilder(context),
           ),
         ),

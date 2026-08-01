@@ -64,6 +64,7 @@ class MyPopover extends StatefulWidget {
     this.groupId,
     this.areaGroupId,
     this.useSameGroupIdForChild = true,
+    this.requestFocusOnOpen = true,
   }) : assert(
          (controller != null) ^ (visible != null),
          'Either controller or visible must be provided',
@@ -145,6 +146,12 @@ class MyPopover extends StatefulWidget {
   /// the popover.
   /// {@endtemplate}
   final bool useSameGroupIdForChild;
+
+  /// Whether the popover should take focus when it opens.
+  ///
+  /// Defaults to `true`. Set this to `false` for overlays such as autocomplete
+  /// suggestions where the trigger must keep receiving keyboard input.
+  final bool requestFocusOnOpen;
 
   /// {@template MyPopover.reverseDuration}
   /// The duration of the popover's exit animation.
@@ -230,10 +237,9 @@ class _MyPopoverState extends State<MyPopover>
   void _onPopoverToggle() {
     if (controller.isOpen) {
       unawaited(animationController.forward(from: 0));
-      // When the popover is opened, request focus
-      // to be able to receive key events.
-
-      _popoverFocusNode.requestFocus();
+      if (widget.requestFocusOnOpen) {
+        _popoverFocusNode.requestFocus();
+      }
     } else {
       unawaited(animationController.reverse());
     }
@@ -339,8 +345,10 @@ class _MyPopoverState extends State<MyPopover>
             portalBuilder: (_) {
               // used to trap the focus inside the popover.
               return FocusScope(
+                canRequestFocus: widget.requestFocusOnOpen,
                 child: Focus(
                   skipTraversal: true,
+                  canRequestFocus: widget.requestFocusOnOpen,
                   focusNode: _popoverFocusNode,
                   child: popover,
                 ),

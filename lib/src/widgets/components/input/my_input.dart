@@ -14,6 +14,7 @@ import '../../common/my_decoration.dart';
 import '../../common/my_decorator.dart';
 import '../../form/input_decorator.dart';
 import '../../form/keyboard_toolbar.dart';
+import 'my_auto_complete.dart';
 
 class _TextFieldSelectionGestureDetectorBuilder
     extends TextSelectionGestureDetectorBuilder {
@@ -909,6 +910,43 @@ class MyInputState extends State<MyInput>
     _statesController.update(WidgetState.focused, _effectiveFocusNode.hasFocus);
   }
 
+  void _applyAutoComplete(MyAutoCompleteIntent intent) {
+    final value = _effectiveController.value;
+    final selection = value.selection;
+    final TextRange replacementRange;
+
+    switch (intent.mode) {
+      case MyAutoCompleteMode.append:
+        replacementRange = selection.isValid
+            ? TextRange(start: selection.start, end: selection.end)
+            : TextRange.collapsed(value.text.length);
+      case MyAutoCompleteMode.replaceWord:
+        replacementRange = selection.isValid && !selection.isCollapsed
+            ? TextRange(start: selection.start, end: selection.end)
+            : currentWordRange(value) ??
+                  TextRange.collapsed(
+                    selection.isValid
+                        ? selection.extentOffset
+                        : value.text.length,
+                  );
+      case MyAutoCompleteMode.replaceAll:
+        replacementRange = TextRange(start: 0, end: value.text.length);
+    }
+
+    final text = value.text.replaceRange(
+      replacementRange.start,
+      replacementRange.end,
+      intent.suggestion,
+    );
+    final caretOffset = replacementRange.start + intent.suggestion.length;
+    _effectiveController.value = TextEditingValue(
+      text: text,
+      selection: TextSelection.collapsed(offset: caretOffset),
+      composing: TextRange.empty,
+    );
+    widget.onChanged?.call(text);
+  }
+
   void _handleSelectionChanged(
     TextSelection selection,
     SelectionChangedCause? cause,
@@ -1270,7 +1308,7 @@ class MyInputState extends State<MyInput>
       semanticsMaxValueLength = null;
     }
 
-    return MouseRegion(
+    final input = MouseRegion(
       cursor: effectiveMouseCursor,
       onEnter: (PointerEnterEvent event) => _handleHover(true),
       onExit: (PointerExitEvent event) => _handleHover(false),
@@ -1350,6 +1388,18 @@ class MyInputState extends State<MyInput>
           ),
         ),
       ),
+    );
+
+    return Actions(
+      actions: {
+        MyAutoCompleteIntent: CallbackAction<MyAutoCompleteIntent>(
+          onInvoke: (intent) {
+            _applyAutoComplete(intent);
+            return null;
+          },
+        ),
+      },
+      child: input,
     );
   }
 }
