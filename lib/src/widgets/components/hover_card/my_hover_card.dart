@@ -52,7 +52,7 @@ class _MyHoverCardState extends State<MyHoverCard> {
   MyPopoverController get _effectiveController =>
       widget.controller ?? _controller!;
 
-  Duration get _wait => widget.wait ?? const Duration(milliseconds: 250);
+  Duration get _wait => widget.wait ?? const Duration(milliseconds: 200);
 
   Duration get _debounce =>
       widget.debounce ?? const Duration(milliseconds: 500);
