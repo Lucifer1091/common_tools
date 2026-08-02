@@ -41,6 +41,7 @@ import 'page/my_input_page.dart';
 import 'page/my_link_page.dart';
 import 'page/my_loader_page.dart';
 import 'page/my_lists_page.dart';
+import 'page/my_menu_bar_page.dart';
 import 'page/my_navbar_page.dart';
 import 'page/my_notice_bar_page.dart';
 import 'page/my_picker_page.dart';
@@ -163,6 +164,11 @@ Map<String, List<ExamplePageModel>> exampleMap = {
       text: 'NavBar',
       name: 'navbar',
       pageBuilder: _wrapInheritedTheme((context) => const MyNavBarPage()),
+    ),
+    ExamplePageModel(
+      text: 'Menu Bar',
+      name: 'menu-bar',
+      pageBuilder: _wrapInheritedTheme((context) => const MyMenuBarPage()),
     ),
     ExamplePageModel(
       text: 'Pagination',
