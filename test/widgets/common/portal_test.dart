@@ -176,6 +176,73 @@ void main() {
 
     expect(tester.getTopLeft(find.byKey(_popoverKey)), const Offset(8, 24));
   });
+
+  testWidgets('global anchor places the overlay top-left at the pointer', (
+    tester,
+  ) async {
+    await _setViewport(tester, const Size(400, 300));
+    await tester.pumpWidget(
+      const _GlobalPortalHarness(
+        anchor: MyGlobalAnchor(Offset(80, 60)),
+        popoverSize: Size(100, 40),
+      ),
+    );
+    await _settlePortal(tester);
+
+    expect(tester.getTopLeft(find.byKey(_popoverKey)), const Offset(80, 60));
+  });
+
+  testWidgets('global anchor flips near the right and bottom viewport edges', (
+    tester,
+  ) async {
+    await _setViewport(tester, const Size(400, 300));
+    await tester.pumpWidget(
+      const _GlobalPortalHarness(
+        anchor: MyGlobalAnchor(Offset(380, 280)),
+        popoverSize: Size(100, 60),
+      ),
+    );
+    await _settlePortal(tester);
+
+    expect(tester.getTopLeft(find.byKey(_popoverKey)), const Offset(280, 220));
+  });
+
+  testWidgets('global anchor clamps to viewport padding as a fallback', (
+    tester,
+  ) async {
+    await _setViewport(tester, const Size(400, 300));
+    await tester.pumpWidget(
+      const _GlobalPortalHarness(
+        anchor: MyGlobalAnchor(Offset(2, 2)),
+        popoverSize: Size(100, 40),
+      ),
+    );
+    await _settlePortal(tester);
+
+    expect(tester.getTopLeft(find.byKey(_popoverKey)), const Offset(8, 8));
+  });
+
+  testWidgets('global anchor repositions while visible', (tester) async {
+    await _setViewport(tester, const Size(400, 300));
+    await tester.pumpWidget(
+      const _GlobalPortalHarness(
+        anchor: MyGlobalAnchor(Offset(40, 40)),
+        popoverSize: Size(100, 40),
+      ),
+    );
+    await _settlePortal(tester);
+    expect(tester.getTopLeft(find.byKey(_popoverKey)), const Offset(40, 40));
+
+    await tester.pumpWidget(
+      const _GlobalPortalHarness(
+        anchor: MyGlobalAnchor(Offset(140, 90)),
+        popoverSize: Size(100, 40),
+      ),
+    );
+    await _settlePortal(tester);
+
+    expect(tester.getTopLeft(find.byKey(_popoverKey)), const Offset(140, 90));
+  });
 }
 
 Future<void> _setViewport(WidgetTester tester, Size size) async {
@@ -258,6 +325,31 @@ class _PositionedPortalHarness extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _GlobalPortalHarness extends StatelessWidget {
+  const _GlobalPortalHarness({required this.anchor, required this.popoverSize});
+
+  final MyGlobalAnchor anchor;
+  final Size popoverSize;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: MyPortal(
+          visible: true,
+          anchor: anchor,
+          portalBuilder: (context) => SizedBox(
+            key: _popoverKey,
+            width: popoverSize.width,
+            height: popoverSize.height,
+          ),
+          child: const SizedBox(key: _triggerKey, width: 20, height: 20),
         ),
       ),
     );

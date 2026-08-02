@@ -121,20 +121,48 @@ class MyAnchor extends MyAnchorBase {
 
 @immutable
 class MyGlobalAnchor extends MyAnchorBase {
-  const MyGlobalAnchor(this.offset);
+  const MyGlobalAnchor(
+    this.offset, {
+    this.followerAnchor = Alignment.topLeft,
+    this.allowHorizontalFlip = true,
+    this.allowVerticalFlip = true,
+    this.viewportPadding = const EdgeInsets.all(8),
+  });
 
   /// The global offset where the overlay is positioned.
   final Offset offset;
+
+  /// The coordinates of the overlay from which the overlay starts.
+  final Alignment followerAnchor;
+
+  /// Whether the overlay may be mirrored horizontally to remain on screen.
+  final bool allowHorizontalFlip;
+
+  /// Whether the overlay may be mirrored vertically to remain on screen.
+  final bool allowVerticalFlip;
+
+  /// Minimum distance kept between the overlay and the viewport edge.
+  final EdgeInsets viewportPadding;
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is MyGlobalAnchor && other.offset == offset;
+    return other is MyGlobalAnchor &&
+        other.offset == offset &&
+        other.followerAnchor == followerAnchor &&
+        other.allowHorizontalFlip == allowHorizontalFlip &&
+        other.allowVerticalFlip == allowVerticalFlip &&
+        other.viewportPadding == viewportPadding;
   }
 
   @override
-  int get hashCode => offset.hashCode;
+  int get hashCode =>
+      offset.hashCode ^
+      followerAnchor.hashCode ^
+      allowHorizontalFlip.hashCode ^
+      allowVerticalFlip.hashCode ^
+      viewportPadding.hashCode;
 }
 
 class MyPortal extends StatefulWidget {
@@ -232,21 +260,28 @@ class _MyPortalState extends State<MyPortal> {
   }
 
   void _calculatePosition() {
-    if (!mounted || widget.anchor is! MyAnchorAuto) return;
+    if (!mounted) return;
 
-    final anchor = widget.anchor as MyAnchorAuto;
-
-    final box = context.findRenderObject();
     final overlayState = Overlay.of(context, debugRequiredFor: widget);
     final overlayAncestor = overlayState.context.findRenderObject();
+    if (overlayAncestor is! RenderBox ||
+        !overlayAncestor.attached ||
+        !overlayAncestor.hasSize) {
+      _schedulePositionCalculation();
+      return;
+    }
 
-    final ready =
-        box is RenderBox &&
-        box.attached &&
-        box.hasSize &&
-        overlayAncestor is RenderBox &&
-        overlayAncestor.attached &&
-        overlayAncestor.hasSize;
+    if (widget.anchor case final MyAnchorAuto anchor) {
+      _calculateAutoPosition(anchor, overlayAncestor);
+    } else if (widget.anchor case final MyGlobalAnchor anchor) {
+      _calculateGlobalPosition(anchor, overlayAncestor);
+    }
+  }
+
+  void _calculateAutoPosition(MyAnchorAuto anchor, RenderBox overlayAncestor) {
+    final box = context.findRenderObject();
+
+    final ready = box is RenderBox && box.attached && box.hasSize;
 
     if (!ready) {
       _schedulePositionCalculation();
@@ -257,21 +292,44 @@ class _MyPortalState extends State<MyPortal> {
     final overlayReady = overlay != null && overlay.attached && overlay.hasSize;
     final overlaySize = overlayReady ? overlay.size : Size.zero;
     final topLeft = box.localToGlobal(Offset.zero, ancestor: overlayAncestor);
-    final viewport = Offset.zero & overlayAncestor.size;
-    final safeViewport = Rect.fromLTRB(
-      viewport.left + anchor.viewportPadding.left,
-      viewport.top + anchor.viewportPadding.top,
-      viewport.right - anchor.viewportPadding.right,
-      viewport.bottom - anchor.viewportPadding.bottom,
-    );
     final position = _resolveAutoPosition(
       targetTopLeft: topLeft,
       targetSize: box.size,
       overlaySize: overlaySize,
-      viewport: safeViewport,
+      viewport: _safeViewport(overlayAncestor.size, anchor.viewportPadding),
       anchor: anchor,
     );
 
+    _updateCalculatedPosition(position, overlayReady);
+  }
+
+  void _calculateGlobalPosition(
+    MyGlobalAnchor anchor,
+    RenderBox overlayAncestor,
+  ) {
+    final overlay = overlayKey.currentContext?.findRenderObject() as RenderBox?;
+    final overlayReady = overlay != null && overlay.attached && overlay.hasSize;
+    final overlaySize = overlayReady ? overlay.size : Size.zero;
+    final position = _resolveGlobalPosition(
+      overlaySize: overlaySize,
+      viewport: _safeViewport(overlayAncestor.size, anchor.viewportPadding),
+      anchor: anchor,
+    );
+
+    _updateCalculatedPosition(position, overlayReady);
+  }
+
+  Rect _safeViewport(Size viewportSize, EdgeInsets viewportPadding) {
+    final viewport = Offset.zero & viewportSize;
+    return Rect.fromLTRB(
+      viewport.left + viewportPadding.left,
+      viewport.top + viewportPadding.top,
+      viewport.right - viewportPadding.right,
+      viewport.bottom - viewportPadding.bottom,
+    );
+  }
+
+  void _updateCalculatedPosition(Offset position, bool overlayReady) {
     if (position != _calculatedPosition || _overlayReady != overlayReady) {
       if (mounted) {
         setState(() {
@@ -337,6 +395,45 @@ class _MyPortalState extends State<MyPortal> {
     }
 
     final value = preferred ?? targetTopLeft;
+    final maxX = math.max(viewport.left, viewport.right - overlaySize.width);
+    final maxY = math.max(viewport.top, viewport.bottom - overlaySize.height);
+    return Offset(
+      value.dx.clamp(viewport.left, maxX),
+      value.dy.clamp(viewport.top, maxY),
+    );
+  }
+
+  Offset _resolveGlobalPosition({
+    required Size overlaySize,
+    required Rect viewport,
+    required MyGlobalAnchor anchor,
+  }) {
+    final candidates = <({bool flipX, bool flipY})>[
+      (flipX: false, flipY: false),
+      if (anchor.allowHorizontalFlip) (flipX: true, flipY: false),
+      if (anchor.allowVerticalFlip) (flipX: false, flipY: true),
+      if (anchor.allowHorizontalFlip && anchor.allowVerticalFlip)
+        (flipX: true, flipY: true),
+    ];
+
+    Offset? preferred;
+    for (final candidate in candidates) {
+      final followerAnchor = _flipAlignment(
+        anchor.followerAnchor,
+        flipX: candidate.flipX,
+        flipY: candidate.flipY,
+      );
+      final origin =
+          anchor.offset - _alignmentOffset(overlaySize, followerAnchor);
+      preferred ??= origin;
+      final bounds = origin & overlaySize;
+      if (viewport.contains(bounds.topLeft) &&
+          viewport.contains(bounds.bottomRight)) {
+        return origin;
+      }
+    }
+
+    final value = preferred ?? anchor.offset;
     final maxX = math.max(viewport.left, viewport.right - overlaySize.width);
     final maxY = math.max(viewport.top, viewport.bottom - overlaySize.height);
     return Offset(
@@ -418,13 +515,41 @@ class _MyPortalState extends State<MyPortal> {
   }
 
   Widget buildGlobalPosition(BuildContext context, MyGlobalAnchor anchor) {
+    final viewportSize = MediaQuery.sizeOf(context);
+    if (_lastViewportSize != viewportSize) {
+      _lastViewportSize = viewportSize;
+      _schedulePositionCalculation();
+    }
+
+    if (_calculatedPosition == null) {
+      _schedulePositionCalculation();
+      return const SizedBox.shrink();
+    }
+
+    final position = _calculatedPosition!;
+    final overlay = overlayKey.currentContext?.findRenderObject() as RenderBox?;
+
+    if (overlay == null) {
+      _schedulePositionCalculation();
+    }
+
     return CustomSingleChildLayout(
       delegate: MyPositionDelegate(
-        target: anchor.offset,
+        target: position,
         verticalOffset: 0,
         preferBelow: true,
+        exactPosition: true,
       ),
-      child: widget.portalBuilder(context),
+      child: KeyedSubtree(
+        key: overlayKey,
+        child: Visibility.maintain(
+          visible: _overlayReady,
+          child: IgnorePointer(
+            ignoring: !_overlayReady,
+            child: widget.portalBuilder(context),
+          ),
+        ),
+      ),
     );
   }
 

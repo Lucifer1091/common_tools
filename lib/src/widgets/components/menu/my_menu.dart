@@ -695,13 +695,13 @@ class MyMenuCheckbox extends StatelessWidget implements MyMenuItem {
       child: MyMenuButton(
         leading: value
             ? const Icon(LucideIcons.check, size: 16)
-            : const SizedBox(),
+            : const SizedBox.shrink(),
         trailing: trailing,
         enabled: enabled,
         autoClose: autoClose,
         focusNode: focusNode,
         onPressed: onChanged == null ? null : () => onChanged!(!value),
-        child: child ?? MyText(text!),
+        child: child ?? MyText(text!, textAlign: .left),
       ),
     );
   }
@@ -773,8 +773,8 @@ class MyMenuRadio<T> extends StatelessWidget {
       inMutuallyExclusiveGroup: true,
       child: MyMenuButton(
         leading: selected
-            ? const Icon(LucideIcons.circle, size: 10, fill: 1)
-            : const SizedBox(),
+            ? Icon(Icons.circle_rounded, size: 10)
+            : const SizedBox.shrink(),
         trailing: trailing,
         enabled: enabled,
         autoClose: autoClose,
@@ -782,7 +782,7 @@ class MyMenuRadio<T> extends StatelessWidget {
         onPressed: group.onChanged == null
             ? null
             : () => group.onChanged!(value),
-        child: child ?? MyText(text!),
+        child: child ?? MyText(text!, textAlign: .left),
       ),
     );
   }

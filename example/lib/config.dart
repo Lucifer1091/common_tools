@@ -22,6 +22,7 @@ import 'page/my_cell_page.dart';
 import 'page/my_chat_page.dart';
 import 'page/my_checkbox_page.dart';
 import 'page/my_collapse_page.dart';
+import 'page/my_context_menu_page.dart';
 import 'page/my_custom_page.dart';
 import 'page/my_date_picker_page.dart';
 import 'page/my_dialog_page.dart';
@@ -390,6 +391,11 @@ Map<String, List<ExamplePageModel>> exampleMap = {
       text: 'Dropdown Menu',
       name: 'dropdown-menu',
       pageBuilder: _wrapInheritedTheme((context) => const MyDropDownMenuPage()),
+    ),
+    ExamplePageModel(
+      text: 'Context Menu',
+      name: 'context-menu',
+      pageBuilder: _wrapInheritedTheme((context) => const MyContextMenuPage()),
     ),
     ExamplePageModel(
       text: 'Select',
