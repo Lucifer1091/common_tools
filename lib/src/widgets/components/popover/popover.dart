@@ -345,7 +345,7 @@ class _MyPopoverState extends State<MyPopover>
             portalBuilder: (_) {
               // used to trap the focus inside the popover.
               return FocusScope(
-                canRequestFocus: widget.requestFocusOnOpen,
+                canRequestFocus: true,
                 child: Focus(
                   skipTraversal: true,
                   canRequestFocus: widget.requestFocusOnOpen,

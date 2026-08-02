@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/widgets.dart';
 
 /// The position of the [MyPortal] in the global coordinate system.
@@ -13,8 +15,11 @@ class MyAnchorAuto extends MyAnchorBase {
   const MyAnchorAuto({
     this.offset = Offset.zero,
     this.followTargetOnResize = true,
-    this.followerAnchor = Alignment.bottomCenter,
+    this.followerAnchor = Alignment.topCenter,
     this.targetAnchor = Alignment.bottomCenter,
+    this.allowHorizontalFlip = true,
+    this.allowVerticalFlip = true,
+    this.viewportPadding = const EdgeInsets.all(8),
   });
 
   /// The offset of the overlay from the target widget.
@@ -31,6 +36,15 @@ class MyAnchorAuto extends MyAnchorBase {
   /// The coordinates of the target from which the overlay starts.
   final Alignment targetAnchor;
 
+  /// Whether the overlay may be mirrored horizontally to remain on screen.
+  final bool allowHorizontalFlip;
+
+  /// Whether the overlay may be mirrored vertically to remain on screen.
+  final bool allowVerticalFlip;
+
+  /// Minimum distance kept between the overlay and the viewport edge.
+  final EdgeInsets viewportPadding;
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
@@ -39,7 +53,10 @@ class MyAnchorAuto extends MyAnchorBase {
         other.offset == offset &&
         other.followTargetOnResize == followTargetOnResize &&
         other.followerAnchor == followerAnchor &&
-        other.targetAnchor == targetAnchor;
+        other.targetAnchor == targetAnchor &&
+        other.allowHorizontalFlip == allowHorizontalFlip &&
+        other.allowVerticalFlip == allowVerticalFlip &&
+        other.viewportPadding == viewportPadding;
   }
 
   @override
@@ -47,7 +64,10 @@ class MyAnchorAuto extends MyAnchorBase {
       offset.hashCode ^
       followTargetOnResize.hashCode ^
       followerAnchor.hashCode ^
-      targetAnchor.hashCode;
+      targetAnchor.hashCode ^
+      allowHorizontalFlip.hashCode ^
+      allowVerticalFlip.hashCode ^
+      viewportPadding.hashCode;
 }
 
 /// Manually specifies the position of the [MyPortal] in the global
@@ -140,8 +160,7 @@ class _MyPortalState extends State<MyPortal> {
   final overlayPortalController = OverlayPortalController();
   final overlayKey = GlobalKey();
 
-  Offset? _calculatedTarget;
-  bool _calculatedPreferBelow = true;
+  Offset? _calculatedPosition;
   bool _overlayReady = false;
   Size? _lastViewportSize;
   bool _positionCalculationScheduled = false;
@@ -177,10 +196,9 @@ class _MyPortalState extends State<MyPortal> {
         _calculatePosition();
         show();
       } else {
-        if (_calculatedTarget != null) {
+        if (_calculatedPosition != null) {
           setState(() {
-            _calculatedTarget = null;
-            _calculatedPreferBelow = true;
+            _calculatedPosition = null;
             _overlayReady = false;
           });
         } else if (_overlayReady) {
@@ -238,91 +256,111 @@ class _MyPortalState extends State<MyPortal> {
     final overlay = overlayKey.currentContext?.findRenderObject() as RenderBox?;
     final overlayReady = overlay != null && overlay.attached && overlay.hasSize;
     final overlaySize = overlayReady ? overlay.size : Size.zero;
-    final verticalGap = anchor.offset.dy.abs();
-
     final topLeft = box.localToGlobal(Offset.zero, ancestor: overlayAncestor);
-    final bottomRight = box.localToGlobal(
-      box.size.bottomRight(Offset.zero),
-      ancestor: overlayAncestor,
+    final viewport = Offset.zero & overlayAncestor.size;
+    final safeViewport = Rect.fromLTRB(
+      viewport.left + anchor.viewportPadding.left,
+      viewport.top + anchor.viewportPadding.top,
+      viewport.right - anchor.viewportPadding.right,
+      viewport.bottom - anchor.viewportPadding.bottom,
+    );
+    final position = _resolveAutoPosition(
+      targetTopLeft: topLeft,
+      targetSize: box.size,
+      overlaySize: overlaySize,
+      viewport: safeViewport,
+      anchor: anchor,
     );
 
-    final availableBelow =
-        overlayAncestor.size.height - bottomRight.dy - verticalGap;
-    final availableAbove = topLeft.dy - verticalGap;
-    final shouldOpenAbove =
-        overlaySize.height > availableBelow &&
-        (overlaySize.height <= availableAbove ||
-            availableAbove > availableBelow);
-
-    final targetOffset = switch ((anchor.targetAnchor, shouldOpenAbove)) {
-      (
-        (Alignment.topLeft || Alignment.centerLeft || Alignment.bottomLeft),
-        true,
-      ) =>
-        box.size.topLeft(Offset.zero),
-      (
-        (Alignment.topCenter || Alignment.center || Alignment.bottomCenter),
-        true,
-      ) =>
-        box.size.topCenter(Offset.zero),
-      (
-        (Alignment.topRight || Alignment.centerRight || Alignment.bottomRight),
-        true,
-      ) =>
-        box.size.topRight(Offset.zero),
-      (
-        (Alignment.topLeft || Alignment.centerLeft || Alignment.bottomLeft),
-        false,
-      ) =>
-        box.size.bottomLeft(Offset.zero),
-      (
-        (Alignment.topCenter || Alignment.center || Alignment.bottomCenter),
-        false,
-      ) =>
-        box.size.bottomCenter(Offset.zero),
-      (
-        (Alignment.topRight || Alignment.centerRight || Alignment.bottomRight),
-        false,
-      ) =>
-        box.size.bottomRight(Offset.zero),
-      (final alignment, _) => throw Exception(
-        """MyAnchorAuto doesn't support the alignment $alignment you provided""",
-      ),
-    };
-
-    var followerOffset = switch (anchor.followerAnchor) {
-      Alignment.topLeft ||
-      Alignment.centerLeft ||
-      Alignment.bottomLeft => Offset(-overlaySize.width / 2, 0),
-      Alignment.topCenter ||
-      Alignment.center ||
-      Alignment.bottomCenter => Offset.zero,
-      Alignment.topRight ||
-      Alignment.centerRight ||
-      Alignment.bottomRight => Offset(overlaySize.width / 2, 0),
-      final alignment => throw Exception(
-        """MyAnchorAuto doesn't support the alignment $alignment you provided""",
-      ),
-    };
-
-    followerOffset += targetOffset;
-    followerOffset += Offset(anchor.offset.dx, 0);
-
-    final target = box.localToGlobal(followerOffset, ancestor: overlayAncestor);
-
-    if (target != _calculatedTarget ||
-        _calculatedPreferBelow != !shouldOpenAbove ||
-        _overlayReady != overlayReady) {
+    if (position != _calculatedPosition || _overlayReady != overlayReady) {
       if (mounted) {
         setState(() {
-          _calculatedTarget = target;
-          _calculatedPreferBelow = !shouldOpenAbove;
+          _calculatedPosition = position;
           _overlayReady = overlayReady;
         });
       }
     } else if (!overlayReady) {
       _schedulePositionCalculation();
     }
+  }
+
+  Offset _resolveAutoPosition({
+    required Offset targetTopLeft,
+    required Size targetSize,
+    required Size overlaySize,
+    required Rect viewport,
+    required MyAnchorAuto anchor,
+  }) {
+    final horizontalFirst =
+        (anchor.targetAnchor.x - anchor.followerAnchor.x).abs() >
+        (anchor.targetAnchor.y - anchor.followerAnchor.y).abs();
+    final candidates = <({bool flipX, bool flipY})>[
+      (flipX: false, flipY: false),
+      if (horizontalFirst && anchor.allowHorizontalFlip)
+        (flipX: true, flipY: false),
+      if (!horizontalFirst && anchor.allowVerticalFlip)
+        (flipX: false, flipY: true),
+      if (horizontalFirst && anchor.allowVerticalFlip)
+        (flipX: false, flipY: true),
+      if (!horizontalFirst && anchor.allowHorizontalFlip)
+        (flipX: true, flipY: false),
+      if (anchor.allowHorizontalFlip && anchor.allowVerticalFlip)
+        (flipX: true, flipY: true),
+    ];
+
+    Offset? preferred;
+    for (final candidate in candidates) {
+      final targetAnchor = _flipAlignment(
+        anchor.targetAnchor,
+        flipX: candidate.flipX,
+        flipY: candidate.flipY,
+      );
+      final followerAnchor = _flipAlignment(
+        anchor.followerAnchor,
+        flipX: candidate.flipX,
+        flipY: candidate.flipY,
+      );
+      final offset = Offset(
+        candidate.flipX ? -anchor.offset.dx : anchor.offset.dx,
+        candidate.flipY ? -anchor.offset.dy : anchor.offset.dy,
+      );
+      final targetPoint =
+          targetTopLeft + _alignmentOffset(targetSize, targetAnchor);
+      final origin =
+          targetPoint - _alignmentOffset(overlaySize, followerAnchor) + offset;
+      preferred ??= origin;
+      final bounds = origin & overlaySize;
+      if (viewport.contains(bounds.topLeft) &&
+          viewport.contains(bounds.bottomRight)) {
+        return origin;
+      }
+    }
+
+    final value = preferred ?? targetTopLeft;
+    final maxX = math.max(viewport.left, viewport.right - overlaySize.width);
+    final maxY = math.max(viewport.top, viewport.bottom - overlaySize.height);
+    return Offset(
+      value.dx.clamp(viewport.left, maxX),
+      value.dy.clamp(viewport.top, maxY),
+    );
+  }
+
+  Alignment _flipAlignment(
+    Alignment alignment, {
+    required bool flipX,
+    required bool flipY,
+  }) {
+    return Alignment(
+      flipX ? -alignment.x : alignment.x,
+      flipY ? -alignment.y : alignment.y,
+    );
+  }
+
+  Offset _alignmentOffset(Size size, Alignment alignment) {
+    return Offset(
+      (alignment.x + 1) * size.width / 2,
+      (alignment.y + 1) * size.height / 2,
+    );
   }
 
   Widget buildAutoPosition(BuildContext context, MyAnchorAuto anchor) {
@@ -334,12 +372,12 @@ class _MyPortalState extends State<MyPortal> {
       }
     }
 
-    if (_calculatedTarget == null) {
+    if (_calculatedPosition == null) {
       _schedulePositionCalculation();
       return const SizedBox.shrink();
     }
 
-    final target = _calculatedTarget!;
+    final position = _calculatedPosition!;
 
     final overlay = overlayKey.currentContext?.findRenderObject() as RenderBox?;
 
@@ -349,9 +387,10 @@ class _MyPortalState extends State<MyPortal> {
 
     return CustomSingleChildLayout(
       delegate: MyPositionDelegate(
-        target: target,
-        verticalOffset: anchor.offset.dy.abs(),
-        preferBelow: _calculatedPreferBelow,
+        target: position,
+        verticalOffset: 0,
+        preferBelow: true,
+        exactPosition: true,
       ),
       child: KeyedSubtree(
         key: overlayKey,
@@ -423,6 +462,7 @@ class MyPositionDelegate extends SingleChildLayoutDelegate {
     required this.target,
     required this.verticalOffset,
     required this.preferBelow,
+    this.exactPosition = false,
   });
 
   /// The offset of the target the overlay is positioned near in the global
@@ -439,12 +479,16 @@ class MyPositionDelegate extends SingleChildLayoutDelegate {
   /// direction, the tooltip will be displayed in the opposite direction.
   final bool preferBelow;
 
+  /// Whether [target] is the exact top-left position of the overlay.
+  final bool exactPosition;
+
   @override
   BoxConstraints getConstraintsForChild(BoxConstraints constraints) =>
       constraints.loosen();
 
   @override
   Offset getPositionForChild(Size size, Size childSize) {
+    if (exactPosition) return target;
     return positionDependentBox(
       size: size,
       childSize: childSize,
@@ -459,6 +503,7 @@ class MyPositionDelegate extends SingleChildLayoutDelegate {
   bool shouldRelayout(MyPositionDelegate oldDelegate) {
     return target != oldDelegate.target ||
         verticalOffset != oldDelegate.verticalOffset ||
-        preferBelow != oldDelegate.preferBelow;
+        preferBelow != oldDelegate.preferBelow ||
+        exactPosition != oldDelegate.exactPosition;
   }
 }

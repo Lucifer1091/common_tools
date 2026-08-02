@@ -73,6 +73,109 @@ void main() {
     await tester.tap(find.byKey(_popoverKey));
     expect(tapped, isTrue);
   });
+
+  testWidgets('auto anchor honors exact bottom-left and top-left points', (
+    tester,
+  ) async {
+    await _setViewport(tester, const Size(400, 300));
+    await tester.pumpWidget(
+      const _PositionedPortalHarness(
+        triggerOffset: Offset(40, 30),
+        triggerSize: Size(50, 20),
+        popoverSize: Size(80, 40),
+        anchor: MyAnchorAuto(
+          offset: Offset(0, 4),
+          targetAnchor: Alignment.bottomLeft,
+          followerAnchor: Alignment.topLeft,
+        ),
+      ),
+    );
+    await _settlePortal(tester);
+
+    expect(tester.getTopLeft(find.byKey(_popoverKey)), const Offset(40, 54));
+  });
+
+  testWidgets('auto anchor flips vertically when there is no room below', (
+    tester,
+  ) async {
+    await _setViewport(tester, const Size(400, 300));
+    await tester.pumpWidget(
+      const _PositionedPortalHarness(
+        triggerOffset: Offset(40, 260),
+        triggerSize: Size(50, 20),
+        popoverSize: Size(80, 60),
+        anchor: MyAnchorAuto(
+          offset: Offset(0, 4),
+          targetAnchor: Alignment.bottomLeft,
+          followerAnchor: Alignment.topLeft,
+        ),
+      ),
+    );
+    await _settlePortal(tester);
+
+    expect(tester.getTopLeft(find.byKey(_popoverKey)), const Offset(40, 196));
+  });
+
+  testWidgets('auto anchor opens a submenu beside its target', (tester) async {
+    await _setViewport(tester, const Size(400, 300));
+    await tester.pumpWidget(
+      const _PositionedPortalHarness(
+        triggerOffset: Offset(100, 50),
+        triggerSize: Size(80, 30),
+        popoverSize: Size(100, 60),
+        anchor: MyAnchorAuto(
+          offset: Offset(4, -2),
+          targetAnchor: Alignment.topRight,
+          followerAnchor: Alignment.topLeft,
+        ),
+      ),
+    );
+    await _settlePortal(tester);
+
+    expect(tester.getTopLeft(find.byKey(_popoverKey)), const Offset(184, 48));
+  });
+
+  testWidgets('auto anchor flips a submenu near the right viewport edge', (
+    tester,
+  ) async {
+    await _setViewport(tester, const Size(400, 300));
+    await tester.pumpWidget(
+      const _PositionedPortalHarness(
+        triggerOffset: Offset(300, 50),
+        triggerSize: Size(80, 30),
+        popoverSize: Size(100, 60),
+        anchor: MyAnchorAuto(
+          offset: Offset(4, -2),
+          targetAnchor: Alignment.topRight,
+          followerAnchor: Alignment.topLeft,
+        ),
+      ),
+    );
+    await _settlePortal(tester);
+
+    expect(tester.getTopLeft(find.byKey(_popoverKey)), const Offset(196, 48));
+  });
+
+  testWidgets('auto anchor clamps to its viewport padding as a fallback', (
+    tester,
+  ) async {
+    await _setViewport(tester, const Size(400, 300));
+    await tester.pumpWidget(
+      const _PositionedPortalHarness(
+        triggerOffset: Offset.zero,
+        triggerSize: Size(20, 20),
+        popoverSize: Size(100, 40),
+        anchor: MyAnchorAuto(
+          offset: Offset(0, 4),
+          targetAnchor: Alignment.bottomLeft,
+          followerAnchor: Alignment.topLeft,
+        ),
+      ),
+    );
+    await _settlePortal(tester);
+
+    expect(tester.getTopLeft(find.byKey(_popoverKey)), const Offset(8, 24));
+  });
 }
 
 Future<void> _setViewport(WidgetTester tester, Size size) async {
@@ -111,6 +214,50 @@ class _PortalHarness extends StatelessWidget {
                 const SizedBox(key: _popoverKey, width: 80, height: 20),
             child: const SizedBox(key: _triggerKey, width: 40, height: 20),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PositionedPortalHarness extends StatelessWidget {
+  const _PositionedPortalHarness({
+    required this.triggerOffset,
+    required this.triggerSize,
+    required this.popoverSize,
+    required this.anchor,
+  });
+
+  final Offset triggerOffset;
+  final Size triggerSize;
+  final Size popoverSize;
+  final MyAnchorAuto anchor;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: Stack(
+          children: [
+            Positioned(
+              left: triggerOffset.dx,
+              top: triggerOffset.dy,
+              child: MyPortal(
+                visible: true,
+                anchor: anchor,
+                portalBuilder: (context) => SizedBox(
+                  key: _popoverKey,
+                  width: popoverSize.width,
+                  height: popoverSize.height,
+                ),
+                child: SizedBox(
+                  key: _triggerKey,
+                  width: triggerSize.width,
+                  height: triggerSize.height,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
