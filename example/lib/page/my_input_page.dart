@@ -239,39 +239,23 @@ class _MyInputViewPageState extends State<MyInputViewPage> {
   }
 
   Widget _buildChipInput(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      spacing: 24,
-      children: [
-        MyAutoComplete(
-          controller: _chipInputController,
-          suggestions: _chipSuggestions,
-          child: MyChipInput<String>(
-            controller: _chipInputController,
-            placeholder: 'Type a fruit and press Enter',
-            clipboardHandler: const MyDecoratedChipClipboardHandler<String>(
-              prefix: '@',
-              delimiter: ';',
-              chipDeserializer: _deserializeChip,
-            ),
-            onChipSubmitted: (value) {
-              setState(() => _chipSuggestions = const []);
-              return value;
-            },
-            chipBuilder: (context, chip) => Text('@$chip'),
-          ),
+    return MyAutoComplete(
+      controller: _chipInputController,
+      suggestions: _chipSuggestions,
+      child: MyChipInput<String>(
+        controller: _chipInputController,
+        placeholder: 'Type a fruit and press Enter',
+        clipboardHandler: const MyDecoratedChipClipboardHandler<String>(
+          prefix: '@',
+          delimiter: ';',
+          chipDeserializer: _deserializeChip,
         ),
-        ListenableBuilder(
-          listenable: _chipInputController,
-          builder: (context, child) {
-            final chips = _chipInputController.chips.join(', ');
-            return MyText(
-              chips.isEmpty ? 'Current chips: none' : 'Current chips: $chips',
-              textColor: context.colorScheme.mutedForeground,
-            );
-          },
-        ),
-      ],
+        onChipSubmitted: (value) {
+          setState(() => _chipSuggestions = const []);
+          return value;
+        },
+        chipBuilder: (context, chip) => Text('@$chip'),
+      ),
     );
   }
 

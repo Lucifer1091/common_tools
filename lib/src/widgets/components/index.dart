@@ -2,6 +2,7 @@ export 'action_sheet/index.dart';
 export 'avatar/index.dart';
 export 'backtop/index.dart';
 export 'badge/index.dart';
+export 'breadcrumb/index.dart';
 export 'button/index.dart';
 export 'cell/index.dart';
 export 'chat/index.dart';

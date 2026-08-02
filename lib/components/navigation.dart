@@ -1,6 +1,7 @@
 /// Navigation, tabs, drawers, sidebars, and paging components.
 library common_tools.components.navigation;
 
+export '../src/widgets/components/breadcrumb/index.dart';
 export '../src/widgets/components/drawer/index.dart';
 export '../src/widgets/components/navbar/index.dart';
 export '../src/widgets/components/sidebar/index.dart';

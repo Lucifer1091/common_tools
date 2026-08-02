@@ -1,4 +1,5 @@
 import 'package:example/page/my_backtop_page.dart';
+import 'package:example/page/my_breadcrumb_page.dart';
 import 'package:example/page/my_button_page.dart';
 import 'package:example/page/my_steps_page.dart';
 import 'package:flutter/material.dart';
@@ -137,6 +138,11 @@ Map<String, List<ExamplePageModel>> exampleMap = {
       name: 'back-top',
       pageName: 'backtop',
       pageBuilder: _wrapInheritedTheme((context) => const MyBackTopPage()),
+    ),
+    ExamplePageModel(
+      text: 'Breadcrumb',
+      name: 'breadcrumb',
+      pageBuilder: _wrapInheritedTheme((context) => const MyBreadcrumbPage()),
     ),
     ExamplePageModel(
       text: 'Drawer',
