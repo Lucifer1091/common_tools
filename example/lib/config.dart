@@ -66,6 +66,7 @@ import 'page/my_textarea_page.dart';
 import 'page/my_theme_page.dart';
 import 'page/my_time_counter_page.dart';
 import 'page/my_toast_page.dart';
+import 'page/my_tree_page.dart';
 // import 'page/td_tree_select_page.dart';
 import 'page/my_upload_page.dart';
 import 'page/todo_page.dart';
@@ -359,6 +360,11 @@ Map<String, List<ExamplePageModel>> exampleMap = {
       text: 'Table',
       name: 'table',
       pageBuilder: _wrapInheritedTheme((context) => const MyTablePage()),
+    ),
+    ExamplePageModel(
+      text: 'Tree',
+      name: 'tree',
+      pageBuilder: _wrapInheritedTheme((context) => const MyTreePage()),
     ),
     ExamplePageModel(
       text: 'Tag',

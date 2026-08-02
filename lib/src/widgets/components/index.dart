@@ -49,4 +49,5 @@ export 'text/index.dart';
 export 'text_area/index.dart';
 export 'time_counter/index.dart';
 export 'toast/index.dart';
+export 'tree/index.dart';
 export 'upload/index.dart';

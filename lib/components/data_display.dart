@@ -15,3 +15,4 @@ export '../src/widgets/components/table/index.dart';
 export '../src/widgets/components/tag/index.dart';
 export '../src/widgets/components/text/index.dart';
 export '../src/widgets/components/time_counter/index.dart';
+export '../src/widgets/components/tree/index.dart';
