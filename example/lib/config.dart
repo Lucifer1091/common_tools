@@ -31,6 +31,7 @@ import 'page/my_select_page.dart';
 import 'page/my_errors_page.dart';
 import 'page/my_font_page.dart';
 import 'page/my_footer_page.dart';
+import 'page/my_hover_card_page.dart';
 import 'page/my_image_page.dart';
 import 'page/my_image_viewer_page.dart';
 import 'page/my_indexes_page.dart';
@@ -394,6 +395,11 @@ Map<String, List<ExamplePageModel>> exampleMap = {
       text: 'Loading',
       name: 'loading',
       pageBuilder: _wrapInheritedTheme((context) => const MyLoaderPage()),
+    ),
+    ExamplePageModel(
+      text: 'Hover Card',
+      name: 'hover-card',
+      pageBuilder: _wrapInheritedTheme((context) => const MyHoverCardPage()),
     ),
     ExamplePageModel(
       text: 'NoticeBar',

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
-class InfoWidget extends StatelessWidget {
-  const InfoWidget({
+import '../../../../extensions/context.dart';
+
+class MyTooltip extends StatelessWidget {
+  const MyTooltip({
     required this.child,
     super.key,
     this.message,
@@ -42,11 +44,12 @@ class InfoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Tooltip(
       key: key,
-      message: message ?? '',
+      message: richMessage == null ? message ?? '' : null,
       richMessage: richMessage,
       constraints: constraints,
       mouseCursor: cursor,
-      padding: padding ?? EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding:
+          padding ?? const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       margin: margin,
       verticalOffset: verticalOffset,
       preferBelow: preferBelow,
@@ -54,7 +57,8 @@ class InfoWidget extends StatelessWidget {
       decoration:
           decoration ??
           BoxDecoration(
-            color: Colors.black.withValues(alpha: 0.8),
+            color: context.colorScheme.popover,
+            border: Border.all(color: context.colorScheme.border),
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(4),
               topRight: Radius.circular(12),
@@ -62,10 +66,14 @@ class InfoWidget extends StatelessWidget {
               bottomRight: Radius.circular(12),
             ),
           ),
-      textStyle: textStyle,
+      textStyle:
+          textStyle ??
+          context.bodySmall.copyWith(
+            color: context.colorScheme.popoverForeground,
+          ),
       textAlign: textAlign,
       waitDuration: waitDuration,
-      showDuration: showDuration ?? Duration(seconds: 4),
+      showDuration: showDuration ?? const Duration(seconds: 4),
       triggerMode: TooltipTriggerMode.tap,
       child: child,
     );

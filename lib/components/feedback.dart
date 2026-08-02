@@ -4,6 +4,7 @@ library common_tools.components.feedback;
 export '../src/overlays/index.dart';
 export '../src/widgets/components/dialog/index.dart';
 export '../src/widgets/components/error/index.dart';
+export '../src/widgets/components/hover_card/index.dart';
 export '../src/widgets/components/loading/index.dart';
 export '../src/widgets/components/notice_bar/index.dart';
 export '../src/widgets/components/popover/index.dart';

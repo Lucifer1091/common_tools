@@ -14,6 +14,7 @@ export 'divider/index.dart';
 export 'drawer/index.dart';
 export 'error/index.dart';
 export 'footer/index.dart';
+export 'hover_card/index.dart';
 export 'image/index.dart';
 export 'image_viewer/index.dart';
 export 'indexes/index.dart';

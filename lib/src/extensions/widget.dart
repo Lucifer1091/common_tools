@@ -237,39 +237,6 @@ extension WidgetExtensions on Widget {
     );
   }
 
-  /// Wraps this widget in [Tooltip].
-  ///
-  /// Set [showRichText] to render custom rich tooltip content.
-  Tooltip tooltip({
-    required String msg,
-    bool showRichText = false,
-    bool preferBelow = true,
-    double? height,
-    double? width,
-  }) => Tooltip(
-    message: showRichText ? null : msg,
-    constraints: BoxConstraints(minHeight: height ?? 0),
-    richMessage: showRichText
-        ? WidgetSpan(
-            alignment: PlaceholderAlignment.baseline,
-            baseline: TextBaseline.alphabetic,
-            child: Container(
-              padding: const EdgeInsets.all(10),
-              constraints: BoxConstraints(maxWidth: width ?? 300),
-              child: Text(msg),
-            ),
-          )
-        : null,
-    decoration: showRichText
-        ? const BoxDecoration(
-            color: Colors.amberAccent,
-            borderRadius: BorderRadius.all(Radius.circular(4)),
-          )
-        : null,
-    preferBelow: preferBelow,
-    child: this,
-  );
-
   /// Applies foreground blur to this widget using [ImageFiltered].
   Widget blur({double? x, double? y}) => ImageFiltered(
     imageFilter: ImageFilter.blur(sigmaX: x ?? 3, sigmaY: y ?? 3),
