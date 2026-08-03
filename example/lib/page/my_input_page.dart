@@ -22,6 +22,7 @@ class _MyInputViewPageState extends State<MyInputViewPage> {
   final _chipInputController = MyChipEditingController<String>();
   List<String> _externalSuggestions = const [];
   List<String> _chipSuggestions = const [];
+  MyPhoneNumber? _phoneNumber;
   MyAutoCompleteMode _autoCompleteMode = MyAutoCompleteMode.replaceWord;
   _AutoCompleteFilterMode _filterMode = _AutoCompleteFilterMode.contains;
 
@@ -191,6 +192,34 @@ class _MyInputViewPageState extends State<MyInputViewPage> {
                     ],
                   ).padding(horizontal: 16),
                 );
+              },
+            ),
+          ],
+        ),
+        ExampleModule(
+          title: 'Phone Input',
+          children: [
+            ExampleItem(
+              desc: 'Country selector',
+              builder: (context) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      width: 300,
+                      child: MyPhoneInput(
+                        initialCountry: Country.fromCountryCode('ID'),
+                        onChanged: (value) {
+                          setState(() {
+                            _phoneNumber = value;
+                          });
+                        },
+                      ),
+                    ),
+                    const Gap(24),
+                    Text(_phoneNumber?.value ?? '(No value)'),
+                  ],
+                ).padding(horizontal: 16);
               },
             ),
           ],

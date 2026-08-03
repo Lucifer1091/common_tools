@@ -5,6 +5,7 @@ export '../src/widgets/components/checkbox/index.dart';
 export '../src/widgets/components/date_time_picker/index.dart';
 export '../src/widgets/components/input/index.dart';
 export '../src/widgets/components/otp/index.dart';
+export '../src/widgets/components/phone_input/index.dart';
 export '../src/widgets/components/picker/index.dart';
 export '../src/widgets/components/radio/index.dart';
 export '../src/widgets/components/select/index.dart';

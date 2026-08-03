@@ -28,6 +28,7 @@ export 'notice_bar/index.dart';
 export 'numbers/index.dart';
 export 'otp/index.dart';
 export 'pagination/index.dart';
+export 'phone_input/index.dart';
 export 'picker/index.dart';
 export 'popover/index.dart';
 export 'popup/index.dart';
