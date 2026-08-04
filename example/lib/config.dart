@@ -21,6 +21,7 @@ import 'page/my_builders_page.dart';
 import 'page/my_cell_page.dart';
 import 'page/my_chat_page.dart';
 import 'page/my_checkbox_page.dart';
+import 'page/my_color_picker_page.dart';
 import 'page/my_collapse_page.dart';
 import 'page/my_context_menu_page.dart';
 import 'page/my_custom_page.dart';
@@ -212,6 +213,11 @@ Map<String, List<ExamplePageModel>> exampleMap = {
       text: 'Checkbox',
       name: 'checkbox',
       pageBuilder: _wrapInheritedTheme((context) => const MyCheckboxPage()),
+    ),
+    ExamplePageModel(
+      text: 'Color Picker',
+      name: 'color-picker',
+      pageBuilder: _wrapInheritedTheme((context) => const MyColorPickerPage()),
     ),
     ExamplePageModel(
       text: 'Date & Time Picker',

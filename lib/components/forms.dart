@@ -2,6 +2,7 @@
 library common_tools.components.forms;
 
 export '../src/widgets/components/checkbox/index.dart';
+export '../src/widgets/components/color_picker/index.dart';
 export '../src/widgets/components/date_time_picker/index.dart';
 export '../src/widgets/components/input/index.dart';
 export '../src/widgets/components/otp/index.dart';

@@ -45,8 +45,11 @@ void main() {
     expect(find.text('Dark'), findsOneWidget);
     expect(find.text('Slate'), findsNothing);
     expect(find.text('Gray'), findsNothing);
-    expect(find.text('Base'), findsOneWidget);
     expect(find.text('Same as base'), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('my_theme_picker.accent.same_as_base')),
+      findsOneWidget,
+    );
 
     for (final base in MyColorScheme.baseColors) {
       final finder = find.byKey(ValueKey('my_theme_picker.base.${base.name}'));

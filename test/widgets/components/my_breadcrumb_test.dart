@@ -128,13 +128,13 @@ void main() {
           children: [
             const Text('Home'),
             MyBreadcrumbDropdown(
-              child: const MyBreadcrumbEllipsis(),
               items: [
                 MyBreadcrumbMenuItem(
                   text: 'Hidden route',
                   onTap: () => tapped = true,
                 ),
               ],
+              child: const MyBreadcrumbEllipsis(),
             ),
             const Text('Current'),
           ],
