@@ -358,6 +358,7 @@ class _MyPhoneInputState extends State<MyPhoneInput> {
         mainAxisSize: MainAxisSize.min,
         children: [
           _buildCountrySelector(context),
+          const SizedBox(width: 8),
           Container(width: 1, height: 28, color: context.colorScheme.input),
           const SizedBox(width: 12),
           if (country != null) Text(country.dialCode),
