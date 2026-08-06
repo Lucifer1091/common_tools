@@ -9,14 +9,14 @@ class MyFontPage extends StatelessWidget {
 
   static const _fontWeights = <_FontWeightSpec>[
     _FontWeightSpec('100', FontWeight.w100, 'Thin'),
-    _FontWeightSpec('200', FontWeight.w200, 'UltraLight'),
+    _FontWeightSpec('200', FontWeight.w200, 'ExtraLight'),
     _FontWeightSpec('300', FontWeight.w300, 'Light'),
     _FontWeightSpec('400', FontWeight.w400, 'Regular'),
     _FontWeightSpec('500', FontWeight.w500, 'Medium'),
     _FontWeightSpec('600', FontWeight.w600, 'SemiBold'),
     _FontWeightSpec('700', FontWeight.w700, 'Bold'),
-    _FontWeightSpec('800', FontWeight.w800, 'Black'),
-    _FontWeightSpec('900', FontWeight.w900, 'UltraBlack'),
+    _FontWeightSpec('800', FontWeight.w800, 'ExtraBold'),
+    _FontWeightSpec('900', FontWeight.w900, 'Black'),
   ];
 
   @override

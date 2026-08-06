@@ -52,40 +52,94 @@ flutter:
       fonts:
         - asset: lib/fonts/geist/Geist-Thin.otf
           weight: 100
-        - asset: lib/fonts/geist/Geist-UltraLight.otf
+        - asset: lib/fonts/geist/Geist-ThinItalic.otf
+          weight: 100
+          style: italic
+        - asset: lib/fonts/geist/Geist-ExtraLight.otf
           weight: 200
+        - asset: lib/fonts/geist/Geist-ExtraLightItalic.otf
+          weight: 200
+          style: italic
         - asset: lib/fonts/geist/Geist-Light.otf
           weight: 300
+        - asset: lib/fonts/geist/Geist-LightItalic.otf
+          weight: 300
+          style: italic
         - asset: lib/fonts/geist/Geist-Regular.otf
           weight: 400
+        - asset: lib/fonts/geist/Geist-RegularItalic.otf
+          weight: 400
+          style: italic
         - asset: lib/fonts/geist/Geist-Medium.otf
           weight: 500
+        - asset: lib/fonts/geist/Geist-MediumItalic.otf
+          weight: 500
+          style: italic
         - asset: lib/fonts/geist/Geist-SemiBold.otf
           weight: 600
+        - asset: lib/fonts/geist/Geist-SemiBoldItalic.otf
+          weight: 600
+          style: italic
         - asset: lib/fonts/geist/Geist-Bold.otf
           weight: 700
-        - asset: lib/fonts/geist/Geist-Black.otf
+        - asset: lib/fonts/geist/Geist-BoldItalic.otf
+          weight: 700
+          style: italic
+        - asset: lib/fonts/geist/Geist-ExtraBold.otf
           weight: 800
-        - asset: lib/fonts/geist/Geist-UltraBlack.otf
+        - asset: lib/fonts/geist/Geist-ExtraBoldItalic.otf
+          weight: 800
+          style: italic
+        - asset: lib/fonts/geist/Geist-Black.otf
           weight: 900
+        - asset: lib/fonts/geist/Geist-BlackItalic.otf
+          weight: 900
+          style: italic
 
     - family: GeistMono
       fonts:
         - asset: lib/fonts/geist_mono/GeistMono-Thin.otf
           weight: 100
-        - asset: lib/fonts/geist_mono/GeistMono-UltraLight.otf
+        - asset: lib/fonts/geist_mono/GeistMono-ThinItalic.otf
+          weight: 100
+          style: italic
+        - asset: lib/fonts/geist_mono/GeistMono-ExtraLight.otf
           weight: 200
+        - asset: lib/fonts/geist_mono/GeistMono-ExtraLightItalic.otf
+          weight: 200
+          style: italic
         - asset: lib/fonts/geist_mono/GeistMono-Light.otf
           weight: 300
+        - asset: lib/fonts/geist_mono/GeistMono-LightItalic.otf
+          weight: 300
+          style: italic
         - asset: lib/fonts/geist_mono/GeistMono-Regular.otf
           weight: 400
+        - asset: lib/fonts/geist_mono/GeistMono-Italic.otf
+          weight: 400
+          style: italic
         - asset: lib/fonts/geist_mono/GeistMono-Medium.otf
           weight: 500
+        - asset: lib/fonts/geist_mono/GeistMono-MediumItalic.otf
+          weight: 500
+          style: italic
         - asset: lib/fonts/geist_mono/GeistMono-SemiBold.otf
           weight: 600
+        - asset: lib/fonts/geist_mono/GeistMono-SemiBoldItalic.otf
+          weight: 600
+          style: italic
         - asset: lib/fonts/geist_mono/GeistMono-Bold.otf
           weight: 700
-        - asset: lib/fonts/geist_mono/GeistMono-Black.otf
+        - asset: lib/fonts/geist_mono/GeistMono-BoldItalic.otf
+          weight: 700
+          style: italic
+        - asset: lib/fonts/geist_mono/GeistMono-ExtraBold.otf
           weight: 800
-        - asset: lib/fonts/geist_mono/GeistMono-UltraBlack.otf
+        - asset: lib/fonts/geist_mono/GeistMono-ExtraBoldItalic.otf
+          weight: 800
+          style: italic
+        - asset: lib/fonts/geist_mono/GeistMono-Black.otf
           weight: 900
+        - asset: lib/fonts/geist_mono/GeistMono-BlackItalic.otf
+          weight: 900
+          style: italic
