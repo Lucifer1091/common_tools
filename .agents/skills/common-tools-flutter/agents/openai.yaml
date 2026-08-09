@@ -1,0 +1,4 @@
+interface:
+  display_name: "Common Tools Flutter"
+  short_description: "Use the common_tools Flutter package correctly"
+  default_prompt: "Use $common-tools-flutter to find and apply the correct common_tools API for this Flutter task."

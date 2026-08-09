@@ -23,7 +23,9 @@ jobs:
       # Flutter 3.44 bundles Dartdoc 9.0.4, which crashes on Flutter's own
       # @docImport metadata. Run the isolated patched Dartdoc instead.
       - run: dart run tool/check_dartdoc.dart
-      - run: dart tool/public_api.dart --check
+      - run: dart run tool/generate_catalog.dart --check
+      - run: dart test
+        working-directory: tool/catalog
       - run: dart pub publish --dry-run
 
   platform-smoke:

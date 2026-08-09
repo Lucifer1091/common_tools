@@ -1,0 +1,30 @@
+# common_tools
+
+> Private Flutter package catalogue generated exclusively from `lib/**/*.dart`.
+
+Never import `package:common_tools/src/...`. Use the narrowest public facade.
+
+## Guides
+
+- [Themes and styling](.agents/skills/common-tools-flutter/references/themes-and-styling.md): Generated public API reference.
+- [Layout and responsive APIs](.agents/skills/common-tools-flutter/references/layout-and-responsive.md): Generated public API reference.
+- [Action components](.agents/skills/common-tools-flutter/references/components-actions.md): Generated public API reference.
+- [Form components](.agents/skills/common-tools-flutter/references/components-forms.md): Generated public API reference.
+- [Feedback components](.agents/skills/common-tools-flutter/references/components-feedback.md): Generated public API reference.
+- [Data-display components](.agents/skills/common-tools-flutter/references/components-data-display.md): Generated public API reference.
+- [Navigation components](.agents/skills/common-tools-flutter/references/components-navigation.md): Generated public API reference.
+- [Media components](.agents/skills/common-tools-flutter/references/components-media.md): Generated public API reference.
+- [Other components](.agents/skills/common-tools-flutter/references/components-other.md): Generated public API reference.
+- [Animations, builders, and lists](.agents/skills/common-tools-flutter/references/animations-builders-lists.md): Generated public API reference.
+- [Form foundations and validation](.agents/skills/common-tools-flutter/references/forms-and-validation.md): Generated public API reference.
+- [Overlay foundations](.agents/skills/common-tools-flutter/references/overlays-and-feedback.md): Generated public API reference.
+- [Context and widget extensions](.agents/skills/common-tools-flutter/references/extensions-context-widget.md): Generated public API reference.
+- [Value extensions](.agents/skills/common-tools-flutter/references/extensions-values.md): Generated public API reference.
+- [Networking](.agents/skills/common-tools-flutter/references/networking.md): Generated public API reference.
+- [Files and services](.agents/skills/common-tools-flutter/references/files-and-services.md): Generated public API reference.
+- [Utilities and data types](.agents/skills/common-tools-flutter/references/utilities-and-data-types.md): Generated public API reference.
+- [Localization](.agents/skills/common-tools-flutter/references/localization.md): Generated public API reference.
+
+## Optional
+
+- [Complete internal file index](.agents/skills/common-tools-flutter/references/internal-file-index.md): Navigation only; do not import internal paths.
