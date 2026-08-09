@@ -100,6 +100,54 @@ void main() {
     expect(find.text('#336699'), findsOneWidget);
   });
 
+  testWidgets('dialog history swatch selects draft before Save', (
+    tester,
+  ) async {
+    const recent = Color(0xFF12A456);
+    Color? changed;
+    final history = MyColorHistoryController(initialColors: const [recent]);
+    addTearDown(history.dispose);
+
+    await tester.pumpWidget(
+      _ThemeHarness(
+        historyController: history,
+        child: MyColorPicker(
+          value: const Color(0xFF000000),
+          presentation: MyColorPickerPresentation.dialog,
+          onChanged: (value) => changed = value,
+        ),
+      ),
+    );
+
+    await tester.tap(find.byType(MyButton).first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('my-color-picker-dialog-history')));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.byKey(const Key('my-color-picker-history-grid')),
+      findsOneWidget,
+    );
+
+    await tester.tap(find.byKey(const Key('my-color-picker-history-color-0')));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const Key('my-color-picker-history-grid')), findsNothing);
+    expect(
+      tester
+          .widget<EditableText>(_editableIn('my-color-picker-r-input'))
+          .controller
+          .text,
+      '18',
+    );
+    expect(changed, isNull);
+
+    await tester.tap(find.byKey(const Key('my-color-picker-dialog-save')));
+    await tester.pumpAndSettle();
+
+    expect(changed, recent);
+  });
+
   testWidgets('mode selection keeps the compact popover open', (tester) async {
     await tester.pumpWidget(
       _ThemeHarness(

@@ -540,6 +540,7 @@ class _MyColorPickerState extends State<MyColorPicker> {
   Future<void> _openDialog() async {
     if (!widget.enabled) return;
     final themeData = context.theme;
+    final history = MyRecentColorsScope.maybeOf(context);
     await Future<void>.delayed(const Duration(milliseconds: 50));
     if (!mounted) return;
     var draft = _effectiveValue;
@@ -585,6 +586,10 @@ class _MyColorPickerState extends State<MyColorPicker> {
                                 enableEyeDropper: false,
                                 layout: _MyColorPickerPanelLayout.stacked,
                                 overlayGroupId: _effectivePopoverGroupId,
+                                historyController: history,
+                                onHistorySelected: (_) => setDialogState(
+                                  () => showHistoryView = false,
+                                ),
                                 onChanging: (color) {
                                   setDialogState(() => draft = color);
                                   widget.onChanging?.call(color);
@@ -868,7 +873,9 @@ class _MyColorPickerPanel extends StatefulWidget {
     required this.overlayGroupId,
     this.showHistoryView,
     this.showToolButtons = true,
+    this.historyController,
     this.onEyeDropperRequested,
+    this.onHistorySelected,
     this.onChanged,
     this.onChanging,
   });
@@ -882,7 +889,9 @@ class _MyColorPickerPanel extends StatefulWidget {
   final Object overlayGroupId;
   final bool? showHistoryView;
   final bool showToolButtons;
+  final MyColorHistoryController? historyController;
   final Future<void> Function()? onEyeDropperRequested;
+  final ValueChanged<Color>? onHistorySelected;
   final ValueChanged<Color>? onChanged;
   final ValueChanged<Color>? onChanging;
 
@@ -918,6 +927,18 @@ class _MyColorPickerPanelState extends State<_MyColorPickerPanel> {
   void _emitChanged(Color color) {
     setState(() => _value = color);
     widget.onChanged?.call(color);
+  }
+
+  void _selectHistoryColor(Color color) {
+    setState(() {
+      _value = color;
+      if (widget.layout == _MyColorPickerPanelLayout.stacked &&
+          widget.showHistoryView == null) {
+        _showHistory = false;
+      }
+    });
+    widget.onChanged?.call(color);
+    widget.onHistorySelected?.call(color);
   }
 
   Future<void> _pickFromScreen() async {
@@ -997,7 +1018,7 @@ class _MyColorPickerPanelState extends State<_MyColorPickerPanel> {
                     crossAxisCount: 2,
                     slotCount: 14,
                     spacing: 4,
-                    onSelected: _emitChanged,
+                    onSelected: _selectHistoryColor,
                   ),
                 ),
               ],
@@ -1020,7 +1041,7 @@ class _MyColorPickerPanelState extends State<_MyColorPickerPanel> {
             controller: history,
             selectedColor: _value,
             slotCount: 16,
-            onSelected: _emitChanged,
+            onSelected: _selectHistoryColor,
           )
         else ...[
           AspectRatio(aspectRatio: 1, child: _buildPlane()),
@@ -1068,17 +1089,19 @@ class _MyColorPickerPanelState extends State<_MyColorPickerPanel> {
         widget.showHistory &&
         history != null;
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 8,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         if (showEyeDropper)
           MyButton(
             key: const Key('my-color-picker-eye-dropper'),
+            height: 40,
+            width: 40,
             type: MyButtonType.outline,
             shape: MyButtonShape.square,
             icon: LucideIcons.pipette,
             onTap: _pickFromScreen,
           ),
-        if (showEyeDropper) const Gap(8),
         if (showHistoryToggle)
           MyButton(
             key: const Key('my-color-picker-history-toggle'),
@@ -1087,7 +1110,6 @@ class _MyColorPickerPanelState extends State<_MyColorPickerPanel> {
             icon: LucideIcons.history,
             onTap: () => setState(() => _showHistory = !_showHistory),
           ),
-        if (showHistoryToggle) const Gap(8),
         Expanded(
           child: _ColorInputs(
             value: _value,
@@ -1104,7 +1126,8 @@ class _MyColorPickerPanelState extends State<_MyColorPickerPanel> {
 
   @override
   Widget build(BuildContext context) {
-    final history = MyRecentColorsScope.maybeOf(context);
+    final history =
+        widget.historyController ?? MyRecentColorsScope.maybeOf(context);
     if (widget.layout == _MyColorPickerPanelLayout.stacked) {
       return _buildStacked(history);
     }
@@ -1143,7 +1166,8 @@ class _ColorInputs extends StatelessWidget {
       MyColorPickerMode.hex => _buildHexInputs(),
     };
     final selector = SizedBox(
-      width: 92,
+      height: 40,
+      width: 86,
       child: MySelect<MyColorPickerMode>(
         key: const Key('my-color-picker-mode-select'),
         initialValue: mode,
@@ -1170,10 +1194,10 @@ class _ColorInputs extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         if (constraints.maxWidth >= requiredWidth) {
-          return Row(children: [selector, const Gap(8), ...inputs]);
+          return Row(spacing: 6, children: [selector, ...inputs]);
         }
         return Wrap(
-          spacing: 8,
+          spacing: 6,
           runSpacing: 8,
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [selector, ...inputs],
@@ -1346,6 +1370,7 @@ class _NumberInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
+      height: 40,
       width: 58,
       child: _TextValueInput(
         value: value,
@@ -1701,6 +1726,7 @@ class _ColorHistoryGrid extends StatelessWidget {
             }
             final color = colors[index];
             return GestureDetector(
+              key: Key('my-color-picker-history-color-$index'),
               onTap: () => onSelected(color),
               child: DecoratedBox(
                 decoration: BoxDecoration(
@@ -1713,7 +1739,7 @@ class _ColorHistoryGrid extends StatelessWidget {
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(2),
+                  padding: const EdgeInsets.all(3),
                   child: _ColorSwatch(color: color),
                 ),
               ),
